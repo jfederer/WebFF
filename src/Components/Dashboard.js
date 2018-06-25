@@ -5,7 +5,7 @@ import { styles } from '../style';
 
 class Dashboard extends React.Component {
 	componentDidMount() {
-		this.props.appBarTextCB("SedWE");
+		this.props.appBarTextCB('SedWE Dashboard');
 	}
 
 	render() {

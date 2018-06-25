@@ -48,6 +48,10 @@ class AppLayout extends React.Component {
 		this.setState({appBarText:txt});
 	};
 
+	buildNav = () => {
+
+	};
+
 	render() {
 		const { classes } = this.props;
 
@@ -91,7 +95,7 @@ class AppLayout extends React.Component {
 					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */}
 
 					<Switch> {/* only match ONE route at a time */}
-						<Route exact path="/" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
+						<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
 						<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
 						<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}/>} />
 						<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}/>} />
