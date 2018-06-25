@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import { styles } from '../style';
 
 class FieldForm extends React.Component {
+	componentDidMount() {
+		this.props.appBarTextCB("Field Form");
+	}
+
 	render() {
 
 		return (
@@ -15,8 +18,8 @@ class FieldForm extends React.Component {
 }
 
 FieldForm.propTypes = {
-//   classes: PropTypes.object.isRequired,
-//    theme: PropTypes.object.isRequired,
+	classes: PropTypes.object.isRequired,
+	appBarTextCB: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(FieldForm);

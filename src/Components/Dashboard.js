@@ -1,22 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { styles } from '../theme';
+import { styles } from '../style';
 
 class Dashboard extends React.Component {
+	componentDidMount() {
+		this.props.appBarTextCB("SedWE");
+	}
+
 	render() {
 
 		return (
-			<h1>FF</h1>
+			<h1>Dashboard</h1>
 		);
 	}
 }
 
 Dashboard.propTypes = {
-//   classes: PropTypes.object.isRequired,
-//    theme: PropTypes.object.isRequired,
+	classes: PropTypes.object.isRequired,
+	appBarTextCB: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(Dashboard);

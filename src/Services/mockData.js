@@ -1,10 +1,11 @@
-// This file is shared across the demos.
-
 import React from 'react';
-import Icons from '@material-ui/icons';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import {Link} from 'react-router-dom';
+
+import {styles} from '../style';
+
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import InfoIcon from '@material-ui/icons/Info';
@@ -13,11 +14,8 @@ import HelpIcon from '@material-ui/icons/Help';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-import {styles} from '../style';
-import classNames from 'classnames';
-import {
-	Link
-  } from 'react-router-dom'
+
+
 
 export const systemMenu = (
   <div>

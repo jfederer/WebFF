@@ -1,22 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { styles } from '../theme';
+// import TextField from '@material-ui/core/TextField';
+import { styles } from '../style';
 
 class WaterQuality extends React.Component {
+	componentDidMount() {
+		this.props.appBarTextCB("Water Quality");
+	}
+
 	render() {
 
 		return (
-			<h1>FF</h1>
+			<h1>WQ</h1>
 		);
 	}
 }
 
 WaterQuality.propTypes = {
-//   classes: PropTypes.object.isRequired,
-//    theme: PropTypes.object.isRequired,
+	classes: PropTypes.object.isRequired,
+	appBarTextCB: PropTypes.func
 };
 
-export default withStyles(styles, { withTheme: true })(WaterQuality);
+export default withStyles(styles)(WaterQuality);

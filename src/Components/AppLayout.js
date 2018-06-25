@@ -11,10 +11,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SystemMenu from './SystemMenu.js';
 import NavMenu from './NavMenu.js';
 import FieldForm from './FieldForm.js';
+import Dashboard from './Dashboard.js';
+import WaterQuality from './WaterQuality.js';
 import { styles } from '../style';
 import 'typeface-roboto';
 import {
-	BrowserRouter as Router,
 	Route,
 	Switch
 } from 'react-router-dom';
@@ -48,7 +49,7 @@ class AppLayout extends React.Component {
 	};
 
 	render() {
-		const { classes, children } = this.props;
+		const { classes } = this.props;
 
 		return (
 			<div className={classes.root}>
@@ -90,10 +91,10 @@ class AppLayout extends React.Component {
 					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */}
 
 					<Switch> {/* only match ONE route at a time */}
-						<Route exact path="/" render={() => <h1>HOME</h1>} />
-						<Route path="/Dashboard" render={() => <h1>DASH</h1>} />
-						<Route path="/FieldForm" render={() => <h1>FF</h1>} />
-						<Route path="/WaterQuality" render={() => <h1>WQ</h1>} />
+						<Route exact path="/" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
+						<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
+						<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}/>} />
+						<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}/>} />
 						<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}/>} />
 					</Switch>
 

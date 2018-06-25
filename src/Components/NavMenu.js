@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { navMenu } from '../Services/mockData';
@@ -14,7 +13,7 @@ import {styles} from '../style';
 
 class NavMenu extends React.Component {
   render() {
-   const { classes, theme } = this.props;
+   const { classes } = this.props;
     var navList = (
       <div className={classes.list}>
         <List >{navMenu}</List>
@@ -41,8 +40,7 @@ class NavMenu extends React.Component {
 }
 
 NavMenu.propTypes = {
- // classes: PropTypes.object.isRequired,
- // theme: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(NavMenu);
