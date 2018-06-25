@@ -68,4 +68,9 @@ export const styles = theme => ({
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
   },
+  errorPage: {
+	margin: '0 auto',
+	maxWidth: '864px',
+	textAlign: 'center'
+  }
 });

@@ -17,7 +17,8 @@ import {
 	BrowserRouter as Router,
 	Route,
 	Switch
-} from 'react-router-dom'
+} from 'react-router-dom';
+import ErrorPage from './Errors/ErrorPage';  
 
 class AppLayout extends React.Component {
 	state = {
@@ -42,6 +43,9 @@ class AppLayout extends React.Component {
 		this.setState({ systemMenuOpen: false });
 	};
 
+	setAppBarText = (txt) => {
+		this.setState({appBarText:txt});
+	};
 
 	render() {
 		const { classes, children } = this.props;
@@ -77,24 +81,25 @@ class AppLayout extends React.Component {
 					</Toolbar>
 
 				</AppBar>
-				
+
 				<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} />
 				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} />
-						<main className={classes.content}>
-							<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
+				<main className={classes.content}>
+					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
-							<Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography> 
-							<Switch> {/* only match ONE route at a time */}
-								<Route exact path="/" render={() => <h1>HOME</h1>} />
-								<Route path="/Dashboard" render={() => <h1>DASH</h1>} />
-								<Route path="/FieldForm" render={() => <h1>FF</h1>} />
-								<Route path="/WaterQuality" render={() => <h1>WQ</h1>} />
-								<Route render={() => <h1>404</h1>} />
-							</Switch>
-							
-						</main>
-				
-				
+					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */}
+
+					<Switch> {/* only match ONE route at a time */}
+						<Route exact path="/" render={() => <h1>HOME</h1>} />
+						<Route path="/Dashboard" render={() => <h1>DASH</h1>} />
+						<Route path="/FieldForm" render={() => <h1>FF</h1>} />
+						<Route path="/WaterQuality" render={() => <h1>WQ</h1>} />
+						<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}/>} />
+					</Switch>
+
+				</main>
+
+
 			</div>
 		);
 	}
