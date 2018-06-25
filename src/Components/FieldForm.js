@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { styles } from '../theme';
+import { styles } from '../style';
 
 class FieldForm extends React.Component {
 	render() {

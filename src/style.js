@@ -3,18 +3,17 @@ const drawerWidth = 180;
 export const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 430,
-    zIndex: 1,
-    overflow: 'hidden',
+	zIndex: 1,
+	overflow: 'hidden',
     position: 'relative',
     display: 'flex',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+    // transition: theme.transitions.create(['width', 'margin'], {
+    //   easing: theme.transitions.easing.sharp,
+    //   duration: theme.transitions.duration.leavingScreen,
+    // }),
   },
   appBarShift: {
     marginLeft: drawerWidth,

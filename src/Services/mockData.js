@@ -5,7 +5,6 @@ import Icons from '@material-ui/icons';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import InfoIcon from '@material-ui/icons/Info';
@@ -14,8 +13,11 @@ import HelpIcon from '@material-ui/icons/Help';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-import {styles} from '../theme';
+import {styles} from '../style';
 import classNames from 'classnames';
+import {
+	Link
+  } from 'react-router-dom'
 
 export const systemMenu = (
   <div>
@@ -51,21 +53,21 @@ export const systemMenu = (
 
 export var navMenu = (
 	<div>
-	  <ListItem button>
+	  <ListItem button component={Link} to="/Dashboard">
 		<ListItemIcon>
 		  <DashboardIcon />
 		</ListItemIcon>
 		<ListItemText className={styles.navMenuText} primary="Dashboard" />
 	  </ListItem>
 
-	  <ListItem button>
+	  <ListItem button component={Link} to="/FieldForm">
 		<ListItemIcon>
 		  <ImportContactsIcon />
 		</ListItemIcon>
 		<ListItemText className={styles.navMenuText} primary="Field Form" />
 	  </ListItem>
   
-	  <ListItem button>
+	  <ListItem button component={Link} to="/WaterQuality">
 		<ListItemIcon>
 		  <OpacityIcon />
 		</ListItemIcon>

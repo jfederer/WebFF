@@ -7,13 +7,20 @@
     "@material-ui/icons": "^1.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "typeface-roboto": "0.0.54"
   },
   "scripts": {
-    "start": "react-scripts start",
+	"start": "react-scripts start",
+	"server": "json-server --watch MOCK_db.json --port 3004",
+	"dev": "concurrently --kill-others \"npm run start\" \"npm run server\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+	  "json-server":"^0.14.0",
+	  "concurrently":"^3.6.0"
   }
 }

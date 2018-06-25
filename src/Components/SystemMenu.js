@@ -7,7 +7,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { systemMenu } from '../Services/mockData';
 import 'typeface-roboto';
-import {styles} from '../theme';
+import {styles} from '../style';
 
 class SystemMenu extends React.Component {
   render() {
