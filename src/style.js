@@ -72,5 +72,12 @@ export const styles = theme => ({
 	margin: '0 auto',
 	maxWidth: '864px',
 	textAlign: 'center'
-  }
+  },
+formControl: {
+  margin: theme.spacing.unit,
+  minWidth: 120,
+},
+selectEmpty: {
+  marginTop: theme.spacing.unit * 2,
+},
 });

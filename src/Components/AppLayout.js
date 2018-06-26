@@ -48,9 +48,25 @@ class AppLayout extends React.Component {
 		this.setState({appBarText:txt});
 	};
 
-	buildNav = () => {
-
+	buildRoutes = () => {
+		var newRouteMenu = ( 
+		<Switch> {/* only match ONE route at a time */}
+		<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
+		{this.state.navMenu}
+		<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
+		<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}/>} />
+		<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}/>} />
+		<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}/>} />
+	</Switch>
+		);
+		this.setState({routeMenu:newRouteMenu});
 	};
+
+
+	componentDidMount() {
+		this.buildRoutes();
+	}
+
 
 	render() {
 		const { classes } = this.props;
@@ -91,16 +107,10 @@ class AppLayout extends React.Component {
 				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} />
 				<main className={classes.content}>
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
-
+					<button onClick={this.addRoute}>AddWQ</button>
 					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */}
 
-					<Switch> {/* only match ONE route at a time */}
-						<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
-						<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
-						<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}/>} />
-						<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}/>} />
-						<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}/>} />
-					</Switch>
+					{this.state.routeMenu}
 
 				</main>
 

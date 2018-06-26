@@ -11,7 +11,7 @@ class ErrorPage extends React.Component {
 
 	render() {
 		const { classes, errMsg } = this.props;
-		console.log(this.props);
+//		console.log(this.props);
 		
 
 		return (

@@ -5,7 +5,7 @@ import { styles } from './style';
 import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
-	BrowserRouter as Router,
+	BrowserRouter as Router
 } from 'react-router-dom'
 class App extends React.Component {
 
