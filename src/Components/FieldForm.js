@@ -35,11 +35,8 @@ const API = 'http://localhost:3004/';
 
 		return (
 			<div>
-				<h1>FF</h1>
-
 				<form className={classes.root} autoComplete="off">
 					{questionList}
-
 				</form>
 			</div>
 		);
@@ -49,6 +46,6 @@ const API = 'http://localhost:3004/';
 FieldForm.propTypes = {
 	classes: PropTypes.object.isRequired,
 	appBarTextCB: PropTypes.func
-};
+}; 
 
 export default withStyles(styles, { withTheme: true })(FieldForm);
