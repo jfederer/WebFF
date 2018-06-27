@@ -25,11 +25,6 @@ constructor(props) {
 	}
 };
 	
-	componentDidMount() {
-		
-
-	}
-
 	handleSelectChange = event => {  //FUTURE: combine the handlers
 		this.setState({ [event.target.name]: event.target.value });
 		this.setState({
@@ -50,15 +45,17 @@ constructor(props) {
 
 
 	buildQuestion() {
+		const DEBUG = false;
 		const { classes } = this.props;
 		var theQ = {};
 		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;//TODO: Ask Ken: Do we want this to be the XML value?
-
+		//TODO: if key or id isn't included, make the missng one the same as the one that's included
 
 		switch (this.props.type) {
 			case 'DropDown': {
+				if(DEBUG) console.log("DropDown Question");
 				theQ = (
-					<FormControl className={classes.formControl}>
+					<FormControl className={classes.formControl} key={this.props.key}>
 						<InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
 						<Select
 							value={this.state.value}
@@ -76,8 +73,10 @@ constructor(props) {
 			}
 
 			case 'Text': {
+				if(DEBUG) console.log("Text Question");
 				theQ =
 					<TextField
+						key={this.props.key}
 						id={this.props.id}
 						onChange={this.handleTextChange(this.props.id)}
 						label={this.props.label}
@@ -90,7 +89,9 @@ constructor(props) {
 			}
 
 			case 'MultiText': {
+				if(DEBUG) console.log("MultiText Question");
 				theQ = <TextField
+				key={this.props.key}
 					id={this.props.id}
 					onChange={this.handleTextChange(this.props.id)}
 					label={this.props.label}
@@ -105,9 +106,10 @@ constructor(props) {
 			}
 
 			case 'MultiChoice': { 
+				if(DEBUG) console.log("MultiChoice Question");
 				//Note that MultiChoice builds out state elements in the constructor for defining initial states.				
 				theQ =
-					<FormControl component="fieldset">
+					<FormControl component="fieldset" key={this.props.key}>
 						<FormLabel component="legend">{this.props.label}</FormLabel>
 						<FormGroup>
 
@@ -134,7 +136,7 @@ constructor(props) {
 			}
 			default: {
 				//TODO: Throw error
-				console.err.log("Question doesn't match any type");
+				console.log("Question doesn't match any type");
 			}
 		}
 		return theQ;
@@ -146,7 +148,6 @@ constructor(props) {
 		return (
 			<div>
 				{this.buildQuestion()}
-				{console.log(this.state)}
 			</div>
 		);
 	}

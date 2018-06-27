@@ -5,7 +5,19 @@ import { styles } from '../style';
 import Question from './Question';
 
 class FieldForm extends React.Component {
+	constructor(props) {
+		super(props);
+			this.state = {
+			  questionsData: [],
+			};
+	}
 
+	componentWillMount() {
+const API = 'http://localhost:3004/';
+		fetch(API + 'questions') 
+		.then(results => results.json())
+		.then(data => this.setState({questionsData:data}))
+	}
 
 	componentDidMount() {
 		this.props.appBarTextCB("Field Form");
@@ -13,57 +25,20 @@ class FieldForm extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		var selectArr = [
-			{
-				value: '',
-				label: 'None'
-			},
-			{
-				value: 'O1',
-				label: 'Option 1'
-			},
-			{
-				value: 'O2',
-				label: 'Option 2'
-			},
-			{
-				value: 'O3',
-				label: 'Option 3'
-			},
-		];
 
-		var multiArr = [
-			{
-				value: 'CSN',
-				label: 'Colleen Niznik',
-				checked: false
-			},
-			{
-				value: 'CBF',  //tODO: IF VALUE exists, use it... if not, use label
-				label: 'Corbin Brock',
-				checked: true 
-			},
-			{
-				value: 'RAF',
-				label: 'Ruby Anne'
-			},
-			{
-				value: 'JAW',
-				label: 'Jan Wonka',
-				checked: false
-			},
-		];
+		//create form questions
+		var questionList = [];
+		questionList.push(this.state.questionsData.map(questionData => {
+			return <Question {...questionData} />
+		}));
+
 
 		return (
 			<div>
 				<h1>FF</h1>
 
 				<form className={classes.root} autoComplete="off">
-
-					 <Question key="test1" id="test" label="Question #1" XMLvalue="XMLQ1" type="Text" placeholder="placeme" />
-					<Question key="test2" id="test2" label="Question #2" XMLvalue="XMLQ2" type="MultiText" /> 
-					<Question key="test3" id="test3" label="Question #3" XMLvalue="XMLQ3" type="DropDown" selectOptions={selectArr} />
-					<Question key="test4" id="test4" label="Question #4" XMLvalue="XMLQ4" type="MultiChoice" multiChoiceOptions={multiArr} />
+					{questionList}
 
 				</form>
 			</div>
