@@ -15,16 +15,41 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 
 class Question extends React.Component {
-constructor(props) {
-	super(props);
-	this.state = {
-		value: '', //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
+	constructor(props) {
+		super(props);
+		this.state = {
+			value: '', //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
+		};
 	};
-	if (this.props.type === "MultiChoice") {
-		this.props.multiChoiceOptions.map(multiSelectOption => this.state[multiSelectOption.label]=multiSelectOption.checked);  //TODO: This throws an annoying warning.
-	}
-};
+
+
+	//TODO: Be careful, some of this is pulling status from state, some from props... 
+
+	componentWillMount() {
+		if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
+			var newValObj = {};
+			this.props.multiChoiceOptions.map(multiSelectOption => {
+				//console.log(multiSelectOption.label + " : " + multiSelectOption.checked);
+			//	this.setState({ [multiSelectOption.label]:multiSelectOption.checked} );
+				newValObj[multiSelectOption.label] = multiSelectOption.checked;
+				return null;
+			}
+			); 
 	
+			this.setState({value:newValObj});
+		}
+		// if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
+		// 	this.props.multiChoiceOptions.map(multiSelectOption => {
+		// 		//console.log(multiSelectOption.label + " : " + multiSelectOption.checked);
+		// 		this.setState({ [multiSelectOption.label]:multiSelectOption.checked} );
+		// 		return null;
+		// 	}
+		// 	); 
+		// }
+	}
+
+
+
 	handleSelectChange = event => {  //FUTURE: combine the handlers
 		this.setState({ [event.target.name]: event.target.value });
 		this.setState({
@@ -38,8 +63,13 @@ constructor(props) {
 		});
 	};
 
-	handleMultiChoiceChange = name => event => {
-		this.setState({ [name]: event.target.checked });
+	handleMultiChoiceChange = label => event => {
+		this.setState({
+			value: {
+			  ...this.state.value,
+			  [label]: event.target.checked,
+			},
+		  });
 	};
 
 
@@ -48,11 +78,11 @@ constructor(props) {
 		const { classes } = this.props;
 		var theQ = {};
 		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;//TODO: Ask Ken: Do we want this to be the XML value?
-		//TODO: if key or id isn't included, make the missng one the same as the one that's included
+		//TODO: if key or id isn't included, make the missing one the same as the one that's included
 
 		switch (this.props.type) {
 			case 'DropDown': {
-				if(DEBUG) console.log("DropDown Question");
+				if (DEBUG) console.log("DropDown Question");
 				theQ = (
 					<FormControl className={classes.formControl} key={this.props.key}>
 						<InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
@@ -72,7 +102,7 @@ constructor(props) {
 			}
 
 			case 'Text': {
-				if(DEBUG) console.log("Text Question");
+				if (DEBUG) console.log("Text Question");
 				theQ =
 					<TextField
 						key={this.props.key}
@@ -88,9 +118,9 @@ constructor(props) {
 			}
 
 			case 'MultiText': {
-				if(DEBUG) console.log("MultiText Question");
+				if (DEBUG) console.log("MultiText Question");
 				theQ = <TextField
-				key={this.props.key}
+					key={this.props.key}
 					id={this.props.id}
 					onChange={this.handleTextChange(this.props.id)}
 					label={this.props.label}
@@ -104,8 +134,8 @@ constructor(props) {
 				break;
 			}
 
-			case 'MultiChoice': { 
-				if(DEBUG) console.log("MultiChoice Question");
+			case 'MultiChoice': {
+				if (DEBUG) console.log("MultiChoice Question");
 				//Note that MultiChoice builds out state elements in the constructor for defining initial states.				
 				theQ =
 					<FormControl component="fieldset" key={this.props.key}>
@@ -118,7 +148,7 @@ constructor(props) {
 										key={this.props.XMLvalue + multiSelectOption.label}
 										control={
 											<Checkbox
-												checked={this.state[multiSelectOption.label]}
+												checked={this.state.value[multiSelectOption.label]}
 												onChange={this.handleMultiChoiceChange(multiSelectOption.label)}
 												value={multiSelectOption.value}
 												xmlvalue={this.props.XMLvalue}
@@ -144,10 +174,12 @@ constructor(props) {
 
 
 	render() {
+		//console.log(this.state);
 		return (
 			<div>
 				{this.buildQuestion()}
 			</div>
+
 		);
 	}
 }
@@ -155,6 +187,7 @@ constructor(props) {
 Question.propTypes = {
 	classes: PropTypes.object.isRequired,
 	validator: PropTypes.func,
+	stateChangeHandler: PropTypes.func,
 
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,
