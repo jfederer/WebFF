@@ -13,6 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 
+//this.state.value always contains the up-to-date question values/answers.
 
 class Question extends React.Component {
 	constructor(props) {
@@ -29,8 +30,6 @@ class Question extends React.Component {
 		if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
 			var newValObj = {};
 			this.props.multiChoiceOptions.map(multiSelectOption => {
-				//console.log(multiSelectOption.label + " : " + multiSelectOption.checked);
-			//	this.setState({ [multiSelectOption.label]:multiSelectOption.checked} );
 				newValObj[multiSelectOption.label] = multiSelectOption.checked;
 				return null;
 			}
@@ -38,14 +37,6 @@ class Question extends React.Component {
 	
 			this.setState({value:newValObj});
 		}
-		// if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
-		// 	this.props.multiChoiceOptions.map(multiSelectOption => {
-		// 		//console.log(multiSelectOption.label + " : " + multiSelectOption.checked);
-		// 		this.setState({ [multiSelectOption.label]:multiSelectOption.checked} );
-		// 		return null;
-		// 	}
-		// 	); 
-		// }
 	}
 
 
@@ -57,13 +48,13 @@ class Question extends React.Component {
 		})
 	};
 
-	handleTextChange = value => event => {
+	handleTextChange = value => event => {  //FUTURE: combine the handlers
 		this.setState({
 			value: event.target.value,
 		});
 	};
 
-	handleMultiChoiceChange = label => event => {
+	handleMultiChoiceChange = label => event => {  //FUTURE: combine the handlers
 		this.setState({
 			value: {
 			  ...this.state.value,
