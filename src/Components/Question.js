@@ -43,7 +43,6 @@ constructor(props) {
 	};
 
 
-
 	buildQuestion() {
 		const DEBUG = false;
 		const { classes } = this.props;

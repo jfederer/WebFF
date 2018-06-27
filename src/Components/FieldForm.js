@@ -13,9 +13,30 @@ class FieldForm extends React.Component {
 		};
 	}
 
-	componentWillMount() {
-
+	componentDidMount() {
+		if(localStorage.getItem('questionsData')) {
+			console.log("using local storage data");
+		} else {
+			this.fetchData();
+		}
 	}
+
+	componentWillMount() {
+		this.props.appBarTextCB("Field Form");
+		if (localStorage.getItem('questionsData')) {
+			this.setState({
+				questionsData: JSON.parse(localStorage.getItem('questionsData')),
+				isLoading:false
+			});
+		}
+	}
+
+	componentWillUpdate(nextProps, nextState) {
+		console.log("CWU");
+			localStorage.setItem('questionsData',JSON.stringify(nextState.questionsData));
+			console.log()
+		}
+
 
 	fetchData() {
 		const DEBUG = false;
@@ -48,10 +69,7 @@ class FieldForm extends React.Component {
 				.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
-	componentDidMount() {
-		this.props.appBarTextCB("Field Form");
-		this.fetchData();
-	}
+
 
 	render() {
 		const DEBUG=false;
