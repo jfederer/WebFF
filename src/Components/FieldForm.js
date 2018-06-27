@@ -7,37 +7,77 @@ import Question from './Question';
 class FieldForm extends React.Component {
 	constructor(props) {
 		super(props);
-			this.state = {
-			  questionsData: [],
-			};
+		this.state = {
+			isLoading: true,
+			questionsData: [],
+		};
 	}
 
 	componentWillMount() {
-const API = 'http://localhost:3004/';
-		fetch(API + 'questions') 
-		.then(results => results.json())
-		.then(data => this.setState({questionsData:data}))
+
+	}
+
+	fetchData() {
+		const DEBUG = false;
+		const API = 'http://localhost:3004/';
+		const query = 'questions';
+
+		function handleErrors(response) {    // fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response;
+		}
+
+		if(DEBUG)console.log("Function: fetchData @ " + API + query);
+		fetch(API + query)
+			.then(handleErrors)
+			.then(response => response.json())
+			.then(
+				parsedJSON => {
+					if(DEBUG)console.log("Parsed JSON: ");
+					if(DEBUG)console.log(parsedJSON);
+					//setTimeout(()=> {
+						this.setState({ 
+							questionsData: parsedJSON,
+							isLoading:false});
+						if(DEBUG)console.log("CurrentState: ");
+						if(DEBUG)console.log(this.state);
+					//},2000);
+				})
+				.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
 	componentDidMount() {
 		this.props.appBarTextCB("Field Form");
+		this.fetchData();
 	}
 
 	render() {
+		const DEBUG=false;
 		const { classes } = this.props;
+		const { isLoading, questionsData } = this.state;
 
 		//create form questions
 		var questionList = [];
-		questionList.push(this.state.questionsData.map(questionData => {
-			return <Question {...questionData} />
-		}));
+		if(!isLoading && questionsData.length>0) {
+			questionList.push(questionsData.map(questionData => <Question {...questionData} />));
+		}
+		if(DEBUG)console.log("render");
+		if(DEBUG)console.log(this.state);
+		
 
-
+		//TODO: loader is not working.  Likely css problem.  Look at ihatetomatoes css stuff. 
 		return (
-			<div>
+			<div>    
 				<form className={classes.root} autoComplete="off">
-					{questionList}
+					{
+						!isLoading && questionList.length > 0 ? questionList : null
+					}
 				</form>
+				<div className="loader">
+					<div className="icon">LOADING!!!!</div>
+				</div>
 			</div>
 		);
 	}
@@ -46,6 +86,6 @@ const API = 'http://localhost:3004/';
 FieldForm.propTypes = {
 	classes: PropTypes.object.isRequired,
 	appBarTextCB: PropTypes.func
-}; 
+};
 
 export default withStyles(styles, { withTheme: true })(FieldForm);

@@ -21,7 +21,7 @@ constructor(props) {
 		value: '', //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
 	};
 	if (this.props.type === "MultiChoice") {
-		this.props.multiChoiceOptions.map(multiSelectOption => this.state[multiSelectOption.label]=multiSelectOption.checked);
+		this.props.multiChoiceOptions.map(multiSelectOption => this.state[multiSelectOption.label]=multiSelectOption.checked);  //TODO: This throws an annoying warning.
 	}
 };
 	
