@@ -25,7 +25,7 @@ class Question extends React.Component {
 	};
 
 
-	//TODO: Be careful, some of this is pulling status from state, some from props... 
+	//TODO: Be careful, some of this is pulling status from state, some from props.
 
 	componentWillMount() {
 		
