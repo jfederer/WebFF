@@ -20,6 +20,7 @@ class Question extends React.Component {
 		super(props);
 		this.state = {
 			value: '', //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
+			key:''
 		};
 	};
 
@@ -27,15 +28,18 @@ class Question extends React.Component {
 	//TODO: Be careful, some of this is pulling status from state, some from props... 
 
 	componentWillMount() {
+		
+		this.setState({ key: this.props.id});;
 		if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
 			var newValObj = {};
-			this.props.multiChoiceOptions.map(multiSelectOption => {
+			
+			this.props.value.map(multiSelectOption => {
 				newValObj[multiSelectOption.label] = multiSelectOption.checked;
 				return null;
 			}
-			); 
-	
-			this.setState({value:newValObj});
+			);
+
+			this.setState({ value: newValObj });
 		}
 	}
 
@@ -45,22 +49,26 @@ class Question extends React.Component {
 		this.setState({ [event.target.name]: event.target.value });
 		this.setState({
 			value: event.target.value,
-		})
+		}, () => this.props.stateChangeHandler(this)
+		);
 	};
 
 	handleTextChange = value => event => {  //FUTURE: combine the handlers
 		this.setState({
-			value: event.target.value,
-		});
+			value: event.target.value
+		}, () => this.props.stateChangeHandler(this)
+		);
+
 	};
 
 	handleMultiChoiceChange = label => event => {  //FUTURE: combine the handlers
 		this.setState({
 			value: {
-			  ...this.state.value,
-			  [label]: event.target.checked,
-			},
-		  });
+				...this.state.value,
+				[label]: event.target.checked,
+			}
+		}, () => this.props.stateChangeHandler(this)
+		);
 	};
 
 
@@ -83,7 +91,7 @@ class Question extends React.Component {
 							id={this.props.id}
 							name={this.props.XMLvalue}
 						>
-							{this.props.selectOptions.map(valueLabelPair =>
+							{this.props.value.map(valueLabelPair =>
 								<MenuItem key={this.props.XMLvalue + valueLabelPair.label} value={valueLabelPair.value} xmlvalue={this.props.XMLvalue}>{valueLabelPair.label}</MenuItem>
 							)}
 						</Select>
@@ -133,7 +141,7 @@ class Question extends React.Component {
 						<FormLabel component="legend">{this.props.label}</FormLabel>
 						<FormGroup>
 
-							{this.props.multiChoiceOptions.map(multiSelectOption => {
+							{this.props.value.map(multiSelectOption => {
 								return (
 									<FormControlLabel
 										key={this.props.XMLvalue + multiSelectOption.label}
@@ -166,6 +174,8 @@ class Question extends React.Component {
 
 	render() {
 		//console.log(this.state);
+		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
 		return (
 			<div>
 				{this.buildQuestion()}
@@ -179,7 +189,7 @@ Question.propTypes = {
 	classes: PropTypes.object.isRequired,
 	validator: PropTypes.func,
 	stateChangeHandler: PropTypes.func,
-
+	key: PropTypes.string,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,
 	placeholder: PropTypes.string,
