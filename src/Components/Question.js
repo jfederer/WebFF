@@ -51,7 +51,7 @@ class Question extends React.Component {
 			value: event.target.value,
 		}, () => this.props.stateChangeHandler(this)
 		);
-	};
+	}; 
 
 	handleTextChange = value => event => {  //FUTURE: combine the handlers
 		this.setState({
