@@ -18,8 +18,9 @@ class FieldForm extends React.Component {
 
 	componentDidMount() {
 		if(localStorage.getItem('questionsData')) {
-			console.log("using local storage data");
+			console.log("using local storage data for FF questions");
 		} else {
+			console.log("going to DB for data for navMenu");
 			this.fetchData();
 		}
 	}
@@ -40,6 +41,16 @@ class FieldForm extends React.Component {
 	}
 
 	questionChangeHandler(Q) {
+		console.log(Q);
+		if(Q==null) { //POC
+			console.log("Here");
+			//add EDI tab
+
+			//tell nav handler to show tab
+
+			return;
+		}
+
 		console.log("--------------");
 		console.log("FF state:");
 		console.log(this.state);
@@ -71,6 +82,8 @@ class FieldForm extends React.Component {
 			}
 			return questionData;
 		});
+
+		console.log(QD);
 
 		// replace the questionData in localStorage
 		localStorage.setItem('questionsData', JSON.stringify(rawData));
@@ -135,7 +148,7 @@ class FieldForm extends React.Component {
 					<li><b>Station Number</b></li>
 					<li><b>Agency Code</b></li>
 					<li><b>Sample Data</b> (auto populated with current date)</li>
-					<li><b>SSC Sample Type</b> (EDI or EWI:  If EDI selected, add EDI tab... If EWI selected, add EWI Tab)</li>
+					<li><b>SSC Sample Type</b> (EDI or EWI:  If EDI selected, add EDI tab... If EWI selected, add EWI Tab)<button onClick={()=>this.questionChangeHandler()}>Add EDI</button></li>
 					<li><b>Bedload attempted?</b>  (opens new tab or questions on EDI/EWI tab... I forget, check notes)</li>
 					<li><b>Bed Material attempted?</b> (opens new tab or questions on EDI/EWI tab... I forget, check notes)</li>
 					<li><b>Time Zone</b></li>

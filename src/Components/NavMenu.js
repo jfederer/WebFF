@@ -12,11 +12,11 @@ import { styles } from '../style';
 
 class NavMenu extends React.Component {
 	render() {
-		console.log(this.props.menuItems);
+		//console.log(this.props.menuItems);
 		const { classes } = this.props;
 		var navList = (
 			<div className={classes.list}>
-				<List>{this.props.menuItems}</List>
+				{this.props.menuItems.length!==null ? <List>{this.props.menuItems}</List> : <h6>loading</h6>}
 			</div>
 		);
 
@@ -41,7 +41,7 @@ class NavMenu extends React.Component {
 
 NavMenu.propTypes = {
 	classes: PropTypes.object.isRequired,
-	menuItems: PropTypes.object.isRequired
+	menuItems: PropTypes.array.isRequired  //TODO: sometimes gets object, sometimes gets array... need to fix before we can set this
 };
 
 export default withStyles(styles)(NavMenu);

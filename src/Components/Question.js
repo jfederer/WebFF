@@ -131,7 +131,7 @@ class Question extends React.Component {
 				var defaultVal = '';
 				for (var i = 0; i < this.props.value.length; i++) {
 					var tpv = this.props.value[i];
-					tpv.selected ? defaultVal = tpv.label : null;
+					if (tpv.selected) defaultVal = tpv.label;
 					menuItems.push(
 						<MenuItem
 							key={this.props.XMLvalue + "_" + tpv.label}

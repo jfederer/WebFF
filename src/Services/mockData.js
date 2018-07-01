@@ -71,6 +71,16 @@ export var navMenu = (
 		</ListItemIcon>
 		<ListItemText primary="Water Quality" />
 	  </ListItem>
+
+	  <ListItem button component={Link} to="/EDI">
+		 EWI
+		<ListItemText primary="EWI" />
+	  </ListItem>
+
+	  <ListItem button component={Link} to="/EWI">
+		  EDI
+		<ListItemText primary="EDI" />
+	  </ListItem>
   
 	  <ListItem button>
 		<ListItemIcon>
