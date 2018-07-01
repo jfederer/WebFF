@@ -10,7 +10,6 @@ class EDI extends React.Component {
 	}
 
 	render() {
-
 		return (
 			<div>
 				<h1>EDI</h1>
@@ -18,9 +17,6 @@ class EDI extends React.Component {
 		);
 	}
 }
-
-
-
 
 EDI.propTypes = {
 	classes: PropTypes.object.isRequired,

@@ -37,8 +37,7 @@ class FieldForm extends React.Component {
 	componentWillUpdate(nextProps, nextState) {
 			localStorage.setItem('questionsData',JSON.stringify(nextState.questionsData));
 			//console.log()
-		}
-
+	}
 
 	questionChangeHandler(Q) {
 		console.log("--------------");
@@ -109,8 +108,6 @@ class FieldForm extends React.Component {
 				})
 				.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
-
-
 
 	render() {
 		const DEBUG=false;

@@ -116,7 +116,7 @@ class Question extends React.Component {
 
 
 	buildQuestion() {
-		const DEBUG = true;
+		const DEBUG = false;
 		const { classes } = this.props;
 		var theQ = {};
 		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;//TODO: Ask Ken: Do we want this to be the XML value?
@@ -147,7 +147,6 @@ class Question extends React.Component {
 						<InputLabel htmlFor={this.props.label}>{this.props.label}</InputLabel>
 						<Select
 							defaultValue={ defaultVal }
-							// value={this.state.selectLabel}
 							value={this.state.selectLabel}
 							onChange={this.handleSelectChange}
 							inputProps={{

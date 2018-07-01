@@ -13,20 +13,30 @@ import NavMenu from './NavMenu.js';
 import FieldForm from './FieldForm.js';
 import Dashboard from './Dashboard.js';
 import WaterQuality from './WaterQuality.js';
+import EDI from './EDI.js';
+import EWI from './EWI.js';
 import { styles } from '../style';
 import 'typeface-roboto';
 import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import ErrorPage from './Errors/ErrorPage';  
+import ErrorPage from './Errors/ErrorPage';
+import { navMenu } from '../Services/mockData';
 
 class AppLayout extends React.Component {
-	state = {
-		navMenuExpanded: false,
-		systemMenuOpen: false,
-		appBarText: "App Bar Title"
+	constructor(props) {
+		super(props);
+		this.state = {
+			// isLoading: true,
+			navMenuExpanded: false,
+			systemMenuOpen: false,
+			appBarText: "App Bar Title",
+			navMenuItems: navMenu
+		};
 	};
+
+
 
 	handleLeftDrawerOpen = () => {
 		this.setState({ navMenuExpanded: true });
@@ -45,21 +55,23 @@ class AppLayout extends React.Component {
 	};
 
 	setAppBarText = (txt) => {
-		this.setState({appBarText:txt});
+		this.setState({ appBarText: txt });
 	};
 
 	buildRoutes = () => {
-		var newRouteMenu = ( 
-		<Switch> {/* only match ONE route at a time */}
-		<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
-		{this.state.navMenu}
-		<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText}/>} />
-		<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}/>} />
-		<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}/>} />
-		<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}/>} />
-	</Switch>
+		var newRouteMenu = (
+			<Switch> {/* only match ONE route at a time */}
+				<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
+				{this.state.navMenu}
+				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} />} />
+				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText} />} />
+				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText} />} />
+				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText} />} />
+				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText} />} />
+				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText} />} />
+			</Switch>
 		);
-		this.setState({routeMenu:newRouteMenu});
+		this.setState({ routeMenu: newRouteMenu });
 	};
 
 
@@ -104,7 +116,7 @@ class AppLayout extends React.Component {
 				</AppBar>
 
 				<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} />
-				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} />
+				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.state.navMenuItems} />
 				<main className={classes.content}>
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 					<button onClick={this.addRoute}>AddWQ</button>
