@@ -48,49 +48,35 @@ class FieldForm extends React.Component {
 		console.log("--------------");
 		console.log("Q:");
 		console.log(Q.state);
+
 		
+		// get the questions in localStorage
 		var rawData = JSON.parse(localStorage.getItem('questionsData'));
 		console.log("--------------");
 		console.log("questionsData");
 		console.log(rawData);
 
-		// var QD = rawData.filter(questionData => {
-		// 	if (questionData.key===Q.state.key) {
-		// 		console.log("--------------");
-		// 		console.log("questionData (pre)");
-		// 		console.log(questionData);
-		// 		questionData.value = Q.value;
-		// 		console.log("--------------");
-		// 		console.log("questionData (post)");
-		// 		console.log(questionData);
-				
-		// 	}
-		// 	return questionData;
-		// });
+		// find the specific question in questionData based on the key,then update the value property
+		var QD = rawData.filter(questionData => {
+			if (questionData.key===Q.state.key) {
+				console.log("------FOUND!--------");
+				console.log("questionData (pre)");
+				console.log(questionData);
+				console.log("Q.state.value");
+				console.log(Q.state.value);
+				//questionData.value="SEVEN!";
+				questionData.value = Q.state.value;
+				console.log("--------------");
+				console.log("questionData (post)");
+				console.log(questionData);				
+			}
+			return questionData;
+		});
 
-		//this.setState({"questionsData":QD});
-
-		// if(theQ && theQ.length !== 1) {
-		// 	//TODO: throw error -- should only return one thing with unqiue key..
-		// } else {
-		// 	theQ = theQ[0];
-		// }
+		// replace the questionData in localStorage
+		localStorage.setItem('questionsData', JSON.stringify(rawData));
 		
-		// console.log(theQ);
-
-		// theQ.value = Q.state.value;
-		// console.log(theQ);
-		// var test1 = JSON.parse(rawData).filter((item) => {
-		// 	if (item.key==='test4')
-		// 	return item;
-		// });
-		// console.log(test1);
-		// test1[0].id="TEST4";
-		
-		//console.log(test1);
-
-		//console.log(this.find_in_object(rawData, {key:'test1'}));
-
+		//FUTURE:  likely  way to do this without replacing the entire 'questionsData'.
 	}
 
 	fetchData() {
@@ -142,7 +128,33 @@ class FieldForm extends React.Component {
 
 		//TODO: loader is not working.  Likely css problem.  Look at ihatetomatoes css stuff. 
 		return (
-			<div>    
+			<div>
+				<p>Select station name (list pulled from DB --> based on previous entries rather than admin console?)</p>
+				
+				<p>When station name selected, auto populate:</p>
+				<ul>
+					<li><b>Project name</b></li>
+					<li><b>Project ID</b></li>
+					<li><b>Station Number</b></li>
+					<li><b>Agency Code</b></li>
+					<li><b>Sample Data</b> (auto populated with current date)</li>
+					<li><b>SSC Sample Type</b> (EDI or EWI:  If EDI selected, add EDI tab... If EWI selected, add EWI Tab)</li>
+					<li><b>Bedload attempted?</b>  (opens new tab or questions on EDI/EWI tab... I forget, check notes)</li>
+					<li><b>Bed Material attempted?</b> (opens new tab or questions on EDI/EWI tab... I forget, check notes)</li>
+					<li><b>Time Zone</b></li>
+					<li><b>Sample Team</b></li>
+					<li><b>Compiled by</b></li>
+					<li><b>Same day Sample</b></li>
+				</ul>
+				<p>Weather:</p>
+				<ul>
+					<li><b>Sky</b></li>
+					<li><b>Precip</b></li>
+					<li><b>Temp</b></li>
+					<li><b>Wind</b></li>
+					<li><b>Direction</b></li>
+				</ul>
+
 				<form className={classes.root} autoComplete="off">
 					{
 						!isLoading && questionList.length > 0 ? questionList : null

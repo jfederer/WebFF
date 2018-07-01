@@ -9,18 +9,16 @@ import {
 } from 'react-router-dom'
 class App extends React.Component {
 
-  render() {  
-    return (
-		<React.Fragment>
-		<CssBaseline />
-		<Router>
-		<AppLayout />
-
-		</Router>
-
-		</React.Fragment>
-    );
-  }
+	render() {
+		return (
+			<React.Fragment>
+				<CssBaseline />
+				<Router>
+					<AppLayout />
+				</Router>
+			</React.Fragment>
+		);
+	}
 }
 
 

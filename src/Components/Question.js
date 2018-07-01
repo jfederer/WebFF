@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { styles } from '../style';
+//import { styles } from '../style';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,44 +14,86 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 
 //this.state.value always contains the up-to-date question values/answers.
+const styles = theme => ({
+	root: {
+		display: 'flex',
+		flexWrap: 'wrap',
+	},
+	formControl: {
+		margin: theme.spacing.unit,
+		minWidth: 120,
+	},
+	selectEmpty: {
+		marginTop: theme.spacing.unit * 2,
+	},
+});
+
 
 class Question extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			value: '', //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
-			key:''
+			key: ''
 		};
 	};
 
 
-	//TODO: Be careful, some of this is pulling status from state, some from props.
+	getProps() {
+		return this.props;
+	}
 
 	componentWillMount() {
-		
-		this.setState({ key: this.props.id});;
-		if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
-			var newValObj = {};
-			
-			this.props.value.map(multiSelectOption => {
-				newValObj[multiSelectOption.label] = multiSelectOption.checked;
-				return null;
-			}
-			);
+		this.setState({ key: this.props.id });;
+		this.setState({ value: this.props.value });
 
-			this.setState({ value: newValObj });
+
+
+		// .map(valueLabelPair => {
+		// 	if(valueLabelPair.selected) {
+		// 		console.log("selected found");
+		// 		return valueLabelPair.label;
+		// 	}
+		// });
+		//console.log(selectLabel);
+
+
+		// if (this.props.type === "MultiChoice") { // Set initial "checked" states of MultiChoice questions
+		// 	var newValObj = {};
+
+		// 	this.props.value.map(multiSelectOption => {
+		// 		newValObj[multiSelectOption.label] = multiSelectOption.checked;
+		// 		return null;
+		// 	}
+		// 	);
+
+		// 	this.setState({ value: newValObj });
+		// }
+	}
+
+	componentDidMount() {
+		if (this.props.type === "DropDown") {
+			for (var i = 0; i < this.props.value.length; i++) {
+				if (this.props.value[i].selected) {
+					// *works* console.log("selected found: " + this.props.value[i].label);
+					this.setState({ selectLabel: this.props.value[i].label });
+				}
+			}
 		}
 	}
 
 
-
 	handleSelectChange = event => {  //FUTURE: combine the handlers
+		console.log("Event.target: ");
+		console.log(event.target); // contains the value of the selected MenuItem and the name of the select
 		this.setState({ [event.target.name]: event.target.value });
-		this.setState({
-			value: event.target.value,
-		}, () => this.props.stateChangeHandler(this)
-		);
-	}; 
+
+
+		// this.setState({
+		// 	value: event.target.value,
+		// }, () => this.props.stateChangeHandler(this)
+		// );
+	};
 
 	handleTextChange = value => event => {  //FUTURE: combine the handlers
 		this.setState({
@@ -72,30 +114,75 @@ class Question extends React.Component {
 	};
 
 
+
 	buildQuestion() {
-		const DEBUG = false;
+		const DEBUG = true;
 		const { classes } = this.props;
 		var theQ = {};
 		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;//TODO: Ask Ken: Do we want this to be the XML value?
 		//TODO: if key or id isn't included, make the missing one the same as the one that's included
+		if (DEBUG) console.log("this.props");
+		if (DEBUG) console.log(this.props);
+
 
 		switch (this.props.type) {
 			case 'DropDown': {
-				if (DEBUG) console.log("DropDown Question");
-				theQ = (
-					<FormControl className={classes.formControl} key={this.props.key}>
-						<InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
-						<Select
-							value={this.state.value}
-							onChange={this.handleSelectChange}
-							id={this.props.id}
-							name={this.props.XMLvalue}
+				var menuItems = [];
+				var defaultVal = '';
+				for (var i = 0; i < this.props.value.length; i++) {
+					var tpv = this.props.value[i];
+					tpv.selected ? defaultVal = tpv.label : null;
+					menuItems.push(
+						<MenuItem
+							key={this.props.XMLvalue + "_" + tpv.label}
+							value={tpv.value}
 						>
-							{this.props.value.map(valueLabelPair =>
-								<MenuItem key={this.props.XMLvalue + valueLabelPair.label} value={valueLabelPair.value} xmlvalue={this.props.XMLvalue}>{valueLabelPair.label}</MenuItem>
-							)}
+							{tpv.label}
+						</MenuItem>
+					);
+				}
+				console.log("defVal: " + defaultVal);
+				theQ = (
+					<FormControl className={classes.formControl}>
+						<InputLabel htmlFor={this.props.label}>{this.props.label}</InputLabel>
+						<Select
+							defaultValue={ defaultVal }
+							// value={this.state.selectLabel}
+							value={this.state.selectLabel}
+							onChange={this.handleSelectChange}
+							inputProps={{
+								name: 'selectLabel',  // this name is defining the 'name' in the event to which the value in the selected menu item is assigned (aka: this is the 'key' in state)
+								id: this.props.label,
+							}}
+						>
+							{menuItems}
 						</Select>
 					</FormControl>
+
+
+
+
+
+					// <FormControl className={classes.formControl} key={this.props.key}>
+					// 	<InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>
+					// 	<Select
+					// 		onChange={this.handleSelectChange}
+					// 		value={selectLabel}
+					// 		id={this.props.id}
+					// 		name={this.state.XMLvalue}
+					// 	>
+					// 		{this.props.value.map(valueLabelPair =>
+					// 			<MenuItem
+					// 				key={this.props.XMLvalue + "_" + valueLabelPair.label}
+					// 				value={valueLabelPair.value}
+					// 			>
+					// 				{valueLabelPair.label}
+					// 			</MenuItem>
+					// 		)}
+					// 	</Select>
+					// </FormControl>
+
+
 				);
 				break;
 			}
@@ -104,9 +191,10 @@ class Question extends React.Component {
 				if (DEBUG) console.log("Text Question");
 				theQ =
 					<TextField
+						value={this.state.value}
+						onChange={this.handleTextChange(this.props.key)}
 						key={this.props.key}
 						id={this.props.id}
-						onChange={this.handleTextChange(this.props.id)}
 						label={this.props.label}
 						placeholder={realPlaceholder}
 						className={classes.textField}
@@ -119,9 +207,10 @@ class Question extends React.Component {
 			case 'MultiText': {
 				if (DEBUG) console.log("MultiText Question");
 				theQ = <TextField
+					value={this.state.value}
+					onChange={this.handleTextChange(this.props.key)}
 					key={this.props.key}
 					id={this.props.id}
-					onChange={this.handleTextChange(this.props.id)}
 					label={this.props.label}
 					placeholder={realPlaceholder}
 					className={classes.textField}
@@ -165,6 +254,7 @@ class Question extends React.Component {
 			default: {
 				//TODO: Throw error
 				console.log("Question doesn't match any type");
+				//FIXME: by not returning a question with a key, this throws a application-wide error... 
 			}
 		}
 		return theQ;

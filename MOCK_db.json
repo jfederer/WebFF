@@ -32,52 +32,9 @@
 	{"id":30,"first_name":"Nana","last_name":"LaBastida","email":"nlabastidat@google.co.jp","gender":"Female"}
 ],
 	"questions": [
+		
 		{"key":"test1", "id":"test1", "label":"Question #1", "XMLvalue":"XMLQ1", "type":"Text", "placeholder":"placeme", "value":""},
-		{"key":"test2", "id":"test2", "label":"Question #2", "XMLvalue":"XMLQ2", "type":"Text", "value": "Seventeen"},
-		{"key":"test3", "id":"test3", "label":"Question #3", "XMLvalue":"XMLQ3", "type":"MultiText", "value": ""},
-		{"key":"test4", "id":"test4", "label":"Question #4", "XMLvalue":"XMLQ4", "type":"DropDown", "value": [
-			{
-				"value": "",
-				"label": "None"
-			},
-			{
-				"value": "Opt1",
-				"label": "Option 1"
-			},
-			{
-				"value": "Opt2",
-				"label": "Option 2"
-			},
-			{
-				"value": "Opt3",
-				"label": "Option 3"
-			}
-		]},
-		{"key":"test5", "id":"test5", "label":"Question #5", "XMLvalue":"XMLQ5", "type":"MultiChoice", "value": [
-			{
-				"value": "CSN",
-				"label": "Colleen Niznik",
-				"checked": false
-			},
-			{
-				"value": "CBF",  
-				"label": "Corbin Brock",
-				"checked": true 
-			},
-			{
-				"value": "RAF",
-				"label": "Ruby Anne"
-			},
-			{
-				"value": "JAW",
-				"label": "Jan Wonka",
-				"checked": false
-			},
-			{
-				"value": "KASS",
-				"label": "Kassidy Schmassidy",
-				"checked": true
-			}
-		]}
+		{"key":"test2", "id":"test2", "label":"Question #2", "XMLvalue":"XMLQ2", "type":"Text", "value": "Default Value"},
+		{"key":"test3", "id":"test3", "label":"Question #3", "XMLvalue":"XMLQ3", "type":"MultiText", "value": ""}
 	]
 }
