@@ -38,11 +38,10 @@ class AppLayout extends React.Component {
 		super(props);
 
 		var initialNavInfo = [
-			{"key":"nav_Dashboard", "text":"Dashboard", "route":"/Dashboard", "icon":"DashboardIcon"},
-			{"key":"nav_FieldForm", "text":"Field Form","route":"/FieldForm", "icon":"ImportContactsIcon"},
-			{"key":"nav_WaterQuality", "text":"Water Quality", "route":"/WaterQuality", "icon":"OpaciztyIcon"}
-		];
-		var initialNavMenu = this.jsonToNavMenu(initialNavInfo); // designed to show something prior to loading
+			{ "key": "nav_Dashboard", "text": "Dashboard", "route": "/Dashboard", "icon": "DashboardIcon" },
+			{ "key": "nav_FieldForm", "text": "Field Form", "route": "/FieldForm", "icon": "ImportContactsIcon" },
+			{ "key": "nav_WaterQuality", "text": "Water Quality", "route": "/WaterQuality", "icon": "OpaciztyIcon" }
+		];//TODO: designed to show something prior to loading... unecessary?
 
 		this.state = {
 			isNavLoading: true,
@@ -51,34 +50,17 @@ class AppLayout extends React.Component {
 			appBarText: "App Bar Title",
 			showEDI: false,
 			showEWI: false,
-			navMenuItems: initialNavMenu,
-			loadedNavMenuItems: []
+			showWaterQuality: false,
+			showFieldForm: false,
+			navMenuInfo: initialNavInfo,
 		};
+		this.navigationControl = this.navigationControl.bind(this);
+
 	};
 
-
-	jsonToNavMenu(jsonNavData) {
-		return jsonNavData.map((menuItem) => { 
-			return (
-				<ListItem key={menuItem.key} button component={Link} to={menuItem.route}>
-					<ListItemIcon>
-						{this.materialtIcon(menuItem.icon)}
-					</ListItemIcon>
-					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-				</ListItem>
-			);
-		});
+	componentWillUpdate(nextProps, nextState) {
+		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 	}
-
-	materialtIcon(icon) {	
-			switch (icon) {
-			  case 'DashboardIcon': return <DashboardIcon />
-			  case 'ImportContactsIcon': return <ImportContactsIcon />
-			  case 'OpacityIcon': return <OpacityIcon />
-			  default: return <SettingsInputComponentIcon />
-			}
-	}
-
 	componenetDidMount() {
 
 	}
@@ -87,12 +69,73 @@ class AppLayout extends React.Component {
 		if (localStorage.getItem('navMenuInfo')) {
 			console.log("using localStorage data for navMenuInfo");
 			this.setState({
-				loadedNavMenuItems: JSON.parse(localStorage.getItem('navMenuInfo')),
-				isLoading:false
+				//navMenuInfo: JSON.parse(localStorage.getItem('navMenuInfo')),
+				navMenuInfo: JSON.parse(localStorage.getItem('navMenuInfo')),
+				isLoading: false
 			});
 		} else {
 			console.log("going to DB for data for navMenuInfo");
 			this.fetchNavData();
+		}
+	}
+
+	navigationControl(tabName, add) {
+		tabName = tabName.replace(/\s/g,'');
+
+		// if add is false, remove menuItem ased on tabNAme  
+		// if add is true, add a tab named tabName
+		// extra verbosity due to desire to use dynamic key name
+		var key = 'show'+tabName;
+		var val = add;
+		var obj  = {};
+		obj[key] = val;
+		this.setState(obj);
+	}
+
+	jsonToNavMenu(jsonNavData) {
+		// this function filters tabs based on the "showXYZ" items in state
+		var retMenu = [];
+		for(var i = 0; i<jsonNavData.length; i++) {
+			var menuItem = jsonNavData[i];
+			var shouldInclude = true;
+
+			if((menuItem.text==="EWI" && !this.state.showEWI)) {   //HARDCODE
+				shouldInclude = false;
+			}
+
+			if((menuItem.text==="EDI" && !this.state.showEDI)) {  //HARDCODE
+				shouldInclude = false;
+			}
+
+			if((menuItem.text==="Water Quality" && !this.state.showWaterQuality)) {   //HARDCODE
+				shouldInclude = false;
+			}
+
+			if((menuItem.text==="Field Form" && !this.state.showFieldForm)) {  //HARDCODE
+				shouldInclude = false;
+			}
+
+
+
+			if(shouldInclude) retMenu.push(
+				<ListItem key={menuItem.key} button component={Link} to={menuItem.route}>
+					{(menuItem.text!=="EDI") ? ( //HARDCODE
+					<ListItemIcon>
+						{this.materialtIcon(menuItem.icon)}
+					</ListItemIcon>): null}
+					<ListItemText className={styles.navMenuText} primary={menuItem.text} /> 
+				</ListItem>
+			);
+		}
+		return retMenu;
+	}
+
+	materialtIcon(icon) {
+		switch (icon) {
+			case 'DashboardIcon': return <DashboardIcon />
+			case 'ImportContactsIcon': return <ImportContactsIcon />
+			case 'OpacityIcon': return <OpacityIcon />
+			default: return <SettingsInputComponentIcon />
 		}
 	}
 
@@ -119,7 +162,7 @@ class AppLayout extends React.Component {
 					if (DEBUG) console.log(parsedJSON);
 					setTimeout(() => {
 						this.setState({
-							loadedNavMenuItems: parsedJSON,
+							navMenuInfo: parsedJSON,
 							isNavLoading: false
 						});
 						if (DEBUG) console.log("CurrentState: ");
@@ -155,12 +198,12 @@ class AppLayout extends React.Component {
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
 				{this.state.navMenu}
-				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} />} />
-				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText} />} />
-				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText} />} />
-				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText} />} />
-				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText} />} />
-				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText} />} />
+				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} navControl={this.navigationControl}/>} />
+				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
 			</Switch>
 		);
 		this.setState({ routeMenu: newRouteMenu });
@@ -174,89 +217,60 @@ class AppLayout extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		//console.log(this.state.navMenu);
 
 		let navigationMenu;
 
-
-		if (this.state.isNavLoading) {
+		if (this.state.isNavLoading) { //TODO: this if doesn't seem needed any longer... given we pre-load a hard-coded inital menu state
 			//navigationMenu = null;  
 			//TODO: actually seems to work, might be worth putting in a single nave menu item that simpyl shows lack of connection rather than some default options
-			navigationMenu = ( 
-				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.state.navMenuItems} />
+			navigationMenu = (
+				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
 			);
 		} else {
-			var myMenuItems = this.state.loadedNavMenuItems.map((menuItem) => {
-				return (
-					<ListItem key={menuItem.key} button component={Link} to={menuItem.route}>
-						<ListItemIcon>
-							<DashboardIcon />
-						</ListItemIcon>
-						<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-					</ListItem>
-					
-				);
-			});
 			navigationMenu = (
-					<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={myMenuItems} />
-				);
-
-
-
-			{/* <List>
-        {exercises.map(({ id, title }) =>
-          <ListItem key={id}>
-            <ListItemText primary={title} />
-          </ListItem>
-        )}
-      </List> */}
-			// </List>loadedNavMenuItems
-
-			// navigationMenu = (
-
-			// );
+				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
+			);
 		}
 
 
-	return(
-			<div className = { classes.root } >
-			<AppBar
-				position="absolute"
-				className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
-			>
-				<Toolbar disableGutters={!this.state.navMenuExpanded}>
-					<IconButton
-						color="inherit"
-						aria-label="expand drawer"
-						onClick={this.handleLeftDrawerOpen}
-						className={classNames(classes.menuButton, this.state.navMenuExpanded && classes.hide)}
-					>
-						<ChevronRightIcon />
-					</IconButton>
+		return (
+			<div className={classes.root} >
+				<AppBar
+					position="absolute"
+					className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
+				>
+					<Toolbar disableGutters={!this.state.navMenuExpanded}>
+						<IconButton
+							color="inherit"
+							aria-label="expand drawer"
+							onClick={this.handleLeftDrawerOpen}
+							className={classNames(classes.menuButton, this.state.navMenuExpanded && classes.hide)}
+						>
+							<ChevronRightIcon />
+						</IconButton>
 
-					<Typography variant="title" color="inherit" noWrap>
-						{this.state.appBarText}
-					</Typography>
+						<Typography variant="title" color="inherit" noWrap>
+							{this.state.appBarText}
+						</Typography>
 
-					<IconButton
-						color="inherit"
-						aria-label="System Menu"
-						onClick={this.handleSystemMenuIconClicked}
-						className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
-					>
-						<MenuIcon />
-					</IconButton>
-				</Toolbar>
+						<IconButton
+							color="inherit"
+							aria-label="System Menu"
+							onClick={this.handleSystemMenuIconClicked}
+							className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
+						>
+							<MenuIcon />
+						</IconButton>
+					</Toolbar>
 
-			</AppBar>
+				</AppBar>
 
-			<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} />
-				{ navigationMenu }
-				<main className = { classes.content } >
-			<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */ }
-					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */ }
-					{/* <button onClick={() => this.setState({ showEDI: true })}>SHOW</button> */ }
-					{ this.state.routeMenu }
+				<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} />
+				{navigationMenu}
+				<main className={classes.content} >
+					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
+					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */}
+					{this.state.routeMenu}
 
 				</main>
 

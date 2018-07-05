@@ -148,7 +148,11 @@ class FieldForm extends React.Component {
 					<li><b>Station Number</b></li>
 					<li><b>Agency Code</b></li>
 					<li><b>Sample Data</b> (auto populated with current date)</li>
-					<li><b>SSC Sample Type</b> (EDI or EWI:  If EDI selected, add EDI tab... If EWI selected, add EWI Tab)<button onClick={()=>this.questionChangeHandler()}>Add EDI</button></li>
+					<li><b>SSC Sample Type</b> (EDI or EWI:  If EDI selected, add EDI tab... If EWI selected, add EWI Tab)
+						<button onClick={()=>this.props.navControl("EDI",true)}>Add EDI</button>
+						<button onClick={()=>this.props.navControl("EDI",false)}>Remove EDI</button>
+						<button onClick={()=>this.props.navControl("EWI",true)}>Add EWI</button>
+						<button onClick={()=>this.props.navControl("EWI",false)}>Remove EWI</button></li>
 					<li><b>Bedload attempted?</b>  (opens new tab or questions on EDI/EWI tab... I forget, check notes)</li>
 					<li><b>Bed Material attempted?</b> (opens new tab or questions on EDI/EWI tab... I forget, check notes)</li>
 					<li><b>Time Zone</b></li>

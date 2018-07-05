@@ -32,14 +32,14 @@
 	{"id":30,"first_name":"Nana","last_name":"LaBastida","email":"nlabastidat@google.co.jp","gender":"Female"}
 ],
 	"questions": [
-		{"key":"test1", "id":"test1", "label":"Question #1", "XMLvalue":"XMLQ1", "type":"Text", "placeholder":"placeme", "value":""},
+		{"key":"test1", "id":"test1", "label":"PRoject Name", "XMLvalue":"XMLQ1", "type":"Text", "placeholder":"placeme", "value":""},
 		{"key":"test2", "id":"test2", "label":"Question #2", "XMLvalue":"XMLQ2", "type":"Text", "value": "Default Value"},
 		{"key":"test3", "id":"test3", "label":"Question #3", "XMLvalue":"XMLQ3", "type":"MultiText", "value": ""}
 	],
 	"navMenuInfo": [
-		{"key":"nav_Dashboard", "text":"Dashboard", "route":"/Dashboard"},
-		{"key":"nav_FieldForm", "text":"Field Form","route":"/FieldForm"},
-		{"key":"nav_WaterQuality", "text":"Water Quality", "route":"/WaterQuality"},
+		{"key":"nav_Dashboard", "text":"Dashboard", "route":"/Dashboard", "icon":"DashboardIcon"},
+		{"key":"nav_FieldForm", "text":"Field Form","route":"/FieldForm", "icon":"ImportContactsIcon"},
+		{"key":"nav_WaterQuality", "text":"Water Quality", "route":"/WaterQuality", "icon":"OpacityIcon"},
 		{"key":"nav_EDI", "text":"EDI", "route":"/EDI"},
 		{"key":"nav_EWI", "text":"EWI", "route":"/EWI"}
 	]
