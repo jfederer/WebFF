@@ -41,54 +41,54 @@ class FieldForm extends React.Component {
 	}
 
 	questionChangeHandler(Q) {
-		console.log(Q);
+		//this function saves updated question "values" (must be located at "Q.value") to localStorage
+
+		//FUTURE: while this works, it could be simpler re-written with spread operator
+		//might require re
+
+		var DEBUG=false;
+		if(DEBUG)console.log(Q);
 		if(Q==null) { //POC
-			console.log("Here");
-			//add EDI tab
-
-			//tell nav handler to show tab
-
+			console.log("Question returned to questionChangeHandler was null");
 			return;
 		}
 
-		console.log("--------------");
-		console.log("FF state:");
-		console.log(this.state);
+		if(DEBUG)console.log("--------------");
+		if(DEBUG)console.log("FF state:");
+		if(DEBUG)console.log(this.state);
 		// to sync question modifications to localStorage
-		console.log("--------------");
-		console.log("Q:");
-		console.log(Q.state);
+		if(DEBUG)console.log("--------------");
+		if(DEBUG)console.log("Q:");
+		if(DEBUG)console.log(Q.state);
 
 		
 		// get the questions in localStorage
 		var rawData = JSON.parse(localStorage.getItem('questionsData'));
-		console.log("--------------");
-		console.log("questionsData");
-		console.log(rawData);
+		if(DEBUG)console.log("--------------");
+		if(DEBUG)console.log("questionsData");
+		if(DEBUG)console.log(rawData);
 
 		// find the specific question in questionData based on the key,then update the value property
-		var QD = rawData.filter(questionData => {
+		var QData = rawData.filter(questionData => {
 			if (questionData.key===Q.state.key) {
-				console.log("------FOUND!--------");
-				console.log("questionData (pre)");
-				console.log(questionData);
-				console.log("Q.state.value");
-				console.log(Q.state.value);
+				if(DEBUG)console.log("------FOUND!--------");
+				if(DEBUG)console.log("questionData (pre)");
+				if(DEBUG)console.log(questionData);
+				if(DEBUG)console.log("Q.state.value");
+				if(DEBUG)console.log(Q.state.value);
 				//questionData.value="SEVEN!";
 				questionData.value = Q.state.value;
-				console.log("--------------");
-				console.log("questionData (post)");
-				console.log(questionData);				
+				if(DEBUG)console.log("--------------");
+				if(DEBUG)console.log("questionData (post)");
+				if(DEBUG)console.log(questionData);				
 			}
 			return questionData;
 		});
 
-		console.log(QD);
+		if(DEBUG)console.log(QData);
 
 		// replace the questionData in localStorage
 		localStorage.setItem('questionsData', JSON.stringify(rawData));
-		
-		//FUTURE:  likely  way to do this without replacing the entire 'questionsData'.
 	}
 
 	fetchData() {

@@ -1,46 +1,93 @@
 {
-	"info": [
-		{"id":1,"first_name":"Glynn","last_name":"Dunbar","email":"gdunbar0@github.com","gender":"Male"},
-	{"id":2,"first_name":"Stefano","last_name":"Raggles","email":"sraggles1@squarespace.com","gender":"Male"},
-	{"id":3,"first_name":"Beniamino","last_name":"Cremen","email":"bcremen2@epa.gov","gender":"Male"},
-	{"id":4,"first_name":"Fae","last_name":"Lammin","email":"flammin3@shareasale.com","gender":"Female"},
-	{"id":5,"first_name":"Sayers","last_name":"Kuhl","email":"skuhl4@state.tx.us","gender":"Male"},
-	{"id":6,"first_name":"Shaina","last_name":"Drewett","email":"sdrewett5@vkontakte.ru","gender":"Female"},
-	{"id":7,"first_name":"Darcee","last_name":"Rojel","email":"drojel6@oakley.com","gender":"Female"},
-	{"id":8,"first_name":"Dicky","last_name":"Peskin","email":"dpeskin7@google.nl","gender":"Male"},
-	{"id":9,"first_name":"Neils","last_name":"Greenham","email":"ngreenham8@skype.com","gender":"Male"},
-	{"id":10,"first_name":"Forrester","last_name":"Haggata","email":"fhaggata9@infoseek.co.jp","gender":"Male"},
-	{"id":11,"first_name":"Barnard","last_name":"Andrusyak","email":"bandrusyaka@nytimes.com","gender":"Male"},
-	{"id":12,"first_name":"Mathilde","last_name":"Shillaker","email":"mshillakerb@lycos.com","gender":"Female"},
-	{"id":13,"first_name":"Megen","last_name":"Jirka","email":"mjirkac@youtu.be","gender":"Female"},
-	{"id":14,"first_name":"Winston","last_name":"Burwin","email":"wburwind@sphinn.com","gender":"Male"},
-	{"id":15,"first_name":"Thaddus","last_name":"Howland","email":"thowlande@tmall.com","gender":"Male"},
-	{"id":16,"first_name":"Bil","last_name":"Tonkinson","email":"btonkinsonf@patch.com","gender":"Male"},
-	{"id":17,"first_name":"Bertram","last_name":"Perigo","email":"bperigog@t.co","gender":"Male"},
-	{"id":18,"first_name":"Yorker","last_name":"Thurlby","email":"ythurlbyh@eventbrite.com","gender":"Male"},
-	{"id":19,"first_name":"Abby","last_name":"Balshen","email":"abalsheni@skype.com","gender":"Female"},
-	{"id":20,"first_name":"Barr","last_name":"Olenchenko","email":"bolenchenkoj@storify.com","gender":"Male"},
-	{"id":21,"first_name":"Kelley","last_name":"Saxon","email":"ksaxonk@msn.com","gender":"Male"},
-	{"id":22,"first_name":"Shell","last_name":"Waison","email":"swaisonl@imgur.com","gender":"Male"},
-	{"id":23,"first_name":"Shem","last_name":"Bark","email":"sbarkm@elpais.com","gender":"Male"},
-	{"id":24,"first_name":"Noby","last_name":"Daveley","email":"ndaveleyn@last.fm","gender":"Male"},
-	{"id":25,"first_name":"Kristos","last_name":"Nance","email":"knanceo@icio.us","gender":"Male"},
-	{"id":26,"first_name":"Kevina","last_name":"Cobbin","email":"kcobbinp@cyberchimps.com","gender":"Female"},
-	{"id":27,"first_name":"Alfi","last_name":"Kinchin","email":"akinchinq@weebly.com","gender":"Female"},
-	{"id":28,"first_name":"Aldo","last_name":"Doul","email":"adoulr@technorati.com","gender":"Male"},
-	{"id":29,"first_name":"Warren","last_name":"Gyde","email":"wgydes@rakuten.co.jp","gender":"Male"},
-	{"id":30,"first_name":"Nana","last_name":"LaBastida","email":"nlabastidat@google.co.jp","gender":"Female"}
-],
 	"questions": [
-		{"key":"test1", "id":"test1", "label":"PRoject Name", "XMLvalue":"XMLQ1", "type":"Text", "placeholder":"placeme", "value":""},
-		{"key":"test2", "id":"test2", "label":"Question #2", "XMLvalue":"XMLQ2", "type":"Text", "value": "Default Value"},
-		{"key":"test3", "id":"test3", "label":"Question #3", "XMLvalue":"XMLQ3", "type":"MultiText", "value": ""}
+		{
+			"key": "test1",
+			"id": "test1",
+			"label": "Single Line Text",
+			"XMLValue": "XMLQ1",
+			"type": "Text",
+			"helperText": "PCodes FTW!",
+			"placeholder": "placeme",
+			"value": ""
+		},
+		{
+			"key": "test2",
+			"id": "test2",
+			"label": "Single Line Text",
+			"XMLValue": "XMLQ2",
+			"type": "Text",
+			"value": "Default Value"
+		},
+		{
+			"key": "test3",
+			"id": "test3",
+			"label": "Question #3",
+			"XMLValue": "XMLQ3",
+			"type": "MultiText",
+			"value": ""
+		},
+		{
+			"key": "test4",
+			"id": "test4",
+			"label": "Question Label 4",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": true,
+			"helperText": "PCodes FTW!",
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"My3": "three"
+			},
+			"value": "One"
+		},
+		{
+			"key": "test5",
+			"id": "test5",
+			"label": "Question #5",
+			"XMLValue": "XMLQ5",
+			"type": "MultiChoice",
+			"options": {
+				"Colleen Niznik": "CSN",
+				"Corbin Brock": "CBF",
+				"Ruby Anne": "RAF",
+				"Kassidy Schmassidy": "KASS"
+			},
+			"value": [
+				"CSN",
+				"RAF"
+			]
+		}
 	],
 	"navMenuInfo": [
-		{"key":"nav_Dashboard", "text":"Dashboard", "route":"/Dashboard", "icon":"DashboardIcon"},
-		{"key":"nav_FieldForm", "text":"Field Form","route":"/FieldForm", "icon":"ImportContactsIcon"},
-		{"key":"nav_WaterQuality", "text":"Water Quality", "route":"/WaterQuality", "icon":"OpacityIcon"},
-		{"key":"nav_EDI", "text":"EDI", "route":"/EDI"},
-		{"key":"nav_EWI", "text":"EWI", "route":"/EWI"}
+		{
+			"key": "nav_Dashboard",
+			"text": "Dashboard",
+			"route": "/Dashboard",
+			"icon": "DashboardIcon"
+		},
+		{
+			"key": "nav_FieldForm",
+			"text": "Field Form",
+			"route": "/FieldForm",
+			"icon": "ImportContactsIcon"
+		},
+		{
+			"key": "nav_WaterQuality",
+			"text": "Water Quality",
+			"route": "/WaterQuality",
+			"icon": "OpacityIcon"
+		},
+		{
+			"key": "nav_EDI",
+			"text": "EDI",
+			"route": "/EDI"
+		},
+		{
+			"key": "nav_EWI",
+			"text": "EWI",
+			"route": "/EWI"
+		}
 	]
 }

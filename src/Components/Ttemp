@@ -46,3 +46,35 @@
 				"checked": true
 			}
 		]}
+
+
+
+
+
+
+		{"key":"test5", "id":"test5", "label":"Question #5", "XMLvalue":"XMLQ5", "type":"MultiChoice", "value": {
+			{
+				"value": "CSN",
+				"label": "Colleen Niznik",
+				"checked": false
+			},
+			{
+				"value": "CBF",  
+				"label": "Corbin Brock",
+				"checked": true 
+			},
+			{
+				"value": "RAF",
+				"label": "Ruby Anne"
+			},
+			{
+				"value": "JAW",
+				"label": "Jan Wonka",
+				"checked": false
+			},
+			{
+				"value": "KASS",
+				"label": "Kassidy Schmassidy",
+				"checked": true
+			}
+		}
