@@ -139,6 +139,10 @@ class Question extends React.Component {
 							native
 							value={this.state.value}
 							onChange={this.handleSelectChange('value')}
+							inputProps={{
+								name: this.props.label,
+								id: this.props.id,
+							  }}
 						>
 							{this.buildSelectOptions(this.props.options)}
 
