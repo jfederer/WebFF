@@ -8,7 +8,9 @@
 			"type": "Text",
 			"helperText": "PCodes FTW!",
 			"placeholder": "placeme",
-			"value": ""
+			"value": "",
+			"tabName": "Dashboard",
+			"layoutGroup": "Test"
 		},
 		{
 			"key": "test2",
@@ -16,7 +18,9 @@
 			"label": "Single Line Text",
 			"XMLValue": "XMLQ2",
 			"type": "Text",
-			"value": "Default Value"
+			"value": "Default Value",
+			"tabName": "Dashboard",
+			"layoutGroup": "Test"
 		},
 		{
 			"key": "test3",
@@ -24,7 +28,9 @@
 			"label": "Question #3",
 			"XMLValue": "XMLQ3",
 			"type": "MultiText",
-			"value": ""
+			"value": "",
+			"tabName": "Dashboard",
+			"layoutGroup": "Test"
 		},
 		{
 			"key": "test4",
@@ -40,7 +46,9 @@
 				"My2": "Two",
 				"My3": "three"
 			},
-			"value": "One"
+			"value": "One",
+			"tabName": "Dashboard",
+			"layoutGroup": "Test"
 		},
 		{
 			"key": "test5",
@@ -57,7 +65,9 @@
 			"value": [
 				"CSN",
 				"RAF"
-			]
+			],
+			"tabName": "Dashboard",
+			"layoutGroup": "Test"
 		},
 		{
 			"key": "stationName",
@@ -65,8 +75,8 @@
 			"label": "Station Name",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
 			"includeBlank": false,
+			"tabName": "FieldForm",
 			"layoutGroup": "Basic"
 		},
 		{
@@ -144,7 +154,9 @@
 			"options": {
 				"Bedload Attempted": "bedloadAttempted"
 			},
-			"value": []
+			"value": [],
+			"tabName": "FieldForm",
+			"layoutGroup": "Basic"
 		},
 		{
 			"key": "bedMaterialAttempted",
@@ -155,7 +167,9 @@
 			"options": {
 				"Bed Material Attempted": "bedMaterialAttempted"
 			},
-			"value": []
+			"value": [],
+			"tabName": "FieldForm",
+			"layoutGroup": "Basic"
 		},
 		{
 			"key": "timeZone",
@@ -183,7 +197,9 @@
 			"label": "Sampling Team",
 			"XMLValue": "st",
 			"type": "Text",
-			"value": ""
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "Basic"
 		},
 		{
 			"key": "compiledBy",
@@ -191,7 +207,9 @@
 			"label": "Compiled By",
 			"XMLValue": "cb",
 			"type": "Text",
-			"value": ""
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "Basic"
 		},
 		{
 			"key": "sameDaySample",

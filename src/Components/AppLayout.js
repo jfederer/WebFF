@@ -193,7 +193,7 @@ class AppLayout extends React.Component {
 				<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
 				{this.state.navMenu}
 				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} navControl={this.navigationControl}/>} />
-				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}  tabName="FieldForm" navControl={this.navigationControl}/>} />
 				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
 				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
 				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
