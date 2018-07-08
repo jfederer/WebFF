@@ -37,12 +37,6 @@ class AppLayout extends React.Component {
 	constructor(props) {
 		super(props);
 
-		var initialNavInfo = [
-			{ "key": "nav_Dashboard", "text": "Dashboard", "route": "/Dashboard", "icon": "DashboardIcon" },
-			{ "key": "nav_FieldForm", "text": "Field Form", "route": "/FieldForm", "icon": "ImportContactsIcon" },
-			{ "key": "nav_WaterQuality", "text": "Water Quality", "route": "/WaterQuality", "icon": "OpaciztyIcon" }
-		];//TODO: designed to show something prior to loading... unecessary?
-
 		this.state = {
 			isNavLoading: true,
 			navMenuExpanded: false,
@@ -52,7 +46,7 @@ class AppLayout extends React.Component {
 			showEWI: false,
 			showWaterQuality: false,
 			showFieldForm: false,
-			navMenuInfo: initialNavInfo,
+			navMenuInfo: [] 
 		};
 		this.navigationControl = this.navigationControl.bind(this);
 
@@ -82,7 +76,7 @@ class AppLayout extends React.Component {
 	navigationControl(tabName, add) {
 		tabName = tabName.replace(/\s/g,'');
 
-		// if add is false, remove menuItem ased on tabNAme  
+		// if add is false, remove menuItem used on tabNAme  
 		// if add is true, add a tab named tabName
 		// extra verbosity due to desire to use dynamic key name
 		var key = 'show'+tabName;
@@ -160,14 +154,14 @@ class AppLayout extends React.Component {
 				parsedJSON => {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
-					setTimeout(() => {
+					//setTimeout(() => {
 						this.setState({
 							navMenuInfo: parsedJSON,
 							isNavLoading: false
 						});
 						if (DEBUG) console.log("CurrentState: ");
 						if (DEBUG) console.log(this.state);
-					}, 2000);
+					//}, 2000);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}

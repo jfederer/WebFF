@@ -58,6 +58,248 @@
 				"CSN",
 				"RAF"
 			]
+		},
+		{
+			"key": "stationName",
+			"id": "stationName",
+			"label": "Station Name",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": false,
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "stationNumber",
+			"id": "stationNumber",
+			"label": "Station Number",
+			"XMLValue": "",
+			"type": "Text",
+			"tabName": "FieldForm",
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "projectName",
+			"id": "projectName",
+			"label": "Project Name",
+			"XMLValue": "",
+			"type": "Text",
+			"tabName": "FieldForm",
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "projectID",
+			"id": "projectID",
+			"label": "Project ID",
+			"XMLValue": "",
+			"type": "Text",
+			"tabName": "FieldForm",
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "agencyCode",
+			"id": "agencyCode",
+			"label": "Agency Code",
+			"XMLValue": "",
+			"type": "Text",
+			"tabName": "FieldForm",
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "sampleDate",
+			"id": "sampleDate",
+			"label": "Sample Date",
+			"XMLValue": "",
+			"type": "Text",
+			"tabName": "FieldForm",
+			"placeholder": "yyyymmdd",
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "sampleType",
+			"id": "sampleType",
+			"label": "Sample Type",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"EDI": "EDI",
+				"EWI": "EWI"
+			},
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "bedloadAttempted",
+			"id": "bedloadAttempted",
+			"label": "Bedload Attempted",
+			"XMLValue": "Bedload",
+			"type": "MultiChoice",
+			"options": {
+				"Bedload Attempted": "bedloadAttempted"
+			},
+			"value": []
+		},
+		{
+			"key": "bedMaterialAttempted",
+			"id": "bedMaterialAttempted",
+			"label": "Bed Material Attempted",
+			"XMLValue": "Material",
+			"type": "MultiChoice",
+			"options": {
+				"Bed Material Attempted": "bedMaterialAttempted"
+			},
+			"value": []
+		},
+		{
+			"key": "timeZone",
+			"id": "timeZone",
+			"label": "Time Zone Area",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"Hawaii-Aleutian": "Hawaii-Aleutian",
+				"Alaska": "Alaska",
+				"Pacific": "Pacific",
+				"Mountain": "Mountain",
+				"Central": "Central",
+				"Eastern": "Eastern",
+				"Atlantic" : "Atlantic"
+			},
+			"value": "",
+			"layoutGroup": "Basic"
+		},
+		{
+			"key": "samplingTeam",
+			"id": "samplingTeam",
+			"label": "Sampling Team",
+			"XMLValue": "st",
+			"type": "Text",
+			"value": ""
+		},
+		{
+			"key": "compiledBy",
+			"id": "compiledBy",
+			"label": "Compiled By",
+			"XMLValue": "cb",
+			"type": "Text",
+			"value": ""
+		},
+		{
+			"key": "sameDaySample",
+			"id": "sameDaySample",
+			"label": "Same Day Sample",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": false,
+			"options": {
+				"No": "No",
+				"2": "Mist",
+				"3": "Light Rain",
+				"4": "Medium Rain",
+				"5": "Heavy Rain"
+			},
+			"value": "No",
+			"layoutGroup": "Basic"
+		},
+
+		{
+			"key": "sky",
+			"id": "sky",
+			"label": "Sky",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"Clear": "Clear",
+				"Partly Cloudy": "Partly Cloudy",
+				"Cloudy": "Cloudy"
+			},
+			"value": "",
+			"layoutGroup": "Weather"
+		},
+		{
+			"key": "precipitation",
+			"id": "precipitation",
+			"label": "Precipitation",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"No Precip": "No Precip",
+				"Mist": "Mist",
+				"Light Rain": "Light Rain",
+				"Medium Rain": "Medium Rain",
+				"Heavy Rain": "Heavy Rain",
+				"Sleet": "Sleet",
+				"Snow": "Snow"
+			},
+			"value": "",
+			"layoutGroup": "Weather"
+		},
+		{
+			"key": "temperature",
+			"id": "temperature",
+			"label": "Temperature",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"Very Cold": "Very Cold",
+				"Cold": "Cold",
+				"Cool": "Cool",
+				"Warm": "Warm",
+				"Hot": "Hot",
+				"Very Hot": "Very Hot"
+			},
+			"value": "",
+			"layoutGroup": "Weather"
+		},
+		{
+			"key": "wind",
+			"id": "wind",
+			"label": "Wind",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"Calm": "Calm",
+				"Light Breeze": "Light Breeze",
+				"Breeze": "Breeze",
+				"Gusty": "Gusty",
+				"Windy": "Windy"
+			},
+			"value": "",
+			"layoutGroup": "Weather"
+		},
+		{
+			"key": "windDirection",
+			"id": "windDirection",
+			"label": "Wind Direction",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "FieldForm",
+			"includeBlank": true,
+			"options": {
+				"Upstream": "Upstream",
+				"Downstream": "Downstream",
+				"Cross-stream": "Cross-stream"
+			},
+			"value": "",
+			"layoutGroup": "Weather"
 		}
 	],
 	"navMenuInfo": [

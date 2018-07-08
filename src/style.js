@@ -6,7 +6,16 @@ export const styles = theme => ({
 	zIndex: 1,
 	overflow: 'hidden',
     position: 'relative',
-    display: 'flex',
+	display: 'flex',
+	// [theme.breakpoints.down('sm')]: {
+	// 	backgroundColor: theme.palette.secondary.main,
+	//   },
+	//   [theme.breakpoints.up('md')]: {
+	// 	backgroundColor: theme.palette.primary.main,
+	//   },
+	//   [theme.breakpoints.up('lg')]: {
+	// 	backgroundColor: '#119',
+	//   },
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -80,4 +89,19 @@ formControl: {
 selectEmpty: {
   marginTop: theme.spacing.unit * 2,
 },
+container: {
+	display: 'grid',
+	gridTemplateColumns: 'repeat(12, 1fr)',
+	gridGap: `${theme.spacing.unit * 3}px`,
+  },
+  paper: {
+	padding: theme.spacing.unit,
+	textAlign: 'center',
+	color: theme.palette.text.secondary,
+	whiteSpace: 'nowrap',
+	marginBottom: theme.spacing.unit,
+  },
+  divider: {
+	margin: `${theme.spacing.unit * 2}px 0`,
+  },
 });
