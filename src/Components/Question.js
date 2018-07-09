@@ -11,6 +11,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
 
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -217,9 +218,9 @@ class Question extends React.Component {
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
 		return (
-			<div>
+			<Grid item xs={3}>
 				{this.buildQuestion()}
-			</div>
+			</Grid>
 
 		);
 	}

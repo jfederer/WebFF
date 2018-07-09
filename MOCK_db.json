@@ -76,7 +76,7 @@
 			"XMLValue": "",
 			"type": "DropDown",
 			"includeBlank": false,
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"layoutGroup": "Basic"
 		},
 		{
@@ -85,7 +85,7 @@
 			"label": "Station Number",
 			"XMLValue": "",
 			"type": "Text",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"value": "",
 			"layoutGroup": "Basic"
 		},
@@ -95,7 +95,7 @@
 			"label": "Project Name",
 			"XMLValue": "",
 			"type": "Text",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"value": "",
 			"layoutGroup": "Basic"
 		},
@@ -105,7 +105,7 @@
 			"label": "Project ID",
 			"XMLValue": "",
 			"type": "Text",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"value": "",
 			"layoutGroup": "Basic"
 		},
@@ -115,7 +115,7 @@
 			"label": "Agency Code",
 			"XMLValue": "",
 			"type": "Text",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"value": "",
 			"layoutGroup": "Basic"
 		},
@@ -125,7 +125,7 @@
 			"label": "Sample Date",
 			"XMLValue": "",
 			"type": "Text",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"placeholder": "yyyymmdd",
 			"value": "",
 			"layoutGroup": "Basic"
@@ -136,7 +136,7 @@
 			"label": "Sample Type",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"EDI": "EDI",
@@ -155,7 +155,7 @@
 				"Bedload Attempted": "bedloadAttempted"
 			},
 			"value": [],
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"layoutGroup": "Basic"
 		},
 		{
@@ -168,7 +168,7 @@
 				"Bed Material Attempted": "bedMaterialAttempted"
 			},
 			"value": [],
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"layoutGroup": "Basic"
 		},
 		{
@@ -177,7 +177,7 @@
 			"label": "Time Zone Area",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"Hawaii-Aleutian": "Hawaii-Aleutian",
@@ -198,7 +198,7 @@
 			"XMLValue": "st",
 			"type": "Text",
 			"value": "",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"layoutGroup": "Basic"
 		},
 		{
@@ -208,7 +208,7 @@
 			"XMLValue": "cb",
 			"type": "Text",
 			"value": "",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"layoutGroup": "Basic"
 		},
 		{
@@ -217,7 +217,7 @@
 			"label": "Same Day Sample",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": false,
 			"options": {
 				"No": "No",
@@ -236,7 +236,7 @@
 			"label": "Sky",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"Clear": "Clear",
@@ -252,7 +252,7 @@
 			"label": "Precipitation",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"No Precip": "No Precip",
@@ -272,7 +272,7 @@
 			"label": "Temperature",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"Very Cold": "Very Cold",
@@ -291,7 +291,7 @@
 			"label": "Wind",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"Calm": "Calm",
@@ -309,7 +309,7 @@
 			"label": "Wind Direction",
 			"XMLValue": "",
 			"type": "DropDown",
-			"tabName": "FieldForm",
+			"tabName": "Field Form",
 			"includeBlank": true,
 			"options": {
 				"Upstream": "Upstream",
@@ -328,7 +328,7 @@
 			"icon": "DashboardIcon"
 		},
 		{
-			"key": "nav_FieldForm",
+			"key": "nav_Field Form",
 			"text": "Field Form",
 			"route": "/FieldForm",
 			"icon": "ImportContactsIcon"

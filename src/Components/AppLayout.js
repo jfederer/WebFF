@@ -192,11 +192,12 @@ class AppLayout extends React.Component {
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
 				{this.state.navMenu}
-				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} navControl={this.navigationControl}/>} />
-				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText}  tabName="FieldForm" navControl={this.navigationControl}/>} />
-				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
-				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
-				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				{/* HARDCODE!! */}
+				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl}/>} />  
+				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText} text="Field Form" navControl={this.navigationControl}/>} />
+				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}  text="Water Quality" navControl={this.navigationControl}/>} />
+				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText} text="EDI" navControl={this.navigationControl}/>} />
+				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText} text="EWI" navControl={this.navigationControl}/>} />
 				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
 			</Switch>
 		);
@@ -216,7 +217,6 @@ class AppLayout extends React.Component {
 
 		if (this.state.isNavLoading) { //TODO: this if doesn't seem needed any longer... given we pre-load a hard-coded inital menu state
 			//navigationMenu = null;  
-			//TODO: actually seems to work, might be worth putting in a single nave menu item that simpyl shows lack of connection rather than some default options
 			navigationMenu = (
 				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
 			);

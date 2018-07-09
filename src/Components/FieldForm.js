@@ -1,12 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { styles } from '../style';
+// import { styles } from '../style';
 import Question from './Question';
-
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 
 // standardize (library?) the use of "questionsData" string to generalized variable
+
+const styles = theme => ({
+	root: {
+	  display: 'flex',
+	  flexWrap: 'wrap',
+	},
+	formControl: {
+	  margin: theme.spacing.unit,
+	  minWidth: 120,
+	},
+	selectEmpty: {
+	  marginTop: theme.spacing.unit * 2,
+	},
+  });
 
 class FieldForm extends React.Component {
 	constructor(props) {
@@ -28,7 +43,7 @@ class FieldForm extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.appBarTextCB(this.props.tabName);
+		this.props.appBarTextCB(this.props.text);
 		if (localStorage.getItem('questionsData')) {
 			this.setState({
 				questionsData: JSON.parse(localStorage.getItem('questionsData')),
@@ -39,7 +54,6 @@ class FieldForm extends React.Component {
 
 	componentWillUpdate(nextProps, nextState) {
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
-		//console.log()
 	}
 
 	questionChangeHandler(Q) {
@@ -128,6 +142,7 @@ class FieldForm extends React.Component {
 
 
 	createQuestionsForTab(questionsData) {
+		let DEBUG=false;
 		// the questionsData variable contains only Questions for this single tab.
 		const { classes } = this.props;
 		//FUTURE: can absolutely be done more efficiently and with just a single recursive function.  So bad might even qualify as a FIXME: if there are performance issues
@@ -154,18 +169,21 @@ class FieldForm extends React.Component {
 			}
 			if (i > 0) {
 				let timestamp = new Date().getUTCMilliseconds();
-				tabQuestions.push(<p>DIVIDER!!!!</p>);  //TODO: add divider between layoutGroups
+				tabQuestions.push((
+					<Divider key={timestamp} />
+					)
+					);  //TODO: add divider between layoutGroups
 			}
 			tabQuestions.push(this.createQuestionsForLayoutGroup(layoutGroup));
-			console.log("Layout Group " + layoutGroupNames[i]);
-			console.log(layoutGroup);
+			if(DEBUG)console.log("Layout Group " + layoutGroupNames[i]);
+			if(DEBUG)console.log(layoutGroup);
 		}
 
 
 
-		console.log("Tab Questions Length: " + tabQuestions.length);
-		for (let i = 0; i < questionsData.length; i++) {
-			console.log(tabQuestions[i]);
+		if(DEBUG)console.log("Tab Questions Length: " + tabQuestions.length);
+		for (let i = 0; i < tabQuestions.length; i++) {
+			if(DEBUG)console.log(tabQuestions[i]);
 		}
 		return tabQuestions;
 	}
@@ -184,25 +202,17 @@ class FieldForm extends React.Component {
 		const { classes } = this.props;
 		const { isLoading, questionsData } = this.state;
 
-		//create form questions
-		var questionList = [];
-		//console.log(this.props.tabName);
-		let tempQ = questionsData.filter((question) => {
-			return question.tabName === this.props.tabName;
-		}
-		)
-		console.log("TempQ");
-		console.log(tempQ);
-		questionList = this.createQuestionsForTab(tempQ);
+		let questionList = [];
+		
+		if (!isLoading && questionsData.length > 0) {
+			questionList = this.createQuestionsForTab(questionsData.filter((question) => {
+			 	return question.tabName === this.props.text;
+			 }));
+			}
 
-		// if (!isLoading && questionsData.length > 0) {
-		// 	questionList.push(questionsData.map(questionData => <Question {...questionData} stateChangeHandler={this.questionChangeHandler} />));
-		// }
 		if (DEBUG) console.log("render");
 		if (DEBUG) console.log(this.state);
 
-
-		//TODO: loader is not working.  Likely css problem.  Look at ihatetomatoes css stuff. 
 		return (
 			<div>
 				<p>Select station name (list pulled from DB --> based on previous entries rather than admin console?)</p>
@@ -213,14 +223,34 @@ class FieldForm extends React.Component {
 				<button onClick={() => this.props.navControl("EWI", true)}>Add EWI</button>
 				<button onClick={() => this.props.navControl("EWI", false)}>Remove EWI</button>
 
+<Grid container spacing={24}>
 				<form className={classes.root} autoComplete="off">
 					{
 						!isLoading && questionList.length > 0 ? questionList : null
 					}
 				</form>
-				<div className="loader">
-					<div className="icon">LOADING!!!!</div>
-				</div>
+				</Grid>
+				<Grid className={classes.content}container spacing={24}>
+					<Grid item xs={3}>
+						<Paper className={classes.paper}>xs=3</Paper>
+					</Grid>
+					<Grid item xs={3}>
+						<Paper className={classes.paper}>xs=3</Paper>
+					</Grid>
+					<Grid item xs={3}>
+						<Paper className={classes.paper}>xs=3</Paper>
+					</Grid>
+					<Grid item xs={3}>
+						<Paper className={classes.paper}>xs=3</Paper>
+					</Grid>
+					<Grid item xs={8}>
+						<Paper className={classes.paper}>xs=8</Paper>
+					</Grid>
+					<Grid item xs={4}>
+						<Paper className={classes.paper}>xs=4</Paper>
+					</Grid>
+				</Grid>
+
 			</div>
 		);
 	}
