@@ -146,15 +146,18 @@
 			"layoutGroup": "Basic"
 		},
 		{
-			"key": "bedloadAttempted",
-			"id": "bedloadAttempted",
-			"label": "Bedload Attempted",
+			"key": "sedimentType",
+			"id": "sedimentType",
+			"label": "Sediment Type",
 			"XMLValue": "Bedload",
-			"type": "MultiChoice",
+			"type": "DropDown",
+			"includeBlank": false,
 			"options": {
-				"Bedload Attempted": "bedloadAttempted"
+				"Bedload": "bedload",
+				"Bed Material": "bedMaterial",
+				"Suspended": "suspended"
 			},
-			"value": [],
+			"value": "suspended",
 			"tabName": "Field Form",
 			"layoutGroup": "Basic"
 		},
@@ -319,6 +322,9 @@
 			"value": "",
 			"layoutGroup": "Weather"
 		}
+
+
+
 	],
 	"navMenuInfo": [
 		{

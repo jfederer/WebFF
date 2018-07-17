@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from '../style';
+import QuestionPanel from './QuestionPanel';
 
 class WaterQuality extends React.Component {
 	componentDidMount() {
@@ -9,9 +10,9 @@ class WaterQuality extends React.Component {
 	}
 
 	render() {
-
 		return (
 			<div>
+				<QuestionPanel>
 				<p>Collect the following data (more?)</p>
 				<ul>
 					<li><b>Time</b></li>
@@ -22,6 +23,7 @@ class WaterQuality extends React.Component {
 					<li><b>Trubidity (FNU)</b></li>
 					<li><b>Trubidity (NTRU)</b></li>
 				</ul>
+				</QuestionPanel>
 			</div>
 		);
 	}

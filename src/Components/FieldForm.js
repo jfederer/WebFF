@@ -6,6 +6,7 @@ import Question from './Question';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
+import QuestionPanel from './QuestionPanel';
 
 // standardize (library?) the use of "questionsData" string to generalized variable
 
@@ -215,6 +216,13 @@ class FieldForm extends React.Component {
 
 		return (
 			<div>
+				
+				<QuestionPanel questions={questionList} panelName="Panel Name Time!" />
+
+
+
+
+				<hr /><hr /><hr />
 				<p>Select station name (list pulled from DB --> based on previous entries rather than admin console?)</p>
 
 				<p>When station name selected, auto populate:</p>
@@ -223,7 +231,9 @@ class FieldForm extends React.Component {
 				<button onClick={() => this.props.navControl("EWI", true)}>Add EWI</button>
 				<button onClick={() => this.props.navControl("EWI", false)}>Remove EWI</button>
 
-<Grid container spacing={24}>
+				
+
+				<Grid container spacing={24}>
 				<form className={classes.root} autoComplete="off">
 					{
 						!isLoading && questionList.length > 0 ? questionList : null
