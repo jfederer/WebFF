@@ -26,6 +26,8 @@ import { Link } from 'react-router-dom';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import ReorderIcon from '@material-ui/icons/Reorder';
+import ColorizeIcon from '@material-ui/icons/Colorize';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import QuestionPage from './QuestionPage';
 
@@ -39,7 +41,7 @@ class WebFF extends React.Component {
 			isNavLoading: true,
 			navMenuExpanded: false,
 			systemMenuOpen: false,
-			appBarText: "App Bar Title",
+			appBarText: "Sediment Field Forms",
 			showEDI: false,
 			showEWI: false,
 			showWaterQuality: false,
@@ -86,6 +88,7 @@ class WebFF extends React.Component {
 
 	jsonToNavMenu(jsonNavData) {
 		// this function filters tabs based on the "showXYZ" items in state
+		console.log(jsonNavData);
 		var retMenu = [];
 		for(var i = 0; i<jsonNavData.length; i++) {
 			var menuItem = jsonNavData[i];
@@ -108,13 +111,17 @@ class WebFF extends React.Component {
 			}
 
 
-
+			// use icon?
+			let useIcon = true;
+			if(menuItem.icon==="") {
+				useIcon = false;
+			}
+				
 			if(shouldInclude) retMenu.push(
 				<ListItem key={menuItem.key} button component={Link} to={menuItem.route}>
-					{(menuItem.text!=="EDI") ? ( //HARDCODE
-					<ListItemIcon>
+					{(useIcon) ? <ListItemIcon>
 						{this.materialtIcon(menuItem.icon)}
-					</ListItemIcon>): null}
+					</ListItemIcon> : null}
 					<ListItemText className={styles.navMenuText} primary={menuItem.text} /> 
 				</ListItem>
 			);
@@ -127,6 +134,8 @@ class WebFF extends React.Component {
 			case 'DashboardIcon': return <DashboardIcon />
 			case 'ImportContactsIcon': return <ImportContactsIcon />
 			case 'OpacityIcon': return <OpacityIcon />
+			case 'ReorderIcon' : return <ReorderIcon />
+			case 'ColorizeIcon' : return <ColorizeIcon />
 			default: return <SettingsInputComponentIcon />
 		}
 	}

@@ -210,7 +210,6 @@ class QuestionPage extends React.Component {
 		let tabQuestionData = [];
 		let layoutGroupNames = [];
 		let questionPanels = [];
-		console.log(this.props);
 
 		if (!isLoading && questionsData.length > 0) {
 

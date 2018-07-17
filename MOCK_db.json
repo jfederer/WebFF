@@ -499,7 +499,8 @@
 		{
 			"key": "nav_EWI",
 			"text": "EWI",
-			"route": "/EWI"
+			"route": "/EWI",
+			"icon": ""
 		}
 	]
 }
