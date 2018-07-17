@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import AppLayout from './Components/AppLayout';
+import WebFF from './Components/WebFF';
 import { styles } from './style';
 import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,7 +14,7 @@ class App extends React.Component {
 			<React.Fragment>
 				<CssBaseline />
 				<Router>
-					<AppLayout />
+					<WebFF />
 				</Router>
 			</React.Fragment>
 		);

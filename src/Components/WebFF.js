@@ -10,11 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SystemMenu from './SystemMenu.js';
 import NavMenu from './NavMenu.js';
-import FieldForm from './FieldForm.js';
 import Dashboard from './Dashboard.js';
-import WaterQuality from './WaterQuality.js';
-import EDI from './EDI.js';
-import EWI from './EWI.js';
 import { styles } from '../style';
 import 'typeface-roboto';
 import {
@@ -30,10 +26,11 @@ import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
+import QuestionPage from './QuestionPage';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
-class AppLayout extends React.Component {
+class WebFF extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -194,10 +191,11 @@ class AppLayout extends React.Component {
 				{this.state.navMenu}
 				{/* HARDCODE!! */}
 				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl}/>} />  
-				<Route path="/FieldForm" render={() => <FieldForm appBarTextCB={this.setAppBarText} text="Field Form" navControl={this.navigationControl}/>} />
-				<Route path="/WaterQuality" render={() => <WaterQuality appBarTextCB={this.setAppBarText}  text="Water Quality" navControl={this.navigationControl}/>} />
-				<Route path="/EDI" render={() => <EDI appBarTextCB={this.setAppBarText} text="EDI" navControl={this.navigationControl}/>} />
-				<Route path="/EWI" render={() => <EWI appBarTextCB={this.setAppBarText} text="EWI" navControl={this.navigationControl}/>} />
+				<Route path="/FieldForm" render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName="Field Form" navControl={this.navigationControl}/>} />
+				<Route path="/WaterQuality" render={() => <QuestionPage appBarTextCB={this.setAppBarText}  tabName="Water Quality" navControl={this.navigationControl}/>} />
+				<Route path="/QuestionPanel" render={() => <QuestionPage appBarTextCB={this.setAppBarText}  tabName="Question Page" navControl={this.navigationControl}/>} />
+				<Route path="/EDI" render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName="EDI" navControl={this.navigationControl}/>} />
+				<Route path="/EWI" render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName="EWI" navControl={this.navigationControl}/>} />
 				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
 			</Switch>
 		);
@@ -274,8 +272,8 @@ class AppLayout extends React.Component {
 	}
 }
 
-AppLayout.propTypes = {
+WebFF.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(AppLayout);
+export default withStyles(styles, { withTheme: true })(WebFF);

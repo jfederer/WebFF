@@ -9,8 +9,9 @@
 			"helperText": "PCodes FTW!",
 			"placeholder": "placeme",
 			"value": "",
-			"tabName": "Dashboard",
-			"layoutGroup": "Test"
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"width": 3
 		},
 		{
 			"key": "test2",
@@ -19,8 +20,9 @@
 			"XMLValue": "XMLQ2",
 			"type": "Text",
 			"value": "Default Value",
-			"tabName": "Dashboard",
-			"layoutGroup": "Test"
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"width": 3
 		},
 		{
 			"key": "test3",
@@ -29,8 +31,9 @@
 			"XMLValue": "XMLQ3",
 			"type": "MultiText",
 			"value": "",
-			"tabName": "Dashboard",
-			"layoutGroup": "Test"
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"width": 3
 		},
 		{
 			"key": "test4",
@@ -47,8 +50,9 @@
 				"My3": "three"
 			},
 			"value": "One",
-			"tabName": "Dashboard",
-			"layoutGroup": "Test"
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"width": 3
 		},
 		{
 			"key": "test5",
@@ -66,8 +70,81 @@
 				"CSN",
 				"RAF"
 			],
-			"tabName": "Dashboard",
-			"layoutGroup": "Test"
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"width": 3
+		},
+		{
+			"key": "test6",
+			"id": "test6",
+			"label": "Single Line Text Q6",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "PCodes FTW!",
+			"placeholder": "placeme",
+			"value": "",
+			"tabName": "Question Page",
+			"layoutGroup": "QP2",
+			"width": 3
+		},
+		{
+			"key": "test7",
+			"id": "test7",
+			"label": "Single Line Text Question 7",
+			"XMLValue": "XMLQ7",
+			"type": "Text",
+			"value": "Default Value",
+			"tabName": "Question Page",
+			"layoutGroup": "QP2",
+			"width": 3
+		},
+		{
+			"key": "test8",
+			"id": "test8",
+			"label": "Question #8",
+			"XMLValue": "XMLQ8",
+			"type": "MultiText",
+			"value": "",
+			"tabName": "Question Page",
+			"layoutGroup": "QP2",
+			"width": 3
+		},
+		{
+			"key": "test9",
+			"id": "test9",
+			"label": "Question Label 9",
+			"XMLValue": "XMLQ9",
+			"type": "DropDown",
+			"includeBlank": true,
+			"helperText": "PCodes FTW!",
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"My3": "three"
+			},
+			"value": "One",
+			"tabName": "Question Page",
+			"layoutGroup": "QP2",
+			"width": 3
+		},
+		{
+			"key": "test10",
+			"id": "test10",
+			"label": "Question #10",
+			"XMLValue": "XMLQ10",
+			"type": "MultiChoice",
+			"options": {
+				"Joe Federer": "JF",
+				"Ken Skach": "KS",
+				"Molly Wood": "MW"
+			},
+			"value": [
+				"JF"
+			],
+			"tabName": "Question Page",
+			"layoutGroup": "QP2",
+			"width": 3
 		},
 		{
 			"key": "stationName",
@@ -189,7 +266,7 @@
 				"Mountain": "Mountain",
 				"Central": "Central",
 				"Eastern": "Eastern",
-				"Atlantic" : "Atlantic"
+				"Atlantic": "Atlantic"
 			},
 			"value": "",
 			"layoutGroup": "Basic"
@@ -232,7 +309,6 @@
 			"value": "No",
 			"layoutGroup": "Basic"
 		},
-
 		{
 			"key": "sky",
 			"id": "sky",
@@ -321,10 +397,92 @@
 			},
 			"value": "",
 			"layoutGroup": "Weather"
+		},
+		{
+			"key": "time",
+			"id": "time",
+			"label": "Time (hhmm)",
+			"XMLValue": "P1000",
+			"type": "Text",
+			"helperText": "P1000",
+			"placeholder": "hhmm",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"width": 3
+		},
+		{
+			"key": "location",
+			"id": "location",
+			"label": "Location",
+			"XMLValue": "P1234",
+			"type": "Text",
+			"helperText": "P1234",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"width": 3
+		},
+		{
+			"key": "temp",
+			"id": "temp",
+			"label": "Temp C",
+			"XMLValue": "P23430",
+			"type": "Text",
+			"helperText": "P23430",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"width": 3
+		},
+		{
+			"key": "specificConductance",
+			"id": "specificConductance",
+			"label": "Specific Conductance",
+			"XMLValue": "P594",
+			"type": "Text",
+			"helperText": "P594",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"xs": 2
+		},
+		{
+			"key": "transparency",
+			"id": "transparency",
+			"label": "Transparency",
+			"XMLValue": "P9987",
+			"type": "Text",
+			"helperText": "P9987",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"xs": 6
+		},
+		{
+			"key": "NTRUturbidity",
+			"id": "NTRUturbidity",
+			"label": "NTRU Turbidity HACH",
+			"XMLValue": "P983",
+			"type": "Text",
+			"helperText": "P983",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"xs": 3
+		},
+		{
+			"key": "FNUturbidity",
+			"id": "FNUturbidity",
+			"label": "FNU Turbidity DTS-12",
+			"XMLValue": "P984",
+			"type": "Text",
+			"helperText": "P984",
+			"value": "",
+			"tabName": "Water Quality",
+			"layoutGroup": "FieldParameters",
+			"xs": 8
 		}
-
-
-
 	],
 	"navMenuInfo": [
 		{
