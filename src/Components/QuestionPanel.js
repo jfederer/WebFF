@@ -36,8 +36,8 @@ class QuestionPanel extends React.Component {
 
 QuestionPanel.propTypes = {
 	classes: PropTypes.object.isRequired,
-	questions: PropTypes.array.isRequired
-	// className={
+	questions: PropTypes.array.isRequired,
+	grey: PropTypes.bool
 }
 
 export default withStyles(styles)(QuestionPanel);

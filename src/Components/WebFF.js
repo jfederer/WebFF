@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import {withRouter} from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -185,17 +186,18 @@ class WebFF extends React.Component {
 	};
 
 	buildRoutes = () => {
+		// console.log(this.state.navMenuInfo);
+		// let dynamicRoutes = this.state.navMenuInfo.map((navItem)=> {
+		// 		return <Route key={navItem.key} path={navItem.route} appBarTextCB={this.setAppBarText} tabName={navItem.text} navControl={this.navigationControl}/>;
+		// });
+		// console.log(dynamicRoutes);
 		var newRouteMenu = (
 			<Switch> {/* only match ONE route at a time */}
-				<Route exact path="/" render={() => <h1>HOME (login?)</h1>} />
+				<Route exact path="/" render={() => <h1>HOME</h1>} />
 				{this.state.navMenu}
-				{/* HARDCODE!! */}
 				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl}/>} />  
-				<Route path="/FieldForm" render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName="Field Form" navControl={this.navigationControl}/>} />
-				<Route path="/WaterQuality" render={() => <QuestionPage appBarTextCB={this.setAppBarText}  tabName="Water Quality" navControl={this.navigationControl}/>} />
-				<Route path="/QuestionPanel" render={() => <QuestionPage appBarTextCB={this.setAppBarText}  tabName="Question Page" navControl={this.navigationControl}/>} />
-				<Route path="/EDI" render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName="EDI" navControl={this.navigationControl}/>} />
-				<Route path="/EWI" render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName="EWI" navControl={this.navigationControl}/>} />
+				<Route render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName={this.props.location.pathname.slice(1)} navControl={this.navigationControl}/>} />
+				{/* //TODO: do some processing on pathname to give good human-readable tabnames */}
 				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
 			</Switch>
 		);
@@ -213,7 +215,7 @@ class WebFF extends React.Component {
 
 		let navigationMenu;
 
-		if (this.state.isNavLoading) { //TODO: this if doesn't seem needed any longer... given we pre-load a hard-coded inital menu state
+		if (this.state.isNavLoading) { 
 			//navigationMenu = null;  
 			navigationMenu = (
 				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
@@ -276,4 +278,4 @@ WebFF.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(WebFF);
+export default withRouter(withStyles(styles, { withTheme: true })(WebFF));

@@ -432,7 +432,7 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"xs": 2
+			"width_xs": 2
 		},
 		{
 			"key": "transparency",
@@ -444,7 +444,7 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"xs": 6
+			"width_xs": 6
 		},
 		{
 			"key": "NTRUturbidity",
@@ -456,7 +456,7 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"xs": 3
+			"width_xs": 3
 		},
 		{
 			"key": "FNUturbidity",
@@ -468,7 +468,7 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"xs": 8
+			"width_xs": 8
 		}
 	],
 	"navMenuInfo": [
@@ -479,17 +479,18 @@
 			"icon": "DashboardIcon"
 		},
 		{
-			"key": "nav_Field Form",
-			"text": "Field Form",
-			"route": "/FieldForm",
-			"icon": "ImportContactsIcon"
-		},
-		{
 			"key": "nav_WaterQuality",
 			"text": "Water Quality",
 			"route": "/WaterQuality",
 			"icon": "OpacityIcon"
 		},
+		{
+			"key": "nav_Field Form",
+			"text": "Field Form",
+			"route": "/FieldForm",
+			"icon": "ImportContactsIcon"
+		},
+
 		{
 			"key": "nav_EDI",
 			"text": "EDI",

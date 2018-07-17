@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-// import { styles } from '../style';
+import {withRouter} from 'react-router-dom';
 import Question from './Question';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
@@ -24,12 +24,14 @@ const styles = theme => ({
 });
 
 
+
 class QuestionPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			isLoading: true,
-			questionsData: []
+			questionsData: [],
+			tabName: this.props.location.pathname.slice(1)
 		};
 		this.questionChangeHandler = this.questionChangeHandler.bind(this);
 	}
@@ -44,7 +46,7 @@ class QuestionPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.appBarTextCB(this.props.text);
+		this.props.appBarTextCB(this.state.tabName);
 		if (localStorage.getItem('questionsData')) {
 			this.setState({
 				questionsData: JSON.parse(localStorage.getItem('questionsData')),
@@ -203,16 +205,17 @@ class QuestionPage extends React.Component {
 
 	render() {
 		const DEBUG = false;
-		const { classes } = this.props;
+		const { classes, tabName } = this.props;
 		const { isLoading, questionsData } = this.state;
 		let tabQuestionData = [];
 		let layoutGroupNames = [];
 		let questionPanels = [];
+		console.log(this.props);
 
 		if (!isLoading && questionsData.length > 0) {
 
 			tabQuestionData = questionsData.filter((question) => {
-				return question.tabName === this.props.tabName;
+				return question.tabName.replace(/ /g,'') === tabName.replace(/ /g,'');  //regex removes whitespace... allowing a match regardless of whitespace in the url or the questions database
 			});
 
 			layoutGroupNames = this.getLayoutGroupNames(tabQuestionData);
@@ -222,31 +225,16 @@ class QuestionPage extends React.Component {
 				let layoutGroupQuestionsData = this.getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);
 
 				questionPanels.push(
-				<div key={this.props.tabName + layoutGroupNames[i] + '_div'}>
+				<div key={tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
 						questions={this.createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData)} 
 						panelName={layoutGroupNames[i]}
-						key={this.props.tabName + layoutGroupNames[i]}
+						key={tabName + layoutGroupNames[i]}
 						grey={i%2===1} />
 						<Divider />
 						</div>
 						);
 			}
-
-			// questionPanels = layoutGroupNames.map((layoutGroupName) => {
-				
-
-			// 	return (
-			// 		<div key={this.props.tabName + layoutGroupName + '_div'}>
-			// 		<QuestionPanel 
-			// 			questions={this.createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData)} 
-			// 			panelName={layoutGroupName}
-			// 			key={this.props.tabName + layoutGroupName}
-			// 			grey={true} />
-			// 			<Divider />
-			// 			</div>
-			// 	);
-			// });
 		}
 
 		if (DEBUG) console.log("render");
@@ -254,11 +242,11 @@ class QuestionPage extends React.Component {
 
 		return (
 			<div>
+				{this.props.tabName}
 				{questionPanels}
 				
 
 				<hr /><hr /><hr />
-				<p>Select station name (list pulled from DB --> based on previous entries rather than admin console?)</p>
 
 				<p>When station name selected, auto populate:</p>
 				<button onClick={() => this.props.navControl("EDI", true)}>Add EDI</button>
@@ -266,15 +254,6 @@ class QuestionPage extends React.Component {
 				<button onClick={() => this.props.navControl("EWI", true)}>Add EWI</button>
 				<button onClick={() => this.props.navControl("EWI", false)}>Remove EWI</button>
 
-
-
-				<Grid container spacing={24}>
-					<form className={classes.root} autoComplete="off">
-						{
-							// !isLoading && questionList.length > 0 ? questionList : null
-						}
-					</form>
-				</Grid>
 			</div>
 		);
 	}
@@ -286,4 +265,4 @@ QuestionPage.propTypes = {
 	tabName: PropTypes.string.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(QuestionPage);
+export default withRouter(withStyles(styles, { withTheme: true })(QuestionPage));
