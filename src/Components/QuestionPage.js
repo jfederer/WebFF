@@ -207,7 +207,7 @@ class QuestionPage extends React.Component {
 		const { isLoading, questionsData } = this.state;
 		let tabQuestionData = [];
 		let layoutGroupNames = [];
-		let questionPanels;
+		let questionPanels = [];
 
 		if (!isLoading && questionsData.length > 0) {
 
@@ -217,20 +217,36 @@ class QuestionPage extends React.Component {
 
 			layoutGroupNames = this.getLayoutGroupNames(tabQuestionData);
 
-			questionPanels = layoutGroupNames.map((layoutGroupName) => {
-				let layoutGroupQuestionsData = this.getLayoutGroupQuestionsData(tabQuestionData, layoutGroupName);
+			
+			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {
+				let layoutGroupQuestionsData = this.getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);
 
-				return (
-					<div key={this.props.tabName + layoutGroupName + '_div'}>
+				questionPanels.push(
+				<div key={this.props.tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
 						questions={this.createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData)} 
-						panelName={layoutGroupName}
-						key={this.props.tabName + layoutGroupName}
-						grey={true} />
+						panelName={layoutGroupNames[i]}
+						key={this.props.tabName + layoutGroupNames[i]}
+						grey={i%2===1} />
 						<Divider />
 						</div>
-				);
-			});
+						);
+			}
+
+			// questionPanels = layoutGroupNames.map((layoutGroupName) => {
+				
+
+			// 	return (
+			// 		<div key={this.props.tabName + layoutGroupName + '_div'}>
+			// 		<QuestionPanel 
+			// 			questions={this.createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData)} 
+			// 			panelName={layoutGroupName}
+			// 			key={this.props.tabName + layoutGroupName}
+			// 			grey={true} />
+			// 			<Divider />
+			// 			</div>
+			// 	);
+			// });
 		}
 
 		if (DEBUG) console.log("render");

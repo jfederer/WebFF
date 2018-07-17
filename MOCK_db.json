@@ -239,19 +239,6 @@
 			"layoutGroup": "Basic"
 		},
 		{
-			"key": "bedMaterialAttempted",
-			"id": "bedMaterialAttempted",
-			"label": "Bed Material Attempted",
-			"XMLValue": "Material",
-			"type": "MultiChoice",
-			"options": {
-				"Bed Material Attempted": "bedMaterialAttempted"
-			},
-			"value": [],
-			"tabName": "Field Form",
-			"layoutGroup": "Basic"
-		},
-		{
 			"key": "timeZone",
 			"id": "timeZone",
 			"label": "Time Zone Area",
