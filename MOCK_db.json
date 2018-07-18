@@ -6,7 +6,6 @@
 			"label": "Single Line Text",
 			"XMLValue": "XMLQ1",
 			"type": "Text",
-			"helperText": "PCodes FTW!",
 			"placeholder": "placeme",
 			"value": "",
 			"tabName": "Question Page",
@@ -42,7 +41,6 @@
 			"XMLValue": "XMLQ4",
 			"type": "DropDown",
 			"includeBlank": true,
-			"helperText": "PCodes FTW!",
 			"options": {
 				"No oe": "NA",
 				"My1": "One",
@@ -72,6 +70,7 @@
 			],
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
+			"helperText": "PCodes FTW!",
 			"width": 3
 		},
 		{
@@ -310,7 +309,8 @@
 				"Cloudy": "Cloudy"
 			},
 			"value": "",
-			"layoutGroup": "Weather"
+			"layoutGroup": "Weather",
+			"width_xs": 4
 		},
 		{
 			"key": "precipitation",
@@ -330,7 +330,8 @@
 				"Snow": "Snow"
 			},
 			"value": "",
-			"layoutGroup": "Weather"
+			"layoutGroup": "Weather",
+			"width_xs": 4
 		},
 		{
 			"key": "temperature",
@@ -349,7 +350,8 @@
 				"Very Hot": "Very Hot"
 			},
 			"value": "",
-			"layoutGroup": "Weather"
+			"layoutGroup": "Weather",
+			"width_xs": 4
 		},
 		{
 			"key": "wind",
@@ -367,7 +369,8 @@
 				"Windy": "Windy"
 			},
 			"value": "",
-			"layoutGroup": "Weather"
+			"layoutGroup": "Weather",
+			"width_xs": 4
 		},
 		{
 			"key": "windDirection",
@@ -383,7 +386,8 @@
 				"Cross-stream": "Cross-stream"
 			},
 			"value": "",
-			"layoutGroup": "Weather"
+			"layoutGroup": "Weather",
+			"width_xs": 4
 		},
 		{
 			"key": "time",
@@ -396,7 +400,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width": 3
+			"width_xs": 4,
+			"width_lg": 3
 		},
 		{
 			"key": "location",
@@ -408,7 +413,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width": 3
+			"width_xs": 4,
+			"width_lg": 3
 		},
 		{
 			"key": "temp",
@@ -420,7 +426,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width": 3
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "specificConductance",
@@ -432,7 +439,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width_xs": 2
+			"width_xs": 6,
+			"width_lg": 2
 		},
 		{
 			"key": "transparency",
@@ -444,7 +452,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width_xs": 6
+			"width_xs": 6,
+			"width_lg": 2
 		},
 		{
 			"key": "NTRUturbidity",
@@ -456,7 +465,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width_xs": 3
+			"width_xs": 6,
+			"width_lg": 6
 		},
 		{
 			"key": "FNUturbidity",
@@ -468,7 +478,8 @@
 			"value": "",
 			"tabName": "Water Quality",
 			"layoutGroup": "FieldParameters",
-			"width_xs": 8
+			"width_xs": 6,
+			"width_lg": 6
 		}
 	],
 	"navMenuInfo": [

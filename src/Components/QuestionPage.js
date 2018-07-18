@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import Question from './Question';
-import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import QuestionPanel from './QuestionPanel';
 
@@ -185,7 +184,7 @@ class QuestionPage extends React.Component {
 
 	render() {
 		const DEBUG = false;
-		const { classes, tabName } = this.props;
+		const { tabName } = this.props;
 		const { isLoading, questionsData } = this.state;
 		let tabQuestionData = [];
 		let layoutGroupNames = [];

@@ -88,7 +88,7 @@ class WebFF extends React.Component {
 
 	jsonToNavMenu(jsonNavData) {
 		// this function filters tabs based on the "showXYZ" items in state
-		console.log(jsonNavData);
+		// console.log(jsonNavData);
 		var retMenu = [];
 		for(var i = 0; i<jsonNavData.length; i++) {
 			var menuItem = jsonNavData[i];

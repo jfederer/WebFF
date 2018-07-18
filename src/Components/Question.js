@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -20,14 +21,16 @@ import Grid from '@material-ui/core/Grid';
 const styles = theme => ({
 	root: {
 		display: 'flex',
+		fullWidth: true,
+		backgroundColor: '#292',
+		// padding: '20px',
 		flexWrap: 'wrap',
 	},
 	formControl: {
-		margin: theme.spacing.unit,
-		minWidth: 120,
-	},
-	selectEmpty: {
-		marginTop: theme.spacing.unit * 2,
+		margin: 0,
+		minWidth: 120,  //TODO: Build in a minWidth based on content?
+		fullWidth: true,
+		backgroundColor: '#9ee'
 	},
 });
 
@@ -125,17 +128,18 @@ class Question extends React.Component {
 		const DEBUG = false;
 		const { classes } = this.props;
 		var theQ = {};
-		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;//TODO: Ask Ken: Do we want this to be the XML value?
+		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
 		//TODO: if key or id isn't included, make the missing one the same as the one that's included
 		if (DEBUG) console.log("this.props");
 		if (DEBUG) console.log(this.props);
 
 
 		switch (this.props.type) {
-			case 'DropDown': { //TODO: Ensure this saves appropriate "values" to state
+			case 'DropDown': { 
+				//TODO: age-native-simple
 				theQ = (
 					<FormControl className={classes.formControl}>
-						<InputLabel htmlFor="age-native-simple">{this.props.label}</InputLabel>
+						<InputLabel htmlFor="age-native-simple">{this.props.label}</InputLabel> 
 						<Select
 							native
 							value={this.state.value}
@@ -148,7 +152,7 @@ class Question extends React.Component {
 							{this.buildSelectOptions(this.props.options)}
 
 						</Select>
-						<FormHelperText>{this.props.helperText}</FormHelperText>
+						{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}
 					</FormControl>
 				);
 				break;
@@ -165,9 +169,10 @@ class Question extends React.Component {
 						label={this.props.label}
 						placeholder={realPlaceholder}
 						className={classes.textField}
-						margin="normal"
+						
+						fullWidth
 						xmlvalue={this.props.XMLvalue}
-					/></FormControl>
+					/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}</FormControl>
 				break;
 			}
 
@@ -181,11 +186,11 @@ class Question extends React.Component {
 					label={this.props.label}
 					placeholder={realPlaceholder}
 					className={classes.textField}
-					margin="normal"
+					
 					xmlvalue={this.props.XMLvalue}
 					multiline
 					rows="4"
-				/></FormControl>
+				/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}</FormControl>
 				break;
 			}
 
@@ -195,6 +200,7 @@ class Question extends React.Component {
 				theQ =
 					<FormControl component="fieldset" key={this.props.key}>
 						<FormLabel component="legend">{this.props.label}</FormLabel>
+						{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}
 						<FormGroup>
 
 							{this.buildCheckboxOptions(this.props.options)}
@@ -217,9 +223,12 @@ class Question extends React.Component {
 	render() {
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
+		const { props } = this;
+
+		//TODO: if no value, leave it just 'lg' or 'xs'....
 		return (
-			<Grid item xs={3}>
-				{this.buildQuestion()}
+			<Grid item key={props.id+'_grid'} xs={props.width_xs} lg={props.width_lg}>  
+				<Paper>{this.buildQuestion()}</Paper>
 			</Grid>
 
 		);
