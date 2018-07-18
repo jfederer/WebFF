@@ -46,7 +46,7 @@ class QuestionPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.appBarTextCB(this.state.tabName);
+		this.props.appBarTextCB(this.props.tabName);
 		if (localStorage.getItem('questionsData')) {
 			this.setState({
 				questionsData: JSON.parse(localStorage.getItem('questionsData')),
@@ -57,6 +57,7 @@ class QuestionPage extends React.Component {
 
 	componentWillUpdate(nextProps, nextState) {
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
+		this.props.appBarTextCB(nextProps.tabName);
 	}
 
 	questionChangeHandler(Q) {
@@ -177,27 +178,6 @@ class QuestionPage extends React.Component {
 				return questionData.layoutGroup === layoutGroupName;
 			});
 		}
-
-		// for (let i = 0; i < layoutGroupNames.length; i++) {
-		// 	let layoutGroup = [];
-		// 	for (let k = 0; k < questionsData.length; k++) {
-		// 		if (questionsData[k].layoutGroup === layoutGroupNames[i]) {
-		// 			layoutGroup.push(questionsData[k]);
-		// 		}
-		// 	}
-		// 	if (i > 0) {
-		// 		let timestamp = new Date().getUTCMilliseconds();
-		// 		tabQuestions.push((
-		// 			<Divider key={timestamp} />
-		// 		)
-		// 		);  //TODO: add divider between layoutGroups
-		// 	}
-		// 	tabQuestions.push(this.createQuestionsForLayoutGroup(layoutGroup));
-		// 	if (DEBUG) console.log("Layout Group " + layoutGroupNames[i]);
-		// 	if (DEBUG) console.log(layoutGroup);
-		// }
-
-
 		return layoutGroupQuestionsData;
 
 	}
