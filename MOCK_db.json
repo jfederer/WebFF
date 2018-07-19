@@ -155,7 +155,12 @@
 			"tabName": "Field Form",
 			"layoutGroup": "Basic",
 			"width_xs": 6,
-			"width_lg": 3
+			"width_lg": 3,
+			"options": {
+				"Minnehahaha Creek": "EDI",
+				"EWI": "EWI"
+			},
+			"value": "EDI"
 		},
 		{
 			"key": "stationNumber",
