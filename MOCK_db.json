@@ -530,7 +530,6 @@
 			"route": "/FieldForm",
 			"icon": "ImportContactsIcon"
 		},
-
 		{
 			"key": "nav_EDI",
 			"text": "EDI",
@@ -541,6 +540,73 @@
 			"text": "EWI",
 			"route": "/EWI",
 			"icon": ""
+		}
+	],
+	"dialogQuestionsInfo": [
+		{
+			"dialogName": "Add New Station",
+			"dialogDescription": "Fill out the following to add a new station",
+			"questions": [
+				{
+					"key": "stationName",
+					"id": "stationName",
+					"label": "Station Name",
+					"XMLValue": "stnnm",
+					"type": "Text",
+					"tabName": "Add New Station",
+					"layoutGroup": "Basic",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"key": "stationNumber",
+					"id": "stationNumber",
+					"label": "Station Number",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"key": "projectName",
+					"id": "projectName",
+					"label": "Project Name",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"key": "projectID",
+					"id": "projectID",
+					"label": "Project ID",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 4,
+					"width_lg": 2
+				},
+				{
+					"key": "agencyCode",
+					"id": "agencyCode",
+					"label": "Agency Code",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 2,
+					"width_lg": 1
+				}
+			]
 		}
 	]
 }

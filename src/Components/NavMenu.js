@@ -12,7 +12,6 @@ import { styles } from '../style';
 
 class NavMenu extends React.Component {
 	render() {
-		//console.log(this.props.menuItems);
 		const { classes } = this.props;
 		var navList = (
 			<div className={classes.list}>

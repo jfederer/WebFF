@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
-import Question from './Question';
 import Divider from '@material-ui/core/Divider';
 import QuestionPanel from './QuestionPanel';
+import { createQuestionComponentsForLayoutGroup, 
+	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
+
 
 // standardize (library?) the use of "questionsData" string to generalized variable
 
@@ -111,7 +113,7 @@ class QuestionPage extends React.Component {
 		localStorage.setItem('questionsData', JSON.stringify(rawData));
 	}
 
-	fetchData() {
+	fetchData() {   //TODO:  Move to WebFF to ensure everything gets loaded before heading to field
 		const DEBUG = false;
 		const API = 'http://localhost:3004/';
 		const query = 'questions';
@@ -143,45 +145,6 @@ class QuestionPage extends React.Component {
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
-	createQuestionComponentsForLayoutGroup(questionsData) {
-		// the questonisData variable contains only Questions data for this single layout group and returns question components pointing to this.questionChangeHandler
-		let layoutGroupQuestionComponents = [];
-
-		if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-			layoutGroupQuestionComponents = questionsData.map(questionData => <Question {...questionData} stateChangeHandler={this.questionChangeHandler} />);
-		}
-
-		return layoutGroupQuestionComponents;
-	}
-
-	getLayoutGroupNames(questionsData) {
-		// provided with questionData, will return array of layout group names (strings)
-		let layoutGroupNames = [];
-
-		if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-			for (let i = 0; i < questionsData.length; i++) {
-				if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
-					layoutGroupNames.push(questionsData[i].layoutGroup);
-				}
-			}
-		}
-		return layoutGroupNames;
-	}
-
-	getLayoutGroupQuestionsData(questionsData, layoutGroupName) {
-		// given questionData, will filter down to items that match the layoutgroup = layoutGroupName
-		let layoutGroupQuestionsData = [];
-
-		if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-			layoutGroupQuestionsData = questionsData.filter((questionData) => {
-				return questionData.layoutGroup === layoutGroupName;
-			});
-		}
-		return layoutGroupQuestionsData;
-
-	}
-
-
 	render() {
 		const DEBUG = false;
 		const { tabName } = this.props;
@@ -196,16 +159,16 @@ class QuestionPage extends React.Component {
 				return question.tabName.replace(/ /g,'') === tabName.replace(/ /g,'');  //regex removes whitespace... allowing a match regardless of whitespace in the url or the questions database
 			});
 
-			layoutGroupNames = this.getLayoutGroupNames(tabQuestionData);
+			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
 
 			
 			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {
-				let layoutGroupQuestionsData = this.getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);
+				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);
 
 				questionPanels.push(
 				<div key={tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
-						questions={this.createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData)} 
+						questions={createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData, this.questionChangeHandler)} 
 						panelName={layoutGroupNames[i]}
 						key={tabName + layoutGroupNames[i]}
 						grey={i%2===1} />

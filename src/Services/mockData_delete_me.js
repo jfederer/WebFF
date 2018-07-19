@@ -14,11 +14,19 @@ import HelpIcon from '@material-ui/icons/Help';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 
 
 
 export const systemMenu = (
   <div>
+	<ListItem button>
+      <ListItemIcon>
+        <NoteAddIcon />
+      </ListItemIcon>
+      <ListItemText primary="Add Station" />
+    </ListItem>
+
 	<ListItem button>
       <ListItemIcon>
         <HelpIcon />
@@ -48,45 +56,3 @@ export const systemMenu = (
     </ListItem>
   </div>
 );
-
-export var navMenu = (
-	<div>
-	  <ListItem button component={Link} to="/Dashboard">
-		<ListItemIcon>
-		  <DashboardIcon />
-		</ListItemIcon>
-		<ListItemText className={styles.navMenuText} primary="Dashboard" />
-	  </ListItem>
-
-	  <ListItem button component={Link} to="/FieldForm">
-		<ListItemIcon>
-		  <ImportContactsIcon />
-		</ListItemIcon>
-		<ListItemText className={styles.navMenuText} primary="Field Form" />
-	  </ListItem>
-  
-	  <ListItem button component={Link} to="/WaterQuality">
-		<ListItemIcon>
-		  <OpacityIcon />
-		</ListItemIcon>
-		<ListItemText primary="Water Quality" />
-	  </ListItem>
-
-	  <ListItem button component={Link} to="/EDI">
-		 EWI
-		<ListItemText primary="EWI" />
-	  </ListItem>
-
-	  <ListItem button component={Link} to="/EWI">
-		  EDI
-		<ListItemText primary="EDI" />
-	  </ListItem>
-  
-	  <ListItem button>
-		<ListItemIcon>
-		  <SettingsInputComponentIcon />
-		</ListItemIcon>
-		<ListItemText primary="Collection" />
-	  </ListItem>
-	</div>
-  );

@@ -33,7 +33,6 @@ class QuestionPanel extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { questions } = this.props;
-		console.log(questions);
 
 		return (
 			<Paper className={classNames(classes.root, this.props.grey ? classes.lightGrey : '')} elevation={2}>

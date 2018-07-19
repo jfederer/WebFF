@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -31,6 +31,8 @@ import ColorizeIcon from '@material-ui/icons/Colorize';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import QuestionPage from './QuestionPage';
 
+import SystemDialog from './SystemDialog';
+
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
 class WebFF extends React.Component {
@@ -39,22 +41,39 @@ class WebFF extends React.Component {
 
 		this.state = {
 			isNavLoading: true,
+			navMenuInfo: [],
 			navMenuExpanded: false,
+
+			isDialogQuestionsLoading: false,
+			dialogQuestionsInfo: [],
+			dialogOpen: false,
+			curDialogDescription: "",
+			curDialogName: "",
+			curDialogQuestionsInfo: [],
+
+
 			systemMenuOpen: false,
+
 			appBarText: "Sediment Field Forms",
+
 			showEDI: false,
 			showEWI: false,
 			showWaterQuality: false,
 			showFieldForm: false,
-			navMenuInfo: [] 
+
+
 		};
 		this.navigationControl = this.navigationControl.bind(this);
+		this.handleDialogOpen = this.handleDialogOpen.bind(this);
+		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
 
 	};
 
 	componentWillUpdate(nextProps, nextState) {
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
+		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
 	}
+
 	componenetDidMount() {
 
 	}
@@ -63,25 +82,35 @@ class WebFF extends React.Component {
 		if (localStorage.getItem('navMenuInfo')) {
 			console.log("using localStorage data for navMenuInfo");
 			this.setState({
-				//navMenuInfo: JSON.parse(localStorage.getItem('navMenuInfo')),
 				navMenuInfo: JSON.parse(localStorage.getItem('navMenuInfo')),
-				isLoading: false
+				isNavLoading: false
 			});
 		} else {
 			console.log("going to DB for data for navMenuInfo");
-			this.fetchNavData();
+			this.fetchNavMenuInfoData();
+		}
+
+		if (localStorage.getItem('dialogQuestionsInfo')) {
+			console.log("using localStorage data for dialogQuestionsInfo");
+			this.setState({
+				dialogQuestionsInfo: JSON.parse(localStorage.getItem('dialogQuestionsInfo')),
+				isDialogQuestionsLoading: false
+			});
+		} else {
+			console.log("going to DB for data for dialogQuestionsInfo");
+			this.fetchDialogQuestionInfoData();
 		}
 	}
 
 	navigationControl(tabName, add) {
-		tabName = tabName.replace(/\s/g,'');
+		tabName = tabName.replace(/\s/g, '');
 
 		// if add is false, remove menuItem used on tabNAme  
 		// if add is true, add a tab named tabName
 		// extra verbosity due to desire to use dynamic key name
-		var key = 'show'+tabName;
+		var key = 'show' + tabName;
 		var val = add;
-		var obj  = {};
+		var obj = {};
 		obj[key] = val;
 		this.setState(obj);
 	}
@@ -90,39 +119,39 @@ class WebFF extends React.Component {
 		// this function filters tabs based on the "showXYZ" items in state
 		// console.log(jsonNavData);
 		var retMenu = [];
-		for(var i = 0; i<jsonNavData.length; i++) {
+		for (var i = 0; i < jsonNavData.length; i++) {
 			var menuItem = jsonNavData[i];
 			var shouldInclude = true;
 
-			if((menuItem.text==="EWI" && !this.state.showEWI)) {   //HARDCODE
+			if ((menuItem.text === "EWI" && !this.state.showEWI)) {   //HARDCODE
 				shouldInclude = false;
 			}
 
-			if((menuItem.text==="EDI" && !this.state.showEDI)) {  //HARDCODE
+			if ((menuItem.text === "EDI" && !this.state.showEDI)) {  //HARDCODE
 				shouldInclude = false;
 			}
 
-			if((menuItem.text==="Water Quality" && !this.state.showWaterQuality)) {   //HARDCODE
+			if ((menuItem.text === "Water Quality" && !this.state.showWaterQuality)) {   //HARDCODE
 				shouldInclude = false;
 			}
 
-			if((menuItem.text==="Field Form" && !this.state.showFieldForm)) {  //HARDCODE
+			if ((menuItem.text === "Field Form" && !this.state.showFieldForm)) {  //HARDCODE
 				shouldInclude = false;
 			}
 
 
 			// use icon?
 			let useIcon = true;
-			if(menuItem.icon==="") {
+			if (menuItem.icon === "") {
 				useIcon = false;
 			}
-				
-			if(shouldInclude) retMenu.push(
+
+			if (shouldInclude) retMenu.push(
 				<ListItem key={menuItem.key} button component={Link} to={menuItem.route}>
 					{(useIcon) ? <ListItemIcon>
 						{this.materialtIcon(menuItem.icon)}
 					</ListItemIcon> : null}
-					<ListItemText className={styles.navMenuText} primary={menuItem.text} /> 
+					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
 				</ListItem>
 			);
 		}
@@ -134,13 +163,13 @@ class WebFF extends React.Component {
 			case 'DashboardIcon': return <DashboardIcon />
 			case 'ImportContactsIcon': return <ImportContactsIcon />
 			case 'OpacityIcon': return <OpacityIcon />
-			case 'ReorderIcon' : return <ReorderIcon />
-			case 'ColorizeIcon' : return <ColorizeIcon />
+			case 'ReorderIcon': return <ReorderIcon />
+			case 'ColorizeIcon': return <ColorizeIcon />
 			default: return <SettingsInputComponentIcon />
 		}
 	}
 
-	fetchNavData() {
+	fetchNavMenuInfoData() {
 		const DEBUG = false;
 		const API = 'http://localhost:3004/';
 		const query = 'navMenuInfo';
@@ -162,17 +191,58 @@ class WebFF extends React.Component {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
 					//setTimeout(() => {
-						this.setState({
-							navMenuInfo: parsedJSON,
-							isNavLoading: false
-						});
-						if (DEBUG) console.log("CurrentState: ");
-						if (DEBUG) console.log(this.state);
+					this.setState({
+						navMenuInfo: parsedJSON,
+						isNavLoading: false
+					});
+					if (DEBUG) console.log("CurrentState: ");
+					if (DEBUG) console.log(this.state);
 					//}, 2000);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
+	fetchDialogQuestionInfoData() {
+		const DEBUG = false;
+		const API = 'http://localhost:3004/';
+		const query = 'dialogQuestionsInfo';
+
+		function handleErrors(response) {
+			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response;
+		}
+
+		if (DEBUG) console.log("Function: fetchDialogQuestionData @ " + API + query);
+		fetch(API + query)
+			.then(handleErrors)
+			.then(response => response.json())
+			.then(
+				parsedJSON => {
+					if (DEBUG) console.log("Parsed JSON: ");
+					if (DEBUG) console.log(parsedJSON);
+					//setTimeout(() => {
+					this.setState({
+						dialogQuestionsInfo: parsedJSON,
+						isDialogQuestionsLoading: false
+					});
+					if (DEBUG) console.log("CurrentState: ");
+					if (DEBUG) console.log(this.state);
+					//}, 2000);
+				})
+			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
+	}
+
+
+	handleDialogOpen() {
+		this.setState({ dialogOpen: true });
+	};
+
+	handleDialogClose = () => {
+		this.setState({ dialogOpen: false });
+	};
 
 	handleLeftDrawerOpen = () => {
 		this.setState({ navMenuExpanded: true });
@@ -204,10 +274,10 @@ class WebFF extends React.Component {
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
 				{this.state.navMenu}
-				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl}/>} />  
-				<Route render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName={this.props.location.pathname.slice(1)} navControl={this.navigationControl}/>} />
+				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl} />} />
+				<Route render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName={this.props.location.pathname.slice(1)} navControl={this.navigationControl} />} />
 				{/* //TODO: do some processing on pathname to give good human-readable tabnames */}
-				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText}  navControl={this.navigationControl}/>} />
+				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText} navControl={this.navigationControl} />} />
 			</Switch>
 		);
 		this.setState({ routeMenu: newRouteMenu });
@@ -218,24 +288,32 @@ class WebFF extends React.Component {
 		this.buildRoutes();
 	}
 
+	handleSystemMenuItemClicked(menuText) {
+		// build the curDialogXXX data
+		this.setState({ curDialogName: menuText });
+
+		let filteredDialogInfo = this.state.dialogQuestionsInfo.filter((dialogItem) => {
+			return dialogItem.dialogName.replace(/ /g, '') === menuText.replace(/ /g, '')
+		});
+
+		if (filteredDialogInfo && filteredDialogInfo.length === 1) {
+			this.setState({
+				curDialogDescription: filteredDialogInfo[0].dialogDescription,
+				curDialogName: menuText,
+				curDialogQuestionsInfo: filteredDialogInfo[0].questions
+			});
+			//open the dialog
+			this.handleDialogOpen();
+		} else {
+			//TODO: ERR
+			console.log(menuText + "is not yet implemented");
+		}
+
+	}
 
 	render() {
 		const { classes } = this.props;
-
-		let navigationMenu;
-
-		if (this.state.isNavLoading) { 
-			//navigationMenu = null;  
-			navigationMenu = (
-				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
-			);
-		} else {
-			navigationMenu = (
-				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
-			);
-		}
-
-
+	
 		return (
 			<div className={classes.root} >
 				<AppBar
@@ -268,16 +346,14 @@ class WebFF extends React.Component {
 
 				</AppBar>
 
-				<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} />
-				{navigationMenu}
+				<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} menuItemClickHandler={this.handleSystemMenuItemClicked} />
+				<SystemDialog isOpen={this.state.dialogOpen} closeHandler={this.handleDialogClose} dialogQuestionsInfo={this.state.curDialogQuestionsInfo} dialogName={this.state.curDialogName} dialogDescription={this.state.curDialogDescription} />
+				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
+
 				<main className={classes.content} >
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
-					{/* <Typography noWrap>{'You think water moves fast? You should see ice.'}</Typography>  REMOVE THIS - JUST FOR REFERENCE WITH TYPOGRAPHY */}
 					{this.state.routeMenu}
-
 				</main>
-
-
 			</div >
 		);
 	}
