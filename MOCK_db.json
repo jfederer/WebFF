@@ -45,7 +45,7 @@
 				"No oe": "NA",
 				"My1": "One",
 				"My2": "Two",
-				"My3": "three"
+				"Thi sis a longer": "three All Around"
 			},
 			"value": "One",
 			"tabName": "Question Page",
@@ -153,7 +153,9 @@
 			"type": "DropDown",
 			"includeBlank": false,
 			"tabName": "Field Form",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 6,
+			"width_lg": 3
 		},
 		{
 			"key": "stationNumber",
@@ -163,7 +165,9 @@
 			"type": "Text",
 			"tabName": "Field Form",
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 6,
+			"width_lg": 3
 		},
 		{
 			"key": "projectName",
@@ -173,7 +177,9 @@
 			"type": "Text",
 			"tabName": "Field Form",
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 6,
+			"width_lg": 3
 		},
 		{
 			"key": "projectID",
@@ -183,7 +189,9 @@
 			"type": "Text",
 			"tabName": "Field Form",
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "agencyCode",
@@ -193,7 +201,9 @@
 			"type": "Text",
 			"tabName": "Field Form",
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 2,
+			"width_lg": 1
 		},
 		{
 			"key": "sampleDate",
@@ -204,7 +214,9 @@
 			"tabName": "Field Form",
 			"placeholder": "yyyymmdd",
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "sampleType",
@@ -219,7 +231,9 @@
 				"EWI": "EWI"
 			},
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "sedimentType",
@@ -235,12 +249,14 @@
 			},
 			"value": "suspended",
 			"tabName": "Field Form",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "timeZone",
 			"id": "timeZone",
-			"label": "Time Zone Area",
+			"label": "Time Zone",
 			"XMLValue": "",
 			"type": "DropDown",
 			"tabName": "Field Form",
@@ -255,7 +271,9 @@
 				"Atlantic": "Atlantic"
 			},
 			"value": "",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 3,
+			"width_lg": 1
 		},
 		{
 			"key": "samplingTeam",
@@ -265,7 +283,9 @@
 			"type": "Text",
 			"value": "",
 			"tabName": "Field Form",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 4,
+			"width_lg": 3
 		},
 		{
 			"key": "compiledBy",
@@ -275,7 +295,9 @@
 			"type": "Text",
 			"value": "",
 			"tabName": "Field Form",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 2,
+			"width_lg": 1
 		},
 		{
 			"key": "sameDaySample",
@@ -286,14 +308,16 @@
 			"tabName": "Field Form",
 			"includeBlank": false,
 			"options": {
-				"No": "No",
-				"2": "Mist",
-				"3": "Light Rain",
-				"4": "Medium Rain",
-				"5": "Heavy Rain"
+				"No": false,
+				"2": "2",
+				"3": "3",
+				"4": "4",
+				"5": "5"
 			},
 			"value": "No",
-			"layoutGroup": "Basic"
+			"layoutGroup": "Basic",
+			"width_xs": 3,
+			"width_lg": 1
 		},
 		{
 			"key": "sky",
@@ -310,7 +334,8 @@
 			},
 			"value": "",
 			"layoutGroup": "Weather",
-			"width_xs": 4
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "precipitation",
@@ -331,7 +356,8 @@
 			},
 			"value": "",
 			"layoutGroup": "Weather",
-			"width_xs": 4
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "temperature",
@@ -351,7 +377,8 @@
 			},
 			"value": "",
 			"layoutGroup": "Weather",
-			"width_xs": 4
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "wind",
@@ -370,7 +397,8 @@
 			},
 			"value": "",
 			"layoutGroup": "Weather",
-			"width_xs": 4
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "windDirection",
@@ -387,7 +415,8 @@
 			},
 			"value": "",
 			"layoutGroup": "Weather",
-			"width_xs": 4
+			"width_xs": 4,
+			"width_lg": 2
 		},
 		{
 			"key": "time",

@@ -23,14 +23,22 @@ const styles = theme => ({
 		display: 'flex',
 		fullWidth: true,
 		backgroundColor: '#292',
-		// padding: '20px',
-		flexWrap: 'wrap',
+		wrap: 'nowrap',
+		zeroMinWidth: true
 	},
 	formControl: {
 		margin: 0,
-		minWidth: 120,  //TODO: Build in a minWidth based on content?
+		//minWidth: 120,  //TODO: Build in a minWidth based on content?
 		fullWidth: true,
-		backgroundColor: '#9ee'
+		backgroundColor: '#9ee',
+		wrap: 'nowrap'
+	},
+	inputLabel: {
+		margin: 0,
+		//minWidth: 120,  //TODO: Build in a minWidth based on content?
+		fullWidth: true,
+		backgroundColor: '#9ee',
+		wrap: 'nowrap'
 	},
 });
 
@@ -139,7 +147,7 @@ class Question extends React.Component {
 				//TODO: age-native-simple
 				theQ = (
 					<FormControl className={classes.formControl}>
-						<InputLabel htmlFor="age-native-simple">{this.props.label}</InputLabel> 
+						<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> 
 						<Select
 							native
 							value={this.state.value}
@@ -160,8 +168,9 @@ class Question extends React.Component {
 
 			case 'Text': {
 				if (DEBUG) console.log("Text Question");
-				theQ = <FormControl className={classes.formControl}>
-					<TextField
+				//theQ = <FormControl className={classes.formControl}>
+				theQ = <div>
+					<TextField 
 						value={this.state.value}
 						onChange={this.handleTextChange(this.props.key)}
 						key={this.props.key}
@@ -169,16 +178,17 @@ class Question extends React.Component {
 						label={this.props.label}
 						placeholder={realPlaceholder}
 						className={classes.textField}
-						
 						fullWidth
 						xmlvalue={this.props.XMLvalue}
-					/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}</FormControl>
+					/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}
+					</div>
 				break;
 			}
 
 			case 'MultiText': {
 				if (DEBUG) console.log("MultiText Question");
-				theQ = <FormControl className={classes.formControl}><TextField
+				theQ = <div>
+					<TextField
 					value={this.state.value}
 					onChange={this.handleTextChange(this.props.key)}
 					key={this.props.key}
@@ -186,11 +196,11 @@ class Question extends React.Component {
 					label={this.props.label}
 					placeholder={realPlaceholder}
 					className={classes.textField}
-					
+					fullWidth
 					xmlvalue={this.props.XMLvalue}
 					multiline
 					rows="4"
-				/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}</FormControl>
+				/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}</div>
 				break;
 			}
 
