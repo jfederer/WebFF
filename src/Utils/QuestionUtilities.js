@@ -41,7 +41,55 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 }
 
-// export default createQuestionComponentsForLayoutGroup;
+export const saveQuestionValueToLS = (Q) => {
+	//this function saves updated question "values" (must be located at "Q.value") to localStorage.questionsData
 
+	//FUTURE: while this works, it could be simpler re-written with spread operator
+
+	//FUTURE: Should go to utility class or somewhere else that is parent of all pages
+
+	var DEBUG = false;
+	if (DEBUG) console.log(Q);
+	if (Q == null) { //POC
+		console.log("Question returned to questionChangeHandler was null");
+		return;
+	}
+
+	if (DEBUG) console.log("--------------");
+	if (DEBUG) console.log("FF state:");
+	if (DEBUG) console.log(this.state);
+	// to sync question modifications to localStorage
+	if (DEBUG) console.log("--------------");
+	if (DEBUG) console.log("Q:");
+	if (DEBUG) console.log(Q.state);
+
+
+	// get the questions in localStorage
+	var rawData = JSON.parse(localStorage.getItem('questionsData'));
+	if (DEBUG) console.log("--------------");
+	if (DEBUG) console.log("questionsData");
+	if (DEBUG) console.log(rawData);
+
+	// find the specific question in questionData based on the key,then update the value property
+	var QData = rawData.filter(questionData => {
+		if (questionData.key === Q.state.key) {
+			if (DEBUG) console.log("------FOUND!--------");
+			if (DEBUG) console.log("questionData (pre)");
+			if (DEBUG) console.log(questionData);
+			if (DEBUG) console.log("Q.state.value");
+			if (DEBUG) console.log(Q.state.value);
+			questionData.value = Q.state.value;
+			if (DEBUG) console.log("--------------");
+			if (DEBUG) console.log("questionData (post)");
+			if (DEBUG) console.log(questionData);
+		}
+		return questionData;
+	});
+
+	if (DEBUG) console.log(QData);
+
+	// replace the questionData in localStorage
+	localStorage.setItem('questionsData', JSON.stringify(rawData));
+}
 
 

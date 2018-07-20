@@ -11,8 +11,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -137,6 +137,7 @@ class Question extends React.Component {
 		const { classes } = this.props;
 		var theQ = {};
 		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
+		
 		//TODO: if key or id isn't included, make the missing one the same as the one that's included
 		if (DEBUG) console.log("this.props");
 		if (DEBUG) console.log(this.props);
@@ -231,17 +232,13 @@ class Question extends React.Component {
 
 
 	render() {
+		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLvalue;
+		
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
 		const { props } = this;
-
-		//TODO: if no value, leave it just 'lg' or 'xs'....
-		return (
-			<Grid item key={props.id+'_grid'} xs={props.width_xs} lg={props.width_lg}>  
-				<Paper>{this.buildQuestion()}</Paper>
-			</Grid>
-
-		);
+		return <Tooltip title={tooltip}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
+		
 	}
 }
 

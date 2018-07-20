@@ -12,13 +12,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import QuestionPanel from './QuestionPanel';
 
 import { createQuestionComponentsForLayoutGroup } from '../Utils/QuestionUtilities';
 
 const styles = theme => ({
-	root: {
-		backgroundColor: "#991"
-	},
 
 });
 
@@ -37,6 +35,8 @@ class SystemDialog extends React.Component {
 		const { classes, closeHandler, dialogName, dialogDescription, dialogQuestionsInfo } = this.props;
 
 		//TODO: callback function for these questions
+		//TODO: questionPanel could actually be a questionPage...allowing for multiple panels... perhaps useful in the 'settings' dialog?
+
 
 		return (
 			<div>
@@ -51,35 +51,15 @@ class SystemDialog extends React.Component {
 						<DialogContentText>
 							{dialogDescription}:
             			</DialogContentText>
-						<TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Email Address"
-              fullWidth
-            />
-						{createQuestionComponentsForLayoutGroup(dialogQuestionsInfo, null)}
+						<QuestionPanel 
+						questions={createQuestionComponentsForLayoutGroup(dialogQuestionsInfo, null)}
+						key={dialogName}/>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={closeHandler} color="primary">Cancel</Button>
 						<Button onClick={() => alert("Submitted")} color="primary">Submit</Button>
 					</DialogActions>
 				</Dialog>
-
-
-
-				{/* <Paper className={classNames(classes.root, this.props.grey ? classes.lightGrey : '')} elevation={2}>
-				{this.props.panelName}
-				<Grid 
-					container 
-					spacing={8}
-					alignItems='baseline'
-					justify='space-around' 
-					>
-					{questions}  
-					{/* Note, The 'questions' are encased in Grid items. */}
-				{/* </Grid>
-			</Paper> */} */}
 			</div>
 		);
 	}

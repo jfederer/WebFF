@@ -8,24 +8,21 @@ import green from '@material-ui/core/colors/green';
 
 const styles = theme => ({
 	root: { // applies to entire QuestionPanel
-		// ...theme.mixins.gutters(),
+		...theme.mixins.gutters(),
 		flexGrow: 1,
 		  paddingTop: theme.spacing.unit * 1,
 		  paddingBottom: theme.spacing.unit * 1,
-			backgroundColor: 'white',
+			backgroundColor: '#eee',
 			margin: '10px',  //margin between QuestionPanels
 			[theme.breakpoints.down('sm')]: {
-			  backgroundColor: theme.palette.secondary.main,
-			},
-			[theme.breakpoints.up('md')]: {
-			  backgroundColor: theme.palette.primary.main,
+			  backgroundColor: '#eee',
 			},
 			[theme.breakpoints.up('lg')]: {
-			  backgroundColor: green[500],
+			  backgroundColor: '#eee',
 			},
 	},
 	lightGrey: {
-		backgroundColor: '#eee'
+		backgroundColor: '#ddd'
 	}
 });
 
@@ -33,6 +30,37 @@ class QuestionPanel extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { questions } = this.props;
+
+		let gridedQuestions = questions.map((question) => {
+			let gridItem;
+			// console.log(props.width_xs);
+			// console.log(props.width_lg);
+	
+			if((question.props.width_xs==='' || question.props.width_xs==null) && (question.props.width_lg==='' || question.props.width_lg==null)) {
+				// neither lg or xs are set.
+				return <Grid item key={question.props.id+'_grid'} xs lg>  
+					{question}
+				</Grid>
+	
+			} else if (question.props.width_xs==='' || question.props.width_xs==null) {
+				// xs is not set
+				return <Grid item key={question.props.id+'_grid'} xs lg={question.props.width_lg}>  
+					{question}
+				</Grid>
+	
+			} else if (question.props.width_lg==='' || question.props.width_lg==null) {
+				// lg is not set
+				return <Grid item key={question.props.id+'_grid'} xs={question.props.width_xs} lg>  
+					{question}
+				</Grid>
+	
+			} else {
+				// both lg and xs are set.
+				return <Grid item key={question.props.id+'_grid'} xs={question.props.width_xs} lg={question.props.width_lg}>  
+					{question}
+				</Grid>
+			}
+		});
 
 		return (
 			<Paper className={classNames(classes.root, this.props.grey ? classes.lightGrey : '')} elevation={2}>
@@ -43,8 +71,7 @@ class QuestionPanel extends React.Component {
 					alignItems='baseline'
 					justify='space-around' 
 					>
-					{questions}  
-					{/* Note, The 'questions' are encased in Grid items. */}
+					{gridedQuestions}  
 				</Grid>
 			</Paper>
 		);

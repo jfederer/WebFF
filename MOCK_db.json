@@ -154,6 +154,7 @@
 			"includeBlank": false,
 			"tabName": "Field Form",
 			"layoutGroup": "Basic",
+			"helperText": "PCodes FTW!",
 			"width_xs": 6,
 			"width_lg": 3,
 			"options": {
@@ -573,7 +574,7 @@
 					"value": "",
 					"layoutGroup": "Basic",
 					"width_xs": 6,
-					"width_lg": 3
+					"width_lg": 6
 				},
 				{
 					"key": "projectName",
@@ -585,7 +586,7 @@
 					"value": "",
 					"layoutGroup": "Basic",
 					"width_xs": 6,
-					"width_lg": 3
+					"width_lg": 6
 				},
 				{
 					"key": "projectID",
@@ -596,8 +597,8 @@
 					"tabName": "Add Station",
 					"value": "",
 					"layoutGroup": "Basic",
-					"width_xs": 4,
-					"width_lg": 2
+					"width_xs": 3,
+					"width_lg": 3
 				},
 				{
 					"key": "agencyCode",
@@ -608,8 +609,8 @@
 					"tabName": "Add Station",
 					"value": "",
 					"layoutGroup": "Basic",
-					"width_xs": 2,
-					"width_lg": 1
+					"width_xs": 3,
+					"width_lg": 3
 				}
 			]
 		}
