@@ -3,8 +3,8 @@
 		{
 			"key": "test1",
 			"id": "test1",
-			"label": "Single Line Text",
-			"XMLValue": "XMLQ1",
+			"label": "Impedence",
+			"XMLValue": "P10020",
 			"type": "Text",
 			"placeholder": "placeme",
 			"value": "",
@@ -70,7 +70,7 @@
 			],
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
-			"helperText": "PCodes FTW!",
+			"helperText": "P1942",
 			"width": 3
 		},
 		{
@@ -79,7 +79,7 @@
 			"label": "Single Line Text Q6",
 			"XMLValue": "XMLQ6",
 			"type": "Text",
-			"helperText": "PCodes FTW!",
+			"helperText": "P0032",
 			"placeholder": "placeme",
 			"value": "",
 			"tabName": "Question Page",
@@ -245,7 +245,7 @@
 			"key": "sedimentType",
 			"id": "sedimentType",
 			"label": "Sediment Type",
-			"XMLValue": "Bedload",
+			"XMLValue": "sedimentType",
 			"type": "DropDown",
 			"includeBlank": false,
 			"options": {

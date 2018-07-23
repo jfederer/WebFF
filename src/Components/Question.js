@@ -28,16 +28,15 @@ const styles = theme => ({
 	},
 	formControl: {
 		margin: 0,
+		display: 'flex',
 		//minWidth: 120,  //TODO: Build in a minWidth based on content?
 		fullWidth: true,
-		backgroundColor: '#9ee',
 		wrap: 'nowrap'
 	},
 	inputLabel: {
 		margin: 0,
 		//minWidth: 120,  //TODO: Build in a minWidth based on content?
 		fullWidth: true,
-		backgroundColor: '#9ee',
 		wrap: 'nowrap'
 	},
 });
@@ -151,6 +150,7 @@ class Question extends React.Component {
 						<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> 
 						<Select
 							native
+							autoWidth={true}
 							value={this.state.value}
 							onChange={this.handleSelectChange('value')}
 							inputProps={{
@@ -161,7 +161,6 @@ class Question extends React.Component {
 							{this.buildSelectOptions(this.props.options)}
 
 						</Select>
-						{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}
 					</FormControl>
 				);
 				break;
@@ -180,8 +179,8 @@ class Question extends React.Component {
 						placeholder={realPlaceholder}
 						className={classes.textField}
 						fullWidth
-						xmlvalue={this.props.XMLvalue}
-					/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}
+						xmlvalue={this.props.XMLValue}
+					/>
 					</div>
 				break;
 			}
@@ -198,10 +197,11 @@ class Question extends React.Component {
 					placeholder={realPlaceholder}
 					className={classes.textField}
 					fullWidth
-					xmlvalue={this.props.XMLvalue}
+					xmlvalue={this.props.XMLValue}
 					multiline
 					rows="4"
-				/>{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}</div>
+				/>
+				</div>
 				break;
 			}
 
@@ -211,7 +211,6 @@ class Question extends React.Component {
 				theQ =
 					<FormControl component="fieldset" key={this.props.key}>
 						<FormLabel component="legend">{this.props.label}</FormLabel>
-						{(this.props.helperText)?<FormHelperText>{this.props.helperText}</FormHelperText>:null}
 						<FormGroup>
 
 							{this.buildCheckboxOptions(this.props.options)}
@@ -232,12 +231,16 @@ class Question extends React.Component {
 
 
 	render() {
-		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLvalue;
+		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
 		const { props } = this;
-		return <Tooltip title={tooltip}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
+		if (tooltip!=null) {
+			return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
+		} else {
+			return <Paper>{this.buildQuestion()}</Paper>;
+		}
 		
 	}
 }
