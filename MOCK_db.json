@@ -106,18 +106,6 @@
 			]
 		},
 		{
-			"key": "testSubQuest",
-			"id": "testSubQuest",
-			"label": "Data",
-			"XMLValue": "P10020",
-			"type": "Text",
-			"placeholder": "Resistance to AC",
-			"value": "",
-			"tabName": "Question Page",
-			"layoutGroup": "Test"
-			
-		},
-		{
 			"key": "test6",
 			"id": "test6",
 			"label": "Single Line Text Q6",

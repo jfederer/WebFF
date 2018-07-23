@@ -57,12 +57,8 @@ class Question extends React.Component {
 			key: '',
 			currentQuestionValue: this.props.value,
 		};
+		this.handleTableChange = this.handleTableChange.bind(this);
 	};
-
-
-	getProps() {
-		return this.props;
-	}
 
 	componentWillMount() {
 		this.setState({ key: this.props.id });;
@@ -105,6 +101,12 @@ class Question extends React.Component {
 
 		this.setState({ value: tempValue }, () => this.props.stateChangeHandler(this)
 		);
+	};
+
+	handleTableChange = name => event => {
+		console.log("Here");
+		console.log(name);
+		console.log(event);
 	};
 
 
@@ -262,6 +264,7 @@ class Question extends React.Component {
 
 				// go through value in state and drop them into tableValues.
 				// this extra step is to deal with mis-matches between intial 'value' settings and the table size
+				// additional error-checking worthwhile for when value is (not an array, too big, etc)
 				if (this.state.value != null) {
 					this.state.value.map((row, rowNum) => {
 						row.map((element,colNum) => {
@@ -272,23 +275,24 @@ class Question extends React.Component {
 					});
 				}
 
-
 				// build the JSX tableRows based on above-calculated tableValues
 				let tableRows = [];
-				console.log(this.props);
-				let editedProps = {...this.props, label:"Plurgh"};
-				console.log(editedProps);
+				// console.log(this.props);
+				// let editedProps = {...this.props, type:"Text"};
+				// console.log(editedProps);
 
 
 				tableValues.map((curRow, row) => {
 					tableRows.push(
 							<TableRow key={this.state.key + "_row_" + row}> 
 							{curRow.map((cellContent, col) => {
+								//console.log(cellContent);
+								let adHocProps = {...this.props, type:"Text", label:"", value:cellContent}
 								return (
 									<TableCell key={this.props.key + "_row:" + row + "_col:" + col}>
 										{/* {cellContent + "_row:" + row + "_col:" + col} */}
-										{/* <Question {...this.props} stateChangeHandler={this.props.stateChangeHandler} /> */}
-										{cellContent}
+										<Question {...adHocProps} stateChangeHandler={this.handleTableChange("in build")} />
+										{/* {cellContent} */}
 									</TableCell>
 								)
 							})}

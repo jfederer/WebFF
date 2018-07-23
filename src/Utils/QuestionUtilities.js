@@ -44,10 +44,6 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 export const saveQuestionValueToLS = (Q) => {
 	//this function saves updated question "values" (must be located at "Q.value") to localStorage.questionsData
 
-	//FUTURE: while this works, it could be simpler re-written with spread operator
-
-	//FUTURE: Should go to utility class or somewhere else that is parent of all pages
-
 	var DEBUG = false;
 	if (DEBUG) console.log(Q);
 	if (Q == null) { //POC
