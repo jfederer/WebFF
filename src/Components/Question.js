@@ -10,10 +10,14 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import Switch from '@material-ui/core/Switch';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -23,7 +27,6 @@ const styles = theme => ({
 	root: {
 		display: 'flex',
 		fullWidth: true,
-		backgroundColor: '#292',
 		wrap: 'nowrap',
 		zeroMinWidth: true
 	},
@@ -40,6 +43,9 @@ const styles = theme => ({
 		fullWidth: true,
 		wrap: 'nowrap'
 	},
+	ppr: {
+		backgroundColor: "#9ee"
+	}
 });
 
 
@@ -65,7 +71,7 @@ class Question extends React.Component {
 
 	handleToggleChange = name => event => {
 		this.setState({ [name]: event.target.checked }, () => this.props.stateChangeHandler(this));
-	  };
+	};
 
 
 	handleTextChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
@@ -141,18 +147,18 @@ class Question extends React.Component {
 		const { classes } = this.props;
 		var theQ = {};
 		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
-		
+
 		//TODO: if key or id isn't included, make the missing one the same as the one that's included
 		if (DEBUG) console.log("this.props");
 		if (DEBUG) console.log(this.props);
 
 
 		switch (this.props.type) {
-			case 'DropDown': { 
+			case 'DropDown': {
 				//TODO: age-native-simple
 				theQ = (
 					<FormControl className={classes.formControl}>
-						<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> 
+						<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel>
 						<Select
 							native
 							autoWidth={true}
@@ -161,7 +167,7 @@ class Question extends React.Component {
 							inputProps={{
 								name: this.props.label,
 								id: this.props.id,
-							  }}
+							}}
 						>
 							{this.buildSelectOptions(this.props.options)}
 
@@ -175,7 +181,7 @@ class Question extends React.Component {
 				if (DEBUG) console.log("Text Question");
 				//theQ = <FormControl className={classes.formControl}>
 				theQ = <div>
-					<TextField 
+					<TextField
 						value={this.state.value}
 						onChange={this.handleTextChange(this.props.key)}
 						key={this.props.key}
@@ -186,7 +192,7 @@ class Question extends React.Component {
 						fullWidth
 						xmlvalue={this.props.XMLValue}
 					/>
-					</div>
+				</div>
 				break;
 			}
 
@@ -194,18 +200,18 @@ class Question extends React.Component {
 				if (DEBUG) console.log("MultiText Question");
 				theQ = <div>
 					<TextField
-					value={this.state.value}
-					onChange={this.handleTextChange(this.props.key)}
-					key={this.props.key}
-					id={this.props.id}
-					label={this.props.label}
-					placeholder={realPlaceholder}
-					className={classes.textField}
-					fullWidth
-					xmlvalue={this.props.XMLValue}
-					multiline
-					rows="4"
-				/>
+						value={this.state.value}
+						onChange={this.handleTextChange(this.props.key)}
+						key={this.props.key}
+						id={this.props.id}
+						label={this.props.label}
+						placeholder={realPlaceholder}
+						className={classes.textField}
+						fullWidth
+						xmlvalue={this.props.XMLValue}
+						multiline
+						rows="4"
+					/>
 				</div>
 				break;
 			}
@@ -224,22 +230,84 @@ class Question extends React.Component {
 				break;
 			}
 			case 'Toggle': {
-
 				if (DEBUG) console.log("Toggle Question");
 				theQ =
-				<FormControlLabel 
+					<FormControlLabel
 						key={this.props.key + "_FormControlLabel"}
-					control={
-					  <Switch
-					  	key={this.props.key}
-						id={this.props.id}
-						checked={this.state.value}
-						onChange={this.handleToggleChange('value')}
-						xmlvalue={this.props.XMLValue}
-					  />
-					}
-					label={this.props.label}
-				  />
+						control={
+							<Switch
+								key={this.props.key}
+								id={this.props.id}
+								checked={this.state.value}
+								onChange={this.handleToggleChange('value')}
+								xmlvalue={this.props.XMLValue}
+							/>
+						}
+						label={this.props.label}
+					/>
+				break;
+			}
+			case 'Table': {
+				if (DEBUG) console.log("Table Question");
+				
+				
+				//TODO: might want to put row and column size info in state for adding later...
+
+				// make appropriately-sized empty table data array
+				let tableValues = [];
+				for (var i = 0; i< this.props.numberOfRows; i++) {
+					let numbRows = parseInt(this.props.colHeaders.length, 10);
+					tableValues.push(Array(numbRows).fill(""));
+				}
+
+				// go through value in state and drop them into tableValues.
+				// this extra step is to deal with mis-matches between intial 'value' settings and the table size
+				if (this.state.value != null) {
+					this.state.value.map((row, rowNum) => {
+						row.map((element,colNum) => {
+							tableValues[rowNum][colNum]=element;
+							return null;
+						});
+						return null;
+					});
+				}
+
+
+				// build the JSX tableRows based on above-calculated tableValues
+				let tableRows = [];
+				console.log(this.props);
+				let editedProps = {...this.props, label:"Plurgh"};
+				console.log(editedProps);
+
+
+				tableValues.map((curRow, row) => {
+					tableRows.push(
+							<TableRow key={this.state.key + "_row_" + row}> 
+							{curRow.map((cellContent, col) => {
+								return (
+									<TableCell key={this.props.key + "_row:" + row + "_col:" + col}>
+										{/* {cellContent + "_row:" + row + "_col:" + col} */}
+										{/* <Question {...this.props} stateChangeHandler={this.props.stateChangeHandler} /> */}
+										{cellContent}
+									</TableCell>
+								)
+							})}
+							</TableRow>
+							);
+							return null;
+				});
+
+				theQ =
+					<Table key={this.props.key + "_table"}className={classes.table}>
+							<TableHead>
+								<TableRow>
+							{this.props.colHeaders.map((header) => <TableCell key={this.props.key + header}>{header}</TableCell>)}
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{tableRows}
+							</TableBody>
+						</Table>
 				break;
 			}
 			default: {
@@ -255,16 +323,16 @@ class Question extends React.Component {
 
 	render() {
 		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
-		
+
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
-		const { props } = this;
-		if (tooltip!=null) {
+
+		if (tooltip != null) {
 			return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
 		} else {
 			return <Paper>{this.buildQuestion()}</Paper>;
 		}
-		
+
 	}
 }
 
@@ -277,7 +345,7 @@ Question.propTypes = {
 	label: PropTypes.string.isRequired,
 	placeholder: PropTypes.string,
 	XMLValue: PropTypes.string.isRequired,
-	type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle']).isRequired,  //Toggle is just a single multichoice... implement?
+	type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?
 	selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

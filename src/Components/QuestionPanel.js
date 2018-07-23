@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import classNames from 'classnames';
-import green from '@material-ui/core/colors/green';
 
 const styles = theme => ({
 	root: { // applies to entire QuestionPanel
@@ -32,7 +31,6 @@ class QuestionPanel extends React.Component {
 		const { questions } = this.props;
 
 		let gridedQuestions = questions.map((question) => {
-			let gridItem;
 			// console.log(props.width_xs);
 			// console.log(props.width_lg);
 	

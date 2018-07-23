@@ -86,6 +86,38 @@
 			
 		},
 		{
+			"key": "testTable",
+			"id": "testTable",
+			"label": "Test Table Label",
+			"XMLValue": "Deets",
+			"type": "Table",
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "Table Helper Me",
+			"colWidths" : ["40", "50", "25", "25", "10"],
+			"colHeaders" : ["Dessert Name","Calories","Fat", "Carbs", "Protein"],
+			"numberOfRows" : "8",
+			"value": [
+				["Frozen yoghurt","159", "", "24", "4.0"],
+				["Ice cream sandwich","237", "9.0", "37", "4.3"],
+				["Eclair","262", "16.0", "24", "6.0"],
+				["Cupcake","305", "3.7", "67", "4.3"],
+				["Gingerbread", "356", "16.0", "49", "3.9"]
+			]
+		},
+		{
+			"key": "testSubQuest",
+			"id": "testSubQuest",
+			"label": "Data",
+			"XMLValue": "P10020",
+			"type": "Text",
+			"placeholder": "Resistance to AC",
+			"value": "",
+			"tabName": "Question Page",
+			"layoutGroup": "Test"
+			
+		},
+		{
 			"key": "test6",
 			"id": "test6",
 			"label": "Single Line Text Q6",
