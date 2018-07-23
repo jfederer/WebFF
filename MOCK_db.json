@@ -6,22 +6,22 @@
 			"label": "Impedence",
 			"XMLValue": "P10020",
 			"type": "Text",
-			"placeholder": "placeme",
+			"placeholder": "Resistance to AC",
 			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"width": 3
+			"layoutGroup": "Test"
+			
 		},
 		{
 			"key": "test2",
 			"id": "test2",
-			"label": "Single Line Text",
+			"label": "What name?",
 			"XMLValue": "XMLQ2",
 			"type": "Text",
-			"value": "Default Value",
+			"value": "Johnny Science",
 			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"width": 3
+			"layoutGroup": "Test"
+			
 		},
 		{
 			"key": "test3",
@@ -31,8 +31,8 @@
 			"type": "MultiText",
 			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"width": 3
+			"layoutGroup": "Test"
+			
 		},
 		{
 			"key": "test4",
@@ -47,15 +47,15 @@
 				"My2": "Two",
 				"Thi sis a longer": "three All Around"
 			},
-			"value": "One",
+			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"width": 3
+			"layoutGroup": "Test"
+			
 		},
 		{
 			"key": "test5",
 			"id": "test5",
-			"label": "Question #5",
+			"label": "Who is family",
 			"XMLValue": "XMLQ5",
 			"type": "MultiChoice",
 			"options": {
@@ -70,8 +70,20 @@
 			],
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
-			"helperText": "P1942",
-			"width": 3
+			"helperText": "P1942"
+			
+		},
+		{
+			"key": "testTog",
+			"id": "testTog",
+			"label": "Hot Out?",
+			"XMLValue": "XMLQT",
+			"type": "Toggle",
+			"value": "true",
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "Toggle Me"
+			
 		},
 		{
 			"key": "test6",
@@ -83,8 +95,7 @@
 			"placeholder": "placeme",
 			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "QP2",
-			"width": 3
+			"layoutGroup": "QP2"
 		},
 		{
 			"key": "test7",
@@ -94,8 +105,7 @@
 			"type": "Text",
 			"value": "Default Value",
 			"tabName": "Question Page",
-			"layoutGroup": "QP2",
-			"width": 3
+			"layoutGroup": "QP2"
 		},
 		{
 			"key": "test8",
@@ -105,8 +115,7 @@
 			"type": "MultiText",
 			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "QP2",
-			"width": 3
+			"layoutGroup": "QP2"
 		},
 		{
 			"key": "test9",
@@ -124,13 +133,12 @@
 			},
 			"value": "One",
 			"tabName": "Question Page",
-			"layoutGroup": "QP2",
-			"width": 3
+			"layoutGroup": "QP2"
 		},
 		{
 			"key": "test10",
 			"id": "test10",
-			"label": "Question #10",
+			"label": "Who is programmer",
 			"XMLValue": "XMLQ10",
 			"type": "MultiChoice",
 			"options": {
@@ -142,8 +150,7 @@
 				"JF"
 			],
 			"tabName": "Question Page",
-			"layoutGroup": "QP2",
-			"width": 3
+			"layoutGroup": "QP2"
 		},
 		{
 			"key": "stationName",

@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
+import Switch from '@material-ui/core/Switch';
 
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -61,6 +62,10 @@ class Question extends React.Component {
 		this.setState({ key: this.props.id });;
 		this.setState({ value: this.props.value });
 	}
+
+	handleToggleChange = name => event => {
+		this.setState({ [name]: event.target.checked }, () => this.props.stateChangeHandler(this));
+	  };
 
 
 	handleTextChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
@@ -204,7 +209,6 @@ class Question extends React.Component {
 				</div>
 				break;
 			}
-
 			case 'MultiChoice': {
 				if (DEBUG) console.log("MultiChoice Question");
 				//Note that MultiChoice builds out state elements in the constructor for defining initial states.				
@@ -217,6 +221,25 @@ class Question extends React.Component {
 
 						</FormGroup>
 					</FormControl>
+				break;
+			}
+			case 'Toggle': {
+
+				if (DEBUG) console.log("Toggle Question");
+				theQ =
+				<FormControlLabel 
+						key={this.props.key + "_FormControlLabel"}
+					control={
+					  <Switch
+					  	key={this.props.key}
+						id={this.props.id}
+						checked={this.state.value}
+						onChange={this.handleToggleChange('value')}
+						xmlvalue={this.props.XMLValue}
+					  />
+					}
+					label={this.props.label}
+				  />
 				break;
 			}
 			default: {
