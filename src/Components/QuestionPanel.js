@@ -8,7 +8,7 @@ import classNames from 'classnames';
 const styles = theme => ({
 	root: { // applies to entire QuestionPanel
 		...theme.mixins.gutters(),
-		flexGrow: 1,
+		 flexGrow: 1,
 		  paddingTop: theme.spacing.unit * 1,
 		  paddingBottom: theme.spacing.unit * 1,
 			backgroundColor: '#eee',

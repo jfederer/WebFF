@@ -9,7 +9,8 @@
 			"placeholder": "Resistance to AC",
 			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "Test"
+			"layoutGroup": "Test",
+			"size": "40"
 			
 		},
 		{
@@ -20,7 +21,8 @@
 			"type": "Text",
 			"value": "Johnny Science",
 			"tabName": "Question Page",
-			"layoutGroup": "Test"
+			"layoutGroup": "Test",
+			"size": "50"
 			
 		},
 		{
@@ -92,17 +94,75 @@
 			"XMLValue": "Deets",
 			"type": "Table",
 			"tabName": "Question Page",
-			"layoutGroup": "Test",
+			"layoutGroup": "Table",
 			"helperText": "Table Helper Me",
-			"colWidths" : ["40", "50", "25", "25", "10"],
+			"colWidths" : ["20%", "20%", "30%", "10%", "10%"],
 			"colHeaders" : ["Dessert Name","Calories","Fat", "Carbs", "Protein"],
+			"rowHeaders" : "true",
 			"numberOfRows" : "8",
 			"value": [
-				["Frozen yoghurt","159", "", "24", "4.0"],
+				["Frozen yoghurt","159ewrwr", "", "24", "4.0"],
 				["Ice cream sandwich","237", "9.0", "37", "4.3"],
 				["Eclair","262", "16.0", "24", "6.0"],
 				["Cupcake","305", "3.7", "67", "4.3"],
 				["Gingerbread", "356", "16.0", "49", "3.9"]
+			]
+		},
+		{
+			"key": "testTable2",
+			"id": "testTable2",
+			"label": "Test Table Label2",
+			"XMLValue": "Deets2",
+			"type": "Table",
+			"tabName": "Question Page",
+			"layoutGroup": "Table2",
+			"colHeaders" : ["Element","Found"],
+			"rowHeaders" : "true",
+			"numberOfRows" : "10",
+			"value": [
+				["Au","159"],
+				["Hg","237"],
+				["O2","262"],
+				["CO2","305"],
+				["He", "356"]
+			]
+		},
+		{
+			"key": "testTable3",
+			"id": "testTable3",
+			"label": "Test Table Label3",
+			"XMLValue": "Deets3",
+			"type": "Table",
+			"tabName": "Question Page",
+			"layoutGroup": "Table2",
+			"colHeaders" : ["Element","Found"],
+			"rowHeaders" : "true",
+			"numberOfRows" : "10",
+			"value": [
+				["Au","159"],
+				["Hg","237"],
+				["O2","262"],
+				["CO2","305"],
+				["He", "356"]
+			]
+		},
+		{
+			"key": "testTable4",
+			"id": "testTable4",
+			"label": "Test Table Label4",
+			"XMLValue": "Deets4",
+			"type": "Table",
+			"tabName": "Question Page",
+			"layoutGroup": "Table2",
+			"colHeaders" : ["Element","Found"],
+			"rowHeaders" : "true",
+			"numberOfRows" : "10",
+			"value": [
+				["Au","159"],
+				["Hg","237"],
+				["O2","262"],
+				["CO2","305"],
+				["He", "356"]
 			]
 		},
 		{

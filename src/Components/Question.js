@@ -24,30 +24,39 @@ import TableRow from '@material-ui/core/TableRow';
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
 
 const styles = theme => ({
-	root: {
-		display: 'flex',
-		fullWidth: true,
-		wrap: 'nowrap',
-		zeroMinWidth: true
-	},
 	formControl: {
 		margin: 0,
 		display: 'flex',
-		//minWidth: 120,  //TODO: Build in a minWidth based on content?
 		fullWidth: true,
 		wrap: 'nowrap'
 	},
 	inputLabel: {
 		margin: 0,
-		//minWidth: 120,  //TODO: Build in a minWidth based on content?
+		display: 'flex',
 		fullWidth: true,
 		wrap: 'nowrap'
 	},
-	ppr: {
-		backgroundColor: "#9ee"
+	tableCell: {
+		padding: 5,
+		flexShrink: 0,
+	},
+	textField: {
+		padding: 0,
+		margin: 0,
+		backgroundColor: "#191",
+		color: "#fff"
+	},
+	table: {
+		width: 10,
+		backgroundColor: "#911"
 	}
+
+
 });
 
+var inputProps = {
+	size: 4
+  }
 
 class Question extends React.Component {
 	constructor(props) {
@@ -181,9 +190,8 @@ class Question extends React.Component {
 
 			case 'Text': {
 				if (DEBUG) console.log("Text Question");
-				//theQ = <FormControl className={classes.formControl}>
-				theQ = <div>
-					<TextField
+				let thisSize = this.props.size ? this.props.size : 1;
+				theQ = <TextField
 						value={this.state.value}
 						onChange={this.handleTextChange(this.props.key)}
 						key={this.props.key}
@@ -192,9 +200,13 @@ class Question extends React.Component {
 						placeholder={realPlaceholder}
 						className={classes.textField}
 						fullWidth
-						xmlvalue={this.props.XMLValue}
+						xmlvalue={this.props.XMLValue}   
+						inputProps={{
+							size: thisSize
+						}}  					
 					/>
-				</div>
+
+				// theQ = <input type="text" name="fname" size={1}/>;
 				break;
 			}
 
@@ -252,7 +264,6 @@ class Question extends React.Component {
 			case 'Table': {
 				if (DEBUG) console.log("Table Question");
 				
-				
 				//TODO: might want to put row and column size info in state for adding later...
 
 				// make appropriately-sized empty table data array
@@ -277,10 +288,6 @@ class Question extends React.Component {
 
 				// build the JSX tableRows based on above-calculated tableValues
 				let tableRows = [];
-				// console.log(this.props);
-				// let editedProps = {...this.props, type:"Text"};
-				// console.log(editedProps);
-
 
 				tableValues.map((curRow, row) => {
 					tableRows.push(
@@ -288,10 +295,14 @@ class Question extends React.Component {
 							{curRow.map((cellContent, col) => {
 								//console.log(cellContent);
 								let adHocProps = {...this.props, type:"Text", label:"", value:cellContent}
+								
+
 								return (
-									<TableCell key={this.props.key + "_row:" + row + "_col:" + col}>
+									<TableCell className={classes.tableCell} key={this.props.key + "_row:" + row + "_col:" + col}>
 										{/* {cellContent + "_row:" + row + "_col:" + col} */}
-										<Question {...adHocProps} stateChangeHandler={this.handleTableChange("in build")} />
+										{col===0 && this.props.rowHeaders ?
+										<div className={classes.header}>{cellContent}</div> :
+										<Question {...adHocProps} stateChangeHandler={this.handleTableChange("in build")} />}
 										{/* {cellContent} */}
 									</TableCell>
 								)
@@ -301,17 +312,27 @@ class Question extends React.Component {
 							return null;
 				});
 
-				theQ =
-					<Table key={this.props.key + "_table"}className={classes.table}>
-							<TableHead>
-								<TableRow>
-							{this.props.colHeaders.map((header) => <TableCell key={this.props.key + header}>{header}</TableCell>)}
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{tableRows}
-							</TableBody>
-						</Table>
+				// if column widths are not specified, split the table evenly
+				let colGroup =  <colgroup> 
+					{
+						this.props.colWidths ? 
+						this.props.colWidths.map((colWidth, i) => <col key={"colWidth_"+i} width={colWidth}/>) :
+						this.props.colHeaders.map((colWidth, i) => <col key={"colWidth_"+i} width={100 / this.props.colHeaders.length}/>)
+					}
+				</colgroup>;
+
+theQ =
+	<Table key={this.props.key + "_table"} className={classes.table}>
+		 {colGroup}
+		<TableHead>
+			<TableRow>
+		{this.props.colHeaders.map((header) => <TableCell className={classes.tableCell} key={this.props.id + header}><div className={classes.header}>{header}</div></TableCell>)}
+			</TableRow>
+		</TableHead>
+		<TableBody>
+			{tableRows}
+		</TableBody>
+	</Table>
 				break;
 			}
 			default: {
