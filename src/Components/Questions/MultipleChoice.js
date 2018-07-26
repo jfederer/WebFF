@@ -72,12 +72,13 @@ class MultipleChoice extends React.Component {
 
     render() {
         // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
-        return <FormControl component="fieldset" key={this.props.id}>
+        return <div>
             <FormLabel component="legend">{this.props.label}</FormLabel>
             <FormGroup>
                 {this.buildCheckboxOptions(this.props.options)}
             </FormGroup>
-        </FormControl>;
+            </div>
+    //    <FormControl component="fieldset" key={this.props.id}> </FormControl>;
     }
 }
 
