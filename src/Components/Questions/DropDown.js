@@ -114,6 +114,7 @@ DropDown.propTypes = {
 	XMLValue: PropTypes.string,
 	type: PropTypes.oneOf(['DropDown']).isRequired,
 	options: PropTypes.object.isRequired,
+	helperText: PropTypes.string
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
 	// (ie: "if dropDown... select_options prop(array or strings) is required")

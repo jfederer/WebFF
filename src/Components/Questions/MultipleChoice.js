@@ -91,6 +91,7 @@ MultipleChoice.propTypes = {
     XMLValue: PropTypes.string,
     type: PropTypes.oneOf(['MultipleChoice']).isRequired, 
     options: PropTypes.object.isRequired,
+    helperText: PropTypes.string
 
     //TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
     

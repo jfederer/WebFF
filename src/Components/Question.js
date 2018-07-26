@@ -1,14 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-//import { styles } from '../style';
-import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import Switch from '@material-ui/core/Switch';
@@ -21,6 +13,7 @@ import { getQuestionData } from '../Utils/QuestionUtilities';
 import Text from './Questions/Text';
 import DropDown from './Questions/DropDown';
 import MultipleChoice from './Questions/MultipleChoice';
+import Toggle from './Questions/Toggle';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -120,22 +113,9 @@ class Question extends React.Component {
 				theQ = <MultipleChoice {...this.props} />;
 				break;
 			}
+
 			case 'Toggle': {
-				if (DEBUG) console.log("Toggle Question");
-				theQ =
-					<FormControlLabel
-						key={this.props.id + "_FormControlLabel"}
-						control={
-							<Switch
-								key={this.props.id}
-								id={this.props.id}
-								checked={this.state.value}
-								onChange={this.handleToggleChange('value')}
-								xmlvalue={this.props.XMLValue}
-							/>
-						}
-						label={this.props.label}
-					/>
+				theQ = <Toggle {...this.props} />;
 				break;
 			}
 			case 'Table': {

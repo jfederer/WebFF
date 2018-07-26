@@ -84,6 +84,16 @@
 			
 		},
 		{
+			"id": "testTog2",
+			"XMLValue": "XMLQT2",
+			"type": "Toggle",
+			"value": "true",
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "Toggle Me Also"
+			
+		},
+		{
 			"id": "testTable",
 			"label": "Test Table Label",
 			"XMLValue": "Deets",
