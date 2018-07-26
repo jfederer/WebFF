@@ -84,18 +84,16 @@ class MultipleChoice extends React.Component {
 MultipleChoice.propTypes = {
     classes: PropTypes.object,
     validator: PropTypes.func,
-    stateChangeHandler: PropTypes.func,
+    stateChangeHandler: PropTypes.func.isRequired,
     key: PropTypes.string,
     id: PropTypes.string.isRequired,
     label: PropTypes.string,
-    placeholder: PropTypes.string,
-    XMLValue: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?
-    selectOptions: PropTypes.arrayOf(PropTypes.object),
+    XMLValue: PropTypes.string,
+    type: PropTypes.oneOf(['MultipleChoice']).isRequired, 
+    options: PropTypes.object.isRequired,
 
     //TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
-    // (ie: "if dropDown... select_options prop(array or strings) is required")
-    //TODO: expand the 'options' to be objectOf, etc.  ie: make sure it's formatted right.
+    
 
 };
 

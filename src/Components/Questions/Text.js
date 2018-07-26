@@ -41,7 +41,7 @@ class Text extends React.Component {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		let thisSize = this.props.size ? this.props.size : 1;
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
-		
+
 		return <TextField
 			value={this.state.value}
 			onChange={this.handleValueChange(this.props.id)}
@@ -55,6 +55,8 @@ class Text extends React.Component {
 			inputProps={{
 				size: thisSize
 			}}
+			multiline={this.props.multiline}
+			rows={this.props.rows}
 		/>;
 
 	}
@@ -63,14 +65,14 @@ class Text extends React.Component {
 Text.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func,
-	key: PropTypes.string,
+	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string.isRequired,
-	type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?
-	selectOptions: PropTypes.arrayOf(PropTypes.object),
+	XMLValue: PropTypes.string,
+	multiline: PropTypes.bool,
+	rows: PropTypes.number,
+	type: PropTypes.oneOf(['Text']).isRequired
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
 	// (ie: "if dropDown... select_options prop(array or strings) is required")

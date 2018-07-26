@@ -63,13 +63,16 @@ class DropDown extends React.Component {
 	buildQuestion() {
 		const { classes } = this.props;
 
-		//TODO: if key or id isn't included, make the missing one the same as the one that's included
 				return (
-					<FormControl className={classes.formControl}>
-						<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel>
+					// <FormControl className={classes.formControl}>
+					<div>
+						{(this.props.label!=null) ?
+							<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> :
+							null }
 						<Select
 							native
-							autoWidth={true}
+							// autoWidth={true}
+							fullWidth
 							value={this.state.value}
 							onChange={this.handleValueChange('value')}
 							inputProps={{
@@ -80,7 +83,8 @@ class DropDown extends React.Component {
 							{this.buildSelectOptions(this.props.options)}
 
 						</Select>
-					</FormControl>
+						</div>
+					// </FormControl>
 				);
 	};
 
@@ -104,14 +108,12 @@ class DropDown extends React.Component {
 DropDown.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func,
-	key: PropTypes.string,
+	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
-	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string.isRequired,
-	type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?
-	selectOptions: PropTypes.arrayOf(PropTypes.object),
+	XMLValue: PropTypes.string,
+	type: PropTypes.oneOf(['DropDown']).isRequired,
+	options: PropTypes.object.isRequired,
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
 	// (ie: "if dropDown... select_options prop(array or strings) is required")

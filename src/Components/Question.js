@@ -87,53 +87,11 @@ class Question extends React.Component {
 		);
 	};
 
-	handleMultiChoiceChange = choiceVal => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-
-		let tempValue = this.state.value;
-
-		if (event.target.checked) {
-			tempValue.push(choiceVal);
-		} else {
-			let index = tempValue.indexOf(choiceVal);
-			if (index > -1) {
-				tempValue.splice(index, 1);
-			} else {
-				//TODO: Throw Error
-				console.log("ERROR: MultiChoice option requested for removal did not exist in list of checked items in 'value'");
-			}
-		}
-
-		this.setState({ value: tempValue }, () => this.props.stateChangeHandler(this)
-		);
-	};
-
 	handleTableChange = name => event => {
 		console.log("Here");
 		console.log(name);
 		console.log(event);
 	};
-
-
-	buildCheckboxOptions(optionsPairs) {  // note, this references props and state... not just passed parameters and blank option could be split out for reuse
-		var JSX_return = [];
-
-		for (var optionLabel in optionsPairs) {
-			JSX_return.push(
-				<FormControlLabel
-					key={optionLabel + ":" + optionsPairs[optionLabel]}
-					control={
-						<Checkbox
-							checked={this.state.value && this.state.value.includes(optionsPairs[optionLabel])}
-							onChange={this.handleMultiChoiceChange(optionsPairs[optionLabel])}
-							value={optionsPairs[optionLabel]}
-						/>
-					}
-					label={optionLabel}
-				/>
-			);
-		}
-		return JSX_return;
-	}
 
 	buildQuestion() {
 		const DEBUG = false;
@@ -158,38 +116,8 @@ class Question extends React.Component {
 				break;
 			}
 
-			case 'MultiText': {
-				if (DEBUG) console.log("MultiText Question");
-				// theQ = <div>
-				// 	<TextField
-				// 		value={this.state.value}
-				// 		onChange={this.handleTextChange(this.props.id)}
-				// 		key={this.props.id}
-				// 		id={this.props.id}
-				// 		label={this.props.label}
-				// 		placeholder={realPlaceholder}
-				// 		className={classes.textField}
-				// 		fullWidth
-				// 		xmlvalue={this.props.XMLValue}
-				// 		multiline
-				// 		rows="4"
-				// 	/>
-				// </div>
-				theQ = "Hi";
-				break;
-			}
-			case 'MultiChoice': {
-				if (DEBUG) console.log("MultiChoice Question");
-				//Note that MultiChoice builds out state elements in the constructor for defining initial states.				
+			case 'MultipleChoice': {
 				theQ = <MultipleChoice {...this.props} />;
-					// <FormControl component="fieldset" key={this.props.id}>
-					// 	<FormLabel component="legend">{this.props.label}</FormLabel>
-					// 	<FormGroup>
-
-					// 		{this.buildCheckboxOptions(this.props.options)}
-
-					// 	</FormGroup>
-					// </FormControl>
 				break;
 			}
 			case 'Toggle': {
@@ -330,7 +258,7 @@ Question.propTypes = {
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLValue: PropTypes.string.isRequired,
-	type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?
+	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?
 	selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

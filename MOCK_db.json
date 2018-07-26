@@ -27,10 +27,12 @@
 			"id": "test3",
 			"label": "Question #3",
 			"XMLValue": "XMLQ3",
-			"type": "MultiText",
+			"type": "Text",
 			"value": "",
 			"tabName": "Question Page",
-			"layoutGroup": "Test"
+			"layoutGroup": "Test",
+			"multiline": true,
+			"rows":4
 			
 		},
 		{
@@ -54,7 +56,7 @@
 			"id": "test5",
 			"label": "Who is family",
 			"XMLValue": "XMLQ5",
-			"type": "MultiChoice",
+			"type": "MultipleChoice",
 			"options": {
 				"Colleen Niznik": "CSN",
 				"Corbin Brock": "CBF",
@@ -193,7 +195,7 @@
 			"id": "test8",
 			"label": "Question #8",
 			"XMLValue": "XMLQ8",
-			"type": "MultiText",
+			"type": "Text",
 			"value": "",
 			"tabName": "Question Page",
 			"layoutGroup": "QP2"
@@ -219,7 +221,7 @@
 			"id": "test10",
 			"label": "Who is programmer",
 			"XMLValue": "XMLQ10",
-			"type": "MultiChoice",
+			"type": "MultipleChoice",
 			"options": {
 				"Joe Federer": "JF",
 				"Ken Skach": "KS",
