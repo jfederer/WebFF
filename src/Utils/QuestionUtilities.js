@@ -61,16 +61,14 @@ export const saveQuestionValueToLS = (Q) => {
 	var DEBUG = false;
 	if (DEBUG) console.log(Q);
 	if (Q == null) { //POC
-		console.log("Question returned to questionChangeHandler was null");
+		console.log("Question returned to questionChangeHandler was null.  Question follows: ");
+		console.log(Q);
 		return;
 	}
 
-	if (DEBUG) console.log("--------------");
-	if (DEBUG) console.log("FF state:");
-	if (DEBUG) console.log(this.state);
 	// to sync question modifications to localStorage
 	if (DEBUG) console.log("--------------");
-	if (DEBUG) console.log("Q:");
+	if (DEBUG) console.log("Q.state:");
 	if (DEBUG) console.log(Q.state);
 
 
@@ -82,7 +80,8 @@ export const saveQuestionValueToLS = (Q) => {
 
 	// find the specific question in questionData based on the key,then update the value property
 	var QData = rawData.filter(questionData => {
-		if (questionData.key === Q.state.key) {
+		if (DEBUG) console.log(questionData.id + " === " + Q.props.id);
+		if (questionData.id === Q.props.id) {
 			if (DEBUG) console.log("------FOUND!--------");
 			if (DEBUG) console.log("questionData (pre)");
 			if (DEBUG) console.log(questionData);
@@ -92,6 +91,8 @@ export const saveQuestionValueToLS = (Q) => {
 			if (DEBUG) console.log("--------------");
 			if (DEBUG) console.log("questionData (post)");
 			if (DEBUG) console.log(questionData);
+		} else {
+			if (DEBUG) console.log("no");
 		}
 		return questionData;
 	});

@@ -19,6 +19,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { getQuestionData } from '../Utils/QuestionUtilities';
+import Text from './Questions/Text';
 import DropDown from './Questions/DropDown';
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -172,44 +173,28 @@ class Question extends React.Component {
 			}
 
 			case 'Text': {
-				if (DEBUG) console.log("Text Question");
-				let thisSize = this.props.size ? this.props.size : 1;
-				theQ = <TextField
-						value={this.state.value}
-						onChange={this.handleTextChange(this.props.id)}
-						key={this.props.id}
-						id={this.props.id}
-						label={this.props.label}
-						placeholder={realPlaceholder}
-						className={classes.textField}
-						fullWidth
-						xmlvalue={this.props.XMLValue}   
-						inputProps={{
-							size: thisSize
-						}}  					
-					/>
-
-				// theQ = <input type="text" name="fname" size={1}/>;
+				theQ = <Text {...this.props} />
 				break;
 			}
 
 			case 'MultiText': {
 				if (DEBUG) console.log("MultiText Question");
-				theQ = <div>
-					<TextField
-						value={this.state.value}
-						onChange={this.handleTextChange(this.props.id)}
-						key={this.props.id}
-						id={this.props.id}
-						label={this.props.label}
-						placeholder={realPlaceholder}
-						className={classes.textField}
-						fullWidth
-						xmlvalue={this.props.XMLValue}
-						multiline
-						rows="4"
-					/>
-				</div>
+				// theQ = <div>
+				// 	<TextField
+				// 		value={this.state.value}
+				// 		onChange={this.handleTextChange(this.props.id)}
+				// 		key={this.props.id}
+				// 		id={this.props.id}
+				// 		label={this.props.label}
+				// 		placeholder={realPlaceholder}
+				// 		className={classes.textField}
+				// 		fullWidth
+				// 		xmlvalue={this.props.XMLValue}
+				// 		multiline
+				// 		rows="4"
+				// 	/>
+				// </div>
+				theQ = "Hi";
 				break;
 			}
 			case 'MultiChoice': {
