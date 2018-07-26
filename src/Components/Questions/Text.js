@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 
 //this.state.value always contains the up-to-date question values/answers.
 
@@ -16,11 +15,6 @@ const styles = theme => ({
 		marginRight: theme.spacing.unit,
 	},
 });
-
-
-var inputProps = {
-	size: 4
-}
 
 class Text extends React.Component {
 	constructor(props) {
@@ -44,11 +38,10 @@ class Text extends React.Component {
 	render() {
 		const { classes } = this.props;
 
-		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		let thisSize = this.props.size ? this.props.size : 1;
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
-		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
+		
 		return <TextField
 			value={this.state.value}
 			onChange={this.handleValueChange(this.props.id)}
