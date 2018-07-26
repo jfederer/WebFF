@@ -35,10 +35,6 @@ class Text extends React.Component {
 	}
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		console.log("here");
-		console.log(value);
-		console.log(event.target.value);
-		console.log(this);
 		this.setState({
 			value: event.target.value
 		}, () => this.props.stateChangeHandler(this)

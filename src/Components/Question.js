@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -21,6 +20,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { getQuestionData } from '../Utils/QuestionUtilities';
 import Text from './Questions/Text';
 import DropDown from './Questions/DropDown';
+import MultipleChoice from './Questions/MultipleChoice';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -87,12 +87,6 @@ class Question extends React.Component {
 		);
 	};
 
-	handleSelectChange = name => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		this.setState({ [name]: event.target.value },
-			() => this.props.stateChangeHandler(this)
-		);
-	};
-
 	handleMultiChoiceChange = choiceVal => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 
 		let tempValue = this.state.value;
@@ -137,19 +131,6 @@ class Question extends React.Component {
 					label={optionLabel}
 				/>
 			);
-		}
-		return JSX_return;
-	}
-
-	buildSelectOptions(optionsPairs) {  // note, this references props and blank option could be split out for reuse
-		var JSX_return = [];
-
-		if (this.props.includeBlank && this.props.includeBlank === true) {
-			JSX_return.push(<option key="nada" value="" />);
-		}
-
-		for (var optionLabel in optionsPairs) {
-			JSX_return.push(<option key={optionLabel} value={optionsPairs[optionLabel]}>{optionLabel}</option>);
 		}
 		return JSX_return;
 	}
@@ -200,15 +181,15 @@ class Question extends React.Component {
 			case 'MultiChoice': {
 				if (DEBUG) console.log("MultiChoice Question");
 				//Note that MultiChoice builds out state elements in the constructor for defining initial states.				
-				theQ =
-					<FormControl component="fieldset" key={this.props.id}>
-						<FormLabel component="legend">{this.props.label}</FormLabel>
-						<FormGroup>
+				theQ = <MultipleChoice {...this.props} />;
+					// <FormControl component="fieldset" key={this.props.id}>
+					// 	<FormLabel component="legend">{this.props.label}</FormLabel>
+					// 	<FormGroup>
 
-							{this.buildCheckboxOptions(this.props.options)}
+					// 		{this.buildCheckboxOptions(this.props.options)}
 
-						</FormGroup>
-					</FormControl>
+					// 	</FormGroup>
+					// </FormControl>
 				break;
 			}
 			case 'Toggle': {
