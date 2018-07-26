@@ -1,7 +1,6 @@
 {
 	"questions": [
 		{
-			"key": "test1",
 			"id": "test1",
 			"label": "Impedence",
 			"XMLValue": "P10020",
@@ -14,7 +13,6 @@
 			
 		},
 		{
-			"key": "test2",
 			"id": "test2",
 			"label": "What name?",
 			"XMLValue": "XMLQ2",
@@ -26,7 +24,6 @@
 			
 		},
 		{
-			"key": "test3",
 			"id": "test3",
 			"label": "Question #3",
 			"XMLValue": "XMLQ3",
@@ -37,7 +34,6 @@
 			
 		},
 		{
-			"key": "test4",
 			"id": "test4",
 			"label": "Question Label 4",
 			"XMLValue": "XMLQ4",
@@ -55,7 +51,6 @@
 			
 		},
 		{
-			"key": "test5",
 			"id": "test5",
 			"label": "Who is family",
 			"XMLValue": "XMLQ5",
@@ -76,7 +71,6 @@
 			
 		},
 		{
-			"key": "testTog",
 			"id": "testTog",
 			"label": "Hot Out?",
 			"XMLValue": "XMLQT",
@@ -88,7 +82,6 @@
 			
 		},
 		{
-			"key": "testTable",
 			"id": "testTable",
 			"label": "Test Table Label",
 			"XMLValue": "Deets",
@@ -99,17 +92,29 @@
 			"colWidths" : ["20%", "20%", "30%", "10%", "10%"],
 			"colHeaders" : ["Dessert Name","Calories","Fat", "Carbs", "Protein"],
 			"rowHeaders" : "true",
-			"numberOfRows" : "8",
+			"numberOfRows" : "5",
 			"value": [
 				["Frozen yoghurt","159ewrwr", "", "24", "4.0"],
 				["Ice cream sandwich","237", "9.0", "37", "4.3"],
-				["Eclair","262", "16.0", "24", "6.0"],
+				["Eclair","262", "SubQuestion::subTest1", "24", "6.0"],
 				["Cupcake","305", "3.7", "67", "4.3"],
 				["Gingerbread", "356", "16.0", "49", "3.9"]
 			]
 		},
 		{
-			"key": "testTable2",
+			"id": "subTest1",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"Thi sis": "three All Around"
+			},
+			"value": ""			
+		},
+		{
 			"id": "testTable2",
 			"label": "Test Table Label2",
 			"XMLValue": "Deets2",
@@ -128,7 +133,7 @@
 			]
 		},
 		{
-			"key": "testTable3",
+
 			"id": "testTable3",
 			"label": "Test Table Label3",
 			"XMLValue": "Deets3",
@@ -147,7 +152,6 @@
 			]
 		},
 		{
-			"key": "testTable4",
 			"id": "testTable4",
 			"label": "Test Table Label4",
 			"XMLValue": "Deets4",
@@ -166,7 +170,6 @@
 			]
 		},
 		{
-			"key": "test6",
 			"id": "test6",
 			"label": "Single Line Text Q6",
 			"XMLValue": "XMLQ6",
@@ -178,7 +181,6 @@
 			"layoutGroup": "QP2"
 		},
 		{
-			"key": "test7",
 			"id": "test7",
 			"label": "Single Line Text Question 7",
 			"XMLValue": "XMLQ7",
@@ -188,7 +190,6 @@
 			"layoutGroup": "QP2"
 		},
 		{
-			"key": "test8",
 			"id": "test8",
 			"label": "Question #8",
 			"XMLValue": "XMLQ8",
@@ -198,7 +199,6 @@
 			"layoutGroup": "QP2"
 		},
 		{
-			"key": "test9",
 			"id": "test9",
 			"label": "Question Label 9",
 			"XMLValue": "XMLQ9",
@@ -216,7 +216,6 @@
 			"layoutGroup": "QP2"
 		},
 		{
-			"key": "test10",
 			"id": "test10",
 			"label": "Who is programmer",
 			"XMLValue": "XMLQ10",
@@ -233,7 +232,6 @@
 			"layoutGroup": "QP2"
 		},
 		{
-			"key": "stationName",
 			"id": "stationName",
 			"label": "Station Name",
 			"XMLValue": "",
@@ -251,7 +249,6 @@
 			"value": "EDI"
 		},
 		{
-			"key": "stationNumber",
 			"id": "stationNumber",
 			"label": "Station Number",
 			"XMLValue": "",
@@ -263,7 +260,6 @@
 			"width_lg": 3
 		},
 		{
-			"key": "projectName",
 			"id": "projectName",
 			"label": "Project Name",
 			"XMLValue": "",
@@ -275,7 +271,6 @@
 			"width_lg": 3
 		},
 		{
-			"key": "projectID",
 			"id": "projectID",
 			"label": "Project ID",
 			"XMLValue": "",
@@ -287,7 +282,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "agencyCode",
 			"id": "agencyCode",
 			"label": "Agency Code",
 			"XMLValue": "",
@@ -299,7 +293,6 @@
 			"width_lg": 1
 		},
 		{
-			"key": "sampleDate",
 			"id": "sampleDate",
 			"label": "Sample Date",
 			"XMLValue": "",
@@ -312,7 +305,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "sampleType",
 			"id": "sampleType",
 			"label": "Sample Type",
 			"XMLValue": "",
@@ -329,7 +321,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "sedimentType",
 			"id": "sedimentType",
 			"label": "Sediment Type",
 			"XMLValue": "sedimentType",
@@ -347,7 +338,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "timeZone",
 			"id": "timeZone",
 			"label": "Time Zone",
 			"XMLValue": "",
@@ -369,7 +359,6 @@
 			"width_lg": 1
 		},
 		{
-			"key": "samplingTeam",
 			"id": "samplingTeam",
 			"label": "Sampling Team",
 			"XMLValue": "st",
@@ -381,7 +370,6 @@
 			"width_lg": 3
 		},
 		{
-			"key": "compiledBy",
 			"id": "compiledBy",
 			"label": "Compiled By",
 			"XMLValue": "cb",
@@ -393,7 +381,6 @@
 			"width_lg": 1
 		},
 		{
-			"key": "sameDaySample",
 			"id": "sameDaySample",
 			"label": "Same Day Sample",
 			"XMLValue": "",
@@ -413,7 +400,6 @@
 			"width_lg": 1
 		},
 		{
-			"key": "sky",
 			"id": "sky",
 			"label": "Sky",
 			"XMLValue": "",
@@ -431,7 +417,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "precipitation",
 			"id": "precipitation",
 			"label": "Precipitation",
 			"XMLValue": "",
@@ -453,7 +438,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "temperature",
 			"id": "temperature",
 			"label": "Temperature",
 			"XMLValue": "",
@@ -474,7 +458,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "wind",
 			"id": "wind",
 			"label": "Wind",
 			"XMLValue": "",
@@ -494,7 +477,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "windDirection",
 			"id": "windDirection",
 			"label": "Wind Direction",
 			"XMLValue": "",
@@ -512,7 +494,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "time",
 			"id": "time",
 			"label": "Time (hhmm)",
 			"XMLValue": "P1000",
@@ -526,7 +507,6 @@
 			"width_lg": 3
 		},
 		{
-			"key": "location",
 			"id": "location",
 			"label": "Location",
 			"XMLValue": "P1234",
@@ -539,7 +519,6 @@
 			"width_lg": 3
 		},
 		{
-			"key": "temp",
 			"id": "temp",
 			"label": "Temp C",
 			"XMLValue": "P23430",
@@ -552,7 +531,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "specificConductance",
 			"id": "specificConductance",
 			"label": "Specific Conductance",
 			"XMLValue": "P594",
@@ -565,7 +543,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "transparency",
 			"id": "transparency",
 			"label": "Transparency",
 			"XMLValue": "P9987",
@@ -578,7 +555,6 @@
 			"width_lg": 2
 		},
 		{
-			"key": "NTRUturbidity",
 			"id": "NTRUturbidity",
 			"label": "NTRU Turbidity HACH",
 			"XMLValue": "P983",
@@ -591,7 +567,6 @@
 			"width_lg": 6
 		},
 		{
-			"key": "FNUturbidity",
 			"id": "FNUturbidity",
 			"label": "FNU Turbidity DTS-12",
 			"XMLValue": "P984",
@@ -606,30 +581,25 @@
 	],
 	"navMenuInfo": [
 		{
-			"key": "nav_Dashboard",
 			"text": "Dashboard",
 			"route": "/Dashboard",
 			"icon": "DashboardIcon"
 		},
 		{
-			"key": "nav_WaterQuality",
 			"text": "Water Quality",
 			"route": "/WaterQuality",
 			"icon": "OpacityIcon"
 		},
 		{
-			"key": "nav_Field Form",
 			"text": "Field Form",
 			"route": "/FieldForm",
 			"icon": "ImportContactsIcon"
 		},
 		{
-			"key": "nav_EDI",
 			"text": "EDI",
 			"route": "/EDI"
 		},
 		{
-			"key": "nav_EWI",
 			"text": "EWI",
 			"route": "/EWI",
 			"icon": ""
@@ -641,7 +611,6 @@
 			"dialogDescription": "Fill out the following to add a new station",
 			"questions": [
 				{
-					"key": "stationName",
 					"id": "stationName",
 					"label": "Station Name",
 					"XMLValue": "stnnm",
@@ -652,7 +621,6 @@
 					"width_lg": 3
 				},
 				{
-					"key": "stationNumber",
 					"id": "stationNumber",
 					"label": "Station Number",
 					"XMLValue": "",
@@ -664,7 +632,6 @@
 					"width_lg": 6
 				},
 				{
-					"key": "projectName",
 					"id": "projectName",
 					"label": "Project Name",
 					"XMLValue": "",
@@ -676,7 +643,6 @@
 					"width_lg": 6
 				},
 				{
-					"key": "projectID",
 					"id": "projectID",
 					"label": "Project ID",
 					"XMLValue": "",
@@ -688,7 +654,6 @@
 					"width_lg": 3
 				},
 				{
-					"key": "agencyCode",
 					"id": "agencyCode",
 					"label": "Agency Code",
 					"XMLValue": "",

@@ -36,25 +36,29 @@ class QuestionPanel extends React.Component {
 	
 			if((question.props.width_xs==='' || question.props.width_xs==null) && (question.props.width_lg==='' || question.props.width_lg==null)) {
 				// neither lg or xs are set.
-				return <Grid item key={question.props.id+'_grid'} xs lg>  
-					{question}
-				</Grid>
+				return <Grid item 
+							key={question.props.id+'_grid'} xs lg>  
+							{question}
+						</Grid>
 	
 			} else if (question.props.width_xs==='' || question.props.width_xs==null) {
 				// xs is not set
-				return <Grid item key={question.props.id+'_grid'} xs lg={question.props.width_lg}>  
+				return <Grid item  
+				key={question.props.id+'_grid'} xs lg={question.props.width_lg}>  
 					{question}
 				</Grid>
 	
 			} else if (question.props.width_lg==='' || question.props.width_lg==null) {
 				// lg is not set
-				return <Grid item key={question.props.id+'_grid'} xs={question.props.width_xs} lg>  
+				return <Grid item  
+				key={question.props.id+'_grid'} xs={question.props.width_xs} lg>  
 					{question}
 				</Grid>
 	
 			} else {
 				// both lg and xs are set.
-				return <Grid item key={question.props.id+'_grid'} xs={question.props.width_xs} lg={question.props.width_lg}>  
+				return <Grid item  
+				key={question.props.id+'_grid'} xs={question.props.width_xs} lg={question.props.width_lg}>  
 					{question}
 				</Grid>
 			}
@@ -67,7 +71,8 @@ class QuestionPanel extends React.Component {
 					container 
 					spacing={8}
 					alignItems='baseline'
-					justify='space-around' 
+					// justify='space-around' 
+					justify="center"
 					>
 					{gridedQuestions}  
 				</Grid>

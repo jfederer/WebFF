@@ -18,38 +18,39 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
+import { getQuestionData } from '../Utils/QuestionUtilities';
+import DropDown from './Questions/DropDown';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
 
 const styles = theme => ({
-	formControl: {
-		margin: 0,
-		display: 'flex',
-		fullWidth: true,
-		wrap: 'nowrap'
-	},
-	inputLabel: {
-		margin: 0,
-		display: 'flex',
-		fullWidth: true,
-		wrap: 'nowrap'
-	},
-	tableCell: {
-		padding: 5,
-		flexShrink: 0,
-	},
-	textField: {
-		padding: 0,
-		margin: 0,
-		backgroundColor: "#191",
-		color: "#fff"
-	},
-	table: {
-		width: 10,
-		backgroundColor: "#911"
-	}
+	// formControl: {
+	// 	margin: 0,
+	// 	display: 'flex',
+	// 	fullWidth: true,
+	// 	wrap: 'nowrap'
+	// },
+	// inputLabel: {
+	// 	margin: 0,
+	// 	display: 'flex',
+	// 	fullWidth: true,
+	// 	wrap: 'nowrap'
+	// },
+	// tableCell: {
+	// 	padding: 5,
+	// 	flexShrink: 0,
+	// },
+	// textField: {
+	// 	padding: 0,
+	// 	margin: 0,
+	// 	backgroundColor: "#191",
+	// 	color: "#fff"
+	// },
+	// table: {
+	// 	width: 10,
+	// 	backgroundColor: "#911"
+	// }
 
 
 });
@@ -63,14 +64,13 @@ class Question extends React.Component {
 		super(props);
 		this.state = {
 			value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
-			key: '',
 			currentQuestionValue: this.props.value,
 		};
 		this.handleTableChange = this.handleTableChange.bind(this);
 	};
 
 	componentWillMount() {
-		this.setState({ key: this.props.id });;
+		// this.setState({ key: this.props.id });
 		this.setState({ value: this.props.value });
 	}
 
@@ -167,24 +167,7 @@ class Question extends React.Component {
 		switch (this.props.type) {
 			case 'DropDown': {
 				//TODO: age-native-simple
-				theQ = (
-					<FormControl className={classes.formControl}>
-						<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel>
-						<Select
-							native
-							autoWidth={true}
-							value={this.state.value}
-							onChange={this.handleSelectChange('value')}
-							inputProps={{
-								name: this.props.label,
-								id: this.props.id,
-							}}
-						>
-							{this.buildSelectOptions(this.props.options)}
-
-						</Select>
-					</FormControl>
-				);
+				theQ = <DropDown {...this.props} />
 				break;
 			}
 
@@ -193,8 +176,8 @@ class Question extends React.Component {
 				let thisSize = this.props.size ? this.props.size : 1;
 				theQ = <TextField
 						value={this.state.value}
-						onChange={this.handleTextChange(this.props.key)}
-						key={this.props.key}
+						onChange={this.handleTextChange(this.props.id)}
+						key={this.props.id}
 						id={this.props.id}
 						label={this.props.label}
 						placeholder={realPlaceholder}
@@ -215,8 +198,8 @@ class Question extends React.Component {
 				theQ = <div>
 					<TextField
 						value={this.state.value}
-						onChange={this.handleTextChange(this.props.key)}
-						key={this.props.key}
+						onChange={this.handleTextChange(this.props.id)}
+						key={this.props.id}
 						id={this.props.id}
 						label={this.props.label}
 						placeholder={realPlaceholder}
@@ -233,7 +216,7 @@ class Question extends React.Component {
 				if (DEBUG) console.log("MultiChoice Question");
 				//Note that MultiChoice builds out state elements in the constructor for defining initial states.				
 				theQ =
-					<FormControl component="fieldset" key={this.props.key}>
+					<FormControl component="fieldset" key={this.props.id}>
 						<FormLabel component="legend">{this.props.label}</FormLabel>
 						<FormGroup>
 
@@ -247,10 +230,10 @@ class Question extends React.Component {
 				if (DEBUG) console.log("Toggle Question");
 				theQ =
 					<FormControlLabel
-						key={this.props.key + "_FormControlLabel"}
+						key={this.props.id + "_FormControlLabel"}
 						control={
 							<Switch
-								key={this.props.key}
+								key={this.props.id}
 								id={this.props.id}
 								checked={this.state.value}
 								onChange={this.handleToggleChange('value')}
@@ -291,14 +274,25 @@ class Question extends React.Component {
 
 				tableValues.map((curRow, row) => {
 					tableRows.push(
-							<TableRow key={this.state.key + "_row_" + row}> 
+							<TableRow key={this.props.id + "_row_" + row}> 
 							{curRow.map((cellContent, col) => {
 								//console.log(cellContent);
-								let adHocProps = {...this.props, type:"Text", label:"", value:cellContent}
+								
+								let subQkey = this.props.id + "_row:" + row + "_col:" + col;
+								let adHocProps = {...this.props, id:subQkey, type:"Text", label:"", value:cellContent}
+
+								if(cellContent.startsWith("SubQuestion::")) {
+									console.log("DD");
+									let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::")+13);
+									console.log(subQuestionID);
+									let questionData = getQuestionData(subQuestionID);
+									adHocProps = {...adHocProps, ...questionData};
+								}
+								
 								
 
 								return (
-									<TableCell className={classes.tableCell} key={this.props.key + "_row:" + row + "_col:" + col}>
+									<TableCell className={classes.tableCell} key={this.props.id + "_row:" + row + "_col:" + col}>
 										{/* {cellContent + "_row:" + row + "_col:" + col} */}
 										{col===0 && this.props.rowHeaders ?
 										<div className={classes.header}>{cellContent}</div> :
@@ -322,7 +316,7 @@ class Question extends React.Component {
 				</colgroup>;
 
 theQ =
-	<Table key={this.props.key + "_table"} className={classes.table}>
+	<Table key={this.props.id + "_table"} className={classes.table}>
 		 {colGroup}
 		<TableHead>
 			<TableRow>
@@ -362,12 +356,12 @@ theQ =
 }
 
 Question.propTypes = {
-	classes: PropTypes.object.isRequired,
+	classes: PropTypes.object,
 	validator: PropTypes.func,
 	stateChangeHandler: PropTypes.func,
 	key: PropTypes.string,
 	id: PropTypes.string.isRequired,
-	label: PropTypes.string.isRequired,
+	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLValue: PropTypes.string.isRequired,
 	type: PropTypes.oneOf(['Text', 'MultiText', 'DropDown', 'MultiChoice', 'Toggle', "Table", "Checkbox", "Date", "Time"]).isRequired,  //Toggle is just a single multichoice... implement?

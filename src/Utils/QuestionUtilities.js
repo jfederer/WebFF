@@ -14,6 +14,20 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
     return layoutGroupQuestionComponents;
 }
 
+export const getQuestionData= (questionID) => {
+	// returns questionData about single question with its' key field equal to questionKey
+	//WARNING, this assumes questionsData is populated in LS  //TODO, do not make assumption
+	
+	var questionsData = JSON.parse(localStorage.getItem('questionsData'));
+	var questionData = questionsData.filter(questionData => questionData.id === questionID);
+	
+	if(questionData != null && questionData.length===1) {
+		return questionData[0];
+	} else {
+		return null; //TODO: throw errors
+	}
+}
+
 export const getLayoutGroupNames = (questionsData) => {
     // provided with questionData, will return array of layout group names (strings)
     let layoutGroupNames = [];

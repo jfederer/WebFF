@@ -147,7 +147,7 @@ class WebFF extends React.Component {
 			}
 
 			if (shouldInclude) retMenu.push(
-				<ListItem key={menuItem.key} button component={Link} to={menuItem.route}>
+				<ListItem key={menuItem.route+"_key"} button component={Link} to={menuItem.route}>
 					{(useIcon) ? <ListItemIcon>
 						{this.materialtIcon(menuItem.icon)}
 					</ListItemIcon> : null}
@@ -265,11 +265,6 @@ class WebFF extends React.Component {
 	};
 
 	buildRoutes = () => {
-		// console.log(this.state.navMenuInfo);
-		// let dynamicRoutes = this.state.navMenuInfo.map((navItem)=> {
-		// 		return <Route key={navItem.key} path={navItem.route} appBarTextCB={this.setAppBarText} tabName={navItem.text} navControl={this.navigationControl}/>;
-		// });
-		// console.log(dynamicRoutes);
 		var newRouteMenu = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />

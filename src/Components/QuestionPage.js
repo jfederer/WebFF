@@ -113,7 +113,11 @@ class QuestionPage extends React.Component {
 		if (!isLoading && questionsData.length > 0) {
 
 			tabQuestionData = questionsData.filter((question) => {
-				return question.tabName.replace(/ /g,'') === tabName.replace(/ /g,'');  //regex removes whitespace... allowing a match regardless of whitespace in the url or the questions database
+				if(question.tabName) {
+					return question.tabName.replace(/ /g,'') === tabName.replace(/ /g,'');  //regex removes whitespace... allowing a match regardless of whitespace in the url or the questions database
+				} else {
+					return null;
+				}
 			});
 
 			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
