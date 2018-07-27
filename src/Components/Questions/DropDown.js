@@ -30,8 +30,6 @@ class DropDown extends React.Component {
 		super(props);
 		this.state = {
 			value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
-			key: '',
-			currentQuestionValue: this.props.value,
 		};
 	};
 

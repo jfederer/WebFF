@@ -64,7 +64,7 @@ class QuestionPage extends React.Component {
 	questionChangeHandler(Q) {
 
 		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.value") to localStorage
-		this.props.systemCB(Q);
+		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q
 	}
 
 	fetchData() {   //TODO:  Move to WebFF to ensure everything gets loaded before heading to field

@@ -287,8 +287,11 @@ class WebFF extends React.Component {
 	};
 
 	questionChangeSystemCallback(question) {
-		alert("QC-cb");
+		// check if there are additional actions needed based on the actionOptions in this question, Q
+		console.log("QCSQ: question: ", question);
 	}
+
+
 
 	buildRoutes = () => {
 		var newRouteMenu = (
