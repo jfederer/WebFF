@@ -77,20 +77,44 @@
 			"label": "Hot Out?",
 			"XMLValue": "XMLQT",
 			"type": "Toggle",
-			"value": "true",
+			"value": false,
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
-			"helperText": "Toggle Me"
+			"helperText": "Toggle Me",
+			"checkbox" : false
 			
 		},
 		{
 			"id": "testTog2",
 			"XMLValue": "XMLQT2",
 			"type": "Toggle",
-			"value": "true",
+			"value": true,
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
-			"helperText": "Toggle Me Also"
+			"helperText": "Toggle Me Also",
+			"checkbox" : false			
+		},
+		{
+			"id": "testTog3",
+			"label": "Check Me?",
+			"XMLValue": "XMLQT",
+			"type": "Toggle",
+			"value": true,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "Toggle Me",
+			"checkbox" : true
+			
+		},
+		{
+			"id": "testTog4",
+			"XMLValue": "XMLQT2",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
 			
 		},
 		{

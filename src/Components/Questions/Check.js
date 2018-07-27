@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import Checkbox from '@material-ui/core/Checkbox';
+
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -33,34 +33,29 @@ class Toggle extends React.Component {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
         // const { classes } = this.props;
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue; 
-		let controlElement; 
-
-		if(this.props.checkbox===true) {
-			controlElement = <Checkbox
-			key={this.props.id}
-			id={this.props.id}
-			checked={this.state.value}
-			onChange={this.handleToggleChange('value')}
-			xmlvalue={this.props.XMLValue}
-		/>
-		} else {
-			controlElement = <Switch
-			key={this.props.id}
-			id={this.props.id}
-			checked={this.state.value}
-			onChange={this.handleToggleChange('value')}
-			xmlvalue={this.props.XMLValue}
-		/>
-		}
 
         if (this.props.label!=null) {
             return <FormControlLabel
             key={this.props.id + "_FormControlLabel"}
-            control={controlElement}
+            control={
+                <Switch
+                    key={this.props.id}
+                    id={this.props.id}
+                    checked={this.state.value}
+                    onChange={this.handleToggleChange('value')}
+                    xmlvalue={this.props.XMLValue}
+                />
+            }
             label={this.props.label}
         />
         } else {
-            return controlElement;
+            return <Switch
+            key={this.props.id}
+            id={this.props.id}
+            checked={this.state.value}
+            onChange={this.handleToggleChange('value')}
+            xmlvalue={this.props.XMLValue}
+        />
         }
 
     }
