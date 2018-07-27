@@ -57,11 +57,12 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 export const saveQuestionValueToLS = (Q) => {
 	//this function saves updated question "values" (must be located at "Q.value") to localStorage.questionsData
-	console.log("saveQuestionValueToLS, Q:" + Q);
+
 	var DEBUG = false;
 	if (DEBUG) console.log(Q);
 	if (Q == null) { //POC
-		console.log("Question passed to saveQuestionValueToLS was null.  Question: ", Q);
+		console.log("Question returned to questionChangeHandler was null.  Question follows: ");
+		console.log(Q);
 		return;
 	}
 

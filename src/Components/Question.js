@@ -60,8 +60,11 @@ class Question extends React.Component {
 	}
 
 	buildQuestion() {
+		const DEBUG = false;
+		const { classes } = this.props;
 		var theQ = {};
-		
+		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
+
 		switch (this.props.type) {
 			case 'DropDown': {
 				theQ = <DropDown {...this.props} />
@@ -80,6 +83,7 @@ class Question extends React.Component {
 				break;
 			}
 			case 'InputTable': {
+				console.log("TABLE");
 				theQ = <InputTable {...this.props} />;
 				break;
 			}
@@ -118,7 +122,7 @@ Question.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLValue: PropTypes.string.isRequired,
 	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "InputTable", "Checkbox", "Date", "Time"]).isRequired,  
 	selectOptions: PropTypes.arrayOf(PropTypes.object),
 
