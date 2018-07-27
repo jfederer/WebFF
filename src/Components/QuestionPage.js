@@ -41,7 +41,7 @@ class QuestionPage extends React.Component {
 		if (localStorage.getItem('questionsData')) {
 			console.log("using local storage data for QP questions");
 		} else {
-			console.log("going to DB for data for navMenu");
+			console.log("going to DB for data for questionsData");
 			this.fetchData();
 		}
 	}
@@ -62,7 +62,6 @@ class QuestionPage extends React.Component {
 	}
 
 	questionChangeHandler(Q) {
-
 		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.value") to localStorage
 		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q
 	}
@@ -143,16 +142,6 @@ class QuestionPage extends React.Component {
 			<div>
 				{this.props.tabName}
 				{questionPanels}
-				
-
-				<hr /><hr /><hr />
-
-				<p>When station name selected, auto populate:</p>
-				<button onClick={() => this.props.navControl("EDI", true)}>Add EDI</button>
-				<button onClick={() => this.props.navControl("EDI", false)}>Remove EDI</button>
-				<button onClick={() => this.props.navControl("EWI", true)}>Add EWI</button>
-				<button onClick={() => this.props.navControl("EWI", false)}>Remove EWI</button>
-
 			</div>
 		);
 	}

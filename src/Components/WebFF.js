@@ -61,20 +61,11 @@ class WebFF extends React.Component {
 			curDialogName: "",
 			curDialogQuestionsInfo: [],
 
-
 			systemMenuOpen: false,
 
 			appBarText: "Sediment Field Forms",
 
-			tabShowStatus : {Dashboard: true, EDI:false, EWI:true, WaterQuality:true, FieldForm:true},
-		
-
-			showEDI: false,
-			showEWI: false,
-			showWaterQuality: false,
-			showFieldForm: false,
-
-
+			tabShowStatus: { Dashboard: true, EDI: false, EWI: false, WaterQuality: false, FieldForm: false },
 		};	//TODO: pull tabShowStatus from DB
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
@@ -117,26 +108,26 @@ class WebFF extends React.Component {
 	}
 
 	navigationControl(tabName, add) {
-		tabName = tabName.replace(/\s/g, '');
+		// tabName = tabName.replace(/\s/g, '');
 
-		// if add is false, remove menuItem used on tabNAme  
-		// if add is true, add a tab named tabName
-		// extra verbosity due to desire to use dynamic key name
-		var key = 'show' + tabName;
-		var val = add;
-		var obj = {};
-		obj[key] = val;
-		this.setState(obj);
+		// // if add is false, remove menuItem used on tabNAme  
+		// // if add is true, add a tab named tabName
+		// // extra verbosity due to desire to use dynamic key name
+		// var key = 'show' + tabName;
+		// var val = add;
+		// var obj = {};
+		// obj[key] = val;
+		// this.setState(obj);
+		this.showTab(tabName, add);
 	}
 
 	jsonToNavMenu(jsonNavData) {
-		
 		// this function filters tabs based on the "showXYZ" items in state
-		 console.log(jsonNavData);
+		// console.log(jsonNavData);
 		var retMenu = [];
 		for (var i = 0; i < jsonNavData.length; i++) {
 			var menuItem = jsonNavData[i];
-			var shouldInclude = this.state.tabShowStatus[menuItem.text.replace(/ /g,'')];
+			var shouldInclude = this.state.tabShowStatus[menuItem.text.replace(/ /g, '')];
 
 			// use icon?
 			let useIcon = true;
@@ -274,27 +265,52 @@ class WebFF extends React.Component {
 		this.setState({ appBarText: txt });
 	};
 
-	actionExecuter = (action) => {
-		console.log("Executing..." + action);
+	actionExecuter = (actionString) => {
+		let splitActionString = actionString.split('::');
+		if (splitActionString.length != 2) {
+			//TODO: Throw error
+		}
+		switch (splitActionString[0]) {
+			case "ShowTab": 
+				this.showTab(splitActionString[1],true);
+				break;
+			case "HideTab":
+				this.showTab(splitActionString[1],false);
+				break;
+			case "ShowQuestion":
+				break;
+			case "HideQuestion":
+				break;
+			case "ShowQuestionPanel":
+				break;
+			case "HideQuestionPanel":
+				break;
+			default:
+				//TODO: throw error
+				console.log("Requested action '" + splitActionString[0] + "' not recognized");
+		}
 	}
 
 	showTab(tabName, toShow) {
-		this.setState({ ...this.state.tabShowStatus, tabName: toShow});
+		console.log("ShOWTAB: ", tabName, " ", toShow);
+		let newTabShowStatus = this.state.tabShowStatus;
+		newTabShowStatus[tabName.replace(/ /g, '')] = toShow;
+		this.setState(newTabShowStatus);
 	}
 
 	questionChangeSystemCallback(question) {
 		// check if there are additional actions needed based on the actionOptions in this question, Q
-		if (question==null) {
-				//TODO: throw error
-				console.log("questionChangeSystemCallback required field, question, is null");
+		if (question == null) {
+			//TODO: throw error
+			console.log("questionChangeSystemCallback required field, question, is null");
 		}
-		if ( question.props.actions) {
+		if (question.props.actions) {
 			let { actions } = question.props;
 			let qval = question.state.value;
 			let commandString = actions[qval];
 			if (commandString) {
 				let actionsToDo = commandString.split('&');
-				actionsToDo.forEach((action)=>{
+				actionsToDo.forEach((action) => {
 					this.actionExecuter(action);
 				});
 			}
