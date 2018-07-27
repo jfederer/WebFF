@@ -37,6 +37,7 @@ class Text extends React.Component {
 
 	render() {
 		const { classes } = this.props;
+		console.log("Render TEXT");
 
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		let thisSize = this.props.size ? this.props.size : 1;

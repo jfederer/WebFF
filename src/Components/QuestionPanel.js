@@ -29,6 +29,7 @@ class QuestionPanel extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { questions } = this.props;
+		console.log("Rendering Question Panel");
 
 		let gridedQuestions = questions.map((question) => {
 			// console.log(props.width_xs);
