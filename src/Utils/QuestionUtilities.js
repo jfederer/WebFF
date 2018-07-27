@@ -14,7 +14,7 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
     return layoutGroupQuestionComponents;
 }
 
-export const getQuestionData= (questionID) => {
+export const getQuestionDataFromLSbyQuestionID= (questionID) => {
 	// returns questionData about single question with its' key field equal to questionKey
 	//WARNING, this assumes questionsData is populated in LS  //TODO, do not make assumption
 	
@@ -61,8 +61,7 @@ export const saveQuestionValueToLS = (Q) => {
 	var DEBUG = false;
 	if (DEBUG) console.log(Q);
 	if (Q == null) { //POC
-		console.log("Question returned to questionChangeHandler was null.  Question follows: ");
-		console.log(Q);
+		console.log("Question passed to saveQuestionValueToLS was null or undefined");
 		return;
 	}
 
