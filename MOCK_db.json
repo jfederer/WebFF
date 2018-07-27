@@ -377,9 +377,9 @@
 				"Single Vertical": "30"
 			},
 			"actions": {
-				"20": "&ShowTab::EDI",
-				"30": "&ShowTab::EDI",
-				"10": "&ShowTab::EWI"
+				"10": "ShowTab::EWI&HideTab::EDI",
+				"20": "ShowTab::EDI&HideTab::EWI",
+				"30": "ShowTab::EDI&ShowTab::EWI"
 			},
 			"value": "",
 			"layoutGroup": "Basic",

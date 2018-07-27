@@ -66,16 +66,20 @@ class WebFF extends React.Component {
 
 			appBarText: "Sediment Field Forms",
 
+			tabShowStatus : {Dashboard: true, EDI:false, EWI:true, WaterQuality:true, FieldForm:true},
+		
+
 			showEDI: false,
 			showEWI: false,
 			showWaterQuality: false,
 			showFieldForm: false,
 
 
-		};
+		};	//TODO: pull tabShowStatus from DB
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
+		this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
 
 	};
 
@@ -126,29 +130,13 @@ class WebFF extends React.Component {
 	}
 
 	jsonToNavMenu(jsonNavData) {
+		
 		// this function filters tabs based on the "showXYZ" items in state
-		// console.log(jsonNavData);
+		 console.log(jsonNavData);
 		var retMenu = [];
 		for (var i = 0; i < jsonNavData.length; i++) {
 			var menuItem = jsonNavData[i];
-			var shouldInclude = true;
-
-			if ((menuItem.text === "EWI" && !this.state.showEWI)) {   //HARDCODE
-				shouldInclude = false;
-			}
-
-			if ((menuItem.text === "EDI" && !this.state.showEDI)) {  //HARDCODE
-				shouldInclude = false;
-			}
-
-			if ((menuItem.text === "Water Quality" && !this.state.showWaterQuality)) {   //HARDCODE
-				shouldInclude = false;
-			}
-
-			if ((menuItem.text === "Field Form" && !this.state.showFieldForm)) {  //HARDCODE
-				shouldInclude = false;
-			}
-
+			var shouldInclude = this.state.tabShowStatus[menuItem.text.replace(/ /g,'')];
 
 			// use icon?
 			let useIcon = true;
@@ -286,10 +274,34 @@ class WebFF extends React.Component {
 		this.setState({ appBarText: txt });
 	};
 
+	actionExecuter = (action) => {
+		console.log("Executing..." + action);
+	}
+
+	showTab(tabName, toShow) {
+		this.setState({ ...this.state.tabShowStatus, tabName: toShow});
+	}
+
 	questionChangeSystemCallback(question) {
 		// check if there are additional actions needed based on the actionOptions in this question, Q
-		console.log("QCSQ: question: ", question);
+		if (question==null) {
+				//TODO: throw error
+				console.log("questionChangeSystemCallback required field, question, is null");
+		}
+		if ( question.props.actions) {
+			let { actions } = question.props;
+			let qval = question.state.value;
+			let commandString = actions[qval];
+			if (commandString) {
+				let actionsToDo = commandString.split('&');
+				actionsToDo.forEach((action)=>{
+					this.actionExecuter(action);
+				});
+			}
+		}
 	}
+
+
 
 
 
@@ -298,15 +310,23 @@ class WebFF extends React.Component {
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
 				{this.state.navMenu}
-				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl} />} />
+				<Route path="/Dashboard" render={() => <Dashboard
+					appBarTextCB={this.setAppBarText}
+					text="Dashboard"
+					navControl={this.navigationControl}
+				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
 					tabName={this.props.location.pathname.slice(1)}
 					navControl={this.navigationControl}
 					systemCB={this.questionChangeSystemCallback}
 				/>} />
-				{/* //TODO: do some processing on pathname to give good human-readable tabnames */}
-				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText} navControl={this.navigationControl} />} />
+				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
+				<Route render={() => <ErrorPage
+					errMsg="Route was not found"
+					appBarTextCB={this.setAppBarText}
+					navControl={this.navigationControl}
+				/>} />
 			</Switch>
 		);
 		this.setState({ routeMenu: newRouteMenu });
@@ -375,9 +395,17 @@ class WebFF extends React.Component {
 
 				</AppBar>
 
-				<SystemMenu isOpen={this.state.systemMenuOpen} closeHandler={this.handleSystemMenuClose} menuItemClickHandler={this.handleSystemMenuItemClicked} />
-				<SystemDialog isOpen={this.state.dialogOpen} closeHandler={this.handleDialogClose} dialogQuestionsInfo={this.state.curDialogQuestionsInfo} dialogName={this.state.curDialogName} dialogDescription={this.state.curDialogDescription} />
-				<NavMenu isExpanded={this.state.navMenuExpanded} closeHandler={this.handleLeftDrawerClose} menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
+				<SystemMenu isOpen={this.state.systemMenuOpen}
+					closeHandler={this.handleSystemMenuClose}
+					menuItemClickHandler={this.handleSystemMenuItemClicked} />
+				<SystemDialog isOpen={this.state.dialogOpen}
+					closeHandler={this.handleDialogClose}
+					dialogQuestionsInfo={this.state.curDialogQuestionsInfo}
+					dialogName={this.state.curDialogName}
+					dialogDescription={this.state.curDialogDescription} />
+				<NavMenu isExpanded={this.state.navMenuExpanded}
+					closeHandler={this.handleLeftDrawerClose}
+					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
 
 				<main className={classes.content} >
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
