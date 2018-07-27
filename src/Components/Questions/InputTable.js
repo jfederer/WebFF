@@ -85,7 +85,8 @@ class InputTable extends React.Component {
 						//console.log(cellContent);
 
 						let subQkey = this.props.id + "_row:" + row + "_col:" + col;
-						let adHocProps = { ...this.props, id: subQkey, type: "Text", label: "", value: cellContent }
+						let classlessProps = delete this.props[classes];
+						let adHocProps = { ...this.classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
 
 						if (cellContent.startsWith("SubQuestion::")) {
 							console.log("DD");
@@ -159,7 +160,7 @@ InputTable.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string.isRequired,
+	XMLValue: PropTypes.string,
 	type: PropTypes.oneOf(["InputTable"]).isRequired,
 	selectOptions: PropTypes.arrayOf(PropTypes.object)
 
