@@ -29,6 +29,16 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import ColorizeIcon from '@material-ui/icons/Colorize';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
+import FilterDramaIcon from '@material-ui/icons/FilterDrama';
+import StraightenIcon from '@material-ui/icons/Straighten';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import GroupAddIcon from '@material-ui/icons/PersonAdd';
+import CompareIcon from '@material-ui/icons/Compare';
+import EditIcon from '@material-ui/icons/Edit';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
 
 import SystemDialog from './SystemDialog';
@@ -147,7 +157,7 @@ class WebFF extends React.Component {
 			}
 
 			if (shouldInclude) retMenu.push(
-				<ListItem key={menuItem.route+"_key"} button component={Link} to={menuItem.route}>
+				<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
 					{(useIcon) ? <ListItemIcon>
 						{this.materialtIcon(menuItem.icon)}
 					</ListItemIcon> : null}
@@ -165,6 +175,18 @@ class WebFF extends React.Component {
 			case 'OpacityIcon': return <OpacityIcon />
 			case 'ReorderIcon': return <ReorderIcon />
 			case 'ColorizeIcon': return <ColorizeIcon />
+			case 'FilterDramaIcon': return <FilterDramaIcon />
+			case 'StraightenIcon': return <StraightenIcon />
+			case 'LibraryAddIcon': return <LibraryAddIcon />
+			case 'PlaylistAddIcon': return <PlaylistAddIcon />
+			case 'PersonAddIcon': return <PersonAddIcon />
+			case 'GroupAddIcon': return <GroupAddIcon />
+			case 'PlaylistAddCheckIcon': return <PlaylistAddCheckIcon />
+			case 'NoteAddIcon': return <NoteAddIcon />
+			case 'EditIcon': return <EditIcon />
+			case 'CompareIcon': return <CompareIcon />
+
+			//TODO: additional good ones:  blur*, edit* (gives editor options...)
 			default: return <SettingsInputComponentIcon />
 		}
 	}
@@ -264,13 +286,22 @@ class WebFF extends React.Component {
 		this.setState({ appBarText: txt });
 	};
 
+	questionChangeSystemCallback(question) {
+		alert("QC-cb");
+	}
+
 	buildRoutes = () => {
 		var newRouteMenu = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
 				{this.state.navMenu}
 				<Route path="/Dashboard" render={() => <Dashboard appBarTextCB={this.setAppBarText} text="Dashboard" navControl={this.navigationControl} />} />
-				<Route render={() => <QuestionPage appBarTextCB={this.setAppBarText} tabName={this.props.location.pathname.slice(1)} navControl={this.navigationControl} />} />
+				<Route render={() => <QuestionPage
+					appBarTextCB={this.setAppBarText}
+					tabName={this.props.location.pathname.slice(1)}
+					navControl={this.navigationControl}
+					systemCB={this.questionChangeSystemCallback}
+				/>} />
 				{/* //TODO: do some processing on pathname to give good human-readable tabnames */}
 				<Route render={() => <ErrorPage errMsg="Route was not found" appBarTextCB={this.setAppBarText} navControl={this.navigationControl} />} />
 			</Switch>
@@ -308,7 +339,7 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-	
+
 		return (
 			<div className={classes.root} >
 				<AppBar

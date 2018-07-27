@@ -62,12 +62,9 @@ class QuestionPage extends React.Component {
 	}
 
 	questionChangeHandler(Q) {
-		//this function saves updated question "values" (must be located at "Q.value") to localStorage
 
-		//FUTURE: while this works, it could be simpler re-written with spread operator
-
-		//FUTURE: Should go to utility class or somewhere else that is parent of all pages
-		saveQuestionValueToLS(Q);
+		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.value") to localStorage
+		this.props.systemCB(Q);
 	}
 
 	fetchData() {   //TODO:  Move to WebFF to ensure everything gets loaded before heading to field

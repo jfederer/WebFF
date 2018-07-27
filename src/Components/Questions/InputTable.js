@@ -20,7 +20,7 @@ const styles = theme => ({
 	},
 	table: {
 		width: 10,
-		backgroundColor: "#911"
+	//	backgroundColor: "#911"
 	}
 });
 

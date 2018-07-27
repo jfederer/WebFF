@@ -57,8 +57,9 @@ class QuestionPanel extends React.Component {
 	
 			} else {
 				// both lg and xs are set.
-				return <Grid item  
-				key={question.props.id+'_grid'} xs={question.props.width_xs} lg={question.props.width_lg}>  
+				return <Grid item 
+				key={question.props.id+'_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
+				>  
 					{question}
 				</Grid>
 			}
@@ -71,6 +72,7 @@ class QuestionPanel extends React.Component {
 					container 
 					spacing={8}
 					alignItems='baseline'
+					alignContent='center'
 					// justify='space-around' 
 					justify="center"
 					>

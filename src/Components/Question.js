@@ -8,6 +8,7 @@ import DropDown from './Questions/DropDown';
 import MultipleChoice from './Questions/MultipleChoice';
 import Toggle from './Questions/Toggle';
 import InputTable from './Questions/InputTable';
+import DateInput from './Questions/DateInput';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -51,7 +52,7 @@ class Question extends React.Component {
 		this.state = {
 			value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
 		};
-		console.log(this.props);
+		//console.log(this.props);
 	};
 
 	componentWillMount() {
@@ -83,8 +84,12 @@ class Question extends React.Component {
 				break;
 			}
 			case 'InputTable': {
-				console.log("TABLE");
 				theQ = <InputTable {...this.props} />;
+				break;
+			}
+			case 'DateInput': {
+				console.log("Creating Date question: ", this.props);
+				theQ = <DateInput {...this.props} />;
 				break;
 			}
 			default: {
@@ -122,8 +127,8 @@ Question.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string.isRequired,
-	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "InputTable", "Checkbox", "Date", "Time"]).isRequired,  
+	XMLValue: PropTypes.string,
+	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "InputTable", "Checkbox", "DateInput", "Time"]).isRequired,  
 	selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

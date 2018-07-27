@@ -50,7 +50,6 @@
 			"value": "",
 			"tabName": "Question Page",
 			"layoutGroup": "Test"
-			
 		},
 		{
 			"id": "test5",
@@ -115,7 +114,15 @@
 			"layoutGroup": "Test",
 			"helperText": "Toggle Me Also",
 			"checkbox" : true
-			
+		},
+		{
+			"id": "testDate",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
 		},
 		{
 			"id": "testTable",
@@ -341,22 +348,6 @@
 			"width_lg": 2
 		},
 		{
-			"id": "sampleType",
-			"label": "Sample Type",
-			"XMLValue": "",
-			"type": "DropDown",
-			"tabName": "Field Form",
-			"includeBlank": true,
-			"options": {
-				"EDI": "EDI",
-				"EWI": "EWI"
-			},
-			"value": "",
-			"layoutGroup": "Basic",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-		{
 			"id": "sedimentType",
 			"label": "Sediment Type",
 			"XMLValue": "sedimentType",
@@ -373,6 +364,29 @@
 			"width_xs": 4,
 			"width_lg": 2
 		},
+		{
+			"id": "samplingMethod",
+			"label": "Sampling Method",
+			"XMLValue": "",
+			"type": "DropDown",
+			"tabName": "Field Form",
+			"includeBlank": true,
+			"options": {
+				"EWI": "10",
+				"EDI": "20",
+				"Single Vertical": "30"
+			},
+			"actions": {
+				"20": "&ShowTab::EDI",
+				"30": "&ShowTab::EDI",
+				"10": "&ShowTab::EWI"
+			},
+			"value": "",
+			"layoutGroup": "Basic",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+		
 		{
 			"id": "timeZone",
 			"label": "Time Zone",
@@ -613,7 +627,231 @@
 			"layoutGroup": "FieldParameters",
 			"width_xs": 6,
 			"width_lg": 6
+		},
+
+
+
+
+
+
+		{
+			"id": "SamplerType",
+			"label": "Sampler Type",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": false,
+			"options": {
+				"Not Applicable": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"Thi sis a longer": "three All Around"
+			},
+			"value": "NA",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},	
+			{
+			"id": "bagmaterial",
+			"label": "Bag / Bottle Material",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"Thi sis a longer": "three All Around"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},		{
+			"id": "sizeOfBagBottle",
+			"label": "Size of Bag / Bottle",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"Thi sis a longer": "three All Around"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},		{
+			"id": "nozzelMaterial",
+			"label": "Nozzel Material",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"Thi sis a longer": "three All Around"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 6,
+			"width_lg": 2
+		},		{
+			"id": "nozelWidth",
+			"label": "Nozel Width",
+			"XMLValue": "XMLQ4",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"No oe": "NA",
+				"My1": "One",
+				"My2": "Two",
+				"Thi sis a longer": "three All Around"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 6,
+			"width_lg": 2
+		},
+		{
+			"id": "EDI_table",
+			"label": "Test Table Label4",
+			"XMLValue": "Deets4",
+			"type": "InputTable",
+			"tabName": "EDI",
+			"layoutGroup": "Table",
+			"colHeaders" : ["","Set A", "Set B"],
+			"rowHeaders" : "true",
+			"numberOfRows" : "8",
+			"value": [
+				["Start Time","SubQuestion::startTime","SubQuestion::startTime2" ],
+				["Gage Height","237", ""],
+				["End Time","SubQuestion::endTime","SubQuestion::startTime2"],
+				["Gage Height","305", ""],
+				["Mean Time", "SubQuestion::testTable2","SubQuestion::startTime2"],
+				["Concentration", "SubQuestion::concCheck","SubQuestion::concCheck2"],
+				["Sand Fines", "SubQuestion::sandCheck","SubQuestion::sandCheck2"],
+				["Full Size", "SubQuestion::fullCheck","SubQuestion::fullCheck2"]
+			],
+			"width_xs": 12,
+			"width_lg": 6
+		},	
+		{
+			"id": "concCheck",
+			"XMLValue": "C",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
+		},
+		{
+			"id": "sandCheck",
+			"XMLValue": "SF",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
+		},
+		{
+			"id": "fullCheck",
+			"XMLValue": "Z",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
+		},
+		{
+			"id": "concCheck2",
+			"XMLValue": "C",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
+		},
+		{
+			"id": "sandCheck2",
+			"XMLValue": "SF",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
+		},
+		{
+			"id": "fullCheck2",
+			"XMLValue": "Z",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox" : true
+		},
+
+
+
+
+		{
+			"id": "startTime",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
+		},
+		{
+			"id": "endTime",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
+		},
+		{
+			"id": "meanTime",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
+		},
+		{
+			"id": "startTime2",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
+		},
+		{
+			"id": "endTime2",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
+		},
+		{
+			"id": "meanTime2",
+			"XMLValue": "xmlDate",
+			"type": "DateInput",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "date helper text"
 		}
+
+
 	],
 	"navMenuInfo": [
 		{
