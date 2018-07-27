@@ -97,7 +97,7 @@
 			"id": "testTable",
 			"label": "Test Table Label",
 			"XMLValue": "Deets",
-			"type": "Table",
+			"type": "InputTable",
 			"tabName": "Question Page",
 			"layoutGroup": "Table",
 			"helperText": "Table Helper Me",
@@ -111,7 +111,7 @@
 				["Eclair","262", "SubQuestion::subTest1", "24", "6.0"],
 				["Cupcake","305", "3.7", "67", "4.3"],
 				["Gingerbread", "356", "16.0", "49", "3.9"]
-			]
+			] 
 		},
 		{
 			"id": "subTest1",
@@ -130,7 +130,7 @@
 			"id": "testTable2",
 			"label": "Test Table Label2",
 			"XMLValue": "Deets2",
-			"type": "Table",
+			"type": "InputTable",
 			"tabName": "Question Page",
 			"layoutGroup": "Table2",
 			"colHeaders" : ["Element","Found"],
@@ -149,7 +149,7 @@
 			"id": "testTable3",
 			"label": "Test Table Label3",
 			"XMLValue": "Deets3",
-			"type": "Table",
+			"type": "InputTable",
 			"tabName": "Question Page",
 			"layoutGroup": "Table2",
 			"colHeaders" : ["Element","Found"],
@@ -167,7 +167,7 @@
 			"id": "testTable4",
 			"label": "Test Table Label4",
 			"XMLValue": "Deets4",
-			"type": "Table",
+			"type": "InputTable",
 			"tabName": "Question Page",
 			"layoutGroup": "Table2",
 			"colHeaders" : ["Element","Found"],

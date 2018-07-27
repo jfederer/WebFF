@@ -9,11 +9,11 @@ const styles = theme => ({
 	root: { // applies to entire QuestionPanel
 		...theme.mixins.gutters(),
 		 flexGrow: 1,
-		  paddingTop: theme.spacing.unit * 1,
-		  paddingBottom: theme.spacing.unit * 1,
+		  paddingTop: 0,
+		  paddingBottom: 0,
 			backgroundColor: '#eee',
 			margin: '10px',  //margin between QuestionPanels
-			[theme.breakpoints.down('sm')]: {
+			[theme.breakpoints.down('sm')]: {  // can be deleted, here for helping with layout testing
 			  backgroundColor: '#eee',
 			},
 			[theme.breakpoints.up('lg')]: {

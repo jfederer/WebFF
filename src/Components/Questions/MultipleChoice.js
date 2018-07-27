@@ -27,7 +27,7 @@ class MultipleChoice extends React.Component {
         this.setState({ value: this.props.value });
     }
 
-    handleMultiChoiceChange = choiceVal => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+    handleValueChange = choiceVal => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 
         let tempValue = this.state.value;
 
@@ -39,7 +39,7 @@ class MultipleChoice extends React.Component {
                 tempValue.splice(index, 1);
             } else {
                 //TODO: Throw Error
-                console.log("ERROR: MultiChoice option requested for removal did not exist in list of checked items in 'value'");
+                console.log("ERROR: MultipleChoice option requested for removal did not exist in list of checked items in 'value'");
             }
         }
 
@@ -57,7 +57,7 @@ class MultipleChoice extends React.Component {
                     control={
                         <Checkbox
                             checked={this.state.value && this.state.value.includes(optionsPairs[optionLabel])}
-                            onChange={this.handleMultiChoiceChange(optionsPairs[optionLabel])}
+                            onChange={this.handleValueChange(optionsPairs[optionLabel])}
                             value={optionsPairs[optionLabel]}
                         />
                     }
