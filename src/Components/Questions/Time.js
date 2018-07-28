@@ -60,6 +60,8 @@ class DateInput extends React.Component {
 		console.log("value: ", this.state.value);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		// let thisSize = this.props.size ? this.props.size : 1;
+		// let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
+		//TODO: put in current time as default if nothing is passed
 		return <TextField
 			key={this.props.id}
 			id={this.props.id}
