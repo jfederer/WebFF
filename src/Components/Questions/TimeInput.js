@@ -16,10 +16,12 @@ const styles = theme => ({
 	},
 });
 
-class DateInput extends React.Component {
+class TimeInput extends React.Component {
 	constructor(props) {
-		let DEBUG=true;
+		let DEBUG=false;
 		super(props);
+
+		if(DEBUG)console.log("CONSTRUCTOR INSTRUCTOR DEDUCTOR");
 		if(DEBUG)console.log("CONSTRUCTOR: Props.value: ", props.value);
 		if (this.props.value != null) {
 			if(DEBUG)console.log("CONSTRUCTOR: Props.value not equal null");
@@ -30,12 +32,12 @@ class DateInput extends React.Component {
 			if(DEBUG)console.log("CONSTRUCTOR: props.value equals null")
 			let d = new Date();
 			if(DEBUG)console.log("CONSTRUCTOR: Date: ", d)
-			let dateOfMonthString = ('0' + d.getDate()).slice(-2);
-			let monthString = ('0' + (d.getMonth()+1)).slice(-2);
-			let dateString = d.getFullYear() + "-" + monthString +"-" + dateOfMonthString;
-			if(DEBUG)console.log("CONSTRUCTOR: datestring: ", dateString);
+			let hoursString = ('0' + d.getHours()).slice(-2);
+			let minutesString = ('0' + (d.getMinutes()+1)).slice(-2);
+			let timeString = hoursString + ":" + minutesString;
+			if(DEBUG)console.log("CONSTRUCTOR: timeString: ", timeString);
 			this.state = {
-				value: dateString
+				value: timeString
 			}
 			if(DEBUG)console.log("CONSTRUCTOR: state.value: ", this.state.value);
 		}
@@ -62,31 +64,36 @@ class DateInput extends React.Component {
 		// let thisSize = this.props.size ? this.props.size : 1;
 		// let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
 		//TODO: put in current time as default if nothing is passed
+
+
 		return <TextField
-			key={this.props.id}
-			id={this.props.id}
-			label={this.props.label}
-			fullWidth
-			type="date"
-			value={this.state.value}
-			className={classes.textField}
-			xmlvalue={this.props.XMLValue}
-			InputLabelProps={{
-				shrink: true,
-			}}
-			onChange={this.handleValueChange(this.props.id)}
-		/>
+		id={this.props.id}
+		key={this.props.id}
+		label={this.props.label}
+		fullWidth
+        type="time"
+		value={this.state.value}
+		xmlvalue={this.props.XMLValue}
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        inputProps={{
+          step: this.props.step,
+		}}
+		onChange={this.handleValueChange(this.props.id)}
+      />
 	}
 }
 
-DateInput.propTypes = {
+TimeInput.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
 	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	XMLValue: PropTypes.string,
-	type: PropTypes.oneOf(['DateInput']).isRequired,
+	type: PropTypes.oneOf(['TimeInput']).isRequired,
 	helperText: PropTypes.string
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
@@ -95,4 +102,4 @@ DateInput.propTypes = {
 
 };
 
-export default withStyles(styles)(DateInput);
+export default withStyles(styles)(TimeInput);

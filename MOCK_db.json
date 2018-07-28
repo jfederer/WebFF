@@ -119,10 +119,43 @@
 			"id": "testDate",
 			"XMLValue": "xmlDate",
 			"type": "DateInput",
+			"label": "current date default",
 			"value": null,
 			"tabName": "Question Page",
-			"layoutGroup": "Test",
+			"layoutGroup": "Date Time Tests",
 			"helperText": "date helper text"
+		},
+		{
+			"id": "testDate2",
+			"XMLValue": "xmlDate2",
+			"type": "DateInput",
+			"label": "Specific Default",
+			"value": "2017-10-25",
+			"tabName": "Question Page",
+			"layoutGroup": "Date Time Tests",
+			"helperText": "date helper text"
+		},
+		{
+			"id": "testTime",
+			"XMLValue": "xmlTime",
+			"type": "TimeInput",
+			"label": "Current time default",
+			"value": null,
+			"tabName": "Question Page",
+			"layoutGroup": "Date Time Tests",
+			"helperText": "Enter a time",
+			"step": 600
+		},
+		{
+			"id": "testTime2",
+			"XMLValue": "xmlTime2",
+			"type": "TimeInput",
+			"label":"Specific Time default",
+			"value": "16:39",
+			"tabName": "Question Page",
+			"layoutGroup": "Date Time Tests",
+			"helperText": "Enter a time",
+			"step": 600
 		},
 		{
 			"id": "testTable",
@@ -799,56 +832,44 @@
 		{
 			"id": "startTime",
 			"XMLValue": "xmlDate",
-			"type": "DateInput",
+			"type": "TimeInput",
 			"value": null,
-			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"helperText": "date helper text"
+			"helperText": "Start sample time for set 1"
 		},
 		{
 			"id": "endTime",
 			"XMLValue": "xmlDate",
-			"type": "DateInput",
+			"type": "TimeInput",
 			"value": null,
-			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"helperText": "date helper text"
+			"helperText": "End sample time for set 1"
 		},
 		{
 			"id": "meanTime",
 			"XMLValue": "xmlDate",
-			"type": "DateInput",
+			"type": "TimeInput",
 			"value": null,
-			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"helperText": "date helper text"
+			"helperText": "Average time for sample set 1"
 		},
 		{
 			"id": "startTime2",
 			"XMLValue": "xmlDate",
-			"type": "DateInput",
+			"type": "TimeInput",
 			"value": null,
-			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"helperText": "date helper text"
+			"helperText": "Start sample time for set 2"
 		},
 		{
 			"id": "endTime2",
 			"XMLValue": "xmlDate",
-			"type": "DateInput",
+			"type": "TimeInput",
 			"value": null,
-			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"helperText": "date helper text"
+			"helperText": "End of sample time for set 2"
 		},
 		{
 			"id": "meanTime2",
 			"XMLValue": "xmlDate",
-			"type": "DateInput",
+			"type": "TimeInput",
 			"value": null,
-			"tabName": "Question Page",
-			"layoutGroup": "Test",
-			"helperText": "date helper text"
+			"helperText": "Average time for sample set 2"
 		}
 
 

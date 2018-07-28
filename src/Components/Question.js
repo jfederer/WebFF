@@ -9,6 +9,7 @@ import MultipleChoice from './Questions/MultipleChoice';
 import Toggle from './Questions/Toggle';
 import InputTable from './Questions/InputTable';
 import DateInput from './Questions/DateInput';
+import TimeInput from './Questions/TimeInput';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -88,8 +89,11 @@ class Question extends React.Component {
 				break;
 			}
 			case 'DateInput': {
-				console.log("Creating Date question: ", this.props);
 				theQ = <DateInput {...this.props} />;
+				break;
+			}
+			case 'TimeInput': {
+				theQ = <TimeInput {...this.props} />;
 				break;
 			}
 			default: {
@@ -128,7 +132,7 @@ Question.propTypes = {
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLValue: PropTypes.string,
-	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "InputTable", "Checkbox", "DateInput", "Time"]).isRequired,  
+	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "InputTable", "Checkbox", "DateInput", "TimeInput"]).isRequired,  
 	selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
