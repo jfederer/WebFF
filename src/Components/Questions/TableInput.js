@@ -8,7 +8,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { getQuestionDataFromLSbyQuestionID } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
-import Button from '@material-ui/core/Button';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -24,7 +23,6 @@ const styles = theme => ({
 	}
 });
 
-const ROWCOLUMNSEPARATOR = "&&";
 
 class TableInput extends React.Component {
 	constructor(props) {

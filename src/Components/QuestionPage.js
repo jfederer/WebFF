@@ -30,34 +30,24 @@ class QuestionPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isLoading: true,
-			questionsData: [],
+			questionsData: this.props.questionsData,
 			tabName: this.props.location.pathname.slice(1)
 		};
 		this.questionChangeHandler = this.questionChangeHandler.bind(this);
 	}
 
 	componentDidMount() {
-		if (localStorage.getItem('questionsData')) {
-			console.log("using local storage data for QP questions");
-		} else {
-			console.log("going to DB for data for questionsData");
-			this.fetchData();
-		}
+
 	}
 
 	componentWillMount() {
 		this.props.appBarTextCB(this.props.tabName);
-		if (localStorage.getItem('questionsData')) {
-			this.setState({
-				questionsData: JSON.parse(localStorage.getItem('questionsData')),
-				isLoading: false
-			});
-		}
 	}
 
-	componentWillUpdate(nextProps, nextState) {
-		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
+	componentWillUpdate(nextProps, nextState) { // gets called when moving between pages
+		// console.log("QP: CWU: NextState", nextState);
+		// console.log("QP: CWU: NextProps", nextProps);
+		//REFACTOR 7/28 localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
 		this.props.appBarTextCB(nextProps.tabName);
 	}
 
@@ -66,47 +56,17 @@ class QuestionPage extends React.Component {
 		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q
 	}
 
-	fetchData() {   //TODO:  Move to WebFF to ensure everything gets loaded before heading to field
-		const DEBUG = false;
-		const API = 'http://localhost:3004/';
-		const query = 'questions';
 
-		function handleErrors(response) {    // fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-			if (!response.ok) {
-				throw Error(response.statusText);
-			}
-			return response;
-		}
-
-		if (DEBUG) console.log("Function: fetchData @ " + API + query);
-		fetch(API + query)
-			.then(handleErrors)
-			.then(response => response.json())
-			.then(
-				parsedJSON => {
-					if (DEBUG) console.log("Parsed JSON: ");
-					if (DEBUG) console.log(parsedJSON);
-					//setTimeout(()=> {
-					this.setState({
-						questionsData: parsedJSON,
-						isLoading: false
-					});
-					if (DEBUG) console.log("CurrentState: ");
-					if (DEBUG) console.log(this.state);
-					//},2000);
-				})
-			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	}
 
 	render() {
 		const DEBUG = false;
 		const { tabName } = this.props;
-		const { isLoading, questionsData } = this.state;
+		const { questionsData } = this.state;
 		let tabQuestionData = [];
 		let layoutGroupNames = [];
 		let questionPanels = [];
 
-		if (!isLoading && questionsData.length > 0) {
+		if (questionsData.length > 0) {
 
 			tabQuestionData = questionsData.filter((question) => {
 				if(question.tabName) {

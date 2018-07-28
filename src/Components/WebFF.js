@@ -50,16 +50,19 @@ class WebFF extends React.Component {
 		super(props);
 
 		this.state = {
-			isNavLoading: true,
+			isNavLoaded: false,
 			navMenuInfo: [],
 			navMenuExpanded: false,
 
-			isDialogQuestionsLoading: false,
+			isDialogQuestionsLoaded: false,
 			dialogQuestionsInfo: [],
 			dialogOpen: false,
 			curDialogDescription: "",
 			curDialogName: "",
 			curDialogQuestionsInfo: [],
+
+			isQuestionsDataLoaded: false,
+			questionsData: [],
 
 			systemMenuOpen: false,
 
@@ -74,13 +77,15 @@ class WebFF extends React.Component {
 
 	};
 
-	componentWillUpdate(nextProps, nextState) {
+	componentWillUpdate(nextProps, nextState) { //TODO: Not sure what we are doing here... why don't we set these right when we load them in the fetch?
+		// console.log("CWU: ", nextState);
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
+		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
 	}
 
 	componenetDidMount() {
-
+		// this.buildRoutesAndRenderPages();
 	}
 
 	componentWillMount() {
@@ -88,7 +93,7 @@ class WebFF extends React.Component {
 			console.log("using localStorage data for navMenuInfo");
 			this.setState({
 				navMenuInfo: JSON.parse(localStorage.getItem('navMenuInfo')),
-				isNavLoading: false
+				isNavLoaded: true
 			});
 		} else {
 			console.log("going to DB for data for navMenuInfo");
@@ -99,25 +104,26 @@ class WebFF extends React.Component {
 			console.log("using localStorage data for dialogQuestionsInfo");
 			this.setState({
 				dialogQuestionsInfo: JSON.parse(localStorage.getItem('dialogQuestionsInfo')),
-				isDialogQuestionsLoading: false
+				isDialogQuestionsLoaded: true
 			});
 		} else {
 			console.log("going to DB for data for dialogQuestionsInfo");
 			this.fetchDialogQuestionInfoData();
 		}
+
+		if (localStorage.getItem('questionsData')) {
+			console.log("using local storage data for QP questions");
+			this.setState({
+				questionsData: JSON.parse(localStorage.getItem('questionsData')),
+				isQuestionsDataLoaded: true
+			}, this.buildRoutesAndRenderPages);
+		} else {
+			console.log("going to DB for data for questionsData");
+			this.fetchQuestionData(this.buildRoutesAndRenderPages);
+		}
 	}
 
 	navigationControl(tabName, add) {
-		// tabName = tabName.replace(/\s/g, '');
-
-		// // if add is false, remove menuItem used on tabNAme  
-		// // if add is true, add a tab named tabName
-		// // extra verbosity due to desire to use dynamic key name
-		// var key = 'show' + tabName;
-		// var val = add;
-		// var obj = {};
-		// obj[key] = val;
-		// this.setState(obj);
 		this.showTab(tabName, add);
 	}
 
@@ -138,7 +144,7 @@ class WebFF extends React.Component {
 			if (shouldInclude) retMenu.push(
 				<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
 					{(useIcon) ? <ListItemIcon>
-						{this.materialtIcon(menuItem.icon)}
+						{this.materialIcon(menuItem.icon)}
 					</ListItemIcon> : null}
 					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
 				</ListItem>
@@ -147,7 +153,7 @@ class WebFF extends React.Component {
 		return retMenu;
 	}
 
-	materialtIcon(icon) {
+	materialIcon(icon) {
 		switch (icon) {
 			case 'DashboardIcon': return <DashboardIcon />
 			case 'ImportContactsIcon': return <ImportContactsIcon />
@@ -194,11 +200,43 @@ class WebFF extends React.Component {
 					//setTimeout(() => {
 					this.setState({
 						navMenuInfo: parsedJSON,
-						isNavLoading: false
+						isNavLoaded: true
 					});
 					if (DEBUG) console.log("CurrentState: ");
 					if (DEBUG) console.log(this.state);
 					//}, 2000);
+				})
+			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
+	}
+
+	fetchQuestionData(CB) {   
+		const DEBUG = false;
+		const API = 'http://localhost:3004/';
+		const query = 'questions';
+
+		function handleErrors(response) {    // fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response;
+		}
+
+		if (DEBUG) console.log("Function: fetchData @ " + API + query);
+		fetch(API + query)
+			.then(handleErrors)
+			.then(response => response.json())
+			.then(
+				parsedJSON => {
+					if (DEBUG) console.log("Parsed JSON: ");
+					if (DEBUG) console.log(parsedJSON);
+					//setTimeout(()=> {
+					this.setState({
+						questionsData: parsedJSON,
+						isQuestionsDataLoaded: true
+					}, CB);
+					if (DEBUG) console.log("CurrentState: ");
+					if (DEBUG) console.log(this.state);
+					//},2000);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
@@ -227,7 +265,7 @@ class WebFF extends React.Component {
 					//setTimeout(() => {
 					this.setState({
 						dialogQuestionsInfo: parsedJSON,
-						isDialogQuestionsLoading: false
+						isDialogQuestionsLoaded: true
 					});
 					if (DEBUG) console.log("CurrentState: ");
 					if (DEBUG) console.log(this.state);
@@ -267,7 +305,7 @@ class WebFF extends React.Component {
 
 	actionExecuter = (actionString) => {
 		let splitActionString = actionString.split('::');
-		if (splitActionString.length != 2) {
+		if (splitActionString.length !== 2) {
 			//TODO: Throw error
 		}
 		switch (splitActionString[0]) {
@@ -292,7 +330,6 @@ class WebFF extends React.Component {
 	}
 
 	showTab(tabName, toShow) {
-		console.log("ShOWTAB: ", tabName, " ", toShow);
 		let newTabShowStatus = this.state.tabShowStatus;
 		newTabShowStatus[tabName.replace(/ /g, '')] = toShow;
 		this.setState(newTabShowStatus);
@@ -318,11 +355,8 @@ class WebFF extends React.Component {
 	}
 
 
-
-
-
-	buildRoutes = () => {
-		var newRouteMenu = (
+	buildRoutesAndRenderPages = () => {
+		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
 				{this.state.navMenu}
@@ -336,6 +370,7 @@ class WebFF extends React.Component {
 					tabName={this.props.location.pathname.slice(1)}
 					navControl={this.navigationControl}
 					systemCB={this.questionChangeSystemCallback}
+					questionsData={this.state.questionsData}
 				/>} />
 				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
 				<Route render={() => <ErrorPage
@@ -345,13 +380,9 @@ class WebFF extends React.Component {
 				/>} />
 			</Switch>
 		);
-		this.setState({ routeMenu: newRouteMenu });
+		this.setState({ routesAndPages: newRoutesAndPages });
 	};
 
-
-	componentDidMount() {
-		this.buildRoutes();
-	}
 
 	handleSystemMenuItemClicked(menuText) {
 		// build the curDialogXXX data
@@ -425,7 +456,7 @@ class WebFF extends React.Component {
 
 				<main className={classes.content} >
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
-					{this.state.routeMenu}
+					{this.state.routesAndPages}
 				</main>
 			</div >
 		);

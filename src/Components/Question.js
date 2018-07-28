@@ -62,10 +62,9 @@ class Question extends React.Component {
 	}
 
 	buildQuestion() {
-		const DEBUG = false;
-		const { classes } = this.props;
+		// const { classes } = this.props;
 		var theQ = {};
-		var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
+		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
 
 		switch (this.props.type) {
 			case 'DropDown': {
