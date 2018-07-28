@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-//this.state.value always contains the up-to-date question values/answers.
+//this.state.value always contains the up-to-date time in this question
 
 const styles = theme => ({
 	container: {
@@ -59,12 +59,8 @@ class TimeInput extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		console.log("value: ", this.state.value);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		// let thisSize = this.props.size ? this.props.size : 1;
-		// let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
-		//TODO: put in current time as default if nothing is passed
-
 
 		return <TextField
 		id={this.props.id}
