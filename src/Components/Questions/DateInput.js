@@ -18,23 +18,26 @@ const styles = theme => ({
 
 class DateInput extends React.Component {
 	constructor(props) {
+		let DEBUG=true;
 		super(props);
-		console.log("CONSTRUCTOR: Props.value: ", props.value);
+		if(DEBUG)console.log("CONSTRUCTOR: Props.value: ", props.value);
 		if (this.props.value != null) {
-			console.log("CONSTRUCTOR: Props.value not equal null");
+			if(DEBUG)console.log("CONSTRUCTOR: Props.value not equal null");
 			this.state = {
 				value: this.props.value
 			};
 		} else {
-			console.log("CONSTRUCTOR: props.value equals null")
+			if(DEBUG)console.log("CONSTRUCTOR: props.value equals null")
 			let d = new Date();
-			console.log("CONSTRUCTOR: Date: ", d)
-			let dateString = d.getMonth()+1 + "/" + d.getDate() + "/" + d.getFullYear();
-			console.log("CONSTRUCTOR: datestring: ", dateString);
+			if(DEBUG)console.log("CONSTRUCTOR: Date: ", d)
+			let dateOfMonthString = ('0' + d.getDate()).slice(-2);
+			let monthString = ('0' + (d.getMonth()+1)).slice(-2);
+			let dateString = d.getFullYear() + "-" + monthString +"-" + dateOfMonthString;
+			if(DEBUG)console.log("CONSTRUCTOR: datestring: ", dateString);
 			this.state = {
 				value: dateString
 			}
-			console.log("CONSTRUCTOR: state.value: ", this.state.value);
+			if(DEBUG)console.log("CONSTRUCTOR: state.value: ", this.state.value);
 		}
 	};
 
