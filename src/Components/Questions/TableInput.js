@@ -26,7 +26,7 @@ const styles = theme => ({
 
 const ROWCOLUMNSEPARATOR = "&&";
 
-class InputTable extends React.Component {
+class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -171,7 +171,7 @@ class InputTable extends React.Component {
 	}
 }
 
-InputTable.propTypes = {
+TableInput.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
 	stateChangeHandler: PropTypes.func,
@@ -180,7 +180,7 @@ InputTable.propTypes = {
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLValue: PropTypes.string,
-	type: PropTypes.oneOf(["InputTable"]).isRequired,
+	type: PropTypes.oneOf(["TableInput"]).isRequired,
 	selectOptions: PropTypes.arrayOf(PropTypes.object)
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
@@ -189,4 +189,4 @@ InputTable.propTypes = {
 
 };
 
-export default withStyles(styles)(InputTable);
+export default withStyles(styles)(TableInput);

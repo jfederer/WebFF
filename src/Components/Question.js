@@ -7,7 +7,7 @@ import Text from './Questions/Text';
 import DropDown from './Questions/DropDown';
 import MultipleChoice from './Questions/MultipleChoice';
 import Toggle from './Questions/Toggle';
-import InputTable from './Questions/InputTable';
+import TableInput from './Questions/TableInput';
 import DateInput from './Questions/DateInput';
 import TimeInput from './Questions/TimeInput';
 
@@ -84,8 +84,8 @@ class Question extends React.Component {
 				theQ = <Toggle {...this.props} />;
 				break;
 			}
-			case 'InputTable': {
-				theQ = <InputTable {...this.props} />;
+			case 'TableInput': {
+				theQ = <TableInput {...this.props} />;
 				break;
 			}
 			case 'DateInput': {
@@ -132,7 +132,7 @@ Question.propTypes = {
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLValue: PropTypes.string,
-	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "InputTable", "Checkbox", "DateInput", "TimeInput"]).isRequired,  
+	type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput"]).isRequired,  
 	selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
