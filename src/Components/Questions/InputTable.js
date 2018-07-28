@@ -46,16 +46,17 @@ class InputTable extends React.Component {
 	// };
 
 	handleTableChange(textSubQuestion) {
-		console.log("HandleTableChange");
+		let DEBUG = false;
+		if(DEBUG)console.log("HandleTableChange");
 		console.log("textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
 		const { id } = textSubQuestion.props;
 		let questionRow = id.substring(id.indexOf("row:")+4,id.indexOf("col:"));
 		let questionCol = id.substring(id.indexOf("col:")+4);
 		let questionVal = textSubQuestion.state.value;
-		console.log("questionVal: ", questionVal);
-		console.log("questionRow: ", questionRow);
-		console.log("questionCol: ", questionCol);
+		if(DEBUG)console.log("questionVal: ", questionVal);
+		if(DEBUG)console.log("questionRow: ", questionRow);
+		if(DEBUG)console.log("questionCol: ", questionCol);
 		let tempTableValue = this.state.value;
 		tempTableValue[questionRow][questionCol]=questionVal;
 
@@ -97,8 +98,8 @@ class InputTable extends React.Component {
 				<TableRow key={this.props.id + "_row_" + row}>
 					{curRow.map((cellContent, col) => {
 						//console.log("cellContent: ", cellContent);
-						console.log("   ");
-						let DEBUG = true;
+						
+						let DEBUG = false;
 						let subQkey = this.props.id + "_row:" + row + "col:" + col;
 						let classlessProps = delete this.props[classes]; // need to delete classes so they don't get passed to children
 						let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
