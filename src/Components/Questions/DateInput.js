@@ -49,7 +49,7 @@ class DateInput extends React.Component {
 		this.setState({
 			value: event.target.value
 		}, () => {
-			console.log(this.props.stateChangeHandler);
+			//console.log(this.props.stateChangeHandler);
 			this.props.stateChangeHandler(this)
 		}
 		);
@@ -57,7 +57,7 @@ class DateInput extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		console.log("value: ", this.state.value);
+		//console.log("value: ", this.state.value);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		// let thisSize = this.props.size ? this.props.size : 1;
 		return <TextField
