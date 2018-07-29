@@ -61,10 +61,13 @@ class QuestionPage extends React.Component {
 	render() {
 		const DEBUG = false;
 		const { tabName } = this.props;
-		const { questionsData } = this.state;
+		const { questionsData, hiddenQuestions } = this.state;
 		let tabQuestionData = [];
 		let layoutGroupNames = [];
 		let questionPanels = [];
+		if (DEBUG) console.log("Question Page Render:  state:  ", this.state);
+		if (DEBUG) console.log("Question Page Render:  hiddenQuestions:  ", hiddenQuestions);
+
 
 		if (questionsData.length > 0) {
 
@@ -77,7 +80,7 @@ class QuestionPage extends React.Component {
 			});
 
 			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
-
+	
 			
 			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {
 				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);
@@ -85,7 +88,7 @@ class QuestionPage extends React.Component {
 				questionPanels.push(
 				<div key={tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
-						questions={createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData, this.questionChangeHandler)} 
+						questions={createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData, this.questionChangeHandler, hiddenQuestions)} 
 						panelName={layoutGroupNames[i]}
 						key={tabName + layoutGroupNames[i]}
 						grey={i%2===1} />
@@ -95,8 +98,7 @@ class QuestionPage extends React.Component {
 			}
 		}
 
-		if (DEBUG) console.log("render");
-		if (DEBUG) console.log(this.state);
+		
 
 		return (
 			<div>

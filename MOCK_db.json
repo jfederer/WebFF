@@ -72,6 +72,27 @@
 			
 		},
 		{
+			"id": "testHidden",
+			"hidden": true,
+			"label": "Is this showing?",
+			"XMLValue": "XMLQ5",
+			"type": "MultipleChoice",
+			"options": {
+				"Should": "CSN",
+				"Not": "CBF",
+				"Show": "RAF",
+				"When Hidden": "KASS"
+			},
+			"value": [
+				"CSN",
+				"RAF"
+			],
+			"tabName": "Question Page",
+			"layoutGroup": "Test",
+			"helperText": "I'm Helping!"
+			
+		},
+		{
 			"id": "testTog",
 			"label": "Hot Out?",
 			"XMLValue": "XMLQT",
@@ -407,12 +428,22 @@
 			"options": {
 				"EWI": "10",
 				"EDI": "20",
-				"Single Vertical": "30"
+				"Single Vertical": "30",
+				"RemoveStnNumb": "40",
+				"ShowStnNumb": "50",
+				"Hide:PjctID_Hide:StnNumber": "55",
+				"Show:StnNum_Hide:ProjectID": "60",
+				"ShowProjectID": "70"
 			},
 			"actions": {
 				"10": "ShowTab::EWI&HideTab::EDI",
 				"20": "ShowTab::EDI&HideTab::EWI",
-				"30": "ShowTab::EDI&ShowTab::EWI"
+				"30": "ShowTab::EDI&ShowTab::EWI",
+				"40": "HideQuestion::stationNumber",
+				"50": "ShowQuestion::stationNumber",
+				"55": "HideQuestion::projectID&HideQuestion::stationNumber",
+				"60": "ShowQuestion::stationNumber&HideQuestion::projectID",
+				"70": "ShowQuestion::projectID"
 			},
 			"value": "",
 			"layoutGroup": "Basic",

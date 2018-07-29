@@ -82,6 +82,7 @@ class WebFF extends React.Component {
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
+		
 	}
 
 	componenetDidMount() {
@@ -316,8 +317,12 @@ class WebFF extends React.Component {
 				this.showTab(splitActionString[1],false);
 				break;
 			case "ShowQuestion":
+				this.showQuestion(splitActionString[1],false);
+				this.buildRoutesAndRenderPages(); 
 				break;
 			case "HideQuestion":
+				this.showQuestion(splitActionString[1],true);
+				this.buildRoutesAndRenderPages();
 				break;
 			case "ShowQuestionPanel":
 				break;
@@ -333,6 +338,28 @@ class WebFF extends React.Component {
 		let newTabShowStatus = this.state.tabShowStatus;
 		newTabShowStatus[tabName.replace(/ /g, '')] = toShow;
 		this.setState(newTabShowStatus);
+	}
+
+	showQuestion(questionID, toShow) {
+		let DEBUG = false;
+		if(DEBUG) console.log("Show Question: ", questionID, " toShow: ", toShow);
+		// find the specific question in this.state.questionData based on the id, then update the hidden property
+		let updatedQuestionsData = this.state.questionsData.filter(questionData => {
+			if (questionData.id === questionID) {
+				if (DEBUG) console.log("------FOUND!--------");
+				if (DEBUG) console.log(questionData);
+				questionData['hidden'] = toShow;
+			} else {
+				if (DEBUG) console.log("questionData.id :", questionData.id, " and questionID: ", questionID, " do not match");
+			}
+			return questionData;
+		});
+	
+		if (DEBUG) console.log(updatedQuestionsData);
+		this.setState({questionsData:updatedQuestionsData});
+		// replace the questionData in localStorage
+//		localStorage.setItem('questionsData', JSON.stringify(rawData));
+		
 	}
 
 	questionChangeSystemCallback(question) {
@@ -355,7 +382,7 @@ class WebFF extends React.Component {
 	}
 
 
-	buildRoutesAndRenderPages = () => {
+	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
@@ -409,7 +436,7 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-
+		
 		return (
 			<div className={classes.root} >
 				<AppBar

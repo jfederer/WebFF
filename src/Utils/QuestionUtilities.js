@@ -5,10 +5,12 @@ import Question from '../Components/Question';
 export const createQuestionComponentsForLayoutGroup = (questionsData, changeHandler) => {
     // the questonisData variable contains only Questions data for a single layout group
     // returns question components pointing to this.questionChangeHandler
-    let layoutGroupQuestionComponents = [];
+	let layoutGroupQuestionComponents = [];
 
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-        layoutGroupQuestionComponents = questionsData.map(questionData => <Question {...questionData} stateChangeHandler={changeHandler} />);
+        layoutGroupQuestionComponents = questionsData.map(questionData => {
+			return <Question {...questionData} stateChangeHandler={changeHandler} />
+		});
     }
 
     return layoutGroupQuestionComponents;
@@ -43,7 +45,7 @@ export const getLayoutGroupNames = (questionsData) => {
 }
 
 export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
-    // given questionData, will filter down to items that match the layoutgroup = layoutGroupName
+    // given questionData, will filter down to items that match the layoutgroup = layoutGroupName ....
     let layoutGroupQuestionsData = [];
 
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
