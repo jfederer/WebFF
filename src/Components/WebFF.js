@@ -40,7 +40,7 @@ import CompareIcon from '@material-ui/icons/Compare';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
-import { createQuestionComponentsForLayoutGroup, saveQuestionValueToLS,
+import { createQuestionComponentsForLayoutGroup, getQuestionDataWithUpdatedValue,
 	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
 
 import SystemDialog from './SystemDialog';
@@ -389,17 +389,24 @@ class WebFF extends React.Component {
 		this.setState({hiddenPanels:newHiddenPanels});
 	}
 
-	questionChangeSystemCallback(question) {
-		// checks for action string, executes, and then updates current state of questionsData
+	questionChangeSystemCallback(Q) {
+		
+		
+		// checks for action string, executes any actions, and then updates current state of questionsData
+
+		// save updated value to state:
+		let updatedQuestionData = getQuestionDataWithUpdatedValue(Q);
+
+		this.setState({questionsData: updatedQuestionData});
 
 		// check if there are additional actions needed based on the actionOptions in this question, Q
-		if (question == null) {
+		if (Q == null) {
 			//TODO: throw error
 			console.log("questionChangeSystemCallback required field, question, is null");
 		}
-		if (question.props.actions) {
-			let { actions } = question.props;
-			let qval = question.state.value;
+		if (Q.props.actions) {
+			let { actions } = Q.props;
+			let qval = Q.state.value;
 			let commandString = actions[qval];
 			if (commandString) {
 				let actionsToDo = commandString.split('&');
@@ -408,17 +415,18 @@ class WebFF extends React.Component {
 				});
 			}
 		}
-		let updatedQuestionData = saveQuestionValueToLS(question);
-		this.setState({questionsData: updatedQuestionData});
+
+		
+
 	}
 
 	//FIX potential remove
-	questionChangeHandler(Q) {
-		console.log("QuestionPage: questionChangeHandler: Q: ", Q);
-		console.log("Q.state.value: ", Q.state.value);
-		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q  (FIX: and updated parent state?)
-		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.state.value") to localStorage
-	}
+	// questionChangeHandler(Q) {
+	// 	console.log("QuestionPage: questionChangeHandler: Q: ", Q);
+	// 	console.log("Q.state.value: ", Q.state.value);
+	// 	this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q  (FIX: and updated parent state?)
+	// 	saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.state.value") to localStorage
+	// }
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		var newRoutesAndPages = (

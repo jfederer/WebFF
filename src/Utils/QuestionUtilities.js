@@ -57,7 +57,7 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 }
 
-export const saveQuestionValueToLS = (Q) => {
+export const getQuestionDataWithUpdatedValue = (Q) => {
 	//this function saves updated question "values" (must be located at "Q.state.value") to localStorage.questionsData
 	// returns updated questionsData object
 	console.log("saveQuestionValueToLS", Q.state.value);
@@ -91,7 +91,7 @@ export const saveQuestionValueToLS = (Q) => {
 	if (DEBUG) console.log("saveQuestionValueToLS: newQuestionsData: ", newQuestionsData);
 
 	// replace the questionData in localStorage
-	localStorage.setItem('questionsData', JSON.stringify(newQuestionsData));
+	//localStorage.setItem('questionsData', JSON.stringify(newQuestionsData));
 
 	return newQuestionsData;
 }
