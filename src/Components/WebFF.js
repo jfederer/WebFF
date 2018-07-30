@@ -72,8 +72,8 @@ class WebFF extends React.Component {
 
 			appBarText: "Sediment Field Forms",
 
-			tabShowStatus: { Dashboard: true, EDI: false, EWI: false, WaterQuality: false, FieldForm: false },
-		};	//TODO: pull tabShowStatus from DB
+			hiddenTabs: [ "EDI", "EWI", "WaterQuality", "FieldForm" ],  //TODO: pull hiddenTabs from LS before overwriting here?
+		};	
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
@@ -85,17 +85,19 @@ class WebFF extends React.Component {
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
+		localStorage.setItem('hiddenPanels', JSON.stringify(nextState.hiddenPanels));
+		localStorage.setItem('hiddenTabs', JSON.stringify(nextState.hiddenTabs));
 	}
 
 	componentWillMount() {
-		let itemsToLoad = ["navMenuInfo", "dialogQuestionsInfo", "questionsData"]
+		let itemsToLoad = ["navMenuInfo", "dialogQuestionsInfo", "questionsData", "hiddenPanels", "hiddenTabs"]
 
 		for (let i = 0; i < itemsToLoad.length; i++) {
 			if (localStorage.getItem(itemsToLoad[i])) {
 				console.log("using localStorage data for " + itemsToLoad[i]);
 				let newItemsLoaded = this.state.itemsLoaded;
 				if (!newItemsLoaded.includes(itemsToLoad[i])) {
-						newItemsLoaded.push(itemsToLoad[i])
+					newItemsLoaded.push(itemsToLoad[i])
 				}
 				this.setState({
 					[itemsToLoad[i]]: JSON.parse(localStorage.getItem(itemsToLoad[i])),
@@ -118,7 +120,7 @@ class WebFF extends React.Component {
 		var retMenu = [];
 		for (var i = 0; i < jsonNavData.length; i++) {
 			var menuItem = jsonNavData[i];
-			var shouldInclude = this.state.tabShowStatus[menuItem.text.replace(/ /g, '')];
+			var shouldInclude = !this.state.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
 
 			// use icon?
 			let useIcon = true;
@@ -185,12 +187,12 @@ class WebFF extends React.Component {
 					let newItemsLoaded = this.state.itemsLoaded;
 					newItemsLoaded.push(query);
 					// setTimeout(() => {
-						this.setState({
-							[query]: parsedJSON,
-							itemsLoaded: newItemsLoaded
-						}, this.buildRoutesAndRenderPages);
-						if (DEBUG) console.log("CurrentState: ");
-						if (DEBUG) console.log(this.state);
+					this.setState({
+						[query]: parsedJSON,
+						itemsLoaded: newItemsLoaded
+					}, this.buildRoutesAndRenderPages);
+					if (DEBUG) console.log("CurrentState: ");
+					if (DEBUG) console.log(this.state);
 					// }, 1200);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
@@ -259,9 +261,22 @@ class WebFF extends React.Component {
 	}
 
 	showTab(tabName, toShow) {
-		let newTabShowStatus = this.state.tabShowStatus;
-		newTabShowStatus[tabName.replace(/ /g, '')] = toShow;
-		this.setState(newTabShowStatus);
+		let newHiddenTabs = this.state.hiddenTabs;
+		let cleanTabName = tabName.replace(/ /g, '');
+		if (toShow) {
+			// remove all instancs from newHiddenTabs
+			while (newHiddenTabs.includes(cleanTabName)) {
+				let index = newHiddenTabs.indexOf(cleanTabName);
+				if (index > -1) {
+					newHiddenTabs.splice(index, 1);
+				}
+			}
+		} else {
+			// add tabName to newHiddenTabs
+			newHiddenTabs.push(cleanTabName);
+
+		}
+		this.setState({ hiddenTabs: newHiddenTabs });
 	}
 
 	showQuestion(questionID, toShow) {
