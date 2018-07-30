@@ -40,8 +40,7 @@ import CompareIcon from '@material-ui/icons/Compare';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
-import { createQuestionComponentsForLayoutGroup, getQuestionDataWithUpdatedValue,
-	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
+import { getQuestionDataWithUpdatedValue } from '../Utils/QuestionUtilities';
 
 import SystemDialog from './SystemDialog';
 
@@ -52,7 +51,8 @@ class WebFF extends React.Component {
 		super(props);
 
 		this.state = {
-			isNavLoaded: false,
+			itemsLoaded: [],
+
 			navMenuInfo: [],
 			navMenuExpanded: false,
 
@@ -82,49 +82,29 @@ class WebFF extends React.Component {
 	};
 
 	componentWillUpdate(nextProps, nextState) { //TODO: Not sure what we are doing here... why don't we set these right when we load them in the fetch?
-	console.log("CWU");
-		//console.log("CWU: ", nextState.questionsData[31].value?nextState.questionsData[31].value:"QuestoinsData31 not yet loaded");
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
 	}
 
-	componenetDidMount() {
-		// this.buildRoutesAndRenderPages();
-	}
-
 	componentWillMount() {
-		if (localStorage.getItem('navMenuInfo')) {
-			console.log("using localStorage data for navMenuInfo");
-			this.setState({
-				navMenuInfo: JSON.parse(localStorage.getItem('navMenuInfo')),
-				isNavLoaded: true
-			});
-		} else {
-			console.log("going to DB for data for navMenuInfo");
-			this.fetchNavMenuInfoData();
-		}
+		let itemsToLoad = ["navMenuInfo", "dialogQuestionsInfo", "questionsData"]
 
-		if (localStorage.getItem('dialogQuestionsInfo')) {
-			console.log("using localStorage data for dialogQuestionsInfo");
-			this.setState({
-				dialogQuestionsInfo: JSON.parse(localStorage.getItem('dialogQuestionsInfo')),
-				isDialogQuestionsLoaded: true
-			});
-		} else {
-			console.log("going to DB for data for dialogQuestionsInfo");
-			this.fetchDialogQuestionInfoData();
-		}
-
-		if (localStorage.getItem('questionsData')) {
-			console.log("using local storage data for QP questions");
-			this.setState({
-				questionsData: JSON.parse(localStorage.getItem('questionsData')),
-				isQuestionsDataLoaded: true
-			}, this.buildRoutesAndRenderPages);
-		} else {
-			console.log("going to DB for data for questionsData");
-			this.fetchQuestionData(this.buildRoutesAndRenderPages);
+		for (let i = 0; i < itemsToLoad.length; i++) {
+			if (localStorage.getItem(itemsToLoad[i])) {
+				console.log("using localStorage data for " + itemsToLoad[i]);
+				let newItemsLoaded = this.state.itemsLoaded;
+				if (!newItemsLoaded.includes(itemsToLoad[i])) {
+						newItemsLoaded.push(itemsToLoad[i])
+				}
+				this.setState({
+					[itemsToLoad[i]]: JSON.parse(localStorage.getItem(itemsToLoad[i])),
+					itemsLoaded: newItemsLoaded
+				}, this.buildRoutesAndRenderPages);
+			} else {
+				console.log("going to DB for data for " + itemsToLoad[i]);
+				this.fetchDBInfo(itemsToLoad[i]);
+			}
 		}
 	}
 
@@ -181,10 +161,10 @@ class WebFF extends React.Component {
 		}
 	}
 
-	fetchNavMenuInfoData() {
+	fetchDBInfo(_query) {
 		const DEBUG = false;
 		const API = 'http://localhost:3004/';
-		const query = 'navMenuInfo';
+		const query = _query;
 
 		function handleErrors(response) {
 			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
@@ -194,7 +174,7 @@ class WebFF extends React.Component {
 			return response;
 		}
 
-		if (DEBUG) console.log("Function: fetchNavData @ " + API + query);
+		if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
 		fetch(API + query)
 			.then(handleErrors)
 			.then(response => response.json())
@@ -202,83 +182,19 @@ class WebFF extends React.Component {
 				parsedJSON => {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
-					setTimeout(() => {
-					this.setState({
-						navMenuInfo: parsedJSON,
-						isNavLoaded: true
-					});
-					if (DEBUG) console.log("CurrentState: ");
-					if (DEBUG) console.log(this.state);
-					}, 1200);
+					let newItemsLoaded = this.state.itemsLoaded;
+					newItemsLoaded.push(query);
+					// setTimeout(() => {
+						this.setState({
+							[query]: parsedJSON,
+							itemsLoaded: newItemsLoaded
+						}, this.buildRoutesAndRenderPages);
+						if (DEBUG) console.log("CurrentState: ");
+						if (DEBUG) console.log(this.state);
+					// }, 1200);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
-
-	fetchQuestionData(CB) {
-		const DEBUG = false;
-		const API = 'http://localhost:3004/';
-		const query = 'questions';
-
-		function handleErrors(response) {    // fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-			if (!response.ok) {
-				throw Error(response.statusText);
-			}
-			return response;
-		}
-
-		if (DEBUG) console.log("Function: fetchData @ " + API + query);
-		fetch(API + query)
-			.then(handleErrors)
-			.then(response => response.json())
-			.then(
-				parsedJSON => {
-					if (DEBUG) console.log("Parsed JSON: ");
-					if (DEBUG) console.log(parsedJSON);
-					setTimeout(()=> {
-					this.setState({
-						questionsData: parsedJSON,
-						isQuestionsDataLoaded: true
-					}, CB);
-					if (DEBUG) console.log("CurrentState: ");
-					if (DEBUG) console.log(this.state);
-					},1000);
-				})
-			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	}
-
-	fetchDialogQuestionInfoData() {
-		const DEBUG = false;
-		const API = 'http://localhost:3004/';
-		const query = 'dialogQuestionsInfo';
-
-		function handleErrors(response) {
-			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-			if (!response.ok) {
-				throw Error(response.statusText);
-			}
-			return response;
-		}
-
-		if (DEBUG) console.log("Function: fetchDialogQuestionData @ " + API + query);
-		fetch(API + query)
-			.then(handleErrors)
-			.then(response => response.json())
-			.then(
-				parsedJSON => {
-					if (DEBUG) console.log("Parsed JSON: ");
-					if (DEBUG) console.log(parsedJSON);
-					setTimeout(() => {
-					this.setState({
-						dialogQuestionsInfo: parsedJSON,
-						isDialogQuestionsLoaded: true
-					});
-					if (DEBUG) console.log("CurrentState: ");
-					if (DEBUG) console.log(this.state);
-					}, 700);
-				})
-			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	}
-
 
 	handleDialogOpen() {
 		this.setState({ dialogOpen: true });
@@ -374,11 +290,11 @@ class WebFF extends React.Component {
 		let newHiddenPanels = this.state.hiddenPanels;
 		console.log("toShow: ", toShow);
 		if (toShow) {  // remove all instances of panelName from hiddenPanels
-			while(newHiddenPanels.includes(panelName)) {
+			while (newHiddenPanels.includes(panelName)) {
 				let index = newHiddenPanels.indexOf(panelName);
 				if (index > -1) {
 					newHiddenPanels.splice(index, 1);
-					}
+				}
 			}
 		} else { // not toShow:  add panelName to newHiddenPanels
 			if (!newHiddenPanels.includes(panelName)) {
@@ -386,18 +302,18 @@ class WebFF extends React.Component {
 			}
 		}
 		console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
-		this.setState({hiddenPanels:newHiddenPanels});
+		this.setState({ hiddenPanels: newHiddenPanels });
 	}
 
 	questionChangeSystemCallback(Q) {
-		
-		
+
+
 		// checks for action string, executes any actions, and then updates current state of questionsData
 
 		// save updated value to state:
 		let updatedQuestionData = getQuestionDataWithUpdatedValue(Q);
 
-		this.setState({questionsData: updatedQuestionData});
+		this.setState({ questionsData: updatedQuestionData });
 
 		// check if there are additional actions needed based on the actionOptions in this question, Q
 		if (Q == null) {
@@ -416,17 +332,9 @@ class WebFF extends React.Component {
 			}
 		}
 
-		
+
 
 	}
-
-	//FIX potential remove
-	// questionChangeHandler(Q) {
-	// 	console.log("QuestionPage: questionChangeHandler: Q: ", Q);
-	// 	console.log("Q.state.value: ", Q.state.value);
-	// 	this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q  (FIX: and updated parent state?)
-	// 	saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.state.value") to localStorage
-	// }
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		var newRoutesAndPages = (

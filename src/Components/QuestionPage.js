@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import QuestionPanel from './QuestionPanel';
-import { createQuestionComponentsForLayoutGroup, saveQuestionValueToLS,
+import { createQuestionComponentsForLayoutGroup, 
 	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
 
 
@@ -27,26 +27,12 @@ const styles = theme => ({
 
 
 class QuestionPage extends React.Component {
-	constructor(props) {
-		super(props);
-		// this.state = {
-		// 	tabName: this.props.location.pathname.slice(1),
-		// };
-//FIX		this.questionChangeHandler = this.questionChangeHandler.bind(this);
-	}
-
-	componentDidMount() {
-
-	}
 
 	componentWillMount() {
 		this.props.appBarTextCB(this.props.tabName);
 	}
 
 	componentWillUpdate(nextProps, nextState) { // gets called when moving between pages
-		// console.log("QP: CWU: NextState", nextState);
-		// console.log("QP: CWU: NextProps", nextProps);
-		//REFACTOR 7/28 localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
 		this.props.appBarTextCB(nextProps.tabName);
 	}
 

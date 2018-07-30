@@ -64,7 +64,10 @@ class QuestionPanel extends React.Component {
 						{question}
 					</Grid>
 				}
-		});
+				//TOOD throw error, shouldn't get here.
+				return null;
+			}
+		);
 
 		return (
 			<Paper className={classNames(classes.root, this.props.grey ? classes.lightGrey : '')} elevation={2}>
