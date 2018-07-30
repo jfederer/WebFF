@@ -1,11 +1,15 @@
 import React from 'react';
+// import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormControl from '@material-ui/core/FormControl';
+// import Fragment from '@material-ui/core/Fragment';
 
+//TODO: generate minWidth based on content & label
 const styles = theme => ({
 	root: {
 		display: 'flex',
@@ -61,8 +65,7 @@ class DropDown extends React.Component {
 		const { classes } = this.props;
 
 				return (
-					// <FormControl className={classes.formControl}>
-					<div>
+					 <FormControl className={classes.formControl}>
 						{(this.props.label!=null) ?
 							<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> :
 							null }
@@ -80,8 +83,7 @@ class DropDown extends React.Component {
 							{this.buildSelectOptions(this.props.options)}
 
 						</Select>
-						</div>
-					// </FormControl>
+					 </FormControl>
 				);
 	};
 

@@ -110,7 +110,7 @@ class WebFF extends React.Component {
 		}
 	}
 
-	navigationControl(tabName, add) {
+	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
 		this.showTab(tabName, add);
 	}
 
