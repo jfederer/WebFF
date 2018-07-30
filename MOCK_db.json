@@ -5,8 +5,7 @@
 		"EWI",
 		"EDI"
 	],
-	"hiddenPanels": [
-	],
+	"hiddenPanels": [],
 	"navMenuInfo": [
 		{
 			"text": "Dashboard",
@@ -1117,6 +1116,130 @@
 			"type": "TimeInput",
 			"value": null,
 			"helperText": "Average time for sample set 2"
+		},
+		{
+			"id": "edgeOfWater_Left",
+			"label": "Left Edge Of Water",
+			"type": "Text",
+			"placeholder": "Feet from XYZ",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 6,
+			"width_lg": 3
+		},
+		{
+			"id": "edgeOfSamplingZone_Left",
+			"label": "Left Edge Of Sampling Zone",
+			"type": "Text",
+			"placeholder": "Feet from XYZ",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 6,
+			"width_lg": 3
+		},
+		{
+			"id": "edgeOfSamplingZone_Right",
+			"label": "Right Edge Of Sampling Zone",
+			"type": "Text",
+			"placeholder": "Feet from XYZ",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 6,
+			"width_lg": 3
+		},
+		{
+			"id": "edgeOfWater_Right",
+			"label": "Right Edge Of Water",
+			"type": "Text",
+			"placeholder": "Feet from XYZ",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 6,
+			"width_lg": 3
+		},
+		{
+			"id": "pier1_start",
+			"label": "Pier 1 Start",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier1_end",
+			"label": "Pier 1 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier2_start",
+			"label": "Pier 2 Start",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier2_end",
+			"label": "Pier 2 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier3_start",
+			"label": "Pier 3 Start",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier3_end",
+			"label": "Pier 3 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier4_start",
+			"label": "Pier 4 Start",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
+		},
+		{
+			"id": "pier4_end",
+			"label": "Pier 4 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 3
 		}
 	]
 }
