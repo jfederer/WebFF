@@ -19,19 +19,19 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
 
 
 
-export const reformat = (s) => {
+export const mathStringReformat = (s) => {
     s = s.toLowerCase();
-    s = replaceAll(s, " ", "");
-    s = replaceAll(s, "-(", "-1*(");
+    s = replaceAll(s, " ", ""); // strip whitespace
+    s = replaceAll(s, "-(", "-1*("); 
     s = replaceAll(s, ")(", ")*(");
     s = replaceAll(s, "-", "+-");
     s = replaceAll(s, "--", "+");
     s = replaceAll(s, "++", "+");
     s = replaceAll(s, "(+", "(");
     for (var i = 0; i < 10; i++) {
-        s = replaceAll(s, i + "(", i + "*" + "(");
+        s = replaceAll(s, i + "(", i + "*(");
     }
-    while(s.charAt(0) == "+") s = s.substr(1);
+    while(s.charAt(0) === "+") s = s.substr(1);
     return s;
 } // standardize string format
 

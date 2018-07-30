@@ -32,8 +32,6 @@ class Text extends React.Component {
 		this.setState({
 			value: event.target.value
 		}, () => {
-			console.log("Changed text value");
-			console.log(this.props.stateChangeHandler);
 			this.props.stateChangeHandler(this)
 		}
 		);

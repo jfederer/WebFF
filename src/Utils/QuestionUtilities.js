@@ -19,7 +19,6 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
 export const getQuestionDataFromLSbyQuestionID= (questionID) => {
 	// returns questionData about single question with its' key field equal to questionKey
 	//WARNING, this assumes questionsData is populated in LS  //TODO, do not make assumption
-	
 	var questionsData = JSON.parse(localStorage.getItem('questionsData'));
 	var questionData = questionsData.filter(questionData => questionData.id === questionID);
 	
