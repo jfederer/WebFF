@@ -58,50 +58,39 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 }
 
 export const saveQuestionValueToLS = (Q) => {
-	//this function saves updated question "values" (must be located at "Q.value") to localStorage.questionsData
+	//this function saves updated question "values" (must be located at "Q.state.value") to localStorage.questionsData
 
-	var DEBUG = false;
-	if (DEBUG) console.log(Q);
+	var DEBUG = true;
+	if (DEBUG) console.log("saveQuestionValueToLS: Q: ", Q);
 	if (Q == null) { //POC
 		console.log("Question passed to saveQuestionValueToLS was null or undefined");
 		return;
 	}
 
-	// to sync question modifications to localStorage
-	if (DEBUG) console.log("--------------");
-	if (DEBUG) console.log("Q.state:");
-	if (DEBUG) console.log(Q.state);
-
-
 	// get the questions in localStorage
-	var rawData = JSON.parse(localStorage.getItem('questionsData'));
-	if (DEBUG) console.log("--------------");
-	if (DEBUG) console.log("questionsData");
-	if (DEBUG) console.log(rawData);
+	var questionsDataFromLS = JSON.parse(localStorage.getItem('questionsData'));
+	if (DEBUG) console.log("saveQuestionValueToLS: questionsDataFromLS: ", questionsDataFromLS);
 
-	// find the specific question in questionData based on the key,then update the value property
-	var QData = rawData.filter(questionData => {
-		if (DEBUG) console.log(questionData.id + " === " + Q.props.id);
+	// find the specific question in questionsDataFromLS based on the id,then update the value property
+	var newQuestionsData = questionsDataFromLS.filter(questionData => {
+		//if (DEBUG) console.log("saveQuestionValueToLS: ", questionData.id + " === " + Q.props.id);
 		if (questionData.id === Q.props.id) {
 			if (DEBUG) console.log("------FOUND!--------");
-			if (DEBUG) console.log("questionData (pre)");
-			if (DEBUG) console.log(questionData);
-			if (DEBUG) console.log("Q.state.value");
-			if (DEBUG) console.log(Q.state.value);
+			if (DEBUG) console.log("saveQuestionValueToLS: questionData (pre): ", questionData);
+			if (DEBUG) console.log("saveQuestionValueToLS: Q.state.value", Q.state.value);
 			questionData.value = Q.state.value;
-			if (DEBUG) console.log("--------------");
-			if (DEBUG) console.log("questionData (post)");
-			if (DEBUG) console.log(questionData);
+			if (DEBUG) console.log("saveQuestionValueToLS: questionData (post)", questionData);
+
 		} else {
-			if (DEBUG) console.log("no");
+			if (DEBUG) console.log("saveQuestionValueToLS: no");
 		}
 		return questionData;
 	});
 
-	if (DEBUG) console.log(QData);
+	if (DEBUG) console.log("saveQuestionValueToLS: newQuestionsData: ", newQuestionsData);
 
 	// replace the questionData in localStorage
-	localStorage.setItem('questionsData', JSON.stringify(rawData));
+	localStorage.setItem('questionsData', JSON.stringify(newQuestionsData));
 }
 
 

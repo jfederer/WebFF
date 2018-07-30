@@ -31,7 +31,8 @@ class QuestionPage extends React.Component {
 		super(props);
 		this.state = {
 			questionsData: this.props.questionsData,
-			tabName: this.props.location.pathname.slice(1)
+			tabName: this.props.location.pathname.slice(1),
+			hiddenPanels: this.props.hiddenPanels
 		};
 		this.questionChangeHandler = this.questionChangeHandler.bind(this);
 	}
@@ -52,7 +53,10 @@ class QuestionPage extends React.Component {
 	}
 
 	questionChangeHandler(Q) {
-		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.value") to localStorage
+		console.log("QuestionPage: questionChangeHandler: Q: ", Q);
+		console.log("Q.state.value: ", Q.state.value);
+
+		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.state.value") to localStorage
 		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q
 	}
 
@@ -80,7 +84,13 @@ class QuestionPage extends React.Component {
 			});
 
 			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
-	
+			console.log("layoutGroupNames:", layoutGroupNames);
+			console.log("this.state.hiddenPanels:", this.state.hiddenPanels);			
+
+			layoutGroupNames = layoutGroupNames.filter((groupName) => {
+				return !this.state.hiddenPanels.includes(this.state.tabName+":"+groupName); 
+			})
+			console.log("layoutGroupNames", layoutGroupNames);
 			
 			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {
 				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);

@@ -10,7 +10,6 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"size": "40"
-			
 		},
 		{
 			"id": "test2",
@@ -21,7 +20,6 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"size": "50"
-			
 		},
 		{
 			"id": "test3",
@@ -32,8 +30,7 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"multiline": true,
-			"rows":4
-			
+			"rows": 4
 		},
 		{
 			"id": "test4",
@@ -69,7 +66,6 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"helperText": "P1942"
-			
 		},
 		{
 			"id": "testHidden",
@@ -90,7 +86,6 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"helperText": "I'm Helping!"
-			
 		},
 		{
 			"id": "testTog",
@@ -101,8 +96,7 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"helperText": "Toggle Me",
-			"checkbox" : false
-			
+			"checkbox": false
 		},
 		{
 			"id": "testTog2",
@@ -112,7 +106,7 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"helperText": "Toggle Me Also",
-			"checkbox" : false			
+			"checkbox": false
 		},
 		{
 			"id": "testTog3",
@@ -123,8 +117,7 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"helperText": "Toggle Me",
-			"checkbox" : true
-			
+			"checkbox": true
 		},
 		{
 			"id": "testTog4",
@@ -134,7 +127,7 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Test",
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
 		{
 			"id": "testDate",
@@ -171,7 +164,7 @@
 			"id": "testTime2",
 			"XMLValue": "xmlTime2",
 			"type": "TimeInput",
-			"label":"Specific Time default",
+			"label": "Specific Time default",
 			"value": "16:39",
 			"tabName": "Question Page",
 			"layoutGroup": "Date Time Tests",
@@ -186,17 +179,59 @@
 			"tabName": "Question Page",
 			"layoutGroup": "Table",
 			"helperText": "Table Helper Me",
-			"colWidths" : ["20%", "20%", "30%", "10%", "10%"],
-			"colHeaders" : ["Dessert Name","Calories","Fat", "Carbs", "Protein"],
-			"rowHeaders" : "true",
-			"numberOfRows" : "5",
+			"colWidths": [
+				"20%",
+				"20%",
+				"30%",
+				"10%",
+				"10%"
+			],
+			"colHeaders": [
+				"Dessert Name",
+				"Calories",
+				"Fat",
+				"Carbs",
+				"Protein"
+			],
+			"rowHeaders": "true",
+			"numberOfRows": "5",
 			"value": [
-				["Frozen yoghurt","159ewrwr", "", "24", "4.0"],
-				["Ice cream sandwich","237", "9.0", "37", "4.3"],
-				["Eclair","262", "SubQuestion::subTest1", "24", "6.0"],
-				["Cupcake","305", "3.7", "67", "4.3"],
-				["Gingerbread", "356", "16.0", "49", "3.9"]
-			] 
+				[
+					"Frozen yoghurt",
+					"159ewrwr",
+					"",
+					"24",
+					"4.0"
+				],
+				[
+					"Ice cream sandwich",
+					"237",
+					"9.0",
+					"37",
+					"4.3"
+				],
+				[
+					"Eclair",
+					"262",
+					"SubQuestion::subTest1",
+					"24",
+					"6.0"
+				],
+				[
+					"Cupcake",
+					"305",
+					"3.7",
+					"67",
+					"4.3"
+				],
+				[
+					"Gingerbread",
+					"356",
+					"16.0",
+					"49",
+					"3.9"
+				]
+			]
 		},
 		{
 			"id": "subTest1",
@@ -209,7 +244,7 @@
 				"My2": "Two",
 				"Thi sis": "three All Around"
 			},
-			"value": ""			
+			"value": ""
 		},
 		{
 			"id": "testTable2",
@@ -218,34 +253,69 @@
 			"type": "TableInput",
 			"tabName": "Question Page",
 			"layoutGroup": "Table2",
-			"colHeaders" : ["Element","Found"],
-			"rowHeaders" : "true",
-			"numberOfRows" : "10",
+			"colHeaders": [
+				"Element",
+				"Found"
+			],
+			"rowHeaders": "true",
+			"numberOfRows": "10",
 			"value": [
-				["Au","159"],
-				["Hg","237"],
-				["O2","262"],
-				["CO2","305"],
-				["He", "356"]
+				[
+					"Au",
+					"159"
+				],
+				[
+					"Hg",
+					"237"
+				],
+				[
+					"O2",
+					"262"
+				],
+				[
+					"CO2",
+					"305"
+				],
+				[
+					"He",
+					"356"
+				]
 			]
 		},
 		{
-
 			"id": "testTable3",
 			"label": "Test Table Label3",
 			"XMLValue": "Deets3",
 			"type": "TableInput",
 			"tabName": "Question Page",
 			"layoutGroup": "Table2",
-			"colHeaders" : ["Element","Found"],
-			"rowHeaders" : "true",
-			"numberOfRows" : "10",
+			"colHeaders": [
+				"Element",
+				"Found"
+			],
+			"rowHeaders": "true",
+			"numberOfRows": "10",
 			"value": [
-				["Au","159"],
-				["Hg","237"],
-				["O2","262"],
-				["CO2","305"],
-				["He", "356"]
+				[
+					"Au",
+					"159"
+				],
+				[
+					"Hg",
+					"237"
+				],
+				[
+					"O2",
+					"262"
+				],
+				[
+					"CO2",
+					"305"
+				],
+				[
+					"He",
+					"356"
+				]
 			]
 		},
 		{
@@ -255,15 +325,33 @@
 			"type": "TableInput",
 			"tabName": "Question Page",
 			"layoutGroup": "Table2",
-			"colHeaders" : ["Element","Found"],
-			"rowHeaders" : "true",
-			"numberOfRows" : "10",
+			"colHeaders": [
+				"Element",
+				"Found"
+			],
+			"rowHeaders": "true",
+			"numberOfRows": "10",
 			"value": [
-				["Au","159"],
-				["Hg","237"],
-				["O2","262"],
-				["CO2","305"],
-				["He", "356"]
+				[
+					"Au",
+					"159"
+				],
+				[
+					"Hg",
+					"237"
+				],
+				[
+					"O2",
+					"262"
+				],
+				[
+					"CO2",
+					"305"
+				],
+				[
+					"He",
+					"356"
+				]
 			]
 		},
 		{
@@ -433,7 +521,9 @@
 				"ShowStnNumb": "50",
 				"Hide:PjctID_Hide:StnNumber": "55",
 				"Show:StnNum_Hide:ProjectID": "60",
-				"ShowProjectID": "70"
+				"ShowProjectID": "70",
+				"HideWeather": "80",
+				"ShowWeather": "90"
 			},
 			"actions": {
 				"10": "ShowTab::EWI&HideTab::EDI",
@@ -443,14 +533,15 @@
 				"50": "ShowQuestion::stationNumber",
 				"55": "HideQuestion::projectID&HideQuestion::stationNumber",
 				"60": "ShowQuestion::stationNumber&HideQuestion::projectID",
-				"70": "ShowQuestion::projectID"
+				"70": "ShowQuestion::projectID",
+				"80": "HidePanel::FieldForm:Weather",
+				"90": "ShowPanel::FieldForm:Weather"
 			},
 			"value": "",
 			"layoutGroup": "Basic",
 			"width_xs": 4,
 			"width_lg": 2
 		},
-		
 		{
 			"id": "timeZone",
 			"label": "Time Zone",
@@ -692,12 +783,6 @@
 			"width_xs": 6,
 			"width_lg": 6
 		},
-
-
-
-
-
-
 		{
 			"id": "SamplerType",
 			"label": "Sampler Type",
@@ -715,8 +800,8 @@
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
-		},	
-			{
+		},
+		{
 			"id": "bagmaterial",
 			"label": "Bag / Bottle Material",
 			"XMLValue": "XMLQ4",
@@ -733,7 +818,8 @@
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
-		},		{
+		},
+		{
 			"id": "sizeOfBagBottle",
 			"label": "Size of Bag / Bottle",
 			"XMLValue": "XMLQ4",
@@ -750,7 +836,8 @@
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 2
-		},		{
+		},
+		{
 			"id": "nozzelMaterial",
 			"label": "Nozzel Material",
 			"XMLValue": "XMLQ4",
@@ -767,7 +854,8 @@
 			"layoutGroup": "Sampler Info",
 			"width_xs": 6,
 			"width_lg": 2
-		},		{
+		},
+		{
 			"id": "nozelWidth",
 			"label": "Nozel Width",
 			"XMLValue": "XMLQ4",
@@ -792,29 +880,65 @@
 			"type": "TableInput",
 			"tabName": "EDI",
 			"layoutGroup": "Table",
-			"colHeaders" : ["","Set A", "Set B"],
-			"rowHeaders" : "true",
-			"numberOfRows" : "8",
+			"colHeaders": [
+				"",
+				"Set A",
+				"Set B"
+			],
+			"rowHeaders": "true",
+			"numberOfRows": "8",
 			"value": [
-				["Start Time","SubQuestion::startTime","SubQuestion::startTime2" ],
-				["Gage Height","237", ""],
-				["End Time","SubQuestion::endTime","SubQuestion::startTime2"],
-				["Gage Height","305", ""],
-				["Mean Time", "SubQuestion::testTable2","SubQuestion::startTime2"],
-				["Concentration", "SubQuestion::concCheck","SubQuestion::concCheck2"],
-				["Sand Fines", "SubQuestion::sandCheck","SubQuestion::sandCheck2"],
-				["Full Size", "SubQuestion::fullCheck","SubQuestion::fullCheck2"]
+				[
+					"Start Time",
+					"SubQuestion::startTime",
+					"SubQuestion::startTime2"
+				],
+				[
+					"Gage Height",
+					"237",
+					""
+				],
+				[
+					"End Time",
+					"SubQuestion::endTime",
+					"SubQuestion::startTime2"
+				],
+				[
+					"Gage Height",
+					"305",
+					""
+				],
+				[
+					"Mean Time",
+					"SubQuestion::testTable2",
+					"SubQuestion::startTime2"
+				],
+				[
+					"Concentration",
+					"SubQuestion::concCheck",
+					"SubQuestion::concCheck2"
+				],
+				[
+					"Sand Fines",
+					"SubQuestion::sandCheck",
+					"SubQuestion::sandCheck2"
+				],
+				[
+					"Full Size",
+					"SubQuestion::fullCheck",
+					"SubQuestion::fullCheck2"
+				]
 			],
 			"width_xs": 12,
 			"width_lg": 6
-		},	
+		},
 		{
 			"id": "concCheck",
 			"XMLValue": "C",
 			"type": "Toggle",
 			"value": false,
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
 		{
 			"id": "sandCheck",
@@ -822,7 +946,7 @@
 			"type": "Toggle",
 			"value": false,
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
 		{
 			"id": "fullCheck",
@@ -830,7 +954,7 @@
 			"type": "Toggle",
 			"value": false,
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
 		{
 			"id": "concCheck2",
@@ -838,7 +962,7 @@
 			"type": "Toggle",
 			"value": false,
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
 		{
 			"id": "sandCheck2",
@@ -846,7 +970,7 @@
 			"type": "Toggle",
 			"value": false,
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
 		{
 			"id": "fullCheck2",
@@ -854,12 +978,8 @@
 			"type": "Toggle",
 			"value": false,
 			"helperText": "Toggle Me Also",
-			"checkbox" : true
+			"checkbox": true
 		},
-
-
-
-
 		{
 			"id": "startTime",
 			"XMLValue": "xmlDate",
@@ -902,8 +1022,6 @@
 			"value": null,
 			"helperText": "Average time for sample set 2"
 		}
-
-
 	],
 	"navMenuInfo": [
 		{

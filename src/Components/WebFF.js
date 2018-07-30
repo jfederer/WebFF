@@ -64,6 +64,8 @@ class WebFF extends React.Component {
 			isQuestionsDataLoaded: false,
 			questionsData: [],
 
+			hiddenPanels: [],
+
 			systemMenuOpen: false,
 
 			appBarText: "Sediment Field Forms",
@@ -78,11 +80,11 @@ class WebFF extends React.Component {
 	};
 
 	componentWillUpdate(nextProps, nextState) { //TODO: Not sure what we are doing here... why don't we set these right when we load them in the fetch?
-		// console.log("CWU: ", nextState);
+		console.log("CDU: ", nextState);
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
-		
+
 	}
 
 	componenetDidMount() {
@@ -198,19 +200,19 @@ class WebFF extends React.Component {
 				parsedJSON => {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
-					//setTimeout(() => {
+					setTimeout(() => {
 					this.setState({
 						navMenuInfo: parsedJSON,
 						isNavLoaded: true
 					});
 					if (DEBUG) console.log("CurrentState: ");
 					if (DEBUG) console.log(this.state);
-					//}, 2000);
+					}, 1200);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
-	fetchQuestionData(CB) {   
+	fetchQuestionData(CB) {
 		const DEBUG = false;
 		const API = 'http://localhost:3004/';
 		const query = 'questions';
@@ -230,14 +232,14 @@ class WebFF extends React.Component {
 				parsedJSON => {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
-					//setTimeout(()=> {
+					setTimeout(()=> {
 					this.setState({
 						questionsData: parsedJSON,
 						isQuestionsDataLoaded: true
 					}, CB);
 					if (DEBUG) console.log("CurrentState: ");
 					if (DEBUG) console.log(this.state);
-					//},2000);
+					},1000);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
@@ -263,14 +265,14 @@ class WebFF extends React.Component {
 				parsedJSON => {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
-					//setTimeout(() => {
+					setTimeout(() => {
 					this.setState({
 						dialogQuestionsInfo: parsedJSON,
 						isDialogQuestionsLoaded: true
 					});
 					if (DEBUG) console.log("CurrentState: ");
 					if (DEBUG) console.log(this.state);
-					//}, 2000);
+					}, 700);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
@@ -310,23 +312,27 @@ class WebFF extends React.Component {
 			//TODO: Throw error
 		}
 		switch (splitActionString[0]) {
-			case "ShowTab": 
-				this.showTab(splitActionString[1],true);
+			case "ShowTab":
+				this.showTab(splitActionString[1], true);
 				break;
 			case "HideTab":
-				this.showTab(splitActionString[1],false);
+				this.showTab(splitActionString[1], false);
 				break;
 			case "ShowQuestion":
-				this.showQuestion(splitActionString[1],false);
-				this.buildRoutesAndRenderPages(); 
-				break;
-			case "HideQuestion":
-				this.showQuestion(splitActionString[1],true);
+				this.showQuestion(splitActionString[1], true);
 				this.buildRoutesAndRenderPages();
 				break;
-			case "ShowQuestionPanel":
+			case "HideQuestion":
+				this.showQuestion(splitActionString[1], false);
+				this.buildRoutesAndRenderPages();
 				break;
-			case "HideQuestionPanel":
+			case "ShowPanel":
+				this.showQuestionPanel(splitActionString[1], true);
+				this.buildRoutesAndRenderPages();
+				break;
+			case "HidePanel":
+				this.showQuestionPanel(splitActionString[1], false);
+				this.buildRoutesAndRenderPages();
 				break;
 			default:
 				//TODO: throw error
@@ -342,23 +348,43 @@ class WebFF extends React.Component {
 
 	showQuestion(questionID, toShow) {
 		let DEBUG = false;
-		if(DEBUG) console.log("Show Question: ", questionID, " toShow: ", toShow);
+		if (DEBUG) console.log("Show Question: ", questionID, " toShow: ", toShow);
 		// find the specific question in this.state.questionData based on the id, then update the hidden property
 		let updatedQuestionsData = this.state.questionsData.filter(questionData => {
 			if (questionData.id === questionID) {
 				if (DEBUG) console.log("------FOUND!--------");
 				if (DEBUG) console.log(questionData);
-				questionData['hidden'] = toShow;
+				questionData['hidden'] = !toShow;
 			} else {
 				if (DEBUG) console.log("questionData.id :", questionData.id, " and questionID: ", questionID, " do not match");
 			}
 			return questionData;
 		});
-	
+
 		if (DEBUG) console.log(updatedQuestionsData);
-		this.setState({questionsData:updatedQuestionsData});
+		this.setState({ questionsData: updatedQuestionsData });
 		// replace the questionData in localStorage
-//		localStorage.setItem('questionsData', JSON.stringify(rawData));
+		//		localStorage.setItem('questionsData', JSON.stringify(rawData));
+	}
+
+	showQuestionPanel(panelName, toShow) {
+		console.log("this.state.hiddenPanels:", this.state.hiddenPanels);
+		let newHiddenPanels = this.state.hiddenPanels;
+		console.log("toShow: ", toShow);
+		if (toShow) {  // remove all instances of panelName from hiddenPanels
+			while(newHiddenPanels.includes(panelName)) {
+				let index = newHiddenPanels.indexOf(panelName);
+				if (index > -1) {
+					newHiddenPanels.splice(index, 1);
+					}
+			}
+		} else { // not toShow:  add panelName to newHiddenPanels
+			if (!newHiddenPanels.includes(panelName)) {
+				newHiddenPanels.push(panelName);
+			}
+		}
+		console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
+		this.setState({hiddenPanels:newHiddenPanels});
 		
 	}
 
@@ -398,6 +424,7 @@ class WebFF extends React.Component {
 					navControl={this.navigationControl}
 					systemCB={this.questionChangeSystemCallback}
 					questionsData={this.state.questionsData}
+					hiddenPanels={this.state.hiddenPanels}
 				/>} />
 				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
 				<Route render={() => <ErrorPage
@@ -436,7 +463,7 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		
+
 		return (
 			<div className={classes.root} >
 				<AppBar
