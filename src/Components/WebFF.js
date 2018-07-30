@@ -264,7 +264,7 @@ class WebFF extends React.Component {
 		let newHiddenTabs = this.state.hiddenTabs;
 		let cleanTabName = tabName.replace(/ /g, '');
 		if (toShow) {
-			// remove all instancs from newHiddenTabs
+			// remove all instances from newHiddenTabs
 			while (newHiddenTabs.includes(cleanTabName)) {
 				let index = newHiddenTabs.indexOf(cleanTabName);
 				if (index > -1) {

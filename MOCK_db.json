@@ -1,4 +1,100 @@
 {
+	"hiddenTabs": [
+		"Water Quality",
+		"Field Form",
+		"EWI",
+		"EDI"
+	],
+	"hiddenPanels": [
+	],
+	"navMenuInfo": [
+		{
+			"text": "Dashboard",
+			"route": "/Dashboard",
+			"icon": "DashboardIcon"
+		},
+		{
+			"text": "Water Quality",
+			"route": "/WaterQuality",
+			"icon": "OpacityIcon"
+		},
+		{
+			"text": "Field Form",
+			"route": "/FieldForm",
+			"icon": "ImportContactsIcon"
+		},
+		{
+			"text": "EDI",
+			"route": "/EDI"
+		},
+		{
+			"text": "EWI",
+			"route": "/EWI",
+			"icon": ""
+		}
+	],
+	"dialogQuestionsInfo": [
+		{
+			"dialogName": "Add New Station",
+			"dialogDescription": "Fill out the following to add a new station",
+			"questions": [
+				{
+					"id": "stationName",
+					"label": "Station Name",
+					"XMLValue": "stnnm",
+					"type": "Text",
+					"tabName": "Add New Station",
+					"layoutGroup": "Basic",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"id": "stationNumber",
+					"label": "Station Number",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 6,
+					"width_lg": 6
+				},
+				{
+					"id": "projectName",
+					"label": "Project Name",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 6,
+					"width_lg": 6
+				},
+				{
+					"id": "projectID",
+					"label": "Project ID",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 3,
+					"width_lg": 3
+				},
+				{
+					"id": "agencyCode",
+					"label": "Agency Code",
+					"XMLValue": "",
+					"type": "Text",
+					"tabName": "Add Station",
+					"value": "",
+					"layoutGroup": "Basic",
+					"width_xs": 3,
+					"width_lg": 3
+				}
+			]
+		}
+	],
 	"questionsData": [
 		{
 			"id": "test1",
@@ -1021,94 +1117,6 @@
 			"type": "TimeInput",
 			"value": null,
 			"helperText": "Average time for sample set 2"
-		}
-	],
-	"navMenuInfo": [
-		{
-			"text": "Dashboard",
-			"route": "/Dashboard",
-			"icon": "DashboardIcon"
-		},
-		{
-			"text": "Water Quality",
-			"route": "/WaterQuality",
-			"icon": "OpacityIcon"
-		},
-		{
-			"text": "Field Form",
-			"route": "/FieldForm",
-			"icon": "ImportContactsIcon"
-		},
-		{
-			"text": "EDI",
-			"route": "/EDI"
-		},
-		{
-			"text": "EWI",
-			"route": "/EWI",
-			"icon": ""
-		}
-	],
-	"dialogQuestionsInfo": [
-		{
-			"dialogName": "Add New Station",
-			"dialogDescription": "Fill out the following to add a new station",
-			"questions": [
-				{
-					"id": "stationName",
-					"label": "Station Name",
-					"XMLValue": "stnnm",
-					"type": "Text",
-					"tabName": "Add New Station",
-					"layoutGroup": "Basic",
-					"width_xs": 6,
-					"width_lg": 3
-				},
-				{
-					"id": "stationNumber",
-					"label": "Station Number",
-					"XMLValue": "",
-					"type": "Text",
-					"tabName": "Add Station",
-					"value": "",
-					"layoutGroup": "Basic",
-					"width_xs": 6,
-					"width_lg": 6
-				},
-				{
-					"id": "projectName",
-					"label": "Project Name",
-					"XMLValue": "",
-					"type": "Text",
-					"tabName": "Add Station",
-					"value": "",
-					"layoutGroup": "Basic",
-					"width_xs": 6,
-					"width_lg": 6
-				},
-				{
-					"id": "projectID",
-					"label": "Project ID",
-					"XMLValue": "",
-					"type": "Text",
-					"tabName": "Add Station",
-					"value": "",
-					"layoutGroup": "Basic",
-					"width_xs": 3,
-					"width_lg": 3
-				},
-				{
-					"id": "agencyCode",
-					"label": "Agency Code",
-					"XMLValue": "",
-					"type": "Text",
-					"tabName": "Add Station",
-					"value": "",
-					"layoutGroup": "Basic",
-					"width_xs": 3,
-					"width_lg": 3
-				}
-			]
 		}
 	]
 }
