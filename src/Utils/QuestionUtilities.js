@@ -59,8 +59,9 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 export const saveQuestionValueToLS = (Q) => {
 	//this function saves updated question "values" (must be located at "Q.state.value") to localStorage.questionsData
-
-	var DEBUG = true;
+	// returns updated questionsData object
+	console.log("saveQuestionValueToLS", Q.state.value);
+	var DEBUG = false;
 	if (DEBUG) console.log("saveQuestionValueToLS: Q: ", Q);
 	if (Q == null) { //POC
 		console.log("Question passed to saveQuestionValueToLS was null or undefined");
@@ -91,6 +92,8 @@ export const saveQuestionValueToLS = (Q) => {
 
 	// replace the questionData in localStorage
 	localStorage.setItem('questionsData', JSON.stringify(newQuestionsData));
+
+	return newQuestionsData;
 }
 
 

@@ -40,6 +40,8 @@ import CompareIcon from '@material-ui/icons/Compare';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
+import { createQuestionComponentsForLayoutGroup, saveQuestionValueToLS,
+	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
 
 import SystemDialog from './SystemDialog';
 
@@ -80,11 +82,11 @@ class WebFF extends React.Component {
 	};
 
 	componentWillUpdate(nextProps, nextState) { //TODO: Not sure what we are doing here... why don't we set these right when we load them in the fetch?
-		console.log("CDU: ", nextState);
+	console.log("CWU");
+		//console.log("CWU: ", nextState.questionsData[31].value?nextState.questionsData[31].value:"QuestoinsData31 not yet loaded");
 		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
 		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
 		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
-
 	}
 
 	componenetDidMount() {
@@ -385,10 +387,11 @@ class WebFF extends React.Component {
 		}
 		console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
 		this.setState({hiddenPanels:newHiddenPanels});
-		
 	}
 
 	questionChangeSystemCallback(question) {
+		// checks for action string, executes, and then updates current state of questionsData
+
 		// check if there are additional actions needed based on the actionOptions in this question, Q
 		if (question == null) {
 			//TODO: throw error
@@ -405,6 +408,8 @@ class WebFF extends React.Component {
 				});
 			}
 		}
+		let updatedQuestionData = saveQuestionValueToLS(question);
+		this.setState({questionsData: updatedQuestionData});
 	}
 
 
