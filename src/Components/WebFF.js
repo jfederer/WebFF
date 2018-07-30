@@ -412,6 +412,13 @@ class WebFF extends React.Component {
 		this.setState({questionsData: updatedQuestionData});
 	}
 
+	//FIX potential remove
+	questionChangeHandler(Q) {
+		console.log("QuestionPage: questionChangeHandler: Q: ", Q);
+		console.log("Q.state.value: ", Q.state.value);
+		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q  (FIX: and updated parent state?)
+		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.state.value") to localStorage
+	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		var newRoutesAndPages = (

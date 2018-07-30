@@ -29,12 +29,10 @@ const styles = theme => ({
 class QuestionPage extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			questionsData: this.props.questionsData,
-			tabName: this.props.location.pathname.slice(1),
-			hiddenPanels: this.props.hiddenPanels
-		};
-		this.questionChangeHandler = this.questionChangeHandler.bind(this);
+		// this.state = {
+		// 	tabName: this.props.location.pathname.slice(1),
+		// };
+//FIX		this.questionChangeHandler = this.questionChangeHandler.bind(this);
 	}
 
 	componentDidMount() {
@@ -52,24 +50,14 @@ class QuestionPage extends React.Component {
 		this.props.appBarTextCB(nextProps.tabName);
 	}
 
-	questionChangeHandler(Q) {
-		console.log("QuestionPage: questionChangeHandler: Q: ", Q);
-		console.log("Q.state.value: ", Q.state.value);
-		this.props.systemCB(Q); // check if there are additional actions needed based on the actionOptions in this question, Q  (FIX: and updated parent state?)
-		saveQuestionValueToLS(Q);  //this function saves updated question "values" (must be located at "Q.state.value") to localStorage
-	}
-
-
-
 	render() {
 		const DEBUG = false;
-		const { tabName } = this.props;
-		const { questionsData, hiddenQuestions } = this.state;
+		const { tabName, questionsData, systemCB, hiddenPanels} = this.props;
 		let tabQuestionData = [];
 		let layoutGroupNames = [];
 		let questionPanels = [];
-		if (DEBUG) console.log("Question Page Render:  state:  ", this.state);
-		if (DEBUG) console.log("Question Page Render:  hiddenQuestions:  ", hiddenQuestions);
+		if (DEBUG) console.log("Question Page Render:  props:  ", this.props);
+		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 
 		if (questionsData.length > 0) {
@@ -78,14 +66,14 @@ class QuestionPage extends React.Component {
 				if(question.tabName) {
 					return question.tabName.replace(/ /g,'') === tabName.replace(/ /g,'');  //regex removes whitespace... allowing a match regardless of whitespace in the url or the questions database
 				} else {
-					return null;
+					return false;
 				}
 			});
 
 			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
 	
 			layoutGroupNames = layoutGroupNames.filter((groupName) => {
-				return !this.state.hiddenPanels.includes(this.state.tabName+":"+groupName); 
+				return !hiddenPanels.includes(tabName+":"+groupName); 
 			})
 				
 			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {
@@ -94,7 +82,7 @@ class QuestionPage extends React.Component {
 				questionPanels.push(
 				<div key={tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
-						questions={createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData, this.questionChangeHandler, hiddenQuestions)} 
+						questions={createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData, systemCB)} 
 						panelName={layoutGroupNames[i]}
 						key={tabName + layoutGroupNames[i]}
 						grey={i%2===1} />
@@ -103,8 +91,6 @@ class QuestionPage extends React.Component {
 						);
 			}
 		}
-
-		
 
 		return (
 			<div>
@@ -117,8 +103,11 @@ class QuestionPage extends React.Component {
 
 QuestionPage.propTypes = {
 	classes: PropTypes.object.isRequired,
-	appBarTextCB: PropTypes.func,
-	tabName: PropTypes.string.isRequired
+	appBarTextCB: PropTypes.func.isRequired,
+	tabName: PropTypes.string.isRequired,
+	questionsData: PropTypes.array.isRequired,
+	hiddenPanels: PropTypes.arrayOf(PropTypes.string).isRequired,
+	systemCB: PropTypes.func.isRequired
 };
 
 export default withRouter(withStyles(styles, { withTheme: true })(QuestionPage));
