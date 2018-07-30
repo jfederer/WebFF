@@ -96,6 +96,17 @@
 	],
 	"questionsData": [
 		{
+			"id": "testComputedPlus",
+			"label": "Testing Addition",
+			"XMLValue": "P10020",
+			"type": "ComputedValue",
+			"placeholder": "Test1 + Test3",
+			"computationString": "test1+test3",
+			"value": "",
+			"tabName": "Question Page",
+			"layoutGroup": "Test"
+		},
+		{
 			"id": "test1",
 			"label": "Impedence",
 			"XMLValue": "P10020",

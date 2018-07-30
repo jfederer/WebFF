@@ -10,7 +10,8 @@ import Toggle from './Questions/Toggle';
 import TableInput from './Questions/TableInput';
 import DateInput from './Questions/DateInput';
 import TimeInput from './Questions/TimeInput';
-import Hidden from '@material-ui/core/Hidden'
+import Hidden from '@material-ui/core/Hidden';
+import ComputedValue from './Questions/ComputedValue';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -68,6 +69,10 @@ class Question extends React.Component {
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
 
 		switch (this.props.type) {
+			case 'ComputedValue': {
+				theQ = <ComputedValue {...this.props} />
+				break;
+			}
 			case 'DropDown': {
 				theQ = <DropDown {...this.props} />
 				break;
@@ -138,7 +143,7 @@ class Question extends React.Component {
 		label: PropTypes.string,
 		placeholder: PropTypes.string,
 		XMLValue: PropTypes.string,
-		type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput"]).isRequired,
+		type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
