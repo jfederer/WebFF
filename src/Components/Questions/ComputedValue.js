@@ -29,10 +29,11 @@ class ComputedValue extends React.Component {
 	};
 
 	componentWillMount() {
-		this.computeValue();
+		this.computeValue(true);
 	}
 
-	handleValueChange = value => event => {  
+	handleValueChange = value => event => {
+		console.log("handleVAlueChange");
 		this.setState({
 			value: event.target.value
 		}, () => {
@@ -41,15 +42,22 @@ class ComputedValue extends React.Component {
 		);
 	};
 
-	componentWillUpdate() {
-		console.log("Yep");
-	}
+	componentWillUpdate(nextProps, nextState) { //performance - could add shouldcomponentupdate
+		// console.log("CV: CWU: this.state:" , this.state);
+		// console.log("CV: CWU: nextState:" , nextState);
+		let curValue = this.computeValue(false)
+		// console.log("CV: CWU: curValue:" , curValue);
+		if(curValue!==nextState.value) {
+			this.computeValue(true);
+		}
+	  }
 
-	computeValue() {
+	computeValue(updateState) {
+		//computes value from computationString based on values in LS and optionally updates state and LS
 		let DEBUG = false;
 		if (DEBUG) console.log(this.props.computationString);
 
-		let computedValue="";
+		let computedValue = "";
 
 		// split the computation string into constituent components
 		let splitCS = this.props.computationString.split(/([+,-,*,/,(,),^])/g);
@@ -57,45 +65,48 @@ class ComputedValue extends React.Component {
 
 		// replace all instaces of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
-			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' &&	splitCS[i] !== '/' &&
-				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !=='^') {
-					// splitCS[i] is a questionID
-					let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]); 
-					console.log(Q);
-					splitCS[i] = Q.value;
-				}
+			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' && splitCS[i] !== '/' &&
+				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^') {
+				// splitCS[i] is a questionID
+				let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]);
+				splitCS[i] = Q.value;
+			}
 		}
 		if (DEBUG) console.log(splitCS);
 
 		//TODO: save old splitCS values so we know what was null for better error display
 
 		// check that all values returned without fail
-		if(splitCS.includes("")) {
+		if (splitCS.includes("")) { //should probably ensure they were a number...
 			console.log("null value was returned in ComputedValue question");
 		} else {
 			// rejoin string and send to math utility
 			let finalComputeString = splitCS.join('')
-			console.log(finalComputeString);
+			//console.log(finalComputeString);
 			// set result to this value
 			computedValue = eval(finalComputeString);
 		}
 
-		this.setState({
-			value: computedValue
-		}, () => {
-			this.props.stateChangeHandler(this);
-			this.render();
+		
+		if (updateState && this.state.value !== computedValue) {
+			this.setState({
+				value: computedValue
+			}, () => {
+				this.props.stateChangeHandler(this);
+			}
+			);
 		}
-		);
 
 		return computedValue;
 	}
 
 	render() {
 		const { classes } = this.props;
-		console.log("CV render");
+		//console.log("CV render");
+
+		// this.computeValue(true);
 		
-		
+
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
 		//TODO: going to need to find a way to set the state.value so it can be referenced in other places similarly to other questions
 
