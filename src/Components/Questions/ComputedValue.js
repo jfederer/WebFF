@@ -44,10 +44,10 @@ class ComputedValue extends React.Component {
 	};
 
 	componentWillUpdate(nextProps, nextState) { //performance - could add shouldcomponentupdate
-		// console.log("CV: CWU: this.state:" , this.state);
-		// console.log("CV: CWU: nextState:" , nextState);
+		console.log("CV: CWU: this.state:" , this.state);
+		console.log("CV: CWU: nextState:" , nextState);
 		let curValue = this.computeValue(false)
-		// console.log("CV: CWU: curValue:" , curValue);
+		console.log("CV: CWU: curValue:" , curValue);
 		if(curValue!==nextState.value) {
 			this.computeValue(true);
 		}
@@ -61,15 +61,24 @@ class ComputedValue extends React.Component {
 		let computedValue = "";
 		let shouldCompute = true;
 
+		if(this.props.id === "samplingWidth") {
+			DEBUG = true;
+		}
+
 		// split the computation string into constituent components
 		//TODO: remove spaces
 		let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
 		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
+		
+
 		// replace all instaces of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
+			//if(DEBUG) console.log(splitCS[i] + " is a " + !) + " number");
+
 			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' && splitCS[i] !== '/' &&
-				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^' && splitCS[i] !== "") {
+				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^' && splitCS[i] !== "" 
+				&& isNaN(splitCS[i])) {
 				// splitCS[i] is a questionID
 				let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]);
 				

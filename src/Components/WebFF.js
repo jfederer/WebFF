@@ -320,13 +320,44 @@ class WebFF extends React.Component {
 		this.setState({ hiddenPanels: newHiddenPanels });
 	}
 
+
+	getQuestionDataWithUpdatedValue(Q) {
+		//this function saves updated question "values" (must be located at "Q.state.value")
+		// returns updated questionsData object
+		var DEBUG = false;
+		if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q: ", Q);
+		if (Q == null) { //POC
+			console.log("Question passed to getQuestionDataWithUpdatedValue was null or undefined");
+			return;
+		}
+	
+		// find the specific question in questionsData based on the id,then update the value property
+		var newQuestionsData = this.state.questionsData.filter(questionData => {
+			if (questionData.id === Q.props.id) {
+				if (DEBUG) console.log("------FOUND!--------");
+				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (pre): ", questionData);
+				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q.state.value", Q.state.value);
+				questionData.value = Q.state.value;
+				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (post)", questionData);
+				} else {
+				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: no");
+			}
+			return questionData;
+		});
+	
+		if (DEBUG) console.log("getQuestionDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
+	
+		return newQuestionsData;
+	}
+
 	questionChangeSystemCallback(Q) {
 		// checks for action string, executes any actions, and then updates current state of questionsData
 
-		//console.log("questionChangeSystemCallback: Q: ", Q);
+		console.log("questionChangeSystemCallback: Q: ", Q);
 
 		// save updated value to state:
-		let updatedQuestionData = getQuestionDataWithUpdatedValue(Q);
+		let updatedQuestionData = this.getQuestionDataWithUpdatedValue(Q);
+		console.log("questionChangeSystemCallback: updatedQuestionData: ", updatedQuestionData);
 
 		this.setState({ questionsData: updatedQuestionData });
 
@@ -346,7 +377,7 @@ class WebFF extends React.Component {
 				});
 			}
 		}
-		this.buildRoutesAndRenderPages();
+		this.buildRoutesAndRenderPages(); //performance
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
@@ -374,7 +405,7 @@ class WebFF extends React.Component {
 					navControl={this.navigationControl}
 				/>} />
 			</Switch>
-		);
+		); //performance
 		this.setState({ routesAndPages: newRoutesAndPages });
 	};
 
