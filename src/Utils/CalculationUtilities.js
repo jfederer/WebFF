@@ -9,7 +9,7 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
         for(let i =0; i<pierLocations.length; i++) {
             if(location > pierLocations[i] && pierCounted[i]===false) {
                 pierCounted[i] = true;
-                return location+pierWidths[i];
+                location+=pierWidths[i];
             }
         }
         return location;

@@ -415,14 +415,10 @@ class WebFF extends React.Component {
 
 	handleSystemMenuItemClicked(menuText) {
 
-		console.log(provideEWISamplingLocations(60, 1160, 
-			[100, 233, 353, 473, 590, 713, 835, 930
-
-			], 
-			[22, 7, 7, 7, 20, 7, 8,200
-
-			],
-			3));
+		console.log(provideEWISamplingLocations(20, 500, 
+			[30, 180, 210, 410], 
+			[120,20,12,45],
+			5));
 
 
 		// build the curDialogXXX data
