@@ -56,31 +56,42 @@ class ComputedValue extends React.Component {
 	computeValue(updateState) {
 		//computes value from computationString based on values in LS and optionally updates state and LS
 		let DEBUG = false;
-		if (DEBUG) console.log(this.props.computationString);
+		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
 
 		let computedValue = "";
+		let shouldCompute = true;
 
 		// split the computation string into constituent components
-		let splitCS = this.props.computationString.split(/([+,-,*,/,(,),^])/g);
-		if (DEBUG) console.log(splitCS);
+		//TODO: remove spaces
+		let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
+		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
 		// replace all instaces of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
 			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' && splitCS[i] !== '/' &&
-				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^') {
+				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^' && splitCS[i] !== "") {
 				// splitCS[i] is a questionID
 				let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]);
-				splitCS[i] = Q.value;
+				
+				// check that all values returned without fail
+				if(Q===null) {
+					//TODO: Throw error
+					if (DEBUG) console.log(splitCS[i] + " question was not found in LS");
+					shouldCompute = false;
+				} else if(Q.value==="") {
+					//TODO: Throw error
+					if (DEBUG) console.log(splitCS[i] + " question has null value in LS");
+					shouldCompute = false;
+				} else { //TODO: Check if number?
+					splitCS[i] = Q.value;
+				}
 			}
 		}
 		if (DEBUG) console.log(splitCS);
 
 		//TODO: save old splitCS values so we know what was null for better error display
-
-		// check that all values returned without fail
-		if (splitCS.includes("")) { //should probably ensure they were a number...
-			//console.log("null value was returned in ComputedValue question");
-		} else {
+		
+		if (shouldCompute) {
 			// rejoin string and send to math utility
 			let finalComputeString = splitCS.join('')
 			//console.log(finalComputeString);
