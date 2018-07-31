@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { getQuestionDataFromLSbyQuestionID, saveQuestionValueToLS } from '../../Utils/QuestionUtilities';
-import { mathStringReformat } from '../../Utils/MathUtilities';
+import { getQuestionDataFromLSbyQuestionID } from '../../Utils/QuestionUtilities';
+
+const math = require('mathjs');
 
 //this.state.value always contains the up-to-date question values/answers.
 
@@ -78,13 +79,13 @@ class ComputedValue extends React.Component {
 
 		// check that all values returned without fail
 		if (splitCS.includes("")) { //should probably ensure they were a number...
-			console.log("null value was returned in ComputedValue question");
+			//console.log("null value was returned in ComputedValue question");
 		} else {
 			// rejoin string and send to math utility
 			let finalComputeString = splitCS.join('')
 			//console.log(finalComputeString);
 			// set result to this value
-			computedValue = eval(finalComputeString);
+			computedValue = math.eval(finalComputeString);
 		}
 
 		
