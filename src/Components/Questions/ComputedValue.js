@@ -61,9 +61,9 @@ class ComputedValue extends React.Component {
 		let computedValue = "";
 		let shouldCompute = true;
 
-		if(this.props.id === "samplingWidth") {
-			DEBUG = true;
-		}
+		// if(this.props.id === "samplingWidth") {
+		// 	DEBUG = true;
+		// }
 
 		// split the computation string into constituent components
 		//TODO: remove spaces
