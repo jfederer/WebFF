@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { getQuestionDataFromLSbyQuestionID } from '../../Utils/QuestionUtilities';
+import { getQuestionDataFromLSbyQuestionID, saveQuestionValueToLS } from '../../Utils/QuestionUtilities';
 import { mathStringReformat } from '../../Utils/MathUtilities';
 
 //this.state.value always contains the up-to-date question values/answers.
@@ -29,23 +29,24 @@ class ComputedValue extends React.Component {
 	};
 
 	componentWillMount() {
-		this.setState({ value: this.props.value });
+		this.setState({value:this.computeValue()}, this.props.stateChangeHandler(this));
 	}
 
-	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+	handleValueChange = value => event => {  
 		this.setState({
 			value: event.target.value
 		}, () => {
-			console.log("Changed text value");
-			console.log(this.props.stateChangeHandler);
 			this.props.stateChangeHandler(this)
 		}
 		);
 	};
 
-	render() {
-		const { classes } = this.props;
-		let DEBUG = true;
+	componentWillUpdate() {
+		console.log("Yep");
+	}
+
+	computeValue() {
+		let DEBUG = false;
 		if (DEBUG) console.log(this.props.computationString);
 
 		let computedValue="";
@@ -59,7 +60,7 @@ class ComputedValue extends React.Component {
 			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' &&	splitCS[i] !== '/' &&
 				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !=='^') {
 					// splitCS[i] is a questionID
-					let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]);
+					let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]); 
 					console.log(Q);
 					splitCS[i] = Q.value;
 				}
@@ -78,6 +79,14 @@ class ComputedValue extends React.Component {
 			// set result to this value
 			computedValue = eval(finalComputeString);
 		}
+
+		return computedValue;
+	}
+
+	render() {
+		const { classes } = this.props;
+		console.log("CV render");
+		
 		
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
 		//TODO: going to need to find a way to set the state.value so it can be referenced in other places similarly to other questions
@@ -89,7 +98,7 @@ class ComputedValue extends React.Component {
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.computationString;
 
 		return <TextField
-			value={computedValue}
+			value={this.state.value}
 			onChange={this.handleValueChange(this.props.id)}
 			key={this.props.id}
 			id={this.props.id}
@@ -99,8 +108,8 @@ class ComputedValue extends React.Component {
 			fullWidth
 			xmlvalue={this.props.XMLValue}
 			inputProps={{
-				size: thisSize
-				// readOnly: true
+				size: thisSize,
+				readOnly: true
 			}}
 		/>;
 
