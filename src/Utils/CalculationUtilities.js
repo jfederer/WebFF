@@ -3,15 +3,17 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
     let samplingLocations = new Array(numberOfSamples);
     let pierCounted = new Array(pierLocations.length).fill(false);
     let pierTotalWidth = 0;
+    console.log("CALCULATING");
 
     function correctSamplingLocationBasedOnPiers (location) {
-        console.log(location);
+        console.log("location: ", location);
         for(let i =0; i<pierLocations.length; i++) {
             if(location > pierLocations[i] && pierCounted[i]===false) {
                 pierCounted[i] = true;
                 location+=pierWidths[i];
             }
         }
+        console.log("Corrected location: ", location);
         return location;
     }
 
@@ -28,11 +30,17 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
 
     
     //TODO: Erin needs to verify output
-    // for(let i = 0; i<pierLocations.length; i++) {
-    //     console.log("pier located from " + pierLocations[i] + "-" + (pierLocations[i]+pierWidths[i]));
-    // }
-    // console.log("samplingZoneWidth: ", samplingZoneWidth)
-    // console.log("samplingWidth: ", samplingWidth)
+    for(let i = 0; i<pierLocations.length; i++) {
+        console.log("pier located from " + pierLocations[i] + "-" + (pierLocations[i]+pierWidths[i]));
+    }
+    console.log("samplingZoneWidth: ", samplingZoneWidth)
+    console.log("samplingWidth: ", samplingWidth)
+    // console.log(provideEWISamplingLocations(20, 500, 
+    //     [30, 180, 210, 410], 
+    //     [120,20,12,45],
+    //     5));
+
+
 
 return samplingLocations;
     

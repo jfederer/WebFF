@@ -444,12 +444,51 @@ class WebFF extends React.Component {
 
 	handleSystemMenuItemClicked(menuText) {
 
-		this.putDBInfo("generatedQuestions",
-		[{"testName":"Joe", "id":"smelven"},
-		{"testName":"Mark", "id":"tensie"},
-		{"testName":"Jan", "id":"oldest"}]
+		// this.putDBInfo("generatedQuestions",
+		// [{"testName":"Joe", "id":"smelven"},
+		// {"testName":"Mark", "id":"tensie"},
+		// {"testName":"Jan", "id":"oldest"}]
+	// );
+		
+		// #1
+		console.log(provideEWISamplingLocations(20, 500, 
+        [30,
+			160,
+			210,
+			300], 
+        [120,
+			40,
+			70,
+			150],
+        5));
+		// #2
+		console.log(provideEWISamplingLocations(20, 600, 
+        [30,
+			160,
+			210,
+			300], 
+        [120,
+			40,
+			50,
+			150],
+        5));
+		// #3
+		console.log(provideEWISamplingLocations(15, 250, 
+        [30,
+			155], 
+        [120,
+			40],
+        5));
+		// #4
+		console.log(provideEWISamplingLocations(15, 250, 
+        [15,
+			155], 
+        [120,
+			40],
+        5));
 	
-	);
+
+
 
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
