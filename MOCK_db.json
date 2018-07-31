@@ -97,12 +97,12 @@
 	"questionsData": [
 		{
 			"id": "testComputedPlus",
+			"value": "",
 			"label": "Testing Addition",
 			"XMLValue": "P10020",
 			"type": "ComputedValue",
 			"placeholder": "Test1 + Test3",
-			"computationString": "test1+test3",
-			"value": "",
+			"computationString": "test1+test3",			
 			"tabName": "Question Page",
 			"layoutGroup": "Test"
 		},

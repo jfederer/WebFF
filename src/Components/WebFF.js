@@ -321,9 +321,9 @@ class WebFF extends React.Component {
 	}
 
 	questionChangeSystemCallback(Q) {
-
-
 		// checks for action string, executes any actions, and then updates current state of questionsData
+
+		console.log("questionChangeSystemCallback: Q: ", Q);
 
 		// save updated value to state:
 		let updatedQuestionData = getQuestionDataWithUpdatedValue(Q);
@@ -346,9 +346,6 @@ class WebFF extends React.Component {
 				});
 			}
 		}
-
-
-
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage

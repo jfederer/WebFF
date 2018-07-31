@@ -29,7 +29,7 @@ class ComputedValue extends React.Component {
 	};
 
 	componentWillMount() {
-		this.setState({value:this.computeValue()}, this.props.stateChangeHandler(this));
+		this.computeValue();
 	}
 
 	handleValueChange = value => event => {  
@@ -79,6 +79,14 @@ class ComputedValue extends React.Component {
 			// set result to this value
 			computedValue = eval(finalComputeString);
 		}
+
+		this.setState({
+			value: computedValue
+		}, () => {
+			this.props.stateChangeHandler(this);
+			this.render();
+		}
+		);
 
 		return computedValue;
 	}

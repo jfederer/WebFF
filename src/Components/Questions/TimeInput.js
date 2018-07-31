@@ -33,7 +33,7 @@ class TimeInput extends React.Component {
 			let d = new Date();
 			if(DEBUG)console.log("CONSTRUCTOR: Date: ", d)
 			let hoursString = ('0' + d.getHours()).slice(-2);
-			let minutesString = ('0' + (d.getMinutes()+1)).slice(-2);
+			let minutesString = ('0' + (d.getMinutes())).slice(-2);
 			let timeString = hoursString + ":" + minutesString;
 			if(DEBUG)console.log("CONSTRUCTOR: timeString: ", timeString);
 			this.state = {
