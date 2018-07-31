@@ -45,8 +45,7 @@ class TableInput extends React.Component {
 
 	handleTableChange(textSubQuestion) {
 		let DEBUG = false;
-		if(DEBUG)console.log("HandleTableChange");
-		console.log("textSubQuestion: ", textSubQuestion);
+		if(DEBUG)console.log("HandleTableChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
 		const { id } = textSubQuestion.props;
 		let questionRow = id.substring(id.indexOf("row:")+4,id.indexOf("col:"));
