@@ -28,11 +28,11 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
 
     
     //TODO: Erin needs to verify output
-    for(let i = 0; i<pierLocations.length; i++) {
-        console.log("pier located from " + pierLocations[i] + "-" + (pierLocations[i]+pierWidths[i]));
-    }
-    console.log("samplingZoneWidth: ", samplingZoneWidth)
-    console.log("samplingWidth: ", samplingWidth)
+    // for(let i = 0; i<pierLocations.length; i++) {
+    //     console.log("pier located from " + pierLocations[i] + "-" + (pierLocations[i]+pierWidths[i]));
+    // }
+    // console.log("samplingZoneWidth: ", samplingZoneWidth)
+    // console.log("samplingWidth: ", samplingWidth)
 
 return samplingLocations;
     

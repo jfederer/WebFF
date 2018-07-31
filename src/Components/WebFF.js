@@ -197,6 +197,35 @@ class WebFF extends React.Component {
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
+	putDBInfo(location, data) {
+		//FIXME: This does not work the way you'd expect, functionality addition was abandonded due to deadline
+		const DEBUG = false;
+		const API = 'http://localhost:3004/';
+		const query = location;
+
+		function handleErrors(response) {
+			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response;
+		}
+
+		if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
+
+		fetch(API + query, {
+			method: 'post',
+			headers: {
+			  'Accept': 'application/json',
+			  'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		  }).then(function(response) {
+				return response.json()
+			  }).then(function(json) {
+				console.log('parsed json: ', json)
+			  }).catch(error => console.log("Error fetching " + API + query + "\n" + error));
+	}
 
 	handleDialogOpen() {
 		this.setState({ dialogOpen: true });
@@ -415,11 +444,12 @@ class WebFF extends React.Component {
 
 	handleSystemMenuItemClicked(menuText) {
 
-		console.log(provideEWISamplingLocations(20, 500, 
-			[30, 180, 210, 410], 
-			[120,20,12,45],
-			5));
-
+		this.putDBInfo("generatedQuestions",
+		[{"testName":"Joe", "id":"smelven"},
+		{"testName":"Mark", "id":"tensie"},
+		{"testName":"Jan", "id":"oldest"}]
+	
+	);
 
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
