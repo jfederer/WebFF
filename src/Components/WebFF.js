@@ -40,7 +40,6 @@ import CompareIcon from '@material-ui/icons/Compare';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
-import { getQuestionDataWithUpdatedValue } from '../Utils/QuestionUtilities';
 
 import SystemDialog from './SystemDialog';
 
