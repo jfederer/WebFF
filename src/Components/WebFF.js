@@ -40,6 +40,7 @@ import CompareIcon from '@material-ui/icons/Compare';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
+import { provideEWISamplingLocations } from '../Utils/CalculationUtilities';
 
 import SystemDialog from './SystemDialog';
 
@@ -71,8 +72,8 @@ class WebFF extends React.Component {
 
 			appBarText: "Sediment Field Forms",
 
-			hiddenTabs: [ "EDI", "EWI", "WaterQuality", "FieldForm" ],  //TODO: pull hiddenTabs from LS before overwriting here?
-		};	
+			hiddenTabs: ["EDI", "EWI", "WaterQuality", "FieldForm"],  //TODO: pull hiddenTabs from LS before overwriting here?
+		};
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
@@ -329,7 +330,7 @@ class WebFF extends React.Component {
 			console.log("Question passed to getQuestionDataWithUpdatedValue was null or undefined");
 			return;
 		}
-	
+
 		// find the specific question in questionsData based on the id,then update the value property
 		var newQuestionsData = this.state.questionsData.filter(questionData => {
 			if (questionData.id === Q.props.id) {
@@ -338,14 +339,14 @@ class WebFF extends React.Component {
 				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q.state.value", Q.state.value);
 				questionData.value = Q.state.value;
 				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (post)", questionData);
-				} else {
+			} else {
 				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: no");
 			}
 			return questionData;
 		});
-	
+
 		if (DEBUG) console.log("getQuestionDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
-	
+
 		return newQuestionsData;
 	}
 
@@ -376,6 +377,9 @@ class WebFF extends React.Component {
 				});
 			}
 		}
+
+
+
 		this.buildRoutesAndRenderPages(); //performance
 	}
 
@@ -410,6 +414,25 @@ class WebFF extends React.Component {
 
 
 	handleSystemMenuItemClicked(menuText) {
+
+		console.log(provideEWISamplingLocations(70, 1160, [115,
+			235,
+			353,
+			473,
+			594,
+			714,
+			835,
+			940], [10,
+				10,
+				10,
+				10,
+				10,
+				10,
+				10,
+				140
+				], 10));
+
+
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
 

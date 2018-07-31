@@ -27,7 +27,7 @@ class ComputedValue extends React.Component {
 		this.state = {
 			value: this.props.value,
 		};
-	};
+	}; 
 
 	componentWillMount() {
 		this.computeValue(true);
