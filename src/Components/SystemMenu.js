@@ -13,6 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HelpIcon from '@material-ui/icons/Help';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 
 
 const styles = {
@@ -36,6 +37,12 @@ class SystemMenu extends React.Component {
               <NoteAddIcon />
             </ListItemIcon>
             <ListItemText primary="Add Station" />
+          </ListItem>
+          <ListItem button onClick={()=>this.props.menuItemClickHandler('Add New Question')}>
+            <ListItemIcon>
+              <PlaylistAddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add Question" />
           </ListItem>
 
           <ListItem button onClick={()=>this.props.menuItemClickHandler('User Manual')}>

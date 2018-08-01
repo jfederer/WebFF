@@ -133,26 +133,44 @@
 					"value": ""
 				},
 				{
-					"id": "projectID",
-					"label": "Project ID",
+					"id": "newQuestion_width",
+					"label": "Question Width",
 					"XMLValue": "",
 					"type": "Text",
-					"tabName": "Add Station",
 					"value": "",
-					"layoutGroup": "Basic",
 					"width_xs": 3,
 					"width_lg": 3
 				},
 				{
-					"id": "agencyCode",
-					"label": "Agency Code",
+					"id": "newQuestion_tabName",
+					"label": "Tab Name",
+					"XMLValue": "",
+					"helperText": "Name of tab where this question resides",
+					"placeholder": "spaces acceptable",
+					"type": "Text",
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 3
+				},
+				{
+					"id": "newQuestion_layoutGroup",
+					"label": "Layout Group",
+					"helperText": "Group on Tab where question resides",
+					"placeholder": "Spaces acceptable",
 					"XMLValue": "",
 					"type": "Text",
-					"tabName": "Add Station",
 					"value": "",
-					"layoutGroup": "Basic",
-					"width_xs": 3,
+					"width_xs": 4,
 					"width_lg": 3
+				},
+				{
+					"id": "newQuestion_initalValue_textValue",
+					"label": "Initial Value",
+					"type": "Text",
+					"placeholder": "Can be left blank",
+					"value": "",
+					"width_xs": 6,
+					"width_lg": 6
 				}
 			]
 		}
@@ -714,7 +732,8 @@
 			"value": "",
 			"layoutGroup": "Basic",
 			"width_xs": 6,
-			"width_lg": 3
+			"width_lg": 3,
+			"hidden": true
 		},
 		{
 			"id": "projectName",
@@ -1055,6 +1074,7 @@
 			"width_xs": 6,
 			"width_lg": 6
 		},
+
 		{
 			"id": "SamplerType",
 			"label": "Sampler Type",
@@ -1068,7 +1088,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "NA",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
@@ -1086,7 +1106,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
@@ -1104,7 +1124,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 2
@@ -1122,7 +1142,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 6,
 			"width_lg": 2
@@ -1140,66 +1160,28 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 6,
 			"width_lg": 2
 		},
+		
 		{
-			"id": "EDI_table",
-			"label": "Test Table Label4",
-			"XMLValue": "Deets4",
+			"id": "EWI_samples_table",
+			"label": "Samples Table",
 			"type": "TableInput",
-			"tabName": "EDI",
-			"layoutGroup": "Table",
+			"tabName": "EWI",
+			"layoutGroup": "Samples",
 			"colHeaders": [
-				"",
-				"Set A",
-				"Set B"
+				"Distance",
+				"Depth To Bottom",
+				"Depth Sampled",
+				"Transit Time",
+				"Transit Volume"
 			],
 			"rowHeaders": "true",
-			"numberOfRows": "8",
 			"value": [
-				[
-					"Start Time",
-					"SubQuestion::startTime",
-					"SubQuestion::startTime2"
-				],
-				[
-					"Gage Height",
-					"237",
-					""
-				],
-				[
-					"End Time",
-					"SubQuestion::endTime",
-					"SubQuestion::startTime2"
-				],
-				[
-					"Gage Height",
-					"305",
-					""
-				],
-				[
-					"Mean Time",
-					"SubQuestion::testTable2",
-					"SubQuestion::startTime2"
-				],
-				[
-					"Concentration",
-					"SubQuestion::concCheck",
-					"SubQuestion::concCheck2"
-				],
-				[
-					"Sand Fines",
-					"SubQuestion::sandCheck",
-					"SubQuestion::sandCheck2"
-				],
-				[
-					"Full Size",
-					"SubQuestion::fullCheck",
-					"SubQuestion::fullCheck2"
-				]
+			
 			],
 			"width_xs": 12,
 			"width_lg": 6
@@ -1310,18 +1292,7 @@
 			"label": "Left Edge Of Sampling Zone",
 			"type": "Text",
 			"placeholder": "Feet from XYZ",
-			"value": "10",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 6,
-			"width_lg": 3
-		},
-		{
-			"id": "edgeOfWater_Right",
-			"label": "Right Edge Of Water",
-			"type": "Text",
-			"placeholder": "Feet from XYZ",
-			"value": "120",
+			"value": "20",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
 			"width_xs": 6,
@@ -1332,7 +1303,18 @@
 			"label": "Right Edge Of Sampling Zone",
 			"type": "Text",
 			"placeholder": "Feet from XYZ",
-			"value": "110",
+			"value": "600",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 6,
+			"width_lg": 3
+		},		
+		{
+			"id": "edgeOfWater_Right",
+			"label": "Right Edge Of Water",
+			"type": "Text",
+			"placeholder": "Feet from XYZ",
+			"value": "620",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
 			"width_xs": 6,
@@ -1400,90 +1382,6 @@
 			"layoutGroup": "StreamCalc",
 			"width_xs": 2,
 			"width_lg": 1
-		},
-		{
-			"id": "samplingWidth",
-			"value": "",
-			"label": "Sampling Width",
-			"type": "ComputedValue",
-			"placeholder": "Stream Width",
-			"computationString": "stream_width/samplingPoints",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_1",
-			"value": "",
-			"label": "SP_1",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "edgeOfSamplingZone_Left+samplingWidth/2",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_2",
-			"value": "",
-			"label": "SP_2",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_3",
-			"value": "",
-			"label": "SP_3",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_4",
-			"value": "",
-			"label": "SP_4",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_5",
-			"value": "",
-			"label": "SP_5",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 5",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 2
-		},
-		{
-			"id": "SP_6",
-			"value": "",
-			"label": "SP_6",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 6",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 2
 		}
 	]
 }

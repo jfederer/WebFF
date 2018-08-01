@@ -27,6 +27,7 @@ const styles = theme => ({
 class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			value: this.props.value
 		};
@@ -35,6 +36,58 @@ class TableInput extends React.Component {
 
 	componentWillMount() {
 		this.setState({ value: this.props.value });
+
+
+		let tableWidth = this.props.colHeaders.length; 	//TODO: might want to put row and column size info in state for adding later...
+
+
+		//console.log(this.props);
+
+
+		// make appropriately-sized empty table data array based on 'rows' value if it exists
+		let emptyTable = [];
+		let numberOfRowsToEnsure = 1;  //TODO: maybe set to zero and add better error handling
+		if(this.props.minimumNumberOfRows) {
+			numberOfRowsToEnsure = this.props.minimumNumberOfRows;
+		}
+		if (numberOfRowsToEnsure < this.state.value.length) {
+			numberOfRowsToEnsure = this.state.value.length;
+		}
+		//console.log("Going to generate " + numberOfRowsToEnsure + " rows");
+
+		for (var i = 0; i < numberOfRowsToEnsure; i++) {
+			let numbRows = parseInt(tableWidth, 10);
+			emptyTable.push(Array(numbRows).fill(""));
+		}
+
+		// go through value in state and drop them into emptyTable.
+		// this extra step is to deal with mis-matches between intial 'value' settings and the table size
+		// additional error-checking worthwhile for when value is (not an array, too big, etc)
+		if (this.state.value != null) {
+			this.state.value.map((row, rowNum) => {
+				row.map((element, colNum) => {
+					emptyTable[rowNum][colNum] = element;
+					return null;
+				});
+				return null;
+			});
+		}
+		this.setState({value:emptyTable}); // empty table is no longer empty
+
+
+		// if(this.props.samplingDistanceColumn!=null && this.props.samplingDistanceValues!=null) {  //TODO: bridgeWizard as separate table type?
+		// 	console.log("Going to add it in");
+		// 	//add the samplingDistanceValues array to the start of every row in this.state.values
+		// 	let newValues = tableValues;
+		// 	for(let i = 0; i<this.props.samplingDistanceValues.length; i++) {
+		// 		if(!newValues[i]) { // if need to make a new row
+		// 			let newRow = new Array(tableWidth).fill("");
+		// 			newValues.push(newRow);
+		// 		}
+		// 		newValues[i].unshift(this.props.samplingDistanceValues[i]);
+		// 	}
+		// }
+
 	}
 
 	// handleTableChange = name => event => {
@@ -48,6 +101,7 @@ class TableInput extends React.Component {
 		if(DEBUG)console.log("HandleTableChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
 		const { id } = textSubQuestion.props;
+		console.log(textSubQuestion);
 		let questionRow = id.substring(id.indexOf("row:")+4,id.indexOf("col:"));
 		let questionCol = id.substring(id.indexOf("col:")+4);
 		let questionVal = textSubQuestion.state.value;
@@ -65,27 +119,13 @@ class TableInput extends React.Component {
 
 		const { classes } = this.props;
 
-		//TODO: might want to put row and column size info in state for adding later...
+		let tableWidth = this.props.colHeaders.length; 	//TODO: might want to put row and column size info in state for adding later...
 
-		// make appropriately-sized empty table data array
-		let tableValues = [];
-		for (var i = 0; i < this.props.numberOfRows; i++) {
-			let numbRows = parseInt(this.props.colHeaders.length, 10);
-			tableValues.push(Array(numbRows).fill(""));
-		}
 
-		// go through value in state and drop them into tableValues.
-		// this extra step is to deal with mis-matches between intial 'value' settings and the table size
-		// additional error-checking worthwhile for when value is (not an array, too big, etc)
-		if (this.state.value != null) {
-			this.state.value.map((row, rowNum) => {
-				row.map((element, colNum) => {
-					tableValues[rowNum][colNum] = element;
-					return null;
-				});
-				return null;
-			});
-		}
+		//console.log(this.props);
+		//TODO: read-only columns list
+
+		let tableValues = this.state.value;
 
 		// build the JSX tableRows based on above-calculated tableValues
 		let tableRows = [];
@@ -102,7 +142,7 @@ class TableInput extends React.Component {
 						let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
 						let cellQuestion = null;
 
-						if (cellContent.startsWith("SubQuestion::")) {
+						if (typeof(cellContent)==="string" && cellContent.startsWith("SubQuestion::")) {
 							
 							let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
 							if(DEBUG)console.log("Found a subQuestion: ", subQuestionID);
@@ -139,7 +179,7 @@ class TableInput extends React.Component {
 			{
 				this.props.colWidths ?
 					this.props.colWidths.map((colWidth, i) => <col key={"colWidth_" + i} width={colWidth} />) :
-					this.props.colHeaders.map((colWidth, i) => <col key={"colWidth_" + i} width={100 / this.props.colHeaders.length} />)
+					this.props.colHeaders.map((colWidth, i) => <col key={"colWidth_" + i} width={100 / tableWidth} />)
 			}
 		</colgroup>;
 

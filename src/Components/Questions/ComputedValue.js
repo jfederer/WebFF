@@ -44,10 +44,10 @@ class ComputedValue extends React.Component {
 	};
 
 	componentWillUpdate(nextProps, nextState) { //performance - could add shouldcomponentupdate
-		console.log("CV: CWU: this.state:" , this.state);
-		console.log("CV: CWU: nextState:" , nextState);
+		// console.log("CV: CWU: this.state:" , this.state);
+		// console.log("CV: CWU: nextState:" , nextState);
 		let curValue = this.computeValue(false)
-		console.log("CV: CWU: curValue:" , curValue);
+		// console.log("CV: CWU: curValue:" , curValue);
 		if(curValue!==nextState.value) {
 			this.computeValue(true);
 		}

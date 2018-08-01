@@ -362,6 +362,8 @@ class WebFF extends React.Component {
 
 		// find the specific question in questionsData based on the id,then update the value property
 		var newQuestionsData = this.state.questionsData.filter(questionData => {
+			//console.log("QuestionData: ", questionData);
+
 			if (questionData.id === Q.props.id) {
 				if (DEBUG) console.log("------FOUND!--------");
 				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (pre): ", questionData);
@@ -379,14 +381,45 @@ class WebFF extends React.Component {
 		return newQuestionsData;
 	}
 
+	updateQuestionData(q_id, key, value) {
+		// returns just the matching, updated, question
+		let retQ;
+		var newQuestionsData = this.state.questionsData.filter(questionData => {
+			if (questionData.id === q_id) {
+				retQ = questionData;
+				questionData[key] = value;
+			} 
+			return questionData;
+		});
+		this.setState({questionsData:newQuestionsData});
+		return retQ;
+	}
+
+	getQuestionData(q_id) {
+		let retArr  = this.state.questionsData.filter(questionData => {
+			if (questionData.id === q_id) {
+				return questionData;
+			} 
+		});
+
+		if (retArr.length===1) {
+			return retArr[0];
+		} else {
+			console.log("WebFF: getQuestionData("+q_id+") returned " + retArr.length + " questions");
+			//TODO: throw error
+			return null;
+		}
+		
+	}
+
 	questionChangeSystemCallback(Q) {
 		// checks for action string, executes any actions, and then updates current state of questionsData
 
-		console.log("questionChangeSystemCallback: Q: ", Q);
+		// console.log("questionChangeSystemCallback: Q: ", Q);
 
 		// save updated value to state:
 		let updatedQuestionData = this.getQuestionDataWithUpdatedValue(Q);
-		console.log("questionChangeSystemCallback: updatedQuestionData: ", updatedQuestionData);
+		// console.log("questionChangeSystemCallback: updatedQuestionData: ", updatedQuestionData);
 
 		this.setState({ questionsData: updatedQuestionData });
 
@@ -395,6 +428,7 @@ class WebFF extends React.Component {
 			//TODO: throw error
 			console.log("questionChangeSystemCallback required field, question, is null");
 		}
+
 		if (Q.props.actions) {
 			let { actions } = Q.props;
 			let qval = Q.state.value;
@@ -451,47 +485,80 @@ class WebFF extends React.Component {
 	// );
 		
 		// #1
-		console.log(provideEWISamplingLocations(20, 500, 
-        [30,
-			160,
-			210,
-			300], 
-        [120,
-			40,
-			70,
-			150],
-        5));
+		 
+		let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
+		let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
+		let numSampPoints = this.getQuestionData("samplingPoints").value;
+		
+		let tempValArr = provideEWISamplingLocations(LESZ, RESZ, 
+			[30,
+				160,
+				210,
+				300], 
+			[120,
+				40,
+				50,
+				150],
+			numSampPoints);
+			
+			console.log("Results: ", tempValArr);
+		
+			//console.log();
+			// console.log(this.updateQuestionData("EWI_samples_table", "value", [tempValArr]));
+			let newVal = new Array(tempValArr.length);
+			for(let i =0; i<tempValArr.length; i++) {
+				newVal[i] = [tempValArr[i]];
+			}
+			// this.updateQuestionData("EWI_samples_table", "value", [tempValArr]);
+			this.updateQuestionData("EWI_samples_table", "value", newVal);
+			//this.questionChangeSystemCallback(this.getQuestionData("EWI_samples_table"));
+
+
+		//console.log(tempQ);
+		//this.getQuestionDataWithUpdatedValue(tempQ);
+
+
+		
 		// #2
-		console.log(provideEWISamplingLocations(20, 600, 
-        [30,
-			160,
-			210,
-			300], 
-        [120,
-			40,
-			50,
-			150],
-        5));
-		// #3
-		console.log(provideEWISamplingLocations(15, 250, 
-        [30,
-			155], 
-        [120,
-			40],
-        5));
-		// #4
-		console.log(provideEWISamplingLocations(15, 250, 
-        [15,
-			155], 
-        [120,
-			40],
-        5));
+		
+		// console.log(provideEWISamplingLocations(20, 600, 
+        // [30,
+		// 	160,
+		// 	210,
+		// 	300], 
+        // [120,
+		// 	40,
+		// 	50,
+		// 	150],
+        // 5));
+		// // #3
+		// console.log(provideEWISamplingLocations(15, 250, 
+        // [30,
+		// 	155], 
+        // [120,
+		// 	40],
+        // 5));
+		// // #4
+		// console.log(provideEWISamplingLocations(15, 250, 
+        // [15,
+		// 	155], 
+        // [120,
+		// 	40],
+		// 5));
+		// #5
+		// 		console.log(provideEWISamplingLocations(20, 500, 
+        // [60,
+		// 	160,210,350], 
+        // [20,40,70,100],
+		// 5));
 	
 
 
 
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
+
+		//console.log(menuText);
 
 		let filteredDialogInfo = this.state.dialogQuestionsInfo.filter((dialogItem) => {
 			return dialogItem.dialogName.replace(/ /g, '') === menuText.replace(/ /g, '')
@@ -507,7 +574,7 @@ class WebFF extends React.Component {
 			this.handleDialogOpen();
 		} else {
 			//TODO: ERR
-			console.log(menuText + "is not yet implemented");
+			console.log(menuText + " is not yet implemented");
 		}
 
 	}
