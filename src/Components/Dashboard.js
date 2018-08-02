@@ -40,7 +40,7 @@ class Dashboard extends React.Component {
 				}
 			}
 		}
-		console.log(retString);
+	//	console.log(retString);
 		return retString;
 	}
 
@@ -82,13 +82,13 @@ class Dashboard extends React.Component {
 				<Paper className={classes.paper}><b>File Download</b><br />
 				<Button onClick={()=>	{
 							let d = new Date();
-							saveFile("WebFF_"+ d.getFullYear + (d.getMonth()+1) + d.getMinutes() + 
+							saveFile("WebFF_"+ d.getFullYear() + (d.getMonth()+1) + d.getDate() + d.getHours() + d.getMinutes() + 
 							".txt", this.collectValues(true));
 						}}>
 						Save Current Samling Event to XML</Button>
 				<Button onClick={()=>	{
 							let d = new Date();
-							saveFile("WebFF_"+ d.getFullYear + (d.getMonth()+1) + d.getMinutes() + 
+							saveFile("WebFF_"+ d.getFullYear() + (d.getMonth()+1) + d.getDate() + d.getHours() + d.getMinutes() + 
 							".txt", this.collectValues(false));
 						}}>
 						Save Current Samling Event to CSV</Button>

@@ -42,7 +42,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations } from '../Utils/CalculationUtilities';
-import { saveFile } from '../Utils/FileHandling';
 import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';

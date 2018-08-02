@@ -30,10 +30,10 @@
 			"text": "EWI",
 			"route": "/EWI",
 			"icon": ""
-		},{
-			"text": "File Management",
-			"route": "/FileManagement",
-			"icon": "SaveIcon"
+		},	{
+			"text": "QuestionPage",
+			"route": "/QuestionPage",
+			"icon": "CompareIcon"
 		}
 
 	],
@@ -904,13 +904,13 @@
 				"EWI": "10",
 				"EDI": "20",
 				"Single Vertical": "30",
-				"RemoveStnNumb": "40",
-				"ShowStnNumb": "50",
-				"Hide:PjctID_Hide:StnNumber": "55",
-				"Show:StnNum_Hide:ProjectID": "60",
-				"ShowProjectID": "70",
-				"HideWeather": "80",
-				"ShowWeather": "90"
+				"DEMO:RemoveStnNumb": "40",
+				"DEMO:ShowStnNumb": "50",
+				"DEMO:Hide:PjctID_Hide:StnNumber": "55",
+				"DEMO:ShowProjectID": "70",
+				"DEMO:Show:StnNum_Hide:ProjectID": "60",
+				"DEMO:HideWeather": "80",
+				"DEMO:ShowWeather": "90"
 			},
 			"actions": {
 				"10": "ShowTab::EWI&HideTab::EDI",
@@ -1720,15 +1720,15 @@
 		},
 		{
 			"id": "EDI_feetAboveBed",
-			"XMLValue": "EWI_feetAboveBed",
+			"XMLValue": "EDI_feetAboveBed",
 			"label":"Feet Sampler Stopped above bed",
 			"type": "Text",
 			"value": "",
 			"helperText": "ft",
 			"tabName": "EDI",
 			"layoutGroup": "Set Information",
-			"width_xs":6,
-			"width_lg":6
+			"width_xs":3,
+			"width_lg":3
 		},
 		{
 			"id": "EDI_transitRate",
@@ -1739,8 +1739,8 @@
 			"placeholder": "ft/sec",
 			"tabName": "EDI",
 			"layoutGroup": "Set Information",
-			"width_xs":6,
-			"width_lg":6
+			"width_xs":3,
+			"width_lg":3
 		},
 		{
 			"id": "EDI_fieldComposite",
@@ -2212,8 +2212,8 @@
 			"helperText": "ft",
 			"tabName": "EWI",
 			"layoutGroup": "Set Information",
-			"width_xs":6,
-			"width_lg":6
+			"width_xs":3,
+			"width_lg":3
 		},
 		{
 			"id": "EWI_transitRate",
@@ -2224,8 +2224,8 @@
 			"placeholder": "ft/sec",
 			"tabName": "EWI",
 			"layoutGroup": "Set Information",
-			"width_xs":6,
-			"width_lg":6
+			"width_xs":3,
+			"width_lg":3
 		},
 		{
 			"id": "EWI_fieldComposite",
@@ -2366,7 +2366,7 @@
 		},
 		{
 			"id": "samplingPoints",
-			"value": "",
+			"value": "5",
 			"label": "Sampling Points",
 			"type": "Text",
 			"placeholder": "Number of Points",
