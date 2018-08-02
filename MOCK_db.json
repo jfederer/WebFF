@@ -1,7 +1,7 @@
 {
 	"hiddenTabs": [
-		"Water Quality",
-		"Field Form",
+		"WaterQuality",
+		"FieldForm",
 		"EWI",
 		"EDI"
 	],
@@ -30,7 +30,12 @@
 			"text": "EWI",
 			"route": "/EWI",
 			"icon": ""
+		},{
+			"text": "File Management",
+			"route": "/FileManagement",
+			"icon": "SaveIcon"
 		}
+
 	],
 	"generatedQuestions": [],
 	"dialogQuestionsInfo": [
@@ -750,6 +755,53 @@
 			],
 			"tabName": "Question Page",
 			"layoutGroup": "QP2"
+		},			{
+			"id": "concCheck",
+			"XMLValue": "C",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": true
+		},
+		{
+			"id": "sandCheck",
+			"XMLValue": "SF",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": true
+		},
+		{
+			"id": "fullCheck",
+			"XMLValue": "Z",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": true
+		},
+		{
+			"id": "concCheck2",
+			"XMLValue": "C",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": true
+		},
+		{
+			"id": "sandCheck2",
+			"XMLValue": "SF",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": true
+		},
+		{
+			"id": "fullCheck2",
+			"XMLValue": "Z",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": true
 		},
 		{
 			"id": "stationName",
@@ -1205,92 +1257,587 @@
 			"width_lg": 3
 		},
 		{
-			"id": "time",
-			"label": "Time (hhmm)",
+			"id": "WQ_time",
+			"label": "Time",
 			"XMLValue": "P1000",
-			"type": "Text",
+			"type": "TimeInput",
 			"helperText": "P1000",
 			"placeholder": "hhmm",
-			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
 			"width_xs": 4,
 			"width_lg": 3
 		},
 		{
-			"id": "location",
+			"id": "WQ_location",
 			"label": "Location",
 			"XMLValue": "P1234",
 			"type": "Text",
 			"helperText": "P1234",
 			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
 			"width_xs": 4,
 			"width_lg": 3
 		},
 		{
-			"id": "temp",
+			"id": "WQ_temp",
 			"label": "Temp C",
 			"XMLValue": "P23430",
 			"type": "Text",
 			"helperText": "P23430",
 			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
 			"width_xs": 4,
 			"width_lg": 2
 		},
 		{
-			"id": "specificConductance",
+			"id": "WQ_specificConductance",
 			"label": "Specific Conductance",
 			"XMLValue": "P594",
 			"type": "Text",
 			"helperText": "P594",
 			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
 			"width_xs": 6,
 			"width_lg": 2
 		},
 		{
-			"id": "transparency",
+			"id": "WQ_transparency",
 			"label": "Transparency",
 			"XMLValue": "P9987",
 			"type": "Text",
 			"helperText": "P9987",
 			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
 			"width_xs": 6,
 			"width_lg": 2
 		},
 		{
-			"id": "NTRUturbidity",
+			"id": "WQ_NTRUturbidity",
 			"label": "NTRU Turbidity HACH",
 			"XMLValue": "P983",
 			"type": "Text",
 			"helperText": "P983",
 			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
 			"width_xs": 6,
 			"width_lg": 6
 		},
 		{
-			"id": "FNUturbidity",
+			"id": "WQ_FNUturbidity",
 			"label": "FNU Turbidity DTS-12",
 			"XMLValue": "P984",
 			"type": "Text",
 			"helperText": "P984",
 			"value": "",
 			"tabName": "Water Quality",
-			"layoutGroup": "FieldParameters",
+			"layoutGroup": "Field Parameters",
+			"width_xs": 6,
+			"width_lg": 6
+		},
+
+		{
+			"id": "EDI_samplerType",
+			"label": "Sampler Type",
+			"XMLValue": "P1050",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"US D-74": "US D-74",
+				"US DH-48": "US DH-48",
+				"US D-96 Bag Sampler": "US D-96 Bag Sampler",
+				"Weighted Bottle Sampler": "Weighted Bottle Sampler",
+				"Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
+				"US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
+				"US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
+				"Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
+				"Other": "Other",
+				"US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
+				"US DH-59": "US DH-59",
+				"US DH-76": "US DH-76",
+				"US P-61-A1": "US P-61-A1",
+				"US P-63": "US P-63",
+				"US P-72": "US P-72",
+				"US U-59": "US U-59",
+				"US U-73": "US U-73",
+				"US PS-69": "US PS-69",
+				"US DH-81": "US DH-81",
+				"US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
+				"Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
+				"US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
+				"US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
+				"US D-95 Plastic Bottle": "US D-95 Plastic Bottle",
+				"US D-99 Bag Sampler": "US D-99 Bag Sampler",
+				"Open-mouth 1-liter (Bacteria)": "Open-mouth 1-liter (Bacteria)",
+				"Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
+			},
+			"actions": {
+				"US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
+				"Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+		{
+			"id": "EDI_bottleMaterial",
+			"hidden": true,
+			"label": "Bottle Material",
+			"XMLValue": "P999",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+		{
+			"id": "EDI_bagMaterial",
+			"label": "Bag Material",
+			"XMLValue": "P999",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+		{
+			"id": "EDI_sizeOfBottle",
+			"hidden": true,
+			"label": "Size of Bottle",
+			"XMLValue": "P432",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"Pint": "Pint",
+				"Quart": "Quart"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+		{
+			"id": "EDI_sizeOfBag",
+			"label": "Size of Bag",
+			"XMLValue": "P245",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"1 Liter": "1 Liter",
+				"3 Liter": "3 Liter"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+		{
+			"id": "EDI_nozzelMaterial",
+			"label": "Nozzel Material",
+			"XMLValue": "XMLNM",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"Brass": "Brass",
+				"Plastic": "Plastic"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 6,
+			"width_lg": 2
+		},
+		{
+			"id": "EDI_nozzelWidth",
+			"label": "Nozzel Width",
+			"XMLValue": "XMLNW",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+				"13/16": "13/16",
+				"1/4": "1/4",
+				"15/16": "15/16"
+			},
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 6,
+			"width_lg": 2
+		},
+		{
+			"id": "EDI_setInfo_table",
+			"label": "Set Info Table",
+			"type": "TableInput",
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"colHeaders": [
+				"",
+				"Set A",
+				"Set B",
+				"Average"
+			],
+			"rowHeaders": "true",
+			"value": [
+				[
+					"Start Time",
+					"SubQuestion::setAStartTime",
+					"SubQuestion::setBStartTime",
+					"SubQuestion::setStartTimeAvg"
+				],
+				[
+					"Gage Height(Start)",
+					"SubQuestion::setAStartGageHeight",
+					"SubQuestion::setBStartGageHeight",
+					"SubQuestion::startGageHeightAvg"
+				],
+				[
+					"End Time",
+					"SubQuestion::setAEndTime",
+					"SubQuestion::setBEndTime",
+					"SubQuestion::setEndTimeAvg"
+				],
+				[
+					"Gage Height(End)",
+					"SubQuestion::setAEndGageHeight",
+					"SubQuestion::setBEndGageHeight",
+					"SubQuestion::endGageHeightAvg"
+				],
+				[
+					"Mean Time",
+					"SubQuestion::setAMeanTime",
+					"SubQuestion::setBMeanTime",
+					"SubQuestion::MEANTIMEAVG"
+				]
+				
+			],
 			"width_xs": 6,
 			"width_lg": 6
 		},
 		{
-			"id": "samplerType",
+			"id": "EDI_samples_table",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"colHeaders": [
+				"EDI",
+				"Velocity (ft/sec)",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+
+			],
+			"rowHeaders": "true",
+			"value": [
+				["10%"],
+				["30%"],
+				["50%"],
+				["70%"],
+				["90%"]
+			],
+			"width_xs": 6,
+			"width_lg": 6
+		},
+		{
+			"id": "EDI_setAStartGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "5"
+		},
+		{
+			"id": "EDI_setBStartGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "7"
+		},
+		{
+			"id": "EDI_setAEndGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "10"
+		},
+		{
+			"id": "EDI_setBEndGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "12"
+		},
+		{
+			"id": "EDI_startGageHeightAvg",
+			"XMLValue": "setEndAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
+			"value": null,
+			"helperText": "Average start gage height time for sample"
+		},
+		{
+			"id": "EDI_endGageHeightAvg",
+			"XMLValue": "setEndAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
+			"value": null,
+			"helperText": "Average start gage height time for sample"
+		},
+		{
+			"id": "EDI_setAStartTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "Start sample time for set 1"
+		},
+		{
+			"id": "EDI_setAEndTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "End sample time for set 1"
+		},
+		{
+			"id": "EDI_setStartTimeAvg",
+			"XMLValue": "setStartAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Average start time for sample"
+		},
+		{
+			"id": "EDI_setBStartTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "Start sample time for set 2"
+		},
+		{
+			"id": "EDI_setBEndTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "End of sample time for set 2"
+		},
+		{
+			"id": "EDI_setEndTimeAvg",
+			"XMLValue": "setEndAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Average end time for sample"
+		},
+		{
+			"id": "EDI_setAMeanTime",
+			"XMLValue": "setAMeanTime",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Average start time for sample"
+		},
+		{
+			"id": "EDI_setBMeanTime",
+			"XMLValue": "setBMeanTime",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Mean time for set B"
+		},
+		{
+			"id": "EDI_MEANTIMEAVG",
+			"XMLValue": "meanTimeAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAMeanTime+setBMeanTime)/2",
+			"value": null,
+			"helperText": "Average Mean time for sample"
+		},
+		{
+			"id": "EDI_sampleIsokenetic",
+			"XMLValue": "C",
+			"label":"Sample Isokenetic",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me",
+			"checkbox": false,
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"width_xs":2,
+			"width_lg":2
+		},
+		{
+			"id": "EDI_additionalSampleCollected",
+			"XMLValue": "additionalSampleCollected",
+			"label":"Additional Samples Collected",
+			"type": "Toggle",
+			"value": false,
+			"checkbox": false,
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"width_xs":2,
+			"width_lg":2
+		},
+		{
+			"id": "EDI_intakeEfficiencyCompleted",
+			"XMLValue": "C",
+			"label":"Intake Efficiency Completed",
+			"type": "Toggle",
+			"value": false,
+			"helperText": "Toggle Me Also",
+			"checkbox": false,
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"width_xs":2,
+			"width_lg":2
+		},
+		{
+			"id": "EDI_feetAboveBed",
+			"XMLValue": "EWI_feetAboveBed",
+			"label":"Feet Sampler Stopped above bed",
+			"type": "Text",
+			"value": "",
+			"helperText": "ft",
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"width_xs":6,
+			"width_lg":6
+		},
+		{
+			"id": "EDI_transitRate",
+			"XMLValue": "EWI_tramsitRate",
+			"label":"Transit Rate (ft/sec)",
+			"type": "Text",
+			"value": "",
+			"placeholder": "ft/sec",
+			"tabName": "EDI",
+			"layoutGroup": "Set Information",
+			"width_xs":6,
+			"width_lg":6
+		},
+		{
+			"id": "EDI_fieldComposite",
+			"XMLValue": "EWI_fieldComposite",
+			"label":"Samples Field Composited",
+			"type": "Toggle",
+			"value": true,
+			"checkbox":true,
+			"tabName": "EDI",
+			"layoutGroup": "Analysis Information",
+			"width_xs":6,
+			"width_lg":3
+		},
+		{
+			"id": "EDI_compositeWithGallonContainers",
+			"XMLValue": "EWI_compositeWithGallonContainers",
+			"label":"Composited with Gallon containers",
+			"type": "Toggle",
+			"value": true,
+			"checkbox":true,
+			"tabName": "EDI",
+			"layoutGroup": "Analysis Information",
+			"width_xs":6,
+			"width_lg":3
+		},
+		{
+			"id": "EDI_numSetAContainers",
+			"XMLValue": "EWI_numSetAContainers",
+			"label":"Number of containers - set A",
+			"type": "Text",
+			"value": "",
+			"placeholder": "ft/sec",
+			"tabName": "EDI",
+			"layoutGroup": "Analysis Information",
+			"width_xs":6,
+			"width_lg":3
+		},
+		{
+			"id": "EDI_numSetBContainers",
+			"XMLValue": "EWI_numSetBContainers",
+			"label":"Number of containers - set B",
+			"type": "Text",
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Analysis Information",
+			"width_xs":6,
+			"width_lg":3
+		},
+
+		{
+			"id": "EDI_setAAnalysedFor",
+			"label": "Analyze Set A for:",
+			"XMLValue": "XMLQ5",
+			"type": "MultipleChoice",
+			"options": {
+				"Concentration": "C",
+				"Sand-Fine break": "SF",
+				"Sand Analysis": "SA",
+				"Turbidity": "T",
+				"Loss-on-ignition": "LOI",
+				"Dissolved Solids": "DS",
+				"Specific Conductance": "SC",
+				"Full-size Fractions": "Z"
+			},
+			"value": [
+			],
+			"tabName": "EDI",
+			"layoutGroup": "Analysis Information",
+			"width_xs":6,
+			"width_lg":3
+		},{
+			"id": "EDI_setBAnalysedFor",
+			"label": "Analyze Set B for:",
+			"XMLValue": "XMLQ5",
+			"type": "MultipleChoice",
+			"options": {
+				"Concentration": "C",
+				"Sand-Fine break": "SF",
+				"Sand Analysis": "SA",
+				"Turbidity": "T",
+				"Loss-on-ignition": "LOI",
+				"Dissolved Solids": "DS",
+				"Specific Conductance": "SC",
+				"Full-size Fractions": "Z"
+			},
+			"value": [
+			],
+			"tabName": "EDI",
+			"layoutGroup": "Analysis Information",
+			"width_xs":6,
+			"width_lg":3
+		},
+		
+
+
+		{
+			"id": "EWI_samplerType",
 			"label": "Sampler Type",
 			"XMLValue": "P1050",
 			"type": "DropDown",
@@ -1485,6 +2032,24 @@
 				]
 				
 			],
+			"width_xs": 6,
+			"width_lg": 6
+		},
+		{
+			"id": "EWI_samples_table",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"tabName": "EWI",
+			"layoutGroup": "Set Information",
+			"colHeaders": [
+				"Distance",
+				"Depth To Bottom",
+				"Depth Sampled",
+				"Transit Time",
+				"Transit Volume"
+			],
+			"rowHeaders": "true",
+			"value": [],
 			"width_xs": 6,
 			"width_lg": 6
 		},
@@ -1753,73 +2318,8 @@
 			"width_xs":6,
 			"width_lg":3
 		},
-
-		{
-			"id": "concCheck",
-			"XMLValue": "C",
-			"type": "Toggle",
-			"value": false,
-			"helperText": "Toggle Me Also",
-			"checkbox": true
-		},
-		{
-			"id": "sandCheck",
-			"XMLValue": "SF",
-			"type": "Toggle",
-			"value": false,
-			"helperText": "Toggle Me Also",
-			"checkbox": true
-		},
-		{
-			"id": "fullCheck",
-			"XMLValue": "Z",
-			"type": "Toggle",
-			"value": false,
-			"helperText": "Toggle Me Also",
-			"checkbox": true
-		},
-		{
-			"id": "concCheck2",
-			"XMLValue": "C",
-			"type": "Toggle",
-			"value": false,
-			"helperText": "Toggle Me Also",
-			"checkbox": true
-		},
-		{
-			"id": "sandCheck2",
-			"XMLValue": "SF",
-			"type": "Toggle",
-			"value": false,
-			"helperText": "Toggle Me Also",
-			"checkbox": true
-		},
-		{
-			"id": "fullCheck2",
-			"XMLValue": "Z",
-			"type": "Toggle",
-			"value": false,
-			"helperText": "Toggle Me Also",
-			"checkbox": true
-		},
-		{
-			"id": "EWI_samples_table",
-			"label": "Samples Table",
-			"type": "TableInput",
-			"tabName": "EWI",
-			"layoutGroup": "Samples",
-			"colHeaders": [
-				"Distance",
-				"Depth To Bottom",
-				"Depth Sampled",
-				"Transit Time",
-				"Transit Volume"
-			],
-			"rowHeaders": "true",
-			"value": [],
-			"width_xs": 12,
-			"width_lg": 6
-		},
+	
+		
 		{
 			"id": "edgeOfWater_Left",
 			"label": "Left Edge Of Water",
@@ -1887,17 +2387,6 @@
 			"width_lg": 1
 		},
 		{
-			"id": "pier1_end",
-			"label": "Pier 1 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "150",
-			"tabName": "FieldForm",
-			"layoutGroup": "Waterway Info",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
 			"id": "pier2_start",
 			"label": "Pier 2 Start",
 			"type": "Text",
@@ -1908,17 +2397,7 @@
 			"width_xs": 2,
 			"width_lg": 1
 		},
-		{
-			"id": "pier2_end",
-			"label": "Pier 2 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "200",
-			"tabName": "FieldForm",
-			"layoutGroup": "Waterway Info",
-			"width_xs": 2,
-			"width_lg": 1
-		},
+		
 		{
 			"id": "pier3_start",
 			"label": "Pier 3 Start",
@@ -1930,34 +2409,13 @@
 			"width_xs": 2,
 			"width_lg": 1
 		},
-		{
-			"id": "pier3_end",
-			"label": "Pier 3 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "260",
-			"tabName": "FieldForm",
-			"layoutGroup": "Waterway Info",
-			"width_xs": 2,
-			"width_lg": 1
-		},
+		
 		{
 			"id": "pier4_start",
 			"label": "Pier 4 Start",
 			"type": "Text",
 			"placeholder": "Feet",
 			"value": "300",
-			"tabName": "FieldForm",
-			"layoutGroup": "Waterway Info",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "pier4_end",
-			"label": "Pier 4 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "450",
 			"tabName": "FieldForm",
 			"layoutGroup": "Waterway Info",
 			"width_xs": 2,
@@ -1975,8 +2433,8 @@
 			"width_lg": 1
 		},
 		{
-			"id": "pier5_end",
-			"label": "Pier 5 End",
+			"id": "pier6_start",
+			"label": "Pier 6 Start",
 			"type": "Text",
 			"placeholder": "Feet",
 			"value": "",
@@ -1984,10 +2442,53 @@
 			"layoutGroup": "Waterway Info",
 			"width_xs": 2,
 			"width_lg": 1
+			},{
+				"id": "pier1_end",
+			"label": "Pier 1 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "150",
+			"tabName": "FieldForm",
+			"layoutGroup": "Waterway Info",
+			"width_xs": 2,
+			"width_lg": 1
 		},
 		{
-			"id": "pier6_start",
-			"label": "Pier 6 Start",
+			"id": "pier2_end",
+			"label": "Pier 2 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "200",
+			"tabName": "FieldForm",
+			"layoutGroup": "Waterway Info",
+			"width_xs": 2,
+			"width_lg": 1
+			},	{
+				"id": "pier3_end",
+				"label": "Pier 3 End",
+				"type": "Text",
+				"placeholder": "Feet",
+			"value": "260",
+			"tabName": "FieldForm",
+			"layoutGroup": "Waterway Info",
+			"width_xs": 2,
+			"width_lg": 1
+		},
+		{
+
+			"id": "pier4_end",
+			"label": "Pier 4 End",
+			"type": "Text",
+			"placeholder": "Feet",
+			"value": "450",
+			"tabName": "FieldForm",
+			"layoutGroup": "Waterway Info",
+			"width_xs": 2,
+			"width_lg": 1
+		},
+		{
+			"id": "pier5_end",
+			"label": "Pier 5 End",
 			"type": "Text",
 			"placeholder": "Feet",
 			"value": "",

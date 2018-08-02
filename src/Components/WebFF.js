@@ -37,11 +37,12 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupAddIcon from '@material-ui/icons/PersonAdd';
 import CompareIcon from '@material-ui/icons/Compare';
+import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations } from '../Utils/CalculationUtilities';
-
+import { saveFile } from '../Utils/FileHandling';
 import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
@@ -158,6 +159,7 @@ class WebFF extends React.Component {
 			case 'NoteAddIcon': return <NoteAddIcon />
 			case 'EditIcon': return <EditIcon />
 			case 'CompareIcon': return <CompareIcon />
+			case 'SaveIcon': return <SaveIcon />
 
 			//TODO: additional good ones:  blur*, edit* (gives editor options...)
 			default: return <SettingsInputComponentIcon />
@@ -535,7 +537,9 @@ class WebFF extends React.Component {
 		//TODO: vertical gridding or vertical panels? (might be able to solve with 'layout table' stuff)
 		//TODO: optional column headers for tables
 		//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
-
+		//TODO: Question order priority
+		//TODO: read-only columns in table
+		//TODO: refactor fetching tasks to UTIL
 		
 
 		// this.putDBInfo("generatedQuestions",
@@ -544,8 +548,8 @@ class WebFF extends React.Component {
 		// {"testName":"Jan", "id":"oldest"}]
 		// );
 
-		// #1
 
+		
 
 		this.collectRunAndPropagateSamplePointData();
 
