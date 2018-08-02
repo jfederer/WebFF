@@ -96,10 +96,15 @@ class DropDown extends React.Component {
 		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
 
 		if (tooltip != null) {
-			return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
+			return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
 		} else {
-			return <Paper>{this.buildQuestion()}</Paper>;
+			return this.buildQuestion();
 		}
+		// if (tooltip != null) {
+		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
+		// } else {
+		// 	return <Paper>{this.buildQuestion()}</Paper>;
+		// }
 
 	}
 }

@@ -47,7 +47,7 @@ class SystemDialog extends React.Component {
 							{dialogDescription}:
             			</DialogContentText>
 						<QuestionPanel 
-						questions={createQuestionComponentsForLayoutGroup(dialogQuestionsInfo, null)}
+						questions={createQuestionComponentsForLayoutGroup(dialogQuestionsInfo, this.props.stateChangeHandler, this.props.globalState)}
 						key={dialogName}/>
 					</DialogContent>
 					<DialogActions>

@@ -117,8 +117,13 @@ class Question extends React.Component {
 		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+		let rawQuestion = this.buildQuestion();
 
 		let withPaper = <Paper>{this.buildQuestion()}</Paper>;
+
+		if(this.props.globalState && this.props.globalState.usePaper!=null && !this.props.globalState.usePaper) { 
+			withPaper = rawQuestion;
+		} 
 
 		let withToolTip = withPaper;
 		if (tooltip != null) {

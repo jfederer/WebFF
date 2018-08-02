@@ -52,6 +52,7 @@ class WebFF extends React.Component {
 
 		this.state = {
 			itemsLoaded: [],
+			usePaper: true,
 
 			navMenuInfo: [],
 			navMenuExpanded: false,
@@ -415,6 +416,13 @@ class WebFF extends React.Component {
 	questionChangeSystemCallback(Q) {
 		// checks for action string, executes any actions, and then updates current state of questionsData
 
+		//HARDCODE for demo:
+		// special questions do special things
+		if(Q.props.id==="settings_paper") {
+			this.setState({usePaper:Q.state.value});
+			this.handleSystemMenuItemClicked("Settings");
+		}
+
 		// console.log("questionChangeSystemCallback: Q: ", Q);
 
 		// save updated value to state:
@@ -521,7 +529,14 @@ class WebFF extends React.Component {
 		//TODO: not a fan of just handing around global state.
 		//TODO: regex to remove spaces in computation string
 		//TODO: computeValue calculate TIME values correctly?
+		//TODO: set 'value' of TimeInput questions correctly.
+		//TODO: pass state change handlers to dialogs so questions don't yell
+		//TODO: table width to contents? Wrap? No wrap but have min size?  Sub-questions and fields need sizes as well.
+		//TODO: vertical gridding or vertical panels? (might be able to solve with 'layout table' stuff)
+		//TODO: optional column headers for tables
+		//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
 
+		
 
 		// this.putDBInfo("generatedQuestions",
 		// [{"testName":"Joe", "id":"smelven"},
@@ -537,7 +552,9 @@ class WebFF extends React.Component {
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
 
-		//console.log(menuText);
+		console.log(menuText);
+		console.log(this.state.dialogQuestionsInfo);
+
 
 		let filteredDialogInfo = this.state.dialogQuestionsInfo.filter((dialogItem) => {
 			return dialogItem.dialogName.replace(/ /g, '') === menuText.replace(/ /g, '')
@@ -600,7 +617,9 @@ class WebFF extends React.Component {
 					closeHandler={this.handleDialogClose}
 					dialogQuestionsInfo={this.state.curDialogQuestionsInfo}
 					dialogName={this.state.curDialogName}
-					dialogDescription={this.state.curDialogDescription} />
+					dialogDescription={this.state.curDialogDescription}
+					stateChangeHandler={this.questionChangeSystemCallback}
+					globalState={this.state} />
 				<NavMenu isExpanded={this.state.navMenuExpanded}
 					closeHandler={this.handleLeftDrawerClose}
 					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
