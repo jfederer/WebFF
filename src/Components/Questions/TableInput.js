@@ -37,7 +37,6 @@ class TableInput extends React.Component {
 	componentWillMount() {
 		this.setState({ value: this.props.value });
 
-
 		let tableWidth = this.props.colHeaders.length; 	//TODO: might want to put row and column size info in state for adding later...
 
 
@@ -150,7 +149,7 @@ class TableInput extends React.Component {
 							if(DEBUG)console.log("questionData", questionData);
 							adHocProps = { ...adHocProps, ...questionData };
 							if(DEBUG)console.log("adHocProps", adHocProps);
-							cellQuestion = <Question {...adHocProps} stateChangeHandler={this.props.stateChangeHandler} />;
+							cellQuestion = <Question {...adHocProps} stateChangeHandler={this.props.stateChangeHandler} globalState={this.props.globalState} />;
 						} else {  // this is just a text field and rather than make a separate custom sub queston for each, we'll extract the values as they change and put them into the 2d array of values representing the table
 							if (col === 0 && this.props.rowHeaders) {
 								cellQuestion = <div className={classes.header}>{cellContent}</div>

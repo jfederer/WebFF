@@ -13,14 +13,14 @@
 			"icon": "DashboardIcon"
 		},
 		{
-			"text": "Water Quality",
-			"route": "/WaterQuality",
-			"icon": "OpacityIcon"
-		},
-		{
 			"text": "Field Form",
 			"route": "/FieldForm",
 			"icon": "ImportContactsIcon"
+		},
+		{
+			"text": "Water Quality",
+			"route": "/WaterQuality",
+			"icon": "OpacityIcon"
 		},
 		{
 			"text": "EDI",
@@ -1077,7 +1077,7 @@
 			"type": "DropDown",
 			"includeBlank": true,
 			"options": {
-				"Surface Water":"Surface Water",
+				"Surface Water": "Surface Water",
 				"Bed Material": "Bed Material",
 				"QA (Artificial/Blank)": "QA (Artificial/Blank)",
 				"QA (Duplicate/Replicate)": "QA (Duplicate/Replicate)"
@@ -1095,19 +1095,18 @@
 			"type": "DropDown",
 			"includeBlank": true,
 			"options": {
-				"Regular":"Regular",
-				"Composite (ISCO)":"Composite (ISCO)",
-				"Not Determined":"Not Determined",
-				"Spike":"Spike",
-				"Blank (using IBW or OBW)":"Blank (using IBW or OBW)",
-				"Reference":"Reference",
-				"Blind":"Blind",
-				"Duplicate":"Duplicate",
-				"Reference Material":"Reference Material",
-				"Replicate":"Replicate",
-				"Spike Solution":"Spike Solution",
-				"Other QA":"Other QA"
-
+				"Regular": "Regular",
+				"Composite (ISCO)": "Composite (ISCO)",
+				"Not Determined": "Not Determined",
+				"Spike": "Spike",
+				"Blank (using IBW or OBW)": "Blank (using IBW or OBW)",
+				"Reference": "Reference",
+				"Blind": "Blind",
+				"Duplicate": "Duplicate",
+				"Reference Material": "Reference Material",
+				"Replicate": "Replicate",
+				"Spike Solution": "Spike Solution",
+				"Other QA": "Other QA"
 			},
 			"value": "",
 			"tabName": "Field Form",
@@ -1123,7 +1122,7 @@
 			"includeBlank": true,
 			"options": {
 				"Routine": "Routine",
-				"Cross-section Variation":"Cross-section Variation"
+				"Cross-section Variation": "Cross-section Variation"
 			},
 			"value": "",
 			"tabName": "Field Form",
@@ -1142,17 +1141,17 @@
 				"USGS lab and field and non-USGS lab": "USGS lab and field and non-USGS lab",
 				"Not Determined": "Not Determined",
 				"USGS lab and non-USGS field": "USGS lab and non-USGS field",
-				"USGS lab and non-USGS lab and field":"USGS lab and non-USGS lab and field",
-				"USGS lab and field and non-USGS field":"USGS lab and field and non-USGS field",
-				"USGS lab and field and non-USGS lab and field":"USGS lab and field and non-USGS lab and field",
-				"USGS field only":"USGS field only",
-				"USGS lab only":"USGS lab only",
-				"Non-USGS Field":"Non-USGS Field",
-				"Non-USGS lab only":"Non-USGS lab only",
-				"Non-USGS lab and field":"Non-USGS lab and field",
-				"USGS field and non-USGS field":"USGS field and non-USGS field",
-				"USGS field and non-USGS lab":"USGS field and non-USGS lab",
-				"USGS field and non-USGS lab and field":"USGS field and non-USGS lab and field"
+				"USGS lab and non-USGS lab and field": "USGS lab and non-USGS lab and field",
+				"USGS lab and field and non-USGS field": "USGS lab and field and non-USGS field",
+				"USGS lab and field and non-USGS lab and field": "USGS lab and field and non-USGS lab and field",
+				"USGS field only": "USGS field only",
+				"USGS lab only": "USGS lab only",
+				"Non-USGS Field": "Non-USGS Field",
+				"Non-USGS lab only": "Non-USGS lab only",
+				"Non-USGS lab and field": "Non-USGS lab and field",
+				"USGS field and non-USGS field": "USGS field and non-USGS field",
+				"USGS field and non-USGS lab": "USGS field and non-USGS lab",
+				"USGS field and non-USGS lab and field": "USGS field and non-USGS lab and field"
 			},
 			"value": "",
 			"tabName": "Field Form",
@@ -1252,41 +1251,41 @@
 			"type": "DropDown",
 			"includeBlank": true,
 			"options": {
-				"US D-74":"US D-74",
-				"US DH-48":"US DH-48",
-				"US D-96 Bag Sampler":"US D-96 Bag Sampler",
-				"Weighted Bottle Sampler":"Weighted Bottle Sampler",
-				"Weighted Bottle Sampler w/ hole in cap, no nozzel":"Weighted Bottle Sampler w/ hole in cap, no nozzel",
-				"US DH-2 Bag Sampler":"US DH-2 Bag Sampler",
-				"US D-96-A1 Bag Sampler":"US D-96-A1 Bag Sampler",
-				"Grab Sample (bottle with cap, no nozzel)":"Grab Sample (bottle with cap, no nozzel)",
-				"Other":"Other",
-				"US DH-95 Plastic Bottle":"US DH-95 Plastic Bottle",
-				"US DH-59":"US DH-59",
-				"US DH-76":"US DH-76",
-				"US P-61-A1":"US P-61-A1",
-				"US P-63":"US P-63",
-				"US P-72":"US P-72",
-				"US U-59":"US U-59",
-				"US U-73":"US U-73",
-				"US PS-69":"US PS-69",
-				"US DH-81":"US DH-81",
-				"US HD-81 w/ Teflon cap and nozzel":"US HD-81 w/ Teflon cap and nozzel",
-				"Plastic Bottle w/ Teflon collapsible bag":"Plastic Bottle w/ Teflon collapsible bag",
-				"US DH-95 Teflon Bottle":"US DH-95 Teflon Bottle",
-				"US D-95 Teflon Bottle":"US D-95 Teflon Bottle",
-				"US D-95 Plastic Bottle":"US D-95 Plastic Bottle",
-				"US D-99 Bag Sampler":"US D-99 Bag Sampler",
-				"Open-mouth 1-liter (Bacteria)":"Open-mouth 1-liter (Bacteria)",
-				"Sampler, point, automatic (ISCO)":"Sampler, point, automatic (ISCO)"
+				"US D-74": "US D-74",
+				"US DH-48": "US DH-48",
+				"US D-96 Bag Sampler": "US D-96 Bag Sampler",
+				"Weighted Bottle Sampler": "Weighted Bottle Sampler",
+				"Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
+				"US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
+				"US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
+				"Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
+				"Other": "Other",
+				"US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
+				"US DH-59": "US DH-59",
+				"US DH-76": "US DH-76",
+				"US P-61-A1": "US P-61-A1",
+				"US P-63": "US P-63",
+				"US P-72": "US P-72",
+				"US U-59": "US U-59",
+				"US U-73": "US U-73",
+				"US PS-69": "US PS-69",
+				"US DH-81": "US DH-81",
+				"US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
+				"Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
+				"US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
+				"US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
+				"US D-95 Plastic Bottle": "US D-95 Plastic Bottle",
+				"US D-99 Bag Sampler": "US D-99 Bag Sampler",
+				"Open-mouth 1-liter (Bacteria)": "Open-mouth 1-liter (Bacteria)",
+				"Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
 			},
 			"actions": {
-				"US D-96 Bag Sampler":"ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-				"US DH-2 Bag Sampler":"ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-				"US D-96-A1 Bag Sampler":"ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-				"Weighted Bottle Sampler":"ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-				"Weighted Bottle Sampler w/ hole in cap, no nozzel":"ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
-				"Grab Sample (bottle with cap, no nozzel)":"ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
+				"US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+				"Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
+				"Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
 			},
 			"value": "",
 			"tabName": "EWI",
@@ -1296,7 +1295,7 @@
 		},
 		{
 			"id": "bottleMaterial",
-			"hidden":true,
+			"hidden": true,
 			"label": "Bottle Material",
 			"XMLValue": "P999",
 			"type": "DropDown",
@@ -1331,7 +1330,7 @@
 		},
 		{
 			"id": "sizeOfBottle",
-			"hidden":true,
+			"hidden": true,
 			"label": "Size of Bottle",
 			"XMLValue": "P432",
 			"type": "DropDown",
@@ -1385,9 +1384,9 @@
 			"type": "DropDown",
 			"includeBlank": true,
 			"options": {
-				"13/16":"13/16",
-				"1/4":"1/4",
-				"15/16":"15/16"
+				"13/16": "13/16",
+				"1/4": "1/4",
+				"15/16": "15/16"
 			},
 			"value": "",
 			"tabName": "EWI",
@@ -1396,22 +1395,164 @@
 			"width_lg": 2
 		},
 		{
-			"id": "EWI_samples_table",
-			"label": "Samples Table",
+			"id": "EWI_setInfo_table",
+			"label": "Set Info Table",
 			"type": "TableInput",
 			"tabName": "EWI",
-			"layoutGroup": "Samples",
+			"layoutGroup": "Set Information",
 			"colHeaders": [
-				"Distance",
-				"Depth To Bottom",
-				"Depth Sampled",
-				"Transit Time",
-				"Transit Volume"
+				"",
+				"Set A",
+				"Set B",
+				"Average"
 			],
 			"rowHeaders": "true",
-			"value": [],
-			"width_xs": 12,
-			"width_lg": 6
+			"value": [
+				[
+					"Start Time",
+					"SubQuestion::setAStartTime",
+					"SubQuestion::setBStartTime",
+					"SubQuestion::setStartTimeAvg"
+				],
+				[
+					"Gage Height(Start)",
+					"SubQuestion::setAStartGageHeight",
+					"SubQuestion::setBStartGageHeight",
+					"SubQuestion::startGageHeightAvg"
+				],
+				[
+					"End Time",
+					"SubQuestion::setAEndTime",
+					"SubQuestion::setBEndTime",
+					"SubQuestion::setEndTimeAvg"
+				],
+				[
+					"Gage Height(End)",
+					"SubQuestion::setAEndGageHeight",
+					"SubQuestion::setBEndGageHeight",
+					"SubQuestion::endGageHeightAvg"
+				],
+				[
+					"Mean Time",
+					"SubQuestion::setAMeanTime",
+					"SubQuestion::setBMeanTime",
+					"SubQuestion::MEANTIMEAVG"
+				]
+			],
+			"width_xs": 6,
+			"width_lg": 3
+		},
+		{
+			"id": "setAStartGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "5"
+		},
+		{
+			"id": "setBStartGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "7"
+		},
+		{
+			"id": "setAEndGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "10"
+		},
+		{
+			"id": "setBEndGageHeight",
+			"XMLValue": "XMLQ6",
+			"type": "Text",
+			"helperText": "P0032",
+			"value": "12"
+		},
+		{
+			"id": "startGageHeightAvg",
+			"XMLValue": "setEndAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
+			"value": null,
+			"helperText": "Average start gage height time for sample"
+		},
+		{
+			"id": "endGageHeightAvg",
+			"XMLValue": "setEndAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
+			"value": null,
+			"helperText": "Average start gage height time for sample"
+		},
+		{
+			"id": "setAStartTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "Start sample time for set 1"
+		},
+		{
+			"id": "setAEndTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "End sample time for set 1"
+		},
+		{
+			"id": "setStartTimeAvg",
+			"XMLValue": "setStartAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Average start time for sample"
+		},
+		{
+			"id": "setBStartTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "Start sample time for set 2"
+		},
+		{
+			"id": "setBEndTime",
+			"XMLValue": "xmlDate",
+			"type": "TimeInput",
+			"value": null,
+			"helperText": "End of sample time for set 2"
+		},
+		{
+			"id": "setEndTimeAvg",
+			"XMLValue": "setEndAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Average end time for sample"
+		},
+		{
+			"id": "setAMeanTime",
+			"XMLValue": "setAMeanTime",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Average start time for sample"
+		},
+		{
+			"id": "setBMeanTime",
+			"XMLValue": "setBMeanTime",
+			"type": "ComputedValue",
+			"computationString": "(setAEndTime+setBEndTime)/2",
+			"value": null,
+			"helperText": "Mean time for set B"
+		},
+		{
+			"id": "MEANTIMEAVG",
+			"XMLValue": "meanTimeAvg",
+			"type": "ComputedValue",
+			"computationString": "(setAMeanTime+setBMeanTime)/2",
+			"value": null,
+			"helperText": "Average Mean time for sample"
 		},
 		{
 			"id": "concCheck",
@@ -1462,46 +1603,22 @@
 			"checkbox": true
 		},
 		{
-			"id": "startTime",
-			"XMLValue": "xmlDate",
-			"type": "TimeInput",
-			"value": null,
-			"helperText": "Start sample time for set 1"
-		},
-		{
-			"id": "endTime",
-			"XMLValue": "xmlDate",
-			"type": "TimeInput",
-			"value": null,
-			"helperText": "End sample time for set 1"
-		},
-		{
-			"id": "meanTime",
-			"XMLValue": "xmlDate",
-			"type": "TimeInput",
-			"value": null,
-			"helperText": "Average time for sample set 1"
-		},
-		{
-			"id": "startTime2",
-			"XMLValue": "xmlDate",
-			"type": "TimeInput",
-			"value": null,
-			"helperText": "Start sample time for set 2"
-		},
-		{
-			"id": "endTime2",
-			"XMLValue": "xmlDate",
-			"type": "TimeInput",
-			"value": null,
-			"helperText": "End of sample time for set 2"
-		},
-		{
-			"id": "meanTime2",
-			"XMLValue": "xmlDate",
-			"type": "TimeInput",
-			"value": null,
-			"helperText": "Average time for sample set 2"
+			"id": "EWI_samples_table",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"tabName": "EWI",
+			"layoutGroup": "Samples",
+			"colHeaders": [
+				"Distance",
+				"Depth To Bottom",
+				"Depth Sampled",
+				"Transit Time",
+				"Transit Volume"
+			],
+			"rowHeaders": "true",
+			"value": [],
+			"width_xs": 12,
+			"width_lg": 6
 		},
 		{
 			"id": "edgeOfWater_Left",
@@ -1574,7 +1691,7 @@
 			"label": "Pier 1 End",
 			"type": "Text",
 			"placeholder": "Feet",
-			"value": "120",
+			"value": "150",
 			"tabName": "FieldForm",
 			"layoutGroup": "Waterway Info",
 			"width_xs": 2,

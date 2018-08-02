@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { getQuestionDataFromLSbyQuestionID } from '../../Utils/QuestionUtilities';
+import { getQuestionDataFromQuestionsDataByQuestionID } from '../../Utils/QuestionUtilities';
 
 const math = require('mathjs');
 
@@ -61,42 +61,48 @@ class ComputedValue extends React.Component {
 		let computedValue = "";
 		let shouldCompute = true;
 
+		if(DEBUG)console.log("--------------------------------");
+		//if(this.props.globalState);
+
 		// if(this.props.id === "samplingWidth") {
 		// 	DEBUG = true;
 		// }
 
 		// split the computation string into constituent components
 		//TODO: remove spaces
+		// let splitCS = this.props.computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
 		let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
 		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
 		
-
+		if (DEBUG) console.log("SPLIT PRE:", splitCS);
 		// replace all instaces of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
 			//if(DEBUG) console.log(splitCS[i] + " is a " + !) + " number");
 
 			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' && splitCS[i] !== '/' &&
-				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^' && splitCS[i] !== "" 
-				&& isNaN(splitCS[i])) {
-				// splitCS[i] is a questionID
-				let Q = getQuestionDataFromLSbyQuestionID(splitCS[i]);
+				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^' && splitCS[i] !== "" &&
+				splitCS[i] !== null && isNaN(splitCS[i])) {
+
+					// splitCS[i] is a questionID
+				let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]);
+				if (DEBUG) console.log("subQuestion Q: ", Q);
 				
 				// check that all values returned without fail
 				if(Q===null) {
 					//TODO: Throw error
-					if (DEBUG) console.log(splitCS[i] + " question was not found in LS");
+					if (DEBUG) console.log(splitCS[i] + " question was not found");
 					shouldCompute = false;
-				} else if(Q.value==="") {
+				} else if(Q.value==="" || Q.value===null) {
 					//TODO: Throw error
-					if (DEBUG) console.log(splitCS[i] + " question has null value in LS");
+					if (DEBUG) console.log(splitCS[i] + " question has null value");
 					shouldCompute = false;
 				} else { //TODO: Check if number?
 					splitCS[i] = Q.value;
 				}
 			}
 		}
-		if (DEBUG) console.log(splitCS);
+		if (DEBUG) console.log("SPLIT POST: ", splitCS);
 
 		//TODO: save old splitCS values so we know what was null for better error display
 		

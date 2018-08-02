@@ -2,14 +2,15 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 
 
-export const createQuestionComponentsForLayoutGroup = (questionsData, changeHandler) => {
+export const createQuestionComponentsForLayoutGroup = (questionsData, changeHandler, _globalState) => {
     // the questonisData variable contains only Questions data for a single layout group
     // returns question components pointing to this.questionChangeHandler
 	let layoutGroupQuestionComponents = [];
+	//console.log("CQCFLG: ", _globalState);
 
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
         layoutGroupQuestionComponents = questionsData.map(questionData => {
-			return <Question {...questionData} stateChangeHandler={changeHandler} />
+			return <Question {...questionData} stateChangeHandler={changeHandler} globalState={_globalState}/>
 		});
     }
 
@@ -17,12 +18,44 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
 }
 
 export const getQuestionDataFromLSbyQuestionID= (questionID) => {
+	console.log("getQuestionsDataFromLSbyQestionID is depricated");
 	// returns questionData about single question with its' key field equal to questionKey
 	//WARNING, this assumes questionsData is populated in LS  //TODO, do not make assumption
 	var questionsData = JSON.parse(localStorage.getItem('questionsData'));
 	var questionData = questionsData.filter(questionData => questionData.id === questionID);
 	
 	if(questionData != null && questionData.length===1) {
+		return questionData[0];
+	} else {
+		return null; //TODO: throw errors
+	}
+}
+
+export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questionID) => {
+	let DEBUG = false;
+	
+	if(DEBUG)console.log("--------------");
+	if(DEBUG)console.log(questionsData);
+	if(DEBUG)console.log("looking for questionID: ", questionID);
+
+	
+	
+	let questionData = questionsData.filter(questionData => {
+		
+		// var areEqual = questionData.id.toUpperCase() === questionID.toUpperCase();
+		// console.log(questionData.id + " " + areEqual);
+		
+		if (questionData.id == questionID) {
+			if(DEBUG)console.log("Found");
+			return questionData;
+		}
+	}
+	);
+	
+	if(DEBUG)console.log(questionData);
+
+	if(questionData != null && questionData.length===1) {
+		
 		return questionData[0];
 	} else {
 		return null; //TODO: throw errors

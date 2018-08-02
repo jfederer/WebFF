@@ -440,9 +440,6 @@ class WebFF extends React.Component {
 				});
 			}
 		}
-
-
-
 		this.buildRoutesAndRenderPages(); //performance
 	}
 
@@ -455,6 +452,7 @@ class WebFF extends React.Component {
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
 					navControl={this.navigationControl}
+					globalState={this.state}
 				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
@@ -463,6 +461,7 @@ class WebFF extends React.Component {
 					systemCB={this.questionChangeSystemCallback}
 					questionsData={this.state.questionsData}
 					hiddenPanels={this.state.hiddenPanels}
+					globalState={this.state}
 				/>} />
 				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
 				<Route render={() => <ErrorPage
@@ -472,15 +471,24 @@ class WebFF extends React.Component {
 				/>} />
 			</Switch>
 		); //performance
-		this.setState({ routesAndPages: newRoutesAndPages });
+
+		this.setState({ routesAndPages: newRoutesAndPages }, () => this.collectRunAndPropagateSamplePointData());
 	};
 
 	collectRunAndPropagateSamplePointData() {
-		// pull variables from fields
-		let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
-		let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
-		let numSampPoints = this.getQuestionData("samplingPoints").value;
+		//FIXME:  This overwrites values in the table if any exist //TODO: check current value and insert
+		let numSampPoints = null;
+		//console.log(this.state);
+		if (this.state.itemsLoaded.includes('questionsData')) {
+			numSampPoints = this.getQuestionData("samplingPoints").value;
+		} 
+		
+
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
+			// pull variables from fields
+			let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
+			let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
+			
 			let pierlocs = [];
 			let pierWids = [];
 			for (let i = 0; i < 6; i++) {
@@ -493,21 +501,26 @@ class WebFF extends React.Component {
 
 			let tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
 
-			// turn this into an array of individual values
+			// turn this into an array of 1-length array values for ingestion to table 
 			let newVal = new Array(tempValArr.length);
 			for (let i = 0; i < tempValArr.length; i++) {
 				newVal[i] = [tempValArr[i]];
 			}
 
 			this.updateQuestionData("EWI_samples_table", "value", newVal);
-		}
+		} 
 	}
 
 	handleSystemMenuItemClicked(menuText) {
+		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
+		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
 		//TODO: dynamic pier additions (perhaps do this via an action -- drop down or number input for # of piers.  Cheap, easy, dirty.)
 		//TODO: split analysis source code into check boxes
 		//TODO: Change labels or any question value as an 'action'.
-
+		//TODO: generalize EWI_setInfo_table
+		//TODO: not a fan of just handing around global state.
+		//TODO: regex to remove spaces in computation string
+		//TODO: computeValue calculate TIME values correctly?
 
 
 		// this.putDBInfo("generatedQuestions",
