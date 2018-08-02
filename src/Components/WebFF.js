@@ -216,15 +216,15 @@ class WebFF extends React.Component {
 		fetch(API + query, {
 			method: 'post',
 			headers: {
-			  'Accept': 'application/json',
-			  'Content-Type': 'application/json'
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(data)
-		  }).then(function(response) {
-				return response.json()
-			  }).then(function(json) {
-				console.log('parsed json: ', json)
-			  }).catch(error => console.log("Error fetching " + API + query + "\n" + error));
+		}).then(function (response) {
+			return response.json()
+		}).then(function (json) {
+			console.log('parsed json: ', json)
+		}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
 	handleDialogOpen() {
@@ -388,28 +388,28 @@ class WebFF extends React.Component {
 			if (questionData.id === q_id) {
 				retQ = questionData;
 				questionData[key] = value;
-			} 
+			}
 			return questionData;
 		});
-		this.setState({questionsData:newQuestionsData});
+		this.setState({ questionsData: newQuestionsData });
 		return retQ;
 	}
 
 	getQuestionData(q_id) {
-		let retArr  = this.state.questionsData.filter(questionData => {
+		let retArr = this.state.questionsData.filter(questionData => {
 			if (questionData.id === q_id) {
 				return questionData;
-			} 
+			}
 		});
 
-		if (retArr.length===1) {
+		if (retArr.length === 1) {
 			return retArr[0];
 		} else {
-			console.log("WebFF: getQuestionData("+q_id+") returned " + retArr.length + " questions");
+			console.log("WebFF: getQuestionData(" + q_id + ") returned " + retArr.length + " questions");
 			//TODO: throw error
 			return null;
 		}
-		
+
 	}
 
 	questionChangeSystemCallback(Q) {
@@ -475,85 +475,51 @@ class WebFF extends React.Component {
 		this.setState({ routesAndPages: newRoutesAndPages });
 	};
 
+	collectRunAndPropagateSamplePointData() {
+		// pull variables from fields
+		let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
+		let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
+		let numSampPoints = this.getQuestionData("samplingPoints").value;
+		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
+			let pierlocs = [];
+			let pierWids = [];
+			for (let i = 0; i < 6; i++) {
+				pierlocs.push(this.getQuestionData("pier" + (i + 1) + "_start").value);
+
+				let pierWidth = this.getQuestionData("pier" + (i + 1) + "_end").value - pierlocs[i];
+				pierWids.push(pierWidth);
+			}
+
+
+			let tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
+
+			// turn this into an array of individual values
+			let newVal = new Array(tempValArr.length);
+			for (let i = 0; i < tempValArr.length; i++) {
+				newVal[i] = [tempValArr[i]];
+			}
+
+			this.updateQuestionData("EWI_samples_table", "value", newVal);
+		}
+	}
 
 	handleSystemMenuItemClicked(menuText) {
+		//TODO: dynamic pier additions (perhaps do this via an action -- drop down or number input for # of piers.  Cheap, easy, dirty.)
+		//TODO: split analysis source code into check boxes
+		//TODO: Change labels or any question value as an 'action'.
+
+
 
 		// this.putDBInfo("generatedQuestions",
 		// [{"testName":"Joe", "id":"smelven"},
 		// {"testName":"Mark", "id":"tensie"},
 		// {"testName":"Jan", "id":"oldest"}]
-	// );
-		
+		// );
+
 		// #1
-		 
-		let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
-		let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
-		let numSampPoints = this.getQuestionData("samplingPoints").value;
-		
-		let tempValArr = provideEWISamplingLocations(LESZ, RESZ, 
-			[30,
-				160,
-				210,
-				300], 
-			[120,
-				40,
-				50,
-				150],
-			numSampPoints);
-			
-			console.log("Results: ", tempValArr);
-		
-			//console.log();
-			// console.log(this.updateQuestionData("EWI_samples_table", "value", [tempValArr]));
-			let newVal = new Array(tempValArr.length);
-			for(let i =0; i<tempValArr.length; i++) {
-				newVal[i] = [tempValArr[i]];
-			}
-			// this.updateQuestionData("EWI_samples_table", "value", [tempValArr]);
-			this.updateQuestionData("EWI_samples_table", "value", newVal);
-			//this.questionChangeSystemCallback(this.getQuestionData("EWI_samples_table"));
 
 
-		//console.log(tempQ);
-		//this.getQuestionDataWithUpdatedValue(tempQ);
-
-
-		
-		// #2
-		
-		// console.log(provideEWISamplingLocations(20, 600, 
-        // [30,
-		// 	160,
-		// 	210,
-		// 	300], 
-        // [120,
-		// 	40,
-		// 	50,
-		// 	150],
-        // 5));
-		// // #3
-		// console.log(provideEWISamplingLocations(15, 250, 
-        // [30,
-		// 	155], 
-        // [120,
-		// 	40],
-        // 5));
-		// // #4
-		// console.log(provideEWISamplingLocations(15, 250, 
-        // [15,
-		// 	155], 
-        // [120,
-		// 	40],
-		// 5));
-		// #5
-		// 		console.log(provideEWISamplingLocations(20, 500, 
-        // [60,
-		// 	160,210,350], 
-        // [20,40,70,100],
-		// 5));
-	
-
-
+		this.collectRunAndPropagateSamplePointData();
 
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });

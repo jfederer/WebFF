@@ -6,14 +6,16 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
     pierLocations.filter((el)=>parseInt(el, 10));
     pierWidths.filter((el)=>parseInt(el, 10)); 
     numberOfSamples = parseInt(numberOfSamples, 10);
-    
+    if(numberOfSamples===null | numberOfSamples==="") {
+		return;
+	}
    let samplingLocations = new Array(numberOfSamples);
     let pierCounted = new Array(pierLocations.length).fill(false);
     let pierTotalWidth = 0;
 
    // console.log("CALCULATING");
 
-    //console.log(samplingZone_left, samplingZone_right, pierLocations, pierWidths, numberOfSamples);
+    // console.log(samplingZone_left, samplingZone_right, pierLocations, pierWidths, numberOfSamples);
 
     function correctSamplingLocationBasedOnPiers (location) {
         // console.log("location: ", location);
@@ -23,7 +25,7 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
                 location+=pierWidths[i];
             }
         }
-        // console.log("Corrected location: ", location);
+    // console.log("Corrected location: ", location);
         return location;
     }
 
@@ -39,6 +41,10 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
     for(let i = 1; i<samplingLocations.length;i++) {
         samplingLocations[i] = correctSamplingLocationBasedOnPiers(samplingLocations[i-1]+samplingWidth);
     }
+    for(let i = 0; i<samplingLocations.length;i++) {
+        samplingLocations[i] = Math.round( samplingLocations[i] * 10 ) / 10;
+    }
+
 
 
     

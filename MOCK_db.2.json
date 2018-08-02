@@ -32,6 +32,7 @@
 			"icon": ""
 		}
 	],
+	"generatedQuestions": [],
 	"dialogQuestionsInfo": [
 		{
 			"dialogName": "Add New Station",
@@ -90,6 +91,86 @@
 					"layoutGroup": "Basic",
 					"width_xs": 3,
 					"width_lg": 3
+				}
+			]
+		},
+		{
+			"dialogName": "Add New Question",
+			"dialogDescription": "Fill out the following to add a new questoin",
+			"questions": [
+				{
+					"id": "newQuestion_label",
+					"label": "Label",
+					"type": "Text",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"id": "newQuestion_id",
+					"label": "ID",
+					"type": "Text",
+					"placeholder": "Must be globally unique",
+					"value": "",
+					"width_xs": 6,
+					"width_lg": 6
+				},
+				{
+					"id": "newQuestion_type",
+					"label": "Question Type",
+					"type": "DropDown",
+					"includeBlank": true,
+					"options": {
+						"Checkbox": "Checkbox",
+						"Computed Value": "ComputedValue",
+						"Date": "DateInput",
+						"Drop Down": "DropDown",
+						"Multiple Choice": "MultipleChoice",
+						"Table": "TableInput",
+						"Text": "Text",
+						"Time": "TimeInput",
+						"Toggle": "Toggle"
+					},
+					"value": ""
+				},
+				{
+					"id": "newQuestion_width",
+					"label": "Question Width",
+					"XMLValue": "",
+					"type": "Text",
+					"value": "",
+					"width_xs": 3,
+					"width_lg": 3
+				},
+				{
+					"id": "newQuestion_tabName",
+					"label": "Tab Name",
+					"XMLValue": "",
+					"helperText": "Name of tab where this question resides",
+					"placeholder": "spaces acceptable",
+					"type": "Text",
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 3
+				},
+				{
+					"id": "newQuestion_layoutGroup",
+					"label": "Layout Group",
+					"helperText": "Group on Tab where question resides",
+					"placeholder": "Spaces acceptable",
+					"XMLValue": "",
+					"type": "Text",
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 3
+				},
+				{
+					"id": "newQuestion_initalValue_textValue",
+					"label": "Initial Value",
+					"type": "Text",
+					"placeholder": "Can be left blank",
+					"value": "",
+					"width_xs": 6,
+					"width_lg": 6
 				}
 			]
 		}
@@ -195,7 +276,8 @@
 			"layoutGroup": "TestMath",
 			"width_xs": 4,
 			"width_lg": 2
-		},		{
+		},
+		{
 			"id": "testComplexMath",
 			"value": "",
 			"label": "Testing Complex A/B+(B-C)^C",
@@ -650,7 +732,8 @@
 			"value": "",
 			"layoutGroup": "Basic",
 			"width_xs": 6,
-			"width_lg": 3
+			"width_lg": 3,
+			"hidden": true
 		},
 		{
 			"id": "projectName",
@@ -801,11 +884,11 @@
 			"tabName": "Field Form",
 			"includeBlank": false,
 			"options": {
-				"No": false,
 				"2": "2",
 				"3": "3",
 				"4": "4",
-				"5": "5"
+				"5": "5",
+				"No": false
 			},
 			"value": "No",
 			"layoutGroup": "Basic",
@@ -991,6 +1074,7 @@
 			"width_xs": 6,
 			"width_lg": 6
 		},
+
 		{
 			"id": "SamplerType",
 			"label": "Sampler Type",
@@ -1004,7 +1088,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "NA",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
@@ -1022,7 +1106,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
@@ -1040,7 +1124,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 2
@@ -1058,7 +1142,7 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 6,
 			"width_lg": 2
@@ -1076,66 +1160,28 @@
 				"Thi sis a longer": "three All Around"
 			},
 			"value": "",
-			"tabName": "EDI",
+			"tabName": "EWI",
 			"layoutGroup": "Sampler Info",
 			"width_xs": 6,
 			"width_lg": 2
 		},
+		
 		{
-			"id": "EDI_table",
-			"label": "Test Table Label4",
-			"XMLValue": "Deets4",
+			"id": "EWI_samples_table",
+			"label": "Samples Table",
 			"type": "TableInput",
-			"tabName": "EDI",
-			"layoutGroup": "Table",
+			"tabName": "EWI",
+			"layoutGroup": "Samples",
 			"colHeaders": [
-				"",
-				"Set A",
-				"Set B"
+				"Distance",
+				"Depth To Bottom",
+				"Depth Sampled",
+				"Transit Time",
+				"Transit Volume"
 			],
 			"rowHeaders": "true",
-			"numberOfRows": "8",
 			"value": [
-				[
-					"Start Time",
-					"SubQuestion::startTime",
-					"SubQuestion::startTime2"
-				],
-				[
-					"Gage Height",
-					"237",
-					""
-				],
-				[
-					"End Time",
-					"SubQuestion::endTime",
-					"SubQuestion::startTime2"
-				],
-				[
-					"Gage Height",
-					"305",
-					""
-				],
-				[
-					"Mean Time",
-					"SubQuestion::testTable2",
-					"SubQuestion::startTime2"
-				],
-				[
-					"Concentration",
-					"SubQuestion::concCheck",
-					"SubQuestion::concCheck2"
-				],
-				[
-					"Sand Fines",
-					"SubQuestion::sandCheck",
-					"SubQuestion::sandCheck2"
-				],
-				[
-					"Full Size",
-					"SubQuestion::fullCheck",
-					"SubQuestion::fullCheck2"
-				]
+			
 			],
 			"width_xs": 12,
 			"width_lg": 6
@@ -1246,17 +1292,7 @@
 			"label": "Left Edge Of Sampling Zone",
 			"type": "Text",
 			"placeholder": "Feet from XYZ",
-			"value": "10",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 6,
-			"width_lg": 3
-		},		{
-			"id": "edgeOfWater_Right",
-			"label": "Right Edge Of Water",
-			"type": "Text",
-			"placeholder": "Feet from XYZ",
-			"value": "120",
+			"value": "20",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
 			"width_xs": 6,
@@ -1267,13 +1303,23 @@
 			"label": "Right Edge Of Sampling Zone",
 			"type": "Text",
 			"placeholder": "Feet from XYZ",
-			"value": "110",
+			"value": "600",
+			"tabName": "FieldForm",
+			"layoutGroup": "StreamCalc",
+			"width_xs": 6,
+			"width_lg": 3
+		},		
+		{
+			"id": "edgeOfWater_Right",
+			"label": "Right Edge Of Water",
+			"type": "Text",
+			"placeholder": "Feet from XYZ",
+			"value": "620",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
 			"width_xs": 6,
 			"width_lg": 3
 		},
-
 		{
 			"id": "pier1_start",
 			"label": "Pier 1 Start",
@@ -1282,8 +1328,7 @@
 			"value": "30",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
+			"width_xs": 3
 		},
 		{
 			"id": "pier1_end",
@@ -1293,8 +1338,7 @@
 			"value": "35",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
+			"width_xs": 3
 		},
 		{
 			"id": "pier2_start",
@@ -1304,8 +1348,7 @@
 			"value": "60",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
+			"width_xs": 3
 		},
 		{
 			"id": "pier2_end",
@@ -1315,97 +1358,20 @@
 			"value": "65",
 			"tabName": "FieldForm",
 			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
+			"width_xs": 3
 		},
 		{
-			"id": "pier3_start",
-			"label": "Pier 3 Start",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "30",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
+			"id": "stream_width",
+			"value": "",
+			"label": "Width of Stream",
+			"type": "ComputedValue",
+			"placeholder": "Stream Width",
+			"computationString": "(edgeOfSamplingZone_Right-edgeOfSamplingZone_Left)-(pier1_end-pier1_start)-(pier2_end-pier2_start)",
+			"tabName": "Field Form",
+			"layoutGroup": "Sample Points",
 			"width_xs": 2,
 			"width_lg": 1
 		},
-		{
-			"id": "pier3_end",
-			"label": "Pier 3 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "35",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "pier4_start",
-			"label": "Pier 4 Start",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "60",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "pier4_end",
-			"label": "Pier 4 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "65",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},	{
-			"id": "pier5_start",
-			"label": "Pier 5 Start",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "30",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "pier5_end",
-			"label": "Pier 5 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "35",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "pier6_start",
-			"label": "Pier 6 Start",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "60",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "pier6_end",
-			"label": "Pier 6 End",
-			"type": "Text",
-			"placeholder": "Feet",
-			"value": "65",
-			"tabName": "FieldForm",
-			"layoutGroup": "StreamCalc",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-
 		{
 			"id": "samplingPoints",
 			"value": "",
@@ -1416,90 +1382,6 @@
 			"layoutGroup": "StreamCalc",
 			"width_xs": 2,
 			"width_lg": 1
-		},
-		{
-			"id": "samplingWidth",
-			"value": "",
-			"label": "Sampling Width",
-			"type": "ComputedValue",
-			"placeholder": "Stream Width",
-			"computationString": "stream_width/samplingPoints",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_1",
-			"value": "",
-			"label": "SP_1",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "edgeOfSamplingZone_Left+samplingWidth/2",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_2",
-			"value": "",
-			"label": "SP_2",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_3",
-			"value": "",
-			"label": "SP_3",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_4",
-			"value": "",
-			"label": "SP_4",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 1",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 1
-		},
-		{
-			"id": "SP_5",
-			"value": "",
-			"label": "SP_5",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 5",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 2
-		},
-		{
-			"id": "SP_6",
-			"value": "",
-			"label": "SP_6",
-			"type": "ComputedValue",
-			"placeholder": "Sample Point 6",
-			"computationString": "",
-			"tabName": "Field Form",
-			"layoutGroup": "Sample Points",
-			"width_xs": 2,
-			"width_lg": 2
 		}
 	]
 }
