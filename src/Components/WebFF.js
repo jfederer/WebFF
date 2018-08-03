@@ -52,7 +52,7 @@ class WebFF extends React.Component {
 
 		this.state = {
 			itemsLoaded: [],
-			usePaper: true,
+			usePaper: false,
 
 			navMenuInfo: [],
 			navMenuExpanded: false,
@@ -175,6 +175,7 @@ class WebFF extends React.Component {
 			if (!response.ok) {
 				throw Error(response.statusText);
 			}
+			//note 404 is not found and 400 is a mal-formed request
 			return response;
 		}
 
@@ -198,35 +199,6 @@ class WebFF extends React.Component {
 					// }, 1200);
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	}
-	putDBInfo(location, data) {
-		//FIXME: This does not work the way you'd expect, functionality addition was abandonded due to deadline
-		const DEBUG = false;
-		const API = 'http://localhost:3004/';
-		const query = location;
-
-		function handleErrors(response) {
-			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-			if (!response.ok) {
-				throw Error(response.statusText);
-			}
-			return response;
-		}
-
-		if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
-
-		fetch(API + query, {
-			method: 'post',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		}).then(function (response) {
-			return response.json()
-		}).then(function (json) {
-			console.log('parsed json: ', json)
-		}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
 	handleDialogOpen() {
@@ -520,6 +492,81 @@ class WebFF extends React.Component {
 		} 
 	}
 
+
+	updateDBInfo(location, data, CB) {
+		// attempts to update location
+		// returns the ENTIRE newly updated data element.
+
+		const DEBUG = true;
+		const API = 'http://localhost:3004/';
+		const query = location;
+		// function handleErrors(response) {
+		// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+		// 	if (!response.ok) {
+		// 		throw Error(response.statusText);
+		// 	}
+		// 	return response;
+		// }
+
+		let URI=API + query;
+
+		if (DEBUG) console.log("Function: fetchDBInfo PATCH @ " + URI);
+
+		fetch(URI, {
+			method: 'PATCH',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		}).then(function (response) {
+			if(response.status===200) {
+			 return response.json();	
+			}
+			return null;			
+		}).then(function (json) {
+			CB(json);
+		}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
+	}
+
+	// createDBInfo(location, data) {
+	// 	// attempts to update location
+	// 	// returns the ENTIRE newly updated data element.
+
+	// 	const DEBUG = true;
+	// 	const API = 'http://localhost:3004/';
+	// 	const query = location;
+	// 	// function handleErrors(response) {
+	// 	// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+	// 	// 	if (!response.ok) {
+	// 	// 		throw Error(response.statusText);
+	// 	// 	}
+	// 	// 	return response;
+	// 	// }
+	
+	// 	let URI=API + query;
+
+	// 	fetch(URI, {
+	// 		method: 'PUT',
+	// 		headers: {
+	// 			'Accept': 'application/json',
+	// 			'Content-Type': 'application/json'
+	// 		},
+	// 		body: JSON.stringify(data)
+	// 	}).then(function (response) {
+	// 		if(response.status===404 && !putAlreadyAttempted) {
+	// 			// the resource didn't exist and needs to be 'put' instead of 'patched'.
+	// 			console.log("this was a 404");
+	// 			this.putDBInfo(location, data, true, put);
+	// 		}
+	// 		console.log("Response: ", response);
+	// 		return response.json();
+	// 	}).then(function (json) {
+	// 		return "dsfsdf";
+	// 	}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
+	// }
+
+
 	handleSystemMenuItemClicked(menuText) {
 		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
 		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
@@ -538,7 +585,7 @@ class WebFF extends React.Component {
 		//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
 		//TODO: Question order priority
 		//TODO: read-only columns in table
-		//TODO: refactor fetching tasks to UTIL
+		//TODO: refactor network tasks to UTIL
 		
 
 		// this.putDBInfo("generatedQuestions",
@@ -547,16 +594,35 @@ class WebFF extends React.Component {
 		// {"testName":"Jan", "id":"oldest"}]
 		// );
 
+		if(menuText==="Test Connection") {
+			console.log("Testing  of new Question") 
+				let newQuestion = 				{
+					"id": "ThisisThefirstID",
+						"label": "Station Number",
+						"XMLValue": "",
+						"type": "Text",
+						"tabName": "Add Station",
+						"value": "",
+						"layoutGroup": "Basic",
+						"width_xs": 5,
+						"width_lg": 5
+				}
+				this.updateDBInfo("customQuestions", newQuestion, (resp)=> console.log("EXPECT NULL: Response: ", resp));
+
+				let patchData = 	
+				 {"id":"CSN", "testName":"SMister"}
+				this.updateDBInfo("customQuestions/"+patchData.id, patchData, (resp)=> console.log("EXPECT FULL OBJECT: Response: ", resp));
+
+
+
+			}
+
+
 
 		
 
-		this.collectRunAndPropagateSamplePointData();
-
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
-
-		console.log(menuText);
-		console.log(this.state.dialogQuestionsInfo);
 
 
 		let filteredDialogInfo = this.state.dialogQuestionsInfo.filter((dialogItem) => {
