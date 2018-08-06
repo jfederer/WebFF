@@ -46,14 +46,15 @@ import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
-const criticalDefaultNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
-var itemsToSyncToLS = criticalDefaultNodes;
+const criticalUserNodes = ['stations'];
+const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
+var itemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
 itemsToSyncToLS.push("loggedInUser");
 
 class WebFF extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			itemsLoaded: [],
 			usePaper: false,
@@ -78,6 +79,10 @@ class WebFF extends React.Component {
 			appBarText: "Sediment Field Forms",
 
 			hiddenTabs: [],
+			stations: [],
+
+
+			loggedInUser: "jfederer@usgs.gov"
 		};
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
@@ -92,33 +97,55 @@ class WebFF extends React.Component {
 
 
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
+		this.gatherSystemConfig(criticalDefaultSystemNodes, "defaultConfig");  //load default configurations
+		this.gatherUserConfig(criticalUserNodes, "users/" + this.state.loggedInUser); //load user configuration
+
+		// collect per-user information (stations, questions, navItems)
+
+
+		//TODO: collect info and combine with per user, per station questions
+
+	}
+
+	gatherSystemConfig(nodesToGather, query) {
+		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
 		let DEBUG = false;
 
-		// check if ALL items are loaded into LS
+		if (DEBUG) console.log("gatherConfig: ", nodesToGather, query);
+		// check if ALL critical items are loaded into LS
+		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
 		let allLoadedInLS = true;
-		for (let i = 0; i < criticalDefaultNodes.length; i++) {
-			if (!localStorage.getItem(criticalDefaultNodes[i])) {
+		for (let i = 0; i < nodesToGather.length; i++) {
+			if (DEBUG) console.log(localStorage.getItem(nodesToGather[i]));
+			if (!localStorage.getItem(nodesToGather[i]) || localStorage.getItem(nodesToGather[i]) === "null") {
+				allLoadedInLS = false;
+			}
+			if (nodesToGather[i] === "stations" && localStorage.getItem(nodesToGather[i]) === "[]") {  //KLUDGE to allow for extra searching for stations given it's non-null in the constructor
 				allLoadedInLS = false;
 			}
 		}
+		if (DEBUG) console.log("allLoadedInLS: ", allLoadedInLS);
 
 		if (allLoadedInLS) {
+			if (DEBUG) console.log("pulling from LS");
+
 			// pull everything from LS
-			for (let i = 0; i < criticalDefaultNodes.length; i++) {
+			for (let i = 0; i < nodesToGather.length; i++) {
 				let newItemsLoaded = this.state.itemsLoaded;
-				if (!newItemsLoaded.includes(criticalDefaultNodes[i])) {
-					newItemsLoaded.push(criticalDefaultNodes[i])
+				if (!newItemsLoaded.includes(nodesToGather[i])) {
+					newItemsLoaded.push(nodesToGather[i])
 				}
 				this.setState({
-					[criticalDefaultNodes[i]]: JSON.parse(localStorage.getItem(criticalDefaultNodes[i])),
+					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
 					itemsLoaded: newItemsLoaded
 				}, this.buildRoutesAndRenderPages);
 			}
 		} else {
 			// pull everything from DB
-			//load default configurations
-			this.newFetch("defaultConfig", (defaultConfigJSON) => {
-				defaultConfigJSON.forEach((configNode) => {
+
+			this.newFetch(query, (JSONresponse) => {
+				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
+				JSONresponse.forEach((configNode) => {
 					if (DEBUG) console.log("ConfigNode: ", configNode);
 					let nodeName = configNode.id;
 					if (DEBUG) console.log("NodeName: ", nodeName);
@@ -138,41 +165,70 @@ class WebFF extends React.Component {
 				});
 			});
 		}
-
-
-		//TODO: collect info and combine with per user, per station questions
-
 	}
 
-	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
-		this.showTab(tabName, add);
-	}
 
-	jsonToNavMenu(jsonNavData) {
-		// this function filters tabs based on the "showXYZ" items in state
-		// console.log(jsonNavData);
-		var retMenu = [];
-		for (var i = 0; i < jsonNavData.length; i++) {
-			var menuItem = jsonNavData[i];
-			var shouldInclude = !this.state.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
+	gatherUserConfig(nodesToGather, query) {
+		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
+		let DEBUG = true;
 
-			// use icon?
-			let useIcon = true;
-			if (menuItem.icon === "") {
-				useIcon = false;
+		if (DEBUG) console.log("gatherConfig: ", nodesToGather, query);
+		// check if ALL critical items are loaded into LS
+		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
+		let allLoadedInLS = true;
+		for (let i = 0; i < nodesToGather.length; i++) {
+			if (DEBUG) console.log(localStorage.getItem(nodesToGather[i]));
+			if (!localStorage.getItem(nodesToGather[i]) || localStorage.getItem(nodesToGather[i]) === "null") {
+				allLoadedInLS = false;
 			}
-
-			if (shouldInclude) retMenu.push(
-				<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
-					{(useIcon) ? <ListItemIcon>
-						{this.materialIcon(menuItem.icon)}
-					</ListItemIcon> : null}
-					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-				</ListItem>
-			);
+			if (nodesToGather[i] === "stations" && localStorage.getItem(nodesToGather[i]) === "[]") {  //KLUDGE to allow for extra searching for stations given it's non-null in the constructor
+				allLoadedInLS = false;
+			}
 		}
-		return retMenu;
+		if (DEBUG) console.log("allLoadedInLS: ", allLoadedInLS);
+
+		if (allLoadedInLS) {
+			if (DEBUG) console.log("pulling from LS");
+
+			// pull everything from LS
+			for (let i = 0; i < nodesToGather.length; i++) {
+				let newItemsLoaded = this.state.itemsLoaded;
+				if (!newItemsLoaded.includes(nodesToGather[i])) {
+					newItemsLoaded.push(nodesToGather[i])
+				}
+				this.setState({
+					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
+					itemsLoaded: newItemsLoaded
+				}, this.buildRoutesAndRenderPages);
+			}
+		} else {
+			// pull everything from DB
+
+			this.newFetch(query, (JSONresponse) => {
+				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
+				let nodeArr = [];
+				for (let i = 0; i<nodesToGather.length; i++) {
+					JSONresponse[nodesToGather[i]].forEach((configNode) => {
+						if (DEBUG) console.log("ConfigNode: ", configNode);
+						// let nodeName = configNode.id;
+						//TODO: error and duplication checking -- particularly important as custom questions exist
+						// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
+						nodeArr.push(configNode);
+					});
+					this.setState({ [nodesToGather[i]]: nodeArr }, () => {
+						if (DEBUG) console.log("STATE: ", this.state);
+						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
+						let newItemsLoaded = this.state.itemsLoaded;
+						newItemsLoaded.push(nodesToGather[i]);
+						this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
+					});
+				}
+
+			});
+		}
 	}
+
+
 
 	materialIcon(icon) {
 		switch (icon) {
@@ -220,14 +276,8 @@ class WebFF extends React.Component {
 				parsedJSON => {
 					if (DEBUG) console.log("Parsed JSON: ");
 					if (DEBUG) console.log(parsedJSON);
-					// let newItemsLoaded = this.state.itemsLoaded;
-					// newItemsLoaded.push(query);
 					// // setTimeout(() => {
 					successCB(parsedJSON);
-					// this.setState({
-					// 	[query]: parsedJSON,
-					// 	itemsLoaded: newItemsLoaded
-					// }, this.buildRoutesAndRenderPages);
 					if (DEBUG) console.log("CurrentState: ");
 					if (DEBUG) console.log(this.state);
 					// }, 1200);
@@ -235,41 +285,41 @@ class WebFF extends React.Component {
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
-	fetchDBInfo(_query) {
-		const DEBUG = false;
-		const API = 'http://localhost:3004/';
-		const query = _query;
+	// fetchDBInfo(_query) {
+	// 	const DEBUG = false;
+	// 	const API = 'http://localhost:3004/';
+	// 	const query = _query;
 
-		function handleErrors(response) {
-			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-			if (!response.ok) {
-				throw Error(response.statusText);
-			}
-			//note 404 is not found and 400 is a mal-formed request
-			return response;
-		}
+	// 	function handleErrors(response) {
+	// 		// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+	// 		if (!response.ok) {
+	// 			throw Error(response.statusText);
+	// 		}
+	// 		//note 404 is not found and 400 is a mal-formed request
+	// 		return response;
+	// 	}
 
-		if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
-		fetch(API + query)
-			.then(handleErrors)
-			.then(response => response.json())
-			.then(
-				parsedJSON => {
-					if (DEBUG) console.log("Parsed JSON: ");
-					if (DEBUG) console.log(parsedJSON);
-					let newItemsLoaded = this.state.itemsLoaded;
-					newItemsLoaded.push(query);
-					// setTimeout(() => {
-					this.setState({
-						[query]: parsedJSON,
-						itemsLoaded: newItemsLoaded
-					}, this.buildRoutesAndRenderPages);
-					if (DEBUG) console.log("CurrentState: ");
-					if (DEBUG) console.log(this.state);
-					// }, 1200);
-				})
-			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	}
+	// 	if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
+	// 	fetch(API + query)
+	// 		.then(handleErrors)
+	// 		.then(response => response.json())
+	// 		.then(
+	// 			parsedJSON => {
+	// 				if (DEBUG) console.log("Parsed JSON: ");
+	// 				if (DEBUG) console.log(parsedJSON);
+	// 				let newItemsLoaded = this.state.itemsLoaded;
+	// 				newItemsLoaded.push(query);
+	// 				// setTimeout(() => {
+	// 				this.setState({
+	// 					[query]: parsedJSON,
+	// 					itemsLoaded: newItemsLoaded
+	// 				}, this.buildRoutesAndRenderPages);
+	// 				if (DEBUG) console.log("CurrentState: ");
+	// 				if (DEBUG) console.log(this.state);
+	// 				// }, 1200);
+	// 			})
+	// 		.catch(error => console.log("Error fetching " + API + query + "\n" + error));
+	// }
 
 	handleDialogOpen() {
 		this.setState({ dialogOpen: true });
@@ -331,6 +381,36 @@ class WebFF extends React.Component {
 				//TODO: throw error
 				console.log("Requested action '" + splitActionString[0] + "' not recognized");
 		}
+	}
+
+	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
+		this.showTab(tabName, add);
+	}
+
+	jsonToNavMenu(jsonNavData) {
+		// this function filters tabs based on the "showXYZ" items in state
+		// console.log(jsonNavData);
+		var retMenu = [];
+		for (var i = 0; i < jsonNavData.length; i++) {
+			var menuItem = jsonNavData[i];
+			var shouldInclude = !this.state.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
+
+			// use icon?
+			let useIcon = true;
+			if (menuItem.icon === "") {
+				useIcon = false;
+			}
+
+			if (shouldInclude) retMenu.push(
+				<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
+					{(useIcon) ? <ListItemIcon>
+						{this.materialIcon(menuItem.icon)}
+					</ListItemIcon> : null}
+					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
+				</ListItem>
+			);
+		}
+		return retMenu;
 	}
 
 	showTab(tabName, toShow) {
@@ -458,13 +538,13 @@ class WebFF extends React.Component {
 
 	setLoggedInUser(username) {
 		console.log(this);
-		this.setState({loggedInUser:username}, this.buildRoutesAndRenderPages);
+		this.setState({ loggedInUser: username }, this.buildRoutesAndRenderPages);
 	}
 
 
 	questionChangeSystemCallback(Q) {
 		// checks for action string, executes any actions, and then updates current state of questionsData
-		
+
 		//HARDCODE for demo:
 		// special questions do special things
 		if (Q.props.id === "settings_paper") {
@@ -504,7 +584,7 @@ class WebFF extends React.Component {
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
-				
+
 				<Route path="/Dashboard" render={() => <Dashboard
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
