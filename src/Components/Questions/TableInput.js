@@ -6,7 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { getQuestionDataFromLSbyQuestionID } from '../../Utils/QuestionUtilities';
+import { getQuestionDataFromQuestionsDataByQuestionID } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
@@ -145,7 +145,7 @@ class TableInput extends React.Component {
 							
 							let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
 							if(DEBUG)console.log("Found a subQuestion: ", subQuestionID);
-							let questionData = getQuestionDataFromLSbyQuestionID(subQuestionID);
+							let questionData = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, subQuestionID);
 							if(DEBUG)console.log("questionData", questionData);
 							adHocProps = { ...adHocProps, ...questionData };
 							if(DEBUG)console.log("adHocProps", adHocProps);

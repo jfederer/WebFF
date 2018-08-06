@@ -17,20 +17,6 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
     return layoutGroupQuestionComponents;
 }
 
-export const getQuestionDataFromLSbyQuestionID= (questionID) => {
-	console.log("getQuestionsDataFromLSbyQestionID is depricated");
-	// returns questionData about single question with its' key field equal to questionKey
-	//WARNING, this assumes questionsData is populated in LS  //TODO, do not make assumption
-	var questionsData = JSON.parse(localStorage.getItem('questionsData'));
-	var questionData = questionsData.filter(questionData => questionData.id === questionID);
-	
-	if(questionData != null && questionData.length===1) {
-		return questionData[0];
-	} else {
-		return null; //TODO: throw errors
-	}
-}
-
 export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questionID) => {
 	let DEBUG = false;
 	
