@@ -47,12 +47,13 @@ import SystemDialog from './SystemDialog';
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
 const criticalDefaultNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
-const itemsToSyncToLS = criticalDefaultNodes;
+var itemsToSyncToLS = criticalDefaultNodes;
+itemsToSyncToLS.push("loggedInUser");
 
 class WebFF extends React.Component {
 	constructor(props) {
 		super(props);
-
+		
 		this.state = {
 			itemsLoaded: [],
 			usePaper: false,
@@ -82,6 +83,7 @@ class WebFF extends React.Component {
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
 		this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
+		this.setLoggedInUser = this.setLoggedInUser.bind(this);
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
@@ -454,9 +456,15 @@ class WebFF extends React.Component {
 
 	}
 
+	setLoggedInUser(username) {
+		console.log(this);
+		this.setState({loggedInUser:username}, this.buildRoutesAndRenderPages);
+	}
+
+
 	questionChangeSystemCallback(Q) {
 		// checks for action string, executes any actions, and then updates current state of questionsData
-
+		
 		//HARDCODE for demo:
 		// special questions do special things
 		if (Q.props.id === "settings_paper") {
@@ -757,7 +765,8 @@ class WebFF extends React.Component {
 					dialogName={this.state.curDialogName}
 					dialogDescription={this.state.curDialogDescription}
 					stateChangeHandler={this.questionChangeSystemCallback}
-					globalState={this.state} />
+					globalState={this.state}
+					setLoggedInUser={this.setLoggedInUser} />
 				<NavMenu isExpanded={this.state.navMenuExpanded}
 					closeHandler={this.handleLeftDrawerClose}
 					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />

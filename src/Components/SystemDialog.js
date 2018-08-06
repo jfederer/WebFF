@@ -16,14 +16,33 @@ const styles = theme => ({
 });
 
 class SystemDialog extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			dialogQuestions: []
-		};
-		//this.questionChangeHandler = this.questionChangeHandler.bind(this);
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		dialogQuestions: this.props.dialogQuestions;
+	// 	};
+	// };
+	
+	dialogSubmitHandler(dialogName, globalState) {
+		alert("dialogName: " +  dialogName);
+		switch (dialogName) {
+			case "Switch User" : {  //HARDCODE
+				//FIXME:  no value is being stored in the questions state for some reason
+				// console.log(this);
+				// console.log(this.refs);
+				// console.log(this.refs.switchUser_email);
+				// console.log(this.props.dialogQuestions);
+				let username = document.getElementById('switchUser_email').value;  // KLUDGE
+				this.props.setLoggedInUser(username);
+				this.props.closeHandler();
+				break;
+			}
+			default: {
+				console.log(dialogName + "submit button is not yet implemented");
+			}
+		}
+	
 	}
-
 
 
 	render() {
@@ -34,8 +53,6 @@ class SystemDialog extends React.Component {
 
 
 		return (
-			<div>
-
 				<Dialog
 					open={this.props.isOpen}
 					onClose={this.props.closeHandler}
@@ -48,17 +65,21 @@ class SystemDialog extends React.Component {
             			</DialogContentText>
 						<QuestionPanel 
 						questions={createQuestionComponentsForLayoutGroup(dialogQuestions, this.props.stateChangeHandler, this.props.globalState)}
+						
 						key={dialogName}/>
+						
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={closeHandler} color="primary">Cancel</Button>
-						<Button onClick={() => alert("Submitted")} color="primary">Submit</Button>
+						<Button onClick={() => this.dialogSubmitHandler(dialogName, this.props.globalState)} color="primary">Submit</Button>
 					</DialogActions>
 				</Dialog>
-			</div>
 		);
 	}
 }
+
+
+
 
 SystemDialog.propTypes = {
 	classes: PropTypes.object.isRequired,

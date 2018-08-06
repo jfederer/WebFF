@@ -209,7 +209,9 @@
               "type": "Text",
               "placeholder": "username@usgs.gov",
               "width_xs": 12,
-              "width_lg": 12
+              "width_lg": 12,
+              "ref": "switchUser_email", 
+              "value": ""
             }
           ]
         },
@@ -222,7 +224,7 @@
               "label": "Outline Fields",
               "type": "Toggle",
               "placeholder": "username@usgs.gov",
-              "value": true,
+              "value": false,
               "width_xs": 12,
               "width_lg": 12
             }
