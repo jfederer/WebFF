@@ -1,40 +1,2518 @@
 {
-  "hiddenTabs": [
-    "WaterQuality",
-    "FieldForm",
-    "EWI",
-    "EDI"
-  ],
-  "hiddenPanels": [],
-  "navMenuInfo": [
+  "defaultConfig": [
     {
-      "text": "Dashboard",
-      "route": "/Dashboard",
-      "icon": "DashboardIcon"
+      "id": "hiddenTabs",
+      "hiddenTabsArr": [
+        "WaterQuality",
+        "FieldForm",
+        "EWI",
+        "EDI"
+      ]
     },
     {
-      "text": "Field Form",
-      "route": "/FieldForm",
-      "icon": "ImportContactsIcon"
+      "id": "hiddenPanels",
+      "hiddenPanelsArr": []
     },
     {
-      "text": "Water Quality",
-      "route": "/WaterQuality",
-      "icon": "OpacityIcon"
+      "id": "navMenuInfo",
+      "navMenuInfoArr": [
+        {
+          "text": "Dashboard",
+          "route": "/Dashboard",
+          "icon": "DashboardIcon"
+        },
+        {
+          "text": "Field Form",
+          "route": "/FieldForm",
+          "icon": "ImportContactsIcon"
+        },
+        {
+          "text": "Water Quality",
+          "route": "/WaterQuality",
+          "icon": "OpacityIcon"
+        },
+        {
+          "text": "EDI",
+          "route": "/EDI"
+        },
+        {
+          "text": "EWI",
+          "route": "/EWI",
+          "icon": ""
+        }
+      ]
     },
     {
-      "text": "EDI",
-      "route": "/EDI"
+      "id": "dialogQuestions",
+      "dialogQuestionsArr": [
+        {
+          "dialogName": "Add New Station",
+          "dialogDescription": "Fill out the following to add a new station to your personalized station list",
+          "questions": [
+            {
+              "id": "newStation_stationName",
+              "label": "Station Name",
+              "XMLValue": "stnnm",
+              "type": "Text",
+              "tabName": "Add New Station",
+              "layoutGroup": "Basic",
+              "width_xs": 7,
+              "width_lg": 7
+            },
+            {
+              "id": "newStation_stationNumber",
+              "label": "Station Number",
+              "XMLValue": "",
+              "type": "Text",
+              "tabName": "Add Station",
+              "value": "",
+              "layoutGroup": "Basic",
+              "width_xs": 5,
+              "width_lg": 5
+            },
+            {
+              "id": "newStation_projectName",
+              "label": "Project Name",
+              "XMLValue": "",
+              "type": "Text",
+              "tabName": "Add Station",
+              "value": "",
+              "layoutGroup": "Basic",
+              "width_xs": 6,
+              "width_lg": 6
+            },
+            {
+              "id": "newStation_projectID",
+              "label": "Project ID",
+              "XMLValue": "",
+              "type": "Text",
+              "tabName": "Add Station",
+              "value": "",
+              "layoutGroup": "Basic",
+              "width_xs": 3,
+              "width_lg": 3
+            },
+            {
+              "id": "newStation_agencyCode",
+              "label": "Agency Code",
+              "XMLValue": "",
+              "type": "Text",
+              "tabName": "Add Station",
+              "value": "USGS",
+              "layoutGroup": "Basic",
+              "width_xs": 3,
+              "width_lg": 3
+            }
+          ]
+        },
+        {
+          "dialogName": "Add New Question",
+          "dialogDescription": "Fill out the following to add a new question to the program",
+          "questions": [
+            {
+              "id": "newQuestion_label",
+              "label": "Label",
+              "type": "Text",
+              "width_xs": 6,
+              "width_lg": 3
+            },
+            {
+              "id": "newQuestion_id",
+              "label": "Unique ID",
+              "type": "Text",
+              "placeholder": "Must be globally unique",
+              "value": "",
+              "width_xs": 6,
+              "width_lg": 6
+            },
+            {
+              "id": "newQuestion_type",
+              "label": "Question Type",
+              "type": "DropDown",
+              "includeBlank": true,
+              "options": {
+                "Checkbox": "Checkbox",
+                "Computed Value": "ComputedValue",
+                "Date": "DateInput",
+                "Drop Down": "DropDown",
+                "Multiple Choice": "MultipleChoice",
+                "Table": "TableInput",
+                "Text": "Text",
+                "Time": "TimeInput",
+                "Toggle": "Toggle"
+              },
+              "value": ""
+            },
+            {
+              "id": "newQuestion_tabName",
+              "label": "Tab Name",
+              "XMLValue": "",
+              "helperText": "Name of tab where this question resides",
+              "placeholder": "spaces acceptable",
+              "type": "Text",
+              "value": "",
+              "width_xs": 4,
+              "width_lg": 3
+            },
+            {
+              "id": "newQuestion_layoutGroup",
+              "label": "Layout Group",
+              "helperText": "Group on Tab where question resides",
+              "placeholder": "Spaces acceptable",
+              "XMLValue": "",
+              "type": "Text",
+              "value": "",
+              "width_xs": 4,
+              "width_lg": 3
+            },
+            {
+              "id": "newQuestion_initalValue_textValue",
+              "label": "Initial Value",
+              "type": "Text",
+              "placeholder": "Can be left blank",
+              "value": "",
+              "width_xs": 12,
+              "width_lg": 12
+            },
+            {
+              "id": "newQuestion_width_xs",
+              "label": "Width when screen is small",
+              "type": "Text",
+              "placeholder": "1-12",
+              "value": "",
+              "width_xs": 6,
+              "width_lg": 6
+            },
+            {
+              "id": "newQuestion_width_lg",
+              "label": "Width when screen is small",
+              "type": "Text",
+              "placeholder": "Can be left blank",
+              "value": "",
+              "width_xs": 6,
+              "width_lg": 6
+            }
+          ]
+        },
+        {
+          "dialogName": "User Manual",
+          "dialogDescription": "Holding Times-Sample holding times are specified in the USEPA Region 4 Analytical Support\\nBranch Laboratory Operations and Quality Assurance Manual (ASBLOQAM),\\nMost Recent Version. Field investigators should note that the holding time for an\\nun-preserved VOC sediment sample is 48 hours. Arrangements should be made to\\nship the sediment VOC samples to the laboratory by overnight delivery the day they\\nare collected so the laboratory may preserve and/or analyze the sample within 48\\nhours of collection.\\n\\nPercent Solids\\nSamplers must ensure that the laboratory has sufficient material to determine\\npercent solids in the VOC sediment sample to correct the analytical results to dry\\nweight. If other analyses requiring percent solids determination are being\\nperformed upon the sample, these results may be used. If not, a separate sample\\n(minimum of 2 oz.) for percent solids determination will be required.\\n\\n Safety\\nMethanol is a toxic and flammable liquid. Therefore, methanol must be handled\\nwith all required safety precautions related to toxic and flammable liquids.\\nInhalation of methanol vapors must be avoided. Vials should be opened and closed\\nquickly during the sample preservation procedure. Methanol must be handled in a\\nventilated area. Use protective gloves when handling the methanol vials. Store\\nmethanol away from sources of ignition such as extreme heat or open flames. The\\nvials of methanol should be stored in a cooler with ice at all times.\\n\\nShipping\\nMethanol and sodium bisulfate are considered dangerous goods, therefore shipment\\nof samples preserved with these materials by common carrier is regulated by the\\nU.S. Department of Transportation and the International Air Transport Association\\n(IATA). The rules of shipment found in Title 49 of the Code of Federal Regulations\\n(49 CFR parts 171 to 179) and the current edition of the IATA Dangerous Goods\\nRegulations must be followed when shipping methanol and sodium bisulfate.\\nConsult the above documents or the carrier for additional information. Shipment\\nof the quantities of methanol and sodium bisulfate used for sample preservation\\nfalls under the exemption for small quantities. A summary of the requirements for\\nshipping samples follows. Refer to the code for a complete review of the\\nrequirements.",
+          "questions": []
+        },
+        {
+          "dialogName": "Switch User",
+          "dialogDescription": "WebFF recognizes who you are based on your email.",
+          "questions": [
+            {
+              "id": "switchUser_email",
+              "label": "Email Address",
+              "type": "Text",
+              "placeholder": "username@usgs.gov",
+              "width_xs": 12,
+              "width_lg": 12
+            }
+          ]
+        },
+        {
+          "dialogName": "Settings",
+          "dialogDescription": "WebFF recognizes who you are based on your email.",
+          "questions": [
+            {
+              "id": "settings_paper",
+              "label": "Outline Fields",
+              "type": "Toggle",
+              "placeholder": "username@usgs.gov",
+              "value": true,
+              "width_xs": 12,
+              "width_lg": 12
+            }
+          ]
+        }
+      ]
     },
     {
-      "text": "EWI",
-      "route": "/EWI",
-      "icon": ""
-    },
-    {
-      "text": "QuestionPage",
-      "route": "/QuestionPage",
-      "icon": "CompareIcon"
+      "id": "questionsData",
+      "questionsDataArr": [
+        {
+          "id": "mathInput1",
+          "value": "",
+          "label": "A",
+          "XMLValue": "P10020",
+          "type": "Text",
+          "placeholder": "A value",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 4
+        },
+        {
+          "id": "mathInput2",
+          "value": "",
+          "label": "B",
+          "XMLValue": "P10020",
+          "type": "Text",
+          "placeholder": "B value",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 4
+        },
+        {
+          "id": "mathInput3",
+          "value": "2",
+          "label": "C",
+          "XMLValue": "P10020",
+          "type": "Text",
+          "placeholder": "C value",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 4
+        },
+        {
+          "id": "testComputedPlus",
+          "value": "",
+          "label": "Testing Addition and Subtraction (A+B-C)",
+          "XMLValue": "P10020",
+          "type": "ComputedValue",
+          "placeholder": "A + B - C",
+          "computationString": "mathInput1+mathInput2-mathInput3",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "testComputedMinus",
+          "value": "",
+          "label": "Testing static Number (A+2)",
+          "XMLValue": "P10020",
+          "type": "ComputedValue",
+          "placeholder": "A + 2",
+          "computationString": "mathInput1+2",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "testComputedDivide",
+          "value": "",
+          "label": "Testing Division (A/B)",
+          "XMLValue": "P10020",
+          "type": "ComputedValue",
+          "placeholder": "A / B",
+          "computationString": "mathInput1/mathInput2",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "testComputedMultiply",
+          "value": "",
+          "label": "Testing Multiplication (A*B*C)",
+          "XMLValue": "P10020",
+          "type": "ComputedValue",
+          "placeholder": "A * B * C",
+          "computationString": "mathInput1*mathInput2*mathInput3",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "testComputedExponent",
+          "value": "",
+          "label": "Testing Exponent (A^C)",
+          "XMLValue": "P10020",
+          "type": "ComputedValue",
+          "placeholder": "A + B",
+          "computationString": "mathInput1^mathInput3",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "testComplexMath",
+          "value": "",
+          "label": "Testing Complex A/B+(B-C)^C",
+          "XMLValue": "P10020",
+          "type": "ComputedValue",
+          "placeholder": "A + B",
+          "computationString": "mathInput1/mathInput2+(mathInput2-mathInput3)^mathInput3",
+          "tabName": "Question Page",
+          "layoutGroup": "TestMath",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "test1",
+          "label": "Impedence",
+          "XMLValue": "P10020",
+          "type": "Text",
+          "placeholder": "Resistance to AC",
+          "value": "",
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "size": "40"
+        },
+        {
+          "id": "test2",
+          "label": "What name?",
+          "XMLValue": "XMLQ2",
+          "type": "Text",
+          "value": "Johnny Science",
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "size": "50"
+        },
+        {
+          "id": "test3",
+          "label": "Question #3",
+          "XMLValue": "XMLQ3",
+          "type": "Text",
+          "value": "",
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "multiline": true,
+          "rows": 4
+        },
+        {
+          "id": "test4",
+          "label": "Question Label 4",
+          "XMLValue": "XMLQ4",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "No oe": "NA",
+            "My1": "One",
+            "My2": "Two",
+            "Thi sis a longer": "three All Around"
+          },
+          "value": "",
+          "tabName": "Question Page",
+          "layoutGroup": "Test"
+        },
+        {
+          "id": "test5",
+          "label": "Who is family",
+          "XMLValue": "XMLQ5",
+          "type": "MultipleChoice",
+          "options": {
+            "Colleen Niznik": "CSN",
+            "Corbin Brock": "CBF",
+            "Ruby Anne": "RAF",
+            "Kassidy Schmassidy": "KASS"
+          },
+          "value": [
+            "CSN",
+            "RAF"
+          ],
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "helperText": "P1942"
+        },
+        {
+          "id": "testHidden",
+          "hidden": true,
+          "label": "Is this showing?",
+          "XMLValue": "XMLQ5",
+          "type": "MultipleChoice",
+          "options": {
+            "Should": "CSN",
+            "Not": "CBF",
+            "Show": "RAF",
+            "When Hidden": "KASS"
+          },
+          "value": [
+            "CSN",
+            "RAF"
+          ],
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "helperText": "I'm Helping!"
+        },
+        {
+          "id": "testTog",
+          "label": "Hot Out?",
+          "XMLValue": "XMLQT",
+          "type": "Toggle",
+          "value": false,
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "helperText": "Toggle Me",
+          "checkbox": false
+        },
+        {
+          "id": "testTog2",
+          "XMLValue": "XMLQT2",
+          "type": "Toggle",
+          "value": true,
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "helperText": "Toggle Me Also",
+          "checkbox": false
+        },
+        {
+          "id": "testTog3",
+          "label": "Check Me?",
+          "XMLValue": "XMLQT",
+          "type": "Toggle",
+          "value": true,
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "helperText": "Toggle Me",
+          "checkbox": true
+        },
+        {
+          "id": "testTog4",
+          "XMLValue": "XMLQT2",
+          "type": "Toggle",
+          "value": false,
+          "tabName": "Question Page",
+          "layoutGroup": "Test",
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "testDate",
+          "XMLValue": "xmlDate",
+          "type": "DateInput",
+          "label": "current date default",
+          "value": null,
+          "tabName": "Question Page",
+          "layoutGroup": "Date Time Tests",
+          "helperText": "date helper text"
+        },
+        {
+          "id": "testDate2",
+          "XMLValue": "xmlDate2",
+          "type": "DateInput",
+          "label": "Specific Default",
+          "value": "2017-10-25",
+          "tabName": "Question Page",
+          "layoutGroup": "Date Time Tests",
+          "helperText": "date helper text"
+        },
+        {
+          "id": "testTime",
+          "XMLValue": "xmlTime",
+          "type": "TimeInput",
+          "label": "Current time default",
+          "value": null,
+          "tabName": "Question Page",
+          "layoutGroup": "Date Time Tests",
+          "helperText": "Enter a time",
+          "step": 600
+        },
+        {
+          "id": "testTime2",
+          "XMLValue": "xmlTime2",
+          "type": "TimeInput",
+          "label": "Specific Time default",
+          "value": "16:39",
+          "tabName": "Question Page",
+          "layoutGroup": "Date Time Tests",
+          "helperText": "Enter a time",
+          "step": 600
+        },
+        {
+          "id": "testTable",
+          "label": "Test Table Label",
+          "XMLValue": "Deets",
+          "type": "TableInput",
+          "tabName": "Question Page",
+          "layoutGroup": "Table",
+          "helperText": "Table Helper Me",
+          "colWidths": [
+            "20%",
+            "20%",
+            "30%",
+            "10%",
+            "10%"
+          ],
+          "colHeaders": [
+            "Dessert Name",
+            "Calories",
+            "Fat",
+            "Carbs",
+            "Protein"
+          ],
+          "rowHeaders": "true",
+          "numberOfRows": "5",
+          "value": [
+            [
+              "Frozen yoghurt",
+              "159ewrwr",
+              "",
+              "24",
+              "4.0"
+            ],
+            [
+              "Ice cream sandwich",
+              "237",
+              "9.0",
+              "37",
+              "4.3"
+            ],
+            [
+              "Eclair",
+              "262",
+              "SubQuestion::subTest1",
+              "24",
+              "6.0"
+            ],
+            [
+              "Cupcake",
+              "305",
+              "3.7",
+              "67",
+              "4.3"
+            ],
+            [
+              "Gingerbread",
+              "356",
+              "16.0",
+              "49",
+              "3.9"
+            ]
+          ]
+        },
+        {
+          "id": "subTest1",
+          "XMLValue": "XMLQ4",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "No oe": "NA",
+            "My1": "One",
+            "My2": "Two",
+            "Thi sis": "three All Around"
+          },
+          "value": ""
+        },
+        {
+          "id": "testTable2",
+          "label": "Test Table Label2",
+          "XMLValue": "Deets2",
+          "type": "TableInput",
+          "tabName": "Question Page",
+          "layoutGroup": "Table2",
+          "colHeaders": [
+            "Element",
+            "Found"
+          ],
+          "rowHeaders": "true",
+          "numberOfRows": "10",
+          "value": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ]
+        },
+        {
+          "id": "testTable3",
+          "label": "Test Table Label3",
+          "XMLValue": "Deets3",
+          "type": "TableInput",
+          "tabName": "Question Page",
+          "layoutGroup": "Table2",
+          "colHeaders": [
+            "Element",
+            "Found"
+          ],
+          "rowHeaders": "true",
+          "numberOfRows": "10",
+          "value": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ]
+        },
+        {
+          "id": "testTable4",
+          "label": "Test Table Label4",
+          "XMLValue": "Deets4",
+          "type": "TableInput",
+          "tabName": "Question Page",
+          "layoutGroup": "Table2",
+          "colHeaders": [
+            "Element",
+            "Found"
+          ],
+          "rowHeaders": "true",
+          "numberOfRows": "10",
+          "value": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ]
+        },
+        {
+          "id": "test6",
+          "label": "Single Line Text Q6",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "placeholder": "placeme",
+          "value": "",
+          "tabName": "Question Page",
+          "layoutGroup": "QP2"
+        },
+        {
+          "id": "test7",
+          "label": "Single Line Text Question 7",
+          "XMLValue": "XMLQ7",
+          "type": "Text",
+          "value": "Default Value",
+          "tabName": "Question Page",
+          "layoutGroup": "QP2"
+        },
+        {
+          "id": "test8",
+          "label": "Question #8",
+          "XMLValue": "XMLQ8",
+          "type": "Text",
+          "value": "",
+          "tabName": "Question Page",
+          "layoutGroup": "QP2"
+        },
+        {
+          "id": "test9",
+          "label": "Question Label 9",
+          "XMLValue": "XMLQ9",
+          "type": "DropDown",
+          "includeBlank": true,
+          "helperText": "PCodes FTW!",
+          "options": {
+            "No oe": "NA",
+            "My1": "One",
+            "My2": "Two",
+            "My3": "three"
+          },
+          "value": "One",
+          "tabName": "Question Page",
+          "layoutGroup": "QP2"
+        },
+        {
+          "id": "test10",
+          "label": "Who is programmer",
+          "XMLValue": "XMLQ10",
+          "type": "MultipleChoice",
+          "options": {
+            "Joe Federer": "JF",
+            "Ken Skach": "KS",
+            "Molly Wood": "MW"
+          },
+          "value": [
+            "JF"
+          ],
+          "tabName": "Question Page",
+          "layoutGroup": "QP2"
+        },
+        {
+          "id": "concCheck",
+          "XMLValue": "C",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "sandCheck",
+          "XMLValue": "SF",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "fullCheck",
+          "XMLValue": "Z",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "concCheck2",
+          "XMLValue": "C",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "sandCheck2",
+          "XMLValue": "SF",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "fullCheck2",
+          "XMLValue": "Z",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": true
+        },
+        {
+          "id": "stationName",
+          "label": "Station Name",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": false,
+          "tabName": "Field Form",
+          "layoutGroup": "Basic",
+          "helperText": "PCodes FTW!",
+          "width_xs": 6,
+          "width_lg": 3,
+          "options": {
+            "Minnehahaha Creek": "EDI",
+            "EWI": "EWI"
+          },
+          "value": "EDI"
+        },
+        {
+          "id": "stationNumber",
+          "label": "Station Number",
+          "XMLValue": "",
+          "type": "Text",
+          "tabName": "Field Form",
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "projectName",
+          "label": "Project Name",
+          "XMLValue": "",
+          "type": "Text",
+          "tabName": "Field Form",
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "projectID",
+          "label": "Project ID",
+          "XMLValue": "",
+          "type": "Text",
+          "tabName": "Field Form",
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "agencyCode",
+          "label": "Agency Code",
+          "XMLValue": "",
+          "type": "Text",
+          "tabName": "Field Form",
+          "value": "USGS",
+          "layoutGroup": "Basic",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "sampleDate",
+          "label": "Sample Date",
+          "XMLValue": "",
+          "type": "Text",
+          "tabName": "Field Form",
+          "placeholder": "yyyymmdd",
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "sedimentType",
+          "label": "Sediment Type",
+          "XMLValue": "sedimentType",
+          "type": "DropDown",
+          "includeBlank": false,
+          "options": {
+            "Bedload": "bedload",
+            "Bed Material": "bedMaterial",
+            "Suspended": "suspended"
+          },
+          "value": "suspended",
+          "tabName": "Field Form",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "samplingMethod",
+          "label": "Sampling Method",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "EWI": "10",
+            "EDI": "20",
+            "Single Vertical": "30",
+            "DEMO:RemoveStnNumb": "40",
+            "DEMO:ShowStnNumb": "50",
+            "DEMO:Hide:PjctID_Hide:StnNumber": "55",
+            "DEMO:ShowProjectID": "70",
+            "DEMO:Show:StnNum_Hide:ProjectID": "60",
+            "DEMO:HideWeather": "80",
+            "DEMO:ShowWeather": "90"
+          },
+          "actions": {
+            "10": "ShowTab::EWI&HideTab::EDI",
+            "20": "ShowTab::EDI&HideTab::EWI",
+            "30": "ShowTab::EDI&ShowTab::EWI",
+            "40": "HideQuestion::stationNumber",
+            "50": "ShowQuestion::stationNumber",
+            "55": "HideQuestion::projectID&HideQuestion::stationNumber",
+            "60": "ShowQuestion::stationNumber&HideQuestion::projectID",
+            "70": "ShowQuestion::projectID",
+            "80": "HidePanel::FieldForm:Weather",
+            "90": "ShowPanel::FieldForm:Weather"
+          },
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "timeZone",
+          "label": "Time Zone",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "Hawaii-Aleutian": "Hawaii-Aleutian",
+            "Alaska": "Alaska",
+            "Pacific": "Pacific",
+            "Mountain": "Mountain",
+            "Central": "Central",
+            "Eastern": "Eastern",
+            "Atlantic": "Atlantic"
+          },
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 3,
+          "width_lg": 1
+        },
+        {
+          "id": "samplingTeam",
+          "label": "Sampling Team",
+          "XMLValue": "st",
+          "type": "Text",
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "compiledBy",
+          "label": "Compiled By",
+          "XMLValue": "cb",
+          "type": "Text",
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Basic",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "sameDaySample",
+          "label": "Same Day Sample",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": false,
+          "options": {
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "No": "false"
+          },
+          "value": "false",
+          "layoutGroup": "Basic",
+          "width_xs": 3,
+          "width_lg": 1
+        },
+        {
+          "id": "sky",
+          "label": "Sky",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "Clear": "Clear",
+            "Partly Cloudy": "Partly Cloudy",
+            "Cloudy": "Cloudy"
+          },
+          "value": "",
+          "layoutGroup": "Weather",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "precipitation",
+          "label": "Precipitation",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "No Precip": "No Precip",
+            "Mist": "Mist",
+            "Light Rain": "Light Rain",
+            "Medium Rain": "Medium Rain",
+            "Heavy Rain": "Heavy Rain",
+            "Sleet": "Sleet",
+            "Snow": "Snow"
+          },
+          "value": "",
+          "layoutGroup": "Weather",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "temperature",
+          "label": "Temperature",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "Very Cold": "Very Cold",
+            "Cold": "Cold",
+            "Cool": "Cool",
+            "Warm": "Warm",
+            "Hot": "Hot",
+            "Very Hot": "Very Hot"
+          },
+          "value": "",
+          "layoutGroup": "Weather",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "wind",
+          "label": "Wind",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "Calm": "Calm",
+            "Light Breeze": "Light Breeze",
+            "Breeze": "Breeze",
+            "Gusty": "Gusty",
+            "Windy": "Windy"
+          },
+          "value": "",
+          "layoutGroup": "Weather",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "windDirection",
+          "label": "Wind Direction",
+          "XMLValue": "",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "Upstream": "Upstream",
+            "Downstream": "Downstream",
+            "Cross-stream": "Cross-stream"
+          },
+          "value": "",
+          "layoutGroup": "Weather",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "hydrologicEvent",
+          "label": "Hydrologic Event",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Routine Sample": "Routine Sample",
+            "Storm": "Storm",
+            "Not Determined": "Not Determined",
+            "Under Ice Cover": "Under Ice Cover",
+            "Drought": "Drought",
+            "Regulated Flow": "Regulated Flow",
+            "Snowmelt": "Snowmelt",
+            "Flood": "Flood",
+            "Not Determined (Historical)": "Not Determined (Historical)"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "hydrologicCondition",
+          "label": "HydrologicCondition",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Stable": "Stable",
+            "Rising stage": "Rising stage",
+            "Peak Stage": "Peak Stage",
+            "Stable, High": "Stable, High",
+            "Stable, Low": "Stable, Low",
+            "Not Determined": "Not Determined",
+            "Not Applicable": "Not Applicable"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "streamMixing",
+          "label": "Stream Mixing",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Well Mixed": "Well Mixed",
+            "Stratified": "Stratified",
+            "Poorly-mixed": "Poorly-mixed",
+            "Unknown": "Unknown"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "streamColor",
+          "label": "Stream Color",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Brown": "Brown",
+            "Green": "Green",
+            "Blue": "Blue",
+            "Gray": "Gray",
+            "Clear": "Clear",
+            "Other": "Other"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "sampleMedium",
+          "label": "Sample Medium",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Surface Water": "Surface Water",
+            "Bed Material": "Bed Material",
+            "QA (Artificial/Blank)": "QA (Artificial/Blank)",
+            "QA (Duplicate/Replicate)": "QA (Duplicate/Replicate)"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "sampleType",
+          "label": "Sample Type",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Regular": "Regular",
+            "Composite (ISCO)": "Composite (ISCO)",
+            "Not Determined": "Not Determined",
+            "Spike": "Spike",
+            "Blank (using IBW or OBW)": "Blank (using IBW or OBW)",
+            "Reference": "Reference",
+            "Blind": "Blind",
+            "Duplicate": "Duplicate",
+            "Reference Material": "Reference Material",
+            "Replicate": "Replicate",
+            "Spike Solution": "Spike Solution",
+            "Other QA": "Other QA"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "samplePurpose",
+          "label": "Sample Purpose",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Routine": "Routine",
+            "Cross-section Variation": "Cross-section Variation"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "analysisSourceCode",
+          "label": "Analysis Source Code",
+          "XMLValue": "",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "USGS lab and field": "USGS lab and field",
+            "USGS lab and field and non-USGS lab": "USGS lab and field and non-USGS lab",
+            "Not Determined": "Not Determined",
+            "USGS lab and non-USGS field": "USGS lab and non-USGS field",
+            "USGS lab and non-USGS lab and field": "USGS lab and non-USGS lab and field",
+            "USGS lab and field and non-USGS field": "USGS lab and field and non-USGS field",
+            "USGS lab and field and non-USGS lab and field": "USGS lab and field and non-USGS lab and field",
+            "USGS field only": "USGS field only",
+            "USGS lab only": "USGS lab only",
+            "Non-USGS Field": "Non-USGS Field",
+            "Non-USGS lab only": "Non-USGS lab only",
+            "Non-USGS lab and field": "Non-USGS lab and field",
+            "USGS field and non-USGS field": "USGS field and non-USGS field",
+            "USGS field and non-USGS lab": "USGS field and non-USGS lab",
+            "USGS field and non-USGS lab and field": "USGS field and non-USGS lab and field"
+          },
+          "value": "",
+          "tabName": "Field Form",
+          "layoutGroup": "Sample Information",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "WQ_time",
+          "label": "Time",
+          "XMLValue": "P1000",
+          "type": "TimeInput",
+          "helperText": "P1000",
+          "placeholder": "hhmm",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "WQ_location",
+          "label": "Location",
+          "XMLValue": "P1234",
+          "type": "Text",
+          "helperText": "P1234",
+          "value": "",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "WQ_temp",
+          "label": "Temp C",
+          "XMLValue": "P23430",
+          "type": "Text",
+          "helperText": "P23430",
+          "value": "",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "WQ_specificConductance",
+          "label": "Specific Conductance",
+          "XMLValue": "P594",
+          "type": "Text",
+          "helperText": "P594",
+          "value": "",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "WQ_transparency",
+          "label": "Transparency",
+          "XMLValue": "P9987",
+          "type": "Text",
+          "helperText": "P9987",
+          "value": "",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "WQ_NTRUturbidity",
+          "label": "NTRU Turbidity HACH",
+          "XMLValue": "P983",
+          "type": "Text",
+          "helperText": "P983",
+          "value": "",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 6,
+          "width_lg": 6
+        },
+        {
+          "id": "WQ_FNUturbidity",
+          "label": "FNU Turbidity DTS-12",
+          "XMLValue": "P984",
+          "type": "Text",
+          "helperText": "P984",
+          "value": "",
+          "tabName": "Water Quality",
+          "layoutGroup": "Field Parameters",
+          "width_xs": 6,
+          "width_lg": 6
+        },
+        {
+          "id": "EDI_samplerType",
+          "label": "Sampler Type",
+          "XMLValue": "P1050",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "US D-74": "US D-74",
+            "US DH-48": "US DH-48",
+            "US D-96 Bag Sampler": "US D-96 Bag Sampler",
+            "Weighted Bottle Sampler": "Weighted Bottle Sampler",
+            "Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
+            "US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
+            "US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
+            "Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
+            "Other": "Other",
+            "US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
+            "US DH-59": "US DH-59",
+            "US DH-76": "US DH-76",
+            "US P-61-A1": "US P-61-A1",
+            "US P-63": "US P-63",
+            "US P-72": "US P-72",
+            "US U-59": "US U-59",
+            "US U-73": "US U-73",
+            "US PS-69": "US PS-69",
+            "US DH-81": "US DH-81",
+            "US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
+            "Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
+            "US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
+            "US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
+            "US D-95 Plastic Bottle": "US D-95 Plastic Bottle",
+            "US D-99 Bag Sampler": "US D-99 Bag Sampler",
+            "Open-mouth 1-liter (Bacteria)": "Open-mouth 1-liter (Bacteria)",
+            "Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
+          },
+          "actions": {
+            "US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
+            "Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_bottleMaterial",
+          "hidden": true,
+          "label": "Bottle Material",
+          "XMLValue": "P999",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Plastic": "Plastic",
+            "Glass": "Glass",
+            "Other": "Other"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_bagMaterial",
+          "label": "Bag Material",
+          "XMLValue": "P999",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Plastic": "Plastic",
+            "Glass": "Glass",
+            "Other": "Other"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_sizeOfBottle",
+          "hidden": true,
+          "label": "Size of Bottle",
+          "XMLValue": "P432",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Pint": "Pint",
+            "Quart": "Quart"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_sizeOfBag",
+          "label": "Size of Bag",
+          "XMLValue": "P245",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "1 Liter": "1 Liter",
+            "3 Liter": "3 Liter"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_nozzelMaterial",
+          "label": "Nozzel Material",
+          "XMLValue": "XMLNM",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Brass": "Brass",
+            "Plastic": "Plastic"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_nozzelWidth",
+          "label": "Nozzel Width",
+          "XMLValue": "XMLNW",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "13/16": "13/16",
+            "1/4": "1/4",
+            "15/16": "15/16"
+          },
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_setInfo_table",
+          "label": "Set Info Table",
+          "type": "TableInput",
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "colHeaders": [
+            "",
+            "Set A",
+            "Set B",
+            "Average"
+          ],
+          "rowHeaders": "true",
+          "value": [
+            [
+              "Start Time",
+              "SubQuestion::setAStartTime",
+              "SubQuestion::setBStartTime",
+              "SubQuestion::setStartTimeAvg"
+            ],
+            [
+              "Gage Height(Start)",
+              "SubQuestion::setAStartGageHeight",
+              "SubQuestion::setBStartGageHeight",
+              "SubQuestion::startGageHeightAvg"
+            ],
+            [
+              "End Time",
+              "SubQuestion::setAEndTime",
+              "SubQuestion::setBEndTime",
+              "SubQuestion::setEndTimeAvg"
+            ],
+            [
+              "Gage Height(End)",
+              "SubQuestion::setAEndGageHeight",
+              "SubQuestion::setBEndGageHeight",
+              "SubQuestion::endGageHeightAvg"
+            ],
+            [
+              "Mean Time",
+              "SubQuestion::setAMeanTime",
+              "SubQuestion::setBMeanTime",
+              "SubQuestion::MEANTIMEAVG"
+            ]
+          ],
+          "width_xs": 6,
+          "width_lg": 6
+        },
+        {
+          "id": "EDI_samples_table",
+          "label": "Samples Table",
+          "type": "TableInput",
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "colHeaders": [
+            "EDI",
+            "Velocity (ft/sec)",
+            "Depth (feet)",
+            "T-Rate",
+            "Volume (cc)",
+            "Time (sec)",
+            "Ratio of Vertical",
+            "Intake Efficiency"
+          ],
+          "rowHeaders": "true",
+          "value": [
+            [
+              "10%"
+            ],
+            [
+              "30%"
+            ],
+            [
+              "50%"
+            ],
+            [
+              "70%"
+            ],
+            [
+              "90%"
+            ]
+          ],
+          "width_xs": 6,
+          "width_lg": 6
+        },
+        {
+          "id": "EDI_setAStartGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "5"
+        },
+        {
+          "id": "EDI_setBStartGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "7"
+        },
+        {
+          "id": "EDI_setAEndGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "10"
+        },
+        {
+          "id": "EDI_setBEndGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "12"
+        },
+        {
+          "id": "EDI_startGageHeightAvg",
+          "XMLValue": "setEndAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
+          "value": null,
+          "helperText": "Average start gage height time for sample"
+        },
+        {
+          "id": "EDI_endGageHeightAvg",
+          "XMLValue": "setEndAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
+          "value": null,
+          "helperText": "Average start gage height time for sample"
+        },
+        {
+          "id": "EDI_setAStartTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "Start sample time for set 1"
+        },
+        {
+          "id": "EDI_setAEndTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "End sample time for set 1"
+        },
+        {
+          "id": "EDI_setStartTimeAvg",
+          "XMLValue": "setStartAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Average start time for sample"
+        },
+        {
+          "id": "EDI_setBStartTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "Start sample time for set 2"
+        },
+        {
+          "id": "EDI_setBEndTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "End of sample time for set 2"
+        },
+        {
+          "id": "EDI_setEndTimeAvg",
+          "XMLValue": "setEndAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Average end time for sample"
+        },
+        {
+          "id": "EDI_setAMeanTime",
+          "XMLValue": "setAMeanTime",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Average start time for sample"
+        },
+        {
+          "id": "EDI_setBMeanTime",
+          "XMLValue": "setBMeanTime",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Mean time for set B"
+        },
+        {
+          "id": "EDI_MEANTIMEAVG",
+          "XMLValue": "meanTimeAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAMeanTime+setBMeanTime)/2",
+          "value": null,
+          "helperText": "Average Mean time for sample"
+        },
+        {
+          "id": "EDI_sampleIsokenetic",
+          "XMLValue": "C",
+          "label": "Sample Isokenetic",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me",
+          "checkbox": false,
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_additionalSampleCollected",
+          "XMLValue": "additionalSampleCollected",
+          "label": "Additional Samples Collected",
+          "type": "Toggle",
+          "value": false,
+          "checkbox": false,
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_intakeEfficiencyCompleted",
+          "XMLValue": "C",
+          "label": "Intake Efficiency Completed",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": false,
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "EDI_feetAboveBed",
+          "XMLValue": "EDI_feetAboveBed",
+          "label": "Feet Sampler Stopped above bed",
+          "type": "Text",
+          "value": "",
+          "helperText": "ft",
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "width_xs": 3,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_transitRate",
+          "XMLValue": "EWI_tramsitRate",
+          "label": "Transit Rate (ft/sec)",
+          "type": "Text",
+          "value": "",
+          "placeholder": "ft/sec",
+          "tabName": "EDI",
+          "layoutGroup": "Set Information",
+          "width_xs": 3,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_fieldComposite",
+          "XMLValue": "EWI_fieldComposite",
+          "label": "Samples Field Composited",
+          "type": "Toggle",
+          "value": true,
+          "checkbox": true,
+          "tabName": "EDI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_compositeWithGallonContainers",
+          "XMLValue": "EWI_compositeWithGallonContainers",
+          "label": "Composited with Gallon containers",
+          "type": "Toggle",
+          "value": true,
+          "checkbox": true,
+          "tabName": "EDI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_numSetAContainers",
+          "XMLValue": "EWI_numSetAContainers",
+          "label": "Number of containers - set A",
+          "type": "Text",
+          "value": "",
+          "placeholder": "ft/sec",
+          "tabName": "EDI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_numSetBContainers",
+          "XMLValue": "EWI_numSetBContainers",
+          "label": "Number of containers - set B",
+          "type": "Text",
+          "value": "",
+          "tabName": "EDI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_setAAnalysedFor",
+          "label": "Analyze Set A for:",
+          "XMLValue": "XMLQ5",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "EDI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EDI_setBAnalysedFor",
+          "label": "Analyze Set B for:",
+          "XMLValue": "XMLQ5",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "EDI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_samplerType",
+          "label": "Sampler Type",
+          "XMLValue": "P1050",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "US D-74": "US D-74",
+            "US DH-48": "US DH-48",
+            "US D-96 Bag Sampler": "US D-96 Bag Sampler",
+            "Weighted Bottle Sampler": "Weighted Bottle Sampler",
+            "Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
+            "US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
+            "US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
+            "Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
+            "Other": "Other",
+            "US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
+            "US DH-59": "US DH-59",
+            "US DH-76": "US DH-76",
+            "US P-61-A1": "US P-61-A1",
+            "US P-63": "US P-63",
+            "US P-72": "US P-72",
+            "US U-59": "US U-59",
+            "US U-73": "US U-73",
+            "US PS-69": "US PS-69",
+            "US DH-81": "US DH-81",
+            "US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
+            "Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
+            "US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
+            "US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
+            "US D-95 Plastic Bottle": "US D-95 Plastic Bottle",
+            "US D-99 Bag Sampler": "US D-99 Bag Sampler",
+            "Open-mouth 1-liter (Bacteria)": "Open-mouth 1-liter (Bacteria)",
+            "Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
+          },
+          "actions": {
+            "US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
+            "Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
+            "Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "bottleMaterial",
+          "hidden": true,
+          "label": "Bottle Material",
+          "XMLValue": "P999",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Plastic": "Plastic",
+            "Glass": "Glass",
+            "Other": "Other"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "bagMaterial",
+          "label": "Bag Material",
+          "XMLValue": "P999",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Plastic": "Plastic",
+            "Glass": "Glass",
+            "Other": "Other"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 3
+        },
+        {
+          "id": "sizeOfBottle",
+          "hidden": true,
+          "label": "Size of Bottle",
+          "XMLValue": "P432",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Pint": "Pint",
+            "Quart": "Quart"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "sizeOfBag",
+          "label": "Size of Bag",
+          "XMLValue": "P245",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "1 Liter": "1 Liter",
+            "3 Liter": "3 Liter"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "nozzelMaterial",
+          "label": "Nozzel Material",
+          "XMLValue": "XMLNM",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "Brass": "Brass",
+            "Plastic": "Plastic"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "nozzelWidth",
+          "label": "Nozzel Width",
+          "XMLValue": "XMLNW",
+          "type": "DropDown",
+          "includeBlank": true,
+          "options": {
+            "13/16": "13/16",
+            "1/4": "1/4",
+            "15/16": "15/16"
+          },
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Sampler Info",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setInfo_table",
+          "label": "Set Info Table",
+          "type": "TableInput",
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "colHeaders": [
+            "",
+            "Set A",
+            "Set B",
+            "Average"
+          ],
+          "rowHeaders": "true",
+          "value": [
+            [
+              "Start Time",
+              "SubQuestion::setAStartTime",
+              "SubQuestion::setBStartTime",
+              "SubQuestion::setStartTimeAvg"
+            ],
+            [
+              "Gage Height(Start)",
+              "SubQuestion::setAStartGageHeight",
+              "SubQuestion::setBStartGageHeight",
+              "SubQuestion::startGageHeightAvg"
+            ],
+            [
+              "End Time",
+              "SubQuestion::setAEndTime",
+              "SubQuestion::setBEndTime",
+              "SubQuestion::setEndTimeAvg"
+            ],
+            [
+              "Gage Height(End)",
+              "SubQuestion::setAEndGageHeight",
+              "SubQuestion::setBEndGageHeight",
+              "SubQuestion::endGageHeightAvg"
+            ],
+            [
+              "Mean Time",
+              "SubQuestion::setAMeanTime",
+              "SubQuestion::setBMeanTime",
+              "SubQuestion::MEANTIMEAVG"
+            ]
+          ],
+          "width_xs": 6,
+          "width_lg": 6
+        },
+        {
+          "id": "EWI_samples_table",
+          "label": "Samples Table",
+          "type": "TableInput",
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "colHeaders": [
+            "Distance",
+            "Depth To Bottom",
+            "Depth Sampled",
+            "Transit Time",
+            "Transit Volume"
+          ],
+          "rowHeaders": "true",
+          "value": [],
+          "width_xs": 6,
+          "width_lg": 6
+        },
+        {
+          "id": "setAStartGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "5"
+        },
+        {
+          "id": "setBStartGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "7"
+        },
+        {
+          "id": "setAEndGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "10"
+        },
+        {
+          "id": "setBEndGageHeight",
+          "XMLValue": "XMLQ6",
+          "type": "Text",
+          "helperText": "P0032",
+          "value": "12"
+        },
+        {
+          "id": "startGageHeightAvg",
+          "XMLValue": "setEndAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
+          "value": null,
+          "helperText": "Average start gage height time for sample"
+        },
+        {
+          "id": "endGageHeightAvg",
+          "XMLValue": "setEndAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
+          "value": null,
+          "helperText": "Average start gage height time for sample"
+        },
+        {
+          "id": "setAStartTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "Start sample time for set 1"
+        },
+        {
+          "id": "setAEndTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "End sample time for set 1"
+        },
+        {
+          "id": "setStartTimeAvg",
+          "XMLValue": "setStartAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Average start time for sample"
+        },
+        {
+          "id": "setBStartTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "Start sample time for set 2"
+        },
+        {
+          "id": "setBEndTime",
+          "XMLValue": "xmlDate",
+          "type": "TimeInput",
+          "value": null,
+          "helperText": "End of sample time for set 2"
+        },
+        {
+          "id": "setEndTimeAvg",
+          "XMLValue": "setEndAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Average end time for sample"
+        },
+        {
+          "id": "setAMeanTime",
+          "XMLValue": "setAMeanTime",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Average start time for sample"
+        },
+        {
+          "id": "setBMeanTime",
+          "XMLValue": "setBMeanTime",
+          "type": "ComputedValue",
+          "computationString": "(setAEndTime+setBEndTime)/2",
+          "value": null,
+          "helperText": "Mean time for set B"
+        },
+        {
+          "id": "MEANTIMEAVG",
+          "XMLValue": "meanTimeAvg",
+          "type": "ComputedValue",
+          "computationString": "(setAMeanTime+setBMeanTime)/2",
+          "value": null,
+          "helperText": "Average Mean time for sample"
+        },
+        {
+          "id": "EWI_sampleIsokenetic",
+          "XMLValue": "C",
+          "label": "Sample Isokenetic",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me",
+          "checkbox": false,
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_additionalSampleCollected",
+          "XMLValue": "additionalSampleCollected",
+          "label": "Additional Samples Collected",
+          "type": "Toggle",
+          "value": false,
+          "checkbox": false,
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_intakeEfficiencyCompleted",
+          "XMLValue": "C",
+          "label": "Intake Efficiency Completed",
+          "type": "Toggle",
+          "value": false,
+          "helperText": "Toggle Me Also",
+          "checkbox": false,
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_feetAboveBed",
+          "XMLValue": "EWI_feetAboveBed",
+          "label": "Feet Sampler Stopped above bed",
+          "type": "Text",
+          "value": "",
+          "helperText": "ft",
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "width_xs": 3,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_transitRate",
+          "XMLValue": "EWI_tramsitRate",
+          "label": "Transit Rate (ft/sec)",
+          "type": "Text",
+          "value": "",
+          "placeholder": "ft/sec",
+          "tabName": "EWI",
+          "layoutGroup": "Set Information",
+          "width_xs": 3,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_fieldComposite",
+          "XMLValue": "EWI_fieldComposite",
+          "label": "Samples Field Composited",
+          "type": "Toggle",
+          "value": true,
+          "checkbox": true,
+          "tabName": "EWI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_compositeWithGallonContainers",
+          "XMLValue": "EWI_compositeWithGallonContainers",
+          "label": "Composited with Gallon containers",
+          "type": "Toggle",
+          "value": true,
+          "checkbox": true,
+          "tabName": "EWI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_numSetAContainers",
+          "XMLValue": "EWI_numSetAContainers",
+          "label": "Number of containers - set A",
+          "type": "Text",
+          "value": "",
+          "placeholder": "ft/sec",
+          "tabName": "EWI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_numSetBContainers",
+          "XMLValue": "EWI_numSetBContainers",
+          "label": "Number of containers - set B",
+          "type": "Text",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_setAAnalysedFor",
+          "label": "Analyze Set A for:",
+          "XMLValue": "XMLQ5",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "EWI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "EWI_setBAnalysedFor",
+          "label": "Analyze Set B for:",
+          "XMLValue": "XMLQ5",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "EWI",
+          "layoutGroup": "Analysis Information",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "edgeOfWater_Left",
+          "label": "Left Edge Of Water",
+          "type": "Text",
+          "placeholder": "Feet from XYZ",
+          "value": "10",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "edgeOfSamplingZone_Left",
+          "label": "Left Edge Of Sampling Zone",
+          "type": "Text",
+          "placeholder": "Feet from XYZ",
+          "value": "20",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "edgeOfSamplingZone_Right",
+          "label": "Right Edge Of Sampling Zone",
+          "type": "Text",
+          "placeholder": "Feet from XYZ",
+          "value": "600",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 6,
+          "width_lg": 3
+        },
+        {
+          "id": "edgeOfWater_Right",
+          "label": "Right Edge Of Water",
+          "type": "Text",
+          "placeholder": "Feet from XYZ",
+          "value": "620",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 6,
+          "width_lg": 2
+        },
+        {
+          "id": "samplingPoints",
+          "value": "5",
+          "label": "Sampling Points",
+          "type": "Text",
+          "placeholder": "Number of Points",
+          "tabName": "Field Form",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 12,
+          "width_lg": 2
+        },
+        {
+          "id": "pier1_start",
+          "label": "Pier 1 Start",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "30",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier2_start",
+          "label": "Pier 2 Start",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "160",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier3_start",
+          "label": "Pier 3 Start",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "210",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier4_start",
+          "label": "Pier 4 Start",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "300",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier5_start",
+          "label": "Pier 5 Start",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier6_start",
+          "label": "Pier 6 Start",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier1_end",
+          "label": "Pier 1 End",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "150",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier2_end",
+          "label": "Pier 2 End",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "200",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier3_end",
+          "label": "Pier 3 End",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "260",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier4_end",
+          "label": "Pier 4 End",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "450",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier5_end",
+          "label": "Pier 5 End",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        },
+        {
+          "id": "pier6_end",
+          "label": "Pier 6 End",
+          "type": "Text",
+          "placeholder": "Feet",
+          "value": "",
+          "tabName": "FieldForm",
+          "layoutGroup": "Waterway Info",
+          "width_xs": 2,
+          "width_lg": 1
+        }
+      ]
     }
   ],
   "customQuestions": [
@@ -52,2471 +2530,5 @@
       "id": "CBF"
     }
   ],
-  "generatedQuestions": [],
-  "dialogQuestionsInfo": [
-    {
-      "dialogName": "Add New Station",
-      "dialogDescription": "Fill out the following to add a new station to your personalized station list",
-      "questions": [
-        {
-          "id": "newStation_stationName",
-          "label": "Station Name",
-          "XMLValue": "stnnm",
-          "type": "Text",
-          "tabName": "Add New Station",
-          "layoutGroup": "Basic",
-          "width_xs": 7,
-          "width_lg": 7
-        },
-        {
-          "id": "newStation_stationNumber",
-          "label": "Station Number",
-          "XMLValue": "",
-          "type": "Text",
-          "tabName": "Add Station",
-          "value": "",
-          "layoutGroup": "Basic",
-          "width_xs": 5,
-          "width_lg": 5
-        },
-        {
-          "id": "newStation_projectName",
-          "label": "Project Name",
-          "XMLValue": "",
-          "type": "Text",
-          "tabName": "Add Station",
-          "value": "",
-          "layoutGroup": "Basic",
-          "width_xs": 6,
-          "width_lg": 6
-        },
-        {
-          "id": "newStation_projectID",
-          "label": "Project ID",
-          "XMLValue": "",
-          "type": "Text",
-          "tabName": "Add Station",
-          "value": "",
-          "layoutGroup": "Basic",
-          "width_xs": 3,
-          "width_lg": 3
-        },
-        {
-          "id": "newStation_agencyCode",
-          "label": "Agency Code",
-          "XMLValue": "",
-          "type": "Text",
-          "tabName": "Add Station",
-          "value": "USGS",
-          "layoutGroup": "Basic",
-          "width_xs": 3,
-          "width_lg": 3
-        }
-      ]
-    },
-    {
-      "dialogName": "Add New Question",
-      "dialogDescription": "Fill out the following to add a new question to the program",
-      "questions": [
-        {
-          "id": "newQuestion_label",
-          "label": "Label",
-          "type": "Text",
-          "width_xs": 6,
-          "width_lg": 3
-        },
-        {
-          "id": "newQuestion_id",
-          "label": "Unique ID",
-          "type": "Text",
-          "placeholder": "Must be globally unique",
-          "value": "",
-          "width_xs": 6,
-          "width_lg": 6
-        },
-        {
-          "id": "newQuestion_type",
-          "label": "Question Type",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "Checkbox": "Checkbox",
-            "Computed Value": "ComputedValue",
-            "Date": "DateInput",
-            "Drop Down": "DropDown",
-            "Multiple Choice": "MultipleChoice",
-            "Table": "TableInput",
-            "Text": "Text",
-            "Time": "TimeInput",
-            "Toggle": "Toggle"
-          },
-          "value": ""
-        },
-        {
-          "id": "newQuestion_tabName",
-          "label": "Tab Name",
-          "XMLValue": "",
-          "helperText": "Name of tab where this question resides",
-          "placeholder": "spaces acceptable",
-          "type": "Text",
-          "value": "",
-          "width_xs": 4,
-          "width_lg": 3
-        },
-        {
-          "id": "newQuestion_layoutGroup",
-          "label": "Layout Group",
-          "helperText": "Group on Tab where question resides",
-          "placeholder": "Spaces acceptable",
-          "XMLValue": "",
-          "type": "Text",
-          "value": "",
-          "width_xs": 4,
-          "width_lg": 3
-        },
-        {
-          "id": "newQuestion_initalValue_textValue",
-          "label": "Initial Value",
-          "type": "Text",
-          "placeholder": "Can be left blank",
-          "value": "",
-          "width_xs": 12,
-          "width_lg": 12
-        },
-        {
-          "id": "newQuestion_width_xs",
-          "label": "Width when screen is small",
-          "type": "Text",
-          "placeholder": "1-12",
-          "value": "",
-          "width_xs": 6,
-          "width_lg": 6
-        },
-        {
-          "id": "newQuestion_width_lg",
-          "label": "Width when screen is small",
-          "type": "Text",
-          "placeholder": "Can be left blank",
-          "value": "",
-          "width_xs": 6,
-          "width_lg": 6
-        }
-      ]
-    },
-    {
-      "dialogName": "User Manual",
-      "dialogDescription": "Holding Times-Sample holding times are specified in the USEPA Region 4 Analytical Support\\nBranch Laboratory Operations and Quality Assurance Manual (ASBLOQAM),\\nMost Recent Version. Field investigators should note that the holding time for an\\nun-preserved VOC sediment sample is 48 hours. Arrangements should be made to\\nship the sediment VOC samples to the laboratory by overnight delivery the day they\\nare collected so the laboratory may preserve and/or analyze the sample within 48\\nhours of collection.\\n\\nPercent Solids\\nSamplers must ensure that the laboratory has sufficient material to determine\\npercent solids in the VOC sediment sample to correct the analytical results to dry\\nweight. If other analyses requiring percent solids determination are being\\nperformed upon the sample, these results may be used. If not, a separate sample\\n(minimum of 2 oz.) for percent solids determination will be required.\\n\\n Safety\\nMethanol is a toxic and flammable liquid. Therefore, methanol must be handled\\nwith all required safety precautions related to toxic and flammable liquids.\\nInhalation of methanol vapors must be avoided. Vials should be opened and closed\\nquickly during the sample preservation procedure. Methanol must be handled in a\\nventilated area. Use protective gloves when handling the methanol vials. Store\\nmethanol away from sources of ignition such as extreme heat or open flames. The\\nvials of methanol should be stored in a cooler with ice at all times.\\n\\nShipping\\nMethanol and sodium bisulfate are considered dangerous goods, therefore shipment\\nof samples preserved with these materials by common carrier is regulated by the\\nU.S. Department of Transportation and the International Air Transport Association\\n(IATA). The rules of shipment found in Title 49 of the Code of Federal Regulations\\n(49 CFR parts 171 to 179) and the current edition of the IATA Dangerous Goods\\nRegulations must be followed when shipping methanol and sodium bisulfate.\\nConsult the above documents or the carrier for additional information. Shipment\\nof the quantities of methanol and sodium bisulfate used for sample preservation\\nfalls under the exemption for small quantities. A summary of the requirements for\\nshipping samples follows. Refer to the code for a complete review of the\\nrequirements.",
-      "questions": []
-    },
-    {
-      "dialogName": "Switch User",
-      "dialogDescription": "WebFF recognizes who you are based on your email.",
-      "questions": [
-        {
-          "id": "switchUser_email",
-          "label": "Email Address",
-          "type": "Text",
-          "placeholder": "username@usgs.gov",
-          "width_xs": 12,
-          "width_lg": 12
-        }
-      ]
-    },
-    {
-      "dialogName": "Settings",
-      "dialogDescription": "WebFF recognizes who you are based on your email.",
-      "questions": [
-        {
-          "id": "settings_paper",
-          "label": "Outline Fields",
-          "type": "Toggle",
-          "placeholder": "username@usgs.gov",
-          "value": true,
-          "width_xs": 12,
-          "width_lg": 12
-        }
-      ]
-    }
-  ],
-  "questionsData": [
-    {
-      "id": "mathInput1",
-      "value": "",
-      "label": "A",
-      "XMLValue": "P10020",
-      "type": "Text",
-      "placeholder": "A value",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 4
-    },
-    {
-      "id": "mathInput2",
-      "value": "",
-      "label": "B",
-      "XMLValue": "P10020",
-      "type": "Text",
-      "placeholder": "B value",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 4
-    },
-    {
-      "id": "mathInput3",
-      "value": "2",
-      "label": "C",
-      "XMLValue": "P10020",
-      "type": "Text",
-      "placeholder": "C value",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 4
-    },
-    {
-      "id": "testComputedPlus",
-      "value": "",
-      "label": "Testing Addition and Subtraction (A+B-C)",
-      "XMLValue": "P10020",
-      "type": "ComputedValue",
-      "placeholder": "A + B - C",
-      "computationString": "mathInput1+mathInput2-mathInput3",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "testComputedMinus",
-      "value": "",
-      "label": "Testing static Number (A+2)",
-      "XMLValue": "P10020",
-      "type": "ComputedValue",
-      "placeholder": "A + 2",
-      "computationString": "mathInput1+2",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "testComputedDivide",
-      "value": "",
-      "label": "Testing Division (A/B)",
-      "XMLValue": "P10020",
-      "type": "ComputedValue",
-      "placeholder": "A / B",
-      "computationString": "mathInput1/mathInput2",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "testComputedMultiply",
-      "value": "",
-      "label": "Testing Multiplication (A*B*C)",
-      "XMLValue": "P10020",
-      "type": "ComputedValue",
-      "placeholder": "A * B * C",
-      "computationString": "mathInput1*mathInput2*mathInput3",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "testComputedExponent",
-      "value": "",
-      "label": "Testing Exponent (A^C)",
-      "XMLValue": "P10020",
-      "type": "ComputedValue",
-      "placeholder": "A + B",
-      "computationString": "mathInput1^mathInput3",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "testComplexMath",
-      "value": "",
-      "label": "Testing Complex A/B+(B-C)^C",
-      "XMLValue": "P10020",
-      "type": "ComputedValue",
-      "placeholder": "A + B",
-      "computationString": "mathInput1/mathInput2+(mathInput2-mathInput3)^mathInput3",
-      "tabName": "Question Page",
-      "layoutGroup": "TestMath",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "test1",
-      "label": "Impedence",
-      "XMLValue": "P10020",
-      "type": "Text",
-      "placeholder": "Resistance to AC",
-      "value": "",
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "size": "40"
-    },
-    {
-      "id": "test2",
-      "label": "What name?",
-      "XMLValue": "XMLQ2",
-      "type": "Text",
-      "value": "Johnny Science",
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "size": "50"
-    },
-    {
-      "id": "test3",
-      "label": "Question #3",
-      "XMLValue": "XMLQ3",
-      "type": "Text",
-      "value": "",
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "multiline": true,
-      "rows": 4
-    },
-    {
-      "id": "test4",
-      "label": "Question Label 4",
-      "XMLValue": "XMLQ4",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "No oe": "NA",
-        "My1": "One",
-        "My2": "Two",
-        "Thi sis a longer": "three All Around"
-      },
-      "value": "",
-      "tabName": "Question Page",
-      "layoutGroup": "Test"
-    },
-    {
-      "id": "test5",
-      "label": "Who is family",
-      "XMLValue": "XMLQ5",
-      "type": "MultipleChoice",
-      "options": {
-        "Colleen Niznik": "CSN",
-        "Corbin Brock": "CBF",
-        "Ruby Anne": "RAF",
-        "Kassidy Schmassidy": "KASS"
-      },
-      "value": [
-        "CSN",
-        "RAF"
-      ],
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "helperText": "P1942"
-    },
-    {
-      "id": "testHidden",
-      "hidden": true,
-      "label": "Is this showing?",
-      "XMLValue": "XMLQ5",
-      "type": "MultipleChoice",
-      "options": {
-        "Should": "CSN",
-        "Not": "CBF",
-        "Show": "RAF",
-        "When Hidden": "KASS"
-      },
-      "value": [
-        "CSN",
-        "RAF"
-      ],
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "helperText": "I'm Helping!"
-    },
-    {
-      "id": "testTog",
-      "label": "Hot Out?",
-      "XMLValue": "XMLQT",
-      "type": "Toggle",
-      "value": false,
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "helperText": "Toggle Me",
-      "checkbox": false
-    },
-    {
-      "id": "testTog2",
-      "XMLValue": "XMLQT2",
-      "type": "Toggle",
-      "value": true,
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "helperText": "Toggle Me Also",
-      "checkbox": false
-    },
-    {
-      "id": "testTog3",
-      "label": "Check Me?",
-      "XMLValue": "XMLQT",
-      "type": "Toggle",
-      "value": true,
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "helperText": "Toggle Me",
-      "checkbox": true
-    },
-    {
-      "id": "testTog4",
-      "XMLValue": "XMLQT2",
-      "type": "Toggle",
-      "value": false,
-      "tabName": "Question Page",
-      "layoutGroup": "Test",
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "testDate",
-      "XMLValue": "xmlDate",
-      "type": "DateInput",
-      "label": "current date default",
-      "value": null,
-      "tabName": "Question Page",
-      "layoutGroup": "Date Time Tests",
-      "helperText": "date helper text"
-    },
-    {
-      "id": "testDate2",
-      "XMLValue": "xmlDate2",
-      "type": "DateInput",
-      "label": "Specific Default",
-      "value": "2017-10-25",
-      "tabName": "Question Page",
-      "layoutGroup": "Date Time Tests",
-      "helperText": "date helper text"
-    },
-    {
-      "id": "testTime",
-      "XMLValue": "xmlTime",
-      "type": "TimeInput",
-      "label": "Current time default",
-      "value": null,
-      "tabName": "Question Page",
-      "layoutGroup": "Date Time Tests",
-      "helperText": "Enter a time",
-      "step": 600
-    },
-    {
-      "id": "testTime2",
-      "XMLValue": "xmlTime2",
-      "type": "TimeInput",
-      "label": "Specific Time default",
-      "value": "16:39",
-      "tabName": "Question Page",
-      "layoutGroup": "Date Time Tests",
-      "helperText": "Enter a time",
-      "step": 600
-    },
-    {
-      "id": "testTable",
-      "label": "Test Table Label",
-      "XMLValue": "Deets",
-      "type": "TableInput",
-      "tabName": "Question Page",
-      "layoutGroup": "Table",
-      "helperText": "Table Helper Me",
-      "colWidths": [
-        "20%",
-        "20%",
-        "30%",
-        "10%",
-        "10%"
-      ],
-      "colHeaders": [
-        "Dessert Name",
-        "Calories",
-        "Fat",
-        "Carbs",
-        "Protein"
-      ],
-      "rowHeaders": "true",
-      "numberOfRows": "5",
-      "value": [
-        [
-          "Frozen yoghurt",
-          "159ewrwr",
-          "",
-          "24",
-          "4.0"
-        ],
-        [
-          "Ice cream sandwich",
-          "237",
-          "9.0",
-          "37",
-          "4.3"
-        ],
-        [
-          "Eclair",
-          "262",
-          "SubQuestion::subTest1",
-          "24",
-          "6.0"
-        ],
-        [
-          "Cupcake",
-          "305",
-          "3.7",
-          "67",
-          "4.3"
-        ],
-        [
-          "Gingerbread",
-          "356",
-          "16.0",
-          "49",
-          "3.9"
-        ]
-      ]
-    },
-    {
-      "id": "subTest1",
-      "XMLValue": "XMLQ4",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "No oe": "NA",
-        "My1": "One",
-        "My2": "Two",
-        "Thi sis": "three All Around"
-      },
-      "value": ""
-    },
-    {
-      "id": "testTable2",
-      "label": "Test Table Label2",
-      "XMLValue": "Deets2",
-      "type": "TableInput",
-      "tabName": "Question Page",
-      "layoutGroup": "Table2",
-      "colHeaders": [
-        "Element",
-        "Found"
-      ],
-      "rowHeaders": "true",
-      "numberOfRows": "10",
-      "value": [
-        [
-          "Au",
-          "159"
-        ],
-        [
-          "Hg",
-          "237"
-        ],
-        [
-          "O2",
-          "262"
-        ],
-        [
-          "CO2",
-          "305"
-        ],
-        [
-          "He",
-          "356"
-        ]
-      ]
-    },
-    {
-      "id": "testTable3",
-      "label": "Test Table Label3",
-      "XMLValue": "Deets3",
-      "type": "TableInput",
-      "tabName": "Question Page",
-      "layoutGroup": "Table2",
-      "colHeaders": [
-        "Element",
-        "Found"
-      ],
-      "rowHeaders": "true",
-      "numberOfRows": "10",
-      "value": [
-        [
-          "Au",
-          "159"
-        ],
-        [
-          "Hg",
-          "237"
-        ],
-        [
-          "O2",
-          "262"
-        ],
-        [
-          "CO2",
-          "305"
-        ],
-        [
-          "He",
-          "356"
-        ]
-      ]
-    },
-    {
-      "id": "testTable4",
-      "label": "Test Table Label4",
-      "XMLValue": "Deets4",
-      "type": "TableInput",
-      "tabName": "Question Page",
-      "layoutGroup": "Table2",
-      "colHeaders": [
-        "Element",
-        "Found"
-      ],
-      "rowHeaders": "true",
-      "numberOfRows": "10",
-      "value": [
-        [
-          "Au",
-          "159"
-        ],
-        [
-          "Hg",
-          "237"
-        ],
-        [
-          "O2",
-          "262"
-        ],
-        [
-          "CO2",
-          "305"
-        ],
-        [
-          "He",
-          "356"
-        ]
-      ]
-    },
-    {
-      "id": "test6",
-      "label": "Single Line Text Q6",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "placeholder": "placeme",
-      "value": "",
-      "tabName": "Question Page",
-      "layoutGroup": "QP2"
-    },
-    {
-      "id": "test7",
-      "label": "Single Line Text Question 7",
-      "XMLValue": "XMLQ7",
-      "type": "Text",
-      "value": "Default Value",
-      "tabName": "Question Page",
-      "layoutGroup": "QP2"
-    },
-    {
-      "id": "test8",
-      "label": "Question #8",
-      "XMLValue": "XMLQ8",
-      "type": "Text",
-      "value": "",
-      "tabName": "Question Page",
-      "layoutGroup": "QP2"
-    },
-    {
-      "id": "test9",
-      "label": "Question Label 9",
-      "XMLValue": "XMLQ9",
-      "type": "DropDown",
-      "includeBlank": true,
-      "helperText": "PCodes FTW!",
-      "options": {
-        "No oe": "NA",
-        "My1": "One",
-        "My2": "Two",
-        "My3": "three"
-      },
-      "value": "One",
-      "tabName": "Question Page",
-      "layoutGroup": "QP2"
-    },
-    {
-      "id": "test10",
-      "label": "Who is programmer",
-      "XMLValue": "XMLQ10",
-      "type": "MultipleChoice",
-      "options": {
-        "Joe Federer": "JF",
-        "Ken Skach": "KS",
-        "Molly Wood": "MW"
-      },
-      "value": [
-        "JF"
-      ],
-      "tabName": "Question Page",
-      "layoutGroup": "QP2"
-    },
-    {
-      "id": "concCheck",
-      "XMLValue": "C",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "sandCheck",
-      "XMLValue": "SF",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "fullCheck",
-      "XMLValue": "Z",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "concCheck2",
-      "XMLValue": "C",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "sandCheck2",
-      "XMLValue": "SF",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "fullCheck2",
-      "XMLValue": "Z",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": true
-    },
-    {
-      "id": "stationName",
-      "label": "Station Name",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": false,
-      "tabName": "Field Form",
-      "layoutGroup": "Basic",
-      "helperText": "PCodes FTW!",
-      "width_xs": 6,
-      "width_lg": 3,
-      "options": {
-        "Minnehahaha Creek": "EDI",
-        "EWI": "EWI"
-      },
-      "value": "EDI"
-    },
-    {
-      "id": "stationNumber",
-      "label": "Station Number",
-      "XMLValue": "",
-      "type": "Text",
-      "tabName": "Field Form",
-      "value": "",
-      "layoutGroup": "Basic",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "projectName",
-      "label": "Project Name",
-      "XMLValue": "",
-      "type": "Text",
-      "tabName": "Field Form",
-      "value": "",
-      "layoutGroup": "Basic",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "projectID",
-      "label": "Project ID",
-      "XMLValue": "",
-      "type": "Text",
-      "tabName": "Field Form",
-      "value": "",
-      "layoutGroup": "Basic",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "agencyCode",
-      "label": "Agency Code",
-      "XMLValue": "",
-      "type": "Text",
-      "tabName": "Field Form",
-      "value": "USGS",
-      "layoutGroup": "Basic",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "sampleDate",
-      "label": "Sample Date",
-      "XMLValue": "",
-      "type": "Text",
-      "tabName": "Field Form",
-      "placeholder": "yyyymmdd",
-      "value": "",
-      "layoutGroup": "Basic",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "sedimentType",
-      "label": "Sediment Type",
-      "XMLValue": "sedimentType",
-      "type": "DropDown",
-      "includeBlank": false,
-      "options": {
-        "Bedload": "bedload",
-        "Bed Material": "bedMaterial",
-        "Suspended": "suspended"
-      },
-      "value": "suspended",
-      "tabName": "Field Form",
-      "layoutGroup": "Basic",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "samplingMethod",
-      "label": "Sampling Method",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "EWI": "10",
-        "EDI": "20",
-        "Single Vertical": "30",
-        "DEMO:RemoveStnNumb": "40",
-        "DEMO:ShowStnNumb": "50",
-        "DEMO:Hide:PjctID_Hide:StnNumber": "55",
-        "DEMO:ShowProjectID": "70",
-        "DEMO:Show:StnNum_Hide:ProjectID": "60",
-        "DEMO:HideWeather": "80",
-        "DEMO:ShowWeather": "90"
-      },
-      "actions": {
-        "10": "ShowTab::EWI&HideTab::EDI",
-        "20": "ShowTab::EDI&HideTab::EWI",
-        "30": "ShowTab::EDI&ShowTab::EWI",
-        "40": "HideQuestion::stationNumber",
-        "50": "ShowQuestion::stationNumber",
-        "55": "HideQuestion::projectID&HideQuestion::stationNumber",
-        "60": "ShowQuestion::stationNumber&HideQuestion::projectID",
-        "70": "ShowQuestion::projectID",
-        "80": "HidePanel::FieldForm:Weather",
-        "90": "ShowPanel::FieldForm:Weather"
-      },
-      "value": "",
-      "layoutGroup": "Basic",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "timeZone",
-      "label": "Time Zone",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "Hawaii-Aleutian": "Hawaii-Aleutian",
-        "Alaska": "Alaska",
-        "Pacific": "Pacific",
-        "Mountain": "Mountain",
-        "Central": "Central",
-        "Eastern": "Eastern",
-        "Atlantic": "Atlantic"
-      },
-      "value": "",
-      "layoutGroup": "Basic",
-      "width_xs": 3,
-      "width_lg": 1
-    },
-    {
-      "id": "samplingTeam",
-      "label": "Sampling Team",
-      "XMLValue": "st",
-      "type": "Text",
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Basic",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "compiledBy",
-      "label": "Compiled By",
-      "XMLValue": "cb",
-      "type": "Text",
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Basic",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "sameDaySample",
-      "label": "Same Day Sample",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": false,
-      "options": {
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "5": "5",
-        "No": "false"
-      },
-      "value": "false",
-      "layoutGroup": "Basic",
-      "width_xs": 3,
-      "width_lg": 1
-    },
-    {
-      "id": "sky",
-      "label": "Sky",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "Clear": "Clear",
-        "Partly Cloudy": "Partly Cloudy",
-        "Cloudy": "Cloudy"
-      },
-      "value": "",
-      "layoutGroup": "Weather",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "precipitation",
-      "label": "Precipitation",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "No Precip": "No Precip",
-        "Mist": "Mist",
-        "Light Rain": "Light Rain",
-        "Medium Rain": "Medium Rain",
-        "Heavy Rain": "Heavy Rain",
-        "Sleet": "Sleet",
-        "Snow": "Snow"
-      },
-      "value": "",
-      "layoutGroup": "Weather",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "temperature",
-      "label": "Temperature",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "Very Cold": "Very Cold",
-        "Cold": "Cold",
-        "Cool": "Cool",
-        "Warm": "Warm",
-        "Hot": "Hot",
-        "Very Hot": "Very Hot"
-      },
-      "value": "",
-      "layoutGroup": "Weather",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "wind",
-      "label": "Wind",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "Calm": "Calm",
-        "Light Breeze": "Light Breeze",
-        "Breeze": "Breeze",
-        "Gusty": "Gusty",
-        "Windy": "Windy"
-      },
-      "value": "",
-      "layoutGroup": "Weather",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "windDirection",
-      "label": "Wind Direction",
-      "XMLValue": "",
-      "type": "DropDown",
-      "tabName": "Field Form",
-      "includeBlank": true,
-      "options": {
-        "Upstream": "Upstream",
-        "Downstream": "Downstream",
-        "Cross-stream": "Cross-stream"
-      },
-      "value": "",
-      "layoutGroup": "Weather",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "hydrologicEvent",
-      "label": "Hydrologic Event",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Routine Sample": "Routine Sample",
-        "Storm": "Storm",
-        "Not Determined": "Not Determined",
-        "Under Ice Cover": "Under Ice Cover",
-        "Drought": "Drought",
-        "Regulated Flow": "Regulated Flow",
-        "Snowmelt": "Snowmelt",
-        "Flood": "Flood",
-        "Not Determined (Historical)": "Not Determined (Historical)"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "hydrologicCondition",
-      "label": "HydrologicCondition",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Stable": "Stable",
-        "Rising stage": "Rising stage",
-        "Peak Stage": "Peak Stage",
-        "Stable, High": "Stable, High",
-        "Stable, Low": "Stable, Low",
-        "Not Determined": "Not Determined",
-        "Not Applicable": "Not Applicable"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "streamMixing",
-      "label": "Stream Mixing",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Well Mixed": "Well Mixed",
-        "Stratified": "Stratified",
-        "Poorly-mixed": "Poorly-mixed",
-        "Unknown": "Unknown"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "streamColor",
-      "label": "Stream Color",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Brown": "Brown",
-        "Green": "Green",
-        "Blue": "Blue",
-        "Gray": "Gray",
-        "Clear": "Clear",
-        "Other": "Other"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "sampleMedium",
-      "label": "Sample Medium",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Surface Water": "Surface Water",
-        "Bed Material": "Bed Material",
-        "QA (Artificial/Blank)": "QA (Artificial/Blank)",
-        "QA (Duplicate/Replicate)": "QA (Duplicate/Replicate)"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "sampleType",
-      "label": "Sample Type",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Regular": "Regular",
-        "Composite (ISCO)": "Composite (ISCO)",
-        "Not Determined": "Not Determined",
-        "Spike": "Spike",
-        "Blank (using IBW or OBW)": "Blank (using IBW or OBW)",
-        "Reference": "Reference",
-        "Blind": "Blind",
-        "Duplicate": "Duplicate",
-        "Reference Material": "Reference Material",
-        "Replicate": "Replicate",
-        "Spike Solution": "Spike Solution",
-        "Other QA": "Other QA"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "samplePurpose",
-      "label": "Sample Purpose",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Routine": "Routine",
-        "Cross-section Variation": "Cross-section Variation"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "analysisSourceCode",
-      "label": "Analysis Source Code",
-      "XMLValue": "",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "USGS lab and field": "USGS lab and field",
-        "USGS lab and field and non-USGS lab": "USGS lab and field and non-USGS lab",
-        "Not Determined": "Not Determined",
-        "USGS lab and non-USGS field": "USGS lab and non-USGS field",
-        "USGS lab and non-USGS lab and field": "USGS lab and non-USGS lab and field",
-        "USGS lab and field and non-USGS field": "USGS lab and field and non-USGS field",
-        "USGS lab and field and non-USGS lab and field": "USGS lab and field and non-USGS lab and field",
-        "USGS field only": "USGS field only",
-        "USGS lab only": "USGS lab only",
-        "Non-USGS Field": "Non-USGS Field",
-        "Non-USGS lab only": "Non-USGS lab only",
-        "Non-USGS lab and field": "Non-USGS lab and field",
-        "USGS field and non-USGS field": "USGS field and non-USGS field",
-        "USGS field and non-USGS lab": "USGS field and non-USGS lab",
-        "USGS field and non-USGS lab and field": "USGS field and non-USGS lab and field"
-      },
-      "value": "",
-      "tabName": "Field Form",
-      "layoutGroup": "Sample Information",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "WQ_time",
-      "label": "Time",
-      "XMLValue": "P1000",
-      "type": "TimeInput",
-      "helperText": "P1000",
-      "placeholder": "hhmm",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "WQ_location",
-      "label": "Location",
-      "XMLValue": "P1234",
-      "type": "Text",
-      "helperText": "P1234",
-      "value": "",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "WQ_temp",
-      "label": "Temp C",
-      "XMLValue": "P23430",
-      "type": "Text",
-      "helperText": "P23430",
-      "value": "",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "WQ_specificConductance",
-      "label": "Specific Conductance",
-      "XMLValue": "P594",
-      "type": "Text",
-      "helperText": "P594",
-      "value": "",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "WQ_transparency",
-      "label": "Transparency",
-      "XMLValue": "P9987",
-      "type": "Text",
-      "helperText": "P9987",
-      "value": "",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "WQ_NTRUturbidity",
-      "label": "NTRU Turbidity HACH",
-      "XMLValue": "P983",
-      "type": "Text",
-      "helperText": "P983",
-      "value": "",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 6,
-      "width_lg": 6
-    },
-    {
-      "id": "WQ_FNUturbidity",
-      "label": "FNU Turbidity DTS-12",
-      "XMLValue": "P984",
-      "type": "Text",
-      "helperText": "P984",
-      "value": "",
-      "tabName": "Water Quality",
-      "layoutGroup": "Field Parameters",
-      "width_xs": 6,
-      "width_lg": 6
-    },
-    {
-      "id": "EDI_samplerType",
-      "label": "Sampler Type",
-      "XMLValue": "P1050",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "US D-74": "US D-74",
-        "US DH-48": "US DH-48",
-        "US D-96 Bag Sampler": "US D-96 Bag Sampler",
-        "Weighted Bottle Sampler": "Weighted Bottle Sampler",
-        "Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
-        "US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
-        "US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
-        "Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
-        "Other": "Other",
-        "US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
-        "US DH-59": "US DH-59",
-        "US DH-76": "US DH-76",
-        "US P-61-A1": "US P-61-A1",
-        "US P-63": "US P-63",
-        "US P-72": "US P-72",
-        "US U-59": "US U-59",
-        "US U-73": "US U-73",
-        "US PS-69": "US PS-69",
-        "US DH-81": "US DH-81",
-        "US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
-        "Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
-        "US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
-        "US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
-        "US D-95 Plastic Bottle": "US D-95 Plastic Bottle",
-        "US D-99 Bag Sampler": "US D-99 Bag Sampler",
-        "Open-mouth 1-liter (Bacteria)": "Open-mouth 1-liter (Bacteria)",
-        "Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
-      },
-      "actions": {
-        "US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
-        "Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_bottleMaterial",
-      "hidden": true,
-      "label": "Bottle Material",
-      "XMLValue": "P999",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Plastic": "Plastic",
-        "Glass": "Glass",
-        "Other": "Other"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_bagMaterial",
-      "label": "Bag Material",
-      "XMLValue": "P999",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Plastic": "Plastic",
-        "Glass": "Glass",
-        "Other": "Other"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_sizeOfBottle",
-      "hidden": true,
-      "label": "Size of Bottle",
-      "XMLValue": "P432",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Pint": "Pint",
-        "Quart": "Quart"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_sizeOfBag",
-      "label": "Size of Bag",
-      "XMLValue": "P245",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "1 Liter": "1 Liter",
-        "3 Liter": "3 Liter"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_nozzelMaterial",
-      "label": "Nozzel Material",
-      "XMLValue": "XMLNM",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Brass": "Brass",
-        "Plastic": "Plastic"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_nozzelWidth",
-      "label": "Nozzel Width",
-      "XMLValue": "XMLNW",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "13/16": "13/16",
-        "1/4": "1/4",
-        "15/16": "15/16"
-      },
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_setInfo_table",
-      "label": "Set Info Table",
-      "type": "TableInput",
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "colHeaders": [
-        "",
-        "Set A",
-        "Set B",
-        "Average"
-      ],
-      "rowHeaders": "true",
-      "value": [
-        [
-          "Start Time",
-          "SubQuestion::setAStartTime",
-          "SubQuestion::setBStartTime",
-          "SubQuestion::setStartTimeAvg"
-        ],
-        [
-          "Gage Height(Start)",
-          "SubQuestion::setAStartGageHeight",
-          "SubQuestion::setBStartGageHeight",
-          "SubQuestion::startGageHeightAvg"
-        ],
-        [
-          "End Time",
-          "SubQuestion::setAEndTime",
-          "SubQuestion::setBEndTime",
-          "SubQuestion::setEndTimeAvg"
-        ],
-        [
-          "Gage Height(End)",
-          "SubQuestion::setAEndGageHeight",
-          "SubQuestion::setBEndGageHeight",
-          "SubQuestion::endGageHeightAvg"
-        ],
-        [
-          "Mean Time",
-          "SubQuestion::setAMeanTime",
-          "SubQuestion::setBMeanTime",
-          "SubQuestion::MEANTIMEAVG"
-        ]
-      ],
-      "width_xs": 6,
-      "width_lg": 6
-    },
-    {
-      "id": "EDI_samples_table",
-      "label": "Samples Table",
-      "type": "TableInput",
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "colHeaders": [
-        "EDI",
-        "Velocity (ft/sec)",
-        "Depth (feet)",
-        "T-Rate",
-        "Volume (cc)",
-        "Time (sec)",
-        "Ratio of Vertical",
-        "Intake Efficiency"
-      ],
-      "rowHeaders": "true",
-      "value": [
-        [
-          "10%"
-        ],
-        [
-          "30%"
-        ],
-        [
-          "50%"
-        ],
-        [
-          "70%"
-        ],
-        [
-          "90%"
-        ]
-      ],
-      "width_xs": 6,
-      "width_lg": 6
-    },
-    {
-      "id": "EDI_setAStartGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "5"
-    },
-    {
-      "id": "EDI_setBStartGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "7"
-    },
-    {
-      "id": "EDI_setAEndGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "10"
-    },
-    {
-      "id": "EDI_setBEndGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "12"
-    },
-    {
-      "id": "EDI_startGageHeightAvg",
-      "XMLValue": "setEndAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
-      "value": null,
-      "helperText": "Average start gage height time for sample"
-    },
-    {
-      "id": "EDI_endGageHeightAvg",
-      "XMLValue": "setEndAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
-      "value": null,
-      "helperText": "Average start gage height time for sample"
-    },
-    {
-      "id": "EDI_setAStartTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "Start sample time for set 1"
-    },
-    {
-      "id": "EDI_setAEndTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "End sample time for set 1"
-    },
-    {
-      "id": "EDI_setStartTimeAvg",
-      "XMLValue": "setStartAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Average start time for sample"
-    },
-    {
-      "id": "EDI_setBStartTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "Start sample time for set 2"
-    },
-    {
-      "id": "EDI_setBEndTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "End of sample time for set 2"
-    },
-    {
-      "id": "EDI_setEndTimeAvg",
-      "XMLValue": "setEndAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Average end time for sample"
-    },
-    {
-      "id": "EDI_setAMeanTime",
-      "XMLValue": "setAMeanTime",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Average start time for sample"
-    },
-    {
-      "id": "EDI_setBMeanTime",
-      "XMLValue": "setBMeanTime",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Mean time for set B"
-    },
-    {
-      "id": "EDI_MEANTIMEAVG",
-      "XMLValue": "meanTimeAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAMeanTime+setBMeanTime)/2",
-      "value": null,
-      "helperText": "Average Mean time for sample"
-    },
-    {
-      "id": "EDI_sampleIsokenetic",
-      "XMLValue": "C",
-      "label": "Sample Isokenetic",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me",
-      "checkbox": false,
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "width_xs": 2,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_additionalSampleCollected",
-      "XMLValue": "additionalSampleCollected",
-      "label": "Additional Samples Collected",
-      "type": "Toggle",
-      "value": false,
-      "checkbox": false,
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "width_xs": 2,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_intakeEfficiencyCompleted",
-      "XMLValue": "C",
-      "label": "Intake Efficiency Completed",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": false,
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "width_xs": 2,
-      "width_lg": 2
-    },
-    {
-      "id": "EDI_feetAboveBed",
-      "XMLValue": "EDI_feetAboveBed",
-      "label": "Feet Sampler Stopped above bed",
-      "type": "Text",
-      "value": "",
-      "helperText": "ft",
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "width_xs": 3,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_transitRate",
-      "XMLValue": "EWI_tramsitRate",
-      "label": "Transit Rate (ft/sec)",
-      "type": "Text",
-      "value": "",
-      "placeholder": "ft/sec",
-      "tabName": "EDI",
-      "layoutGroup": "Set Information",
-      "width_xs": 3,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_fieldComposite",
-      "XMLValue": "EWI_fieldComposite",
-      "label": "Samples Field Composited",
-      "type": "Toggle",
-      "value": true,
-      "checkbox": true,
-      "tabName": "EDI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_compositeWithGallonContainers",
-      "XMLValue": "EWI_compositeWithGallonContainers",
-      "label": "Composited with Gallon containers",
-      "type": "Toggle",
-      "value": true,
-      "checkbox": true,
-      "tabName": "EDI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_numSetAContainers",
-      "XMLValue": "EWI_numSetAContainers",
-      "label": "Number of containers - set A",
-      "type": "Text",
-      "value": "",
-      "placeholder": "ft/sec",
-      "tabName": "EDI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_numSetBContainers",
-      "XMLValue": "EWI_numSetBContainers",
-      "label": "Number of containers - set B",
-      "type": "Text",
-      "value": "",
-      "tabName": "EDI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_setAAnalysedFor",
-      "label": "Analyze Set A for:",
-      "XMLValue": "XMLQ5",
-      "type": "MultipleChoice",
-      "options": {
-        "Concentration": "C",
-        "Sand-Fine break": "SF",
-        "Sand Analysis": "SA",
-        "Turbidity": "T",
-        "Loss-on-ignition": "LOI",
-        "Dissolved Solids": "DS",
-        "Specific Conductance": "SC",
-        "Full-size Fractions": "Z"
-      },
-      "value": [],
-      "tabName": "EDI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EDI_setBAnalysedFor",
-      "label": "Analyze Set B for:",
-      "XMLValue": "XMLQ5",
-      "type": "MultipleChoice",
-      "options": {
-        "Concentration": "C",
-        "Sand-Fine break": "SF",
-        "Sand Analysis": "SA",
-        "Turbidity": "T",
-        "Loss-on-ignition": "LOI",
-        "Dissolved Solids": "DS",
-        "Specific Conductance": "SC",
-        "Full-size Fractions": "Z"
-      },
-      "value": [],
-      "tabName": "EDI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_samplerType",
-      "label": "Sampler Type",
-      "XMLValue": "P1050",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "US D-74": "US D-74",
-        "US DH-48": "US DH-48",
-        "US D-96 Bag Sampler": "US D-96 Bag Sampler",
-        "Weighted Bottle Sampler": "Weighted Bottle Sampler",
-        "Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
-        "US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
-        "US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
-        "Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
-        "Other": "Other",
-        "US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
-        "US DH-59": "US DH-59",
-        "US DH-76": "US DH-76",
-        "US P-61-A1": "US P-61-A1",
-        "US P-63": "US P-63",
-        "US P-72": "US P-72",
-        "US U-59": "US U-59",
-        "US U-73": "US U-73",
-        "US PS-69": "US PS-69",
-        "US DH-81": "US DH-81",
-        "US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
-        "Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
-        "US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
-        "US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
-        "US D-95 Plastic Bottle": "US D-95 Plastic Bottle",
-        "US D-99 Bag Sampler": "US D-99 Bag Sampler",
-        "Open-mouth 1-liter (Bacteria)": "Open-mouth 1-liter (Bacteria)",
-        "Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
-      },
-      "actions": {
-        "US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-        "Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
-        "Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "bottleMaterial",
-      "hidden": true,
-      "label": "Bottle Material",
-      "XMLValue": "P999",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Plastic": "Plastic",
-        "Glass": "Glass",
-        "Other": "Other"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "bagMaterial",
-      "label": "Bag Material",
-      "XMLValue": "P999",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Plastic": "Plastic",
-        "Glass": "Glass",
-        "Other": "Other"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 3
-    },
-    {
-      "id": "sizeOfBottle",
-      "hidden": true,
-      "label": "Size of Bottle",
-      "XMLValue": "P432",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Pint": "Pint",
-        "Quart": "Quart"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "sizeOfBag",
-      "label": "Size of Bag",
-      "XMLValue": "P245",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "1 Liter": "1 Liter",
-        "3 Liter": "3 Liter"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 4,
-      "width_lg": 2
-    },
-    {
-      "id": "nozzelMaterial",
-      "label": "Nozzel Material",
-      "XMLValue": "XMLNM",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "Brass": "Brass",
-        "Plastic": "Plastic"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "nozzelWidth",
-      "label": "Nozzel Width",
-      "XMLValue": "XMLNW",
-      "type": "DropDown",
-      "includeBlank": true,
-      "options": {
-        "13/16": "13/16",
-        "1/4": "1/4",
-        "15/16": "15/16"
-      },
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Sampler Info",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "EWI_setInfo_table",
-      "label": "Set Info Table",
-      "type": "TableInput",
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "colHeaders": [
-        "",
-        "Set A",
-        "Set B",
-        "Average"
-      ],
-      "rowHeaders": "true",
-      "value": [
-        [
-          "Start Time",
-          "SubQuestion::setAStartTime",
-          "SubQuestion::setBStartTime",
-          "SubQuestion::setStartTimeAvg"
-        ],
-        [
-          "Gage Height(Start)",
-          "SubQuestion::setAStartGageHeight",
-          "SubQuestion::setBStartGageHeight",
-          "SubQuestion::startGageHeightAvg"
-        ],
-        [
-          "End Time",
-          "SubQuestion::setAEndTime",
-          "SubQuestion::setBEndTime",
-          "SubQuestion::setEndTimeAvg"
-        ],
-        [
-          "Gage Height(End)",
-          "SubQuestion::setAEndGageHeight",
-          "SubQuestion::setBEndGageHeight",
-          "SubQuestion::endGageHeightAvg"
-        ],
-        [
-          "Mean Time",
-          "SubQuestion::setAMeanTime",
-          "SubQuestion::setBMeanTime",
-          "SubQuestion::MEANTIMEAVG"
-        ]
-      ],
-      "width_xs": 6,
-      "width_lg": 6
-    },
-    {
-      "id": "EWI_samples_table",
-      "label": "Samples Table",
-      "type": "TableInput",
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "colHeaders": [
-        "Distance",
-        "Depth To Bottom",
-        "Depth Sampled",
-        "Transit Time",
-        "Transit Volume"
-      ],
-      "rowHeaders": "true",
-      "value": [],
-      "width_xs": 6,
-      "width_lg": 6
-    },
-    {
-      "id": "setAStartGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "5"
-    },
-    {
-      "id": "setBStartGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "7"
-    },
-    {
-      "id": "setAEndGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "10"
-    },
-    {
-      "id": "setBEndGageHeight",
-      "XMLValue": "XMLQ6",
-      "type": "Text",
-      "helperText": "P0032",
-      "value": "12"
-    },
-    {
-      "id": "startGageHeightAvg",
-      "XMLValue": "setEndAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
-      "value": null,
-      "helperText": "Average start gage height time for sample"
-    },
-    {
-      "id": "endGageHeightAvg",
-      "XMLValue": "setEndAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
-      "value": null,
-      "helperText": "Average start gage height time for sample"
-    },
-    {
-      "id": "setAStartTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "Start sample time for set 1"
-    },
-    {
-      "id": "setAEndTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "End sample time for set 1"
-    },
-    {
-      "id": "setStartTimeAvg",
-      "XMLValue": "setStartAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Average start time for sample"
-    },
-    {
-      "id": "setBStartTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "Start sample time for set 2"
-    },
-    {
-      "id": "setBEndTime",
-      "XMLValue": "xmlDate",
-      "type": "TimeInput",
-      "value": null,
-      "helperText": "End of sample time for set 2"
-    },
-    {
-      "id": "setEndTimeAvg",
-      "XMLValue": "setEndAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Average end time for sample"
-    },
-    {
-      "id": "setAMeanTime",
-      "XMLValue": "setAMeanTime",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Average start time for sample"
-    },
-    {
-      "id": "setBMeanTime",
-      "XMLValue": "setBMeanTime",
-      "type": "ComputedValue",
-      "computationString": "(setAEndTime+setBEndTime)/2",
-      "value": null,
-      "helperText": "Mean time for set B"
-    },
-    {
-      "id": "MEANTIMEAVG",
-      "XMLValue": "meanTimeAvg",
-      "type": "ComputedValue",
-      "computationString": "(setAMeanTime+setBMeanTime)/2",
-      "value": null,
-      "helperText": "Average Mean time for sample"
-    },
-    {
-      "id": "EWI_sampleIsokenetic",
-      "XMLValue": "C",
-      "label": "Sample Isokenetic",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me",
-      "checkbox": false,
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "width_xs": 2,
-      "width_lg": 2
-    },
-    {
-      "id": "EWI_additionalSampleCollected",
-      "XMLValue": "additionalSampleCollected",
-      "label": "Additional Samples Collected",
-      "type": "Toggle",
-      "value": false,
-      "checkbox": false,
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "width_xs": 2,
-      "width_lg": 2
-    },
-    {
-      "id": "EWI_intakeEfficiencyCompleted",
-      "XMLValue": "C",
-      "label": "Intake Efficiency Completed",
-      "type": "Toggle",
-      "value": false,
-      "helperText": "Toggle Me Also",
-      "checkbox": false,
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "width_xs": 2,
-      "width_lg": 2
-    },
-    {
-      "id": "EWI_feetAboveBed",
-      "XMLValue": "EWI_feetAboveBed",
-      "label": "Feet Sampler Stopped above bed",
-      "type": "Text",
-      "value": "",
-      "helperText": "ft",
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "width_xs": 3,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_transitRate",
-      "XMLValue": "EWI_tramsitRate",
-      "label": "Transit Rate (ft/sec)",
-      "type": "Text",
-      "value": "",
-      "placeholder": "ft/sec",
-      "tabName": "EWI",
-      "layoutGroup": "Set Information",
-      "width_xs": 3,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_fieldComposite",
-      "XMLValue": "EWI_fieldComposite",
-      "label": "Samples Field Composited",
-      "type": "Toggle",
-      "value": true,
-      "checkbox": true,
-      "tabName": "EWI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_compositeWithGallonContainers",
-      "XMLValue": "EWI_compositeWithGallonContainers",
-      "label": "Composited with Gallon containers",
-      "type": "Toggle",
-      "value": true,
-      "checkbox": true,
-      "tabName": "EWI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_numSetAContainers",
-      "XMLValue": "EWI_numSetAContainers",
-      "label": "Number of containers - set A",
-      "type": "Text",
-      "value": "",
-      "placeholder": "ft/sec",
-      "tabName": "EWI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_numSetBContainers",
-      "XMLValue": "EWI_numSetBContainers",
-      "label": "Number of containers - set B",
-      "type": "Text",
-      "value": "",
-      "tabName": "EWI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_setAAnalysedFor",
-      "label": "Analyze Set A for:",
-      "XMLValue": "XMLQ5",
-      "type": "MultipleChoice",
-      "options": {
-        "Concentration": "C",
-        "Sand-Fine break": "SF",
-        "Sand Analysis": "SA",
-        "Turbidity": "T",
-        "Loss-on-ignition": "LOI",
-        "Dissolved Solids": "DS",
-        "Specific Conductance": "SC",
-        "Full-size Fractions": "Z"
-      },
-      "value": [],
-      "tabName": "EWI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "EWI_setBAnalysedFor",
-      "label": "Analyze Set B for:",
-      "XMLValue": "XMLQ5",
-      "type": "MultipleChoice",
-      "options": {
-        "Concentration": "C",
-        "Sand-Fine break": "SF",
-        "Sand Analysis": "SA",
-        "Turbidity": "T",
-        "Loss-on-ignition": "LOI",
-        "Dissolved Solids": "DS",
-        "Specific Conductance": "SC",
-        "Full-size Fractions": "Z"
-      },
-      "value": [],
-      "tabName": "EWI",
-      "layoutGroup": "Analysis Information",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "edgeOfWater_Left",
-      "label": "Left Edge Of Water",
-      "type": "Text",
-      "placeholder": "Feet from XYZ",
-      "value": "10",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "edgeOfSamplingZone_Left",
-      "label": "Left Edge Of Sampling Zone",
-      "type": "Text",
-      "placeholder": "Feet from XYZ",
-      "value": "20",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "edgeOfSamplingZone_Right",
-      "label": "Right Edge Of Sampling Zone",
-      "type": "Text",
-      "placeholder": "Feet from XYZ",
-      "value": "600",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 6,
-      "width_lg": 3
-    },
-    {
-      "id": "edgeOfWater_Right",
-      "label": "Right Edge Of Water",
-      "type": "Text",
-      "placeholder": "Feet from XYZ",
-      "value": "620",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 6,
-      "width_lg": 2
-    },
-    {
-      "id": "samplingPoints",
-      "value": "5",
-      "label": "Sampling Points",
-      "type": "Text",
-      "placeholder": "Number of Points",
-      "tabName": "Field Form",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 12,
-      "width_lg": 2
-    },
-    {
-      "id": "pier1_start",
-      "label": "Pier 1 Start",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "30",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier2_start",
-      "label": "Pier 2 Start",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "160",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier3_start",
-      "label": "Pier 3 Start",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "210",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier4_start",
-      "label": "Pier 4 Start",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "300",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier5_start",
-      "label": "Pier 5 Start",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier6_start",
-      "label": "Pier 6 Start",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier1_end",
-      "label": "Pier 1 End",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "150",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier2_end",
-      "label": "Pier 2 End",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "200",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier3_end",
-      "label": "Pier 3 End",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "260",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier4_end",
-      "label": "Pier 4 End",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "450",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier5_end",
-      "label": "Pier 5 End",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    },
-    {
-      "id": "pier6_end",
-      "label": "Pier 6 End",
-      "type": "Text",
-      "placeholder": "Feet",
-      "value": "",
-      "tabName": "FieldForm",
-      "layoutGroup": "Waterway Info",
-      "width_xs": 2,
-      "width_lg": 1
-    }
-  ]
+  "generatedQuestions": []
 }

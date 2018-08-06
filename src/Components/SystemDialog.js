@@ -19,7 +19,7 @@ class SystemDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dialogQuestionsInfo: []
+			dialogQuestions: []
 		};
 		//this.questionChangeHandler = this.questionChangeHandler.bind(this);
 	}
@@ -27,7 +27,7 @@ class SystemDialog extends React.Component {
 
 
 	render() {
-		const { closeHandler, dialogName, dialogDescription, dialogQuestionsInfo } = this.props;
+		const { closeHandler, dialogName, dialogDescription, dialogQuestions } = this.props;
 
 		//TODO: callback function for these questions
 		//TODO: questionPanel could actually be a questionPage...allowing for multiple panels... perhaps useful in the 'settings' dialog?
@@ -47,7 +47,7 @@ class SystemDialog extends React.Component {
 							{dialogDescription}:
             			</DialogContentText>
 						<QuestionPanel 
-						questions={createQuestionComponentsForLayoutGroup(dialogQuestionsInfo, this.props.stateChangeHandler, this.props.globalState)}
+						questions={createQuestionComponentsForLayoutGroup(dialogQuestions, this.props.stateChangeHandler, this.props.globalState)}
 						key={dialogName}/>
 					</DialogContent>
 					<DialogActions>
@@ -62,7 +62,7 @@ class SystemDialog extends React.Component {
 
 SystemDialog.propTypes = {
 	classes: PropTypes.object.isRequired,
-	dialogQuestionsInfo: PropTypes.array.isRequired,
+	dialogQuestions: PropTypes.array.isRequired,
 	dialogDescription: PropTypes.string,
 	dialogName: PropTypes.string.isRequired,
 	closeHandler: PropTypes.func.isRequired

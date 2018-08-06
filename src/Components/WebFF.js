@@ -46,6 +46,9 @@ import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
+const criticalDefaultNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
+const itemsToSyncToLS = criticalDefaultNodes;
+
 class WebFF extends React.Component {
 	constructor(props) {
 		super(props);
@@ -58,11 +61,11 @@ class WebFF extends React.Component {
 			navMenuExpanded: false,
 
 			isDialogQuestionsLoaded: false,
-			dialogQuestionsInfo: [],
+			dialogQuestions: [],
 			dialogOpen: false,
 			curDialogDescription: "",
 			curDialogName: "",
-			curDialogQuestionsInfo: [],
+			curDialogQuestions: [],
 
 			isQuestionsDataLoaded: false,
 			questionsData: [],
@@ -73,42 +76,70 @@ class WebFF extends React.Component {
 
 			appBarText: "Sediment Field Forms",
 
-			hiddenTabs: ["EDI", "EWI", "WaterQuality", "FieldForm"],  //TODO: pull hiddenTabs from LS before overwriting here?
+			hiddenTabs: [],
 		};
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
 		this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
-
-	};
-
-	componentWillUpdate(nextProps, nextState) { //TODO: Not sure what we are doing here... why don't we set these right when we load them in the fetch?
-		localStorage.setItem('navMenuInfo', JSON.stringify(nextState.navMenuInfo));
-		localStorage.setItem('dialogQuestionsInfo', JSON.stringify(nextState.dialogQuestionsInfo));
-		localStorage.setItem('questionsData', JSON.stringify(nextState.questionsData));
-		localStorage.setItem('hiddenPanels', JSON.stringify(nextState.hiddenPanels));
-		localStorage.setItem('hiddenTabs', JSON.stringify(nextState.hiddenTabs));
 	}
 
-	componentWillMount() {
-		let itemsToLoad = ["navMenuInfo", "dialogQuestionsInfo", "questionsData", "hiddenPanels", "hiddenTabs"]
+	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
+		itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
+	}
 
-		for (let i = 0; i < itemsToLoad.length; i++) {
-			if (localStorage.getItem(itemsToLoad[i])) {
-				console.log("using localStorage data for " + itemsToLoad[i]);
-				let newItemsLoaded = this.state.itemsLoaded;
-				if (!newItemsLoaded.includes(itemsToLoad[i])) {
-					newItemsLoaded.push(itemsToLoad[i])
-				}
-				this.setState({
-					[itemsToLoad[i]]: JSON.parse(localStorage.getItem(itemsToLoad[i])),
-					itemsLoaded: newItemsLoaded
-				}, this.buildRoutesAndRenderPages);
-			} else {
-				console.log("going to DB for data for " + itemsToLoad[i]);
-				this.fetchDBInfo(itemsToLoad[i]);
+
+	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
+		let DEBUG = false;
+
+		// check if ALL items are loaded into LS
+		let allLoadedInLS = true;
+		for (let i = 0; i < criticalDefaultNodes.length; i++) {
+			if (!localStorage.getItem(criticalDefaultNodes[i])) {
+				allLoadedInLS = false;
 			}
 		}
+
+		if (allLoadedInLS) {
+			// pull everything from LS
+			for (let i = 0; i < criticalDefaultNodes.length; i++) {
+				let newItemsLoaded = this.state.itemsLoaded;
+				if (!newItemsLoaded.includes(criticalDefaultNodes[i])) {
+					newItemsLoaded.push(criticalDefaultNodes[i])
+				}
+				this.setState({
+					[criticalDefaultNodes[i]]: JSON.parse(localStorage.getItem(criticalDefaultNodes[i])),
+					itemsLoaded: newItemsLoaded
+				}, this.buildRoutesAndRenderPages);
+			}
+		} else {
+			// pull everything from DB
+			//load default configurations
+			this.newFetch("defaultConfig", (defaultConfigJSON) => {
+				defaultConfigJSON.forEach((configNode) => {
+					if (DEBUG) console.log("ConfigNode: ", configNode);
+					let nodeName = configNode.id;
+					if (DEBUG) console.log("NodeName: ", nodeName);
+					let nodeArrName = nodeName + "Arr";
+					if (DEBUG) console.log("NodeArrName: ", nodeArrName)
+					let nodeArr = configNode[nodeArrName];
+					if (DEBUG) console.log("nodeArr: ", nodeArr);
+					if (DEBUG) console.log("this.state.itemsLoaded: ", this.state.itemsLoaded);
+
+					this.setState({ [nodeName]: nodeArr }, () => {
+						if (DEBUG) console.log("STATE: ", this.state);
+						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
+						let newItemsLoaded = this.state.itemsLoaded;
+						newItemsLoaded.push(nodeName);
+						this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
+					});
+				});
+			});
+		}
+
+
+		//TODO: collect info and combine with per user, per station questions
+
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
@@ -163,6 +194,43 @@ class WebFF extends React.Component {
 			//TODO: additional good ones:  blur*, edit* (gives editor options...)
 			default: return <SettingsInputComponentIcon />
 		}
+	}
+
+	newFetch(_query, successCB) {
+		const DEBUG = false;
+		const API = 'http://localhost:3004/';
+		const query = _query;
+
+		function handleErrors(response) {
+			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			//note 404 is not found and 400 is a mal-formed request
+			return response;
+		}
+
+		if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
+		fetch(API + query)
+			.then(handleErrors)
+			.then(response => response.json())
+			.then(
+				parsedJSON => {
+					if (DEBUG) console.log("Parsed JSON: ");
+					if (DEBUG) console.log(parsedJSON);
+					// let newItemsLoaded = this.state.itemsLoaded;
+					// newItemsLoaded.push(query);
+					// // setTimeout(() => {
+					successCB(parsedJSON);
+					// this.setState({
+					// 	[query]: parsedJSON,
+					// 	itemsLoaded: newItemsLoaded
+					// }, this.buildRoutesAndRenderPages);
+					if (DEBUG) console.log("CurrentState: ");
+					if (DEBUG) console.log(this.state);
+					// }, 1200);
+				})
+			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
 	fetchDBInfo(_query) {
@@ -391,8 +459,8 @@ class WebFF extends React.Component {
 
 		//HARDCODE for demo:
 		// special questions do special things
-		if(Q.props.id==="settings_paper") {
-			this.setState({usePaper:Q.state.value});
+		if (Q.props.id === "settings_paper") {
+			this.setState({ usePaper: Q.state.value });
 			this.handleSystemMenuItemClicked("Settings");
 		}
 
@@ -428,7 +496,7 @@ class WebFF extends React.Component {
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
-				{this.state.navMenu}
+				
 				<Route path="/Dashboard" render={() => <Dashboard
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
@@ -444,6 +512,7 @@ class WebFF extends React.Component {
 					hiddenPanels={this.state.hiddenPanels}
 					globalState={this.state}
 				/>} />
+				{/* {this.state.navMenu} */}
 				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
 				<Route render={() => <ErrorPage
 					errMsg="Route was not found"
@@ -462,14 +531,14 @@ class WebFF extends React.Component {
 		//console.log(this.state);
 		if (this.state.itemsLoaded.includes('questionsData')) {
 			numSampPoints = this.getQuestionData("samplingPoints").value;
-		} 
-		
+		}
+
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// pull variables from fields
 			let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
 			let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
-			
+
 			let pierlocs = [];
 			let pierWids = [];
 			for (let i = 0; i < 6; i++) {
@@ -489,7 +558,7 @@ class WebFF extends React.Component {
 			}
 
 			this.updateQuestionData("EWI_samples_table", "value", newVal);
-		} 
+		}
 	}
 
 
@@ -508,7 +577,7 @@ class WebFF extends React.Component {
 		// 	return response;
 		// }
 
-		let URI=API + query;
+		let URI = API + query;
 
 		if (DEBUG) console.log("Function: fetchDBInfo PATCH @ " + URI);
 
@@ -520,10 +589,10 @@ class WebFF extends React.Component {
 			},
 			body: JSON.stringify(data)
 		}).then(function (response) {
-			if(response.status===200) {
-			 return response.json();	
+			if (response.status === 200) {
+				return response.json();
 			}
-			return null;			
+			return null;
 		}).then(function (json) {
 			CB(json);
 		}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
@@ -543,7 +612,7 @@ class WebFF extends React.Component {
 	// 	// 	}
 	// 	// 	return response;
 	// 	// }
-	
+
 	// 	let URI=API + query;
 
 	// 	fetch(URI, {
@@ -586,7 +655,7 @@ class WebFF extends React.Component {
 		//TODO: Question order priority
 		//TODO: read-only columns in table
 		//TODO: refactor network tasks to UTIL
-		
+
 
 		// this.putDBInfo("generatedQuestions",
 		// [{"testName":"Joe", "id":"smelven"},
@@ -594,38 +663,38 @@ class WebFF extends React.Component {
 		// {"testName":"Jan", "id":"oldest"}]
 		// );
 
-		if(menuText==="Test Connection") {
-			console.log("Testing  of new Question") 
-				let newQuestion = 				{
-					"id": "ThisisThefirstID",
-						"label": "Station Number",
-						"XMLValue": "",
-						"type": "Text",
-						"tabName": "Add Station",
-						"value": "",
-						"layoutGroup": "Basic",
-						"width_xs": 5,
-						"width_lg": 5
-				}
-				this.updateDBInfo("customQuestions", newQuestion, (resp)=> console.log("EXPECT NULL: Response: ", resp));
-
-				let patchData = 	
-				 {"id":"CSN", "testName":"SMister"}
-				this.updateDBInfo("customQuestions/"+patchData.id, patchData, (resp)=> console.log("EXPECT FULL OBJECT: Response: ", resp));
-
-
-
+		if (menuText === "Test Connection") {
+			console.log("Testing  of new Question")
+			let newQuestion = {
+				"id": "ThisisThefirstID",
+				"label": "Station Number",
+				"XMLValue": "",
+				"type": "Text",
+				"tabName": "Add Station",
+				"value": "",
+				"layoutGroup": "Basic",
+				"width_xs": 5,
+				"width_lg": 5
 			}
+			this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
+
+			let patchData =
+				{ "id": "CSN", "testName": "SMister" }
+			this.updateDBInfo("customQuestions/" + patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
 
 
 
-		
+		}
+
+
+
+
 
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
 
 
-		let filteredDialogInfo = this.state.dialogQuestionsInfo.filter((dialogItem) => {
+		let filteredDialogInfo = this.state.dialogQuestions.filter((dialogItem) => {
 			return dialogItem.dialogName.replace(/ /g, '') === menuText.replace(/ /g, '')
 		});
 
@@ -633,7 +702,7 @@ class WebFF extends React.Component {
 			this.setState({
 				curDialogDescription: filteredDialogInfo[0].dialogDescription,
 				curDialogName: menuText,
-				curDialogQuestionsInfo: filteredDialogInfo[0].questions
+				curDialogQuestions: filteredDialogInfo[0].questions
 			});
 			//open the dialog
 			this.handleDialogOpen();
@@ -684,7 +753,7 @@ class WebFF extends React.Component {
 					menuItemClickHandler={this.handleSystemMenuItemClicked} />
 				<SystemDialog isOpen={this.state.dialogOpen}
 					closeHandler={this.handleDialogClose}
-					dialogQuestionsInfo={this.state.curDialogQuestionsInfo}
+					dialogQuestions={this.state.curDialogQuestions}
 					dialogName={this.state.curDialogName}
 					dialogDescription={this.state.curDialogDescription}
 					stateChangeHandler={this.questionChangeSystemCallback}
