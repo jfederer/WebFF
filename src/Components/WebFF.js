@@ -90,24 +90,30 @@ class WebFF extends React.Component {
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
 		this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
 		this.setLoggedInUser = this.setLoggedInUser.bind(this);
+		this.addStation = this.addStation.bind(this);
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
+		console.log("CWU");
 		itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
 
 		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
+		console.log("NEXTSTATIONS: ", nextState.stations);
+		console.log("STATIONS: ", this.state.stations);
+		if (nextState && this.state.stations !== nextState.stations) {
+			console.log("Stations updated");
+			needToSyncStationDataToQuestionData = true;
+			this.attemptToSyncStationDataToQuestionData();
+		}
 		if (needToSyncStationDataToQuestionData) {
 			if (nextState && this.state.questionsData !== nextState.questionData) {
 				this.attemptToSyncStationDataToQuestionData();
 			}
 		}
-		if (nextState && this.state.stations !== nextState.stations) {
-			needToSyncStationDataToQuestionData = true;
-			this.attemptToSyncStationDataToQuestionData();
-		}
 	}
 
 	attemptToSyncStationDataToQuestionData() {
+		console.log("Attempting");
 		let stationNameQ = this.getQuestionData("stationName");
 		if (stationNameQ === null) {
 			return;
@@ -580,7 +586,7 @@ class WebFF extends React.Component {
 			this.handleSystemMenuItemClicked("Settings");
 		}
 
-		//HARDCODE for stationName
+		//HARDCODE for stationName drop down
 		if(Q.props.id === "stationName") {
 			console.log("stationName: ", Q.state.value);
 			// find the station we are talking about
@@ -628,10 +634,26 @@ class WebFF extends React.Component {
 	}
 
 
+	addStation(stationName, stationNumber, projectName, projectID, agencyCode) {
+		let newStation = {
+			id:stationName,
+			stationNumber:stationNumber,
+			projectName:projectName,
+			projectID:projectID,
+			agencyCode:agencyCode
+		}
+		let newStations = this.state.stations;
+		newStations.push(newStation);
+		console.log("newStations: ", newStations);
+		console.log("this.state.stations: ", this.state.stations);
+		//TODO: validation
 
-
+		
+		this.setState({stations:newStations}, this.attemptToSyncStationDataToQuestionData);
+	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
+		 console.log("BAR");
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
@@ -825,10 +847,6 @@ class WebFF extends React.Component {
 
 		}
 
-
-
-
-
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
 
@@ -854,6 +872,7 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
+		console.log("RENDER");
 
 		return (
 			<div className={classes.root} >
@@ -897,7 +916,8 @@ class WebFF extends React.Component {
 					dialogDescription={this.state.curDialogDescription}
 					stateChangeHandler={this.questionChangeSystemCallback}
 					globalState={this.state}
-					setLoggedInUser={this.setLoggedInUser} />
+					setLoggedInUser={this.setLoggedInUser} 
+					addStation={this.addStation} />
 				<NavMenu isExpanded={this.state.navMenuExpanded}
 					closeHandler={this.handleLeftDrawerClose}
 					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />

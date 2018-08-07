@@ -57,7 +57,8 @@
               "tabName": "Add New Station",
               "layoutGroup": "Basic",
               "width_xs": 7,
-              "width_lg": 7
+			  "width_lg": 7,
+			  "value":""
             },
             {
               "id": "newStation_stationNumber",
@@ -68,7 +69,8 @@
               "value": "",
               "layoutGroup": "Basic",
               "width_xs": 5,
-              "width_lg": 5
+              "width_lg": 5,
+			  "value":""
             },
             {
               "id": "newStation_projectName",
@@ -79,7 +81,8 @@
               "value": "",
               "layoutGroup": "Basic",
               "width_xs": 6,
-              "width_lg": 6
+              "width_lg": 6,
+			  "value":""
             },
             {
               "id": "newStation_projectID",
@@ -90,7 +93,8 @@
               "value": "",
               "layoutGroup": "Basic",
               "width_xs": 3,
-              "width_lg": 3
+              "width_lg": 3,
+			  "value":""
             },
             {
               "id": "newStation_agencyCode",
@@ -101,7 +105,8 @@
               "value": "USGS",
               "layoutGroup": "Basic",
               "width_xs": 3,
-              "width_lg": 3
+              "width_lg": 3,
+			  "value":""
             }
           ]
         },
@@ -114,7 +119,8 @@
               "label": "Label",
               "type": "Text",
               "width_xs": 6,
-              "width_lg": 3
+              "width_lg": 3,
+			  "value":""
             },
             {
               "id": "newQuestion_id",
@@ -123,7 +129,8 @@
               "placeholder": "Must be globally unique",
               "value": "",
               "width_xs": 6,
-              "width_lg": 6
+              "width_lg": 6,
+			  "value":""
             },
             {
               "id": "newQuestion_type",
@@ -152,7 +159,8 @@
               "type": "Text",
               "value": "",
               "width_xs": 4,
-              "width_lg": 3
+              "width_lg": 3,
+			  "value":""
             },
             {
               "id": "newQuestion_layoutGroup",
@@ -163,7 +171,8 @@
               "type": "Text",
               "value": "",
               "width_xs": 4,
-              "width_lg": 3
+              "width_lg": 3,
+			  "value":""
             },
             {
               "id": "newQuestion_initalValue_textValue",
@@ -172,7 +181,8 @@
               "placeholder": "Can be left blank",
               "value": "",
               "width_xs": 12,
-              "width_lg": 12
+              "width_lg": 12,
+			  "value":""
             },
             {
               "id": "newQuestion_width_xs",
@@ -181,7 +191,8 @@
               "placeholder": "1-12",
               "value": "",
               "width_xs": 6,
-              "width_lg": 6
+              "width_lg": 6,
+			  "value":""
             },
             {
               "id": "newQuestion_width_lg",
@@ -190,7 +201,8 @@
               "placeholder": "Can be left blank",
               "value": "",
               "width_xs": 6,
-              "width_lg": 6
+              "width_lg": 6,
+			  "value":""
             }
           ]
         },
@@ -825,10 +837,9 @@
           "width_xs": 6,
           "width_lg": 3,
           "options": {
-            "Minnehahaha Creek": "EDI",
-            "EWI": "EWI"
+            
           },
-          "value": "EDI"
+          "value": ""
         },
         {
           "id": "stationNumber",
