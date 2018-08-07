@@ -818,7 +818,7 @@
           "label": "Station Name",
           "XMLValue": "",
           "type": "DropDown",
-          "includeBlank": false,
+          "includeBlank": true,
           "tabName": "Field Form",
           "layoutGroup": "Basic",
           "helperText": "PCodes FTW!",
@@ -2524,14 +2524,14 @@
         {
           "id" : "Elm Creek",
           "agencyCode" : "USGS",
-          "siteNumber": "05287890",
+          "stationNumber": "05287890",
           "projectName": "Elm Creek Project Name",
           "projectID": "059YE"
         },
         {
           "id" : "Shingle Creek",
           "agencyCode" : "USGS",
-          "siteNumber": "05288705",
+          "stationNumber": "05288705",
           "projectName": "Roofers like Shingles",
           "projectID": "8843G2"
         }

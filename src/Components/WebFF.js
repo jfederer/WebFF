@@ -532,7 +532,7 @@ class WebFF extends React.Component {
 		return newQuestionsData;
 	}
 
-	updateQuestionData(q_id, key, value) {
+	updateQuestionData(q_id, key, value, CB) {
 		// sets the 'key' element to 'value' for question with question id of q_id
 		// returns just the matching, updated, question
 		let retQ;
@@ -543,7 +543,7 @@ class WebFF extends React.Component {
 			}
 			return questionData;
 		});
-		this.setState({ questionsData: newQuestionsData });
+		this.setState({ questionsData: newQuestionsData }, CB);
 		return retQ;
 	}
 
@@ -571,24 +571,47 @@ class WebFF extends React.Component {
 	}
 
 
-	questionChangeSystemCallback(Q, CB) {
-		// checks for action string, executes any actions, and then updates current state of questionsData
-		function checkQuestionChangesForSpecialNeeds(Q) {
-			console.log("SPecial!");
-			//HARDCODE for demo:
-			// special questions do special things
-			if (Q.props.id === "settings_paper") {
-				this.setState({ usePaper: Q.state.value });
-				this.handleSystemMenuItemClicked("Settings");
+	questionChangeSystemCallback(Q) {
+		// updates current state of questionsData, checks for action string, executes any actions
+
+		//HARDCODE for paper settings:
+		if (Q.props.id === "settings_paper") {
+			this.setState({ usePaper: Q.state.value });
+			this.handleSystemMenuItemClicked("Settings");
+		}
+
+		//HARDCODE for stationName
+		if(Q.props.id === "stationName") {
+			console.log("stationName: ", Q.state.value);
+			// find the station we are talking about
+			let stationIndex = 0;
+			for(let i=0; i<this.state.stations.length; i++) {
+				if(this.state.stations[i].id===Q.state.value) {
+					stationIndex = i;
+				}
 			}
-	
-			//HARDCODE for stationName
-			if(Q.props.id === "stationName") {
-				console.log("station name changed: ", Q.state.value);
-				// setStationQuestions(Q.props.value);
+			let stationData = this.state.stations[stationIndex];
+			console.log(stationData);
+
+			for(let i=0; i<questionIDsLinkedToStationName.length; i++) {
+				let q_id = questionIDsLinkedToStationName[i];
+				this.updateQuestionData(q_id, "value", stationData[q_id]);
 			}
-	
-			
+		}
+
+		if (Q == null) {
+			//TODO: throw error
+			console.log("questionChangeSystemCallback required field, question, is null");
+		}
+
+		// save updated value to state:
+		let updatedQuestionData = this.getQuestionDataWithUpdatedValue(Q);
+
+		this.setState({ questionsData: updatedQuestionData }, () => {
+		// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
+		// when done, rebuild routs and render pages // performance
+
+		
 			if (Q.props.actions) {
 				let { actions } = Q.props;
 				let qval = Q.state.value;
@@ -599,34 +622,9 @@ class WebFF extends React.Component {
 						this.actionExecuter(action);
 					});
 				}
-			}
-	
-			CB;
-		}
-
-
-
-		if (Q == null) {
-			//TODO: throw error
-			console.log("questionChangeSystemCallback required field, question, is null");
-		}
-
-		// console.log("questionChangeSystemCallback: Q: ", Q);
-
-		// save updated value to state:
-		let updatedQuestionData = this.getQuestionDataWithUpdatedValue(Q);
-		// console.log("questionChangeSystemCallback: updatedQuestionData: ", updatedQuestionData);
-
-		this.setState({ questionsData: updatedQuestionData }, () => {
-		// check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
-			checkQuestionChangesForSpecialNeeds(Q, this.buildRoutesAndRenderPages);
+			}				
+			this.buildRoutesAndRenderPages();
 		});
-
-
-
-
-
-
 	}
 
 
@@ -906,7 +904,9 @@ class WebFF extends React.Component {
 
 				<main className={classes.content} >
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
+					
 					{this.state.routesAndPages}
+
 				</main>
 			</div >
 		);
