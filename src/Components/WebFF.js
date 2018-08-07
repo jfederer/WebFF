@@ -49,6 +49,7 @@ import SystemDialog from './SystemDialog';
 const criticalUserNodes = ['stations'];
 const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
 var itemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
+var needToSyncStationDataToQuestionData = false;
 itemsToSyncToLS.push("loggedInUser");
 
 class WebFF extends React.Component {
@@ -81,7 +82,6 @@ class WebFF extends React.Component {
 			hiddenTabs: [],
 			stations: [],
 
-
 			loggedInUser: "jfederer@usgs.gov"
 		};
 		this.navigationControl = this.navigationControl.bind(this);
@@ -93,6 +93,33 @@ class WebFF extends React.Component {
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
 		itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
+
+		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
+		if (needToSyncStationDataToQuestionData) {
+			if (nextState && this.state.questionsData !== nextState.questionData) {
+				this.attemptToSyncStationDataToQuestionData();
+			}
+		}
+		if (nextState && this.state.stations !== nextState.stations) {
+			needToSyncStationDataToQuestionData = true;
+			this.attemptToSyncStationDataToQuestionData();
+		}
+	}
+
+	attemptToSyncStationDataToQuestionData() {
+		let stationNameQ = this.getQuestionData("stationName");
+		if (stationNameQ === null) {
+			return;
+		}
+
+		let newOptions = {};
+		for (let i = 0; this.state.stations !== null && i < this.state.stations.length; i++) {
+			newOptions[this.state.stations[i].id] = this.state.stations[i].id;
+		}
+
+		this.updateQuestionData("stationName", "options", newOptions);
+
+		needToSyncStationDataToQuestionData = false;
 	}
 
 
@@ -100,10 +127,7 @@ class WebFF extends React.Component {
 		this.gatherSystemConfig(criticalDefaultSystemNodes, "defaultConfig");  //load default configurations
 		this.gatherUserConfig(criticalUserNodes, "users/" + this.state.loggedInUser); //load user configuration
 
-		// collect per-user information (stations, questions, navItems)
-
-
-		//TODO: collect info and combine with per user, per station questions
+		//TODO: collect station info and combine with default questions and data
 
 	}
 
@@ -170,7 +194,7 @@ class WebFF extends React.Component {
 
 	gatherUserConfig(nodesToGather, query) {
 		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
-		let DEBUG = true;
+		let DEBUG = false;
 
 		if (DEBUG) console.log("gatherConfig: ", nodesToGather, query);
 		// check if ALL critical items are loaded into LS
@@ -207,7 +231,7 @@ class WebFF extends React.Component {
 			this.newFetch(query, (JSONresponse) => {
 				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 				let nodeArr = [];
-				for (let i = 0; i<nodesToGather.length; i++) {
+				for (let i = 0; i < nodesToGather.length; i++) {
 					JSONresponse[nodesToGather[i]].forEach((configNode) => {
 						if (DEBUG) console.log("ConfigNode: ", configNode);
 						// let nodeName = configNode.id;
@@ -433,9 +457,11 @@ class WebFF extends React.Component {
 	}
 
 	showQuestion(questionID, toShow) {
+		// find the specific question in this.state.questionData based on the id, then update the hidden property
+
 		let DEBUG = false;
 		if (DEBUG) console.log("Show Question: ", questionID, " toShow: ", toShow);
-		// find the specific question in this.state.questionData based on the id, then update the hidden property
+
 		let updatedQuestionsData = this.state.questionsData.filter(questionData => {
 			if (questionData.id === questionID) {
 				if (DEBUG) console.log("------FOUND!--------");
@@ -454,6 +480,7 @@ class WebFF extends React.Component {
 	}
 
 	showQuestionPanel(panelName, toShow) {
+		// add or remove the panelName from this.state.hiddenPanels
 		console.log("this.state.hiddenPanels:", this.state.hiddenPanels);
 		let newHiddenPanels = this.state.hiddenPanels;
 		console.log("toShow: ", toShow);
@@ -472,7 +499,6 @@ class WebFF extends React.Component {
 		console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
 		this.setState({ hiddenPanels: newHiddenPanels });
 	}
-
 
 	getQuestionDataWithUpdatedValue(Q) {
 		//this function saves updated question "values" (must be located at "Q.state.value")
@@ -506,6 +532,7 @@ class WebFF extends React.Component {
 	}
 
 	updateQuestionData(q_id, key, value) {
+		// sets the 'key' element to 'value' for question with question id of q_id
 		// returns just the matching, updated, question
 		let retQ;
 		var newQuestionsData = this.state.questionsData.filter(questionData => {
@@ -520,20 +547,21 @@ class WebFF extends React.Component {
 	}
 
 	getQuestionData(q_id) {
+		// returns question from questionsData that has q_id.  If none is found, return null
 		let retArr = this.state.questionsData.filter(questionData => {
 			if (questionData.id === q_id) {
 				return questionData;
 			}
+			return null;
 		});
 
 		if (retArr.length === 1) {
 			return retArr[0];
 		} else {
-			console.log("WebFF: getQuestionData(" + q_id + ") returned " + retArr.length + " questions");
+			// console.log("WebFF: getQuestionData(" + q_id + ") returned " + retArr.length + " questions");
 			//TODO: throw error
 			return null;
 		}
-
 	}
 
 	setLoggedInUser(username) {

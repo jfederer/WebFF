@@ -10,6 +10,7 @@ export const createQuestionComponentsForLayoutGroup = (questionsData, changeHand
 
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
         layoutGroupQuestionComponents = questionsData.map(questionData => {
+
 			return <Question {...questionData} stateChangeHandler={changeHandler} globalState={_globalState}/>
 		});
     }
@@ -23,19 +24,17 @@ export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questi
 	if(DEBUG)console.log("--------------");
 	if(DEBUG)console.log(questionsData);
 	if(DEBUG)console.log("looking for questionID: ", questionID);
-
-	
 	
 	let questionData = questionsData.filter(questionData => {
 		
 		// var areEqual = questionData.id.toUpperCase() === questionID.toUpperCase();
 		// console.log(questionData.id + " " + areEqual);
 		
-		if (questionData.id == questionID) {
+		if (questionData.id === questionID) {
 			if(DEBUG)console.log("Found");
 			return questionData;
 		}
-		//return;
+		return null;
 	}
 	);
 	
