@@ -880,7 +880,7 @@
           "XMLValue": "",
           "type": "Text",
           "tabName": "Field Form",
-          "value": "USGS",
+          "value": "",
           "layoutGroup": "Basic",
           "width_xs": 2,
           "width_lg": 1
@@ -892,7 +892,7 @@
           "type": "DateInput",
           "tabName": "Field Form",
           "placeholder": "yyyymmdd",
-          "value": "",
+          "value": null,
           "layoutGroup": "Basic",
           "width_xs": 4,
           "width_lg": 2
