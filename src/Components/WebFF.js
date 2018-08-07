@@ -851,25 +851,25 @@ class WebFF extends React.Component {
 		// );
 
 		if (menuText === "Test Connection") {
-			console.log("Testing  of new Question")
-			let newQuestion = {
-				"id": "ThisisThefirstID",
-				"label": "Station Number",
-				"XMLValue": "",
-				"type": "Text",
-				"tabName": "Add Station",
-				"value": "",
-				"layoutGroup": "Basic",
-				"width_xs": 5,
-				"width_lg": 5
-			}
-			this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
+			// console.log("Testing  of new Question")
+			// let newQuestion = {
+			// 	"id": "ThisisThefirstID",
+			// 	"label": "Station Number",
+			// 	"XMLValue": "",
+			// 	"type": "Text",
+			// 	"tabName": "Add Station",
+			// 	"value": "",
+			// 	"layoutGroup": "Basic",
+			// 	"width_xs": 5,
+			// 	"width_lg": 5
+			// }
+			// this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
 
-			let patchData =
-				{ "id": "CSN", "testName": "SMister" }
-			this.updateDBInfo("customQuestions/" + patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
+			// let patchData =
+			// 	{ "id": "CSN", "testName": "SMister" }
+			// this.updateDBInfo("customQuestions/" + patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
 
-
+			React.Children.forEach((child) => console.log(child));
 
 		}
 
