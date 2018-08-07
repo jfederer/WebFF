@@ -51,6 +51,7 @@ const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questions
 var itemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
 var needToSyncStationDataToQuestionData = false;
 itemsToSyncToLS.push("loggedInUser");
+const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
 
 class WebFF extends React.Component {
 	constructor(props) {
@@ -570,14 +571,44 @@ class WebFF extends React.Component {
 	}
 
 
-	questionChangeSystemCallback(Q) {
+	questionChangeSystemCallback(Q, CB) {
 		// checks for action string, executes any actions, and then updates current state of questionsData
+		function checkQuestionChangesForSpecialNeeds(Q) {
+			console.log("SPecial!");
+			//HARDCODE for demo:
+			// special questions do special things
+			if (Q.props.id === "settings_paper") {
+				this.setState({ usePaper: Q.state.value });
+				this.handleSystemMenuItemClicked("Settings");
+			}
+	
+			//HARDCODE for stationName
+			if(Q.props.id === "stationName") {
+				console.log("station name changed: ", Q.state.value);
+				// setStationQuestions(Q.props.value);
+			}
+	
+			
+			if (Q.props.actions) {
+				let { actions } = Q.props;
+				let qval = Q.state.value;
+				let commandString = actions[qval];
+				if (commandString) {
+					let actionsToDo = commandString.split('&');
+					actionsToDo.forEach((action) => {
+						this.actionExecuter(action);
+					});
+				}
+			}
+	
+			CB;
+		}
 
-		//HARDCODE for demo:
-		// special questions do special things
-		if (Q.props.id === "settings_paper") {
-			this.setState({ usePaper: Q.state.value });
-			this.handleSystemMenuItemClicked("Settings");
+
+
+		if (Q == null) {
+			//TODO: throw error
+			console.log("questionChangeSystemCallback required field, question, is null");
 		}
 
 		// console.log("questionChangeSystemCallback: Q: ", Q);
@@ -586,27 +617,21 @@ class WebFF extends React.Component {
 		let updatedQuestionData = this.getQuestionDataWithUpdatedValue(Q);
 		// console.log("questionChangeSystemCallback: updatedQuestionData: ", updatedQuestionData);
 
-		this.setState({ questionsData: updatedQuestionData });
+		this.setState({ questionsData: updatedQuestionData }, () => {
+		// check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
+			checkQuestionChangesForSpecialNeeds(Q, this.buildRoutesAndRenderPages);
+		});
 
-		// check if there are additional actions needed based on the actionOptions in this question, Q
-		if (Q == null) {
-			//TODO: throw error
-			console.log("questionChangeSystemCallback required field, question, is null");
-		}
 
-		if (Q.props.actions) {
-			let { actions } = Q.props;
-			let qval = Q.state.value;
-			let commandString = actions[qval];
-			if (commandString) {
-				let actionsToDo = commandString.split('&');
-				actionsToDo.forEach((action) => {
-					this.actionExecuter(action);
-				});
-			}
-		}
-		this.buildRoutesAndRenderPages(); //performance
+
+
+
+
 	}
+
+
+
+
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		var newRoutesAndPages = (
