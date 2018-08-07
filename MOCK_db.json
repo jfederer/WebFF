@@ -889,7 +889,7 @@
           "id": "sampleDate",
           "label": "Sample Date",
           "XMLValue": "",
-          "type": "Text",
+          "type": "DateInput",
           "tabName": "Field Form",
           "placeholder": "yyyymmdd",
           "value": "",

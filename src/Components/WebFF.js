@@ -89,6 +89,7 @@ class WebFF extends React.Component {
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
 		this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
+		this.dialogQuestionChangeSystemCallback = this.dialogQuestionChangeSystemCallback.bind(this);
 		this.setLoggedInUser = this.setLoggedInUser.bind(this);
 		this.addStation = this.addStation.bind(this);
 	}
@@ -528,7 +529,7 @@ class WebFF extends React.Component {
 		this.setState({ hiddenPanels: newHiddenPanels });
 	}
 
-	getQuestionsDataWithUpdatedValue(Q) {
+	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
 		//this function saves updated question "values" (must be located at "Q.state.value")
 		// returns updated questionsData object
 		var DEBUG = false;
@@ -538,10 +539,14 @@ class WebFF extends React.Component {
 			return;
 		}
 
-		// find the specific question in questionsData based on the id,then update the value property
-		var newQuestionsData = this.state.questionsData.filter(questionData => {
-			//console.log("QuestionData: ", questionData);
+		// find the specific question in questionsData  or curDialogQuestions based on the id,then update the value property
+		let questionsToFilter = this.state.curDialogQuestions;
+		if(!dialogQuestions) {
+			questionsToFilter = this.state.questionsData; 
+		} 
 
+		var newQuestionsData = questionsToFilter.filter(questionData => {
+			//console.log("QuestionData: ", questionData);
 			if (questionData.id === Q.props.id) {
 				if (DEBUG) console.log("------FOUND!--------");
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
@@ -602,7 +607,15 @@ class WebFF extends React.Component {
 	}
 
 
-	questionChangeSystemCallback(Q) {
+	dialogQuestionChangeSystemCallback(Q) {
+		console.log(Q);
+		console.log(this.state.curDialogQuestions);
+
+		this.questionChangeSystemCallback(Q, true);
+
+	}
+
+	questionChangeSystemCallback(Q, dialogQuestion) {
 		// updates current state of questionsData, checks for action string, executes any actions
 
 		//HARDCODE for paper settings:
@@ -635,10 +648,14 @@ class WebFF extends React.Component {
 			console.log("questionChangeSystemCallback required field, question, is null");
 		}
 
-		// save updated value to state:
-		let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q);
+		let stateKey = "questionsData";
+		if(dialogQuestion) {
+			stateKey = "curDialogQuestions";
+		}
 
-		this.setState({ questionsData: updatedQuestionData }, () => {
+		// save updated value to state:
+		let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q, dialogQuestion);
+		this.setState({ [stateKey]: updatedQuestionData }, () => {
 		// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
 		// when done, rebuild routs and render pages // performance
 
@@ -869,7 +886,6 @@ class WebFF extends React.Component {
 			// 	{ "id": "CSN", "testName": "SMister" }
 			// this.updateDBInfo("customQuestions/" + patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
 
-			React.Children.forEach((child) => console.log(child));
 
 		}
 
@@ -886,9 +902,11 @@ class WebFF extends React.Component {
 				curDialogDescription: filteredDialogInfo[0].dialogDescription,
 				curDialogName: menuText,
 				curDialogQuestions: filteredDialogInfo[0].questions
-			});
-			//open the dialog
+			}, () => { //open the dialog 
 			this.handleDialogOpen();
+			}
+		);
+			
 		} else {
 			//TODO: ERR
 			console.log(menuText + " is not yet implemented");
@@ -940,7 +958,7 @@ class WebFF extends React.Component {
 					dialogQuestions={this.state.curDialogQuestions}
 					dialogName={this.state.curDialogName}
 					dialogDescription={this.state.curDialogDescription}
-					stateChangeHandler={this.questionChangeSystemCallback}
+					stateChangeHandler={this.dialogQuestionChangeSystemCallback}
 					globalState={this.state}
 					setLoggedInUser={this.setLoggedInUser} 
 					addStation={this.addStation} />

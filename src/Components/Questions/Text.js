@@ -46,7 +46,7 @@ class Text extends React.Component {
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
 
 		return <TextField
-			value={this.state.value}
+			value={this.props.value}
 			onChange={this.handleValueChange(this.props.id)}
 			key={this.props.id}
 			id={this.props.id}
