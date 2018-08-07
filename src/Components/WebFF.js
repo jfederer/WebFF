@@ -94,37 +94,48 @@ class WebFF extends React.Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
-		console.log("CWU");
+		//console.log("CWU");
 		itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
 
 		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
-		console.log("NEXTSTATIONS: ", nextState.stations);
-		console.log("STATIONS: ", this.state.stations);
-		if (nextState && this.state.stations !== nextState.stations) {
-			console.log("Stations updated");
-			needToSyncStationDataToQuestionData = true;
-			this.attemptToSyncStationDataToQuestionData();
-		}
+		//console.log("NEXTSTATIONS: ", nextState.stations);
+		//console.log("STATIONS: ", this.state.stations);
 		if (needToSyncStationDataToQuestionData) {
 			if (nextState && this.state.questionsData !== nextState.questionData) {
 				this.attemptToSyncStationDataToQuestionData();
 			}
 		}
+		if (nextState && this.state.stations !== nextState.stations) {
+			//console.log("Stations updated");
+			needToSyncStationDataToQuestionData = true;
+			this.attemptToSyncStationDataToQuestionData(nextState.stations);
+		}
+		
 	}
 
-	attemptToSyncStationDataToQuestionData() {
-		console.log("Attempting");
+	attemptToSyncStationDataToQuestionData(stationsIn) {
+		//console.log("Attempting");
 		let stationNameQ = this.getQuestionData("stationName");
 		if (stationNameQ === null) {
 			return;
 		}
 
 		let newOptions = {};
-		for (let i = 0; this.state.stations !== null && i < this.state.stations.length; i++) {
-			newOptions[this.state.stations[i].id] = this.state.stations[i].id;
+		let stationsToSync;
+		if(stationsIn) {
+			stationsToSync = stationsIn;
+		} else {
+			stationsToSync = this.state.stations.slice();
 		}
 
-		this.updateQuestionData("stationName", "options", newOptions);
+
+		for (let i = 0; stationsToSync !== null && i < stationsToSync.length; i++) {
+			newOptions[stationsToSync[i].id] = stationsToSync[i].id;
+		}
+
+		//console.log("New Options: ", newOptions);
+
+		this.updateQuestionData("stationName", "options", newOptions,  this.buildRoutesAndRenderPages);
 
 		needToSyncStationDataToQuestionData = false;
 	}
@@ -387,10 +398,10 @@ class WebFF extends React.Component {
 		}
 		switch (splitActionString[0]) {
 			case "ShowTab":
-				this.showTab(splitActionString[1], true);
+				this.showTab(splitActionString[1], true, this.buildRoutesAndRenderPages());
 				break;
 			case "HideTab":
-				this.showTab(splitActionString[1], false);
+				this.showTab(splitActionString[1], false, this.buildRoutesAndRenderPages());
 				break;
 			case "ShowQuestion":
 				this.showQuestion(splitActionString[1], true);
@@ -444,8 +455,11 @@ class WebFF extends React.Component {
 		return retMenu;
 	}
 
-	showTab(tabName, toShow) {
+	showTab(tabName, toShow, CB) {
+		
+		// let newHiddenTabs = this.state.hiddenTabs.slice();
 		let newHiddenTabs = this.state.hiddenTabs;
+		// console.log("After copy: ", newHiddenTabs);
 		let cleanTabName = tabName.replace(/ /g, '');
 		if (toShow) {
 			// remove all instances from newHiddenTabs
@@ -455,12 +469,19 @@ class WebFF extends React.Component {
 					newHiddenTabs.splice(index, 1);
 				}
 			}
+			// console.log("After removal: ", newHiddenTabs);
 		} else {
 			// add tabName to newHiddenTabs
 			newHiddenTabs.push(cleanTabName);
+			// console.log("After addition: ", newHiddenTabs);
 
 		}
-		this.setState({ hiddenTabs: newHiddenTabs });
+		// console.log("Before setting state: ", newHiddenTabs);
+		this.setState({ hiddenTabs: newHiddenTabs }, ()=> {
+			// console.log("STATE after setting state: ", this.state.hiddenTabs);
+			CB;
+		}
+		);
 	}
 
 	showQuestion(questionID, toShow) {
@@ -488,9 +509,9 @@ class WebFF extends React.Component {
 
 	showQuestionPanel(panelName, toShow) {
 		// add or remove the panelName from this.state.hiddenPanels
-		console.log("this.state.hiddenPanels:", this.state.hiddenPanels);
+		// console.log("this.state.hiddenPanels:", this.state.hiddenPanels);
 		let newHiddenPanels = this.state.hiddenPanels;
-		console.log("toShow: ", toShow);
+		// console.log("toShow: ", toShow);
 		if (toShow) {  // remove all instances of panelName from hiddenPanels
 			while (newHiddenPanels.includes(panelName)) {
 				let index = newHiddenPanels.indexOf(panelName);
@@ -503,17 +524,17 @@ class WebFF extends React.Component {
 				newHiddenPanels.push(panelName);
 			}
 		}
-		console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
+		// console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
 		this.setState({ hiddenPanels: newHiddenPanels });
 	}
 
-	getQuestionDataWithUpdatedValue(Q) {
+	getQuestionsDataWithUpdatedValue(Q) {
 		//this function saves updated question "values" (must be located at "Q.state.value")
 		// returns updated questionsData object
 		var DEBUG = false;
-		if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q: ", Q);
+		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
 		if (Q == null) { //POC
-			console.log("Question passed to getQuestionDataWithUpdatedValue was null or undefined");
+			console.log("Question passed to getQuestionsDataWithUpdatedValue was null or undefined");
 			return;
 		}
 
@@ -523,20 +544,22 @@ class WebFF extends React.Component {
 
 			if (questionData.id === Q.props.id) {
 				if (DEBUG) console.log("------FOUND!--------");
-				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (pre): ", questionData);
-				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q.state.value", Q.state.value);
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
 				questionData.value = Q.state.value;
-				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (post)", questionData);
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
 			} else {
-				if (DEBUG) console.log("getQuestionDataWithUpdatedValue: no");
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
 			}
 			return questionData;
 		});
 
-		if (DEBUG) console.log("getQuestionDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
+		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
 
 		return newQuestionsData;
 	}
+
+
 
 	updateQuestionData(q_id, key, value, CB) {
 		// sets the 'key' element to 'value' for question with question id of q_id
@@ -549,7 +572,9 @@ class WebFF extends React.Component {
 			}
 			return questionData;
 		});
+
 		this.setState({ questionsData: newQuestionsData }, CB);
+		
 		return retQ;
 	}
 
@@ -597,11 +622,11 @@ class WebFF extends React.Component {
 				}
 			}
 			let stationData = this.state.stations[stationIndex];
-			console.log(stationData);
+			console.log("stationData", stationData);
 
 			for(let i=0; i<questionIDsLinkedToStationName.length; i++) {
 				let q_id = questionIDsLinkedToStationName[i];
-				this.updateQuestionData(q_id, "value", stationData[q_id]);
+				this.updateQuestionData(q_id, "value", stationData[q_id], this.buildRoutesAndRenderPages);
 			}
 		}
 
@@ -611,7 +636,7 @@ class WebFF extends React.Component {
 		}
 
 		// save updated value to state:
-		let updatedQuestionData = this.getQuestionDataWithUpdatedValue(Q);
+		let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q);
 
 		this.setState({ questionsData: updatedQuestionData }, () => {
 		// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
@@ -628,7 +653,8 @@ class WebFF extends React.Component {
 						this.actionExecuter(action);
 					});
 				}
-			}				
+			}
+
 			this.buildRoutesAndRenderPages();
 		});
 	}
@@ -642,7 +668,7 @@ class WebFF extends React.Component {
 			projectID:projectID,
 			agencyCode:agencyCode
 		}
-		let newStations = this.state.stations;
+		let newStations = this.state.stations.slice();
 		newStations.push(newStation);
 		console.log("newStations: ", newStations);
 		console.log("this.state.stations: ", this.state.stations);
