@@ -29,42 +29,36 @@ const styles = theme => ({
 });
 
 class DropDown extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
-		};
-	};
 
 	componentWillMount() {
-		this.setState({ key: this.props.id });;
 		this.setState({ value: this.props.value });
 	}
 
-	handleValueChange = name => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+	handleValueChange = name => event => {  
 		this.setState({ [name]: event.target.value },
 			() => this.props.stateChangeHandler(this)
 		);
 	};
 
-	buildSelectOptions(optionsPairs) {  // note, this references props and blank option could be split out for reuse
-		var JSX_return = [];
-
-		if (this.props.includeBlank && this.props.includeBlank === true) {
-			JSX_return.push(<option key="nada" value="" />);
-		}
-
-		for (var optionLabel in optionsPairs) {
-			JSX_return.push(<option key={optionLabel} value={optionsPairs[optionLabel]}>{optionLabel}</option>);
-		}
-		return JSX_return;
-	}
-
-	buildQuestion() {
+	render() {
 		const { classes } = this.props;
+		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 
-				return (
-					 <FormControl className={classes.formControl}>
+		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
+
+		// if (tooltip != null) {
+		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
+		// } else {
+		// 	return this.buildQuestion();
+		// }
+		// if (tooltip != null) {
+		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
+		// } else {
+		// 	return <Paper>{this.buildQuestion()}</Paper>;
+		// }
+		console.log(this.props.options)
+			return <FormControl className={classes.formControl}>
 						{(this.props.label!=null) ?
 							<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> :
 							null }
@@ -72,39 +66,18 @@ class DropDown extends React.Component {
 							native
 							// autoWidth={true}
 							fullWidth
-							value={this.state.value}
+							value={this.props.value}
 							onChange={this.handleValueChange('value')}
 							inputProps={{
 								name: this.props.label,
 								id: this.props.id,
 							}}
 						>
-							{this.buildSelectOptions(this.props.options)}
+						{this.props.includeBlank ? <option key="nada" value="" /> : null }
+						{Object.keys(this.props.options).map((optionLabel, index)=> <option key={optionLabel} value={this.props.options[optionLabel]}>{optionLabel}</option>)}
 
 						</Select>
 					 </FormControl>
-				);
-	};
-
-
-
-	render() {
-		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
-
-		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
-
-		if (tooltip != null) {
-			return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
-		} else {
-			return this.buildQuestion();
-		}
-		// if (tooltip != null) {
-		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
-		// } else {
-		// 	return <Paper>{this.buildQuestion()}</Paper>;
-		// }
-
 	}
 }
 

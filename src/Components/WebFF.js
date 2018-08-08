@@ -526,7 +526,7 @@ class WebFF extends React.Component {
 			}
 		}
 		// console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
-		this.setState({ hiddenPanels: newHiddenPanels });
+		this.setState({ hiddenPanels: newHiddenPanels }); 
 	}
 
 	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
@@ -551,7 +551,9 @@ class WebFF extends React.Component {
 				if (DEBUG) console.log("------FOUND!--------");
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
-				questionData.value = Q.state.value;
+				
+					questionData.value = Q.state.value;
+				
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
 			} else {
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
@@ -617,6 +619,8 @@ class WebFF extends React.Component {
 
 	questionChangeSystemCallback(Q, dialogQuestion) {
 		// updates current state of questionsData, checks for action string, executes any actions
+
+		console.log(Q);
 
 		//HARDCODE for paper settings:
 		if (Q.props.id === "settings_paper") {

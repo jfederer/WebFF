@@ -13,15 +13,8 @@ const styles = theme => ({
 });
 
 class Toggle extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
-		};
-	};
 
 	componentWillMount() {
-		// this.setState({ key: this.props.id });
 		this.setState({ value: this.props.value });
 	}
 
@@ -39,7 +32,7 @@ class Toggle extends React.Component {
 			controlElement = <Checkbox
 			key={this.props.id}
 			id={this.props.id}
-			checked={this.state.value}
+			checked={this.props.value}
 			onChange={this.handleToggleChange('value')}
 			xmlvalue={this.props.XMLValue}
 		/>
@@ -47,7 +40,7 @@ class Toggle extends React.Component {
 			controlElement = <Switch
 			key={this.props.id}
 			id={this.props.id}
-			checked={this.state.value}
+			checked={this.props.value}
 			onChange={this.handleToggleChange('value')}
 			xmlvalue={this.props.XMLValue}
 		/>
