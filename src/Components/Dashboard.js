@@ -71,6 +71,7 @@ class Dashboard extends React.Component {
 			  <Grid item xs>
 				<Paper className={classes.paper}><b>Create/Start New Sampling Event</b><br />(optionally base on templates)<br />
 				<Link to='/FieldForm'><Button onClick={()=>	{
+						this.props.createNewSamplingEvent();
 						this.props.navControl("Water Quality",true);
 						this.props.navControl("Field Form",true);
 						}}>Start</Button></Link></Paper>

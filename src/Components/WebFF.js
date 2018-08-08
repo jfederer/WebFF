@@ -49,9 +49,14 @@ import SystemDialog from './SystemDialog';
 const criticalUserNodes = ['stations'];
 const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
 var itemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
-var needToSyncStationDataToQuestionData = false;
 itemsToSyncToLS.push("loggedInUser");
+
 const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
+var needToSyncStationDataToQuestionData = false;
+
+
+const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:";
+
 
 class WebFF extends React.Component {
 	constructor(props) {
@@ -83,8 +88,11 @@ class WebFF extends React.Component {
 			hiddenTabs: [],
 			stations: [],
 
-			loggedInUser: "jfederer@usgs.gov"
+			loggedInUser: "jfederer@usgs.gov",
+
+			samplingEvents: []
 		};
+
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
 		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
@@ -92,6 +100,7 @@ class WebFF extends React.Component {
 		this.dialogQuestionChangeSystemCallback = this.dialogQuestionChangeSystemCallback.bind(this);
 		this.setLoggedInUser = this.setLoggedInUser.bind(this);
 		this.addStation = this.addStation.bind(this);
+		this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
@@ -186,7 +195,7 @@ class WebFF extends React.Component {
 		} else {
 			// pull everything from DB
 
-			this.newFetch(query, (JSONresponse) => {
+			this.fetchDBInfo(query, (JSONresponse) => {
 				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 				JSONresponse.forEach((configNode) => {
 					if (DEBUG) console.log("ConfigNode: ", configNode);
@@ -247,7 +256,7 @@ class WebFF extends React.Component {
 		} else {
 			// pull everything from DB
 
-			this.newFetch(query, (JSONresponse) => {
+			this.fetchDBInfo(query, (JSONresponse) => {
 				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 				let nodeArr = [];
 				for (let i = 0; i < nodesToGather.length; i++) {
@@ -272,6 +281,41 @@ class WebFF extends React.Component {
 	}
 
 
+	getDateTimeString() {
+		let d = new Date();
+		let dateOfMonthString = ('0' + d.getDate()).slice(-2);
+		let monthString = ('0' + (d.getMonth()+1)).slice(-2);
+		let dateString = d.getFullYear() + "-" + monthString +"-" + dateOfMonthString;
+		let hoursString = ('0' + d.getHours()).slice(-2);
+		let minutesString = ('0' + (d.getMinutes())).slice(-2);
+		let secondsString = ('0' + (d.getMinutes())).slice(-2);
+		let timeString = hoursString + ":" + minutesString + ":" + secondsString;
+		return dateString + "@" + timeString;
+	}
+
+
+	createNewSamplingEvent() {
+		console.log("creating new event");
+
+		// create new sampling event 
+		let newSamplingEventID = this.getDateTimeString();
+				
+		// load initial values from questionsData
+		let questionValues = this.state.questionsData.map((Q)=>{
+			return {[Q.id]:Q.value}
+		});
+
+		let newSamplingEvent = {
+			id: newSamplingEventID,
+			questionValues: questionValues
+		}
+
+		//ensure this sampling event will be sync'd to LS
+		itemsToSyncToLS.push(SAMPLING_EVENT_IDENTIFIER+newSamplingEventID);
+
+		//save it to the state   (note, we'll use Object.keys(localStorage) to get this later)
+		this.setState({[SAMPLING_EVENT_IDENTIFIER+newSamplingEventID]:newSamplingEvent});
+	}
 
 	materialIcon(icon) {
 		switch (icon) {
@@ -297,7 +341,7 @@ class WebFF extends React.Component {
 		}
 	}
 
-	newFetch(_query, successCB) {
+	fetchDBInfo(_query, successCB) {
 		const DEBUG = false;
 		const API = 'http://localhost:3004/';
 		const query = _query;
@@ -327,42 +371,6 @@ class WebFF extends React.Component {
 				})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
-
-	// fetchDBInfo(_query) {
-	// 	const DEBUG = false;
-	// 	const API = 'http://localhost:3004/';
-	// 	const query = _query;
-
-	// 	function handleErrors(response) {
-	// 		// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-	// 		if (!response.ok) {
-	// 			throw Error(response.statusText);
-	// 		}
-	// 		//note 404 is not found and 400 is a mal-formed request
-	// 		return response;
-	// 	}
-
-	// 	if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
-	// 	fetch(API + query)
-	// 		.then(handleErrors)
-	// 		.then(response => response.json())
-	// 		.then(
-	// 			parsedJSON => {
-	// 				if (DEBUG) console.log("Parsed JSON: ");
-	// 				if (DEBUG) console.log(parsedJSON);
-	// 				let newItemsLoaded = this.state.itemsLoaded;
-	// 				newItemsLoaded.push(query);
-	// 				// setTimeout(() => {
-	// 				this.setState({
-	// 					[query]: parsedJSON,
-	// 					itemsLoaded: newItemsLoaded
-	// 				}, this.buildRoutesAndRenderPages);
-	// 				if (DEBUG) console.log("CurrentState: ");
-	// 				if (DEBUG) console.log(this.state);
-	// 				// }, 1200);
-	// 			})
-	// 		.catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	// }
 
 	handleDialogOpen() {
 		this.setState({ dialogOpen: true });
@@ -710,6 +718,7 @@ class WebFF extends React.Component {
 					text="Dashboard"
 					navControl={this.navigationControl}
 					globalState={this.state}
+					createNewSamplingEvent={this.createNewSamplingEvent}
 				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
