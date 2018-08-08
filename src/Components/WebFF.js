@@ -76,6 +76,7 @@ class WebFF extends React.Component {
 			curDialogName: "",
 			curDialogQuestions: [],
 
+			defaultQuestionsData: [],
 			isQuestionsDataLoaded: false,
 			questionsData: [],
 
@@ -90,7 +91,8 @@ class WebFF extends React.Component {
 
 			loggedInUser: "jfederer@usgs.gov",
 
-			samplingEvents: []
+			samplingEvents: [],
+			curSamplingEvent: ""
 		};
 
 		this.navigationControl = this.navigationControl.bind(this);
@@ -313,9 +315,11 @@ class WebFF extends React.Component {
 		//ensure this sampling event will be sync'd to LS
 		itemsToSyncToLS.push(SAMPLING_EVENT_IDENTIFIER+newSamplingEventID);
 
-		//save it to the state   (note, we'll use Object.keys(localStorage) to get this later)
-		this.setState({[SAMPLING_EVENT_IDENTIFIER+newSamplingEventID]:newSamplingEvent});
+		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
+		this.setState({[SAMPLING_EVENT_IDENTIFIER+newSamplingEventID]:newSamplingEvent, curSamplingEvent:SAMPLING_EVENT_IDENTIFIER+newSamplingEventID});
 	}
+
+
 
 	materialIcon(icon) {
 		switch (icon) {
@@ -704,7 +708,7 @@ class WebFF extends React.Component {
 		//TODO: validation
 
 		
-		this.setState({stations:newStations}, this.attemptToSyncStationDataToQuestionData);
+		this.setState({stations:newStations}, () => {this.attemptToSyncStationDataToQuestionData});
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
@@ -884,23 +888,25 @@ class WebFF extends React.Component {
 		// );
 
 		if (menuText === "Test Connection") {
-			// console.log("Testing  of new Question")
-			// let newQuestion = {
-			// 	"id": "ThisisThefirstID",
-			// 	"label": "Station Number",
-			// 	"XMLValue": "",
-			// 	"type": "Text",
-			// 	"tabName": "Add Station",
-			// 	"value": "",
-			// 	"layoutGroup": "Basic",
-			// 	"width_xs": 5,
-			// 	"width_lg": 5
-			// }
-			// this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
+			console.log("Testing of new Question")
+			let newQuestion = {
+				"id": "ThisisThefirstID",
+				"label": "Station Number",
+				"XMLValue": "",
+				"type": "Text",
+				"tabName": "Add Station",
+				"value": "",
+				"layoutGroup": "Basic",
+				"width_xs": 5,
+				"width_lg": 5
+			}
+			this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
 
-			// let patchData =
-			// 	{ "id": "CSN", "testName": "SMister" }
-			// this.updateDBInfo("customQuestions/" + patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
+
+
+			let patchData =
+				{ "id": "CSN", "testName": "SMister" }
+			this.updateDBInfo("users/" + this.state.loggedInUser + "patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
 
 
 		}
