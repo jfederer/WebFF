@@ -20,21 +20,20 @@ const styles = theme => ({
 });
 
 class ComputedValue extends React.Component {
-	// warning, this does calculations based on LS
 	// TODO: probably better to pass state and/or use the call back somehow... but utility functions meet the need.
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			value: this.props.value,
 		};
-	}; 
+	};
 
 	componentWillMount() {
 		this.computeValue(true);
 	}
 
 	handleValueChange = value => event => {
-		console.log("handleVAlueChange");
 		this.setState({
 			value: event.target.value
 		}, () => {
@@ -43,17 +42,15 @@ class ComputedValue extends React.Component {
 		);
 	};
 
-	componentWillUpdate(nextProps, nextState) { //performance - could add shouldcomponentupdate
-		// console.log("CV: CWU: this.state:" , this.state);
-		// console.log("CV: CWU: nextState:" , nextState);
-		let curValue = this.computeValue(false)
-		// console.log("CV: CWU: curValue:" , curValue);
-		if(curValue!==nextState.value) {
+	componentWillUpdate(nextProps, nextState) { 
+		 let curValue = this.computeValue(false) // this runs twice to avoid triggering 
+		 if (curValue !== nextState.value) {
 			this.computeValue(true);
-		}
-	  }
+		 }
+	}
 
 	computeValue(updateState) {
+		console.log("CV");
 		//computes value from computationString based on values in LS and optionally updates state and LS
 		let DEBUG = false;
 		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
@@ -61,7 +58,7 @@ class ComputedValue extends React.Component {
 		let computedValue = "";
 		let shouldCompute = true;
 
-		if(DEBUG)console.log("--------------------------------");
+		if (DEBUG) console.log("--------------------------------");
 		//if(this.props.globalState);
 
 		// if(this.props.id === "samplingWidth") {
@@ -74,26 +71,26 @@ class ComputedValue extends React.Component {
 		let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
 		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
-		
+
 		if (DEBUG) console.log("SPLIT PRE:", splitCS);
-		// replace all instaces of questionID's with their value
+		// replace all instances of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
-			//if(DEBUG) console.log(splitCS[i] + " is a " + !) + " number");
+			if (DEBUG) console.log("Working with item: ", splitCS[i]);
 
-			if (splitCS[i] !== '+' && splitCS[i] !== '-' && splitCS[i] !== '*' && splitCS[i] !== '/' &&
-				splitCS[i] !== '(' && splitCS[i] !== ')' && splitCS[i] !== '^' && splitCS[i] !== "" &&
-				splitCS[i] !== null && isNaN(splitCS[i])) {
-
-					// splitCS[i] is a questionID
+			if (!(splitCS[i] === '+' || splitCS[i] === '-' || splitCS[i] === '*' || splitCS[i] === '/' ||
+				splitCS[i] === '(' || splitCS[i] === ')' || splitCS[i] === '^' || splitCS[i] === "" ||
+				splitCS[i] === null) && isNaN(splitCS[i])) {
+				if (DEBUG) console.log(splitCS[i] + " is a question!");
+				// splitCS[i] is a questionID
 				let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]);
 				if (DEBUG) console.log("subQuestion Q: ", Q);
-				
+
 				// check that all values returned without fail
-				if(Q===null) {
+				if (Q === null) {
 					//TODO: Throw error
 					if (DEBUG) console.log(splitCS[i] + " question was not found");
 					shouldCompute = false;
-				} else if(Q.value==="" || Q.value===null) {
+				} else if (Q.value === "" || Q.value === null) {
 					//TODO: Throw error
 					if (DEBUG) console.log(splitCS[i] + " question has null value");
 					shouldCompute = false;
@@ -105,16 +102,16 @@ class ComputedValue extends React.Component {
 		if (DEBUG) console.log("SPLIT POST: ", splitCS);
 
 		//TODO: save old splitCS values so we know what was null for better error display
-		
+
 		if (shouldCompute) {
 			// rejoin string and send to math utility
 			let finalComputeString = splitCS.join('')
 			//console.log(finalComputeString);
-			// set result to this value
 			computedValue = math.eval(finalComputeString);
 		}
 
-		
+
+		// set result to this value if we are suppose dto.
 		if (updateState && this.state.value !== computedValue) {
 			this.setState({
 				value: computedValue
@@ -129,14 +126,7 @@ class ComputedValue extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		//console.log("CV render");
-
-		// this.computeValue(true);
-		
-
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
-		//TODO: going to need to find a way to set the state.value so it can be referenced in other places similarly to other questions
-
 
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 		//TODO: generate minimum size

@@ -620,7 +620,7 @@ class WebFF extends React.Component {
 	questionChangeSystemCallback(Q, dialogQuestion) {
 		// updates current state of questionsData, checks for action string, executes any actions
 
-		console.log(Q);
+		// console.log(Q);
 
 		//HARDCODE for paper settings:
 		if (Q.props.id === "settings_paper") {
@@ -700,7 +700,7 @@ class WebFF extends React.Component {
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
-		 console.log("BAR");
+		//  console.log("BAR");
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
@@ -863,8 +863,9 @@ class WebFF extends React.Component {
 		//TODO: Question order priority
 		//TODO: read-only columns in table
 		//TODO: refactor network tasks to UTIL
-		//TODO: standardize tooltips
+		//TODO: standardize tooltips within questions
 		//TODO: standardize 'styles' within questions
+		//TODO: standardize 'placeholder' within questions
 
 
 		// this.putDBInfo("generatedQuestions",
@@ -922,7 +923,7 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		console.log("RENDER");
+		// console.log("RENDER");
 
 		return (
 			<div className={classes.root} >

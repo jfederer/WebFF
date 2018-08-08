@@ -4,3 +4,5 @@
           "route": "/QuestionPage",
           "icon": "CompareIcon"
         }
+
+		|| isNaN(splitCS[i])
