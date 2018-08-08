@@ -37,6 +37,7 @@ class DateInput extends React.Component {
 			this.state = {
 				value: dateString
 			}
+			this.props.stateChangeHandler(this);
 			if(DEBUG)console.log("CONSTRUCTOR: state.value: ", this.state.value);
 		}
 	};
