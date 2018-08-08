@@ -24,7 +24,7 @@ class Text extends React.Component {
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 		this.setState({
-			value: event.target.value
+			[value]: event.target.value
 		}, () => {
 			
 			this.props.stateChangeHandler(this)
@@ -41,7 +41,7 @@ class Text extends React.Component {
 
 		return <TextField
 			value={this.props.value}
-			onChange={this.handleValueChange(this.props.id)}
+			onChange={this.handleValueChange("value")}
 			key={this.props.id}
 			id={this.props.id}
 			label={this.props.label}
