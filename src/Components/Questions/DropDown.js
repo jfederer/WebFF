@@ -44,19 +44,9 @@ class DropDown extends React.Component {
 		const { classes } = this.props;
 		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 
-		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
-
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
-		// } else {
-		// 	return this.buildQuestion();
-		// }
-		// if (tooltip != null) {
-		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}><Paper>{this.buildQuestion()}</Paper></Tooltip>;
-		// } else {
-		// 	return <Paper>{this.buildQuestion()}</Paper>;
-		// }
+
 		console.log(this.props.options)
 			return <FormControl className={classes.formControl}>
 						{(this.props.label!=null) ?
