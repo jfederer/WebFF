@@ -47,7 +47,6 @@ class DropDown extends React.Component {
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
 
-		console.log(this.props.options)
 			return <FormControl className={classes.formControl}>
 						{(this.props.label!=null) ?
 							<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> :

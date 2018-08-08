@@ -16,66 +16,43 @@ const styles = theme => ({
 
 
 class MultipleChoice extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
-        };
-    };
 
     componentWillMount() {
         this.setState({ value: this.props.value });
     }
 
-    handleValueChange = choiceVal => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-
-        let tempValue = this.state.value;
+    handleValueChange = choiceVal => event => { 
+        let tempValueArr = this.props.value.slice();
 
         if (event.target.checked) {
-            tempValue.push(choiceVal);
+            tempValueArr.push(choiceVal);
         } else {
-            let index = tempValue.indexOf(choiceVal);
-            if (index > -1) {
-                tempValue.splice(index, 1);
-            } else {
-                //TODO: Throw Error
-                console.log("ERROR: MultipleChoice option requested for removal did not exist in list of checked items in 'value'");
-            }
+			while(tempValueArr.includes(choiceVal)) { // removing all occurences
+				tempValueArr.splice(tempValueArr.indexOf(choiceVal), 1);
+			}
         }
 
-        this.setState({ value: tempValue }, () => this.props.stateChangeHandler(this)
-        );
+        this.setState({ value: tempValueArr }, () => this.props.stateChangeHandler(this));
     };
-
-    buildCheckboxOptions(optionsPairs) {  // note, this references props and state... not just passed parameters and blank option could be split out for reuse
-        var JSX_return = [];
-
-        for (var optionLabel in optionsPairs) {
-            JSX_return.push(
-                <FormControlLabel
-                    key={optionLabel + ":" + optionsPairs[optionLabel]}
-                    control={
-                        <Checkbox
-                            checked={this.state.value && this.state.value.includes(optionsPairs[optionLabel])}
-                            onChange={this.handleValueChange(optionsPairs[optionLabel])}
-                            value={optionsPairs[optionLabel]}
-                        />
-                    }
-                    label={optionLabel}
-                />
-            );
-        }
-        return JSX_return;
-    };
-
-
 
     render() {
         // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
         return <FormControl component="fieldset" key={this.props.id}>
             <FormLabel component="legend">{this.props.label}</FormLabel>
             <FormGroup>
-                {this.buildCheckboxOptions(this.props.options)}
+			{Object.keys(this.props.options).map((optionLabel)=> { 
+				return <FormControlLabel
+				key={optionLabel + ":" + this.props.options[optionLabel]}
+				control={
+					<Checkbox
+						checked={this.props.value && this.props.value.includes(this.props.options[optionLabel])}
+						onChange={this.handleValueChange(this.props.options[optionLabel])}
+						value={this.props.options[optionLabel]}
+					/>
+				}
+				label={optionLabel}
+			/>
+			})}
             </FormGroup>
         </FormControl>;
     }

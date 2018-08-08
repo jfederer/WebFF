@@ -863,6 +863,8 @@ class WebFF extends React.Component {
 		//TODO: Question order priority
 		//TODO: read-only columns in table
 		//TODO: refactor network tasks to UTIL
+		//TODO: standardize tooltips
+		//TODO: standardize 'styles' within questions
 
 
 		// this.putDBInfo("generatedQuestions",
