@@ -50,7 +50,7 @@ class ComputedValue extends React.Component {
 	}
 
 	computeValue(updateState) {
-		console.log("CV");
+		//console.log("CV");
 		//computes value from computationString based on values in LS and optionally updates state and LS
 		let DEBUG = false;
 		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
