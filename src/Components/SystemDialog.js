@@ -28,43 +28,40 @@ class SystemDialog extends React.Component {
 		switch (dialogName) {
 			case "Switch User": {  //HARDCODE
 				console.log("Switching user");
-				//FIXME:  no value is being stored in the questions state because this isn't in "questionsData" and instead, is in "dialogQuestions..."
-				//TODO: Move "dialog questions" to the bulk "questionsData" during import and store their values along everyone elses
-				// console.log(this);
-				// console.log(this.refs);
-				// console.log(this.refs.switchUser_email);
-				// console.log(this.props.dialogQuestions);
 				let username = document.getElementById('switchUser_email').value;  // KLUDGE because REFs doesn't appear to be working correctly
 				this.props.setLoggedInUser(username);
 				this.props.closeHandler();
 				break;
 			}
-			case "Add/Remove Station": {
+			case "Add/Remove Station": { //HARDCODE
 				//console.log("Adding New Station");
 
-				//TODO::::::
-				//TODO::::::
-				//TODO::::::  Will need to have this check for adding or deleting.
-				//TODO::::::
-				//TODO::::::
+				if(document.getElementById("editStation_AddOrRemove").value==="Add") {
+					let addStationElementIDs=["stationName", "stationNumber","projectName","projectID","agencyCode"];
+					let stnObj = {};
 
-
-
-				let dialog = globalState.dialogQuestions.filter((dialog) => {
-					return dialog.dialogName === dialogName;
-				})[0];
-				
-				let stnObj = {};
-				for (let i = 0; i < dialog.questions.length; i++) {
-					let q_id = dialog.questions[i].id;
-					let short_q_id = q_id.substring(11);
-					stnObj[short_q_id] = document.getElementById(q_id).value;
+					for (let i = 0; i < addStationElementIDs.length; i++) {
+						let q_id = "newStation_" + addStationElementIDs[i];
+						let short_q_id = addStationElementIDs[i];
+						stnObj[short_q_id] = document.getElementById(q_id).value;  //TODO: FIXME: fails badly if getElement returns null
+					}
+	
+					this.props.addStation(stnObj["stationName"], stnObj["stationNumber"], stnObj["projectName"], stnObj["projectID"], stnObj["agencyCode"]); // HARDCODE (change addStation to accept object would be better)
+					
+					this.props.closeHandler();
+				} else {
+					//TODO: REMOVE STATION
+					this.props.removeStation(document.getElementById("deleteStation_stationName").value); //TODO: FIXME: fails badly if getElement returns null
+					this.props.closeHandler();
 				}
-
-				this.props.addStation(stnObj["stationName"], stnObj["stationNumber"], stnObj["projectName"], stnObj["projectID"], stnObj["agencyCode"]);
-				this.props.closeHandler();
 				break;
 			}
+
+			// case "Add/Remove Question" : {
+			// 						// let addDialog = globalState.dialogQuestions.filter((dialog) => {
+			// 		// 	return dialog.dialogName === dialogName;
+			// 		// })[0];
+			// }
 			default: {
 				console.log(dialogName + "submit button is not yet implemented");
 			}

@@ -62,15 +62,15 @@
                 "Add": "HideQuestion::deleteStation_stationName&ShowQuestion::newStation_stationName&ShowQuestion::newStation_stationNumber&ShowQuestion::newStation_projectName&ShowQuestion::newStation_projectID&ShowQuestion::newStation_agencyCode",
                 "Remove": "ShowQuestion::deleteStation_stationName&HideQuestion::newStation_stationName&HideQuestion::newStation_stationNumber&HideQuestion::newStation_projectName&HideQuestion::newStation_projectID&HideQuestion::newStation_agencyCode"
               },
-			  "value": "",
-			  "width_xs": 12,
+              "value": "",
+              "width_xs": 12,
               "width_lg": 12
             },
             {
               "id": "deleteStation_stationName",
               "label": "Select Station To Remove",
-			  "type": "DropDown",
-			  "hidden": true,
+              "type": "DropDown",
+              "hidden": true,
               "includeBlank": true,
               "options": {
                 "Add New Station": "Add",
@@ -80,8 +80,8 @@
             },
             {
               "id": "newStation_stationName",
-			  "label": "Station Name",
-			  "hidden": true,
+              "label": "Station Name",
+              "hidden": true,
               "XMLValue": "stnnm",
               "type": "Text",
               "tabName": "Add New Station",
@@ -92,8 +92,8 @@
             },
             {
               "id": "newStation_stationNumber",
-			  "label": "Station Number",
-			  "hidden": true,
+              "label": "Station Number",
+              "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
@@ -104,8 +104,8 @@
             },
             {
               "id": "newStation_projectName",
-			  "label": "Project Name",
-			  "hidden": true,
+              "label": "Project Name",
+              "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
@@ -116,8 +116,8 @@
             },
             {
               "id": "newStation_projectID",
-			  "label": "Project ID",
-			  "hidden": true,
+              "label": "Project ID",
+              "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
@@ -128,8 +128,8 @@
             },
             {
               "id": "newStation_agencyCode",
-			  "label": "Agency Code",
-			  "hidden": true,
+              "label": "Agency Code",
+              "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
@@ -2565,6 +2565,13 @@
           "stationNumber": "05288705",
           "projectName": "Roofers like Shingles",
           "projectID": "8843G2"
+        },
+        {
+          "id": "Plum's Station",
+          "stationNumber": "12345",
+          "projectName": "Plum's Project",
+          "projectID": "PID",
+          "agencyCode": "PCA"
         }
       ],
       "samplingEvents": []

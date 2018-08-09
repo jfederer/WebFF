@@ -102,6 +102,7 @@ class WebFF extends React.Component {
 		this.dialogQuestionChangeSystemCallback = this.dialogQuestionChangeSystemCallback.bind(this);
 		this.setLoggedInUser = this.setLoggedInUser.bind(this);
 		this.addStation = this.addStation.bind(this);
+		this.removeStation = this.removeStation.bind(this);
 		this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
 	}
 
@@ -146,7 +147,7 @@ class WebFF extends React.Component {
 		}
 
 		//console.log("New Options: ", newOptions);
-
+		this.updateQuestionData("deleteStation_stationName", "options", newOptions);
 		this.updateQuestionData("stationName", "options", newOptions, this.buildRoutesAndRenderPages);
 
 		needToSyncStationDataToQuestionData = false;
@@ -599,18 +600,41 @@ class WebFF extends React.Component {
 
 
 	updateQuestionData(q_id, key, value, CB) {
-		// sets the 'key' element to 'value' for question with question id of q_id
+		// sets the 'key' element to 'value' for question with question id of q_id ... searches default questions first, then dialog, then TODO: user/station questions
 		// returns just the matching, updated, question
+		// performance: rebuilds entire questionsData... needlessly?
 		let retQ;
+		let anyFound = false;
 		var newQuestionsData = this.state.questionsData.filter(questionData => {
 			if (questionData.id === q_id) {
 				retQ = questionData;
 				questionData[key] = value;
+				anyFound = true;
 			}
 			return questionData;
 		});
 
-		this.setState({ questionsData: newQuestionsData }, CB);
+		if (anyFound) {
+			this.setState({ questionsData: newQuestionsData }, CB);
+		} else {
+			let newDialogQuestions = this.state.dialogQuestions.slice();
+			for (let i = 0; i < newDialogQuestions.length && !anyFound; i++) {
+				var specificDialogQuestions = newDialogQuestions[i].questions.filter(questionData => {
+					if (questionData.id === q_id) {
+						retQ = questionData;
+						questionData[key] = value;
+						anyFound = true;
+					}
+					return questionData;
+				});
+				if(anyFound) {
+					newDialogQuestions[i].questions = specificDialogQuestions;
+					this.setState({ dialogQuestions: newDialogQuestions }, CB);
+				}
+			}
+		}
+
+
 
 		return retQ;
 	}
@@ -711,6 +735,18 @@ class WebFF extends React.Component {
 	}
 
 
+	removeStation(stationIDToDelete) {
+		let newStations = this.state.stations.filter((station) => {
+			console.log(station);
+			if (station.id !== stationIDToDelete) {
+				return true;
+			}
+			return false;
+		});
+
+		this.setState({ stations: newStations }, () => { this.attemptToSyncStationDataToQuestionData(); this.syncStationsToDB(); });
+	}
+
 	addStation(stationName, stationNumber, projectName, projectID, agencyCode) {
 		let newStation = {
 			id: stationName,
@@ -725,8 +761,7 @@ class WebFF extends React.Component {
 		console.log("this.state.stations: ", this.state.stations);
 		//TODO: validation
 
-
-		this.setState({ stations: newStations }, () => { this.attemptToSyncStationDataToQuestionData });
+		this.setState({ stations: newStations }, () => { this.attemptToSyncStationDataToQuestionData(); this.syncStationsToDB(); });
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
@@ -912,24 +947,12 @@ class WebFF extends React.Component {
 		// );
 
 		if (menuText === "Test Connection") {
-
-
-			//TODO: deleting a station woud look like this...
-			let stationIDToDelete = "Plum station";
-			let newStations = this.state.stations.filter((station) => {
-				console.log(station);
-				if (station.id !== stationIDToDelete) {
-					return true;
-				}
-				return false;
-			});
-
-			this.setState({ stations: newStations }, this.syncStationsToDB);
+			
 
 			// this sync's this.state.stations to the DB.  WORKS.
 
 
-			console.log("Testing of new Question")
+			console.log("Testing of update")
 			// let newQuestion = {
 			// 	"id": "ThisisThefirstID",
 			// 	"label": "Station Number",
@@ -1022,7 +1045,8 @@ class WebFF extends React.Component {
 					stateChangeHandler={this.dialogQuestionChangeSystemCallback}
 					globalState={this.state}
 					setLoggedInUser={this.setLoggedInUser}
-					addStation={this.addStation} />
+					addStation={this.addStation}
+					removeStation={this.removeStation} />
 				<NavMenu isExpanded={this.state.navMenuExpanded}
 					closeHandler={this.handleLeftDrawerClose}
 					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
