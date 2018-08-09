@@ -621,37 +621,35 @@ class WebFF extends React.Component {
 
 
 
-	updateQuestionData(q_id, key, value, CB) {
+	updateQuestionData(q_id, key, value, CB) { // void return
 		// sets the 'key' element to 'value' for question with question id of q_id ... searches default questions first, then dialog, then TODO: user/station questions
 		// if the key is 'value' will store it in the currentSampleEvent
-		// returns just the matching, updated, question
 		// performance: rebuilds entire questionsData... needlessly?
 
+		// note, if you are trying to set the value of a question, you save that in the samplingEvent.... or optionally in the dialogQuestions.
+		// values do not get saved to questionData
+
 		 let shouldSetState = true;
-		// if(key==="value") {
-		// 	console.log("Trying to set value on " + q_id);
-		// 	//is the q_id in the eventSample?
-		// 	if(Object.keys(this.state[this.state.curSamplingEventName].questionsValues).includes(q_id)) {
-		// 		// it is! ... so let's set the 
-		// 		let newSamplingEvent = this.state[this.state.curSamplingEventName];
-		// 		newSamplingEvent.questionsValues[key]=value;
-		// 		this.setState({[this.state.curSamplingEventName]:newSamplingEvent}, CB);
-		// 		shouldSetState=false;
-		// 	}
+		if(key==="value") {
+			console.log("Trying to set value on " + q_id);
+			//is the q_id in the eventSample?
+			if(Object.keys(this.state[this.state.curSamplingEventName].questionsValues).includes(q_id)) {
+				// it is! ... so let's set the value in there
+				let newSamplingEvent = this.state[this.state.curSamplingEventName];
+				// console.log("(PRE)newSamplingEvent : ", newSamplingEvent);
+				// console.log("(PRE)newSamplingEvent.questionsValues[q_id]", newSamplingEvent.questionsValues[q_id]);
+				// console.log("(PRE)value: ", value);
+				newSamplingEvent.questionsValues[q_id]=value;
 
+				console.log("newSamplingEvent (POST): ", newSamplingEvent);
+				this.setState({[this.state.curSamplingEventName]:newSamplingEvent}, CB);
+				return;
+			} 
+		 }
 
-
-		// }
-
-		// want to do this
-	//	this.state[this.state.curSamplingEventName].questionsValues[q_id]=value
-
-
-		let retQ;
 		let anyFound = false;
 		var newQuestionsData = this.state.questionsData.filter(questionData => {
 			if (questionData.id === q_id) {
-				retQ = questionData;
 				questionData[key] = value;
 				anyFound = true;
 			}
@@ -659,13 +657,12 @@ class WebFF extends React.Component {
 		});
 
 		if (anyFound) {
-			if(shouldSetState)this.setState({ questionsData: newQuestionsData }, CB);
+			this.setState({ questionsData: newQuestionsData }, CB);
 		} else {
 			let newDialogQuestions = this.state.dialogQuestions.slice();
 			for (let i = 0; i < newDialogQuestions.length && !anyFound; i++) {
 				var specificDialogQuestions = newDialogQuestions[i].questions.filter(questionData => {
 					if (questionData.id === q_id) {
-						retQ = questionData;
 						questionData[key] = value;
 						anyFound = true;
 					}
@@ -673,14 +670,10 @@ class WebFF extends React.Component {
 				});
 				if (anyFound) {
 					newDialogQuestions[i].questions = specificDialogQuestions;
-					if(shouldSetState)this.setState({ dialogQuestions: newDialogQuestions }, CB);
+					this.setState({ dialogQuestions: newDialogQuestions }, CB);
 				}
 			}
 		}
-
-
-
-		return retQ;
 	}
 
 	getQuestionData(q_id) {
@@ -761,6 +754,14 @@ class WebFF extends React.Component {
 			}
 		}
 
+
+		//HARDCODE for numberOfSamplingPoints
+		let propagateSamplePointData = false;
+		if (Q.props.id === "numberOfSamplingPoints") {
+			console.log("numberOfSamplingPoints: ", Q.state.value);
+			propagateSamplePointData = true;
+		}
+
 		if (Q == null) {
 			//TODO: throw error
 			console.log("questionChangeSystemCallback required field, question, is null");
@@ -771,6 +772,7 @@ class WebFF extends React.Component {
 			stateKey = "curDialogQuestions";
 		}
 
+		//TODO: this should use updateQuestionData to change the values instead of calling setState here...
 		// save updated value to samplingEvent in state:
 		let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q, dialogQuestion);
 		this.setState({ "curDialogQuestions": updatedQuestionData }, () => { parseActions(this.actionExecuter); });
@@ -783,14 +785,14 @@ class WebFF extends React.Component {
 			if (DEBUG) console.log("updatedSamplingEvent (POST): ", updatedSamplingEvent);
 			this.setState({ stateKey: updatedSamplingEvent }, () => {
 
-				// let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q, dialogQuestion);
-				// this.setState({ [stateKey]: updatedQuestionData }, () => {
-
 				// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
 				// when done, rebuild routs and render pages // performance
 
 				parseActions(this.actionExecuter);
 
+				if(propagateSamplePointData) {
+					this.collectRunAndPropagateSamplePointData()
+				}
 
 				this.buildRoutesAndRenderPages();
 			});
@@ -869,15 +871,16 @@ class WebFF extends React.Component {
 					</Switch>
 				); //performance
 
-				this.setState({ routesAndPages: newRoutesAndPages }, () => this.collectRunAndPropagateSamplePointData());
+				this.setState({ routesAndPages: newRoutesAndPages });
 			};
+
 
 		collectRunAndPropagateSamplePointData() {
 			//FIXME:  This overwrites values in the table if any exist //TODO: check current value and insert
 			let numSampPoints = null;
 			//console.log(this.state);
 			if (this.state.itemsLoaded.includes('questionsData')) {
-				numSampPoints = this.getQuestionData("samplingPoints").value;
+				numSampPoints = this.getQuestionData("numberOfSamplingPoints").value;
 			}
 
 
@@ -1037,7 +1040,7 @@ class WebFF extends React.Component {
 				this.syncSamplingEventToDB(this.state.curSamplingEventName);
 
 
-
+				
 
 			}
 

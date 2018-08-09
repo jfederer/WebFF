@@ -2403,12 +2403,12 @@
           "width_lg": 2
         },
         {
-          "id": "samplingPoints",
+          "id": "numberOfSamplingPoints",
           "value": "5",
           "label": "Sampling Points",
           "type": "Text",
           "placeholder": "Number of Points",
-          "tabName": "Field Form",
+          "tabName": "FieldForm",
           "layoutGroup": "Waterway Info",
           "width_xs": 12,
           "width_lg": 2
@@ -2920,7 +2920,7 @@
           "edgeOfSamplingZone_Left": "20",
           "edgeOfSamplingZone_Right": "600",
           "edgeOfWater_Right": "620",
-          "samplingPoints": "5",
+          "numberOfSamplingPoints": "5",
           "pier1_start": "30",
           "pier2_start": "160",
           "pier3_start": "210",
@@ -3281,7 +3281,7 @@
           "edgeOfSamplingZone_Left": "20",
           "edgeOfSamplingZone_Right": "600",
           "edgeOfWater_Right": "620",
-          "samplingPoints": "5",
+          "numberOfSamplingPoints": "5",
           "pier1_start": "30",
           "pier2_start": "160",
           "pier3_start": "210",
