@@ -2574,7 +2574,728 @@
           "agencyCode": "PCA"
         }
       ],
-      "samplingEvents": []
+      "SamplingEvent:2018-08-09@11:32:32": {
+        "id": "2018-08-09@11:32:32",
+        "questionsValues": {
+          "mathInput1": "",
+          "mathInput2": "",
+          "mathInput3": "2",
+          "testComputedPlus": "",
+          "testComputedMinus": "",
+          "testComputedDivide": "",
+          "testComputedMultiply": "",
+          "testComputedExponent": "",
+          "testComplexMath": "",
+          "test1": "",
+          "test2": "Johnny Science",
+          "test3": "",
+          "test4": "",
+          "test5": [
+            "CSN",
+            "RAF"
+          ],
+          "testHidden": [
+            "CSN",
+            "RAF"
+          ],
+          "testTog": false,
+          "testTog2": true,
+          "testTog3": true,
+          "testTog4": false,
+          "testDate": null,
+          "testDate2": "2017-10-25",
+          "testTime": null,
+          "testTime2": "16:39",
+          "testTable": [
+            [
+              "Frozen yoghurt",
+              "159ewrwr",
+              "",
+              "24",
+              "4.0"
+            ],
+            [
+              "Ice cream sandwich",
+              "237",
+              "9.0",
+              "37",
+              "4.3"
+            ],
+            [
+              "Eclair",
+              "262",
+              "SubQuestion::subTest1",
+              "24",
+              "6.0"
+            ],
+            [
+              "Cupcake",
+              "305",
+              "3.7",
+              "67",
+              "4.3"
+            ],
+            [
+              "Gingerbread",
+              "356",
+              "16.0",
+              "49",
+              "3.9"
+            ]
+          ],
+          "subTest1": "",
+          "testTable2": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ],
+          "testTable3": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ],
+          "testTable4": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ],
+          "test6": "",
+          "test7": "Default Value",
+          "test8": "",
+          "test9": "One",
+          "test10": [],
+          "concCheck": false,
+          "sandCheck": false,
+          "fullCheck": false,
+          "concCheck2": false,
+          "sandCheck2": false,
+          "fullCheck2": false,
+          "stationName": "",
+          "stationNumber": "",
+          "projectName": "",
+          "projectID": "",
+          "agencyCode": "",
+          "sampleDate": "2018-08-09",
+          "sedimentType": "suspended",
+          "samplingMethod": "",
+          "timeZone": "",
+          "samplingTeam": "",
+          "compiledBy": "YOUS",
+          "sameDaySample": "false",
+          "sky": "",
+          "precipitation": "",
+          "temperature": "",
+          "wind": "",
+          "windDirection": "",
+          "hydrologicEvent": "",
+          "hydrologicCondition": "",
+          "streamMixing": "",
+          "streamColor": "",
+          "sampleMedium": "",
+          "sampleType": "",
+          "samplePurpose": "",
+          "analysisSourceCode": "",
+          "WQ_location": "",
+          "WQ_temp": "",
+          "WQ_specificConductance": "",
+          "WQ_transparency": "",
+          "WQ_NTRUturbidity": "",
+          "WQ_FNUturbidity": "",
+          "EDI_samplerType": "",
+          "EDI_bottleMaterial": "",
+          "EDI_bagMaterial": "",
+          "EDI_sizeOfBottle": "",
+          "EDI_sizeOfBag": "",
+          "EDI_nozzelMaterial": "",
+          "EDI_nozzelWidth": "",
+          "EDI_setInfo_table": [
+            [
+              "Start Time",
+              "SubQuestion::setAStartTime",
+              "SubQuestion::setBStartTime",
+              "SubQuestion::setStartTimeAvg"
+            ],
+            [
+              "Gage Height(Start)",
+              "SubQuestion::setAStartGageHeight",
+              "SubQuestion::setBStartGageHeight",
+              "SubQuestion::startGageHeightAvg"
+            ],
+            [
+              "End Time",
+              "SubQuestion::setAEndTime",
+              "SubQuestion::setBEndTime",
+              "SubQuestion::setEndTimeAvg"
+            ],
+            [
+              "Gage Height(End)",
+              "SubQuestion::setAEndGageHeight",
+              "SubQuestion::setBEndGageHeight",
+              "SubQuestion::endGageHeightAvg"
+            ],
+            [
+              "Mean Time",
+              "SubQuestion::setAMeanTime",
+              "SubQuestion::setBMeanTime",
+              "SubQuestion::MEANTIMEAVG"
+            ]
+          ],
+          "EDI_samples_table": [
+            [
+              "10%"
+            ],
+            [
+              "30%"
+            ],
+            [
+              "50%"
+            ],
+            [
+              "70%"
+            ],
+            [
+              "90%"
+            ]
+          ],
+          "EDI_setAStartGageHeight": "5",
+          "EDI_setBStartGageHeight": "7",
+          "EDI_setAEndGageHeight": "10",
+          "EDI_setBEndGageHeight": "12",
+          "EDI_startGageHeightAvg": null,
+          "EDI_endGageHeightAvg": null,
+          "EDI_setAStartTime": null,
+          "EDI_setAEndTime": null,
+          "EDI_setStartTimeAvg": null,
+          "EDI_setBStartTime": null,
+          "EDI_setBEndTime": null,
+          "EDI_setEndTimeAvg": null,
+          "EDI_setAMeanTime": null,
+          "EDI_setBMeanTime": null,
+          "EDI_MEANTIMEAVG": null,
+          "EDI_sampleIsokenetic": false,
+          "EDI_additionalSampleCollected": false,
+          "EDI_intakeEfficiencyCompleted": false,
+          "EDI_feetAboveBed": "",
+          "EDI_transitRate": "",
+          "EDI_fieldComposite": true,
+          "EDI_compositeWithGallonContainers": true,
+          "EDI_numSetAContainers": "",
+          "EDI_numSetBContainers": "",
+          "EDI_setAAnalysedFor": [],
+          "EDI_setBAnalysedFor": [],
+          "EWI_samplerType": "",
+          "bottleMaterial": "",
+          "bagMaterial": "",
+          "sizeOfBottle": "",
+          "sizeOfBag": "",
+          "nozzelMaterial": "",
+          "nozzelWidth": "",
+          "EWI_setInfo_table": [
+            [
+              "Start Time",
+              "SubQuestion::setAStartTime",
+              "SubQuestion::setBStartTime",
+              "SubQuestion::setStartTimeAvg"
+            ],
+            [
+              "Gage Height(Start)",
+              "SubQuestion::setAStartGageHeight",
+              "SubQuestion::setBStartGageHeight",
+              "SubQuestion::startGageHeightAvg"
+            ],
+            [
+              "End Time",
+              "SubQuestion::setAEndTime",
+              "SubQuestion::setBEndTime",
+              "SubQuestion::setEndTimeAvg"
+            ],
+            [
+              "Gage Height(End)",
+              "SubQuestion::setAEndGageHeight",
+              "SubQuestion::setBEndGageHeight",
+              "SubQuestion::endGageHeightAvg"
+            ],
+            [
+              "Mean Time",
+              "SubQuestion::setAMeanTime",
+              "SubQuestion::setBMeanTime",
+              "SubQuestion::MEANTIMEAVG"
+            ]
+          ],
+          "EWI_samples_table": [
+            [
+              202
+            ],
+            [
+              296
+            ],
+            [
+              490
+            ],
+            [
+              534
+            ],
+            [
+              578
+            ]
+          ],
+          "setAStartGageHeight": "5",
+          "setBStartGageHeight": "7",
+          "setAEndGageHeight": "10",
+          "setBEndGageHeight": "12",
+          "startGageHeightAvg": null,
+          "endGageHeightAvg": null,
+          "setAStartTime": null,
+          "setAEndTime": null,
+          "setStartTimeAvg": null,
+          "setBStartTime": null,
+          "setBEndTime": null,
+          "setEndTimeAvg": null,
+          "setAMeanTime": null,
+          "setBMeanTime": null,
+          "MEANTIMEAVG": null,
+          "EWI_sampleIsokenetic": false,
+          "EWI_additionalSampleCollected": false,
+          "EWI_intakeEfficiencyCompleted": false,
+          "EWI_feetAboveBed": "",
+          "EWI_transitRate": "",
+          "EWI_fieldComposite": true,
+          "EWI_compositeWithGallonContainers": true,
+          "EWI_numSetAContainers": "",
+          "EWI_numSetBContainers": "",
+          "EWI_setAAnalysedFor": [],
+          "EWI_setBAnalysedFor": [],
+          "edgeOfWater_Left": "10",
+          "edgeOfSamplingZone_Left": "20",
+          "edgeOfSamplingZone_Right": "600",
+          "edgeOfWater_Right": "620",
+          "samplingPoints": "5",
+          "pier1_start": "30",
+          "pier2_start": "160",
+          "pier3_start": "210",
+          "pier4_start": "300",
+          "pier5_start": "",
+          "pier6_start": "",
+          "pier1_end": "150",
+          "pier2_end": "200",
+          "pier3_end": "260",
+          "pier4_end": "450",
+          "pier5_end": "",
+          "pier6_end": ""
+        }
+      },
+      "SamplingEvent:2018-08-09@13:24:24": {
+        "id": "2018-08-09@13:24:24",
+        "questionsValues": {
+          "mathInput1": "",
+          "mathInput2": "",
+          "mathInput3": "2",
+          "testComputedPlus": "",
+          "testComputedMinus": "",
+          "testComputedDivide": "",
+          "testComputedMultiply": "",
+          "testComputedExponent": "",
+          "testComplexMath": "",
+          "test1": "",
+          "test2": "Johnny Science",
+          "test3": "",
+          "test4": "",
+          "test5": [
+            "CSN",
+            "RAF"
+          ],
+          "testHidden": [
+            "CSN",
+            "RAF"
+          ],
+          "testTog": false,
+          "testTog2": true,
+          "testTog3": true,
+          "testTog4": false,
+          "testDate": null,
+          "testDate2": "2017-10-25",
+          "testTime": null,
+          "testTime2": "16:39",
+          "testTable": [
+            [
+              "Frozen yoghurt",
+              "159ewrwr",
+              "",
+              "24",
+              "4.0"
+            ],
+            [
+              "Ice cream sandwich",
+              "237",
+              "9.0",
+              "37",
+              "4.3"
+            ],
+            [
+              "Eclair",
+              "262",
+              "SubQuestion::subTest1",
+              "24",
+              "6.0"
+            ],
+            [
+              "Cupcake",
+              "305",
+              "3.7",
+              "67",
+              "4.3"
+            ],
+            [
+              "Gingerbread",
+              "356",
+              "16.0",
+              "49",
+              "3.9"
+            ]
+          ],
+          "subTest1": "",
+          "testTable2": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ],
+          "testTable3": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ],
+          "testTable4": [
+            [
+              "Au",
+              "159"
+            ],
+            [
+              "Hg",
+              "237"
+            ],
+            [
+              "O2",
+              "262"
+            ],
+            [
+              "CO2",
+              "305"
+            ],
+            [
+              "He",
+              "356"
+            ]
+          ],
+          "test6": "",
+          "test7": "Default Value",
+          "test8": "",
+          "test9": "One",
+          "test10": [],
+          "concCheck": false,
+          "sandCheck": false,
+          "fullCheck": false,
+          "concCheck2": false,
+          "sandCheck2": false,
+          "fullCheck2": false,
+          "stationName": "Elm Creek",
+          "stationNumber": "05287890",
+          "projectName": "Elm Creek Project Name",
+          "projectID": "059YE",
+          "agencyCode": "USGS",
+          "sampleDate": "2018-08-09",
+          "sedimentType": "suspended",
+          "samplingMethod": "",
+          "timeZone": "",
+          "samplingTeam": "",
+          "compiledBy": "YOUS",
+          "sameDaySample": "false",
+          "sky": "",
+          "precipitation": "",
+          "temperature": "",
+          "wind": "",
+          "windDirection": "",
+          "hydrologicEvent": "",
+          "hydrologicCondition": "",
+          "streamMixing": "",
+          "streamColor": "",
+          "sampleMedium": "",
+          "sampleType": "",
+          "samplePurpose": "",
+          "analysisSourceCode": "",
+          "WQ_location": "",
+          "WQ_temp": "",
+          "WQ_specificConductance": "",
+          "WQ_transparency": "",
+          "WQ_NTRUturbidity": "",
+          "WQ_FNUturbidity": "",
+          "EDI_samplerType": "",
+          "EDI_bottleMaterial": "",
+          "EDI_bagMaterial": "",
+          "EDI_sizeOfBottle": "",
+          "EDI_sizeOfBag": "",
+          "EDI_nozzelMaterial": "",
+          "EDI_nozzelWidth": "",
+          "EDI_setInfo_table": [
+            [
+              "Start Time",
+              "SubQuestion::setAStartTime",
+              "SubQuestion::setBStartTime",
+              "SubQuestion::setStartTimeAvg"
+            ],
+            [
+              "Gage Height(Start)",
+              "SubQuestion::setAStartGageHeight",
+              "SubQuestion::setBStartGageHeight",
+              "SubQuestion::startGageHeightAvg"
+            ],
+            [
+              "End Time",
+              "SubQuestion::setAEndTime",
+              "SubQuestion::setBEndTime",
+              "SubQuestion::setEndTimeAvg"
+            ],
+            [
+              "Gage Height(End)",
+              "SubQuestion::setAEndGageHeight",
+              "SubQuestion::setBEndGageHeight",
+              "SubQuestion::endGageHeightAvg"
+            ],
+            [
+              "Mean Time",
+              "SubQuestion::setAMeanTime",
+              "SubQuestion::setBMeanTime",
+              "SubQuestion::MEANTIMEAVG"
+            ]
+          ],
+          "EDI_samples_table": [
+            [
+              "10%"
+            ],
+            [
+              "30%"
+            ],
+            [
+              "50%"
+            ],
+            [
+              "70%"
+            ],
+            [
+              "90%"
+            ]
+          ],
+          "EDI_setAStartGageHeight": "5",
+          "EDI_setBStartGageHeight": "7",
+          "EDI_setAEndGageHeight": "10",
+          "EDI_setBEndGageHeight": "12",
+          "EDI_startGageHeightAvg": null,
+          "EDI_endGageHeightAvg": null,
+          "EDI_setAStartTime": null,
+          "EDI_setAEndTime": null,
+          "EDI_setStartTimeAvg": null,
+          "EDI_setBStartTime": null,
+          "EDI_setBEndTime": null,
+          "EDI_setEndTimeAvg": null,
+          "EDI_setAMeanTime": null,
+          "EDI_setBMeanTime": null,
+          "EDI_MEANTIMEAVG": null,
+          "EDI_sampleIsokenetic": false,
+          "EDI_additionalSampleCollected": false,
+          "EDI_intakeEfficiencyCompleted": false,
+          "EDI_feetAboveBed": "",
+          "EDI_transitRate": "",
+          "EDI_fieldComposite": true,
+          "EDI_compositeWithGallonContainers": true,
+          "EDI_numSetAContainers": "",
+          "EDI_numSetBContainers": "",
+          "EDI_setAAnalysedFor": [],
+          "EDI_setBAnalysedFor": [],
+          "EWI_samplerType": "",
+          "bottleMaterial": "",
+          "bagMaterial": "",
+          "sizeOfBottle": "",
+          "sizeOfBag": "",
+          "nozzelMaterial": "",
+          "nozzelWidth": "",
+          "EWI_setInfo_table": [
+            [
+              "Start Time",
+              "SubQuestion::setAStartTime",
+              "SubQuestion::setBStartTime",
+              "SubQuestion::setStartTimeAvg"
+            ],
+            [
+              "Gage Height(Start)",
+              "SubQuestion::setAStartGageHeight",
+              "SubQuestion::setBStartGageHeight",
+              "SubQuestion::startGageHeightAvg"
+            ],
+            [
+              "End Time",
+              "SubQuestion::setAEndTime",
+              "SubQuestion::setBEndTime",
+              "SubQuestion::setEndTimeAvg"
+            ],
+            [
+              "Gage Height(End)",
+              "SubQuestion::setAEndGageHeight",
+              "SubQuestion::setBEndGageHeight",
+              "SubQuestion::endGageHeightAvg"
+            ],
+            [
+              "Mean Time",
+              "SubQuestion::setAMeanTime",
+              "SubQuestion::setBMeanTime",
+              "SubQuestion::MEANTIMEAVG"
+            ]
+          ],
+          "EWI_samples_table": [
+            [
+              202
+            ],
+            [
+              296
+            ],
+            [
+              490
+            ],
+            [
+              534
+            ],
+            [
+              578
+            ]
+          ],
+          "setAStartGageHeight": "5",
+          "setBStartGageHeight": "7",
+          "setAEndGageHeight": "10",
+          "setBEndGageHeight": "12",
+          "startGageHeightAvg": null,
+          "endGageHeightAvg": null,
+          "setAStartTime": null,
+          "setAEndTime": null,
+          "setStartTimeAvg": null,
+          "setBStartTime": null,
+          "setBEndTime": null,
+          "setEndTimeAvg": null,
+          "setAMeanTime": null,
+          "setBMeanTime": null,
+          "MEANTIMEAVG": null,
+          "EWI_sampleIsokenetic": false,
+          "EWI_additionalSampleCollected": false,
+          "EWI_intakeEfficiencyCompleted": false,
+          "EWI_feetAboveBed": "",
+          "EWI_transitRate": "",
+          "EWI_fieldComposite": true,
+          "EWI_compositeWithGallonContainers": true,
+          "EWI_numSetAContainers": "",
+          "EWI_numSetBContainers": "",
+          "EWI_setAAnalysedFor": [],
+          "EWI_setBAnalysedFor": [],
+          "edgeOfWater_Left": "10",
+          "edgeOfSamplingZone_Left": "20",
+          "edgeOfSamplingZone_Right": "600",
+          "edgeOfWater_Right": "620",
+          "samplingPoints": "5",
+          "pier1_start": "30",
+          "pier2_start": "160",
+          "pier3_start": "210",
+          "pier4_start": "300",
+          "pier5_start": "",
+          "pier6_start": "",
+          "pier1_end": "150",
+          "pier2_end": "200",
+          "pier3_end": "260",
+          "pier4_end": "450",
+          "pier5_end": "",
+          "pier6_end": ""
+        }
+      }
     }
   ]
 }

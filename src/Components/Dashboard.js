@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {saveFile} from '../Utils/FileHandling';
+import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
 	root: {
@@ -44,8 +45,16 @@ class Dashboard extends React.Component {
 		return retString;
 	}
 
+	
+
 	render() {
 		const { classes } = this.props;
+
+		//KLUDGE
+		let samplingEventNames = Object.keys(this.props.globalState).filter((key)=>key.startsWith("SamplingEvent:"));
+		//console.log(samplingEventNames);
+
+
 		return (
 			<div className={classes.root}>
 			<h1>Dashboard</h1>
@@ -70,11 +79,22 @@ class Dashboard extends React.Component {
 			<Grid container spacing={24}>
 			  <Grid item xs>
 				<Paper className={classes.paper}><b>Create/Start New Sampling Event</b><br />(optionally base on templates)<br />
+
 				<Link to='/FieldForm'><Button onClick={()=>	{
 						this.props.createNewSamplingEvent();
 						this.props.navControl("Water Quality",true);
 						this.props.navControl("Field Form",true);
-						}}>Start</Button></Link></Paper>
+						}}>BRAND NEW</Button></Link>
+
+				<Divider />
+				{samplingEventNames.map((samplingEventName)=>{
+					return <Link key={samplingEventName} to='/FieldForm'><Button onClick={()=>	{
+						this.props.loadSamplingEvent(samplingEventName);
+						this.props.navControl("Water Quality",true);
+						this.props.navControl("Field Form",true);
+						}}>{samplingEventName}</Button></Link>
+				})}
+						</Paper>
 			  </Grid>
 			</Grid>
 

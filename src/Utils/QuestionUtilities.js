@@ -2,20 +2,27 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 
 
-export const createQuestionComponentsForLayoutGroup = (questionsData, changeHandler, _globalState) => {
-    // the questonisData variable contains only Questions data for a single layout group
-    // returns question components pointing to this.questionChangeHandler
-	let layoutGroupQuestionComponents = [];
-	//console.log("CQCFLG: ", _globalState);
-
+export const createQuestionComponents = (questionsData, changeHandler, _globalState, questionsValues) => {
+    // creates one question component for every question in questionsData
+	// overwrites questionsData value with passed in value in questionsValues
+	let questionComponents = [];
+	//console.log(questionsValues);
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-        layoutGroupQuestionComponents = questionsData.map(questionData => {
+        questionComponents = questionsData.map(questionData => {
 
-			return <Question {...questionData} stateChangeHandler={changeHandler} globalState={_globalState}/>
+			let value = questionData.value;
+			//console.log("Value from questionData: ", value);
+			if(questionsValues) {
+			//	console.log("questionsData.id: ", questionData.id);
+				value = questionsValues[questionData.id]
+				//console.log("Value from questionVALUES: ", value);
+			}
+
+			return <Question {...questionData} value={value} stateChangeHandler={changeHandler} globalState={_globalState}/>
 		});
     }
 
-    return layoutGroupQuestionComponents;
+    return questionComponents;
 }
 
 export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questionID) => {

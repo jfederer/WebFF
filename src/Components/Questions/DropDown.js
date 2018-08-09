@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import Tooltip from '@material-ui/core/Tooltip';
+//import Tooltip from '@material-ui/core/Tooltip';
 import FormControl from '@material-ui/core/FormControl';
 // import Fragment from '@material-ui/core/Fragment';
 
@@ -42,7 +42,7 @@ class DropDown extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		//let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
 
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;

@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import QuestionPanel from './QuestionPanel';
 
-import { createQuestionComponentsForLayoutGroup } from '../Utils/QuestionUtilities';
+import { createQuestionComponents } from '../Utils/QuestionUtilities';
 
 const styles = theme => ({
 
@@ -89,7 +89,7 @@ class SystemDialog extends React.Component {
 						{dialogDescription}:
             			</DialogContentText>
 					<QuestionPanel
-						questions={createQuestionComponentsForLayoutGroup(dialogQuestions, this.props.stateChangeHandler, this.props.globalState)}
+						questions={createQuestionComponents(dialogQuestions, this.props.stateChangeHandler, this.props.globalState)}
 
 						key={dialogName} />
 

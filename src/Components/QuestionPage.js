@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {withRouter} from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import QuestionPanel from './QuestionPanel';
-import { createQuestionComponentsForLayoutGroup, 
+import { createQuestionComponents, 
 	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
 
 
@@ -68,7 +68,7 @@ class QuestionPage extends React.Component {
 				questionPanels.push(
 				<div key={tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
-						questions={createQuestionComponentsForLayoutGroup(layoutGroupQuestionsData, systemCB, this.props.globalState)} 
+						questions={createQuestionComponents(layoutGroupQuestionsData, systemCB, this.props.globalState, this.props.questionsValues)} 
 						panelName={layoutGroupNames[i]}
 						key={tabName + layoutGroupNames[i]}
 						grey={i%2===1} />
