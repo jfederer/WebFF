@@ -39,10 +39,19 @@ class SystemDialog extends React.Component {
 				this.props.closeHandler();
 				break;
 			}
-			case "Add New Station": {
-				console.log("Adding New Station");
+			case "Add/Remove Station": {
+				//console.log("Adding New Station");
+
+				//TODO::::::
+				//TODO::::::
+				//TODO::::::  Will need to have this check for adding or deleting.
+				//TODO::::::
+				//TODO::::::
+
+
+
 				let dialog = globalState.dialogQuestions.filter((dialog) => {
-					return dialog.dialogName === "Add New Station";
+					return dialog.dialogName === dialogName;
 				})[0];
 				
 				let stnObj = {};

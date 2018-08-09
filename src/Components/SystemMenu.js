@@ -38,11 +38,11 @@ class SystemMenu extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Test Connection" />
           </ListItem>
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('Add New Station')}>
+          <ListItem button onClick={()=>this.props.menuItemClickHandler('Add/Remove Station')}>
             <ListItemIcon>
               <NoteAddIcon />
             </ListItemIcon>
-            <ListItemText primary="Add Station" />
+            <ListItemText primary="Add/Remove Station" />
           </ListItem>
           <ListItem button onClick={()=>this.props.menuItemClickHandler('Add New Question')}>
             <ListItemIcon>

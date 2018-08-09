@@ -122,7 +122,7 @@ class WebFF extends React.Component {
 			needToSyncStationDataToQuestionData = true;
 			this.attemptToSyncStationDataToQuestionData(nextState.stations);
 		}
-		
+
 	}
 
 	attemptToSyncStationDataToQuestionData(stationsIn) {
@@ -134,7 +134,7 @@ class WebFF extends React.Component {
 
 		let newOptions = {};
 		let stationsToSync;
-		if(stationsIn) {
+		if (stationsIn) {
 			stationsToSync = stationsIn;
 		} else {
 			stationsToSync = this.state.stations.slice();
@@ -147,7 +147,7 @@ class WebFF extends React.Component {
 
 		//console.log("New Options: ", newOptions);
 
-		this.updateQuestionData("stationName", "options", newOptions,  this.buildRoutesAndRenderPages);
+		this.updateQuestionData("stationName", "options", newOptions, this.buildRoutesAndRenderPages);
 
 		needToSyncStationDataToQuestionData = false;
 	}
@@ -286,8 +286,8 @@ class WebFF extends React.Component {
 	getDateTimeString() {
 		let d = new Date();
 		let dateOfMonthString = ('0' + d.getDate()).slice(-2);
-		let monthString = ('0' + (d.getMonth()+1)).slice(-2);
-		let dateString = d.getFullYear() + "-" + monthString +"-" + dateOfMonthString;
+		let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
+		let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
 		let hoursString = ('0' + d.getHours()).slice(-2);
 		let minutesString = ('0' + (d.getMinutes())).slice(-2);
 		let secondsString = ('0' + (d.getMinutes())).slice(-2);
@@ -301,10 +301,10 @@ class WebFF extends React.Component {
 
 		// create new sampling event 
 		let newSamplingEventID = this.getDateTimeString();
-				
+
 		// load initial values from questionsData
-		let questionValues = this.state.questionsData.map((Q)=>{
-			return {[Q.id]:Q.value}
+		let questionValues = this.state.questionsData.map((Q) => {
+			return { [Q.id]: Q.value }
 		});
 
 		let newSamplingEvent = {
@@ -313,10 +313,10 @@ class WebFF extends React.Component {
 		}
 
 		//ensure this sampling event will be sync'd to LS
-		itemsToSyncToLS.push(SAMPLING_EVENT_IDENTIFIER+newSamplingEventID);
+		itemsToSyncToLS.push(SAMPLING_EVENT_IDENTIFIER + newSamplingEventID);
 
 		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
-		this.setState({[SAMPLING_EVENT_IDENTIFIER+newSamplingEventID]:newSamplingEvent, curSamplingEvent:SAMPLING_EVENT_IDENTIFIER+newSamplingEventID});
+		this.setState({ [SAMPLING_EVENT_IDENTIFIER + newSamplingEventID]: newSamplingEvent, curSamplingEvent: SAMPLING_EVENT_IDENTIFIER + newSamplingEventID });
 	}
 
 
@@ -469,7 +469,7 @@ class WebFF extends React.Component {
 	}
 
 	showTab(tabName, toShow, CB) {
-		
+
 		// let newHiddenTabs = this.state.hiddenTabs.slice();
 		let newHiddenTabs = this.state.hiddenTabs;
 		// console.log("After copy: ", newHiddenTabs);
@@ -490,7 +490,7 @@ class WebFF extends React.Component {
 
 		}
 		// console.log("Before setting state: ", newHiddenTabs);
-		this.setState({ hiddenTabs: newHiddenTabs }, ()=> {
+		this.setState({ hiddenTabs: newHiddenTabs }, () => {
 			// console.log("STATE after setting state: ", this.state.hiddenTabs);
 			CB;
 		}
@@ -503,19 +503,37 @@ class WebFF extends React.Component {
 		let DEBUG = false;
 		if (DEBUG) console.log("Show Question: ", questionID, " toShow: ", toShow);
 
+		let anyFound = false;  // if this remains false, let's check the dialogQuestions...
 		let updatedQuestionsData = this.state.questionsData.filter(questionData => {
 			if (questionData.id === questionID) {
 				if (DEBUG) console.log("------FOUND!--------");
 				if (DEBUG) console.log(questionData);
 				questionData['hidden'] = !toShow;
+				anyFound = true;
 			} else {
 				if (DEBUG) console.log("questionData.id :", questionData.id, " and questionID: ", questionID, " do not match");
 			}
 			return questionData;
 		});
 
-		if (DEBUG) console.log(updatedQuestionsData);
-		this.setState({ questionsData: updatedQuestionsData });
+		if (anyFound) {
+			if (DEBUG) console.log("updatedQuestionsData: ", updatedQuestionsData);  // note, this is the entire questionsData set...//performance
+			this.setState({ questionsData: updatedQuestionsData });
+		} else {
+			// Q_id was not found in questionsData
+			let updatedCurDialogQuestions = this.state.curDialogQuestions.filter(questionData => {
+				if (questionData.id === questionID) {
+					if (DEBUG) console.log("------FOUND!--------");
+					if (DEBUG) console.log(questionData);
+					questionData['hidden'] = !toShow;
+				} else {
+					if (DEBUG) console.log("questionData.id :", questionData.id, " and questionID: ", questionID, " do not match");
+				}
+				return questionData;
+			});
+			this.setState({ curDialogQuestions: updatedCurDialogQuestions });
+		}
+
 		// replace the questionData in localStorage
 		//		localStorage.setItem('questionsData', JSON.stringify(rawData));
 	}
@@ -538,7 +556,7 @@ class WebFF extends React.Component {
 			}
 		}
 		// console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
-		this.setState({ hiddenPanels: newHiddenPanels }); 
+		this.setState({ hiddenPanels: newHiddenPanels });
 	}
 
 	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
@@ -553,9 +571,9 @@ class WebFF extends React.Component {
 
 		// find the specific question in questionsData  or curDialogQuestions based on the id,then update the value property
 		let questionsToFilter = this.state.curDialogQuestions;
-		if(!dialogQuestions) {
-			questionsToFilter = this.state.questionsData; 
-		} 
+		if (!dialogQuestions) {
+			questionsToFilter = this.state.questionsData;
+		}
 
 		var newQuestionsData = questionsToFilter.filter(questionData => {
 			//console.log("QuestionData: ", questionData);
@@ -563,9 +581,9 @@ class WebFF extends React.Component {
 				if (DEBUG) console.log("------FOUND!--------");
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
-				
-					questionData.value = Q.state.value;
-				
+
+				questionData.value = Q.state.value;
+
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
 			} else {
 				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
@@ -593,7 +611,7 @@ class WebFF extends React.Component {
 		});
 
 		this.setState({ questionsData: newQuestionsData }, CB);
-		
+
 		return retQ;
 	}
 
@@ -641,19 +659,19 @@ class WebFF extends React.Component {
 		}
 
 		//HARDCODE for stationName drop down
-		if(Q.props.id === "stationName") {
+		if (Q.props.id === "stationName") {
 			console.log("stationName: ", Q.state.value);
 			// find the station we are talking about
 			let stationIndex = 0;
-			for(let i=0; i<this.state.stations.length; i++) {
-				if(this.state.stations[i].id===Q.state.value) {
+			for (let i = 0; i < this.state.stations.length; i++) {
+				if (this.state.stations[i].id === Q.state.value) {
 					stationIndex = i;
 				}
 			}
 			let stationData = this.state.stations[stationIndex];
 			console.log("stationData", stationData);
 
-			for(let i=0; i<questionIDsLinkedToStationName.length; i++) {
+			for (let i = 0; i < questionIDsLinkedToStationName.length; i++) {
 				let q_id = questionIDsLinkedToStationName[i];
 				this.updateQuestionData(q_id, "value", stationData[q_id], this.buildRoutesAndRenderPages);
 			}
@@ -665,17 +683,17 @@ class WebFF extends React.Component {
 		}
 
 		let stateKey = "questionsData";
-		if(dialogQuestion) {
+		if (dialogQuestion) {
 			stateKey = "curDialogQuestions";
 		}
 
 		// save updated value to state:
 		let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q, dialogQuestion);
 		this.setState({ [stateKey]: updatedQuestionData }, () => {
-		// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
-		// when done, rebuild routs and render pages // performance
+			// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
+			// when done, rebuild routs and render pages // performance
 
-		
+
 			if (Q.props.actions) {
 				let { actions } = Q.props;
 				let qval = Q.state.value;
@@ -695,11 +713,11 @@ class WebFF extends React.Component {
 
 	addStation(stationName, stationNumber, projectName, projectID, agencyCode) {
 		let newStation = {
-			id:stationName,
-			stationNumber:stationNumber,
-			projectName:projectName,
-			projectID:projectID,
-			agencyCode:agencyCode
+			id: stationName,
+			stationNumber: stationNumber,
+			projectName: projectName,
+			projectID: projectID,
+			agencyCode: agencyCode
 		}
 		let newStations = this.state.stations.slice();
 		newStations.push(newStation);
@@ -707,8 +725,8 @@ class WebFF extends React.Component {
 		console.log("this.state.stations: ", this.state.stations);
 		//TODO: validation
 
-		
-		this.setState({stations:newStations}, () => {this.attemptToSyncStationDataToQuestionData});
+
+		this.setState({ stations: newStations }, () => { this.attemptToSyncStationDataToQuestionData });
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
@@ -857,6 +875,12 @@ class WebFF extends React.Component {
 	// }
 
 
+
+	syncStationsToDB() {
+		let patchData = { "stations": this.state.stations };
+		this.updateDBInfo("users/" + this.state.loggedInUser, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
+	}
+
 	handleSystemMenuItemClicked(menuText) {
 		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
 		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
@@ -888,25 +912,40 @@ class WebFF extends React.Component {
 		// );
 
 		if (menuText === "Test Connection") {
+
+
+			//TODO: deleting a station woud look like this...
+			let stationIDToDelete = "Plum station";
+			let newStations = this.state.stations.filter((station) => {
+				console.log(station);
+				if (station.id !== stationIDToDelete) {
+					return true;
+				}
+				return false;
+			});
+
+			this.setState({ stations: newStations }, this.syncStationsToDB);
+
+			// this sync's this.state.stations to the DB.  WORKS.
+
+
 			console.log("Testing of new Question")
-			let newQuestion = {
-				"id": "ThisisThefirstID",
-				"label": "Station Number",
-				"XMLValue": "",
-				"type": "Text",
-				"tabName": "Add Station",
-				"value": "",
-				"layoutGroup": "Basic",
-				"width_xs": 5,
-				"width_lg": 5
-			}
-			this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
+			// let newQuestion = {
+			// 	"id": "ThisisThefirstID",
+			// 	"label": "Station Number",
+			// 	"XMLValue": "",
+			// 	"type": "Text",
+			// 	"tabName": "Add Station",
+			// 	"value": "",
+			// 	"layoutGroup": "Basic",
+			// 	"width_xs": 5,
+			// 	"width_lg": 5
+			// }
+			// this.updateDBInfo("customQuestions", newQuestion, (resp) => console.log("EXPECT NULL: Response: ", resp));
 
 
 
-			let patchData =
-				{ "id": "CSN", "testName": "SMister" }
-			this.updateDBInfo("users/" + this.state.loggedInUser + "patchData.id, patchData, (resp) => console.log("EXPECT FULL OBJECT: Response: ", resp));
+
 
 
 		}
@@ -925,10 +964,10 @@ class WebFF extends React.Component {
 				curDialogName: menuText,
 				curDialogQuestions: filteredDialogInfo[0].questions
 			}, () => { //open the dialog 
-			this.handleDialogOpen();
+				this.handleDialogOpen();
 			}
-		);
-			
+			);
+
 		} else {
 			//TODO: ERR
 			console.log(menuText + " is not yet implemented");
@@ -982,7 +1021,7 @@ class WebFF extends React.Component {
 					dialogDescription={this.state.curDialogDescription}
 					stateChangeHandler={this.dialogQuestionChangeSystemCallback}
 					globalState={this.state}
-					setLoggedInUser={this.setLoggedInUser} 
+					setLoggedInUser={this.setLoggedInUser}
 					addStation={this.addStation} />
 				<NavMenu isExpanded={this.state.navMenuExpanded}
 					closeHandler={this.handleLeftDrawerClose}
@@ -990,7 +1029,7 @@ class WebFF extends React.Component {
 
 				<main className={classes.content} >
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
-					
+
 					{this.state.routesAndPages}
 
 				</main>

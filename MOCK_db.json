@@ -46,67 +46,97 @@
       "id": "dialogQuestions",
       "dialogQuestionsArr": [
         {
-          "dialogName": "Add New Station",
-          "dialogDescription": "Fill out the following to add a new station to your personalized station list",
+          "dialogName": "Add/Remove Station",
+          "dialogDescription": "Add a new station to, or remove and existing station from, your personalized station list",
           "questions": [
             {
+              "id": "editStation_AddOrRemove",
+              "label": "Add or Remove station",
+              "type": "DropDown",
+              "includeBlank": true,
+              "options": {
+                "Add New Station": "Add",
+                "Remove Existing Station": "Remove"
+              },
+              "actions": {
+                "Add": "HideQuestion::deleteStation_stationName&ShowQuestion::newStation_stationName&ShowQuestion::newStation_stationNumber&ShowQuestion::newStation_projectName&ShowQuestion::newStation_projectID&ShowQuestion::newStation_agencyCode",
+                "Remove": "ShowQuestion::deleteStation_stationName&HideQuestion::newStation_stationName&HideQuestion::newStation_stationNumber&HideQuestion::newStation_projectName&HideQuestion::newStation_projectID&HideQuestion::newStation_agencyCode"
+              },
+			  "value": "",
+			  "width_xs": 12,
+              "width_lg": 12
+            },
+            {
+              "id": "deleteStation_stationName",
+              "label": "Select Station To Remove",
+			  "type": "DropDown",
+			  "hidden": true,
+              "includeBlank": true,
+              "options": {
+                "Add New Station": "Add",
+                "Remove Existing Station": "Remove"
+              },
+              "value": ""
+            },
+            {
               "id": "newStation_stationName",
-              "label": "Station Name",
+			  "label": "Station Name",
+			  "hidden": true,
               "XMLValue": "stnnm",
               "type": "Text",
               "tabName": "Add New Station",
               "layoutGroup": "Basic",
               "width_xs": 7,
-			  "width_lg": 7,
-			  "value":""
+              "width_lg": 7,
+              "value": ""
             },
             {
               "id": "newStation_stationNumber",
-              "label": "Station Number",
+			  "label": "Station Number",
+			  "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
               "layoutGroup": "Basic",
               "width_xs": 5,
-              "width_lg": 5,
-			  "value":""
+              "width_lg": 5
             },
             {
               "id": "newStation_projectName",
-              "label": "Project Name",
+			  "label": "Project Name",
+			  "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
               "layoutGroup": "Basic",
               "width_xs": 6,
-              "width_lg": 6,
-			  "value":""
+              "width_lg": 6
             },
             {
               "id": "newStation_projectID",
-              "label": "Project ID",
+			  "label": "Project ID",
+			  "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
               "layoutGroup": "Basic",
               "width_xs": 3,
-              "width_lg": 3,
-			  "value":""
+              "width_lg": 3
             },
             {
               "id": "newStation_agencyCode",
-              "label": "Agency Code",
+			  "label": "Agency Code",
+			  "hidden": true,
               "XMLValue": "",
               "type": "Text",
               "tabName": "Add Station",
-              "value": "USGS",
+              "value": "",
               "layoutGroup": "Basic",
               "width_xs": 3,
-              "width_lg": 3,
-			  "value":""
+              "width_lg": 3
             }
           ]
         },
@@ -120,7 +150,7 @@
               "type": "Text",
               "width_xs": 6,
               "width_lg": 3,
-			  "value":""
+              "value": ""
             },
             {
               "id": "newQuestion_id",
@@ -129,8 +159,7 @@
               "placeholder": "Must be globally unique",
               "value": "",
               "width_xs": 6,
-              "width_lg": 6,
-			  "value":""
+              "width_lg": 6
             },
             {
               "id": "newQuestion_type",
@@ -159,8 +188,7 @@
               "type": "Text",
               "value": "",
               "width_xs": 4,
-              "width_lg": 3,
-			  "value":""
+              "width_lg": 3
             },
             {
               "id": "newQuestion_layoutGroup",
@@ -171,8 +199,7 @@
               "type": "Text",
               "value": "",
               "width_xs": 4,
-              "width_lg": 3,
-			  "value":""
+              "width_lg": 3
             },
             {
               "id": "newQuestion_initalValue_textValue",
@@ -181,8 +208,7 @@
               "placeholder": "Can be left blank",
               "value": "",
               "width_xs": 12,
-              "width_lg": 12,
-			  "value":""
+              "width_lg": 12
             },
             {
               "id": "newQuestion_width_xs",
@@ -191,8 +217,7 @@
               "placeholder": "1-12",
               "value": "",
               "width_xs": 6,
-              "width_lg": 6,
-			  "value":""
+              "width_lg": 6
             },
             {
               "id": "newQuestion_width_lg",
@@ -201,8 +226,7 @@
               "placeholder": "Can be left blank",
               "value": "",
               "width_xs": 6,
-              "width_lg": 6,
-			  "value":""
+              "width_lg": 6
             }
           ]
         },
@@ -222,7 +246,7 @@
               "placeholder": "username@usgs.gov",
               "width_xs": 12,
               "width_lg": 12,
-              "ref": "switchUser_email", 
+              "ref": "switchUser_email",
               "value": ""
             }
           ]
@@ -771,8 +795,7 @@
             "Ken Skach": "KS",
             "Molly Wood": "MW"
           },
-          "value": [
-          ],
+          "value": [],
           "tabName": "Question Page",
           "layoutGroup": "QP2"
         },
@@ -835,9 +858,7 @@
           "helperText": "PCodes FTW!",
           "width_xs": 6,
           "width_lg": 3,
-          "options": {
-            
-          },
+          "options": {},
           "value": ""
         },
         {
@@ -2527,20 +2548,20 @@
       ]
     }
   ],
-  "users" : [
+  "users": [
     {
       "id": "jfederer@usgs.gov",
-      "stations" : [
+      "stations": [
         {
-          "id" : "Elm Creek",
-          "agencyCode" : "USGS",
+          "id": "Elm Creek",
+          "agencyCode": "USGS",
           "stationNumber": "05287890",
           "projectName": "Elm Creek Project Name",
           "projectID": "059YE"
         },
         {
-          "id" : "Shingle Creek",
-          "agencyCode" : "USGS",
+          "id": "Shingle Creek",
+          "agencyCode": "USGS",
           "stationNumber": "05288705",
           "projectName": "Roofers like Shingles",
           "projectID": "8843G2"
