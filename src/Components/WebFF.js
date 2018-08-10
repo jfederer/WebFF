@@ -852,12 +852,11 @@ class WebFF extends React.Component {
 
 
 	loadSamplingEvent(samplingEventName) {
-		this.setState({ curSamplingEventName: samplingEventName }, this.buildRoutesAndRenderPages);
+		this.setState({ curSamplingEventName: samplingEventName }, this.runAllActionsForCurrentSamplingEvent);
 	}
 
 
 	runAllActionsForCurrentSamplingEvent() {
-		console.log("heer");
 		this.state.questionsData.map((questionData) => { // for each question
 			if (questionData.actions) { // check if it has an actions node
 				// it does! let's check the value of this question in our current event
@@ -1103,7 +1102,7 @@ class WebFF extends React.Component {
 			// this sync's this.state.stations to the DB.  WORKS.
 			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
 
-			this.runAllActionsForCurrentSamplingEvent();
+			
 		}
 
 		// build the curDialogXXX data
