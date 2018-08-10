@@ -626,17 +626,30 @@ class WebFF extends React.Component {
 
 
 
-	updateQuestionData(q_id, key, value, CB) { // void return
-		// sets the 'key' element to 'value' for question with question id of q_id ... searches default questions first, then dialog, then TODO: user/station questions
-		// if the key is 'value' will store it in the currentSampleEvent
-		// performance: rebuilds entire questionsData... needlessly?
+	updateQuestionData(q_id, key, value, CB) { //*
+		//FIXME: if the key is value, does not look to store in dialogQuestions
+		// q_id: string question ID associated with a question
+		// key: string used as key in questionData object
+		// value: value that key will be set to
+		// CB: callback function to be called after the value has been set
+		// void return
+		
+		// sets the 'key' element to 'value' for the question with question id of q_id ... 
+		// when looking for q_id, searches default questions (questionsData) first, then dialog questions, then TODO: user/station questions
+		// if the key is 'value', store value in the current sampling event or TODO: the dialogQuestions
+		
+		// TODO: throws error if no question matching q_id is found
 
-		// note, if you are trying to set the value of a question, you save that in the samplingEvent.... or optionally in the dialogQuestions.
-		// values do not get saved to questionData
+		// note, when trying to set the value of a question, it should be saved in the samplingEvent.... or optionally in the dialogQuestions. Non-default values do not get saved to questionData
+
+		// TODO: performance: rebuilds entire questionsData... needlessly?
+
+
+		
+
 
 		let shouldSetState = true;
-		if (key === "value") {
-			console.log("Trying to set value on " + q_id);
+		if (key === "value") { // updating value is special -- as the value is stored in dialogQuestions or the samplingEvent or custom user/station questions... NOT questionsData
 			//is the q_id in the eventSample?
 			if (Object.keys(this.state[this.state.curSamplingEventName].questionsValues).includes(q_id)) {
 				// it is! ... so let's set the value in there
@@ -852,6 +865,7 @@ class WebFF extends React.Component {
 
 
 	loadSamplingEvent(samplingEventName) {
+		//TODO: return all items to default state BEFORE loading and running?
 		this.setState({ curSamplingEventName: samplingEventName }, this.runAllActionsForCurrentSamplingEvent);
 	}
 
