@@ -36,7 +36,7 @@ class MultipleChoice extends React.Component {
     };
 
     render() {
-        // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+        // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
         return <FormControl component="fieldset" key={this.props.id}>
             <FormLabel component="legend">{this.props.label}</FormLabel>
             <FormGroup>
@@ -65,7 +65,7 @@ MultipleChoice.propTypes = {
     key: PropTypes.string,
     id: PropTypes.string.isRequired,
     label: PropTypes.string,
-    XMLValue: PropTypes.string,
+    XMLTag: PropTypes.string,
     type: PropTypes.oneOf(['MultipleChoice']).isRequired, 
     options: PropTypes.object.isRequired,
     helperText: PropTypes.string

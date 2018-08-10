@@ -1,7 +1,7 @@
 
 
 
-{"key":"test4", "id":"test4", "label":"Question #4", "XMLvalue":"XMLQ4", "type":"DropDown", "value": [
+{"key":"test4", "id":"test4", "label":"Question #4", "XMLTag":"XMLQ4", "type":"DropDown", "value": [
 			{
 				"value": "noo",
 				"label": "None"
@@ -20,7 +20,7 @@
 				"label": "Option 3"
 			}
 		]},
-		{"key":"test5", "id":"test5", "label":"Question #5", "XMLvalue":"XMLQ5", "type":"MultiChoice", "value": [
+		{"key":"test5", "id":"test5", "label":"Question #5", "XMLTag":"XMLQ5", "type":"MultiChoice", "value": [
 			{
 				"value": "CSN",
 				"label": "Colleen Niznik",
@@ -52,7 +52,7 @@
 
 
 
-		{"key":"test5", "id":"test5", "label":"Question #5", "XMLvalue":"XMLQ5", "type":"MultiChoice", "value": {
+		{"key":"test5", "id":"test5", "label":"Question #5", "XMLTag":"XMLQ5", "type":"MultiChoice", "value": {
 			{
 				"value": "CSN",
 				"label": "Colleen Niznik",

@@ -59,7 +59,7 @@ class DateInput extends React.Component {
 	render() {
 		const { classes } = this.props;
 		//console.log("value: ", this.state.value);
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
 		return <TextField
 			key={this.props.id}
@@ -69,7 +69,7 @@ class DateInput extends React.Component {
 			type="date"
 			value={this.state.value}
 			className={classes.textField}
-			xmlvalue={this.props.XMLValue}
+			xmltag={this.props.XMLTag}
 			InputLabelProps={{
 				shrink: true,
 			}}
@@ -84,7 +84,7 @@ DateInput.propTypes = {
 	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
 	type: PropTypes.oneOf(['DateInput']).isRequired,
 	helperText: PropTypes.string
 

@@ -59,7 +59,7 @@ class TimeInput extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
 
 		return <TextField
@@ -69,7 +69,7 @@ class TimeInput extends React.Component {
 		fullWidth
         type="time"
 		value={this.state.value}
-		xmlvalue={this.props.XMLValue}
+		xmltag={this.props.XMLTag}
         className={classes.textField}
         InputLabelProps={{
           shrink: true,
@@ -88,7 +88,7 @@ TimeInput.propTypes = {
 	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
 	type: PropTypes.oneOf(['TimeInput']).isRequired,
 	helperText: PropTypes.string
 

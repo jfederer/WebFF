@@ -114,7 +114,7 @@ class TableInput extends React.Component {
 	}
 
 	buildQuestion() {
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
 		const { classes } = this.props;
 
@@ -215,7 +215,7 @@ TableInput.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
 	type: PropTypes.oneOf(["TableInput"]).isRequired,
 	selectOptions: PropTypes.arrayOf(PropTypes.object)
 

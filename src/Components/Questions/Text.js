@@ -34,9 +34,9 @@ class Text extends React.Component {
 	render() {
 		const { classes } = this.props;
 
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		let thisSize = this.props.size ? this.props.size : 1;
-		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
+		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
 
 		return <TextField
 			value={this.props.value}
@@ -47,7 +47,7 @@ class Text extends React.Component {
 			placeholder={realPlaceholder}
 			className={classes.textField}
 			fullWidth
-			xmlvalue={this.props.XMLValue}
+			xmltag={this.props.XMLTag}
 			inputProps={{
 				size: thisSize
 			}}
@@ -65,7 +65,7 @@ Text.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
 	multiline: PropTypes.bool,
 	rows: PropTypes.number,
 	type: PropTypes.oneOf(['Text']).isRequired,

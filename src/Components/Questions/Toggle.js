@@ -23,9 +23,9 @@ class Toggle extends React.Component {
 	};
 
 	render() {
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
         // const { classes } = this.props;
-		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue; 
+		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag; 
 		let controlElement; 
 
 		if(this.props.checkbox===true) {
@@ -34,7 +34,7 @@ class Toggle extends React.Component {
 			id={this.props.id}
 			checked={this.props.value}
 			onChange={this.handleToggleChange('value')}
-			xmlvalue={this.props.XMLValue}
+			xmltag={this.props.XMLTag}
 		/>
 		} else {
 			controlElement = <Switch
@@ -42,7 +42,7 @@ class Toggle extends React.Component {
 			id={this.props.id}
 			checked={this.props.value}
 			onChange={this.handleToggleChange('value')}
-			xmlvalue={this.props.XMLValue}
+			xmltag={this.props.XMLTag}
 		/>
 		}
 
@@ -65,7 +65,7 @@ Toggle.propTypes = {
 	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
     type: PropTypes.oneOf(['Toggle']).isRequired,
     helperText: PropTypes.string
 

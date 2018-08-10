@@ -82,7 +82,7 @@
               "id": "newStation_stationName",
               "label": "Station Name",
               "hidden": true,
-              "XMLValue": "stnnm",
+              "XMLTag": "stnnm",
               "type": "Text",
               "tabName": "Add New Station",
               "layoutGroup": "Basic",
@@ -94,7 +94,7 @@
               "id": "newStation_stationNumber",
               "label": "Station Number",
               "hidden": true,
-              "XMLValue": "",
+              "XMLTag": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
@@ -106,7 +106,7 @@
               "id": "newStation_projectName",
               "label": "Project Name",
               "hidden": true,
-              "XMLValue": "",
+              "XMLTag": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
@@ -118,7 +118,7 @@
               "id": "newStation_projectID",
               "label": "Project ID",
               "hidden": true,
-              "XMLValue": "",
+              "XMLTag": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
@@ -130,7 +130,7 @@
               "id": "newStation_agencyCode",
               "label": "Agency Code",
               "hidden": true,
-              "XMLValue": "",
+              "XMLTag": "",
               "type": "Text",
               "tabName": "Add Station",
               "value": "",
@@ -182,7 +182,7 @@
             {
               "id": "newQuestion_tabName",
               "label": "Tab Name",
-              "XMLValue": "",
+              "XMLTag": "",
               "helperText": "Name of tab where this question resides",
               "placeholder": "spaces acceptable",
               "type": "Text",
@@ -195,7 +195,7 @@
               "label": "Layout Group",
               "helperText": "Group on Tab where question resides",
               "placeholder": "Spaces acceptable",
-              "XMLValue": "",
+              "XMLTag": "",
               "type": "Text",
               "value": "",
               "width_xs": 4,
@@ -275,7 +275,7 @@
 			"id": "getesoteric",
 			"value": "forge",
 			"label": "A",
-			"XMLValue": "P10020",
+			"XMLTag": "P10020",
 			"type": "Text",
 			"placeholder": "A value",
 			"tabName": "Question Page",
@@ -286,7 +286,7 @@
 		  {
 			"id": "getesotericer",
 			"label": "A",
-			"XMLValue": "P10020",
+			"XMLTag": "P10020",
 			"type": "Text",
 			"placeholder": "A value",
 			"tabName": "Question Page",
@@ -298,7 +298,7 @@
           "id": "mathInput1",
           "value": "",
           "label": "A",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "Text",
           "placeholder": "A value",
           "tabName": "Question Page",
@@ -310,7 +310,7 @@
           "id": "mathInput2",
           "value": "",
           "label": "B",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "Text",
           "placeholder": "B value",
           "tabName": "Question Page",
@@ -322,7 +322,7 @@
           "id": "mathInput3",
           "value": "2",
           "label": "C",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "Text",
           "placeholder": "C value",
           "tabName": "Question Page",
@@ -334,7 +334,7 @@
           "id": "testComputedPlus",
           "value": "",
           "label": "Testing Addition and Subtraction (A+B-C)",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "ComputedValue",
           "placeholder": "A + B - C",
           "computationString": "mathInput1+mathInput2-mathInput3",
@@ -347,7 +347,7 @@
           "id": "testComputedMinus",
           "value": "",
           "label": "Testing static Number (A+2)",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "ComputedValue",
           "placeholder": "A + 2",
           "computationString": "mathInput1+2",
@@ -360,7 +360,7 @@
           "id": "testComputedDivide",
           "value": "",
           "label": "Testing Division (A/B)",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "ComputedValue",
           "placeholder": "A / B",
           "computationString": "mathInput1/mathInput2",
@@ -373,7 +373,7 @@
           "id": "testComputedMultiply",
           "value": "",
           "label": "Testing Multiplication (A*B*C)",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "ComputedValue",
           "placeholder": "A * B * C",
           "computationString": "mathInput1*mathInput2*mathInput3",
@@ -386,7 +386,7 @@
           "id": "testComputedExponent",
           "value": "",
           "label": "Testing Exponent (A^C)",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "ComputedValue",
           "placeholder": "A + B",
           "computationString": "mathInput1^mathInput3",
@@ -399,7 +399,7 @@
           "id": "testComplexMath",
           "value": "",
           "label": "Testing Complex A/B+(B-C)^C",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "ComputedValue",
           "placeholder": "A + B",
           "computationString": "mathInput1/mathInput2+(mathInput2-mathInput3)^mathInput3",
@@ -411,7 +411,7 @@
         {
           "id": "test1",
           "label": "Impedence",
-          "XMLValue": "P10020",
+          "XMLTag": "P10020",
           "type": "Text",
           "placeholder": "Resistance to AC",
           "value": "",
@@ -422,7 +422,7 @@
         {
           "id": "test2",
           "label": "What name?",
-          "XMLValue": "XMLQ2",
+          "XMLTag": "XMLQ2",
           "type": "Text",
           "value": "Johnny Science",
           "tabName": "Question Page",
@@ -432,7 +432,7 @@
         {
           "id": "test3",
           "label": "Question #3",
-          "XMLValue": "XMLQ3",
+          "XMLTag": "XMLQ3",
           "type": "Text",
           "value": "",
           "tabName": "Question Page",
@@ -443,7 +443,7 @@
         {
           "id": "test4",
           "label": "Question Label 4",
-          "XMLValue": "XMLQ4",
+          "XMLTag": "XMLQ4",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -459,7 +459,7 @@
         {
           "id": "test5",
           "label": "Who is family",
-          "XMLValue": "XMLQ5",
+          "XMLTag": "XMLQ5",
           "type": "MultipleChoice",
           "options": {
             "Colleen Niznik": "CSN",
@@ -479,7 +479,7 @@
           "id": "testHidden",
           "hidden": true,
           "label": "Is this showing?",
-          "XMLValue": "XMLQ5",
+          "XMLTag": "XMLQ5",
           "type": "MultipleChoice",
           "options": {
             "Should": "CSN",
@@ -498,7 +498,7 @@
         {
           "id": "testTog",
           "label": "Hot Out?",
-          "XMLValue": "XMLQT",
+          "XMLTag": "XMLQT",
           "type": "Toggle",
           "value": false,
           "tabName": "Question Page",
@@ -508,7 +508,7 @@
         },
         {
           "id": "testTog2",
-          "XMLValue": "XMLQT2",
+          "XMLTag": "XMLQT2",
           "type": "Toggle",
           "value": true,
           "tabName": "Question Page",
@@ -519,7 +519,7 @@
         {
           "id": "testTog3",
           "label": "Check Me?",
-          "XMLValue": "XMLQT",
+          "XMLTag": "XMLQT",
           "type": "Toggle",
           "value": true,
           "tabName": "Question Page",
@@ -529,7 +529,7 @@
         },
         {
           "id": "testTog4",
-          "XMLValue": "XMLQT2",
+          "XMLTag": "XMLQT2",
           "type": "Toggle",
           "value": false,
           "tabName": "Question Page",
@@ -539,7 +539,7 @@
         },
         {
           "id": "testDate",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "DateInput",
           "label": "current date default",
           "value": null,
@@ -549,7 +549,7 @@
         },
         {
           "id": "testDate2",
-          "XMLValue": "xmlDate2",
+          "XMLTag": "xmlDate2",
           "type": "DateInput",
           "label": "Specific Default",
           "value": "2017-10-25",
@@ -559,7 +559,7 @@
         },
         {
           "id": "testTime",
-          "XMLValue": "xmlTime",
+          "XMLTag": "xmlTime",
           "type": "TimeInput",
           "label": "Current time default",
           "value": null,
@@ -570,7 +570,7 @@
         },
         {
           "id": "testTime2",
-          "XMLValue": "xmlTime2",
+          "XMLTag": "xmlTime2",
           "type": "TimeInput",
           "label": "Specific Time default",
           "value": "16:39",
@@ -582,7 +582,7 @@
         {
           "id": "testTable",
           "label": "Test Table Label",
-          "XMLValue": "Deets",
+          "XMLTag": "Deets",
           "type": "TableInput",
           "tabName": "Question Page",
           "layoutGroup": "Table",
@@ -643,7 +643,7 @@
         },
         {
           "id": "subTest1",
-          "XMLValue": "XMLQ4",
+          "XMLTag": "XMLQ4",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -657,7 +657,7 @@
         {
           "id": "testTable2",
           "label": "Test Table Label2",
-          "XMLValue": "Deets2",
+          "XMLTag": "Deets2",
           "type": "TableInput",
           "tabName": "Question Page",
           "layoutGroup": "Table2",
@@ -693,7 +693,7 @@
         {
           "id": "testTable3",
           "label": "Test Table Label3",
-          "XMLValue": "Deets3",
+          "XMLTag": "Deets3",
           "type": "TableInput",
           "tabName": "Question Page",
           "layoutGroup": "Table2",
@@ -729,7 +729,7 @@
         {
           "id": "testTable4",
           "label": "Test Table Label4",
-          "XMLValue": "Deets4",
+          "XMLTag": "Deets4",
           "type": "TableInput",
           "tabName": "Question Page",
           "layoutGroup": "Table2",
@@ -765,7 +765,7 @@
         {
           "id": "test6",
           "label": "Single Line Text Q6",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "placeholder": "placeme",
@@ -776,7 +776,7 @@
         {
           "id": "test7",
           "label": "Single Line Text Question 7",
-          "XMLValue": "XMLQ7",
+          "XMLTag": "XMLQ7",
           "type": "Text",
           "value": "Default Value",
           "tabName": "Question Page",
@@ -785,7 +785,7 @@
         {
           "id": "test8",
           "label": "Question #8",
-          "XMLValue": "XMLQ8",
+          "XMLTag": "XMLQ8",
           "type": "Text",
           "value": "",
           "tabName": "Question Page",
@@ -794,7 +794,7 @@
         {
           "id": "test9",
           "label": "Question Label 9",
-          "XMLValue": "XMLQ9",
+          "XMLTag": "XMLQ9",
           "type": "DropDown",
           "includeBlank": true,
           "helperText": "PCodes FTW!",
@@ -811,7 +811,7 @@
         {
           "id": "test10",
           "label": "Who is programmer",
-          "XMLValue": "XMLQ10",
+          "XMLTag": "XMLQ10",
           "type": "MultipleChoice",
           "options": {
             "Joe Federer": "JF",
@@ -824,7 +824,7 @@
         },
         {
           "id": "concCheck",
-          "XMLValue": "C",
+          "XMLTag": "C",
           "type": "Toggle",
           "value": false,
           "helperText": "Toggle Me Also",
@@ -832,7 +832,7 @@
         },
         {
           "id": "sandCheck",
-          "XMLValue": "SF",
+          "XMLTag": "SF",
           "type": "Toggle",
           "value": false,
           "helperText": "Toggle Me Also",
@@ -840,7 +840,7 @@
         },
         {
           "id": "fullCheck",
-          "XMLValue": "Z",
+          "XMLTag": "Z",
           "type": "Toggle",
           "value": false,
           "helperText": "Toggle Me Also",
@@ -848,7 +848,7 @@
         },
         {
           "id": "concCheck2",
-          "XMLValue": "C",
+          "XMLTag": "C",
           "type": "Toggle",
           "value": false,
           "helperText": "Toggle Me Also",
@@ -856,7 +856,7 @@
         },
         {
           "id": "sandCheck2",
-          "XMLValue": "SF",
+          "XMLTag": "SF",
           "type": "Toggle",
           "value": false,
           "helperText": "Toggle Me Also",
@@ -864,7 +864,7 @@
         },
         {
           "id": "fullCheck2",
-          "XMLValue": "Z",
+          "XMLTag": "Z",
           "type": "Toggle",
           "value": false,
           "helperText": "Toggle Me Also",
@@ -873,7 +873,7 @@
         {
           "id": "stationName",
           "label": "Station Name",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "tabName": "Field Form",
@@ -887,7 +887,7 @@
         {
           "id": "stationNumber",
           "label": "Station Number",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "Text",
           "tabName": "Field Form",
           "value": "",
@@ -898,7 +898,7 @@
         {
           "id": "projectName",
           "label": "Project Name",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "Text",
           "tabName": "Field Form",
           "value": "",
@@ -909,7 +909,7 @@
         {
           "id": "projectID",
           "label": "Project ID",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "Text",
           "tabName": "Field Form",
           "value": "",
@@ -920,7 +920,7 @@
         {
           "id": "agencyCode",
           "label": "Agency Code",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "Text",
           "tabName": "Field Form",
           "value": "",
@@ -931,7 +931,7 @@
         {
           "id": "sampleDate",
           "label": "Sample Date",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DateInput",
           "tabName": "Field Form",
           "placeholder": "yyyymmdd",
@@ -943,7 +943,7 @@
         {
           "id": "sedimentType",
           "label": "Sediment Type",
-          "XMLValue": "sedimentType",
+          "XMLTag": "sedimentType",
           "type": "DropDown",
           "includeBlank": false,
           "options": {
@@ -960,7 +960,7 @@
         {
           "id": "samplingMethod",
           "label": "Sampling Method",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -996,7 +996,7 @@
         {
           "id": "timeZone",
           "label": "Time Zone",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -1017,7 +1017,7 @@
         {
           "id": "samplingTeam",
           "label": "Sampling Team",
-          "XMLValue": "st",
+          "XMLTag": "st",
           "type": "Text",
           "value": "",
           "tabName": "Field Form",
@@ -1028,7 +1028,7 @@
         {
           "id": "compiledBy",
           "label": "Compiled By",
-          "XMLValue": "cb",
+          "XMLTag": "cb",
           "type": "Text",
           "value": "",
           "tabName": "Field Form",
@@ -1039,7 +1039,7 @@
         {
           "id": "sameDaySample",
           "label": "Same Day Sample",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": false,
@@ -1058,7 +1058,7 @@
         {
           "id": "sky",
           "label": "Sky",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -1075,7 +1075,7 @@
         {
           "id": "precipitation",
           "label": "Precipitation",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -1096,7 +1096,7 @@
         {
           "id": "temperature",
           "label": "Temperature",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -1116,7 +1116,7 @@
         {
           "id": "wind",
           "label": "Wind",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -1135,7 +1135,7 @@
         {
           "id": "windDirection",
           "label": "Wind Direction",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
@@ -1152,7 +1152,7 @@
         {
           "id": "hydrologicEvent",
           "label": "Hydrologic Event",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1175,7 +1175,7 @@
         {
           "id": "hydrologicCondition",
           "label": "HydrologicCondition",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1196,7 +1196,7 @@
         {
           "id": "streamMixing",
           "label": "Stream Mixing",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1214,7 +1214,7 @@
         {
           "id": "streamColor",
           "label": "Stream Color",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1234,7 +1234,7 @@
         {
           "id": "sampleMedium",
           "label": "Sample Medium",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1252,7 +1252,7 @@
         {
           "id": "sampleType",
           "label": "Sample Type",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1278,7 +1278,7 @@
         {
           "id": "samplePurpose",
           "label": "Sample Purpose",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1294,7 +1294,7 @@
         {
           "id": "analysisSourceCode",
           "label": "Analysis Source Code",
-          "XMLValue": "",
+          "XMLTag": "",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1323,7 +1323,7 @@
         {
           "id": "WQ_time",
           "label": "Time",
-          "XMLValue": "P1000",
+          "XMLTag": "P1000",
           "type": "TimeInput",
           "helperText": "P1000",
           "placeholder": "hhmm",
@@ -1335,7 +1335,7 @@
         {
           "id": "WQ_location",
           "label": "Location",
-          "XMLValue": "P1234",
+          "XMLTag": "P1234",
           "type": "Text",
           "helperText": "P1234",
           "value": "",
@@ -1347,7 +1347,7 @@
         {
           "id": "WQ_temp",
           "label": "Temp C",
-          "XMLValue": "P23430",
+          "XMLTag": "P23430",
           "type": "Text",
           "helperText": "P23430",
           "value": "",
@@ -1359,7 +1359,7 @@
         {
           "id": "WQ_specificConductance",
           "label": "Specific Conductance",
-          "XMLValue": "P594",
+          "XMLTag": "P594",
           "type": "Text",
           "helperText": "P594",
           "value": "",
@@ -1371,7 +1371,7 @@
         {
           "id": "WQ_transparency",
           "label": "Transparency",
-          "XMLValue": "P9987",
+          "XMLTag": "P9987",
           "type": "Text",
           "helperText": "P9987",
           "value": "",
@@ -1383,7 +1383,7 @@
         {
           "id": "WQ_NTRUturbidity",
           "label": "NTRU Turbidity HACH",
-          "XMLValue": "P983",
+          "XMLTag": "P983",
           "type": "Text",
           "helperText": "P983",
           "value": "",
@@ -1395,7 +1395,7 @@
         {
           "id": "WQ_FNUturbidity",
           "label": "FNU Turbidity DTS-12",
-          "XMLValue": "P984",
+          "XMLTag": "P984",
           "type": "Text",
           "helperText": "P984",
           "value": "",
@@ -1407,7 +1407,7 @@
         {
           "id": "EDI_samplerType",
           "label": "Sampler Type",
-          "XMLValue": "P1050",
+          "XMLTag": "P1050",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1457,7 +1457,7 @@
           "id": "EDI_bottleMaterial",
           "hidden": true,
           "label": "Bottle Material",
-          "XMLValue": "P999",
+          "XMLTag": "P999",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1474,7 +1474,7 @@
         {
           "id": "EDI_bagMaterial",
           "label": "Bag Material",
-          "XMLValue": "P999",
+          "XMLTag": "P999",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1492,7 +1492,7 @@
           "id": "EDI_sizeOfBottle",
           "hidden": true,
           "label": "Size of Bottle",
-          "XMLValue": "P432",
+          "XMLTag": "P432",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1508,7 +1508,7 @@
         {
           "id": "EDI_sizeOfBag",
           "label": "Size of Bag",
-          "XMLValue": "P245",
+          "XMLTag": "P245",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1524,7 +1524,7 @@
         {
           "id": "EDI_nozzelMaterial",
           "label": "Nozzel Material",
-          "XMLValue": "XMLNM",
+          "XMLTag": "XMLNM",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1540,7 +1540,7 @@
         {
           "id": "EDI_nozzelWidth",
           "label": "Nozzel Width",
-          "XMLValue": "XMLNW",
+          "XMLTag": "XMLNW",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1641,35 +1641,35 @@
         },
         {
           "id": "EDI_setAStartGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "5"
         },
         {
           "id": "EDI_setBStartGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "7"
         },
         {
           "id": "EDI_setAEndGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "10"
         },
         {
           "id": "EDI_setBEndGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "12"
         },
         {
           "id": "EDI_startGageHeightAvg",
-          "XMLValue": "setEndAvg",
+          "XMLTag": "setEndAvg",
           "type": "ComputedValue",
           "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
           "value": null,
@@ -1677,7 +1677,7 @@
         },
         {
           "id": "EDI_endGageHeightAvg",
-          "XMLValue": "setEndAvg",
+          "XMLTag": "setEndAvg",
           "type": "ComputedValue",
           "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
           "value": null,
@@ -1685,21 +1685,21 @@
         },
         {
           "id": "EDI_setAStartTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "Start sample time for set 1"
         },
         {
           "id": "EDI_setAEndTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "End sample time for set 1"
         },
         {
           "id": "EDI_setStartTimeAvg",
-          "XMLValue": "setStartAvg",
+          "XMLTag": "setStartAvg",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -1707,21 +1707,21 @@
         },
         {
           "id": "EDI_setBStartTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "Start sample time for set 2"
         },
         {
           "id": "EDI_setBEndTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "End of sample time for set 2"
         },
         {
           "id": "EDI_setEndTimeAvg",
-          "XMLValue": "setEndAvg",
+          "XMLTag": "setEndAvg",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -1729,7 +1729,7 @@
         },
         {
           "id": "EDI_setAMeanTime",
-          "XMLValue": "setAMeanTime",
+          "XMLTag": "setAMeanTime",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -1737,7 +1737,7 @@
         },
         {
           "id": "EDI_setBMeanTime",
-          "XMLValue": "setBMeanTime",
+          "XMLTag": "setBMeanTime",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -1745,7 +1745,7 @@
         },
         {
           "id": "EDI_MEANTIMEAVG",
-          "XMLValue": "meanTimeAvg",
+          "XMLTag": "meanTimeAvg",
           "type": "ComputedValue",
           "computationString": "(setAMeanTime+setBMeanTime)/2",
           "value": null,
@@ -1753,7 +1753,7 @@
         },
         {
           "id": "EDI_sampleIsokenetic",
-          "XMLValue": "C",
+          "XMLTag": "C",
           "label": "Sample Isokenetic",
           "type": "Toggle",
           "value": false,
@@ -1766,7 +1766,7 @@
         },
         {
           "id": "EDI_additionalSampleCollected",
-          "XMLValue": "additionalSampleCollected",
+          "XMLTag": "additionalSampleCollected",
           "label": "Additional Samples Collected",
           "type": "Toggle",
           "value": false,
@@ -1778,7 +1778,7 @@
         },
         {
           "id": "EDI_intakeEfficiencyCompleted",
-          "XMLValue": "C",
+          "XMLTag": "C",
           "label": "Intake Efficiency Completed",
           "type": "Toggle",
           "value": false,
@@ -1791,7 +1791,7 @@
         },
         {
           "id": "EDI_feetAboveBed",
-          "XMLValue": "EDI_feetAboveBed",
+          "XMLTag": "EDI_feetAboveBed",
           "label": "Feet Sampler Stopped above bed",
           "type": "Text",
           "value": "",
@@ -1803,7 +1803,7 @@
         },
         {
           "id": "EDI_transitRate",
-          "XMLValue": "EWI_tramsitRate",
+          "XMLTag": "EWI_tramsitRate",
           "label": "Transit Rate (ft/sec)",
           "type": "Text",
           "value": "",
@@ -1815,7 +1815,7 @@
         },
         {
           "id": "EDI_fieldComposite",
-          "XMLValue": "EWI_fieldComposite",
+          "XMLTag": "EWI_fieldComposite",
           "label": "Samples Field Composited",
           "type": "Toggle",
           "value": true,
@@ -1827,7 +1827,7 @@
         },
         {
           "id": "EDI_compositeWithGallonContainers",
-          "XMLValue": "EWI_compositeWithGallonContainers",
+          "XMLTag": "EWI_compositeWithGallonContainers",
           "label": "Composited with Gallon containers",
           "type": "Toggle",
           "value": true,
@@ -1839,7 +1839,7 @@
         },
         {
           "id": "EDI_numSetAContainers",
-          "XMLValue": "EWI_numSetAContainers",
+          "XMLTag": "EWI_numSetAContainers",
           "label": "Number of containers - set A",
           "type": "Text",
           "value": "",
@@ -1851,7 +1851,7 @@
         },
         {
           "id": "EDI_numSetBContainers",
-          "XMLValue": "EWI_numSetBContainers",
+          "XMLTag": "EWI_numSetBContainers",
           "label": "Number of containers - set B",
           "type": "Text",
           "value": "",
@@ -1863,7 +1863,7 @@
         {
           "id": "EDI_setAAnalysedFor",
           "label": "Analyze Set A for:",
-          "XMLValue": "XMLQ5",
+          "XMLTag": "XMLQ5",
           "type": "MultipleChoice",
           "options": {
             "Concentration": "C",
@@ -1884,7 +1884,7 @@
         {
           "id": "EDI_setBAnalysedFor",
           "label": "Analyze Set B for:",
-          "XMLValue": "XMLQ5",
+          "XMLTag": "XMLQ5",
           "type": "MultipleChoice",
           "options": {
             "Concentration": "C",
@@ -1905,7 +1905,7 @@
         {
           "id": "EWI_samplerType",
           "label": "Sampler Type",
-          "XMLValue": "P1050",
+          "XMLTag": "P1050",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1955,7 +1955,7 @@
           "id": "bottleMaterial",
           "hidden": true,
           "label": "Bottle Material",
-          "XMLValue": "P999",
+          "XMLTag": "P999",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1972,7 +1972,7 @@
         {
           "id": "bagMaterial",
           "label": "Bag Material",
-          "XMLValue": "P999",
+          "XMLTag": "P999",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -1990,7 +1990,7 @@
           "id": "sizeOfBottle",
           "hidden": true,
           "label": "Size of Bottle",
-          "XMLValue": "P432",
+          "XMLTag": "P432",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -2006,7 +2006,7 @@
         {
           "id": "sizeOfBag",
           "label": "Size of Bag",
-          "XMLValue": "P245",
+          "XMLTag": "P245",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -2022,7 +2022,7 @@
         {
           "id": "nozzelMaterial",
           "label": "Nozzel Material",
-          "XMLValue": "XMLNM",
+          "XMLTag": "XMLNM",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -2038,7 +2038,7 @@
         {
           "id": "nozzelWidth",
           "label": "Nozzel Width",
-          "XMLValue": "XMLNW",
+          "XMLTag": "XMLNW",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -2120,35 +2120,35 @@
         },
         {
           "id": "setAStartGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "5"
         },
         {
           "id": "setBStartGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "7"
         },
         {
           "id": "setAEndGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "10"
         },
         {
           "id": "setBEndGageHeight",
-          "XMLValue": "XMLQ6",
+          "XMLTag": "XMLQ6",
           "type": "Text",
           "helperText": "P0032",
           "value": "12"
         },
         {
           "id": "startGageHeightAvg",
-          "XMLValue": "setEndAvg",
+          "XMLTag": "setEndAvg",
           "type": "ComputedValue",
           "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
           "value": null,
@@ -2156,7 +2156,7 @@
         },
         {
           "id": "endGageHeightAvg",
-          "XMLValue": "setEndAvg",
+          "XMLTag": "setEndAvg",
           "type": "ComputedValue",
           "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
           "value": null,
@@ -2164,21 +2164,21 @@
         },
         {
           "id": "setAStartTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "Start sample time for set 1"
         },
         {
           "id": "setAEndTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "End sample time for set 1"
         },
         {
           "id": "setStartTimeAvg",
-          "XMLValue": "setStartAvg",
+          "XMLTag": "setStartAvg",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -2186,21 +2186,21 @@
         },
         {
           "id": "setBStartTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "Start sample time for set 2"
         },
         {
           "id": "setBEndTime",
-          "XMLValue": "xmlDate",
+          "XMLTag": "xmlDate",
           "type": "TimeInput",
           "value": null,
           "helperText": "End of sample time for set 2"
         },
         {
           "id": "setEndTimeAvg",
-          "XMLValue": "setEndAvg",
+          "XMLTag": "setEndAvg",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -2208,7 +2208,7 @@
         },
         {
           "id": "setAMeanTime",
-          "XMLValue": "setAMeanTime",
+          "XMLTag": "setAMeanTime",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -2216,7 +2216,7 @@
         },
         {
           "id": "setBMeanTime",
-          "XMLValue": "setBMeanTime",
+          "XMLTag": "setBMeanTime",
           "type": "ComputedValue",
           "computationString": "(setAEndTime+setBEndTime)/2",
           "value": null,
@@ -2224,7 +2224,7 @@
         },
         {
           "id": "MEANTIMEAVG",
-          "XMLValue": "meanTimeAvg",
+          "XMLTag": "meanTimeAvg",
           "type": "ComputedValue",
           "computationString": "(setAMeanTime+setBMeanTime)/2",
           "value": null,
@@ -2232,7 +2232,7 @@
         },
         {
           "id": "EWI_sampleIsokenetic",
-          "XMLValue": "C",
+          "XMLTag": "C",
           "label": "Sample Isokenetic",
           "type": "Toggle",
           "value": false,
@@ -2245,7 +2245,7 @@
         },
         {
           "id": "EWI_additionalSampleCollected",
-          "XMLValue": "additionalSampleCollected",
+          "XMLTag": "additionalSampleCollected",
           "label": "Additional Samples Collected",
           "type": "Toggle",
           "value": false,
@@ -2257,7 +2257,7 @@
         },
         {
           "id": "EWI_intakeEfficiencyCompleted",
-          "XMLValue": "C",
+          "XMLTag": "C",
           "label": "Intake Efficiency Completed",
           "type": "Toggle",
           "value": false,
@@ -2270,7 +2270,7 @@
         },
         {
           "id": "EWI_feetAboveBed",
-          "XMLValue": "EWI_feetAboveBed",
+          "XMLTag": "EWI_feetAboveBed",
           "label": "Feet Sampler Stopped above bed",
           "type": "Text",
           "value": "",
@@ -2282,7 +2282,7 @@
         },
         {
           "id": "EWI_transitRate",
-          "XMLValue": "EWI_tramsitRate",
+          "XMLTag": "EWI_tramsitRate",
           "label": "Transit Rate (ft/sec)",
           "type": "Text",
           "value": "",
@@ -2294,7 +2294,7 @@
         },
         {
           "id": "EWI_fieldComposite",
-          "XMLValue": "EWI_fieldComposite",
+          "XMLTag": "EWI_fieldComposite",
           "label": "Samples Field Composited",
           "type": "Toggle",
           "value": true,
@@ -2306,7 +2306,7 @@
         },
         {
           "id": "EWI_compositeWithGallonContainers",
-          "XMLValue": "EWI_compositeWithGallonContainers",
+          "XMLTag": "EWI_compositeWithGallonContainers",
           "label": "Composited with Gallon containers",
           "type": "Toggle",
           "value": true,
@@ -2318,7 +2318,7 @@
         },
         {
           "id": "EWI_numSetAContainers",
-          "XMLValue": "EWI_numSetAContainers",
+          "XMLTag": "EWI_numSetAContainers",
           "label": "Number of containers - set A",
           "type": "Text",
           "value": "",
@@ -2330,7 +2330,7 @@
         },
         {
           "id": "EWI_numSetBContainers",
-          "XMLValue": "EWI_numSetBContainers",
+          "XMLTag": "EWI_numSetBContainers",
           "label": "Number of containers - set B",
           "type": "Text",
           "value": "",
@@ -2342,7 +2342,7 @@
         {
           "id": "EWI_setAAnalysedFor",
           "label": "Analyze Set A for:",
-          "XMLValue": "XMLQ5",
+          "XMLTag": "XMLQ5",
           "type": "MultipleChoice",
           "options": {
             "Concentration": "C",
@@ -2363,7 +2363,7 @@
         {
           "id": "EWI_setBAnalysedFor",
           "label": "Analyze Set B for:",
-          "XMLValue": "XMLQ5",
+          "XMLTag": "XMLQ5",
           "type": "MultipleChoice",
           "options": {
             "Concentration": "C",
@@ -2596,729 +2596,7 @@
           "projectID": "PID",
           "agencyCode": "PCA"
         }
-      ],
-      "SamplingEvent:2018-08-09@11:32:32": {
-        "id": "2018-08-09@11:32:32",
-        "questionsValues": {
-          "mathInput1": "",
-          "mathInput2": "",
-          "mathInput3": "4",
-          "testComputedPlus": "",
-          "testComputedMinus": "",
-          "testComputedDivide": "",
-          "testComputedMultiply": "",
-          "testComputedExponent": "",
-          "testComplexMath": "",
-          "test1": "",
-          "test2": "shellfish",
-          "test3": "",
-          "test4": "",
-          "test5": [
-            "CSN",
-            "RAF"
-          ],
-          "testHidden": [
-            "CSN",
-            "RAF"
-          ],
-          "testTog": false,
-          "testTog2": true,
-          "testTog3": true,
-          "testTog4": false,
-          "testDate": null,
-          "testDate2": "2017-10-25",
-          "testTime": null,
-          "testTime2": "16:39",
-          "testTable": [
-            [
-              "Frozen yoghurt",
-              "159ewrwr",
-              "",
-              "24",
-              "4.0"
-            ],
-            [
-              "Ice cream sandwich",
-              "237",
-              "9.0",
-              "37",
-              "4.3"
-            ],
-            [
-              "Eclair",
-              "262",
-              "SubQuestion::subTest1",
-              "24",
-              "6.0"
-            ],
-            [
-              "Cupcake",
-              "305",
-              "3.7",
-              "67",
-              "4.3"
-            ],
-            [
-              "Gingerbread",
-              "356",
-              "16.0",
-              "49",
-              "3.9"
-            ]
-          ],
-          "subTest1": "",
-          "testTable2": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "testTable3": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "testTable4": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "test6": "",
-          "test7": "Default Value",
-          "test8": "",
-          "test9": "One",
-          "test10": [],
-          "concCheck": false,
-          "sandCheck": false,
-          "fullCheck": false,
-          "concCheck2": false,
-          "sandCheck2": false,
-          "fullCheck2": false,
-          "stationName": "",
-          "stationNumber": "",
-          "projectName": "",
-          "projectID": "",
-          "agencyCode": "",
-          "sampleDate": "2018-08-09",
-          "sedimentType": "suspended",
-          "samplingMethod": "30",
-          "timeZone": "",
-          "samplingTeam": "",
-          "compiledBy": "YOUS",
-          "sameDaySample": "false",
-          "sky": "",
-          "precipitation": "",
-          "temperature": "",
-          "wind": "",
-          "windDirection": "",
-          "hydrologicEvent": "",
-          "hydrologicCondition": "",
-          "streamMixing": "",
-          "streamColor": "",
-          "sampleMedium": "",
-          "sampleType": "",
-          "samplePurpose": "",
-          "analysisSourceCode": "",
-          "WQ_location": "",
-          "WQ_temp": "",
-          "WQ_specificConductance": "",
-          "WQ_transparency": "",
-          "WQ_NTRUturbidity": "",
-          "WQ_FNUturbidity": "",
-          "EDI_samplerType": "",
-          "EDI_bottleMaterial": "",
-          "EDI_bagMaterial": "",
-          "EDI_sizeOfBottle": "",
-          "EDI_sizeOfBag": "",
-          "EDI_nozzelMaterial": "",
-          "EDI_nozzelWidth": "",
-          "EDI_setInfo_table": [
-            [
-              "Start Time",
-              "SubQuestion::setAStartTime",
-              "SubQuestion::setBStartTime",
-              "SubQuestion::setStartTimeAvg"
-            ],
-            [
-              "Gage Height(Start)",
-              "SubQuestion::setAStartGageHeight",
-              "SubQuestion::setBStartGageHeight",
-              "SubQuestion::startGageHeightAvg"
-            ],
-            [
-              "End Time",
-              "SubQuestion::setAEndTime",
-              "SubQuestion::setBEndTime",
-              "SubQuestion::setEndTimeAvg"
-            ],
-            [
-              "Gage Height(End)",
-              "SubQuestion::setAEndGageHeight",
-              "SubQuestion::setBEndGageHeight",
-              "SubQuestion::endGageHeightAvg"
-            ],
-            [
-              "Mean Time",
-              "SubQuestion::setAMeanTime",
-              "SubQuestion::setBMeanTime",
-              "SubQuestion::MEANTIMEAVG"
-            ]
-          ],
-          "EDI_samples_table": [
-            [
-              "10%"
-            ],
-            [
-              "30%"
-            ],
-            [
-              "50%"
-            ],
-            [
-              "70%"
-            ],
-            [
-              "90%"
-            ]
-          ],
-          "EDI_setAStartGageHeight": "5",
-          "EDI_setBStartGageHeight": "7",
-          "EDI_setAEndGageHeight": "10",
-          "EDI_setBEndGageHeight": "12",
-          "EDI_startGageHeightAvg": null,
-          "EDI_endGageHeightAvg": null,
-          "EDI_setAStartTime": null,
-          "EDI_setAEndTime": null,
-          "EDI_setStartTimeAvg": null,
-          "EDI_setBStartTime": null,
-          "EDI_setBEndTime": null,
-          "EDI_setEndTimeAvg": null,
-          "EDI_setAMeanTime": null,
-          "EDI_setBMeanTime": null,
-          "EDI_MEANTIMEAVG": null,
-          "EDI_sampleIsokenetic": false,
-          "EDI_additionalSampleCollected": false,
-          "EDI_intakeEfficiencyCompleted": false,
-          "EDI_feetAboveBed": "",
-          "EDI_transitRate": "",
-          "EDI_fieldComposite": true,
-          "EDI_compositeWithGallonContainers": true,
-          "EDI_numSetAContainers": "",
-          "EDI_numSetBContainers": "",
-          "EDI_setAAnalysedFor": [],
-          "EDI_setBAnalysedFor": [],
-          "EWI_samplerType": "",
-          "bottleMaterial": "",
-          "bagMaterial": "",
-          "sizeOfBottle": "",
-          "sizeOfBag": "",
-          "nozzelMaterial": "",
-          "nozzelWidth": "",
-          "EWI_setInfo_table": [
-            [
-              "Start Time",
-              "SubQuestion::setAStartTime",
-              "SubQuestion::setBStartTime",
-              "SubQuestion::setStartTimeAvg"
-            ],
-            [
-              "Gage Height(Start)",
-              "SubQuestion::setAStartGageHeight",
-              "SubQuestion::setBStartGageHeight",
-              "SubQuestion::startGageHeightAvg"
-            ],
-            [
-              "End Time",
-              "SubQuestion::setAEndTime",
-              "SubQuestion::setBEndTime",
-              "SubQuestion::setEndTimeAvg"
-            ],
-            [
-              "Gage Height(End)",
-              "SubQuestion::setAEndGageHeight",
-              "SubQuestion::setBEndGageHeight",
-              "SubQuestion::endGageHeightAvg"
-            ],
-            [
-              "Mean Time",
-              "SubQuestion::setAMeanTime",
-              "SubQuestion::setBMeanTime",
-              "SubQuestion::MEANTIMEAVG"
-            ]
-          ],
-          "EWI_samples_table": [
-            [
-              202
-            ],
-            [
-              296
-            ],
-            [
-              490
-            ],
-            [
-              534
-            ],
-            [
-              578
-            ]
-          ],
-          "setAStartGageHeight": "5",
-          "setBStartGageHeight": "7",
-          "setAEndGageHeight": "10",
-          "setBEndGageHeight": "12",
-          "startGageHeightAvg": null,
-          "endGageHeightAvg": null,
-          "setAStartTime": null,
-          "setAEndTime": null,
-          "setStartTimeAvg": null,
-          "setBStartTime": null,
-          "setBEndTime": null,
-          "setEndTimeAvg": null,
-          "setAMeanTime": null,
-          "setBMeanTime": null,
-          "MEANTIMEAVG": null,
-          "EWI_sampleIsokenetic": false,
-          "EWI_additionalSampleCollected": false,
-          "EWI_intakeEfficiencyCompleted": false,
-          "EWI_feetAboveBed": "",
-          "EWI_transitRate": "",
-          "EWI_fieldComposite": true,
-          "EWI_compositeWithGallonContainers": true,
-          "EWI_numSetAContainers": "",
-          "EWI_numSetBContainers": "",
-          "EWI_setAAnalysedFor": [],
-          "EWI_setBAnalysedFor": [],
-          "edgeOfWater_Left": "10",
-          "edgeOfSamplingZone_Left": "20",
-          "edgeOfSamplingZone_Right": "600",
-          "edgeOfWater_Right": "620",
-          "numberOfSamplingPoints": "5",
-          "pier1_start": "30",
-          "pier2_start": "160",
-          "pier3_start": "210",
-          "pier4_start": "300",
-          "pier5_start": "",
-          "pier6_start": "",
-          "pier1_end": "150",
-          "pier2_end": "200",
-          "pier3_end": "260",
-          "pier4_end": "450",
-          "pier5_end": "",
-          "pier6_end": ""
-        }
-      },
-      "SamplingEvent:2018-08-09@13:24:24": {
-        "id": "2018-08-09@13:24:24",
-        "questionsValues": {
-          "mathInput1": "",
-          "mathInput2": "",
-          "mathInput3": "2",
-          "testComputedPlus": "",
-          "testComputedMinus": "",
-          "testComputedDivide": "",
-          "testComputedMultiply": "",
-          "testComputedExponent": "",
-          "testComplexMath": "",
-          "test1": "",
-          "test2": "Johnny Science",
-          "test3": "",
-          "test4": "",
-          "test5": [
-            "CSN",
-            "RAF"
-          ],
-          "testHidden": [
-            "CSN",
-            "RAF"
-          ],
-          "testTog": false,
-          "testTog2": true,
-          "testTog3": true,
-          "testTog4": false,
-          "testDate": null,
-          "testDate2": "2017-10-25",
-          "testTime": null,
-          "testTime2": "16:39",
-          "testTable": [
-            [
-              "Frozen yoghurt",
-              "159ewrwr",
-              "",
-              "24",
-              "4.0"
-            ],
-            [
-              "Ice cream sandwich",
-              "237",
-              "9.0",
-              "37",
-              "4.3"
-            ],
-            [
-              "Eclair",
-              "262",
-              "SubQuestion::subTest1",
-              "24",
-              "6.0"
-            ],
-            [
-              "Cupcake",
-              "305",
-              "3.7",
-              "67",
-              "4.3"
-            ],
-            [
-              "Gingerbread",
-              "356",
-              "16.0",
-              "49",
-              "3.9"
-            ]
-          ],
-          "subTest1": "",
-          "testTable2": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "testTable3": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "testTable4": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "test6": "",
-          "test7": "Default Value",
-          "test8": "",
-          "test9": "One",
-          "test10": [],
-          "concCheck": false,
-          "sandCheck": false,
-          "fullCheck": false,
-          "concCheck2": false,
-          "sandCheck2": false,
-          "fullCheck2": false,
-          "stationName": "Elm Creek",
-          "stationNumber": "05287890",
-          "projectName": "Elm Creek Project Name",
-          "projectID": "059YE",
-          "agencyCode": "USGS",
-          "sampleDate": "2018-08-09",
-          "sedimentType": "suspended",
-          "samplingMethod": "",
-          "timeZone": "",
-          "samplingTeam": "",
-          "compiledBy": "YOUS",
-          "sameDaySample": "false",
-          "sky": "",
-          "precipitation": "",
-          "temperature": "",
-          "wind": "",
-          "windDirection": "",
-          "hydrologicEvent": "",
-          "hydrologicCondition": "",
-          "streamMixing": "",
-          "streamColor": "",
-          "sampleMedium": "",
-          "sampleType": "",
-          "samplePurpose": "",
-          "analysisSourceCode": "",
-          "WQ_location": "",
-          "WQ_temp": "",
-          "WQ_specificConductance": "",
-          "WQ_transparency": "",
-          "WQ_NTRUturbidity": "",
-          "WQ_FNUturbidity": "",
-          "EDI_samplerType": "",
-          "EDI_bottleMaterial": "",
-          "EDI_bagMaterial": "",
-          "EDI_sizeOfBottle": "",
-          "EDI_sizeOfBag": "",
-          "EDI_nozzelMaterial": "",
-          "EDI_nozzelWidth": "",
-          "EDI_setInfo_table": [
-            [
-              "Start Time",
-              "SubQuestion::setAStartTime",
-              "SubQuestion::setBStartTime",
-              "SubQuestion::setStartTimeAvg"
-            ],
-            [
-              "Gage Height(Start)",
-              "SubQuestion::setAStartGageHeight",
-              "SubQuestion::setBStartGageHeight",
-              "SubQuestion::startGageHeightAvg"
-            ],
-            [
-              "End Time",
-              "SubQuestion::setAEndTime",
-              "SubQuestion::setBEndTime",
-              "SubQuestion::setEndTimeAvg"
-            ],
-            [
-              "Gage Height(End)",
-              "SubQuestion::setAEndGageHeight",
-              "SubQuestion::setBEndGageHeight",
-              "SubQuestion::endGageHeightAvg"
-            ],
-            [
-              "Mean Time",
-              "SubQuestion::setAMeanTime",
-              "SubQuestion::setBMeanTime",
-              "SubQuestion::MEANTIMEAVG"
-            ]
-          ],
-          "EDI_samples_table": [
-            [
-              "10%"
-            ],
-            [
-              "30%"
-            ],
-            [
-              "50%"
-            ],
-            [
-              "70%"
-            ],
-            [
-              "90%"
-            ]
-          ],
-          "EDI_setAStartGageHeight": "5",
-          "EDI_setBStartGageHeight": "7",
-          "EDI_setAEndGageHeight": "10",
-          "EDI_setBEndGageHeight": "12",
-          "EDI_startGageHeightAvg": null,
-          "EDI_endGageHeightAvg": null,
-          "EDI_setAStartTime": null,
-          "EDI_setAEndTime": null,
-          "EDI_setStartTimeAvg": null,
-          "EDI_setBStartTime": null,
-          "EDI_setBEndTime": null,
-          "EDI_setEndTimeAvg": null,
-          "EDI_setAMeanTime": null,
-          "EDI_setBMeanTime": null,
-          "EDI_MEANTIMEAVG": null,
-          "EDI_sampleIsokenetic": false,
-          "EDI_additionalSampleCollected": false,
-          "EDI_intakeEfficiencyCompleted": false,
-          "EDI_feetAboveBed": "",
-          "EDI_transitRate": "",
-          "EDI_fieldComposite": true,
-          "EDI_compositeWithGallonContainers": true,
-          "EDI_numSetAContainers": "",
-          "EDI_numSetBContainers": "",
-          "EDI_setAAnalysedFor": [],
-          "EDI_setBAnalysedFor": [],
-          "EWI_samplerType": "",
-          "bottleMaterial": "",
-          "bagMaterial": "",
-          "sizeOfBottle": "",
-          "sizeOfBag": "",
-          "nozzelMaterial": "",
-          "nozzelWidth": "",
-          "EWI_setInfo_table": [
-            [
-              "Start Time",
-              "SubQuestion::setAStartTime",
-              "SubQuestion::setBStartTime",
-              "SubQuestion::setStartTimeAvg"
-            ],
-            [
-              "Gage Height(Start)",
-              "SubQuestion::setAStartGageHeight",
-              "SubQuestion::setBStartGageHeight",
-              "SubQuestion::startGageHeightAvg"
-            ],
-            [
-              "End Time",
-              "SubQuestion::setAEndTime",
-              "SubQuestion::setBEndTime",
-              "SubQuestion::setEndTimeAvg"
-            ],
-            [
-              "Gage Height(End)",
-              "SubQuestion::setAEndGageHeight",
-              "SubQuestion::setBEndGageHeight",
-              "SubQuestion::endGageHeightAvg"
-            ],
-            [
-              "Mean Time",
-              "SubQuestion::setAMeanTime",
-              "SubQuestion::setBMeanTime",
-              "SubQuestion::MEANTIMEAVG"
-            ]
-          ],
-          "EWI_samples_table": [
-            [
-              202
-            ],
-            [
-              296
-            ],
-            [
-              490
-            ],
-            [
-              534
-            ],
-            [
-              578
-            ]
-          ],
-          "setAStartGageHeight": "5",
-          "setBStartGageHeight": "7",
-          "setAEndGageHeight": "10",
-          "setBEndGageHeight": "12",
-          "startGageHeightAvg": null,
-          "endGageHeightAvg": null,
-          "setAStartTime": null,
-          "setAEndTime": null,
-          "setStartTimeAvg": null,
-          "setBStartTime": null,
-          "setBEndTime": null,
-          "setEndTimeAvg": null,
-          "setAMeanTime": null,
-          "setBMeanTime": null,
-          "MEANTIMEAVG": null,
-          "EWI_sampleIsokenetic": false,
-          "EWI_additionalSampleCollected": false,
-          "EWI_intakeEfficiencyCompleted": false,
-          "EWI_feetAboveBed": "",
-          "EWI_transitRate": "",
-          "EWI_fieldComposite": true,
-          "EWI_compositeWithGallonContainers": true,
-          "EWI_numSetAContainers": "",
-          "EWI_numSetBContainers": "",
-          "EWI_setAAnalysedFor": [],
-          "EWI_setBAnalysedFor": [],
-          "edgeOfWater_Left": "10",
-          "edgeOfSamplingZone_Left": "20",
-          "edgeOfSamplingZone_Right": "600",
-          "edgeOfWater_Right": "620",
-          "numberOfSamplingPoints": "5",
-          "pier1_start": "30",
-          "pier2_start": "160",
-          "pier3_start": "210",
-          "pier4_start": "300",
-          "pier5_start": "",
-          "pier6_start": "",
-          "pier1_end": "150",
-          "pier2_end": "200",
-          "pier3_end": "260",
-          "pier4_end": "450",
-          "pier5_end": "",
-          "pier6_end": ""
-        }
-      }
+      ]    
     }
   ]
 }

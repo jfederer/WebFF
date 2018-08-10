@@ -31,8 +31,8 @@ class Dashboard extends React.Component {
 		for(let i=0; i< allQD.length; i++) {
 			if(allQD[i].value!==null && allQD[i].value!=="") {
 				let tag = allQD[i].id;
-				if(allQD[i].XMLValue !== null && allQD[i].XMLValue !== "") {
-					tag = allQD[i].XMLValue;
+				if(allQD[i].XMLTag !== null && allQD[i].XMLTag !== "") {
+					tag = allQD[i].XMLTag;
 				}
 				if (xml) {
 					retString += "\r\n<" + tag + ">"+allQD[i].value+"</"+ tag + ">";

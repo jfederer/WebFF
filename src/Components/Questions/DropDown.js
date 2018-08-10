@@ -42,7 +42,7 @@ class DropDown extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		//let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		//let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
@@ -76,7 +76,7 @@ DropDown.propTypes = {
 	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
 	type: PropTypes.oneOf(['DropDown']).isRequired,
 	options: PropTypes.object.isRequired,
 	helperText: PropTypes.string

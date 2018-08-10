@@ -128,7 +128,7 @@ class ComputedValue extends React.Component {
 		const { classes } = this.props;
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
 
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		//TODO: generate minimum size
 		let thisSize = this.props.size ? this.props.size : 1;
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.computationString;
@@ -142,7 +142,7 @@ class ComputedValue extends React.Component {
 			placeholder={realPlaceholder}
 			className={classes.textField}
 			fullWidth
-			xmlvalue={this.props.XMLValue}
+			xmltag={this.props.XMLTag}
 			inputProps={{
 				size: thisSize,
 				readOnly: true
@@ -159,7 +159,7 @@ ComputedValue.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
-	XMLValue: PropTypes.string,
+	XMLTag: PropTypes.string,
 	type: PropTypes.oneOf(['ComputedValue']).isRequired,
 	helperText: PropTypes.string
 

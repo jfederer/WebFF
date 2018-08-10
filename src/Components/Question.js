@@ -53,7 +53,7 @@ class Question extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: this.props.value, //FUTURE: Look into just using the XMLvalue as the key and the 'value' as the value... might make conversion to XML simpler.
+			value: this.props.value, //FUTURE: Look into just using the XMLTag as the key and the 'value' as the value... might make conversion to XML simpler.
 		};
 		//console.log(this.props);
 	};
@@ -66,7 +66,7 @@ class Question extends React.Component {
 	buildQuestion() {
 		// const { classes } = this.props;
 		var theQ = {};
-		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLvalue;
+		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
 
 		switch (this.props.type) {
 			case 'ComputedValue': {
@@ -114,7 +114,7 @@ class Question extends React.Component {
 
 
 	render() {
-		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLValue;
+		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		let rawQuestion = this.buildQuestion();
@@ -147,7 +147,7 @@ class Question extends React.Component {
 		id: PropTypes.string.isRequired,
 		label: PropTypes.string,
 		placeholder: PropTypes.string,
-		XMLValue: PropTypes.string,
+		XMLTag: PropTypes.string,
 		type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
