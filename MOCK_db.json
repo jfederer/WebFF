@@ -62,7 +62,7 @@
                 "Add": "HideQuestion::deleteStation_stationName&ShowQuestion::newStation_stationName&ShowQuestion::newStation_stationNumber&ShowQuestion::newStation_projectName&ShowQuestion::newStation_projectID&ShowQuestion::newStation_agencyCode",
                 "Remove": "ShowQuestion::deleteStation_stationName&HideQuestion::newStation_stationName&HideQuestion::newStation_stationNumber&HideQuestion::newStation_projectName&HideQuestion::newStation_projectID&HideQuestion::newStation_agencyCode"
               },
-              "value": "",
+              "value": "Smite",
               "width_xs": 12,
               "width_lg": 12
             },
@@ -88,7 +88,7 @@
               "layoutGroup": "Basic",
               "width_xs": 7,
               "width_lg": 7,
-              "value": ""
+              "value": null
             },
             {
               "id": "newStation_stationNumber",
@@ -271,6 +271,29 @@
     {
       "id": "questionsData",
       "questionsDataArr": [
+		{
+			"id": "getesoteric",
+			"value": "forge",
+			"label": "A",
+			"XMLValue": "P10020",
+			"type": "Text",
+			"placeholder": "A value",
+			"tabName": "Question Page",
+			"layoutGroup": "TestMath",
+			"width_xs": 4,
+			"width_lg": 4
+		  },
+		  {
+			"id": "getesotericer",
+			"label": "A",
+			"XMLValue": "P10020",
+			"type": "Text",
+			"placeholder": "A value",
+			"tabName": "Question Page",
+			"layoutGroup": "TestMath",
+			"width_xs": 4,
+			"width_lg": 4
+		  },
         {
           "id": "mathInput1",
           "value": "",
@@ -2579,7 +2602,7 @@
         "questionsValues": {
           "mathInput1": "",
           "mathInput2": "",
-          "mathInput3": "2",
+          "mathInput3": "4",
           "testComputedPlus": "",
           "testComputedMinus": "",
           "testComputedDivide": "",
@@ -2587,7 +2610,7 @@
           "testComputedExponent": "",
           "testComplexMath": "",
           "test1": "",
-          "test2": "Johnny Science",
+          "test2": "shellfish",
           "test3": "",
           "test4": "",
           "test5": [
@@ -2728,7 +2751,7 @@
           "agencyCode": "",
           "sampleDate": "2018-08-09",
           "sedimentType": "suspended",
-          "samplingMethod": "",
+          "samplingMethod": "30",
           "timeZone": "",
           "samplingTeam": "",
           "compiledBy": "YOUS",

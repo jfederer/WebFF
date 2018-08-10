@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
@@ -52,6 +52,7 @@ class Dashboard extends React.Component {
 
 		//KLUDGE
 		let samplingEventNames = Object.keys(this.props.globalState).filter((key)=>key.startsWith("SamplingEvent:"));
+		let recentFiveSamplingEvents = samplingEventNames.sort().slice(0,5);
 		//console.log(samplingEventNames);
 
 
@@ -61,9 +62,17 @@ class Dashboard extends React.Component {
 			<p>General info and status and direct links to items of value</p>
 			<Grid container spacing={24}>
 			  <Grid item xs>
-				<Paper className={classes.paper}><b>Quick Links</b><br />
-					Return to most recent event<br />
-					List all editable events<br />
+				<Paper className={classes.paper}><h3>Quick Links</h3><br />
+				Load Recent Event: <br />
+				{recentFiveSamplingEvents.map((samplingEventName)=>{
+					return <Fragment key={samplingEventName+"_Fragment"}><Link key={samplingEventName} to='/FieldForm'><Button onClick={()=>	{
+						this.props.loadSamplingEvent(samplingEventName);
+						this.props.navControl("Water Quality",true);
+						this.props.navControl("Field Form",true);
+						}}>{samplingEventName}</Button></Link><br /></Fragment>
+				})}
+					<Link key="allEventsLink" to='/AllEvents'><Button onClick={()=>	{
+						}}>Show all events</Button></Link><br />
 					List all shipped events <br />
 					</Paper>
 			  </Grid>
@@ -87,13 +96,6 @@ class Dashboard extends React.Component {
 						}}>BRAND NEW</Button></Link>
 
 				<Divider />
-				{samplingEventNames.map((samplingEventName)=>{
-					return <Link key={samplingEventName} to='/FieldForm'><Button onClick={()=>	{
-						this.props.loadSamplingEvent(samplingEventName);
-						this.props.navControl("Water Quality",true);
-						this.props.navControl("Field Form",true);
-						}}>{samplingEventName}</Button></Link>
-				})}
 						</Paper>
 			  </Grid>
 			</Grid>
