@@ -684,7 +684,7 @@ class WebFF extends React.Component {
 	getQuestionData(q_id) {
 		// returns question from questionsData that has q_id.  If none is found, return null
 		// WARNING: DO NOT USE THIS TO ACCESS "VALUE" unless you are aware it might be wrong (the value stored in questionsData is the default... the real 'value' is stored in the samplingEvent)
-		// TODO: verify all uses of this function are safe
+		// TODO: verify all uses of this function are safe and/or depricate and/or remove this function
 		let retArr = this.state.questionsData.filter(questionData => {
 			if (questionData.id === q_id) {
 				return questionData;
@@ -736,35 +736,25 @@ class WebFF extends React.Component {
 	parseActionsFromQuestion(Q, actionExecuter) {  //TODO: probably can fix the fact we have two of these functions
 		// Q can be a Question Component OR questionData object -- differentiated by the presence of 'props'
 		// note, if questionData is passed, we get the value from the currentSamplingEvent
-		console.log(Q);
+		//console.log(Q);
 		let actionsExist = false;
+		let q_id;
+		let actions;
 		if (Q.props) {
 			// this Q is a Question component
 			actionsExist = Q.props.actions;
+			q_id = Q.props.id;
+			actions = Q.props.actions;
 		} else {
 			// this Q is questionData object
 			actionsExist = Q.actions;
+			q_id = Q.id;
+			actions = Q.actions;
 		}
 
 		if (actionsExist) {
-			let { actions } = Q.props;
-			let qval = Q.state.value;
-			let commandString = actions[qval];
-			if (commandString) {
-				let actionsToDo = commandString.split('&');
-				actionsToDo.forEach((action) => {
-					actionExecuter(action);
-				});
-			}
-		}
-	}
-
-	parseActionsFromQuestionData(Q, Q_val, actionExecuter) {
-		// Q is a questionData OBJECT, not questionData
-		if (Q.actions) {
-			let { actions } = Q;
-			let qval = Q_val;  // when combinging functions, could pull this from currentSamplingEvent using info in Q
-			let commandString = actions[qval];
+			let q_val = this.getQuestionValue(q_id);
+			let commandString = actions[q_val];
 			if (commandString) {
 				let actionsToDo = commandString.split('&');
 				actionsToDo.forEach((action) => {
@@ -867,6 +857,7 @@ class WebFF extends React.Component {
 
 
 	runAllActionsForCurrentSamplingEvent() {
+		console.log("heer");
 		this.state.questionsData.map((questionData) => { // for each question
 			if (questionData.actions) { // check if it has an actions node
 				// it does! let's check the value of this question in our current event
@@ -1112,18 +1103,7 @@ class WebFF extends React.Component {
 			// this sync's this.state.stations to the DB.  WORKS.
 			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
 
-			//this.runAllActionsForCurrentSamplingEvent();
-			console.log("T1EXPECT  4" + this.getQuestionValue("mathInput3"));
-			console.log("T1EXPECT  shellfish" + this.getQuestionValue("test2"));
-			console.log("T1EXPECT  (nothing)" + this.getQuestionValue("test3"));
-			console.log("T1EXPECT  (lots)" + this.getQuestionValue("testTable"));
-			console.log("T2EXPECT smite " + this.getQuestionValue("editStation_AddOrRemove")); 
-			console.log("T2EXPECT  (nothing)" + this.getQuestionValue("deleteStation_stationName"));
-			console.log("T2EXPECT  null" + this.getQuestionValue("newStation_stationName"));
-			console.log("T3EXPECT  forge" + this.getQuestionValue("getesoteric"));
-			console.log("T3EXPECT  undefined" + this.getQuestionValue("getesotericer"));
-			console.log("EXPECT undefined" + this.getQuestionValue("pruple"));
-
+			this.runAllActionsForCurrentSamplingEvent();
 		}
 
 		// build the curDialogXXX data
