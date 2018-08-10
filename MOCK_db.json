@@ -11,7 +11,9 @@
 		},
 		{
 			"id": "hiddenPanels",
-			"hiddenPanelsArr": []
+			"hiddenPanelsArr": [
+				"EDI:IntakeEfficiencyTest"
+			]
 		},
 		{
 			"id": "navMenuInfo",
@@ -1335,7 +1337,7 @@
 						"Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
 					},
 					"actions": {
-						"US D-96 Bag Sampler": "ShowQuestion::EDI_sizeO::fBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
+						"US D-96 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
 						"US DH-2 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
 						"US D-96-A1 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
 						"US D-99 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
@@ -1416,11 +1418,13 @@
 				{
 					"id": "EDI_NozzleMaterial",
 					"label": "Nozzle Material",
+					"XMLTag":"P72219",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
 						"Brass": "Brass",
-						"Plastic": "Plastic"
+						"Plastic": "Plastic",
+						"TFE":"TFE"
 					},
 					"value": "",
 					"tabName": "EDI",
@@ -1429,8 +1433,9 @@
 					"width_lg": 2
 				},
 				{
-					"id": "EDI_NozzleWidth",
-					"label": "Nozzle Width",
+					"id": "EDI_NozzleDiameter",
+					"label": "Nozzle Diameter",
+					"XMLTag":"P72220",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1444,6 +1449,86 @@
 					"width_xs": 6,
 					"width_lg": 2
 				},
+
+
+
+				{
+					"id": "EDI_streamDepth",
+					"label": "Stream Depth(ft)",
+					"type": "Text",
+					"placeholder": "feet",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 3,
+					"width_lg": 2
+				},
+				{
+					"id": "EDI_transitRate",
+					"label": "Transit Rate(ft/s)",
+					"type": "Text",
+					"placeholder": "feet / second",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 3,
+					"width_lg": 2
+				},				{
+					"id": "EDI_streamVelocity",
+					"label": "Stream Velocity(ft)",
+					"XMLTag": "P72196",
+					"type": "Text",
+					"placeholder": "feet / second",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 3,
+					"width_lg": 2
+				},				{
+					"id": "EDI_sampleVolumeIET",
+					"label": "Sample Volume for Test (mL)",
+					"XMLTag":"P72218",
+					"type": "Text",
+					"placeholder": "milliliters",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 4,
+					"width_lg": 2
+				},				{
+					"id": "EDI_durationIEF",
+					"label": "Seconds sampler collected water",
+					"XMLTag": "P7221",
+					"type": "Text",
+					"placeholder": "seconds",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 4,
+					"width_lg": 2
+				},				{
+					"id": "EDI_ratioOfVertical",
+					"label": "Ratio of Vertical",
+					"type": "Text",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 3,
+					"width_lg": 1
+				},				{
+					"id": "EDI_intakeEfficiency",
+					"label": "Intake Efficiency",
+					"type": "Text",
+					"value": "",
+					"tabName": "EDI",
+					"layoutGroup": "Intake Efficiency Test",
+					"width_xs": 3,
+					"width_lg": 1
+				},
+
+
+
+
 				{
 					"id": "EDI_setInfo_table",
 					"label": "Set Info Table",
@@ -1886,7 +1971,8 @@
 					"includeBlank": true,
 					"options": {
 						"Brass": "Brass",
-						"Plastic": "Plastic"
+						"Plastic": "Plastic",
+						"TFE":"TFE"
 					},
 					"value": "",
 					"tabName": "EWI",

@@ -459,12 +459,12 @@ class WebFF extends React.Component {
 				this.buildRoutesAndRenderPages();
 				break;
 			case "ShowPanel":
-				this.showQuestionPanel(splitActionString[1], true);
+				this.showQuestionPanel(splitActionString[1], true, this.buildRoutesAndRenderPages());
 				this.buildRoutesAndRenderPages();
 				break;
 			case "HidePanel":
-				this.showQuestionPanel(splitActionString[1], false);
-				this.buildRoutesAndRenderPages();
+				this.showQuestionPanel(splitActionString[1], false, this.buildRoutesAndRenderPages());
+				
 				break;
 			default:
 				console.warn("Requested action '" + splitActionString[0] + "' not recognized");
@@ -573,7 +573,8 @@ class WebFF extends React.Component {
 		//		localStorage.setItem('questionsData', JSON.stringify(rawData));
 	}
 
-	showQuestionPanel(panelName, toShow) {
+	showQuestionPanel(panelName, toShow, CB) {
+		// panelName: name of panel, formatted 'PAGE_NAME:PANEL_NAME"...
 		// add or remove the panelName from this.state.hiddenPanels
 		// console.log("this.state.hiddenPanels:", this.state.hiddenPanels);
 		let newHiddenPanels = this.state.hiddenPanels;
@@ -591,7 +592,7 @@ class WebFF extends React.Component {
 			}
 		}
 		// console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
-		this.setState({ hiddenPanels: newHiddenPanels });
+		this.setState({ hiddenPanels: newHiddenPanels }, CB);
 	}
 
 	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
