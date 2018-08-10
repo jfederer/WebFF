@@ -432,10 +432,16 @@ class WebFF extends React.Component {
 		this.setState({ appBarText: txt });
 	};
 
-	actionExecuter = (actionString) => {
+	actionExecuter = (actionString) => { //****   //performance - are we building routes and needlessly rendering pages?
+		//actionString: string in format: 'ACTION_NAME::PARAMETER' where...
+		//   ACTION_NAME is one of the switch options below and
+		//   PARAMETER is the parameter string to said action, generally this will be a questionID, though panels are identified like PAGENAME:PANELNAME.
+		// note, actionExecuter does NOT check for validity of the PARAMETER part of the actionString.
+		// void return
+		// note, does not throw errors and instead only warns.  Actions as of 2018/08/8 are all only GUI sugar and thus shouldn't break the app.
 		let splitActionString = actionString.split('::');
 		if (splitActionString.length !== 2) {
-			//TODO: Throw error
+			console.warn("Requested action string '" + actionString + "' is malformed.  Must only have one '::' per action.  Separate actions with '&'.");
 		}
 		switch (splitActionString[0]) {
 			case "ShowTab":
@@ -461,8 +467,7 @@ class WebFF extends React.Component {
 				this.buildRoutesAndRenderPages();
 				break;
 			default:
-				//TODO: throw error
-				console.log("Requested action '" + splitActionString[0] + "' not recognized");
+				console.warn("Requested action '" + splitActionString[0] + "' not recognized");
 		}
 	}
 
@@ -520,8 +525,10 @@ class WebFF extends React.Component {
 		// console.log("Before setting state: ", newHiddenTabs);
 		this.setState({ hiddenTabs: newHiddenTabs }, () => {
 			// console.log("STATE after setting state: ", this.state.hiddenTabs);
-			CB;
-		}
+			if(typeof CB === "function") {
+				CB();
+			}
+			}
 		);
 	}
 
@@ -745,7 +752,7 @@ class WebFF extends React.Component {
 	parseActionsFromQuestion(Q, actionExecuter) {  //TODO: probably can fix the fact we have two of these functions
 		// Q can be a Question Component OR questionData object -- differentiated by the presence of 'props'
 		// note, if questionData is passed, we get the value from the currentSamplingEvent
-		//console.log(Q);
+		console.log(Q);
 		let actionsExist = false;
 		let q_id;
 		let actions;

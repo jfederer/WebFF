@@ -1068,6 +1068,7 @@
 				{
 					"id": "hydrologicEvent",
 					"label": "Hydrologic Event",
+					"XMLTag": "HydEvent",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1090,6 +1091,7 @@
 				{
 					"id": "hydrologicCondition",
 					"label": "HydrologicCondition",
+					"XMLTag": "Hstat",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1108,44 +1110,9 @@
 					"width_lg": 3
 				},
 				{
-					"id": "streamMixing",
-					"label": "Stream Mixing",
-					"type": "DropDown",
-					"includeBlank": true,
-					"options": {
-						"Well Mixed": "Well Mixed",
-						"Stratified": "Stratified",
-						"Poorly-mixed": "Poorly-mixed",
-						"Unknown": "Unknown"
-					},
-					"value": "",
-					"tabName": "Field Form",
-					"layoutGroup": "Sample Information",
-					"width_xs": 4,
-					"width_lg": 3
-				},
-				{
-					"id": "streamColor",
-					"label": "Stream Color",
-					"type": "DropDown",
-					"includeBlank": true,
-					"options": {
-						"Brown": "Brown",
-						"Green": "Green",
-						"Blue": "Blue",
-						"Gray": "Gray",
-						"Clear": "Clear",
-						"Other": "Other"
-					},
-					"value": "",
-					"tabName": "Field Form",
-					"layoutGroup": "Sample Information",
-					"width_xs": 4,
-					"width_lg": 3
-				},
-				{
 					"id": "sampleMedium",
 					"label": "Sample Medium",
+					"XMLTag": "SmplMediumCode",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1163,6 +1130,7 @@
 				{
 					"id": "sampleType",
 					"label": "Sample Type",
+					"XMLTag": "Stype",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1188,6 +1156,7 @@
 				{
 					"id": "samplePurpose",
 					"label": "Sample Purpose",
+					"XMLTag": "P71999",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1201,32 +1170,57 @@
 					"width_lg": 3
 				},
 				{
-					"id": "analysisSourceCode",
-					"label": "Analysis Source Code",
+					"id": "analysisStatus",
+					"label": "Analysis Status",
+					"XMLTag": "Astat",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
-						"USGS lab and field": "USGS lab and field",
-						"USGS lab and field and non-USGS lab": "USGS lab and field and non-USGS lab",
-						"Not Determined": "Not Determined",
-						"USGS lab and non-USGS field": "USGS lab and non-USGS field",
-						"USGS lab and non-USGS lab and field": "USGS lab and non-USGS lab and field",
-						"USGS lab and field and non-USGS field": "USGS lab and field and non-USGS field",
-						"USGS lab and field and non-USGS lab and field": "USGS lab and field and non-USGS lab and field",
-						"USGS field only": "USGS field only",
-						"USGS lab only": "USGS lab only",
-						"Non-USGS Field": "Non-USGS Field",
-						"Non-USGS lab only": "Non-USGS lab only",
-						"Non-USGS lab and field": "Non-USGS lab and field",
-						"USGS field and non-USGS field": "USGS field and non-USGS field",
-						"USGS field and non-USGS lab": "USGS field and non-USGS lab",
-						"USGS field and non-USGS lab and field": "USGS field and non-USGS lab and field"
+						"Unrestricted": "U",
+						"Internal-use only": "I",
+						"Proprietary": "P"
 					},
 					"value": "",
 					"tabName": "Field Form",
 					"layoutGroup": "Sample Information",
 					"width_xs": 4,
 					"width_lg": 3
+				},
+				{
+					"id": "streamMixing",
+					"label": "Stream Mixing",
+					"type": "DropDown",
+					"includeBlank": true,
+					"options": {
+						"Well Mixed": "Well Mixed",
+						"Stratified": "Stratified",
+						"Poorly-mixed": "Poorly-mixed",
+						"Unknown": "Unknown"
+					},
+					"value": "",
+					"tabName": "Field Form",
+					"layoutGroup": "Sample Information",
+					"width_xs": 4,
+					"width_lg": 6
+				},
+				{
+					"id": "streamColor",
+					"label": "Stream Color",
+					"type": "DropDown",
+					"includeBlank": true,
+					"options": {
+						"Brown": "Brown",
+						"Green": "Green",
+						"Blue": "Blue",
+						"Gray": "Gray",
+						"Clear": "Clear",
+						"Other": "Other"
+					},
+					"value": "",
+					"tabName": "Field Form",
+					"layoutGroup": "Sample Information",
+					"width_xs": 4,
+					"width_lg": 6
 				},
 				{
 					"id": "WQ_time",
@@ -1308,6 +1302,7 @@
 				{
 					"id": "EDI_samplerType",
 					"label": "Sampler Type",
+					"XMLTag": "P84164",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1315,10 +1310,10 @@
 						"US DH-48": "US DH-48",
 						"US D-96 Bag Sampler": "US D-96 Bag Sampler",
 						"Weighted Bottle Sampler": "Weighted Bottle Sampler",
-						"Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
+						"Weighted Bottle Sampler w/ hole in cap, no Nozzle": "Weighted Bottle Sampler w/ hole in cap, no Nozzle",
 						"US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
 						"US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
-						"Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
+						"Grab Sample (bottle with cap, no Nozzle)": "Grab Sample (bottle with cap, no Nozzle)",
 						"Other": "Other",
 						"US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
 						"US DH-59": "US DH-59",
@@ -1330,7 +1325,7 @@
 						"US U-73": "US U-73",
 						"US PS-69": "US PS-69",
 						"US DH-81": "US DH-81",
-						"US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
+						"US HD-81 w/ Teflon cap and Nozzle": "US HD-81 w/ Teflon cap and Nozzle",
 						"Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
 						"US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
 						"US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
@@ -1340,12 +1335,13 @@
 						"Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
 					},
 					"actions": {
-						"US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
-						"Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
+						"US D-96 Bag Sampler": "ShowQuestion::EDI_sizeO::fBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
+						"US DH-2 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
+						"US D-96-A1 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
+						"US D-99 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
+						"Weighted Bottle Sampler": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest",
+						"Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest",
+						"Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest"
 					},
 					"value": "",
 					"tabName": "EDI",
@@ -1418,8 +1414,8 @@
 					"width_lg": 2
 				},
 				{
-					"id": "EDI_nozzelMaterial",
-					"label": "Nozzel Material",
+					"id": "EDI_NozzleMaterial",
+					"label": "Nozzle Material",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1433,8 +1429,8 @@
 					"width_lg": 2
 				},
 				{
-					"id": "EDI_nozzelWidth",
-					"label": "Nozzel Width",
+					"id": "EDI_NozzleWidth",
+					"label": "Nozzle Width",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1631,8 +1627,8 @@
 					"helperText": "Average Mean time for sample"
 				},
 				{
-					"id": "EDI_sampleIsokenetic",
-					"label": "Sample Isokenetic",
+					"id": "EDI_sampleIsokinetic",
+					"label": "Sample Isokinetic",
 					"type": "Toggle",
 					"value": false,
 					"helperText": "Toggle Me",
@@ -1773,6 +1769,7 @@
 				{
 					"id": "EWI_samplerType",
 					"label": "Sampler Type",
+					"XMLTag": "P84164",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1780,10 +1777,10 @@
 						"US DH-48": "US DH-48",
 						"US D-96 Bag Sampler": "US D-96 Bag Sampler",
 						"Weighted Bottle Sampler": "Weighted Bottle Sampler",
-						"Weighted Bottle Sampler w/ hole in cap, no nozzel": "Weighted Bottle Sampler w/ hole in cap, no nozzel",
+						"Weighted Bottle Sampler w/ hole in cap, no Nozzle": "Weighted Bottle Sampler w/ hole in cap, no Nozzle",
 						"US DH-2 Bag Sampler": "US DH-2 Bag Sampler",
 						"US D-96-A1 Bag Sampler": "US D-96-A1 Bag Sampler",
-						"Grab Sample (bottle with cap, no nozzel)": "Grab Sample (bottle with cap, no nozzel)",
+						"Grab Sample (bottle with cap, no Nozzle)": "Grab Sample (bottle with cap, no Nozzle)",
 						"Other": "Other",
 						"US DH-95 Plastic Bottle": "US DH-95 Plastic Bottle",
 						"US DH-59": "US DH-59",
@@ -1795,7 +1792,7 @@
 						"US U-73": "US U-73",
 						"US PS-69": "US PS-69",
 						"US DH-81": "US DH-81",
-						"US HD-81 w/ Teflon cap and nozzel": "US HD-81 w/ Teflon cap and nozzel",
+						"US HD-81 w/ Teflon cap and Nozzle": "US HD-81 w/ Teflon cap and Nozzle",
 						"Plastic Bottle w/ Teflon collapsible bag": "Plastic Bottle w/ Teflon collapsible bag",
 						"US DH-95 Teflon Bottle": "US DH-95 Teflon Bottle",
 						"US D-95 Teflon Bottle": "US D-95 Teflon Bottle",
@@ -1805,12 +1802,12 @@
 						"Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
 					},
 					"actions": {
-						"US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzelMaterial&ShowQuestion::nozzelWidth",
-						"Weighted Bottle Sampler w/ hole in cap, no nozzel": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth",
-						"Grab Sample (bottle with cap, no nozzel)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzelMaterial&HideQuestion::nozzelWidth"
+						"US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
+						"US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
+						"US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
+						"Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
+						"Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::NozzleMaterial&HideQuestion::NozzleWidth",
+						"Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::NozzleMaterial&HideQuestion::NozzleWidth"
 					},
 					"value": "",
 					"tabName": "EWI",
@@ -1883,8 +1880,8 @@
 					"width_lg": 2
 				},
 				{
-					"id": "nozzelMaterial",
-					"label": "Nozzel Material",
+					"id": "NozzleMaterial",
+					"label": "Nozzle Material",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -1898,8 +1895,8 @@
 					"width_lg": 2
 				},
 				{
-					"id": "nozzelWidth",
-					"label": "Nozzel Width",
+					"id": "NozzleWidth",
+					"label": "Nozzle Width",
 					"type": "DropDown",
 					"includeBlank": true,
 					"options": {
@@ -2077,8 +2074,8 @@
 					"helperText": "Average Mean time for sample"
 				},
 				{
-					"id": "EWI_sampleIsokenetic",
-					"label": "Sample Isokenetic",
+					"id": "EWI_sampleIsokinetic",
+					"label": "Sample Isokinetic",
 					"type": "Toggle",
 					"value": false,
 					"helperText": "Toggle Me",
