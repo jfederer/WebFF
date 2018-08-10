@@ -645,10 +645,6 @@ class WebFF extends React.Component {
 		// TODO: performance: rebuilds entire questionsData... needlessly?
 
 
-		
-
-
-		let shouldSetState = true;
 		if (key === "value") { // updating value is special -- as the value is stored in dialogQuestions or the samplingEvent or custom user/station questions... NOT questionsData
 			//is the q_id in the eventSample?
 			if (Object.keys(this.state[this.state.curSamplingEventName].questionsValues).includes(q_id)) {
