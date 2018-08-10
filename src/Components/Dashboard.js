@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
@@ -93,6 +94,7 @@ class Dashboard extends React.Component {
 						this.props.createNewSamplingEvent();
 						this.props.navControl("Water Quality",true);
 						this.props.navControl("Field Form",true);
+						
 						}}>BRAND NEW</Button></Link>
 
 				<Divider />
@@ -128,4 +130,4 @@ Dashboard.propTypes = {
 	appBarTextCB: PropTypes.func
 };
 
-export default withStyles(styles, { withTheme: true })(Dashboard);
+export default withRouter(withStyles(styles, { withTheme: true })(Dashboard));

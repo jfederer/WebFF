@@ -1203,7 +1203,7 @@
 					"tabName": "Field Form",
 					"layoutGroup": "Sample Information",
 					"width_xs": 4,
-					"width_lg": 6
+					"width_lg": 3
 				},
 				{
 					"id": "streamColor",
@@ -1222,7 +1222,194 @@
 					"tabName": "Field Form",
 					"layoutGroup": "Sample Information",
 					"width_xs": 4,
-					"width_lg": 6
+					"width_lg": 3
+				},
+				{
+					"id": "edgeOfWater_Left",
+					"label": "Left Edge Of Water",
+					"type": "Text",
+					"placeholder": "Feet from XYZ",
+					"value": "10",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 6,
+					"width_lg": 2
+				},
+				{
+					"id": "edgeOfSamplingZone_Left",
+					"label": "Left Edge Of Sampling Zone",
+					"type": "Text",
+					"placeholder": "Feet from XYZ",
+					"value": "20",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"id": "edgeOfSamplingZone_Right",
+					"label": "Right Edge Of Sampling Zone",
+					"type": "Text",
+					"placeholder": "Feet from XYZ",
+					"value": "600",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 6,
+					"width_lg": 3
+				},
+				{
+					"id": "edgeOfWater_Right",
+					"label": "Right Edge Of Water",
+					"type": "Text",
+					"placeholder": "Feet from XYZ",
+					"value": "620",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 6,
+					"width_lg": 2
+				},
+				{
+					"id": "numberOfSamplingPoints",
+					"value": "5",
+					"label": "Sampling Points",
+					"type": "Text",
+					"placeholder": "Number of Points",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 12,
+					"width_lg": 2
+				},
+				{
+					"id": "pier1_start",
+					"label": "Pier 1 Start",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "30",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier2_start",
+					"label": "Pier 2 Start",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "160",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier3_start",
+					"label": "Pier 3 Start",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "210",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier4_start",
+					"label": "Pier 4 Start",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "300",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier5_start",
+					"label": "Pier 5 Start",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier6_start",
+					"label": "Pier 6 Start",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier1_end",
+					"label": "Pier 1 End",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "150",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier2_end",
+					"label": "Pier 2 End",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "200",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier3_end",
+					"label": "Pier 3 End",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "260",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier4_end",
+					"label": "Pier 4 End",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "450",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier5_end",
+					"label": "Pier 5 End",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
+				},
+				{
+					"id": "pier6_end",
+					"label": "Pier 6 End",
+					"type": "Text",
+					"placeholder": "Feet",
+					"value": "",
+					"tabName": "FieldForm",
+					"layoutGroup": "Waterway Info",
+					"width_xs": 2,
+					"width_lg": 1
 				},
 				{
 					"id": "WQ_time",
@@ -1527,13 +1714,29 @@
 				},
 
 
+
+
+
+
 				{
 					"id": "EDI_setA_StartTime",
 					"label": "Start Time",
 					"type": "TimeInput",
 					"tabName":"EDI",
 					"layoutGroup": "Set A Information",
-					"value": ""
+					"value": "",
+					"width_xs": 5,
+					"width_lg": 1
+				},
+				{
+					"id": "EDI_setA_EndTime",
+					"label": "End Time",
+					"type": "TimeInput",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"value": "",
+					"width_xs": 5,
+					"width_lg": 1
 				},
 				{
 					"id": "EDI_setA_StartGageHeight",
@@ -1542,16 +1745,11 @@
 					"tabName":"EDI",
 					"layoutGroup": "Set A Information",
 					"type": "Text",
-					"value": ""
+					"value": "",
+					"width_xs": 3,
+					"width_lg": 2
 				},
-				{
-					"id": "EDI_setA_EndTime",
-					"label": "End Time",
-					"type": "TimeInput",
-					"tabName":"EDI",
-					"layoutGroup": "Set A Information",
-					"value": ""
-				},
+
 				{
 					"id": "EDI_setA_EndGageHeight",
 					"label": "End Gage Ht",
@@ -1559,7 +1757,9 @@
 					"tabName":"EDI",
 					"layoutGroup": "Set A Information",
 					"type": "Text",
-					"value": ""
+					"value": "",
+					"width_xs": 3,
+					"width_lg": 2
 				},
 				{
 					"id": "EDI_setA_AvgGageHeight",
@@ -1567,7 +1767,53 @@
 					"tabName":"EDI",
 					"layoutGroup": "Set A Information",
 					"type": "ComputedValue",
-					"computationString": "(EDI_setA_StartGageHeight+EDI_setA_EndGageHeight)/2"
+					"computationString": "(EDI_setA_StartGageHeight+EDI_setA_EndGageHeight)/2",
+					"width_xs": 4,
+					"width_lg": 2
+				},
+				{
+					"id": "EDI_setA_numberOfContainers",
+					"label": "Number Of Containers",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"type": "Text",
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 2
+				},
+
+				{
+					"id": "EDI_setA_analyzeIndividually",
+					"label": "Analyze Individually",
+					"XMLTag":"AnalyzeIndSamples",
+					"type": "Toggle",
+					"checkbox":true,
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 2
+				},
+				{
+					"id": "EDI_setA_AnalysedFor",
+					"label": "Analyze Set A for:",
+					"XMLTag": "Analyses",
+					"type": "MultipleChoice",
+					"options": {
+						"Concentration": "C",
+						"Sand-Fine break": "SF",
+						"Sand Analysis": "SA",
+						"Turbidity": "T",
+						"Loss-on-ignition": "LOI",
+						"Dissolved Solids": "DS",
+						"Specific Conductance": "SC",
+						"Full-size Fractions": "Z"
+					},
+					"value": [],
+					"tabName": "EDI",
+					"layoutGroup": "Set A Information",
+					"width_xs": 6,
+					"width_lg": 6
 				},
 				{
 					"id": "EDI_SetA_samples_table",
@@ -1606,98 +1852,167 @@
 					"width_xs": 6,
 					"width_lg": 6
 				},
-			
+
 				{
-					"id": "EDI_setBStartGageHeight",
+					"id": "EDI_showSetB",
+					"label": "Show Set B",
+					"type": "Toggle",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"value": false,
+					"actions": {
+						"true": "ShowPanel::EDI:Set B Information",
+						"false": "HidePanel::EDI:Set B Information"
+					},
+					"width_xs": 2,
+					"width_lg": 1
+				},
+
+
+
+
+
+				{
+					"id": "EDI_setB_StartTime",
+					"label": "Start Time",
+					"type": "TimeInput",
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
+					"value": "",
+					"width_xs": 5,
+					"width_lg": 1
+				},
+				{
+					"id": "EDI_setB_EndTime",
+					"label": "End Time",
+					"type": "TimeInput",
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
+					"value": "",
+					"width_xs": 5,
+					"width_lg": 1
+				},
+				{
+					"id": "EDI_setB_StartGageHeight",
+					"label": "Start Gage Ht",
+					"placeholder": "feet",
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
 					"type": "Text",
-					"helperText": "P0032",
-					"value": "7"
+					"value": "",
+					"width_xs": 3,
+					"width_lg": 2
 				},
+
 				{
-					"id": "EDI_setAEndGageHeight",
+					"id": "EDI_setB_EndGageHeight",
+					"label": "End Gage Ht",
+					"placeholder": "feet",
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
 					"type": "Text",
-					"helperText": "P0032",
-					"value": "10"
+					"value": "",
+					"width_xs": 3,
+					"width_lg": 2
 				},
 				{
-					"id": "EDI_setBEndGageHeight",
+					"id": "EDI_setB_AvgGageHeight",
+					"label": "Avg Gage Ht",
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
+					"type": "ComputedValue",
+					"computationString": "(EDI_setA_StartGageHeight+EDI_setA_EndGageHeight)/2",
+					"width_xs": 4,
+					"width_lg": 2
+				},
+				{
+					"id": "EDI_setB_numberOfContainers",
+					"label": "Number Of Containers",
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
 					"type": "Text",
-					"helperText": "P0032",
-					"value": "12"
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 2
+				},
+
+				{
+					"id": "EDI_setB_analyzeIndividually",
+					"label": "Analyze Individually",
+					"XMLTag":"AnalyzeIndSamples",
+					"type": "Toggle",
+					"checkbox":true,
+					"tabName":"EDI",
+					"layoutGroup": "Set B Information",
+					"value": "",
+					"width_xs": 4,
+					"width_lg": 2
 				},
 				{
-					"id": "EDI_startGageHeightAvg",
-					"type": "ComputedValue",
-					"computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
-					"value": null,
-					"helperText": "Average start gage height time for sample"
+					"id": "EDI_setB_AnalysedFor",
+					"label": "Analyze Set A for:",
+					"XMLTag": "Analyses",
+					"type": "MultipleChoice",
+					"options": {
+						"Concentration": "C",
+						"Sand-Fine break": "SF",
+						"Sand Analysis": "SA",
+						"Turbidity": "T",
+						"Loss-on-ignition": "LOI",
+						"Dissolved Solids": "DS",
+						"Specific Conductance": "SC",
+						"Full-size Fractions": "Z"
+					},
+					"value": [],
+					"tabName": "EDI",
+					"layoutGroup": "Set B Information",
+					"width_xs": 6,
+					"width_lg": 6
 				},
 				{
-					"id": "EDI_endGageHeightAvg",
-					"type": "ComputedValue",
-					"computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
-					"value": null,
-					"helperText": "Average start gage height time for sample"
+					"id": "EDI_SetB_samples_table",
+					"label": "Samples Table",
+					"type": "TableInput",
+					"tabName": "EDI",
+					"layoutGroup": "Set B Information",
+					"colHeaders": [
+						"EDI",
+						"Velocity (ft/sec)",
+						"Depth (feet)",
+						"T-Rate",
+						"Volume (cc)",
+						"Time (sec)",
+						"Ratio of Vertical",
+						"Intake Efficiency"
+					],
+					"rowHeaders": "true",
+					"value": [
+						[
+							"10%"
+						],
+						[
+							"30%"
+						],
+						[
+							"50%"
+						],
+						[
+							"70%"
+						],
+						[
+							"90%"
+						]
+					],
+					"width_xs": 6,
+					"width_lg": 6
 				},
-				{
-					"id": "EDI_setAStartTime",
-					"type": "TimeInput",
-					"value": null,
-					"helperText": "Start sample time for set 1"
-				},
-				{
-					"id": "EDI_setAEndTime",
-					"type": "TimeInput",
-					"value": null,
-					"helperText": "End sample time for set 1"
-				},
-				{
-					"id": "EDI_setStartTimeAvg",
-					"type": "ComputedValue",
-					"computationString": "(setAEndTime+setBEndTime)/2",
-					"value": null,
-					"helperText": "Average start time for sample"
-				},
-				{
-					"id": "EDI_setBStartTime",
-					"type": "TimeInput",
-					"value": null,
-					"helperText": "Start sample time for set 2"
-				},
-				{
-					"id": "EDI_setBEndTime",
-					"type": "TimeInput",
-					"value": null,
-					"helperText": "End of sample time for set 2"
-				},
-				{
-					"id": "EDI_setEndTimeAvg",
-					"type": "ComputedValue",
-					"computationString": "(setAEndTime+setBEndTime)/2",
-					"value": null,
-					"helperText": "Average end time for sample"
-				},
-				{
-					"id": "EDI_setAMeanTime",
-					"type": "ComputedValue",
-					"computationString": "(setAEndTime+setBEndTime)/2",
-					"value": null,
-					"helperText": "Average start time for sample"
-				},
-				{
-					"id": "EDI_setBMeanTime",
-					"type": "ComputedValue",
-					"computationString": "(setAEndTime+setBEndTime)/2",
-					"value": null,
-					"helperText": "Mean time for set B"
-				},
-				{
-					"id": "EDI_MEANTIMEAVG",
-					"type": "ComputedValue",
-					"computationString": "(setAMeanTime+setBMeanTime)/2",
-					"value": null,
-					"helperText": "Average Mean time for sample"
-				},
+
+
+
+
+
+
+
 				{
 					"id": "EDI_sampleIsokinetic",
 					"label": "Sample Isokinetic",
@@ -1705,8 +2020,8 @@
 					"value": false,
 					"helperText": "Toggle Me",
 					"checkbox": false,
-					"tabName": "EDI",
-					"layoutGroup": "Set Information",
+					"tabName": "EWI",
+					"layoutGroup": "Superfly Extras",
 					"width_xs": 2,
 					"width_lg": 2
 				},
@@ -1716,20 +2031,8 @@
 					"type": "Toggle",
 					"value": false,
 					"checkbox": false,
-					"tabName": "EDI",
-					"layoutGroup": "Set Information",
-					"width_xs": 2,
-					"width_lg": 2
-				},
-				{
-					"id": "EDI_intakeEfficiencyCompleted",
-					"label": "Intake Efficiency Completed",
-					"type": "Toggle",
-					"value": false,
-					"helperText": "Toggle Me Also",
-					"checkbox": false,
-					"tabName": "EDI",
-					"layoutGroup": "Set Information",
+					"tabName": "EWI",
+					"layoutGroup": "Superfly Extras",
 					"width_xs": 2,
 					"width_lg": 2
 				},
@@ -1740,18 +2043,7 @@
 					"value": "",
 					"helperText": "ft",
 					"tabName": "EDI",
-					"layoutGroup": "Set Information",
-					"width_xs": 3,
-					"width_lg": 3
-				},
-				{
-					"id": "EDI_transitRate",
-					"label": "Transit Rate (ft/sec)",
-					"type": "Text",
-					"value": "",
-					"placeholder": "ft/sec",
-					"tabName": "EDI",
-					"layoutGroup": "Set Information",
+					"layoutGroup": "Superfly Extras",
 					"width_xs": 3,
 					"width_lg": 3
 				},
@@ -1762,7 +2054,7 @@
 					"value": true,
 					"checkbox": true,
 					"tabName": "EDI",
-					"layoutGroup": "Analysis Information",
+					"layoutGroup": "Superfly Extras",
 					"width_xs": 6,
 					"width_lg": 3
 				},
@@ -1773,71 +2065,14 @@
 					"value": true,
 					"checkbox": true,
 					"tabName": "EDI",
-					"layoutGroup": "Analysis Information",
+					"layoutGroup": "Superfly Extras",
 					"width_xs": 6,
 					"width_lg": 3
 				},
-				{
-					"id": "EDI_numSetAContainers",
-					"label": "Number of containers - set A",
-					"type": "Text",
-					"value": "",
-					"placeholder": "ft/sec",
-					"tabName": "EDI",
-					"layoutGroup": "Analysis Information",
-					"width_xs": 6,
-					"width_lg": 3
-				},
-				{
-					"id": "EDI_numSetBContainers",
-					"label": "Number of containers - set B",
-					"type": "Text",
-					"value": "",
-					"tabName": "EDI",
-					"layoutGroup": "Analysis Information",
-					"width_xs": 6,
-					"width_lg": 3
-				},
-				{
-					"id": "EDI_setAAnalysedFor",
-					"label": "Analyze Set A for:",
-					"type": "MultipleChoice",
-					"options": {
-						"Concentration": "C",
-						"Sand-Fine break": "SF",
-						"Sand Analysis": "SA",
-						"Turbidity": "T",
-						"Loss-on-ignition": "LOI",
-						"Dissolved Solids": "DS",
-						"Specific Conductance": "SC",
-						"Full-size Fractions": "Z"
-					},
-					"value": [],
-					"tabName": "EDI",
-					"layoutGroup": "Analysis Information",
-					"width_xs": 6,
-					"width_lg": 3
-				},
-				{
-					"id": "EDI_setBAnalysedFor",
-					"label": "Analyze Set B for:",
-					"type": "MultipleChoice",
-					"options": {
-						"Concentration": "C",
-						"Sand-Fine break": "SF",
-						"Sand Analysis": "SA",
-						"Turbidity": "T",
-						"Loss-on-ignition": "LOI",
-						"Dissolved Solids": "DS",
-						"Specific Conductance": "SC",
-						"Full-size Fractions": "Z"
-					},
-					"value": [],
-					"tabName": "EDI",
-					"layoutGroup": "Analysis Information",
-					"width_xs": 6,
-					"width_lg": 3
-				},
+
+
+
+
 				{
 					"id": "EWI_samplerType",
 					"label": "Sampler Type",
@@ -2285,193 +2520,6 @@
 					"layoutGroup": "Analysis Information",
 					"width_xs": 6,
 					"width_lg": 3
-				},
-				{
-					"id": "edgeOfWater_Left",
-					"label": "Left Edge Of Water",
-					"type": "Text",
-					"placeholder": "Feet from XYZ",
-					"value": "10",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 6,
-					"width_lg": 2
-				},
-				{
-					"id": "edgeOfSamplingZone_Left",
-					"label": "Left Edge Of Sampling Zone",
-					"type": "Text",
-					"placeholder": "Feet from XYZ",
-					"value": "20",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 6,
-					"width_lg": 3
-				},
-				{
-					"id": "edgeOfSamplingZone_Right",
-					"label": "Right Edge Of Sampling Zone",
-					"type": "Text",
-					"placeholder": "Feet from XYZ",
-					"value": "600",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 6,
-					"width_lg": 3
-				},
-				{
-					"id": "edgeOfWater_Right",
-					"label": "Right Edge Of Water",
-					"type": "Text",
-					"placeholder": "Feet from XYZ",
-					"value": "620",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 6,
-					"width_lg": 2
-				},
-				{
-					"id": "numberOfSamplingPoints",
-					"value": "5",
-					"label": "Sampling Points",
-					"type": "Text",
-					"placeholder": "Number of Points",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 12,
-					"width_lg": 2
-				},
-				{
-					"id": "pier1_start",
-					"label": "Pier 1 Start",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "30",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier2_start",
-					"label": "Pier 2 Start",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "160",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier3_start",
-					"label": "Pier 3 Start",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "210",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier4_start",
-					"label": "Pier 4 Start",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "300",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier5_start",
-					"label": "Pier 5 Start",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier6_start",
-					"label": "Pier 6 Start",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier1_end",
-					"label": "Pier 1 End",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "150",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier2_end",
-					"label": "Pier 2 End",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "200",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier3_end",
-					"label": "Pier 3 End",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "260",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier4_end",
-					"label": "Pier 4 End",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "450",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier5_end",
-					"label": "Pier 5 End",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
-				},
-				{
-					"id": "pier6_end",
-					"label": "Pier 6 End",
-					"type": "Text",
-					"placeholder": "Feet",
-					"value": "",
-					"tabName": "FieldForm",
-					"layoutGroup": "Waterway Info",
-					"width_xs": 2,
-					"width_lg": 1
 				}
 			]
 		}

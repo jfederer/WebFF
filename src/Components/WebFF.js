@@ -105,7 +105,7 @@ class WebFF extends React.Component {
 		this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
 		this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
 		this.getQuestionValue = this.getQuestionValue.bind(this);
-		
+
 	}
 
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
@@ -326,10 +326,9 @@ class WebFF extends React.Component {
 
 
 	createNewSamplingEvent() {
-		console.log("creating new event");
-
 		// create new sampling event 
 		let newSamplingEventID = this.getDateTimeString();
+		let samplingEventName = SAMPLING_EVENT_IDENTIFIER + newSamplingEventID;
 
 		// load initial values from questionsData  (and dialogQuestions?)
 		let questionsValues = {};
@@ -343,10 +342,10 @@ class WebFF extends React.Component {
 		}
 
 		//ensure this sampling event will be sync'd to LS
-		itemsToSyncToLS.push(SAMPLING_EVENT_IDENTIFIER + newSamplingEventID);
+		itemsToSyncToLS.push(samplingEventName);
 
 		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
-		this.setState({ [SAMPLING_EVENT_IDENTIFIER + newSamplingEventID]: newSamplingEvent, curSamplingEventName: SAMPLING_EVENT_IDENTIFIER + newSamplingEventID });
+		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName:samplingEventName }, ()=> this.runAllActionsForCurrentSamplingEvent());
 	}
 
 
@@ -509,28 +508,28 @@ class WebFF extends React.Component {
 		// void return
 
 		// note, this does not warn or error if nothing was found.  This is the expected bahavior, as it's expected questions might be set to 'remove' things that are alrady removed.
-		
+
 		const processHidden = (hiddenArr) => {
 			let cleanName = name.replace(/ /g, '');
 			if (toShow) {
-			  hiddenArr = hiddenArr.filter((item) => item.replace(/ /g, '') !== cleanName)
+				hiddenArr = hiddenArr.filter((item) => item.replace(/ /g, '') !== cleanName)
 			} else {
-			  hiddenArr.push(cleanName)
+				hiddenArr.push(cleanName)
 			}
 			return hiddenArr;
 		}
-	  
+
 		let listName = "hiddenTabs";
-		if(!isTab) {
+		if (!isTab) {
 			listName = "hiddenPanels";
 		}
 
-		this.setState((prevState, props) => ({ [listName]: processHidden([...prevState[listName]])}), () => {
+		this.setState((prevState, props) => ({ [listName]: processHidden([...prevState[listName]]) }), () => {
 			if (typeof CB === "function") {
 				CB();
 			}
 		})
-	  }
+	}
 
 	showQuestion(questionID, toShow) {
 		// find the specific question in this.state.questionData based on the id, then update the hidden property
@@ -771,8 +770,6 @@ class WebFF extends React.Component {
 	questionChangeSystemCallback(Q, dialogQuestion) {
 		// updates current state of questionsData, checks for action string, executes any actions
 
-
-
 		let DEBUG = false;
 		if (DEBUG) console.log(Q);
 		if (DEBUG) console.log("this.state[this.state.curSamplingEventName]: ", this.state[this.state.curSamplingEventName]);
@@ -829,21 +826,21 @@ class WebFF extends React.Component {
 		let updatedSamplingEvent = this.state[this.state.curSamplingEventName];
 		if (DEBUG) console.log("updatedSamplingEvent (PRE): ", updatedSamplingEvent);   // FIXME: this is already updated... not sure how/where.
 		updatedSamplingEvent.questionsValues[Q.props.id] = Q.state.value;
-		if (DEBUG) console.log("updatedSamplingEvent (POST): ", updatedSamplingEvent);
-		this.setState({ stateKey: updatedSamplingEvent }, () => {
 
-			// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
-			// when done, rebuild routs and render pages // performance
+			if (DEBUG) console.log("updatedSamplingEvent (POST): ", updatedSamplingEvent);
+			this.setState({ stateKey: updatedSamplingEvent }, () => {
 
-			this.parseActionsFromQuestion(Q, this.actionExecuter);
+				// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
+				// when done, rebuild routs and render pages // performance
 
-			if (propagateSamplePointData) {
-				this.collectRunAndPropagateSamplePointData()
-			}
+				this.parseActionsFromQuestion(Q, this.actionExecuter);
 
-			this.buildRoutesAndRenderPages();
-		});
+				if (propagateSamplePointData) {
+					this.collectRunAndPropagateSamplePointData()
+				}
 
+				this.buildRoutesAndRenderPages();
+			});
 	}
 
 
@@ -858,6 +855,7 @@ class WebFF extends React.Component {
 			if (questionData.actions) { // check if it has an actions node
 				// it does! let's check the value of this question in our current event
 				let q_val = this.state[this.state.curSamplingEventName].questionsValues[questionData.id];
+				console.log("questionData.id: ", questionData.id, "q_val: ", q_val);
 				this.parseActionsFromQuestion(this.getQuestionData(questionData.id), this.actionExecuter);
 			}
 		})
@@ -1098,7 +1096,6 @@ class WebFF extends React.Component {
 
 			// this sync's this.state.stations to the DB.  WORKS.
 			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
-
 
 		}
 
