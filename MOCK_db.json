@@ -1337,11 +1337,11 @@
 						"Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
 					},
 					"actions": {
-						"US D-96 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
+						"US D-96 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:Intake Efficiency Test",
 						"US DH-2 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
 						"US D-96-A1 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
 						"US D-99 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
-						"Weighted Bottle Sampler": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest",
+						"Weighted Bottle Sampler": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&HidePanel::EDI:Intake Efficiency Test",
 						"Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest",
 						"Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest"
 					},
@@ -1527,62 +1527,54 @@
 				},
 
 
-
-
 				{
-					"id": "EDI_setInfo_table",
-					"label": "Set Info Table",
-					"type": "TableInput",
-					"tabName": "EDI",
-					"layoutGroup": "Set Information",
-					"colHeaders": [
-						"",
-						"Set A",
-						"Set B",
-						"Average"
-					],
-					"rowHeaders": "true",
-					"value": [
-						[
-							"Start Time",
-							"SubQuestion::setAStartTime",
-							"SubQuestion::setBStartTime",
-							"SubQuestion::setStartTimeAvg"
-						],
-						[
-							"Gage Height(Start)",
-							"SubQuestion::setAStartGageHeight",
-							"SubQuestion::setBStartGageHeight",
-							"SubQuestion::startGageHeightAvg"
-						],
-						[
-							"End Time",
-							"SubQuestion::setAEndTime",
-							"SubQuestion::setBEndTime",
-							"SubQuestion::setEndTimeAvg"
-						],
-						[
-							"Gage Height(End)",
-							"SubQuestion::setAEndGageHeight",
-							"SubQuestion::setBEndGageHeight",
-							"SubQuestion::endGageHeightAvg"
-						],
-						[
-							"Mean Time",
-							"SubQuestion::setAMeanTime",
-							"SubQuestion::setBMeanTime",
-							"SubQuestion::MEANTIMEAVG"
-						]
-					],
-					"width_xs": 6,
-					"width_lg": 6
+					"id": "EDI_setA_StartTime",
+					"label": "Start Time",
+					"type": "TimeInput",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"value": ""
 				},
 				{
-					"id": "EDI_samples_table",
+					"id": "EDI_setA_StartGageHeight",
+					"label": "Start Gage Ht",
+					"placeholder": "feet",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"type": "Text",
+					"value": ""
+				},
+				{
+					"id": "EDI_setA_EndTime",
+					"label": "End Time",
+					"type": "TimeInput",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"value": ""
+				},
+				{
+					"id": "EDI_setA_EndGageHeight",
+					"label": "End Gage Ht",
+					"placeholder": "feet",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"type": "Text",
+					"value": ""
+				},
+				{
+					"id": "EDI_setA_AvgGageHeight",
+					"label": "Avg Gage Ht",
+					"tabName":"EDI",
+					"layoutGroup": "Set A Information",
+					"type": "ComputedValue",
+					"computationString": "(EDI_setA_StartGageHeight+EDI_setA_EndGageHeight)/2"
+				},
+				{
+					"id": "EDI_SetA_samples_table",
 					"label": "Samples Table",
 					"type": "TableInput",
 					"tabName": "EDI",
-					"layoutGroup": "Set Information",
+					"layoutGroup": "Set A Information",
 					"colHeaders": [
 						"EDI",
 						"Velocity (ft/sec)",
@@ -1614,12 +1606,7 @@
 					"width_xs": 6,
 					"width_lg": 6
 				},
-				{
-					"id": "EDI_setAStartGageHeight",
-					"type": "Text",
-					"helperText": "P0032",
-					"value": "5"
-				},
+			
 				{
 					"id": "EDI_setBStartGageHeight",
 					"type": "Text",

@@ -52,9 +52,9 @@ class ComputedValue extends React.Component {
 	computeValue(updateState) {
 		//console.log("CV");
 		//computes value from computationString based on values in LS and optionally updates state and LS
-		let DEBUG = false;
+		let DEBUG = true;
 		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
-
+		console.log(this.props);
 		let computedValue = "";
 		let shouldCompute = true;
 
@@ -67,8 +67,8 @@ class ComputedValue extends React.Component {
 
 		// split the computation string into constituent components
 		//TODO: remove spaces
-		// let splitCS = this.props.computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
-		let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
+		let splitCS = this.props.computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
+		//let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
 		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
 
@@ -82,20 +82,17 @@ class ComputedValue extends React.Component {
 				splitCS[i] === null) && isNaN(splitCS[i])) {
 				if (DEBUG) console.log(splitCS[i] + " is a question!");
 				// splitCS[i] is a questionID
-				let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]);
-				if (DEBUG) console.log("subQuestion Q: ", Q);
+				let q_id = splitCS[i];
+				let q_val = this.props.questionsValues[splitCS[i]];
+				//let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]); //TODO: switch to get questionValue
+				// if (DEBUG) console.log("subQuestion Q: ", Q);
 
 				// check that all values returned without fail
-				if (Q === null) {
-					//TODO: Throw error
-					if (DEBUG) console.log(splitCS[i] + " question was not found");
-					shouldCompute = false;
-				} else if (Q.value === "" || Q.value === null) {
-					//TODO: Throw error
-					if (DEBUG) console.log(splitCS[i] + " question has null value");
+				if (q_val === null || q_val === "") {
+					if (DEBUG) console.log(q_id + " question was not found");
 					shouldCompute = false;
 				} else { //TODO: Check if number?
-					splitCS[i] = Q.value;
+					splitCS[i] = q_val;
 				}
 			}
 		}

@@ -59,7 +59,7 @@ class QuestionPage extends React.Component {
 			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
 	
 			layoutGroupNames = layoutGroupNames.filter((groupName) => {
-				return !hiddenPanels.includes(tabName+":"+groupName); 
+				return !hiddenPanels.includes(tabName.replace(/ /g,'')+":"+groupName.replace(/ /g,'')) && !hiddenPanels.includes(tabName+":"+groupName); 
 			})
 				
 			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {

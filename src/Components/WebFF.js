@@ -104,6 +104,8 @@ class WebFF extends React.Component {
 		this.removeStation = this.removeStation.bind(this);
 		this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
 		this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
+		this.getQuestionValue = this.getQuestionValue.bind(this);
+		
 	}
 
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
@@ -275,7 +277,7 @@ class WebFF extends React.Component {
 			}
 
 
-		
+
 		} else {
 			// pull everything from DB
 			this.fetchDBInfo(query, (JSONresponse) => {
@@ -445,10 +447,10 @@ class WebFF extends React.Component {
 		}
 		switch (splitActionString[0]) {
 			case "ShowTab":
-				this.showTab(splitActionString[1], true, this.buildRoutesAndRenderPages());
+				this.showTabOrPanel(splitActionString[1], true, true, this.buildRoutesAndRenderPages());
 				break;
 			case "HideTab":
-				this.showTab(splitActionString[1], false, this.buildRoutesAndRenderPages());
+				this.showTabOrPanel(splitActionString[1], false, true, this.buildRoutesAndRenderPages());
 				break;
 			case "ShowQuestion":
 				this.showQuestion(splitActionString[1], true);
@@ -459,12 +461,10 @@ class WebFF extends React.Component {
 				this.buildRoutesAndRenderPages();
 				break;
 			case "ShowPanel":
-				this.showQuestionPanel(splitActionString[1], true, this.buildRoutesAndRenderPages());
-				this.buildRoutesAndRenderPages();
+				this.showTabOrPanel(splitActionString[1], true, false, this.buildRoutesAndRenderPages());
 				break;
 			case "HidePanel":
-				this.showQuestionPanel(splitActionString[1], false, this.buildRoutesAndRenderPages());
-				
+				this.showTabOrPanel(splitActionString[1], false, false, this.buildRoutesAndRenderPages());
 				break;
 			default:
 				console.warn("Requested action '" + splitActionString[0] + "' not recognized");
@@ -472,7 +472,7 @@ class WebFF extends React.Component {
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
-		this.showTab(tabName, add);
+		this.showTabOrPanel(tabName, add, true);
 	}
 
 	jsonToNavMenu(jsonNavData) {
@@ -501,36 +501,36 @@ class WebFF extends React.Component {
 		return retMenu;
 	}
 
-	showTab(tabName, toShow, CB) {
+	showTabOrPanel(name, toShow, isTab, CB) {  //*****
+		// name: name of tab, formatted 'PAGE_NAME:PANEL_NAME"... whitespacing doesn't not matter.
+		// toShow: whether to show the panel or not (done by adding or removing panelName from from this.state.hiddenPanels)
+		// isTab: boolean... if true, name is a tab (and we'll use hiddenTabs), if false, name is a panel (and we'll use hiddenPanels)
+		// CB: callback function after the state has been set.
+		// void return
 
-		// let newHiddenTabs = this.state.hiddenTabs.slice();
-		let newHiddenTabs = this.state.hiddenTabs;
-		// console.log("After copy: ", newHiddenTabs);
-		let cleanTabName = tabName.replace(/ /g, '');
-		if (toShow) {
-			// remove all instances from newHiddenTabs
-			while (newHiddenTabs.includes(cleanTabName)) {
-				let index = newHiddenTabs.indexOf(cleanTabName);
-				if (index > -1) {
-					newHiddenTabs.splice(index, 1);
-				}
+		// note, this does not warn or error if nothing was found.  This is the expected bahavior, as it's expected questions might be set to 'remove' things that are alrady removed.
+		
+		const processHidden = (hiddenArr) => {
+			let cleanName = name.replace(/ /g, '');
+			if (toShow) {
+			  hiddenArr = hiddenArr.filter((item) => item.replace(/ /g, '') !== cleanName)
+			} else {
+			  hiddenArr.push(cleanName)
 			}
-			// console.log("After removal: ", newHiddenTabs);
-		} else {
-			// add tabName to newHiddenTabs
-			newHiddenTabs.push(cleanTabName);
-			// console.log("After addition: ", newHiddenTabs);
-
+			return hiddenArr;
 		}
-		// console.log("Before setting state: ", newHiddenTabs);
-		this.setState({ hiddenTabs: newHiddenTabs }, () => {
-			// console.log("STATE after setting state: ", this.state.hiddenTabs);
-			if(typeof CB === "function") {
+	  
+		let listName = "hiddenTabs";
+		if(!isTab) {
+			listName = "hiddenPanels";
+		}
+
+		this.setState((prevState, props) => ({ [listName]: processHidden([...prevState[listName]])}), () => {
+			if (typeof CB === "function") {
 				CB();
 			}
-			}
-		);
-	}
+		})
+	  }
 
 	showQuestion(questionID, toShow) {
 		// find the specific question in this.state.questionData based on the id, then update the hidden property
@@ -573,27 +573,7 @@ class WebFF extends React.Component {
 		//		localStorage.setItem('questionsData', JSON.stringify(rawData));
 	}
 
-	showQuestionPanel(panelName, toShow, CB) {
-		// panelName: name of panel, formatted 'PAGE_NAME:PANEL_NAME"...
-		// add or remove the panelName from this.state.hiddenPanels
-		// console.log("this.state.hiddenPanels:", this.state.hiddenPanels);
-		let newHiddenPanels = this.state.hiddenPanels;
-		// console.log("toShow: ", toShow);
-		if (toShow) {  // remove all instances of panelName from hiddenPanels
-			while (newHiddenPanels.includes(panelName)) {
-				let index = newHiddenPanels.indexOf(panelName);
-				if (index > -1) {
-					newHiddenPanels.splice(index, 1);
-				}
-			}
-		} else { // not toShow:  add panelName to newHiddenPanels
-			if (!newHiddenPanels.includes(panelName)) {
-				newHiddenPanels.push(panelName);
-			}
-		}
-		// console.log("showQuestionPanel: newHiddenPanels: ", newHiddenPanels);
-		this.setState({ hiddenPanels: newHiddenPanels }, CB);
-	}
+
 
 	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
 		//this function saves updated question "values" (must be located at "Q.state.value")
@@ -641,11 +621,11 @@ class WebFF extends React.Component {
 		// value: value that key will be set to
 		// CB: callback function to be called after the value has been set
 		// void return
-		
+
 		// sets the 'key' element to 'value' for the question with question id of q_id ... 
 		// when looking for q_id, searches default questions (questionsData) first, then dialog questions, then TODO: user/station questions
 		// if the key is 'value', store value in the current sampling event or TODO: the dialogQuestions
-		
+
 		// TODO: throws error if no question matching q_id is found
 
 		// note, when trying to set the value of a question, it should be saved in the samplingEvent.... or optionally in the dialogQuestions. Non-default values do not get saved to questionData
@@ -753,7 +733,6 @@ class WebFF extends React.Component {
 	parseActionsFromQuestion(Q, actionExecuter) {  //TODO: probably can fix the fact we have two of these functions
 		// Q can be a Question Component OR questionData object -- differentiated by the presence of 'props'
 		// note, if questionData is passed, we get the value from the currentSamplingEvent
-		console.log(Q);
 		let actionsExist = false;
 		let q_id;
 		let actions;
@@ -1120,7 +1099,7 @@ class WebFF extends React.Component {
 			// this sync's this.state.stations to the DB.  WORKS.
 			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
 
-			
+
 		}
 
 		// build the curDialogXXX data

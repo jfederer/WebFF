@@ -18,7 +18,7 @@ export const createQuestionComponents = (questionsData, changeHandler, _globalSt
 				//console.log("Value from questionVALUES: ", value);
 			}
 
-			return <Question {...questionData} value={value} stateChangeHandler={changeHandler} globalState={_globalState}/>
+			return <Question {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState}/>
 		});
     }
 
