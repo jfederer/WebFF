@@ -143,7 +143,6 @@ class WebFF extends React.Component {
 	}
 
 	attemptToSyncStationDataToQuestionData(stationsIn) {
-		//console.log("Attempting");
 		let stationNameQ = this.getQuestionData("stationName");
 		if (stationNameQ === null) {
 			return;
@@ -162,7 +161,6 @@ class WebFF extends React.Component {
 			newOptions[stationsToSync[i].id] = stationsToSync[i].id;
 		}
 
-		//console.log("New Options: ", newOptions);
 		this.setQuestionData("deleteStation_stationName", "options", newOptions);
 		this.setQuestionData("stationName", "options", newOptions, this.buildRoutesAndRenderPages);
 
@@ -575,7 +573,7 @@ class WebFF extends React.Component {
 
 
 
-	setQuestionData(q_id, key, value, CB) { //*
+	setQuestionData(q_id, key, value, CB) { //**
 		// q_id: string question ID associated with a question
 		// key: string used as key in questionData object
 		// value: value that key will be set to
@@ -588,12 +586,11 @@ class WebFF extends React.Component {
 
 		// TODO: throws error if no question matching q_id is found
 
-		// note, when trying to set the value of a question, it should be saved in the samplingEvent.... or optionally in the dialogQuestions. Non-default values do not get saved to questionData
-
 		// TODO: performance: rebuilds entire questionsData... needlessly?
 
 		if (key === "value") { // updating value is special and has it's own storage locations.  Call appropriate function that handles it well.
 			this.setQuestionValue(q_id, value, CB);
+			return;
 		}
 
 		let anyFound = false;
@@ -803,11 +800,11 @@ class WebFF extends React.Component {
 				}
 			}
 			let stationData = this.state.stations[stationIndex];
-			if (true) console.log("stationData", stationData);
+			if (DEBUG) console.log("stationData", stationData);
 
 			for (let i = 0; i < questionIDsLinkedToStationName.length; i++) {
 				let q_id = questionIDsLinkedToStationName[i];
-				this.setQuestionData(q_id, "value", stationData[q_id], this.buildRoutesAndRenderPages);
+				this.setQuestionValue(q_id, stationData[q_id], this.buildRoutesAndRenderPages);
 			}
 		}
 
@@ -992,7 +989,7 @@ class WebFF extends React.Component {
 				newVal[i] = [tempValArr[i]];
 			}
 
-			this.setQuestionData("EWI_samples_table", "value", newVal);
+			this.setQuestionData("EWI_samples_table", newVal);
 		}
 	}
 
@@ -1112,47 +1109,11 @@ class WebFF extends React.Component {
 		//TODO: standardize 'placeholder' within questions
 		//TODO: utilize isLoaded to hold off processing until done loading
 
-
-		// this.putDBInfo("generatedQuestions",
-		// [{"testName":"Joe", "id":"smelven"},
-		// {"testName":"Mark", "id":"tensie"},
-		// {"testName":"Jan", "id":"oldest"}]
-		// );
-
 		if (menuText === "Test Connection") {
 			console.log("Testing ...")
 
 			// this sync's this.state.stations to the DB.  WORKS.
 			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
-
-			try {
-			this.setQuestionValue("EDI_collectingAgencyOther", "testEntry", () => {
-				console.log("Test in curEvent:  RESULTS:  EXPECT 'testEntry' : ", this.getQuestionValue("EDI_collectingAgencyOther"), 
-					"EXPECT 'yippie':", this.state.questionsData.filter((q) => q.id === "EDI_collectingAgencyOther")[0].value)
-			});}
-			catch(err) {console.log("test 1 caught");}
-
-			try {
-			this.setQuestionValue("newStation_stationName", "test Dialog Entry", () => {
-				console.log("Test in dialog: RESULTS:  EXPECT 'test Dialog Entry' : ", this.getQuestionValue("newStation_stationName"));
-			});}
-			catch(err) {console.log("test 2 caught");}
-
-			try{
-			this.setQuestionValue("TEST_rando", "Test Exotic", () => {
-				console.log("Test in questionsData but NOT in curEvent or dialog: RESULTS:  EXPECT 'Test Exotic' : ", this.getQuestionValue("TEST_rando"),
-					"EXPECT 'Test Exotic':", this.state.questionsData.filter((q) => q.id === "TEST_rando")[0].value)
-			});
-			}
-			catch(err) {console.log("test 3 caught");}
-
-			try{
-			this.setQuestionValue("garbage", "garbage entry", () => {
-				console.log("Test not in anything (expect error)  RESULTS:  EXPECT 'garbage' : ", this.getQuestionValue("garbage"), 
-				"EXPECT 'garbage':", this.state.questionsData.filter((q) => q.id === "garbage")[0].value)
-			});}
-			catch(err) {console.log("test 4 caught:", err);}
-
 
 		}
 
