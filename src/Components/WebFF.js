@@ -105,6 +105,7 @@ class WebFF extends React.Component {
 		this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
 		this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
 		this.getQuestionValue = this.getQuestionValue.bind(this);
+		this.setQuestionValue = this.setQuestionValue.bind(this);
 
 	}
 
@@ -345,7 +346,7 @@ class WebFF extends React.Component {
 		itemsToSyncToLS.push(samplingEventName);
 
 		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
-		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName:samplingEventName }, ()=> this.runAllActionsForCurrentSamplingEvent());
+		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName: samplingEventName }, () => this.runAllActionsForCurrentSamplingEvent());
 	}
 
 
@@ -574,45 +575,6 @@ class WebFF extends React.Component {
 
 
 
-	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
-		//this function saves updated question "values" (must be located at "Q.state.value")
-		// returns updated questionsData object
-		var DEBUG = false;
-		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
-		if (Q == null) { //POC
-			console.log("Question passed to getQuestionsDataWithUpdatedValue was null or undefined");
-			return;
-		}
-
-		// find the specific question in questionsData  or curDialogQuestions based on the id,then update the value property
-		let questionsToFilter = this.state.curDialogQuestions;
-		if (!dialogQuestions) {
-			questionsToFilter = this.state.questionsData;
-		}
-
-		var newQuestionsData = questionsToFilter.filter(questionData => {
-			//console.log("QuestionData: ", questionData);
-			if (questionData.id === Q.props.id) {
-				if (DEBUG) console.log("------FOUND!--------");
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
-
-				questionData.value = Q.state.value;
-
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
-			} else {
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
-			}
-			return questionData;
-		});
-
-		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
-
-		return newQuestionsData;
-	}
-
-
-
 	updateQuestionData(q_id, key, value, CB) { //*
 		//FIXME: if the key is value, does not look to store in dialogQuestions
 		// q_id: string question ID associated with a question
@@ -696,13 +658,70 @@ class WebFF extends React.Component {
 		}
 	}
 
-	getQuestionValue(q_id) { //*****
+	setQuestionValue(q_id, value, CB) { //**** // return should be better
+		// q_id: string question ID associated with a question
+		// value: value that should be saved in state
+		// CB: function that should be called after setState
+		// returns void (TODO: return questoinData format associated with the q_id WITH the updated value inserted)
+		// sets the value of the first question it finds while searching in this order:currentSamplingEvent, dialogQuestions, then, finally, questionsData.
+		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
+		// throws error if no question is found
+
+		let DEBUG=false;
+		if(DEBUG)console.log("setQuestionValue(" + q_id + ", "+value+")");
+
+		// search in current Sampling Event
+		let curSE = Object.assign({},this.state[this.state.curSamplingEventName]);
+		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
+			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in setQuestionValue(" + q_id + ", "+value+")");
+		}
+		if (q_id in curSE.questionsValues) {
+			let newQuestionsValues = curSE.questionsValues;
+			//console.log("newQuestionsValues PRE)", newQuestionsValues); //TODO: the value is already correct here... BEFORE we have even set it.
+			newQuestionsValues[q_id] = value;
+			let newCurSE = {...curSE, questionsValues:newQuestionsValues};
+			this.setState({ [this.state.curSamplingEventName]: newCurSE} , CB);
+			return;
+		}
+
+		// search in dialog questions
+		let newDQ = this.state.dialogQuestions.slice();
+		for (let i = 0; newDQ && i < newDQ.length; i++) {
+			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
+				if (newDQ[i].questions[k].id === q_id) {
+					newDQ[i].questions[k].value = value;
+					this.setState({"dialogQuestions":newDQ}, CB);
+					return; 
+				}
+			}
+		}
+
+		// search in questions data.  given this should be very rare, give a warning.
+		let newQD = this.state.questionsData.slice();
+		for (let i = 0; newQD && i < newQD.length; i++) {
+			if (newQD[i].id === q_id) {
+				console.warn("Setting value ("+value+") on " + q_id + " and it only exists in questionsDialog.  This should be investigated, as it should be very rare.")
+				newQD[i].value = value;
+				this.setState({questionsData:newQD}, CB);
+				return ;
+			}
+		}
+
+		throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
+	}
+
+	getQuestionValue(q_id) { //****  //TODO: error reasonably when  curSamplingEvent is undefined
 		// q_id: string question ID associated with a question
 		// returns VALUE associated with the q_id... first searching currentSamplingEvent, then searching the dialogQuestions, then, finally, questionsData.
 		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
 		// throws error if no question is found
-		if (q_id in this.state[this.state.curSamplingEventName].questionsValues) {
-			return this.state[this.state.curSamplingEventName].questionsValues[q_id];
+		let curSE = Object.assign({},this.state[this.state.curSamplingEventName]);
+		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
+			// current sampling event is not loaded or is malformed.
+			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in getQuestionValue(" + q_id + ")");
+		}
+		if (q_id in curSE.questionsValues) {
+			return curSE.questionsValues[q_id];
 		}
 
 		for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
@@ -768,11 +787,19 @@ class WebFF extends React.Component {
 	}
 
 	questionChangeSystemCallback(Q, dialogQuestion) {
-		// updates current state of questionsData, checks for action string, executes any actions
+		// Q: Question COMPONENT (presumably that just called this)
+		// dialogQuestoin: Boolean of if Q is a 'dialogQuestion'. Optional (missing value will be treated as normal question)
+		// updates value of Q in state, checks for action string, executes any actions
 
 		let DEBUG = false;
-		if (DEBUG) console.log(Q);
+		if (DEBUG) console.log("questionChangeSystemCallback: ", Q, "   dialogQuestion: ", dialogQuestion);
+		if (DEBUG) console.log("this.state.curSamplingEventName: ", this.state.curSamplingEventName);
 		if (DEBUG) console.log("this.state[this.state.curSamplingEventName]: ", this.state[this.state.curSamplingEventName]);
+
+		if (Q == null) {
+			throw new Error("questionChangeSystemCallback required field, question, is null");
+		}
+
 		//HARDCODE for paper settings:
 		if (Q.props.id === "settings_paper") {
 			this.setState({ usePaper: Q.state.value });
@@ -798,7 +825,6 @@ class WebFF extends React.Component {
 			}
 		}
 
-
 		//HARDCODE for numberOfSamplingPoints
 		let propagateSamplePointData = false;
 		if (Q.props.id === "numberOfSamplingPoints") {
@@ -806,42 +832,53 @@ class WebFF extends React.Component {
 			propagateSamplePointData = true;
 		}
 
-		if (Q == null) {
-			//TODO: throw error
-			console.log("questionChangeSystemCallback required field, question, is null");
-		}
-
-		let stateKey = this.state.curSamplingEventName;
-		if (dialogQuestion) {
-			stateKey = "curDialogQuestions";
-		}
-
-		//TODO: this should use updateQuestionData to change the values instead of calling setState here...
-		// save updated value to samplingEvent in state:
-		let updatedQuestionData = this.getQuestionsDataWithUpdatedValue(Q, dialogQuestion);
-		this.setState({ "curDialogQuestions": updatedQuestionData }, () => { this.parseActionsFromQuestion(Q, this.actionExecuter); });
-
-		if (DEBUG) console.log("this.state.curSamplingEventName: ", this.state.curSamplingEventName);
-		if (DEBUG) console.log("Q.props.id: ", Q.props.id);
-		let updatedSamplingEvent = this.state[this.state.curSamplingEventName];
-		if (DEBUG) console.log("updatedSamplingEvent (PRE): ", updatedSamplingEvent);   // FIXME: this is already updated... not sure how/where.
-		updatedSamplingEvent.questionsValues[Q.props.id] = Q.state.value;
-
-			if (DEBUG) console.log("updatedSamplingEvent (POST): ", updatedSamplingEvent);
-			this.setState({ stateKey: updatedSamplingEvent }, () => {
-
-				// after state is set, check if there are additional actions needed based on the actionOptions or other special needs in this question, Q
-				// when done, rebuild routs and render pages // performance
-
-				this.parseActionsFromQuestion(Q, this.actionExecuter);
-
-				if (propagateSamplePointData) {
-					this.collectRunAndPropagateSamplePointData()
-				}
-
-				this.buildRoutesAndRenderPages();
-			});
+		this.setQuestionValue(Q.props.id, Q.state.value, ()=> {
+			this.parseActionsFromQuestion(Q, this.actionExecuter);
+			if (propagateSamplePointData) {
+				this.collectRunAndPropagateSamplePointData();
+			}
+			this.buildRoutesAndRenderPages();
+		});
 	}
+
+	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
+		//this function saves updated question "values" (must be located at "Q.state.value")
+		// returns updated questionsData object
+		var DEBUG = false;
+		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
+		if (Q == null) { //POC
+			console.log("Question passed to getQuestionsDataWithUpdatedValue was null or undefined");
+			return;
+		}
+
+		// find the specific question in questionsData  or curDialogQuestions based on the id,then update the value property
+		let questionsToFilter = this.state.curDialogQuestions;
+		if (!dialogQuestions) {
+			questionsToFilter = this.state.questionsData;
+		}
+
+		var newQuestionsData = questionsToFilter.filter(questionData => {
+			//console.log("QuestionData: ", questionData);
+			if (questionData.id === Q.props.id) {
+				if (DEBUG) console.log("------FOUND!--------");
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
+
+				questionData.value = Q.state.value;
+
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
+			} else {
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
+			}
+			return questionData;
+		});
+
+		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
+
+		return newQuestionsData;
+	}
+
+
 
 
 	loadSamplingEvent(samplingEventName) {
@@ -850,12 +887,16 @@ class WebFF extends React.Component {
 	}
 
 
-	runAllActionsForCurrentSamplingEvent() {
+	runAllActionsForCurrentSamplingEvent() { //***   not a fan of the use of getQuestionData
+		// runs through every question in questionsData, if that question has actions checks the value of said question and runs appropraite actions
+		let DEBUG = false;
 		this.state.questionsData.map((questionData) => { // for each question
 			if (questionData.actions) { // check if it has an actions node
 				// it does! let's check the value of this question in our current event
-				let q_val = this.state[this.state.curSamplingEventName].questionsValues[questionData.id];
-				console.log("questionData.id: ", questionData.id, "q_val: ", q_val);
+				if (DEBUG) {
+					let q_val = this.state[this.state.curSamplingEventName].questionsValues[questionData.id];
+					console.log("questionData.id: ", questionData.id, "q_val: ", q_val);
+				}
 				this.parseActionsFromQuestion(this.getQuestionData(questionData.id), this.actionExecuter);
 			}
 		})
@@ -1083,6 +1124,7 @@ class WebFF extends React.Component {
 		//TODO: standardize tooltips within questions
 		//TODO: standardize 'styles' within questions
 		//TODO: standardize 'placeholder' within questions
+		//TODO: utilize isLoaded to hold off processing until done loading
 
 
 		// this.putDBInfo("generatedQuestions",
@@ -1096,6 +1138,35 @@ class WebFF extends React.Component {
 
 			// this sync's this.state.stations to the DB.  WORKS.
 			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
+
+			try {
+			this.setQuestionValue("EDI_collectingAgencyOther", "testEntry", () => {
+				console.log("Test in curEvent:  RESULTS:  EXPECT 'testEntry' : ", this.getQuestionValue("EDI_collectingAgencyOther"), 
+					"EXPECT 'yippie':", this.state.questionsData.filter((q) => q.id === "EDI_collectingAgencyOther")[0].value)
+			});}
+			catch(err) {console.log("test 1 caught");}
+
+			try {
+			this.setQuestionValue("newStation_stationName", "test Dialog Entry", () => {
+				console.log("Test in dialog: RESULTS:  EXPECT 'test Dialog Entry' : ", this.getQuestionValue("newStation_stationName"));
+			});}
+			catch(err) {console.log("test 2 caught");}
+
+			try{
+			this.setQuestionValue("TEST_rando", "Test Exotic", () => {
+				console.log("Test in questionsData but NOT in curEvent or dialog: RESULTS:  EXPECT 'Test Exotic' : ", this.getQuestionValue("TEST_rando"),
+					"EXPECT 'Test Exotic':", this.state.questionsData.filter((q) => q.id === "TEST_rando")[0].value)
+			});
+			}
+			catch(err) {console.log("test 3 caught");}
+
+			try{
+			this.setQuestionValue("garbage", "garbage entry", () => {
+				console.log("Test not in anything (expect error)  RESULTS:  EXPECT 'garbage' : ", this.getQuestionValue("garbage"), 
+				"EXPECT 'garbage':", this.state.questionsData.filter((q) => q.id === "garbage")[0].value)
+			});}
+			catch(err) {console.log("test 4 caught:", err);}
+
 
 		}
 

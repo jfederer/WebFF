@@ -2615,13 +2615,6 @@
           "projectName": "Plum's Project",
           "projectID": "PID",
           "agencyCode": "PCA"
-        },
-        {
-          "id": "Rum River",
-          "stationNumber": "9998",
-          "projectName": "Bacardi",
-          "projectID": "BAC",
-          "agencyCode": "ATF"
         }
       ],
       "SamplingEvent:2018-08-11@14:29:29": {
