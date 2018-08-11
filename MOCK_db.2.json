@@ -2009,66 +2009,6 @@
 
 
 				{
-					"id": "EDI_timeDatum",
-					"label": "Time Datum",
-					"XMLTag": "TimeDatum",
-					"type": "DropDown",
-					"tabName": "EDI",
-					"layoutGroup": "QWDATA Info",
-					"options": {
-						"SITEFILE Default": "Use Default from SITEFILE",
-						"Atlantic Standard Time":"AST",
-						"Atlantic Daylight Time":"ADT", 
-						"Eastern Standard Time":"EST",
-						"Eastern Daylight Time": "EDT", 
-						"Central Standard Time":"CST",
-						"Central Daylight Time":"CDT",
-						"Mountain Standard Time": "MST",
-						"Mountain Daylight Time": "MDT",
-						"Pacific Standard Time": "PST",
-						"Pacific Daylight Time": "PDT",
-						"Alaska Standard Time": "AKST", 
-						"Alaska Daylight Time":"AKDT", 
-						"Hawaii–Aleutian Standard Time":"HST", 
-						"Hawaii–Aleutian Daylight Time":"HDT"
-					},
-					"value":"Use Default from SITEFILE",
-					"width_xs": 4,
-					"width_lg": 4
-				},{
-					"id": "EDI_collectingAgency",
-					"label": "Collecting Agency",
-					"XMLTag":"CollecAgency",
-					"type": "DropDown",
-					"tabName": "EDI",
-					"layoutGroup": "QWDATA Info",
-					"options": {
-						"USGS-WRD":"USGS-WRD",
-						"USGS-GD":"USGS-GD",
-						"Observer":"Observer", 
-						"Other":"Other"
-					},
-					"actions":{
-						"USGS-WRD":"HideQuestion::EDI_collectingAgencyOther",
-						"USGS-GD":"HideQuestion::EDI_collectingAgencyOther",
-						"Observer":"HideQuestion::EDI_collectingAgencyOther", 
-						"Other":"ShowQuestion::EDI_collectingAgencyOther"
-					},
-					"value":"Use Default from SITEFILE",
-					"width_xs": 4,
-					"width_lg": 4
-				}, {
-					"id": "EDI_collectingAgencyOther",
-					"label": "Other:",
-					"XMLTag":"CollecAgencyOther",
-					"hidden": true,
-					"type": "Text",
-					"tabName": "EDI",
-					"layoutGroup": "QWDATA Info",
-					"width_xs": 4,
-					"width_lg": 4
-				},
-				{
 					"id": "EDI_QWDATA_Table",
 					"label": "QWDATA Samples Table",
 					"type": "TableInput",
@@ -2081,10 +2021,9 @@
 						"Remark",
 						"Sample Time"
 					],
-					"value":[],
 					"rowHeaders": "true",
-					"width_xs": 12,
-					"width_lg": 12
+					"width_xs": 6,
+					"width_lg": 6
 				},
 				
 
