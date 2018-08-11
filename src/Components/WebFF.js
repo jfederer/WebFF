@@ -163,8 +163,8 @@ class WebFF extends React.Component {
 		}
 
 		//console.log("New Options: ", newOptions);
-		this.updateQuestionData("deleteStation_stationName", "options", newOptions);
-		this.updateQuestionData("stationName", "options", newOptions, this.buildRoutesAndRenderPages);
+		this.setQuestionData("deleteStation_stationName", "options", newOptions);
+		this.setQuestionData("stationName", "options", newOptions, this.buildRoutesAndRenderPages);
 
 		needToSyncStationDataToQuestionData = false;
 	}
@@ -575,8 +575,7 @@ class WebFF extends React.Component {
 
 
 
-	updateQuestionData(q_id, key, value, CB) { //*
-		//FIXME: if the key is value, does not look to store in dialogQuestions
+	setQuestionData(q_id, key, value, CB) { //*
 		// q_id: string question ID associated with a question
 		// key: string used as key in questionData object
 		// value: value that key will be set to
@@ -584,8 +583,8 @@ class WebFF extends React.Component {
 		// void return
 
 		// sets the 'key' element to 'value' for the question with question id of q_id ... 
-		// when looking for q_id, searches default questions (questionsData) first, then dialog questions, then TODO: user/station questions
-		// if the key is 'value', store value in the current sampling event or TODO: the dialogQuestions
+		// when looking for q_id, searches default questions (questionsData) first, TODO: then dialog questions, then TODO: user/station questions
+		// TODO: if the key is 'value', offload to "setQuestionValue" function
 
 		// TODO: throws error if no question matching q_id is found
 
@@ -593,21 +592,8 @@ class WebFF extends React.Component {
 
 		// TODO: performance: rebuilds entire questionsData... needlessly?
 
-
-		if (key === "value") { // updating value is special -- as the value is stored in dialogQuestions or the samplingEvent or custom user/station questions... NOT questionsData
-			//is the q_id in the eventSample?
-			if (Object.keys(this.state[this.state.curSamplingEventName].questionsValues).includes(q_id)) {
-				// it is! ... so let's set the value in there
-				let newSamplingEvent = this.state[this.state.curSamplingEventName];
-				// console.log("(PRE)newSamplingEvent : ", newSamplingEvent);
-				// console.log("(PRE)newSamplingEvent.questionsValues[q_id]", newSamplingEvent.questionsValues[q_id]);
-				// console.log("(PRE)value: ", value);
-				newSamplingEvent.questionsValues[q_id] = value;
-
-				console.log("newSamplingEvent (POST): ", newSamplingEvent);
-				this.setState({ [this.state.curSamplingEventName]: newSamplingEvent }, CB);
-				return;
-			}
+		if (key === "value") { // updating value is special and has it's own storage locations.  Call appropriate function that handles it well.
+			this.setQuestionValue(q_id, value, CB);
 		}
 
 		let anyFound = false;
@@ -821,7 +807,7 @@ class WebFF extends React.Component {
 
 			for (let i = 0; i < questionIDsLinkedToStationName.length; i++) {
 				let q_id = questionIDsLinkedToStationName[i];
-				this.updateQuestionData(q_id, "value", stationData[q_id], this.buildRoutesAndRenderPages);
+				this.setQuestionData(q_id, "value", stationData[q_id], this.buildRoutesAndRenderPages);
 			}
 		}
 
@@ -1006,7 +992,7 @@ class WebFF extends React.Component {
 				newVal[i] = [tempValArr[i]];
 			}
 
-			this.updateQuestionData("EWI_samples_table", "value", newVal);
+			this.setQuestionData("EWI_samples_table", "value", newVal);
 		}
 	}
 
