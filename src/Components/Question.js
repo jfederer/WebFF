@@ -12,6 +12,7 @@ import DateInput from './Questions/DateInput';
 import TimeInput from './Questions/TimeInput';
 import Hidden from '@material-ui/core/Hidden';
 import ComputedValue from './Questions/ComputedValue';
+import ButtonInput from './Questions/ButtonInput';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -101,9 +102,13 @@ class Question extends React.Component {
 				theQ = <TimeInput {...this.props} />;
 				break;
 			}
+			case 'ButtonInput' : {
+				theQ = <ButtonInput {...this.props} />;
+				break;
+			}
 			default: {
 				//TODO: Throw error
-				console.log("Question doesn't match any type");
+				console.log("Question " +this.props.type+ " doesn't match any type");
 				theQ = null; // this helps it not crash the entire program, but it still doesn't fix the problem or warn anyone.
 				//FIXME: by not returning a question with a key, this throws a application-wide error... 
 			}
@@ -148,7 +153,7 @@ class Question extends React.Component {
 		label: PropTypes.string,
 		placeholder: PropTypes.string,
 		XMLTag: PropTypes.string,
-		type: PropTypes.oneOf(['Text', 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
+		type: PropTypes.oneOf(['Text', "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

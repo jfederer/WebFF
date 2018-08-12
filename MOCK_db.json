@@ -913,6 +913,54 @@
 			"width_xs": 6,
 			"width_lg": 6
 		  },
+		  {
+			"id": "ButtonTest1",
+			"label": "Press 1",
+			"size":"large",
+			"variant":"fab",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"tabName": "Question Page",
+			"value":"",
+			"layoutGroup": "Field Parameters"
+		  },
+		  {
+			"id": "ButtonTest2",
+			"label": "Press 2",
+			"size":"medium",
+			"variant":"outlined",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"tabName": "Question Page",
+			"value":"",
+			"layoutGroup": "Field Parameters"
+		  },
+		  {
+			"id": "ButtonTest3",
+			"label": "Press 3",
+			"variant": "contained",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"value":"1",
+			"actions": {
+				"1": "ShowPanel::Question Page:Common Field Parameters"
+			},
+			"tabName": "Question Page",
+			"layoutGroup": "Field Parameters"
+		  },
+		  {
+			"id": "ButtonTest4",
+			"label": "Press 4",
+			"icon": "SyncIcon",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"tabName": "Question Page",
+			"value":"1",
+			"actions": {
+				"1": "HidePanel::Question Page:Common Field Parameters"
+			},
+			"layoutGroup": "Field Parameters"
+		  },
 
         {
           "id": "WQ_time",

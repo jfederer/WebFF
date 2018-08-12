@@ -33,7 +33,7 @@ class TableInput extends React.Component {
 	};
 
 	componentWillMount() {
-		console.log("CWM: ", this.state.value)
+//		console.log("CWM: ", this.state.value)
 
 		// make appropriately-sized empty table data array based on 'rows' and 'cols' value if it exists
 		let emptyTable = [];
@@ -41,7 +41,7 @@ class TableInput extends React.Component {
 			let numCols = parseInt(this.props.cols, 10);
 			emptyTable.push(Array(numCols).fill(""));
 		}
-		console.log("emptyTable (empty): ", emptyTable);    // CORRECT OUTPUT
+//		console.log("emptyTable (empty): ", emptyTable);    // CORRECT OUTPUT
 
 		// go through value in state and drop them into emptyTable.
 		if (this.state.value != null) {
@@ -54,11 +54,12 @@ class TableInput extends React.Component {
 			});
 		}
 		// at this point in execution, empty table is no longer empty
-		console.log("emptyTable (filled): ", emptyTable);    // CORRECT OUTPUT
+//		console.log("emptyTable (filled): ", emptyTable);    // CORRECT OUTPUT
 
 
-		this.setState({ value: emptyTable }, () =>
-			console.log("AFTER CWM setState: ", this.state.value));  // SAME OUTPUT AS THE INITIAL CONSOLE.LOG IN COMPONENETWILLMOUNT - INCORRECT!
+		// this.setState({ value: emptyTable }, () =>
+		// 	console.log("AFTER CWM setState: ", this.state.value));  // SAME OUTPUT AS THE INITIAL CONSOLE.LOG IN COMPONENETWILLMOUNT - INCORRECT!
+		this.setState({ value: emptyTable });
 
 	}
 
