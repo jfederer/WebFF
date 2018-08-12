@@ -266,543 +266,7 @@
     {
       "id": "questionsData",
       "questionsDataArr": [
-        {
-          "id": "mathInput1",
-          "value": "",
-          "label": "A",
-          "type": "Text",
-          "placeholder": "A value",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "mathInput2",
-          "value": "",
-          "label": "B",
-          "type": "Text",
-          "placeholder": "B value",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "mathInput3",
-          "value": "2",
-          "label": "C",
-          "type": "Text",
-          "placeholder": "C value",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "testComputedPlus",
-          "value": "",
-          "label": "Testing Addition and Subtraction (A+B-C)",
-          "type": "ComputedValue",
-          "placeholder": "A + B - C",
-          "computationString": "mathInput1+mathInput2-mathInput3",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "testComputedMinus",
-          "value": "",
-          "label": "Testing static Number (A+2)",
-          "type": "ComputedValue",
-          "placeholder": "A + 2",
-          "computationString": "mathInput1+2",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "testComputedDivide",
-          "value": "",
-          "label": "Testing Division (A/B)",
-          "type": "ComputedValue",
-          "placeholder": "A / B",
-          "computationString": "mathInput1/mathInput2",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "testComputedMultiply",
-          "value": "",
-          "label": "Testing Multiplication (A*B*C)",
-          "type": "ComputedValue",
-          "placeholder": "A * B * C",
-          "computationString": "mathInput1*mathInput2*mathInput3",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "testComputedExponent",
-          "value": "",
-          "label": "Testing Exponent (A^C)",
-          "type": "ComputedValue",
-          "placeholder": "A + B",
-          "computationString": "mathInput1^mathInput3",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "testComplexMath",
-          "value": "",
-          "label": "Testing Complex A/B+(B-C)^C",
-          "type": "ComputedValue",
-          "placeholder": "A + B",
-          "computationString": "mathInput1/mathInput2+(mathInput2-mathInput3)^mathInput3",
-          "tabName": "Question Page",
-          "layoutGroup": "TestMath",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "test1",
-          "label": "Impedence",
-          "type": "Text",
-          "placeholder": "Resistance to AC",
-          "value": "",
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "size": "40"
-        },
-        {
-          "id": "test2",
-          "label": "What name?",
-          "type": "Text",
-          "value": "Johnny Science",
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "size": "50"
-        },
-        {
-          "id": "test3",
-          "label": "Question #3",
-          "type": "Text",
-          "value": "",
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "multiline": true,
-          "rows": 4
-        },
-        {
-          "id": "test4",
-          "label": "Question Label 4",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "No oe": "NA",
-            "My1": "One",
-            "My2": "Two",
-            "Thi sis a longer": "three All Around"
-          },
-          "value": "",
-          "tabName": "Question Page",
-          "layoutGroup": "Test"
-        },
-        {
-          "id": "test5",
-          "label": "Who is family",
-          "type": "MultipleChoice",
-          "options": {
-            "Colleen Niznik": "CSN",
-            "Corbin Brock": "CBF",
-            "Ruby Anne": "RAF",
-            "Kassidy Schmassidy": "KASS"
-          },
-          "value": [
-            "CSN",
-            "RAF"
-          ],
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "helperText": "P1942"
-        },
-        {
-          "id": "testHidden",
-          "hidden": true,
-          "label": "Is this showing?",
-          "type": "MultipleChoice",
-          "options": {
-            "Should": "CSN",
-            "Not": "CBF",
-            "Show": "RAF",
-            "When Hidden": "KASS"
-          },
-          "value": [
-            "CSN",
-            "RAF"
-          ],
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "helperText": "I'm Helping!"
-        },
-        {
-          "id": "testTog",
-          "label": "Hot Out?",
-          "type": "Toggle",
-          "value": false,
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "helperText": "Toggle Me",
-          "checkbox": false
-        },
-        {
-          "id": "testTog2",
-          "type": "Toggle",
-          "value": true,
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "helperText": "Toggle Me Also",
-          "checkbox": false
-        },
-        {
-          "id": "testTog3",
-          "label": "Check Me?",
-          "type": "Toggle",
-          "value": true,
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "helperText": "Toggle Me",
-          "checkbox": true
-        },
-        {
-          "id": "testTog4",
-          "type": "Toggle",
-          "value": false,
-          "tabName": "Question Page",
-          "layoutGroup": "Test",
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
-        {
-          "id": "testDate",
-          "type": "DateInput",
-          "label": "current date default",
-          "value": null,
-          "tabName": "Question Page",
-          "layoutGroup": "Date Time Tests",
-          "helperText": "date helper text"
-        },
-        {
-          "id": "testDate2",
-          "type": "DateInput",
-          "label": "Specific Default",
-          "value": "2017-10-25",
-          "tabName": "Question Page",
-          "layoutGroup": "Date Time Tests",
-          "helperText": "date helper text"
-        },
-        {
-          "id": "testTime",
-          "type": "TimeInput",
-          "label": "Current time default",
-          "value": null,
-          "tabName": "Question Page",
-          "layoutGroup": "Date Time Tests",
-          "helperText": "Enter a time",
-          "step": 600
-        },
-        {
-          "id": "testTime2",
-          "type": "TimeInput",
-          "label": "Specific Time default",
-          "value": "16:39",
-          "tabName": "Question Page",
-          "layoutGroup": "Date Time Tests",
-          "helperText": "Enter a time",
-          "step": 600
-        },
-        {
-          "id": "testTable",
-          "label": "Test Table Label",
-          "type": "TableInput",
-          "tabName": "Question Page",
-          "layoutGroup": "Table",
-          "helperText": "Table Helper Me",
-          "colWidths": [
-            "20%",
-            "20%",
-            "30%",
-            "10%",
-            "10%"
-          ],
-          "colHeaders": [
-            "Dessert Name",
-            "Calories",
-            "Fat",
-            "Carbs",
-            "Protein"
-          ],
-          "rowHeaders": "true",
-          "numberOfRows": "5",
-          "value": [
-            [
-              "Frozen yoghurt",
-              "159ewrwr",
-              "",
-              "24",
-              "4.0"
-            ],
-            [
-              "Ice cream sandwich",
-              "237",
-              "9.0",
-              "37",
-              "4.3"
-            ],
-            [
-              "Eclair",
-              "262",
-              "SubQuestion::subTest1",
-              "24",
-              "6.0"
-            ],
-            [
-              "Cupcake",
-              "305",
-              "3.7",
-              "67",
-              "4.3"
-            ],
-            [
-              "Gingerbread",
-              "356",
-              "16.0",
-              "49",
-              "3.9"
-            ]
-          ]
-        },
-        {
-          "id": "subTest1",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "No oe": "NA",
-            "My1": "One",
-            "My2": "Two",
-            "Thi sis": "three All Around"
-          },
-          "value": ""
-        },
-        {
-          "id": "testTable2",
-          "label": "Test Table Label2",
-          "type": "TableInput",
-          "tabName": "Question Page",
-          "layoutGroup": "Table2",
-          "colHeaders": [
-            "Element",
-            "Found"
-          ],
-          "rowHeaders": "true",
-          "numberOfRows": "10",
-          "value": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ]
-        },
-        {
-          "id": "testTable3",
-          "label": "Test Table Label3",
-          "type": "TableInput",
-          "tabName": "Question Page",
-          "layoutGroup": "Table2",
-          "colHeaders": [
-            "Element",
-            "Found"
-          ],
-          "rowHeaders": "true",
-          "numberOfRows": "10",
-          "value": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ]
-        },
-        {
-          "id": "testTable4",
-          "label": "Test Table Label4",
-          "type": "TableInput",
-          "tabName": "Question Page",
-          "layoutGroup": "Table2",
-          "colHeaders": [
-            "Element",
-            "Found"
-          ],
-          "rowHeaders": "true",
-          "numberOfRows": "10",
-          "value": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ]
-        },
-        {
-          "id": "test6",
-          "label": "Single Line Text Q6",
-          "type": "Text",
-          "helperText": "P0032",
-          "placeholder": "placeme",
-          "value": "",
-          "tabName": "Question Page",
-          "layoutGroup": "QP2"
-        },
-        {
-          "id": "test7",
-          "label": "Single Line Text Question 7",
-          "type": "Text",
-          "value": "Default Value",
-          "tabName": "Question Page",
-          "layoutGroup": "QP2"
-        },
-        {
-          "id": "test8",
-          "label": "Question #8",
-          "type": "Text",
-          "value": "",
-          "tabName": "Question Page",
-          "layoutGroup": "QP2"
-        },
-        {
-          "id": "test9",
-          "label": "Question Label 9",
-          "type": "DropDown",
-          "includeBlank": true,
-          "helperText": "PCodes FTW!",
-          "options": {
-            "No oe": "NA",
-            "My1": "One",
-            "My2": "Two",
-            "My3": "three"
-          },
-          "value": "One",
-          "tabName": "Question Page",
-          "layoutGroup": "QP2"
-        },
-        {
-          "id": "test10",
-          "label": "Who is programmer",
-          "type": "MultipleChoice",
-          "options": {
-            "Joe Federer": "JF",
-            "Ken Skach": "KS",
-            "Molly Wood": "MW"
-          },
-          "value": [],
-          "tabName": "Question Page",
-          "layoutGroup": "QP2"
-        },
-        {
-          "id": "concCheck",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
-        {
-          "id": "sandCheck",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
-        {
-          "id": "fullCheck",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
-        {
-          "id": "concCheck2",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
-        {
-          "id": "sandCheck2",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
-        {
-          "id": "fullCheck2",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": true
-        },
+      
         {
           "id": "stationName",
           "label": "Station Name",
@@ -1270,7 +734,7 @@
         },
         {
           "id": "numberOfSamplingPoints",
-          "value": "5",
+          "value": "",
           "label": "Sampling Points",
           "type": "Text",
           "placeholder": "Number of Points",
@@ -1524,13 +988,13 @@
             "Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
           },
           "actions": {
-            "US D-96 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:Intake Efficiency Test",
-            "US DH-2 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
-            "US D-96-A1 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
-            "US D-99 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&ShowPanel::EDI:IntakeEfficiencyTest",
-            "Weighted Bottle Sampler": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleWidth&HidePanel::EDI:Intake Efficiency Test",
-            "Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest",
-            "Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleWidth&HidePanel::EDI:IntakeEfficiencyTest"
+            "US D-96 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleDiameter&ShowPanel::EDI:Intake Efficiency Test",
+            "US DH-2 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleDiameter&ShowPanel::EDI:IntakeEfficiencyTest",
+            "US D-96-A1 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleDiameter&ShowPanel::EDI:IntakeEfficiencyTest",
+            "US D-99 Bag Sampler": "ShowQuestion::EDI_sizeOfBag&HideQuestion::EDI_sizeOfBottle&ShowQuestion::EDI_bagMaterial&HideQuestion::EDI_bottleMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleDiameter&ShowPanel::EDI:IntakeEfficiencyTest",
+            "Weighted Bottle Sampler": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&ShowQuestion::EDI_NozzleMaterial&ShowQuestion::EDI_NozzleDiameter&HidePanel::EDI:Intake Efficiency Test",
+            "Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleDiameter&HidePanel::EDI:IntakeEfficiencyTest",
+            "Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::EDI_sizeOfBottle&HideQuestion::EDI_sizeOfBag&ShowQuestion::EDI_bottleMaterial&HideQuestion::EDI_bagMaterial&HideQuestion::EDI_NozzleMaterial&HideQuestion::EDI_NozzleDiameter&HidePanel::EDI:IntakeEfficiencyTest"
           },
           "value": "",
           "tabName": "EDI",
@@ -2057,14 +1521,8 @@
         },
         {
           "id": "TEST_rando",
-          "label": "Other:",
-          "XMLTag": "CollecAgencyOther",
           "type": "Text",
-          "tabName": "EDI",
-          "value": "exocitca",
-          "layoutGroup": "QWDATA Info",
-          "width_xs": 4,
-          "width_lg": 4
+          "value": "exocitca"
         },
         {
           "id": "EDI_QWDATA_Table",
@@ -2091,7 +1549,7 @@
           "value": false,
           "helperText": "Toggle Me",
           "checkbox": false,
-          "tabName": "EWI",
+          "tabName": "EDI",
           "layoutGroup": "Superfly Extras",
           "width_xs": 2,
           "width_lg": 2
@@ -2102,7 +1560,7 @@
           "type": "Toggle",
           "value": false,
           "checkbox": false,
-          "tabName": "EWI",
+          "tabName": "EDI",
           "layoutGroup": "Superfly Extras",
           "width_xs": 2,
           "width_lg": 2
@@ -2139,7 +1597,18 @@
           "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
-        },
+		},
+		
+
+
+
+
+
+
+
+
+
+
         {
           "id": "EWI_samplerType",
           "label": "Sampler Type",
@@ -2176,12 +1645,13 @@
             "Sampler, point, automatic (ISCO)": "Sampler, point, automatic (ISCO)"
           },
           "actions": {
-            "US D-96 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
-            "US DH-2 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
-            "US D-96-A1 Bag Sampler": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
-            "Weighted Bottle Sampler": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::NozzleMaterial&ShowQuestion::NozzleWidth",
-            "Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::NozzleMaterial&HideQuestion::NozzleWidth",
-            "Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::NozzleMaterial&HideQuestion::NozzleWidth"
+            "US D-96 Bag Sampler": "ShowQuestion::EWI_sizeOfBag&HideQuestion::EWI_sizeOfBottle&ShowQuestion::EWI_bagMaterial&HideQuestion::EWI_bottleMaterial&ShowQuestion::EWI_NozzleMaterial&ShowQuestion::EWI_NozzleDiameter&ShowPanel::EWI:Intake Efficiency Test",
+            "US DH-2 Bag Sampler": "ShowQuestion::EWI_sizeOfBag&HideQuestion::EWI_sizeOfBottle&ShowQuestion::EWI_bagMaterial&HideQuestion::EWI_bottleMaterial&ShowQuestion::EWI_NozzleMaterial&ShowQuestion::EWI_NozzleDiameter&ShowPanel::EWI:IntakeEfficiencyTest",
+            "US D-96-A1 Bag Sampler": "ShowQuestion::EWI_sizeOfBag&HideQuestion::EWI_sizeOfBottle&ShowQuestion::EWI_bagMaterial&HideQuestion::EWI_bottleMaterial&ShowQuestion::EWI_NozzleMaterial&ShowQuestion::EWI_NozzleDiameter&ShowPanel::EWI:IntakeEfficiencyTest",
+            "US D-99 Bag Sampler": "ShowQuestion::EWI_sizeOfBag&HideQuestion::EWI_sizeOfBottle&ShowQuestion::EWI_bagMaterial&HideQuestion::EWI_bottleMaterial&ShowQuestion::EWI_NozzleMaterial&ShowQuestion::EWI_NozzleDiameter&ShowPanel::EWI:IntakeEfficiencyTest",
+            "Weighted Bottle Sampler": "ShowQuestion::EWI_sizeOfBottle&HideQuestion::EWI_sizeOfBag&ShowQuestion::EWI_bottleMaterial&HideQuestion::EWI_bagMaterial&ShowQuestion::EWI_NozzleMaterial&ShowQuestion::EWI_NozzleDiameter&HidePanel::EWI:Intake Efficiency Test",
+            "Weighted Bottle Sampler w/ hole in cap, no Nozzle": "ShowQuestion::EWI_sizeOfBottle&HideQuestion::EWI_sizeOfBag&ShowQuestion::EWI_bottleMaterial&HideQuestion::EWI_bagMaterial&HideQuestion::EWI_NozzleMaterial&HideQuestion::EWI_NozzleDiameter&HidePanel::EWI:IntakeEfficiencyTest",
+            "Grab Sample (bottle with cap, no Nozzle)": "ShowQuestion::EWI_sizeOfBottle&HideQuestion::EWI_sizeOfBag&ShowQuestion::EWI_bottleMaterial&HideQuestion::EWI_bagMaterial&HideQuestion::EWI_NozzleMaterial&HideQuestion::EWI_NozzleDiameter&HidePanel::EWI:IntakeEfficiencyTest"
           },
           "value": "",
           "tabName": "EWI",
@@ -2190,7 +1660,7 @@
           "width_lg": 3
         },
         {
-          "id": "bottleMaterial",
+          "id": "EWI_bottleMaterial",
           "hidden": true,
           "label": "Bottle Material",
           "type": "DropDown",
@@ -2207,7 +1677,7 @@
           "width_lg": 3
         },
         {
-          "id": "bagMaterial",
+          "id": "EWI_bagMaterial",
           "label": "Bag Material",
           "type": "DropDown",
           "includeBlank": true,
@@ -2223,7 +1693,7 @@
           "width_lg": 3
         },
         {
-          "id": "sizeOfBottle",
+          "id": "EWI_sizeOfBottle",
           "hidden": true,
           "label": "Size of Bottle",
           "type": "DropDown",
@@ -2239,7 +1709,7 @@
           "width_lg": 2
         },
         {
-          "id": "sizeOfBag",
+          "id": "EWI_sizeOfBag",
           "label": "Size of Bag",
           "type": "DropDown",
           "includeBlank": true,
@@ -2254,8 +1724,9 @@
           "width_lg": 2
         },
         {
-          "id": "NozzleMaterial",
+          "id": "EWI_NozzleMaterial",
           "label": "Nozzle Material",
+          "XMLTag": "P72219",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -2270,8 +1741,9 @@
           "width_lg": 2
         },
         {
-          "id": "NozzleWidth",
-          "label": "Nozzle Width",
+          "id": "EWI_NozzleDiameter",
+          "label": "Nozzle Diameter",
+          "XMLTag": "P72220",
           "type": "DropDown",
           "includeBlank": true,
           "options": {
@@ -2286,167 +1758,416 @@
           "width_lg": 2
         },
         {
-          "id": "EWI_setInfo_table",
-          "label": "Set Info Table",
-          "type": "TableInput",
+          "id": "EWI_streamDepth",
+          "label": "Stream Depth(ft)",
+          "type": "Text",
+          "placeholder": "feet",
+          "value": "",
           "tabName": "EWI",
-          "layoutGroup": "Set Information",
-          "colHeaders": [
-            "",
-            "Set A",
-            "Set B",
-            "Average"
-          ],
-          "rowHeaders": "true",
-          "value": [
-            [
-              "Start Time",
-              "SubQuestion::setAStartTime",
-              "SubQuestion::setBStartTime",
-              "SubQuestion::setStartTimeAvg"
-            ],
-            [
-              "Gage Height(Start)",
-              "SubQuestion::setAStartGageHeight",
-              "SubQuestion::setBStartGageHeight",
-              "SubQuestion::startGageHeightAvg"
-            ],
-            [
-              "End Time",
-              "SubQuestion::setAEndTime",
-              "SubQuestion::setBEndTime",
-              "SubQuestion::setEndTimeAvg"
-            ],
-            [
-              "Gage Height(End)",
-              "SubQuestion::setAEndGageHeight",
-              "SubQuestion::setBEndGageHeight",
-              "SubQuestion::endGageHeightAvg"
-            ],
-            [
-              "Mean Time",
-              "SubQuestion::setAMeanTime",
-              "SubQuestion::setBMeanTime",
-              "SubQuestion::MEANTIMEAVG"
-            ]
-          ],
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_transitRate",
+          "label": "Transit Rate(ft/s)",
+          "type": "Text",
+          "placeholder": "feet / second",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_streamVelocity",
+          "label": "Stream Velocity(ft)",
+          "XMLTag": "P72196",
+          "type": "Text",
+          "placeholder": "feet / second",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_sampleVolumeIET",
+          "label": "Sample Volume for Test (mL)",
+          "XMLTag": "P72218",
+          "type": "Text",
+          "placeholder": "milliliters",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_durationIEF",
+          "label": "Seconds sampler collected water",
+          "XMLTag": "P7221",
+          "type": "Text",
+          "placeholder": "seconds",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_ratioOfVertical",
+          "label": "Ratio of Vertical",
+          "type": "Text",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 3,
+          "width_lg": 1
+        },
+        {
+          "id": "EWI_intakeEfficiency",
+          "label": "Intake Efficiency",
+          "type": "Text",
+          "value": "",
+          "tabName": "EWI",
+          "layoutGroup": "Intake Efficiency Test",
+          "width_xs": 3,
+          "width_lg": 1
+        },
+        {
+          "id": "EWI_setA_StartTime",
+          "label": "Start Time",
+          "type": "TimeInput",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "value": "",
+          "width_xs": 5,
+          "width_lg": 1
+        },
+        {
+          "id": "EWI_setA_EndTime",
+          "label": "End Time",
+          "type": "TimeInput",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "value": "",
+          "width_xs": 5,
+          "width_lg": 1
+        },
+        {
+          "id": "EWI_setA_StartGageHeight",
+          "label": "Start Gage Ht",
+          "placeholder": "feet",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "type": "Text",
+          "value": "",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setA_EndGageHeight",
+          "label": "End Gage Ht",
+          "placeholder": "feet",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "type": "Text",
+          "value": "",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setA_AvgGageHeight",
+          "label": "Avg Gage Ht",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "type": "ComputedValue",
+          "computationString": "(EWI_setA_StartGageHeight+EWI_setA_EndGageHeight)/2",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setA_numberOfContainers",
+          "label": "Number Of Containers",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "type": "Text",
+          "value": "",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setA_analyzeIndividually",
+          "label": "Analyze Individually",
+          "XMLTag": "AnalyzeIndSamples",
+          "type": "Toggle",
+          "checkbox": true,
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "value": "",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setA_AnalysedFor",
+          "label": "Analyze Set A for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
           "width_xs": 6,
           "width_lg": 6
         },
         {
-          "id": "EWI_samples_table",
+          "id": "EWI_SetA_samples_table",
           "label": "Samples Table",
           "type": "TableInput",
           "tabName": "EWI",
-          "layoutGroup": "Set Information",
+          "layoutGroup": "Set A Information",
           "colHeaders": [
-            "Distance",
-            "Depth To Bottom",
-            "Depth Sampled",
-            "Transit Time",
-            "Transit Volume"
+            "EWI",
+            "Velocity (ft/sec)",
+            "Depth (feet)",
+            "T-Rate",
+            "Volume (cc)",
+            "Time (sec)",
+            "Ratio of Vertical",
+            "Intake Efficiency"
           ],
           "rowHeaders": "true",
-          "value": [],
+          "value": [
+          ],
           "width_xs": 6,
           "width_lg": 6
         },
         {
-          "id": "setAStartGageHeight",
-          "type": "Text",
-          "helperText": "P0032",
-          "value": "5"
+          "id": "EWI_showSetB",
+          "label": "Show Set B",
+          "type": "Toggle",
+          "tabName": "EWI",
+          "layoutGroup": "Set A Information",
+          "value": false,
+          "actions": {
+            "true": "ShowPanel::EWI:Set B Information",
+            "false": "HidePanel::EWI:Set B Information"
+          },
+          "width_xs": 2,
+          "width_lg": 1
         },
         {
-          "id": "setBStartGageHeight",
-          "type": "Text",
-          "helperText": "P0032",
-          "value": "7"
-        },
-        {
-          "id": "setAEndGageHeight",
-          "type": "Text",
-          "helperText": "P0032",
-          "value": "10"
-        },
-        {
-          "id": "setBEndGageHeight",
-          "type": "Text",
-          "helperText": "P0032",
-          "value": "12"
-        },
-        {
-          "id": "startGageHeightAvg",
-          "type": "ComputedValue",
-          "computationString": "(setAStartGageHeight+setBStartGageHeight)/2",
-          "value": null,
-          "helperText": "Average start gage height time for sample"
-        },
-        {
-          "id": "endGageHeightAvg",
-          "type": "ComputedValue",
-          "computationString": "(setAEndGageHeight+setBEndGageHeight)/2",
-          "value": null,
-          "helperText": "Average start gage height time for sample"
-        },
-        {
-          "id": "setAStartTime",
+          "id": "EWI_setB_StartTime",
+          "label": "Start Time",
           "type": "TimeInput",
-          "value": null,
-          "helperText": "Start sample time for set 1"
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "value": "",
+          "width_xs": 5,
+          "width_lg": 1
         },
         {
-          "id": "setAEndTime",
+          "id": "EWI_setB_EndTime",
+          "label": "End Time",
           "type": "TimeInput",
-          "value": null,
-          "helperText": "End sample time for set 1"
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "value": "",
+          "width_xs": 5,
+          "width_lg": 1
         },
         {
-          "id": "setStartTimeAvg",
+          "id": "EWI_setB_StartGageHeight",
+          "label": "Start Gage Ht",
+          "placeholder": "feet",
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "type": "Text",
+          "value": "",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setB_EndGageHeight",
+          "label": "End Gage Ht",
+          "placeholder": "feet",
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "type": "Text",
+          "value": "",
+          "width_xs": 3,
+          "width_lg": 2
+        },
+        {
+          "id": "EWI_setB_AvgGageHeight",
+          "label": "Avg Gage Ht",
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
           "type": "ComputedValue",
-          "computationString": "(setAEndTime+setBEndTime)/2",
-          "value": null,
-          "helperText": "Average start time for sample"
+          "computationString": "(EWI_setA_StartGageHeight+EWI_setA_EndGageHeight)/2",
+          "width_xs": 4,
+          "width_lg": 2
         },
         {
-          "id": "setBStartTime",
-          "type": "TimeInput",
-          "value": null,
-          "helperText": "Start sample time for set 2"
+          "id": "EWI_setB_numberOfContainers",
+          "label": "Number Of Containers",
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "type": "Text",
+          "value": "",
+          "width_xs": 4,
+          "width_lg": 2
         },
         {
-          "id": "setBEndTime",
-          "type": "TimeInput",
-          "value": null,
-          "helperText": "End of sample time for set 2"
+          "id": "EWI_setB_analyzeIndividually",
+          "label": "Analyze Individually",
+          "XMLTag": "AnalyzeIndSamples",
+          "type": "Toggle",
+          "checkbox": true,
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "value": "",
+          "width_xs": 4,
+          "width_lg": 2
         },
         {
-          "id": "setEndTimeAvg",
-          "type": "ComputedValue",
-          "computationString": "(setAEndTime+setBEndTime)/2",
-          "value": null,
-          "helperText": "Average end time for sample"
+          "id": "EWI_setB_AnalysedFor",
+          "label": "Analyze Set A for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "width_xs": 6,
+          "width_lg": 6
         },
         {
-          "id": "setAMeanTime",
-          "type": "ComputedValue",
-          "computationString": "(setAEndTime+setBEndTime)/2",
-          "value": null,
-          "helperText": "Average start time for sample"
+          "id": "EWI_SetB_samples_table",
+          "label": "Samples Table",
+          "type": "TableInput",
+          "tabName": "EWI",
+          "layoutGroup": "Set B Information",
+          "colHeaders": [
+            "EWI",
+            "Velocity (ft/sec)",
+            "Depth (feet)",
+            "T-Rate",
+            "Volume (cc)",
+            "Time (sec)",
+            "Ratio of Vertical",
+            "Intake Efficiency"
+          ],
+          "rowHeaders": "true",
+          "value": [
+          ],
+          "width_xs": 6,
+          "width_lg": 6
         },
         {
-          "id": "setBMeanTime",
-          "type": "ComputedValue",
-          "computationString": "(setAEndTime+setBEndTime)/2",
-          "value": null,
-          "helperText": "Mean time for set B"
+          "id": "EWI_timeDatum",
+          "label": "Time Datum",
+          "XMLTag": "TimeDatum",
+          "type": "DropDown",
+          "tabName": "EWI",
+          "layoutGroup": "QWDATA Info",
+          "options": {
+            "SITEFILE Default": "Use Default from SITEFILE",
+            "Atlantic Standard Time": "AST",
+            "Atlantic Daylight Time": "ADT",
+            "Eastern Standard Time": "EST",
+            "Eastern Daylight Time": "EDT",
+            "Central Standard Time": "CST",
+            "Central Daylight Time": "CDT",
+            "Mountain Standard Time": "MST",
+            "Mountain Daylight Time": "MDT",
+            "Pacific Standard Time": "PST",
+            "Pacific Daylight Time": "PDT",
+            "Alaska Standard Time": "AKST",
+            "Alaska Daylight Time": "AKDT",
+            "Hawaii–Aleutian Standard Time": "HST",
+            "Hawaii–Aleutian Daylight Time": "HDT"
+          },
+          "value": "Use Default from SITEFILE",
+          "width_xs": 4,
+          "width_lg": 4
         },
         {
-          "id": "MEANTIMEAVG",
-          "type": "ComputedValue",
-          "computationString": "(setAMeanTime+setBMeanTime)/2",
-          "value": null,
-          "helperText": "Average Mean time for sample"
+          "id": "EWI_collectingAgency",
+          "label": "Collecting Agency",
+          "XMLTag": "CollecAgency",
+          "type": "DropDown",
+          "tabName": "EWI",
+          "layoutGroup": "QWDATA Info",
+          "options": {
+            "USGS-WRD": "USGS-WRD",
+            "USGS-GD": "USGS-GD",
+            "Observer": "Observer",
+            "Other": "Other"
+          },
+          "actions": {
+            "USGS-WRD": "HideQuestion::EWI_collectingAgencyOther",
+            "USGS-GD": "HideQuestion::EWI_collectingAgencyOther",
+            "Observer": "HideQuestion::EWI_collectingAgencyOther",
+            "Other": "ShowQuestion::EWI_collectingAgencyOther"
+          },
+          "value": "Use Default from SITEFILE",
+          "width_xs": 4,
+          "width_lg": 4
+        },
+        {
+          "id": "EWI_collectingAgencyOther",
+          "label": "Other:",
+          "XMLTag": "CollecAgencyOther",
+          "hidden": true,
+          "type": "Text",
+          "tabName": "EWI",
+          "value": "yippie",
+          "layoutGroup": "QWDATA Info",
+          "width_xs": 4,
+          "width_lg": 4
+        },
+        {
+          "id": "TEST_rando",
+          "type": "Text",
+          "value": "exocitca"
+        },
+        {
+          "id": "EWI_QWDATA_Table",
+          "label": "QWDATA Samples Table",
+          "type": "TableInput",
+          "tabName": "EWI",
+          "layoutGroup": "QWDATA Info",
+          "colHeaders": [
+            "Set",
+            "Sample Number",
+            "Dist from Left Bank",
+            "Remark",
+            "Sample Time"
+          ],
+          "value": [],
+          "rowHeaders": "true",
+          "width_xs": 12,
+          "width_lg": 12
         },
         {
           "id": "EWI_sampleIsokinetic",
@@ -2456,7 +2177,7 @@
           "helperText": "Toggle Me",
           "checkbox": false,
           "tabName": "EWI",
-          "layoutGroup": "Set Information",
+          "layoutGroup": "Superfly Extras",
           "width_xs": 2,
           "width_lg": 2
         },
@@ -2467,19 +2188,7 @@
           "value": false,
           "checkbox": false,
           "tabName": "EWI",
-          "layoutGroup": "Set Information",
-          "width_xs": 2,
-          "width_lg": 2
-        },
-        {
-          "id": "EWI_intakeEfficiencyCompleted",
-          "label": "Intake Efficiency Completed",
-          "type": "Toggle",
-          "value": false,
-          "helperText": "Toggle Me Also",
-          "checkbox": false,
-          "tabName": "EWI",
-          "layoutGroup": "Set Information",
+          "layoutGroup": "Superfly Extras",
           "width_xs": 2,
           "width_lg": 2
         },
@@ -2490,18 +2199,7 @@
           "value": "",
           "helperText": "ft",
           "tabName": "EWI",
-          "layoutGroup": "Set Information",
-          "width_xs": 3,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_transitRate",
-          "label": "Transit Rate (ft/sec)",
-          "type": "Text",
-          "value": "",
-          "placeholder": "ft/sec",
-          "tabName": "EWI",
-          "layoutGroup": "Set Information",
+          "layoutGroup": "Superfly Extras",
           "width_xs": 3,
           "width_lg": 3
         },
@@ -2512,7 +2210,7 @@
           "value": true,
           "checkbox": true,
           "tabName": "EWI",
-          "layoutGroup": "Analysis Information",
+          "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
         },
@@ -2523,68 +2221,7 @@
           "value": true,
           "checkbox": true,
           "tabName": "EWI",
-          "layoutGroup": "Analysis Information",
-          "width_xs": 6,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_numSetAContainers",
-          "label": "Number of containers - set A",
-          "type": "Text",
-          "value": "",
-          "placeholder": "ft/sec",
-          "tabName": "EWI",
-          "layoutGroup": "Analysis Information",
-          "width_xs": 6,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_numSetBContainers",
-          "label": "Number of containers - set B",
-          "type": "Text",
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Analysis Information",
-          "width_xs": 6,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_setAAnalysedFor",
-          "label": "Analyze Set A for:",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "EWI",
-          "layoutGroup": "Analysis Information",
-          "width_xs": 6,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_setBAnalysedFor",
-          "label": "Analyze Set B for:",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "EWI",
-          "layoutGroup": "Analysis Information",
+          "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
         }
@@ -2623,342 +2260,7 @@
           "projectID": "BAC",
           "agencyCode": "ATF"
         }
-      ],
-      "SamplingEvent:2018-08-11@14:29:29": {
-        "id": "2018-08-11@14:29:29",
-        "questionsValues": {
-          "mathInput1": "",
-          "mathInput2": "",
-          "mathInput3": "2",
-          "testComputedPlus": "",
-          "testComputedMinus": "",
-          "testComputedDivide": "",
-          "testComputedMultiply": "",
-          "testComputedExponent": "",
-          "testComplexMath": "",
-          "test1": "",
-          "test2": "Johnny Science",
-          "test3": "",
-          "test4": "",
-          "test5": [
-            "CSN",
-            "RAF"
-          ],
-          "testHidden": [
-            "CSN",
-            "RAF"
-          ],
-          "testTog": false,
-          "testTog2": true,
-          "testTog3": true,
-          "testTog4": false,
-          "testDate": null,
-          "testDate2": "2017-10-25",
-          "testTime": null,
-          "testTime2": "16:39",
-          "testTable": [
-            [
-              "Frozen yoghurt",
-              "159ewrwr",
-              "",
-              "24",
-              "4.0"
-            ],
-            [
-              "Ice cream sandwich",
-              "237",
-              "9.0",
-              "37",
-              "4.3"
-            ],
-            [
-              "Eclair",
-              "262",
-              "SubQuestion::subTest1",
-              "24",
-              "6.0"
-            ],
-            [
-              "Cupcake",
-              "305",
-              "3.7",
-              "67",
-              "4.3"
-            ],
-            [
-              "Gingerbread",
-              "356",
-              "16.0",
-              "49",
-              "3.9"
-            ]
-          ],
-          "subTest1": "",
-          "testTable2": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "testTable3": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "testTable4": [
-            [
-              "Au",
-              "159"
-            ],
-            [
-              "Hg",
-              "237"
-            ],
-            [
-              "O2",
-              "262"
-            ],
-            [
-              "CO2",
-              "305"
-            ],
-            [
-              "He",
-              "356"
-            ]
-          ],
-          "test6": "",
-          "test7": "Default Value",
-          "test8": "",
-          "test9": "One",
-          "test10": [],
-          "concCheck": false,
-          "sandCheck": false,
-          "fullCheck": false,
-          "concCheck2": false,
-          "sandCheck2": false,
-          "fullCheck2": false,
-          "stationName": "",
-          "stationNumber": "",
-          "projectName": "",
-          "projectID": "",
-          "agencyCode": "",
-          "sampleDate": "2018-08-11",
-          "sedimentType": "suspended",
-          "samplingMethod": "",
-          "timeZone": "",
-          "samplingTeam": "",
-          "compiledBy": "",
-          "sameDaySample": "false",
-          "sky": "",
-          "precipitation": "",
-          "temperature": "",
-          "wind": "",
-          "windDirection": "",
-          "hydrologicEvent": "",
-          "hydrologicCondition": "",
-          "sampleMedium": "",
-          "sampleType": "",
-          "samplePurpose": "",
-          "analysisStatus": "",
-          "streamMixing": "",
-          "streamColor": "",
-          "edgeOfWater_Left": "10",
-          "edgeOfSamplingZone_Left": "20",
-          "edgeOfSamplingZone_Right": "600",
-          "edgeOfWater_Right": "620",
-          "numberOfSamplingPoints": "5",
-          "pier1_start": "30",
-          "pier2_start": "160",
-          "pier3_start": "210",
-          "pier4_start": "300",
-          "pier5_start": "",
-          "pier6_start": "",
-          "pier1_end": "150",
-          "pier2_end": "200",
-          "pier3_end": "260",
-          "pier4_end": "450",
-          "pier5_end": "",
-          "pier6_end": "",
-          "WQ_location": "",
-          "WQ_temp": "",
-          "WQ_specificConductance": "",
-          "WQ_transparency": "",
-          "WQ_NTRUturbidity": "",
-          "WQ_FNUturbidity": "",
-          "EDI_samplerType": "",
-          "EDI_bottleMaterial": "",
-          "EDI_bagMaterial": "",
-          "EDI_sizeOfBottle": "",
-          "EDI_sizeOfBag": "",
-          "EDI_NozzleMaterial": "",
-          "EDI_NozzleDiameter": "",
-          "EDI_streamDepth": "",
-          "EDI_transitRate": "",
-          "EDI_streamVelocity": "",
-          "EDI_sampleVolumeIET": "",
-          "EDI_durationIEF": "",
-          "EDI_ratioOfVertical": "",
-          "EDI_intakeEfficiency": "",
-          "EDI_setA_StartTime": "",
-          "EDI_setA_EndTime": "",
-          "EDI_setA_StartGageHeight": "",
-          "EDI_setA_EndGageHeight": "",
-          "EDI_setA_numberOfContainers": "",
-          "EDI_setA_analyzeIndividually": "",
-          "EDI_setA_AnalysedFor": [],
-          "EDI_SetA_samples_table": [
-            [
-              "10%"
-            ],
-            [
-              "30%"
-            ],
-            [
-              "50%"
-            ],
-            [
-              "70%"
-            ],
-            [
-              "90%"
-            ]
-          ],
-          "EDI_showSetB": false,
-          "EDI_setB_StartTime": "",
-          "EDI_setB_EndTime": "",
-          "EDI_setB_StartGageHeight": "",
-          "EDI_setB_EndGageHeight": "",
-          "EDI_setB_numberOfContainers": "",
-          "EDI_setB_analyzeIndividually": "",
-          "EDI_setB_AnalysedFor": [],
-          "EDI_SetB_samples_table": [
-            [
-              "10%"
-            ],
-            [
-              "30%"
-            ],
-            [
-              "50%"
-            ],
-            [
-              "70%"
-            ],
-            [
-              "90%"
-            ]
-          ],
-          "EDI_timeDatum": "Use Default from SITEFILE",
-          "EDI_collectingAgency": "Use Default from SITEFILE",
-          "EDI_collectingAgencyOther": "yippie",
-          "EDI_QWDATA_Table": [],
-          "EDI_sampleIsokinetic": false,
-          "EDI_additionalSampleCollected": false,
-          "EDI_feetAboveBed": "",
-          "EDI_fieldComposite": true,
-          "EDI_compositeWithGallonContainers": true,
-          "EWI_samplerType": "",
-          "bottleMaterial": "",
-          "bagMaterial": "",
-          "sizeOfBottle": "",
-          "sizeOfBag": "",
-          "NozzleMaterial": "",
-          "NozzleWidth": "",
-          "EWI_setInfo_table": [
-            [
-              "Start Time",
-              "SubQuestion::setAStartTime",
-              "SubQuestion::setBStartTime",
-              "SubQuestion::setStartTimeAvg"
-            ],
-            [
-              "Gage Height(Start)",
-              "SubQuestion::setAStartGageHeight",
-              "SubQuestion::setBStartGageHeight",
-              "SubQuestion::startGageHeightAvg"
-            ],
-            [
-              "End Time",
-              "SubQuestion::setAEndTime",
-              "SubQuestion::setBEndTime",
-              "SubQuestion::setEndTimeAvg"
-            ],
-            [
-              "Gage Height(End)",
-              "SubQuestion::setAEndGageHeight",
-              "SubQuestion::setBEndGageHeight",
-              "SubQuestion::endGageHeightAvg"
-            ],
-            [
-              "Mean Time",
-              "SubQuestion::setAMeanTime",
-              "SubQuestion::setBMeanTime",
-              "SubQuestion::MEANTIMEAVG"
-            ]
-          ],
-          "EWI_samples_table": [],
-          "setAStartGageHeight": "5",
-          "setBStartGageHeight": "7",
-          "setAEndGageHeight": "10",
-          "setBEndGageHeight": "12",
-          "startGageHeightAvg": null,
-          "endGageHeightAvg": null,
-          "setAStartTime": null,
-          "setAEndTime": null,
-          "setStartTimeAvg": null,
-          "setBStartTime": null,
-          "setBEndTime": null,
-          "setEndTimeAvg": null,
-          "setAMeanTime": null,
-          "setBMeanTime": null,
-          "MEANTIMEAVG": null,
-          "EWI_sampleIsokinetic": false,
-          "EWI_additionalSampleCollected": false,
-          "EWI_intakeEfficiencyCompleted": false,
-          "EWI_feetAboveBed": "",
-          "EWI_transitRate": "",
-          "EWI_fieldComposite": true,
-          "EWI_compositeWithGallonContainers": true,
-          "EWI_numSetAContainers": "",
-          "EWI_numSetBContainers": "",
-          "EWI_setAAnalysedFor": [],
-          "EWI_setBAnalysedFor": []
-        }
-      }
+      ]      
     }
   ]
 }

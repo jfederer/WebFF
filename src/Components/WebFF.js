@@ -41,7 +41,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import QuestionPage from './QuestionPage';
-import { provideEWISamplingLocations } from '../Utils/CalculationUtilities';
+import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
@@ -318,7 +318,7 @@ class WebFF extends React.Component {
 		let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
 		let hoursString = ('0' + d.getHours()).slice(-2);
 		let minutesString = ('0' + (d.getMinutes())).slice(-2);
-		let secondsString = ('0' + (d.getMinutes())).slice(-2);
+		let secondsString = ('0' + (d.getSeconds())).slice(-2);
 		let timeString = hoursString + ":" + minutesString + ":" + secondsString;
 		return dateString + "@" + timeString;
 	}
@@ -344,7 +344,10 @@ class WebFF extends React.Component {
 		itemsToSyncToLS.push(samplingEventName);
 
 		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
-		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName: samplingEventName }, () => this.runAllActionsForCurrentSamplingEvent());
+		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName: samplingEventName }, () => {
+			this.runAllActionsForCurrentSamplingEvent();
+			this.collectRunAndPropagateSamplePointData();
+		});
 	}
 
 
@@ -811,6 +814,7 @@ class WebFF extends React.Component {
 		//HARDCODE for numberOfSamplingPoints
 		let propagateSamplePointData = false;
 		if (Q.props.id === "numberOfSamplingPoints") {
+			//TODO: check if there are values in EDI or EWI tables and warn of overwriting
 			console.log("numberOfSamplingPoints: ", Q.state.value);
 			propagateSamplePointData = true;
 		}
@@ -866,7 +870,11 @@ class WebFF extends React.Component {
 
 	loadSamplingEvent(samplingEventName) {
 		//TODO: return all items to default state BEFORE loading and running?
-		this.setState({ curSamplingEventName: samplingEventName }, this.runAllActionsForCurrentSamplingEvent);
+		this.setState({ curSamplingEventName: samplingEventName }, ()=> {
+			this.runAllActionsForCurrentSamplingEvent();
+			this.collectRunAndPropagateSamplePointData();
+		}
+		);
 	}
 
 
@@ -958,38 +966,43 @@ class WebFF extends React.Component {
 
 	collectRunAndPropagateSamplePointData() {
 		//FIXME:  This overwrites values in the table if any exist //TODO: check current value and insert
-		//TODO: FIXME: getQuestionData needs to switch to getQuestionValue... getQuestionData is returning faulty information
+		//TODO: check that everything is loaded rather than just quetionsData
 		let numSampPoints = null;
-		//console.log(this.state);
+		console.log("CRAPSPD: ", this.state);
 		if (this.state.itemsLoaded.includes('questionsData')) {
-			numSampPoints = this.getQuestionData("numberOfSamplingPoints").value;
+			console.log("loaded");
+			numSampPoints = this.getQuestionValue("numberOfSamplingPoints");
 		}
-
+		console.log(numSampPoints);
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// pull variables from fields
-			let LESZ = this.getQuestionData("edgeOfSamplingZone_Left").value;
-			let RESZ = this.getQuestionData("edgeOfSamplingZone_Right").value;
+			let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
+			let RESZ = this.getQuestionValue("edgeOfSamplingZone_Right");
 
 			let pierlocs = [];
 			let pierWids = [];
 			for (let i = 0; i < 6; i++) {
-				pierlocs.push(this.getQuestionData("pier" + (i + 1) + "_start").value);
+				pierlocs.push(this.getQuestionValue("pier" + (i + 1) + "_start"));
 
-				let pierWidth = this.getQuestionData("pier" + (i + 1) + "_end").value - pierlocs[i];
+				let pierWidth = this.getQuestionValue("pier" + (i + 1) + "_end") - pierlocs[i];
 				pierWids.push(pierWidth);
 			}
 
 
-			let tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
-
+			let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
 			// turn this into an array of 1-length array values for ingestion to table 
-			let newVal = new Array(tempValArr.length);
-			for (let i = 0; i < tempValArr.length; i++) {
-				newVal[i] = [tempValArr[i]];
+			let newVal = new Array(tempEWIValArr.length);
+			for (let i = 0; i < tempEWIValArr.length; i++) {
+				newVal[i] = [tempEWIValArr[i]];
 			}
 
-			this.setQuestionData("EWI_samples_table", newVal);
+			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints).map((item)=>[item]);
+			
+			this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, ()=>console.log("value set"));
+			this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, ()=>console.log("value set"));
+			this.setQuestionValue("EWI_SetA_samples_table", newVal, ()=>console.log("value set"));
+			this.setQuestionValue("EWI_SetB_samples_table", newVal, ()=>console.log("value set"));
 		}
 	}
 
@@ -1109,17 +1122,20 @@ class WebFF extends React.Component {
 		//TODO: standardize 'placeholder' within questions
 		//TODO: utilize isLoaded to hold off processing until done loading
 
-		if (menuText === "Test Connection") {
-			console.log("Testing ...")
+		if (menuText === "Test") {
 
-			// this sync's this.state.stations to the DB.  WORKS.
-			//this.syncSamplingEventToDB(this.state.curSamplingEventName);
-
+			return;
 		}
 
+		if(menuText === "Sync Current Event to Database") {
+			this.syncSamplingEventToDB(this.state.curSamplingEventName);
+			return;
+		}
+
+
+		// actually opening dialog 
 		// build the curDialogXXX data
 		this.setState({ curDialogName: menuText });
-
 
 		let filteredDialogInfo = this.state.dialogQuestions.filter((dialogItem) => {
 			return dialogItem.dialogName.replace(/ /g, '') === menuText.replace(/ /g, '')
