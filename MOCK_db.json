@@ -266,7 +266,6 @@
     {
       "id": "questionsData",
       "questionsDataArr": [
-      
         {
           "id": "stationName",
           "label": "Station Name",
@@ -874,94 +873,8 @@
           "layoutGroup": "Waterway Info",
           "width_xs": 2,
           "width_lg": 1
-		},
-		
-
-		{
-			"id": "WQ_commongFieldParameters_table",
-			"type": "TableInput",
-			"tabName": "Question Page",
-			"layoutGroup": "Common Field Parameters",
-			"rows": "10",
-			"cols": "8",
-			"colHeaders": true,
-			"rowHeaders": true,
-			"defaultValue": [
-			  [
-			  "EDI",
-			  "SubQuestion::WQ_time",
-			  "Depth (feet)",
-			  "T-Rate",
-			  "Volume (cc)",
-			  "Time (sec)",
-			  "Ratio of Vertical",
-			  "Intake Efficiency"
-			  ],
-			  [
-				"30%"
-			  ],
-			  [
-				"50%"
-			  ],
-			  [
-				"70%"
-			  ],
-			  [
-				"90%"
-			  ]
-			],
-			"width_xs": 6,
-			"width_lg": 6
-		  },
-		  {
-			"id": "ButtonTest1",
-			"label": "Press 1",
-			"size":"large",
-			"variant":"fab",
-			"type": "ButtonInput",
-			"helperText": "P1000",
-			"tabName": "Question Page",
-			"value":"",
-			"layoutGroup": "Field Parameters"
-		  },
-		  {
-			"id": "ButtonTest2",
-			"label": "Press 2",
-			"size":"medium",
-			"variant":"outlined",
-			"type": "ButtonInput",
-			"helperText": "P1000",
-			"tabName": "Question Page",
-			"value":"",
-			"layoutGroup": "Field Parameters"
-		  },
-		  {
-			"id": "ButtonTest3",
-			"label": "Press 3",
-			"variant": "contained",
-			"type": "ButtonInput",
-			"helperText": "P1000",
-			"value":"1",
-			"actions": {
-				"1": "ShowPanel::Question Page:Common Field Parameters"
-			},
-			"tabName": "Question Page",
-			"layoutGroup": "Field Parameters"
-		  },
-		  {
-			"id": "ButtonTest4",
-			"label": "Press 4",
-			"icon": "SyncIcon",
-			"type": "ButtonInput",
-			"helperText": "P1000",
-			"tabName": "Question Page",
-			"value":"1",
-			"actions": {
-				"1": "HidePanel::Question Page:Common Field Parameters"
-			},
-			"layoutGroup": "Field Parameters"
-		  },
-
+        },
+       
         {
           "id": "WQ_time",
           "label": "Time",
@@ -971,8 +884,8 @@
           "tabName": "Water Quality",
           "layoutGroup": "Field Parameters",
           "width_xs": 4,
-		  "width_lg": 3,
-		  "value":""
+          "width_lg": 3,
+          "value": ""
         },
         {
           "id": "WQ_location",
@@ -1685,18 +1598,7 @@
           "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
-		},
-		
-
-
-
-
-
-
-
-
-
-
+        },
         {
           "id": "EWI_samplerType",
           "label": "Sampler Type",
@@ -2035,8 +1937,7 @@
             "Intake Efficiency"
           ],
           "rowHeaders": "true",
-          "value": [
-          ],
+          "value": [],
           "width_xs": 6,
           "width_lg": 6
         },
@@ -2166,8 +2067,7 @@
             "Intake Efficiency"
           ],
           "rowHeaders": "true",
-          "value": [
-          ],
+          "value": [],
           "width_xs": 6,
           "width_lg": 6
         },
@@ -2312,7 +2212,96 @@
           "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
-        }
+        }, {
+			"id": "test_table",
+			"type": "TableInput",
+			"tabName": "Question Page",
+			"layoutGroup": "Common Field Parameters",
+			"rows": "10",
+			"cols": "10",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"value": [
+			  [
+				"EDI",
+				"SubQuestion::WQ_time",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"30%"
+			  ],
+			  [
+				"50%"
+			  ],
+			  [
+				"70%"
+			  ],
+			  [
+				"90%"
+			  ]
+			],
+			"width_xs": 6,
+			"width_lg": 6
+		  },
+		  {
+			"id": "ButtonTest1",
+			"label": "Press 1",
+			"size": "large",
+			"variant": "fab",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"tabName": "Question Page",
+			"value": "1",
+			"actions": {
+			  "1": "AddRowToTable::test_table"
+			},
+			"layoutGroup": "Field Parameters"
+		  },
+		  {
+			"id": "ButtonTest2",
+			"label": "Press 2",
+			"size": "medium",
+			"variant": "outlined",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"tabName": "Question Page",
+			"value": "1",
+			"actions": {
+			  "1": "RemoveRowFromTable::test_table"
+			},
+			"layoutGroup": "Field Parameters"
+		  },
+		  {
+			"id": "ButtonTest3",
+			"label": "Press 3",
+			"variant": "contained",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"value": "1",
+			"actions": {
+			  "1": "AddColumnToTable::test_table"
+			},
+			"tabName": "Question Page",
+			"layoutGroup": "Field Parameters"
+		  },
+		  {
+			"id": "ButtonTest4",
+			"label": "Press 4",
+			"icon": "SyncIcon",
+			"type": "ButtonInput",
+			"helperText": "P1000",
+			"tabName": "Question Page",
+			"value": "1",
+			"actions": {
+			  "1": "RemoveColumnFromTable::test_table"
+			},
+			"layoutGroup": "Field Parameters"
+		  }
       ]
     }
   ],
@@ -2348,7 +2337,9 @@
           "projectID": "BAC",
           "agencyCode": "ATF"
         }
-      ]      
+      ]
+    
+      
     }
   ]
 }

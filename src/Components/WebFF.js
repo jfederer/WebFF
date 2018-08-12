@@ -467,9 +467,34 @@ class WebFF extends React.Component {
 			case "HidePanel":
 				this.showTabOrPanel(splitActionString[1], false, false, this.buildRoutesAndRenderPages());
 				break;
+			case "AddRowToTable":
+				this.addRowToTable(splitActionString[1]);
+				break;
+			case "RemoveRowFromTable":
+				console.log("RemoveRowFromTable");
+				break;
+			case "AddColumnToTable":
+				console.log("AddColumnToTable");
+				break;
+			case "RemoveColumnFromTable":
+				console.log("RemoveColumnFromTable");
+				break;
 			default:
 				console.warn("Requested action '" + splitActionString[0] + "' not recognized");
 		}
+	}
+
+	addRowToTable(q_id) {
+		let valArr = this.getQuestionValue(q_id).slice();
+		console.log("Orig val: ", valArr);
+		let newRow = new Array(valArr[0].length).fill("new");
+		valArr.push(newRow);
+		this.setQuestionValue(q_id, valArr, ()=>{console.log("new val: ", valArr); this.buildRoutesAndRenderPages()});
+		// let QD = this.getQuestionData(q_id);
+		// let curNumRows = parseInt(QD.rows);
+		// this.setQuestionData(q_id, "rows", QD.rows+1, ()=>console.log("set to " + (QD.rows+1)));
+		
+
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
@@ -653,20 +678,20 @@ class WebFF extends React.Component {
 		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
 		// throws error if no question is found
 
-		let DEBUG=false;
-		if(DEBUG)console.log("setQuestionValue(" + q_id + ", "+value+")");
+		let DEBUG = false;
+		if (DEBUG) console.log("setQuestionValue(" + q_id + ", " + value + ")");
 
 		// search in current Sampling Event
-		let curSE = Object.assign({},this.state[this.state.curSamplingEventName]);
+		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
 		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
-			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in setQuestionValue(" + q_id + ", "+value+")");
+			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in setQuestionValue(" + q_id + ", " + value + ")");
 		}
 		if (q_id in curSE.questionsValues) {
 			let newQuestionsValues = curSE.questionsValues;
 			//console.log("newQuestionsValues PRE)", newQuestionsValues); //TODO: the value is already correct here... BEFORE we have even set it.
 			newQuestionsValues[q_id] = value;
-			let newCurSE = {...curSE, questionsValues:newQuestionsValues};
-			this.setState({ [this.state.curSamplingEventName]: newCurSE} , CB);
+			let newCurSE = { ...curSE, questionsValues: newQuestionsValues };
+			this.setState({ [this.state.curSamplingEventName]: newCurSE }, CB);
 			return;
 		}
 
@@ -676,8 +701,8 @@ class WebFF extends React.Component {
 			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
 				if (newDQ[i].questions[k].id === q_id) {
 					newDQ[i].questions[k].value = value;
-					this.setState({"dialogQuestions":newDQ}, CB);
-					return; 
+					this.setState({ "dialogQuestions": newDQ }, CB);
+					return;
 				}
 			}
 		}
@@ -686,10 +711,10 @@ class WebFF extends React.Component {
 		let newQD = this.state.questionsData.slice();
 		for (let i = 0; newQD && i < newQD.length; i++) {
 			if (newQD[i].id === q_id) {
-				console.warn("Setting value ("+value+") on " + q_id + " and it only exists in questionsDialog.  This should be investigated, as it should be very rare.")
+				console.warn("Setting value (" + value + ") on " + q_id + " and it only exists in questionsDialog.  This should be investigated, as it should be very rare.")
 				newQD[i].value = value;
-				this.setState({questionsData:newQD}, CB);
-				return ;
+				this.setState({ questionsData: newQD }, CB);
+				return;
 			}
 		}
 
@@ -701,7 +726,7 @@ class WebFF extends React.Component {
 		// returns VALUE associated with the q_id... first searching currentSamplingEvent, then searching the dialogQuestions, then, finally, questionsData.
 		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
 		// throws error if no question is found
-		let curSE = Object.assign({},this.state[this.state.curSamplingEventName]);
+		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
 		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
 			// current sampling event is not loaded or is malformed.
 			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in getQuestionValue(" + q_id + ")");
@@ -734,9 +759,11 @@ class WebFF extends React.Component {
 	}
 
 
-	parseActionsFromQuestion(Q, actionExecuter) {  //TODO: probably can fix the fact we have two of these functions
-		// Q can be a Question Component OR questionData object -- differentiated by the presence of 'props'
-		// note, if questionData is passed, we get the value from the currentSamplingEvent
+	parseActionsFromQuestion(Q, actionExecuter) {  //****
+		// Q can be a Question Component OR questionData object -- differentiated by the presence of 'props'.
+		// actionExecuter: function to pass each action to.
+		// finds the 'actions' within Q and if they exist, runs the appropriate action string.
+		// note, if questionData is passed (which may or may not include a valid value), we get the value from the currentSamplingEvent
 		let actionsExist = false;
 		let q_id;
 		let actions;
@@ -766,10 +793,7 @@ class WebFF extends React.Component {
 
 	dialogQuestionChangeSystemCallback(Q) {
 		console.log("DialogQuestion: ", Q);
-		//	console.log(this.state.curDialogQuestions);
-
 		this.questionChangeSystemCallback(Q, true);
-
 	}
 
 	questionChangeSystemCallback(Q, dialogQuestion) {
@@ -819,7 +843,7 @@ class WebFF extends React.Component {
 			propagateSamplePointData = true;
 		}
 
-		this.setQuestionValue(Q.props.id, Q.state.value, ()=> {
+		this.setQuestionValue(Q.props.id, Q.state.value, () => {
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
 				this.collectRunAndPropagateSamplePointData();
@@ -870,7 +894,7 @@ class WebFF extends React.Component {
 
 	loadSamplingEvent(samplingEventName) {
 		//TODO: return all items to default state BEFORE loading and running?
-		this.setState({ curSamplingEventName: samplingEventName }, ()=> {
+		this.setState({ curSamplingEventName: samplingEventName }, () => {
 			this.runAllActionsForCurrentSamplingEvent();
 			this.collectRunAndPropagateSamplePointData();
 		}
@@ -997,12 +1021,12 @@ class WebFF extends React.Component {
 				newVal[i] = [tempEWIValArr[i]];
 			}
 
-			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints).map((item)=>[item]);
-			
-			this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, ()=>console.log("value set"));
-			this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, ()=>console.log("value set"));
-			this.setQuestionValue("EWI_SetA_samples_table", newVal, ()=>console.log("value set"));
-			this.setQuestionValue("EWI_SetB_samples_table", newVal, ()=>console.log("value set"));
+			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints).map((item) => [item]);
+
+			this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, () => console.log("value set"));
+			this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, () => console.log("value set"));
+			this.setQuestionValue("EWI_SetA_samples_table", newVal, () => console.log("value set"));
+			this.setQuestionValue("EWI_SetB_samples_table", newVal, () => console.log("value set"));
 		}
 	}
 
@@ -1127,7 +1151,7 @@ class WebFF extends React.Component {
 			return;
 		}
 
-		if(menuText === "Sync Current Event to Database") {
+		if (menuText === "Sync Current Event to Database") {
 			this.syncSamplingEventToDB(this.state.curSamplingEventName);
 			return;
 		}

@@ -16,36 +16,32 @@ const styles = theme => ({
 	tableCell: {
 		padding: 5,
 		flexShrink: 0,
-	},
-	table: {
-		width: 10,
-		//	backgroundColor: "#911"
 	}
+	// table: {
+	// 	width: 10,
+	// 	//	backgroundColor: "#911"
+	// }
 });
 
 
 class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			value: this.props.defaultValue
-		};
-	};
+		let numRows = this.props.value.length;
+		let numCols = 1; // tables with less than 1 column are not allowed
+		this.props.value.forEach(function (row) {
+			if (row.length > numCols) {
+				numCols = row.length;
+			}
+		});
 
-	componentWillMount() {
-//		console.log("CWM: ", this.state.value)
-
-		// make appropriately-sized empty table data array based on 'rows' and 'cols' value if it exists
 		let emptyTable = [];
-		for (var i = 0; i < this.props.rows; i++) {
-			let numCols = parseInt(this.props.cols, 10);
-			emptyTable.push(Array(numCols).fill(""));
+		for (var i = 0; i < numRows; i++) {
+			emptyTable.push(Array(numCols).fill("Def"));
 		}
-//		console.log("emptyTable (empty): ", emptyTable);    // CORRECT OUTPUT
 
-		// go through value in state and drop them into emptyTable.
-		if (this.state.value != null) {
-			this.state.value.map((row, rowNum) => {
+		if (this.props.value != null) {
+			this.props.value.map((row, rowNum) => {
 				row.map((element, colNum) => {
 					emptyTable[rowNum][colNum] = element;
 					return null;
@@ -53,23 +49,27 @@ class TableInput extends React.Component {
 				return null;
 			});
 		}
-		// at this point in execution, empty table is no longer empty
-//		console.log("emptyTable (filled): ", emptyTable);    // CORRECT OUTPUT
 
+		this.state = {
+			value: emptyTable
+		};
 
-		// this.setState({ value: emptyTable }, () =>
-		// 	console.log("AFTER CWM setState: ", this.state.value));  // SAME OUTPUT AS THE INITIAL CONSOLE.LOG IN COMPONENETWILLMOUNT - INCORRECT!
-		this.setState({ value: emptyTable });
+		this.handleTableQuestionChange = this.handleTableQuestionChange.bind(this);
+	};
+
+	componentWillMount() {
+		//		console.log("CWM: ", this.state.value)
+
 
 	}
 
-	handleTableChange(textSubQuestion) {
+	handleTableQuestionChange(textSubQuestion) {
 		let DEBUG = false;
-		if (DEBUG) console.log("HandleTableChange: textSubQuestion: ", textSubQuestion);
+		if (DEBUG) console.log("handleTableQuestionChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
 		const { id } = textSubQuestion.props;
-		console.log(textSubQuestion);
-		let questionRow = id.substring(id.indexOf("row:") + 4, id.indexOf("col:"));
+		// console.log("textSubQuestion", textSubQuestion);
+		let questionRow = id.substring(id.indexOf("row:") + 4, id.indexOf("_col:"));
 		let questionCol = id.substring(id.indexOf("col:") + 4);
 		let questionVal = textSubQuestion.state.value;
 		if (DEBUG) console.log("questionVal: ", questionVal);
@@ -77,8 +77,8 @@ class TableInput extends React.Component {
 		if (DEBUG) console.log("questionCol: ", questionCol);
 		let tempTableValue = this.state.value;
 		tempTableValue[questionRow][questionCol] = questionVal;
-
-		this.setState({ value: tempTableValue }, () => this.props.stateChangeHandler(this));
+		console.log(tempTableValue);
+		this.setState({ value: tempTableValue }, () => {console.log(this.state.value); this.props.stateChangeHandler(this)});
 	}
 
 	buildRow(curRow, row) { //FUTURE:  build even the text questions as sub questions... auto-generating them
@@ -86,10 +86,10 @@ class TableInput extends React.Component {
 		return <TableRow key={this.props.id + "_row_" + row}>
 			{curRow.map((cellContent, col) => {
 				let DEBUG = false;
-				let subQkey = this.props.id + "_row:" + row + "col:" + col;
-				//let classlessProps = delete this.props[classes]; // need to delete classes so they don't get passed to children
-				//let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
-				let adHocProps = { id: subQkey, type: "Text", label: "", value: cellContent }
+				let subQkey = this.props.id + "_row:" + row + "_col:" + col;
+				let classlessProps = delete this.props[classes]; // need to delete classes so they don't get passed to children
+				let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
+				// let adHocProps = { id: subQkey, type: "Text", label: "", value: cellContent }
 				let cellQuestion = null;
 
 				// check if this is a subQuestion
@@ -115,7 +115,7 @@ class TableInput extends React.Component {
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
 						cellQuestion = <div className={classes.header}>{cellContent}</div>
 					} else {
-						cellQuestion = <Question {...adHocProps} stateChangeHandler={this.handleTableChange} />
+						cellQuestion = <Question {...adHocProps} stateChangeHandler={this.handleTableQuestionChange} />
 					}
 				}
 				return (
@@ -129,16 +129,25 @@ class TableInput extends React.Component {
 
 
 	render() {
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
+				//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+				const { classes } = this.props;
 
-		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
+		console.log("rendering table " + this.props.id);
+		console.log(this);
 
-		const { classes } = this.props;
+		let numRows = this.props.value.length;
+		let numCols = 1; // tables with less than 1 column are not allowed
+		this.props.value.forEach(function (row) {
+			if (row.length > numCols) {
+				numCols = row.length;
+			}
+		});
+
+		console.log("Table Size: ", numRows, " x ", numCols); // correct
 
 		//TODO: read-only columns list
 
-		let tableValues = this.state.value;
+		let tableValues = this.props.value;
 
 		// build the JSX tableRows based on will-mount-calculated tableValues
 		let tableRows = [];
