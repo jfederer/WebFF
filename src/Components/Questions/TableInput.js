@@ -153,7 +153,7 @@ class TableInput extends React.Component {
 		let tableRows = [];
 		let tableHeaderRow;
 
-		tableValues.map((curRow, row) => {
+		tableValues.forEach((curRow, row) => {
 			let thisRow = this.buildRow(curRow, row);
 			if (this.props.colHeaders && row === 0) {
 				tableHeaderRow = thisRow;

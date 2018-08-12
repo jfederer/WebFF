@@ -331,7 +331,7 @@ class WebFF extends React.Component {
 
 		// load initial values from questionsData  (and dialogQuestions?)
 		let questionsValues = {};
-		this.state.questionsData.map((Q) => {
+		this.state.questionsData.forEach((Q) => {
 			questionsValues[Q.id] = Q.value;
 		});
 
@@ -471,30 +471,46 @@ class WebFF extends React.Component {
 				this.addRowToTable(splitActionString[1]);
 				break;
 			case "RemoveRowFromTable":
-				console.log("RemoveRowFromTable");
+				this.removeRowFromTable(splitActionString[1]);
 				break;
 			case "AddColumnToTable":
-				console.log("AddColumnToTable");
+				this.addColumnToTable(splitActionString[1]);
 				break;
 			case "RemoveColumnFromTable":
-				console.log("RemoveColumnFromTable");
+				this.removeColumnFromTable(splitActionString[1]);
 				break;
 			default:
 				console.warn("Requested action '" + splitActionString[0] + "' not recognized");
 		}
 	}
 
-	addRowToTable(q_id) {
+	addRowToTable(q_id) { //TODO: copy values vs new values
 		let valArr = this.getQuestionValue(q_id).slice();
-		console.log("Orig val: ", valArr);
-		let newRow = new Array(valArr[0].length).fill("new");
+		let newRow = valArr[valArr.length-1];
 		valArr.push(newRow);
-		this.setQuestionValue(q_id, valArr, ()=>{console.log("new val: ", valArr); this.buildRoutesAndRenderPages()});
-		// let QD = this.getQuestionData(q_id);
-		// let curNumRows = parseInt(QD.rows);
-		// this.setQuestionData(q_id, "rows", QD.rows+1, ()=>console.log("set to " + (QD.rows+1)));
-		
+		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
+	}
 
+	removeRowFromTable(q_id) {
+		let valArr = this.getQuestionValue(q_id).slice();
+		valArr.pop();
+		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
+	}
+
+	addColumnToTable(q_id) { //TODO: copy values vs new values
+		let valArr = this.getQuestionValue(q_id).slice();
+		valArr.forEach((row) => {
+			row.push(row[row.length - 1]);
+		});
+		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
+	}
+
+	removeColumnFromTable(q_id) {
+		let valArr = this.getQuestionValue(q_id).slice();
+		valArr.forEach((row) => {
+			row.pop();
+		});
+		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
@@ -634,14 +650,17 @@ class WebFF extends React.Component {
 			this.setState({ questionsData: newQuestionsData }, CB);
 		} else {
 			let newDialogQuestions = this.state.dialogQuestions.slice();
+			
+			function ifIDMatchSetValue(questionData) {
+				if (questionData.id === q_id) {
+					questionData[key] = value;
+					anyFound = true;
+				}
+				return questionData;
+			}
+
 			for (let i = 0; i < newDialogQuestions.length && !anyFound; i++) {
-				var specificDialogQuestions = newDialogQuestions[i].questions.filter(questionData => {
-					if (questionData.id === q_id) {
-						questionData[key] = value;
-						anyFound = true;
-					}
-					return questionData;
-				});
+				var specificDialogQuestions = newDialogQuestions[i].questions.map(ifIDMatchSetValue);
 				if (anyFound) {
 					newDialogQuestions[i].questions = specificDialogQuestions;
 					this.setState({ dialogQuestions: newDialogQuestions }, CB);
@@ -905,7 +924,7 @@ class WebFF extends React.Component {
 	runAllActionsForCurrentSamplingEvent() { //***   not a fan of the use of getQuestionData
 		// runs through every question in questionsData, if that question has actions checks the value of said question and runs appropraite actions
 		let DEBUG = false;
-		this.state.questionsData.map((questionData) => { // for each question
+		this.state.questionsData.forEach((questionData) => { // for each question
 			if (questionData.actions) { // check if it has an actions node
 				// it does! let's check the value of this question in our current event
 				if (DEBUG) {
