@@ -142,7 +142,7 @@ class ComputedValue extends React.Component {
 			xmltag={this.props.XMLTag}
 			inputProps={{
 				size: thisSize,
-				readOnly: true
+				readOnly: [this.props.readOnly]
 			}}
 		/>;
 

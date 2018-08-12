@@ -874,7 +874,46 @@
           "layoutGroup": "Waterway Info",
           "width_xs": 2,
           "width_lg": 1
-        },
+		},
+		
+
+		{
+			"id": "WQ_commongFieldParameters_table",
+			"type": "TableInput",
+			"tabName": "Question Page",
+			"layoutGroup": "Common Field Parameters",
+			"rows": "10",
+			"cols": "8",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"defaultValue": [
+			  [
+			  "EDI",
+			  "SubQuestion::WQ_time",
+			  "Depth (feet)",
+			  "T-Rate",
+			  "Volume (cc)",
+			  "Time (sec)",
+			  "Ratio of Vertical",
+			  "Intake Efficiency"
+			  ],
+			  [
+				"30%"
+			  ],
+			  [
+				"50%"
+			  ],
+			  [
+				"70%"
+			  ],
+			  [
+				"90%"
+			  ]
+			],
+			"width_xs": 6,
+			"width_lg": 6
+		  },
+
         {
           "id": "WQ_time",
           "label": "Time",
@@ -884,7 +923,8 @@
           "tabName": "Water Quality",
           "layoutGroup": "Field Parameters",
           "width_xs": 4,
-          "width_lg": 3
+		  "width_lg": 3,
+		  "value":""
         },
         {
           "id": "WQ_location",

@@ -19,7 +19,7 @@ const styles = theme => ({
 	},
 	table: {
 		width: 10,
-	//	backgroundColor: "#911"
+		//	backgroundColor: "#911"
 	}
 });
 
@@ -27,41 +27,23 @@ const styles = theme => ({
 class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {
-			value: this.props.value
+			value: this.props.defaultValue
 		};
-		this.handleTableChange = this.handleTableChange.bind(this);
 	};
 
 	componentWillMount() {
-		this.setState({ value: this.props.value });
+		console.log("CWM: ", this.state.value)
 
-		let tableWidth = this.props.colHeaders.length; 	//TODO: might want to put row and column size info in state for adding later...
-
-
-		//console.log(this.props);
-
-
-		// make appropriately-sized empty table data array based on 'rows' value if it exists
+		// make appropriately-sized empty table data array based on 'rows' and 'cols' value if it exists
 		let emptyTable = [];
-		let numberOfRowsToEnsure = 1;  //TODO: maybe set to zero and add better error handling
-		if(this.props.minimumNumberOfRows) {
-			numberOfRowsToEnsure = this.props.minimumNumberOfRows;
+		for (var i = 0; i < this.props.rows; i++) {
+			let numCols = parseInt(this.props.cols, 10);
+			emptyTable.push(Array(numCols).fill(""));
 		}
-		if (numberOfRowsToEnsure < this.state.value.length) {
-			numberOfRowsToEnsure = this.state.value.length;
-		}
-		//console.log("Going to generate " + numberOfRowsToEnsure + " rows");
-
-		for (var i = 0; i < numberOfRowsToEnsure; i++) {
-			let numbRows = parseInt(tableWidth, 10);
-			emptyTable.push(Array(numbRows).fill(""));
-		}
+		console.log("emptyTable (empty): ", emptyTable);    // CORRECT OUTPUT
 
 		// go through value in state and drop them into emptyTable.
-		// this extra step is to deal with mis-matches between intial 'value' settings and the table size
-		// additional error-checking worthwhile for when value is (not an array, too big, etc)
 		if (this.state.value != null) {
 			this.state.value.map((row, rowNum) => {
 				row.map((element, colNum) => {
@@ -71,139 +53,116 @@ class TableInput extends React.Component {
 				return null;
 			});
 		}
-		this.setState({value:emptyTable}); // empty table is no longer empty
+		// at this point in execution, empty table is no longer empty
+		console.log("emptyTable (filled): ", emptyTable);    // CORRECT OUTPUT
 
 
-		// if(this.props.samplingDistanceColumn!=null && this.props.samplingDistanceValues!=null) {  //TODO: bridgeWizard as separate table type?
-		// 	console.log("Going to add it in");
-		// 	//add the samplingDistanceValues array to the start of every row in this.state.values
-		// 	let newValues = tableValues;
-		// 	for(let i = 0; i<this.props.samplingDistanceValues.length; i++) {
-		// 		if(!newValues[i]) { // if need to make a new row
-		// 			let newRow = new Array(tableWidth).fill("");
-		// 			newValues.push(newRow);
-		// 		}
-		// 		newValues[i].unshift(this.props.samplingDistanceValues[i]);
-		// 	}
-		// }
+		this.setState({ value: emptyTable }, () =>
+			console.log("AFTER CWM setState: ", this.state.value));  // SAME OUTPUT AS THE INITIAL CONSOLE.LOG IN COMPONENETWILLMOUNT - INCORRECT!
 
 	}
-
-	// handleTableChange = name => event => {
-	// 	console.log("HandleTableChange");
-	// 	console.log("name: ", name);
-	// 	console.log("event: ", event);
-	// };
 
 	handleTableChange(textSubQuestion) {
 		let DEBUG = false;
-		if(DEBUG)console.log("HandleTableChange: textSubQuestion: ", textSubQuestion);
+		if (DEBUG) console.log("HandleTableChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
 		const { id } = textSubQuestion.props;
 		console.log(textSubQuestion);
-		let questionRow = id.substring(id.indexOf("row:")+4,id.indexOf("col:"));
-		let questionCol = id.substring(id.indexOf("col:")+4);
+		let questionRow = id.substring(id.indexOf("row:") + 4, id.indexOf("col:"));
+		let questionCol = id.substring(id.indexOf("col:") + 4);
 		let questionVal = textSubQuestion.state.value;
-		if(DEBUG)console.log("questionVal: ", questionVal);
-		if(DEBUG)console.log("questionRow: ", questionRow);
-		if(DEBUG)console.log("questionCol: ", questionCol);
+		if (DEBUG) console.log("questionVal: ", questionVal);
+		if (DEBUG) console.log("questionRow: ", questionRow);
+		if (DEBUG) console.log("questionCol: ", questionCol);
 		let tempTableValue = this.state.value;
-		tempTableValue[questionRow][questionCol]=questionVal;
+		tempTableValue[questionRow][questionCol] = questionVal;
 
-		this.setState({value:tempTableValue}, ()=>this.props.stateChangeHandler(this));
+		this.setState({ value: tempTableValue }, () => this.props.stateChangeHandler(this));
 	}
 
-	buildQuestion() {
-		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
-
+	buildRow(curRow, row) { //FUTURE:  build even the text questions as sub questions... auto-generating them
 		const { classes } = this.props;
+		return <TableRow key={this.props.id + "_row_" + row}>
+			{curRow.map((cellContent, col) => {
+				let DEBUG = false;
+				let subQkey = this.props.id + "_row:" + row + "col:" + col;
+				//let classlessProps = delete this.props[classes]; // need to delete classes so they don't get passed to children
+				//let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
+				let adHocProps = { id: subQkey, type: "Text", label: "", value: cellContent }
+				let cellQuestion = null;
 
-		let tableWidth = this.props.colHeaders.length; 	//TODO: might want to put row and column size info in state for adding later...
+				// check if this is a subQuestion
+				if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
+					let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
+					if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
+					let questionData = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, subQuestionID);
+					if (DEBUG) console.log("questionData", questionData);
+					adHocProps = { ...adHocProps, ...questionData };
+					if (DEBUG) console.log("adHocProps", adHocProps);
+					cellQuestion = <Question {...adHocProps} stateChangeHandler={this.props.stateChangeHandler} globalState={this.props.globalState} />;
 
+					// if this question is in a header location, wrap it in the header div
+					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
+						cellQuestion = <div className={classes.header}>{cellQuestion}</div>
+					}
+				} else {  // this is just a text field and rather than make a separate custom sub queston for each, 
+					// we'll extract the values as they change and put them into the 2d array of values representing the table
+					// TODO: dynamically build questions (id: tableQ_ID+row+col)
 
-		//console.log(this.props);
-		//TODO: read-only columns list
-
-		let tableValues = this.state.value;
-
-		// build the JSX tableRows based on above-calculated tableValues
-		let tableRows = [];
-
-		tableValues.map((curRow, row) => {
-			tableRows.push(
-				<TableRow key={this.props.id + "_row_" + row}>
-					{curRow.map((cellContent, col) => {
-						//console.log("cellContent: ", cellContent);
-						
-						let DEBUG = false;
-						let subQkey = this.props.id + "_row:" + row + "col:" + col;
-						let classlessProps = delete this.props[classes]; // need to delete classes so they don't get passed to children
-						let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
-						let cellQuestion = null;
-
-						if (typeof(cellContent)==="string" && cellContent.startsWith("SubQuestion::")) {
-							
-							let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
-							if(DEBUG)console.log("Found a subQuestion: ", subQuestionID);
-							let questionData = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, subQuestionID);
-							if(DEBUG)console.log("questionData", questionData);
-							adHocProps = { ...adHocProps, ...questionData };
-							if(DEBUG)console.log("adHocProps", adHocProps);
-							cellQuestion = <Question {...adHocProps} stateChangeHandler={this.props.stateChangeHandler} globalState={this.props.globalState} />;
-						} else {  // this is just a text field and rather than make a separate custom sub queston for each, we'll extract the values as they change and put them into the 2d array of values representing the table
-							if (col === 0 && this.props.rowHeaders) {
-								cellQuestion = <div className={classes.header}>{cellContent}</div>
-							} else {
-								cellQuestion = <Question {...adHocProps} stateChangeHandler={this.handleTableChange} />
-							}
-						}
-
-
-						//FUTURE:  build even the text questions as sub questions... auto-generating them
-
-
-						return (
-							<TableCell className={classes.tableCell} key={this.props.id + "_row:" + row + "_col:" + col}>
-								{cellQuestion}								
-							</TableCell>
-						)
-					})}
-				</TableRow>
-			);
-			return null;
-		});
-
-		// if column widths are not specified, split the table evenly
-		let colGroup = <colgroup>
-			{
-				this.props.colWidths ?
-					this.props.colWidths.map((colWidth, i) => <col key={"colWidth_" + i} width={colWidth} />) :
-					this.props.colHeaders.map((colWidth, i) => <col key={"colWidth_" + i} width={100 / tableWidth} />)
-			}
-		</colgroup>;
-
-		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
-
-
-		return <Table key={this.props.id + "_table"} className={classes.table}>
-		{colGroup}
-		<TableHead>
-			<TableRow>
-				{this.props.colHeaders.map((header) => <TableCell className={classes.tableCell} key={this.props.id + header}><div className={classes.header}>{header}</div></TableCell>)}
-			</TableRow>
-		</TableHead>
-		<TableBody>
-			{tableRows}
-		</TableBody>
-	</Table>
-	
-
+					// just text could either be a header (whereby it should NOT become a question)
+					// or it needs to be a text question in the table
+					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
+						cellQuestion = <div className={classes.header}>{cellContent}</div>
+					} else {
+						cellQuestion = <Question {...adHocProps} stateChangeHandler={this.handleTableChange} />
+					}
+				}
+				return (
+					<TableCell className={classes.tableCell} key={this.props.id + "_row:" + row + "_col:" + col}>
+						{cellQuestion}
+					</TableCell>
+				)
+			})}
+		</TableRow>
 	}
 
 
 	render() {
-		return this.buildQuestion()
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
+
+		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+		// The problem with the first attempt at that was that the drop down did not display the selection after selecting
+
+		const { classes } = this.props;
+
+		//TODO: read-only columns list
+
+		let tableValues = this.state.value;
+
+		// build the JSX tableRows based on will-mount-calculated tableValues
+		let tableRows = [];
+		let tableHeaderRow;
+
+		tableValues.map((curRow, row) => {
+			let thisRow = this.buildRow(curRow, row);
+			if (this.props.colHeaders && row === 0) {
+				tableHeaderRow = thisRow;
+			} else {
+				tableRows.push(thisRow);
+			}
+		});
+
+		let tableHeader = tableHeaderRow ?
+			<TableHead key={this.props.id + "_tableHead"}>{tableHeaderRow}</TableHead> :
+			null;
+
+		let tableBody = <TableBody>{tableRows}</TableBody>;
+
+		return <Table key={this.props.id + "_table"} className={classes.table}>
+			{/* {colGroup} */}
+			{tableHeader}
+			{tableBody}
+		</Table>
 	}
 }
 
