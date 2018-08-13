@@ -489,6 +489,9 @@ class WebFF extends React.Component {
 		//numToAdd: number of rows to add to the table. If a negative value is passed, will subtract rows
 		//CB: callback function after setQuestionValue is called.
 		//note, new rows are copies of last row.  //TODO: make this copying optional by passing in array of columns to copy
+		//note, TODO: if would be replicating colHeaders, just puts in blanks instead
+		console.log("QID: ", q_id, " : ", this.getQuestionValue(q_id));
+
 		let valArr = this.getQuestionValue(q_id).slice();
 		let newRow = valArr[valArr.length - 1].slice();
 		if (numToAdd > 0)  // add rows
@@ -518,13 +521,19 @@ class WebFF extends React.Component {
 		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
 
-	setTableColumn(q_id, colNum, arr) {
-		// expands entire 
+	setTableColumn(q_id, colNum, arr, CB) {
+		// WARNING: expands or shrinks the entire column to match the number of rows in the given column
+		// TODO: add flag(s) to clear out rest of table? -- no, do this as part of propagate, to much side-effect here
 		let valArr = this.getQuestionValue(q_id).slice();
-		valArr.forEach((row, rowNum) => {
-			row.splice(colNum, 1, arr[rowNum]);
+		console.log("Existing valArr.length: ", valArr.length);
+		console.log("Incoming arr length: ", arr.length);
+		this.updateNumRowsOfTable(q_id, arr.length-valArr.length, () => {
+			valArr = this.getQuestionValue(q_id).slice();
+			valArr.forEach((row, rowNum) => {
+				row.splice(colNum, 1, arr[rowNum]);
+			});
+			this.setQuestionValue(q_id, valArr, CB);
 		});
-		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
@@ -1026,7 +1035,7 @@ class WebFF extends React.Component {
 		let numSampPoints = null;
 		console.log("CRAPSPD: ", this.state);
 		numSampPoints = this.getQuestionValue("numberOfSamplingPoints");
-		console.log(numSampPoints);
+		console.log("numSampPoints: ", numSampPoints);
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// pull variables from fields
@@ -1043,22 +1052,23 @@ class WebFF extends React.Component {
 			}
 
 
-			// set EWI samples tables
-			let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
-			console.log("EWI: ", tempEWIValArr);
-			// turn this into an array of 1-length array values for ingestion to table 
-			let newVal = new Array(tempEWIValArr.length);
-			for (let i = 0; i < tempEWIValArr.length; i++) {
-				newVal[i] = [tempEWIValArr[i]];
-			}
-			this.setTableColumn("EWI_SetA_samples_table", 0, tempEDIValArr);
-			this.setTableColumn("EWI_SetB_samples_table", 0, tempEDIValArr);
+			// // set EWI samples tables
+			// let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
+			// console.log("EWI: ", tempEWIValArr);
+			// // turn this into an array of 1-length array values for ingestion to table 
+			// let newVal = new Array(tempEWIValArr.length);
+			// for (let i = 0; i < tempEWIValArr.length; i++) {
+			// 	newVal[i] = [tempEWIValArr[i]];
+			// }
+			// this.setTableColumn("EWI_SetA_samples_table", 0, tempEWIValArr);
+			// this.setTableColumn("EWI_SetB_samples_table", 0, tempEWIValArr);
 
 			// set EDI samples tables
-			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints);//.map((item) => [item]);
-			console.log("EDI: ", tempEDIValArr);
-			this.setTableColumn("EDI_SetA_samples_table", 0, tempEDIValArr); //TODO: FIXME: expand (or contract) table to match
-			this.setTableColumn("EDI_SetB_samples_table", 0, tempEDIValArr);
+			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints);
+			tempEDIValArr.unshift(""); // to push the results down past the header
+			console.log("EDI values: ", tempEDIValArr);
+			this.setTableColumn("EDI_SetA_samples_table", 0, tempEDIValArr, this.buildRoutesAndRenderPages); //TODO: FIXME: expand (or contract) table to match
+			this.setTableColumn("EDI_SetB_samples_table", 0, tempEDIValArr, this.buildRoutesAndRenderPages);
 			// this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, () => console.log("value set"));
 			// this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, () => console.log("value set"));
 

@@ -70,7 +70,7 @@ export const provideEDISamplingPercentages = (numberOfSamples) => {
   let width = 100 / numberOfSamples;
   let results = [];
   for(let i=1; i<=numberOfSamples; i++) {
-	results.push(Math.round((((i)*width)-(width/2))* 10 ) / 10);
+	results.push((Math.round((((i)*width)-(width/2))* 10 ) / 10)+'%');
   }
 return results;
 }
