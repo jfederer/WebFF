@@ -880,9 +880,7 @@ class WebFF extends React.Component {
 		//HARDCODE for numberOfSamplingPoints
 		let propagateSamplePointData = false;
 		if (Q.props.id.includes("numberOfSamplingPoints")) {
-			//TODO: check if there are values in EDI or EWI tables and warn of overwriting
-			console.log("numberOfSamplingPoints: ", Q.state.value);
-			propagateSamplePointData = true;
+			propagateSamplePointData = true; // want to run it later because we want values to propagate through teh system first
 		}
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
@@ -939,7 +937,6 @@ class WebFF extends React.Component {
 		//TODO: return all items to default state BEFORE loading and running?
 		this.setState({ curSamplingEventName: samplingEventName }, () => {
 			this.runAllActionsForCurrentSamplingEvent();
-			this.collectRunAndPropagateSamplePointData();
 		}
 		);
 	}
