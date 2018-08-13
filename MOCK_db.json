@@ -12,7 +12,7 @@
     {
       "id": "hiddenPanels",
       "hiddenPanelsArr": [
-        "EDI:IntakeEfficiencyTest"
+        "EDI:IntakeEfficiencyTest", "EWI:IntakeEfficiencyTest"
       ]
     },
     {
@@ -732,17 +732,6 @@
           "width_lg": 2
         },
         {
-          "id": "numberOfSamplingPoints",
-          "value": "",
-          "label": "Sampling Points",
-          "type": "Text",
-          "placeholder": "Number of Points",
-          "tabName": "EWI",
-          "layoutGroup": "Waterway Info",
-          "width_xs": 12,
-          "width_lg": 2
-        },
-        {
           "id": "pier1_start",
           "label": "Pier 1 Start",
           "type": "Text",
@@ -1100,7 +1089,9 @@
           "layoutGroup": "Sampler Info",
           "width_xs": 6,
           "width_lg": 2
-        },
+		},      
+
+		
         {
           "id": "EDI_streamDepth",
           "label": "Stream Depth(ft)",
@@ -1145,7 +1136,7 @@
           "tabName": "EDI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 4,
-          "width_lg": 2
+          "width_lg": 3
         },
         {
           "id": "EDI_durationIEF",
@@ -1157,8 +1148,31 @@
           "tabName": "EDI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 4,
-          "width_lg": 2
-        },
+          "width_lg": 3
+		},
+		{
+			"id": "EDI_NozzleMaterial_IET",
+			"label": "Nozzle Material",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString":"EDI_NozzleMaterial",
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		  },        {
+			"id": "EDI_NozzleDiameter_IET",
+			"label": "Nozzle Diameter",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "EDI_NozzleDiameter",
+			"value": "",
+			"tabName": "EDI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		  },
         {
           "id": "EDI_ratioOfVertical",
           "label": "Ratio of Vertical",
@@ -1167,7 +1181,7 @@
           "tabName": "EDI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 3,
-          "width_lg": 1
+          "width_lg": 3
         },
         {
           "id": "EDI_intakeEfficiency",
@@ -1177,8 +1191,10 @@
           "tabName": "EDI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 3,
-          "width_lg": 1
-        },
+          "width_lg": 3
+		},
+		
+
         {
           "id": "EDI_setA_StartTime",
           "label": "Start Time",
@@ -1187,7 +1203,7 @@
           "layoutGroup": "Set A Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EDI_setA_EndTime",
@@ -1197,7 +1213,7 @@
           "layoutGroup": "Set A Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EDI_setA_StartGageHeight",
@@ -1230,7 +1246,18 @@
           "computationString": "(EDI_setA_StartGageHeight+EDI_setA_EndGageHeight)/2",
           "width_xs": 4,
           "width_lg": 2
-        },
+		},
+		{
+			"id": "EDI_setA_numberOfSamplingPoints",
+			"value": "",
+			"label": "Sampling Points",
+			"type": "Text",
+			"placeholder": "Number of Points",
+			"tabName": "EDI",
+			"layoutGroup": "Set A Information",
+			"width_xs": 3,
+			"width_lg": 3
+		  },
         {
           "id": "EDI_setA_numberOfContainers",
           "label": "Number Of Containers",
@@ -1238,8 +1265,8 @@
           "layoutGroup": "Set A Information",
           "type": "Text",
           "value": "",
-          "width_xs": 4,
-          "width_lg": 2
+          "width_xs": 3,
+          "width_lg": 4
         },
         {
           "id": "EDI_setA_analyzeIndividually",
@@ -1251,42 +1278,21 @@
           "layoutGroup": "Set A Information",
           "value": "",
           "width_xs": 4,
-          "width_lg": 2
+          "width_lg": 3
         },
-        {
-          "id": "EDI_setA_AnalysedFor",
-          "label": "Analyze Set A for:",
-          "XMLTag": "Analyses",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "EDI",
-          "layoutGroup": "Set A Information",
-          "width_xs": 6,
-          "width_lg": 6
-        },
+       
 		{
-			"id": "EDI_SetA_samples_table",
+			"id": "EDI_setA_samplesTable",
 			"label": "Samples Table",
 			"type": "TableInput",
 			"tabName": "EDI",
 			"layoutGroup": "Set A Information",
 			"colHeaders": true,
 			"rowHeaders": true,
-			"colSizes": [1,5,2,10,5,6,7,8],
+			"colSizes": [1,2,3,3,3,3,3],
 			"value":  [
 			  [
 				"EDI",
-				"SubQuestion::WQ_time",
 				"Depth (feet)",
 				"T-Rate",
 				"Volume (cc)",
@@ -1295,11 +1301,31 @@
 				"Intake Efficiency"
 			  ],
 			  [
-				"Need Number of Samples","","","","","","",""
+				"Fill Out Number Of Samples","","","","","",""
 			  ]
 			],
-			"width_xs": 6,
-			"width_lg": 6
+			"width_xs": 10,
+			"width_lg": 10
+		  }, {
+			"id": "EDI_setA_AnalysedFor",
+			"label": "Analyze Set A for:",
+			"XMLTag": "Analyses",
+			"type": "MultipleChoice",
+			"options": {
+			  "Concentration": "C",
+			  "Sand-Fine break": "SF",
+			  "Sand Analysis": "SA",
+			  "Turbidity": "T",
+			  "Loss-on-ignition": "LOI",
+			  "Dissolved Solids": "DS",
+			  "Specific Conductance": "SC",
+			  "Full-size Fractions": "Z"
+			},
+			"value": [],
+			"tabName": "EDI",
+			"layoutGroup": "Set A Information",
+			"width_xs": 2,
+			"width_lg": 2
 		  },
         {
           "id": "EDI_showSetB",
@@ -1323,7 +1349,7 @@
           "layoutGroup": "Set B Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EDI_setB_EndTime",
@@ -1333,7 +1359,7 @@
           "layoutGroup": "Set B Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EDI_setB_StartGageHeight",
@@ -1366,7 +1392,18 @@
           "computationString": "(EDI_setA_StartGageHeight+EDI_setA_EndGageHeight)/2",
           "width_xs": 4,
           "width_lg": 2
-        },
+		},
+		{
+			"id": "EDI_setB_numberOfSamplingPoints",
+			"value": "",
+			"label": "Sampling Points",
+			"type": "Text",
+			"placeholder": "Number of Points",
+			"tabName": "EDI",
+			"layoutGroup": "Set B Information",
+			"width_xs": 3,
+			"width_lg": 3
+		  },
         {
           "id": "EDI_setB_numberOfContainers",
           "label": "Number Of Containers",
@@ -1374,8 +1411,8 @@
           "layoutGroup": "Set B Information",
           "type": "Text",
           "value": "",
-          "width_xs": 4,
-          "width_lg": 2
+          "width_xs": 3,
+          "width_lg": 4
         },
         {
           "id": "EDI_setB_analyzeIndividually",
@@ -1387,55 +1424,54 @@
           "layoutGroup": "Set B Information",
           "value": "",
           "width_xs": 4,
-          "width_lg": 2
+          "width_lg": 3
         },
-        {
-          "id": "EDI_setB_AnalysedFor",
-          "label": "Analyze Set A for:",
-          "XMLTag": "Analyses",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "EDI",
-          "layoutGroup": "Set B Information",
-          "width_xs": 6,
-          "width_lg": 6
-        },
+      
 		{
-			"id": "EDI_SetB_samples_table",
+			"id": "EDI_setB_samplesTable",
 			"label": "Samples Table",
 			"type": "TableInput",
 			"tabName": "EDI",
 			"layoutGroup": "Set B Information",
 			"colHeaders": true,
 			"rowHeaders": true,
-			"colSizes": [1,5,2,10,5,6,7,8],
+			"colSizes": [1,2,3,3,3,3,3],
 			"value":  [
-				[
-					"EDI",
-					"SubQuestion::WQ_time",
-					"Depth (feet)",
-					"T-Rate",
-					"Volume (cc)",
-					"Time (sec)",
-					"Ratio of Vertical",
-					"Intake Efficiency"
-				  ],
-				  [
-					"Need Number of Samples","","","","","","",""
-				  ]
+			  [
+				"EDI",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"Fill Out Number Of Samples","","","","","",""
+			  ]
 			],
-			"width_xs": 6,
-			"width_lg": 6
+			"width_xs": 10,
+			"width_lg": 10
+		  },  {
+			"id": "EDI_setB_AnalysedFor",
+			"label": "Analyze Set A for:",
+			"XMLTag": "Analyses",
+			"type": "MultipleChoice",
+			"options": {
+			  "Concentration": "C",
+			  "Sand-Fine break": "SF",
+			  "Sand Analysis": "SA",
+			  "Turbidity": "T",
+			  "Loss-on-ignition": "LOI",
+			  "Dissolved Solids": "DS",
+			  "Specific Conductance": "SC",
+			  "Full-size Fractions": "Z"
+			},
+			"value": [],
+			"tabName": "EDI",
+			"layoutGroup": "Set B Information",
+			"width_xs": 2,
+			"width_lg": 2
 		  },
         {
           "id": "EDI_timeDatum",
@@ -1727,7 +1763,7 @@
           "width_xs": 6,
           "width_lg": 2
         },
-        {
+  {
           "id": "EWI_streamDepth",
           "label": "Stream Depth(ft)",
           "type": "Text",
@@ -1771,7 +1807,7 @@
           "tabName": "EWI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 4,
-          "width_lg": 2
+          "width_lg": 3
         },
         {
           "id": "EWI_durationIEF",
@@ -1783,8 +1819,31 @@
           "tabName": "EWI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 4,
-          "width_lg": 2
-        },
+          "width_lg": 3
+		},
+		{
+			"id": "EWI_NozzleMaterial_IET",
+			"label": "Nozzle Material",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString":"EWI_NozzleMaterial",
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		  },        {
+			"id": "EWI_NozzleDiameter_IET",
+			"label": "Nozzle Diameter",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "EWI_NozzleDiameter",
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		  },
         {
           "id": "EWI_ratioOfVertical",
           "label": "Ratio of Vertical",
@@ -1793,7 +1852,7 @@
           "tabName": "EWI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 3,
-          "width_lg": 1
+          "width_lg": 3
         },
         {
           "id": "EWI_intakeEfficiency",
@@ -1803,7 +1862,7 @@
           "tabName": "EWI",
           "layoutGroup": "Intake Efficiency Test",
           "width_xs": 3,
-          "width_lg": 1
+          "width_lg": 3
         },
         {
           "id": "EWI_setA_StartTime",
@@ -1813,7 +1872,7 @@
           "layoutGroup": "Set A Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EWI_setA_EndTime",
@@ -1823,7 +1882,7 @@
           "layoutGroup": "Set A Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EWI_setA_StartGageHeight",
@@ -1856,7 +1915,18 @@
           "computationString": "(EWI_setA_StartGageHeight+EWI_setA_EndGageHeight)/2",
           "width_xs": 4,
           "width_lg": 2
-        },
+		},
+		{
+			"id": "EWI_setA_numberOfSamplingPoints",
+			"value": "",
+			"label": "Sampling Points",
+			"type": "Text",
+			"placeholder": "Number of Points",
+			"tabName": "EWI",
+			"layoutGroup": "Set A Information",
+			"width_xs": 3,
+			"width_lg": 3
+		  },
         {
           "id": "EWI_setA_numberOfContainers",
           "label": "Number Of Containers",
@@ -1864,8 +1934,8 @@
           "layoutGroup": "Set A Information",
           "type": "Text",
           "value": "",
-          "width_xs": 4,
-          "width_lg": 2
+          "width_xs": 3,
+          "width_lg": 4
         },
         {
           "id": "EWI_setA_analyzeIndividually",
@@ -1877,42 +1947,21 @@
           "layoutGroup": "Set A Information",
           "value": "",
           "width_xs": 4,
-          "width_lg": 2
+          "width_lg": 3
         },
+       
         {
-          "id": "EWI_setA_AnalysedFor",
-          "label": "Analyze Set A for:",
-          "XMLTag": "Analyses",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "EWI",
-          "layoutGroup": "Set A Information",
-          "width_xs": 6,
-          "width_lg": 6
-        },
-        {
-          "id": "EWI_SetA_samples_table",
+          "id": "EWI_setA_samplesTable",
           "label": "Samples Table",
           "type": "TableInput",
           "tabName": "EWI",
           "layoutGroup": "Set A Information",
 		  "colHeaders": true,
 		  "rowHeaders": true,
-		  "colSizes": [1,5,2,10,5,6,7,8],
-          "value":  [
+		  "colSizes": [1,2,3,3,3,3,3],
+		  "value":  [
 			[
 			  "EWI",
-			  "SubQuestion::WQ_time",
 			  "Depth (feet)",
 			  "T-Rate",
 			  "Volume (cc)",
@@ -1921,12 +1970,32 @@
 			  "Intake Efficiency"
 			],
 			[
-			  "Fill Out Number Of Samples","","","","","","",""
+			  "Fill Out Number Of Samples","","","","","",""
 			]
 		  ],
-          "width_xs": 6,
-          "width_lg": 6
-		},
+          "width_xs": 10,
+          "width_lg": 10
+		}, {
+			"id": "EWI_setA_AnalysedFor",
+			"label": "Analyze Set A for:",
+			"XMLTag": "Analyses",
+			"type": "MultipleChoice",
+			"options": {
+			  "Concentration": "C",
+			  "Sand-Fine break": "SF",
+			  "Sand Analysis": "SA",
+			  "Turbidity": "T",
+			  "Loss-on-ignition": "LOI",
+			  "Dissolved Solids": "DS",
+			  "Specific Conductance": "SC",
+			  "Full-size Fractions": "Z"
+			},
+			"value": [],
+			"tabName": "EWI",
+			"layoutGroup": "Set A Information",
+			"width_xs": 2,
+			"width_lg": 2
+		  },
         {
           "id": "EWI_showSetB",
           "label": "Show Set B",
@@ -1951,7 +2020,7 @@
           "layoutGroup": "Set B Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EWI_setB_EndTime",
@@ -1961,7 +2030,7 @@
           "layoutGroup": "Set B Information",
           "value": "",
           "width_xs": 5,
-          "width_lg": 1
+          "width_lg": 2
         },
         {
           "id": "EWI_setB_StartGageHeight",
@@ -1994,7 +2063,18 @@
           "computationString": "(EWI_setA_StartGageHeight+EWI_setA_EndGageHeight)/2",
           "width_xs": 4,
           "width_lg": 2
-        },
+		},
+		{
+			"id": "EWI_setB_numberOfSamplingPoints",
+			"value": "",
+			"label": "Sampling Points",
+			"type": "Text",
+			"placeholder": "Number of Points",
+			"tabName": "EWI",
+			"layoutGroup": "Set B Information",
+			"width_xs": 3,
+			"width_lg": 3
+		  },
         {
           "id": "EWI_setB_numberOfContainers",
           "label": "Number Of Containers",
@@ -2002,9 +2082,9 @@
           "layoutGroup": "Set B Information",
           "type": "Text",
           "value": "",
-          "width_xs": 4,
-          "width_lg": 2
-        },
+          "width_xs": 3,
+          "width_lg": 4
+		},
         {
           "id": "EWI_setB_analyzeIndividually",
           "label": "Analyze Individually",
@@ -2015,42 +2095,21 @@
           "layoutGroup": "Set B Information",
           "value": "",
           "width_xs": 4,
-          "width_lg": 2
+          "width_lg": 3
         },
+       
         {
-          "id": "EWI_setB_AnalysedFor",
-          "label": "Analyze Set A for:",
-          "XMLTag": "Analyses",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "EWI",
-          "layoutGroup": "Set B Information",
-          "width_xs": 6,
-          "width_lg": 6
-        },
-        {
-			"id": "EWI_SetB_samples_table",
+			"id": "EWI_setB_samplesTable",
 			"label": "Samples Table",
 			"type": "TableInput",
 			"tabName": "EWI",
-			"layoutGroup": "Set A Information",
+			"layoutGroup": "Set B Information",
 			"colHeaders": true,
 			"rowHeaders": true,
-			"colSizes": [1,5,2,10,5,6,7,8],
+			"colSizes": [1,2,3,3,3,3,3],
 			"value":  [
 			  [
 				"EWI",
-				"SubQuestion::WQ_time",
 				"Depth (feet)",
 				"T-Rate",
 				"Volume (cc)",
@@ -2059,12 +2118,32 @@
 				"Intake Efficiency"
 			  ],
 			  [
-				"Fill Out Number Of Samples","","","","","","",""
+				"Fill Out Number Of Samples","","","","","",""
 			  ]
 			],
-			"width_xs": 6,
-			"width_lg": 6
-        },
+			"width_xs": 10,
+			"width_lg": 10
+        }, {
+			"id": "EWI_setB_AnalysedFor",
+			"label": "Analyze Set A for:",
+			"XMLTag": "Analyses",
+			"type": "MultipleChoice",
+			"options": {
+			  "Concentration": "C",
+			  "Sand-Fine break": "SF",
+			  "Sand Analysis": "SA",
+			  "Turbidity": "T",
+			  "Loss-on-ignition": "LOI",
+			  "Dissolved Solids": "DS",
+			  "Specific Conductance": "SC",
+			  "Full-size Fractions": "Z"
+			},
+			"value": [],
+			"tabName": "EWI",
+			"layoutGroup": "Set B Information",
+			"width_xs": 2,
+			"width_lg": 2
+		  },
         {
           "id": "EWI_timeDatum",
           "label": "Time Datum",
@@ -2218,21 +2297,20 @@
 			"layoutGroup": "Common Field Parameters",
 			"colHeaders": true,
 			"rowHeaders": true,
-			"colSizes": [1,5,2,10,5,6,7,8],
-			"value": [
-				[
-					"EWI",
-					"SubQuestion::WQ_time",
-					"Depth (feet)",
-					"T-Rate",
-					"Volume (cc)",
-					"Time (sec)",
-					"Ratio of Vertical",
-					"Intake Efficiency"
-				  ],
-				  [
-					"Fill Out Number Of Samples","","","","","","",""
-				  ]
+			"colSizes": [1,2,3,3,3,3,3],
+			"value":  [
+			  [
+				"EWI",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"Fill Out Number Of Samples","","","","","",""
+			  ]
 			],
 			"width_xs": 12,
 			"width_lg": 12

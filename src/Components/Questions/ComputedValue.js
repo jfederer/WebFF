@@ -99,7 +99,9 @@ class ComputedValue extends React.Component {
 
 		//TODO: save old splitCS values so we know what was null for better error display
 
-		if (shouldCompute) {
+		if (shouldCompute && splitCS.length===1) {
+			computedValue = splitCS[0];
+		} else if(shouldCompute) {
 			// rejoin string and send to math utility
 			let finalComputeString = splitCS.join('')
 			//console.log(finalComputeString);

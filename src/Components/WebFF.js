@@ -346,7 +346,7 @@ class WebFF extends React.Component {
 		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
 		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName: samplingEventName }, () => {
 			this.runAllActionsForCurrentSamplingEvent();
-			this.collectRunAndPropagateSamplePointData();
+			// this.collectRunAndPropagateSamplePointData(); 
 		});
 	}
 
@@ -490,7 +490,7 @@ class WebFF extends React.Component {
 		//CB: callback function after setQuestionValue is called.
 		//note, new rows are copies of last row.  //TODO: make this copying optional by passing in array of columns to copy
 		//note, TODO: if would be replicating colHeaders, just puts in blanks instead
-		console.log("QID: ", q_id, " : ", this.getQuestionValue(q_id));
+		//console.log("QID: ", q_id, " : ", this.getQuestionValue(q_id));
 
 		let valArr = this.getQuestionValue(q_id).slice();
 		let newRow = valArr[valArr.length - 1].slice();
@@ -527,7 +527,7 @@ class WebFF extends React.Component {
 		let valArr = this.getQuestionValue(q_id).slice();
 		console.log("Existing valArr.length: ", valArr.length);
 		console.log("Incoming arr length: ", arr.length);
-		this.updateNumRowsOfTable(q_id, arr.length-valArr.length, () => {
+		this.updateNumRowsOfTable(q_id, arr.length - valArr.length, () => {
 			valArr = this.getQuestionValue(q_id).slice();
 			valArr.forEach((row, rowNum) => {
 				row.splice(colNum, 1, arr[rowNum]);
@@ -879,16 +879,17 @@ class WebFF extends React.Component {
 
 		//HARDCODE for numberOfSamplingPoints
 		let propagateSamplePointData = false;
-		if (Q.props.id === "numberOfSamplingPoints") {
+		if (Q.props.id.includes("numberOfSamplingPoints")) {
 			//TODO: check if there are values in EDI or EWI tables and warn of overwriting
 			console.log("numberOfSamplingPoints: ", Q.state.value);
 			propagateSamplePointData = true;
 		}
+
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
 		this.setQuestionValue(Q.props.id, Q.state.value, () => {
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
-				this.collectRunAndPropagateSamplePointData();
+				this.collectRunAndPropagateSamplePointData(Q.props.id);
 			}
 			this.buildRoutesAndRenderPages();
 		});
@@ -1030,48 +1031,40 @@ class WebFF extends React.Component {
 	};
 
 
-	collectRunAndPropagateSamplePointData() {
+	collectRunAndPropagateSamplePointData(q_id) {
 		//TODO: check that everything is loaded before trying
+		let DEBUG=false;
 		let numSampPoints = null;
-		console.log("CRAPSPD: ", this.state);
-		numSampPoints = this.getQuestionValue("numberOfSamplingPoints");
-		console.log("numSampPoints: ", numSampPoints);
+		if(DEBUG)console.log("CRAPSPD: ", this.state);
+		numSampPoints = this.getQuestionValue(q_id);
+		if(DEBUG)console.log("numSampPoints: ", numSampPoints);
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
-			// pull variables from fields
-			let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
-			let RESZ = this.getQuestionValue("edgeOfSamplingZone_Right");
+			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable");
+			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
+			let tempValArr;
+			if (tableToSetName.includes('EWI_')) {
+				// pull variables from fields
+				let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
+				let RESZ = this.getQuestionValue("edgeOfSamplingZone_Right");
+				let pierlocs = [];
+				let pierWids = [];
+				for (let i = 0; i < 6; i++) {
+					pierlocs.push(this.getQuestionValue("pier" + (i + 1) + "_start"));
 
-			let pierlocs = [];
-			let pierWids = [];
-			for (let i = 0; i < 6; i++) {
-				pierlocs.push(this.getQuestionValue("pier" + (i + 1) + "_start"));
+					let pierWidth = this.getQuestionValue("pier" + (i + 1) + "_end") - pierlocs[i];
+					pierWids.push(pierWidth);
+				}
 
-				let pierWidth = this.getQuestionValue("pier" + (i + 1) + "_end") - pierlocs[i];
-				pierWids.push(pierWidth);
+				tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
+				if(DEBUG)console.log("EWI values: ", tempValArr);
+			} else { //EDI
+				tempValArr = provideEDISamplingPercentages(numSampPoints);
+				if(DEBUG)console.log("EDI values: ", tempValArr);
 			}
+			tempValArr.unshift(""); //push past header
 
-
-			// set EWI samples tables
-			let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
-			console.log("EWI: ", tempEWIValArr);
-			// turn this into an array of 1-length array values for ingestion to table 
-			// let newVal = new Array(tempEWIValArr.length);
-			// for (let i = 0; i < tempEWIValArr.length; i++) {
-			// 	newVal[i] = [tempEWIValArr[i]];
-			// }
-			tempEWIValArr.unshift("");
-
-			this.setTableColumn("EWI_SetA_samples_table", 0, tempEWIValArr);
-			this.setTableColumn("EWI_SetB_samples_table", 0, tempEWIValArr);
-
-			// set EDI samples tables
-			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints);
-			tempEDIValArr.unshift(""); // to push the results down past the header
-			console.log("EDI values: ", tempEDIValArr);
-			this.setTableColumn("EDI_SetA_samples_table", 0, tempEDIValArr, this.buildRoutesAndRenderPages); //TODO: FIXME: expand (or contract) table to match
-			this.setTableColumn("EDI_SetB_samples_table", 0, tempEDIValArr, this.buildRoutesAndRenderPages);
-
+			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
 		}
 	}
 
