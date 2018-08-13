@@ -513,6 +513,15 @@ class WebFF extends React.Component {
 		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
 
+	overwriteTableColumn(q_id,colNum,arr) {
+		// does NOT check (or error out) if the arr is too big or two small. Dumb overwrite.
+		let valArr = this.getQuestionValue(q_id).slice();
+		valArr.forEach((row, rowNum) => {
+			row.splice(colNum,1,arr[rowNum]);
+		});
+		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
+	}
+
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
 		this.showTabOrPanel(tabName, add, true);
 	}
@@ -820,7 +829,7 @@ class WebFF extends React.Component {
 		// dialogQuestoin: Boolean of if Q is a 'dialogQuestion'. Optional (missing value will be treated as normal question)
 		// updates value of Q in state, checks for action string, executes any actions
 
-		let DEBUG = true;
+		let DEBUG = false;
 		if (DEBUG) console.log("questionChangeSystemCallback: ", Q, "   dialogQuestion: ", dialogQuestion);
 		if (DEBUG) console.log("this.state.curSamplingEventName: ", this.state.curSamplingEventName);
 		if (DEBUG) console.log("this.state[this.state.curSamplingEventName]: ", this.state[this.state.curSamplingEventName]);
@@ -861,7 +870,7 @@ class WebFF extends React.Component {
 			console.log("numberOfSamplingPoints: ", Q.state.value);
 			propagateSamplePointData = true;
 		}
-		console.log(Q.props.id, Q.state.value);
+		if (DEBUG) console.log(Q.props.id, Q.state.value);
 		this.setQuestionValue(Q.props.id, Q.state.value, () => {
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
@@ -1012,10 +1021,10 @@ class WebFF extends React.Component {
 		//TODO: check that everything is loaded rather than just quetionsData
 		let numSampPoints = null;
 		console.log("CRAPSPD: ", this.state);
-		if (this.state.itemsLoaded.includes('questionsData')) {
-			console.log("loaded");
+		// if (this.state.itemsLoaded.includes('questionsData')) {
+		// 	console.log("loaded");
 			numSampPoints = this.getQuestionValue("numberOfSamplingPoints");
-		}
+		// }
 		console.log(numSampPoints);
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
@@ -1034,21 +1043,24 @@ class WebFF extends React.Component {
 
 
 			let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
+			console.log("EWI: ", tempEWIValArr);
 			// turn this into an array of 1-length array values for ingestion to table 
 			let newVal = new Array(tempEWIValArr.length);
 			for (let i = 0; i < tempEWIValArr.length; i++) {
 				newVal[i] = [tempEWIValArr[i]];
 			}
-
-			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints).map((item) => [item]);
-
-			this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, () => console.log("value set"));
-			this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, () => console.log("value set"));
 			this.setQuestionValue("EWI_SetA_samples_table", newVal, () => console.log("value set"));
 			this.setQuestionValue("EWI_SetB_samples_table", newVal, () => console.log("value set"));
+
+
+			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints);//.map((item) => [item]);
+			console.log("EDI: ", tempEDIValArr);
+			this.overwriteTableColumn("EDI_SetA_samples_table",0,tempEDIValArr); //TODO: FIXME: expand (or contract) table to match
+			// this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, () => console.log("value set"));
+			// this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, () => console.log("value set"));
+
 		}
 	}
-
 
 	updateDBInfo(location, data, CB) {
 		// attempts to update location

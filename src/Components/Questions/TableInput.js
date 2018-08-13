@@ -98,9 +98,9 @@ class TableInput extends React.Component {
 					let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
 					if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
 					let questionData = this.props.globalState.questionsData.filter((Q)=>Q.id===subQuestionID)[0];
-					if (true) console.log("questionData", questionData);
+					if (DEBUG) console.log("questionData", questionData);
 					adHocProps = { ...adHocProps, ...questionData, key:subQkey };
-					if (true) console.log("adHocProps", adHocProps);
+					if (DEBUG) console.log("adHocProps", adHocProps);
 					cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
 
 					// if this question is in a header location, wrap it in the header div

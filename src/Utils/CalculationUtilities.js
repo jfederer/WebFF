@@ -68,13 +68,9 @@ return samplingLocations;
 
 export const provideEDISamplingPercentages = (numberOfSamples) => {
   let width = 100 / numberOfSamples;
-  let results = new Array(numberOfSamples).fill(0);
-  results = results.map((item, i)=> {
-	item = ((i+1)*width)-(width/2);
-	return Math.round(item* 10 ) / 10;
-  });
-
+  let results = [];
+  for(let i=1; i<=numberOfSamples; i++) {
+	results.push(Math.round((((i)*width)-(width/2))* 10 ) / 10);
+  }
 return results;
-    
-
 }

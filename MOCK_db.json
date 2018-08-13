@@ -737,7 +737,7 @@
           "label": "Sampling Points",
           "type": "Text",
           "placeholder": "Number of Points",
-          "tabName": "FieldForm",
+          "tabName": "EDI",
           "layoutGroup": "Waterway Info",
           "width_xs": 12,
           "width_lg": 2
@@ -1274,43 +1274,42 @@
           "width_xs": 6,
           "width_lg": 6
         },
-        {
-          "id": "EDI_SetA_samples_table",
-          "label": "Samples Table",
-          "type": "TableInput",
-          "tabName": "EDI",
-          "layoutGroup": "Set A Information",
-          "colHeaders": [
-            "EDI",
-            "Velocity (ft/sec)",
-            "Depth (feet)",
-            "T-Rate",
-            "Volume (cc)",
-            "Time (sec)",
-            "Ratio of Vertical",
-            "Intake Efficiency"
-          ],
-          "rowHeaders": "true",
-          "value": [
-            [
-              "10%"
-            ],
-            [
-              "30%"
-            ],
-            [
-              "50%"
-            ],
-            [
-              "70%"
-            ],
-            [
-              "90%"
-            ]
-          ],
-          "width_xs": 6,
-          "width_lg": 6
-        },
+		{
+			"id": "EDI_SetA_samples_table",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"tabName": "EDI",
+			"layoutGroup": "Set A Information",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"colSizes": [1,5,2,10,5,6,7,8],
+			"value":  [
+			  [
+				"EDI",
+				"SubQuestion::WQ_time",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"30%","","","","","","",""
+			  ],
+			  [
+				"50%","","","","","","",""
+			  ],
+			  [
+				"70%","","","","","","",""
+			  ],
+			  [
+				"90%","","","","","","",""
+			  ]
+			],
+			"width_xs": 6,
+			"width_lg": 6
+		  },
         {
           "id": "EDI_showSetB",
           "label": "Show Set B",
@@ -1420,43 +1419,42 @@
           "width_xs": 6,
           "width_lg": 6
         },
-        {
-          "id": "EDI_SetB_samples_table",
-          "label": "Samples Table",
-          "type": "TableInput",
-          "tabName": "EDI",
-          "layoutGroup": "Set B Information",
-          "colHeaders": [
-            "EDI",
-            "Velocity (ft/sec)",
-            "Depth (feet)",
-            "T-Rate",
-            "Volume (cc)",
-            "Time (sec)",
-            "Ratio of Vertical",
-            "Intake Efficiency"
-          ],
-          "rowHeaders": "true",
-          "value": [
-            [
-              "10%"
-            ],
-            [
-              "30%"
-            ],
-            [
-              "50%"
-            ],
-            [
-              "70%"
-            ],
-            [
-              "90%"
-            ]
-          ],
-          "width_xs": 6,
-          "width_lg": 6
-        },
+		{
+			"id": "EDI_SetB_samples_table",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"tabName": "EDI",
+			"layoutGroup": "Set B Information",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"colSizes": [1,5,2,10,5,6,7,8],
+			"value":  [
+			  [
+				"EDI",
+				"SubQuestion::WQ_time",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"30%","","","","","","",""
+			  ],
+			  [
+				"50%","","","","","","",""
+			  ],
+			  [
+				"70%","","","","","","",""
+			  ],
+			  [
+				"90%","","","","","","",""
+			  ]
+			],
+			"width_xs": 6,
+			"width_lg": 6
+		  },
         {
           "id": "EDI_timeDatum",
           "label": "Time Datum",
@@ -1926,21 +1924,36 @@
           "type": "TableInput",
           "tabName": "EWI",
           "layoutGroup": "Set A Information",
-          "colHeaders": [
-            "EWI",
-            "Velocity (ft/sec)",
-            "Depth (feet)",
-            "T-Rate",
-            "Volume (cc)",
-            "Time (sec)",
-            "Ratio of Vertical",
-            "Intake Efficiency"
-          ],
-          "rowHeaders": "true",
-          "value": [],
+		  "colHeaders": true,
+		  "rowHeaders": true,
+		  "colSizes": [1,5,2,10,5,6,7,8],
+          "value":  [
+			[
+			  "EDI",
+			  "SubQuestion::WQ_time",
+			  "Depth (feet)",
+			  "T-Rate",
+			  "Volume (cc)",
+			  "Time (sec)",
+			  "Ratio of Vertical",
+			  "Intake Efficiency"
+			],
+			[
+			  "30%","","","","","","",""
+			],
+			[
+			  "50%","","","","","","",""
+			],
+			[
+			  "70%","","","","","","",""
+			],
+			[
+			  "90%","","","","","","",""
+			]
+		  ],
           "width_xs": 6,
           "width_lg": 6
-        },
+		},
         {
           "id": "EWI_showSetB",
           "label": "Show Set B",
