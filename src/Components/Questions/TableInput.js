@@ -13,14 +13,15 @@ import Question from '../Question';
 
 
 const styles = theme => ({
+	table: {
+		width: "100%",
+		backgroundColor: "#911"
+	},
 	tableCell: {
 		padding: 5,
 		flexShrink: 0,
-	}
-	// table: {
-	// 	width: 10,
-	// 	//	backgroundColor: "#911"
-	// }
+	},
+	
 });
 
 
@@ -100,7 +101,7 @@ class TableInput extends React.Component {
 					if (DEBUG) console.log("questionData", questionData);
 					adHocProps = { ...adHocProps, ...questionData };
 					if (DEBUG) console.log("adHocProps", adHocProps);
-					cellQuestion = <Question {...adHocProps} stateChangeHandler={this.props.stateChangeHandler} globalState={this.props.globalState} />;
+					cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} stateChangeHandler={this.props.stateChangeHandler} globalState={this.props.globalState} />;
 
 					// if this question is in a header location, wrap it in the header div
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
@@ -115,7 +116,7 @@ class TableInput extends React.Component {
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
 						cellQuestion = <div className={classes.header}>{cellContent}</div>
 					} else {
-						cellQuestion = <Question {...adHocProps} stateChangeHandler={this.handleTableQuestionChange} />
+						cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} stateChangeHandler={this.handleTableQuestionChange} />
 					}
 				}
 				return (
