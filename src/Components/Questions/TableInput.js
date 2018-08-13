@@ -6,7 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { getQuestionDataFromQuestionsDataByQuestionID } from '../../Utils/QuestionUtilities';
+import { getQuestionDataFromQuestionsDataByQuestionID, createQuestionComponents } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
@@ -15,7 +15,7 @@ import Question from '../Question';
 const styles = theme => ({
 	table: {
 		width: "100%",
-		backgroundColor: "#911"
+	//	backgroundColor: "#911"
 	},
 	tableCell: {
 		padding: 5,
@@ -97,11 +97,11 @@ class TableInput extends React.Component {
 				if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
 					let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
 					if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
-					let questionData = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, subQuestionID);
-					if (DEBUG) console.log("questionData", questionData);
-					adHocProps = { ...adHocProps, ...questionData };
-					if (DEBUG) console.log("adHocProps", adHocProps);
-					cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} stateChangeHandler={this.props.stateChangeHandler} globalState={this.props.globalState} />;
+					let questionData = this.props.globalState.questionsData.filter((Q)=>Q.id===subQuestionID)[0];
+					if (true) console.log("questionData", questionData);
+					adHocProps = { ...adHocProps, ...questionData, key:subQkey };
+					if (true) console.log("adHocProps", adHocProps);
+					cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
 
 					// if this question is in a header location, wrap it in the header div
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
@@ -116,7 +116,7 @@ class TableInput extends React.Component {
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
 						cellQuestion = <div className={classes.header}>{cellContent}</div>
 					} else {
-						cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} stateChangeHandler={this.handleTableQuestionChange} />
+						cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} />
 					}
 				}
 				return (
@@ -133,18 +133,15 @@ class TableInput extends React.Component {
 				//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 				const { classes } = this.props;
 
-		console.log("rendering table " + this.props.id);
-		console.log(this);
+		//let numRows = this.props.value.length;
+		// let numCols = 1; // tables with less than 1 column are not allowed
+		// this.props.value.forEach(function (row) {
+		// 	if (row.length > numCols) {
+		// 		numCols = row.length;
+		// 	}
+		// });
 
-		let numRows = this.props.value.length;
-		let numCols = 1; // tables with less than 1 column are not allowed
-		this.props.value.forEach(function (row) {
-			if (row.length > numCols) {
-				numCols = row.length;
-			}
-		});
-
-		console.log("Table Size: ", numRows, " x ", numCols); // correct
+		//console.log("Table Size: ", numRows, " x ", numCols); // correct
 
 		//TODO: read-only columns list
 

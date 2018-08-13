@@ -820,7 +820,7 @@ class WebFF extends React.Component {
 		// dialogQuestoin: Boolean of if Q is a 'dialogQuestion'. Optional (missing value will be treated as normal question)
 		// updates value of Q in state, checks for action string, executes any actions
 
-		let DEBUG = false;
+		let DEBUG = true;
 		if (DEBUG) console.log("questionChangeSystemCallback: ", Q, "   dialogQuestion: ", dialogQuestion);
 		if (DEBUG) console.log("this.state.curSamplingEventName: ", this.state.curSamplingEventName);
 		if (DEBUG) console.log("this.state[this.state.curSamplingEventName]: ", this.state[this.state.curSamplingEventName]);
@@ -861,7 +861,7 @@ class WebFF extends React.Component {
 			console.log("numberOfSamplingPoints: ", Q.state.value);
 			propagateSamplePointData = true;
 		}
-
+		console.log(Q.props.id, Q.state.value);
 		this.setQuestionValue(Q.props.id, Q.state.value, () => {
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
