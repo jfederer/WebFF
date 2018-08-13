@@ -737,7 +737,7 @@
           "label": "Sampling Points",
           "type": "Text",
           "placeholder": "Number of Points",
-          "tabName": "EDI",
+          "tabName": "EWI",
           "layoutGroup": "Waterway Info",
           "width_xs": 12,
           "width_lg": 2
@@ -1295,16 +1295,7 @@
 				"Intake Efficiency"
 			  ],
 			  [
-				"30%","","","","","","",""
-			  ],
-			  [
-				"50%","","","","","","",""
-			  ],
-			  [
-				"70%","","","","","","",""
-			  ],
-			  [
-				"90%","","","","","","",""
+				"Need Number of Samples","","","","","","",""
 			  ]
 			],
 			"width_xs": 6,
@@ -1429,28 +1420,19 @@
 			"rowHeaders": true,
 			"colSizes": [1,5,2,10,5,6,7,8],
 			"value":  [
-			  [
-				"EDI",
-				"SubQuestion::WQ_time",
-				"Depth (feet)",
-				"T-Rate",
-				"Volume (cc)",
-				"Time (sec)",
-				"Ratio of Vertical",
-				"Intake Efficiency"
-			  ],
-			  [
-				"30%","","","","","","",""
-			  ],
-			  [
-				"50%","","","","","","",""
-			  ],
-			  [
-				"70%","","","","","","",""
-			  ],
-			  [
-				"90%","","","","","","",""
-			  ]
+				[
+					"EDI",
+					"SubQuestion::WQ_time",
+					"Depth (feet)",
+					"T-Rate",
+					"Volume (cc)",
+					"Time (sec)",
+					"Ratio of Vertical",
+					"Intake Efficiency"
+				  ],
+				  [
+					"Need Number of Samples","","","","","","",""
+				  ]
 			],
 			"width_xs": 6,
 			"width_lg": 6
@@ -1929,7 +1911,7 @@
 		  "colSizes": [1,5,2,10,5,6,7,8],
           "value":  [
 			[
-			  "EDI",
+			  "EWI",
 			  "SubQuestion::WQ_time",
 			  "Depth (feet)",
 			  "T-Rate",
@@ -1939,16 +1921,7 @@
 			  "Intake Efficiency"
 			],
 			[
-			  "30%","","","","","","",""
-			],
-			[
-			  "50%","","","","","","",""
-			],
-			[
-			  "70%","","","","","","",""
-			],
-			[
-			  "90%","","","","","","",""
+			  "Fill Out Number Of Samples","","","","","","",""
 			]
 		  ],
           "width_xs": 6,
@@ -1967,7 +1940,9 @@
           },
           "width_xs": 2,
           "width_lg": 1
-        },
+		},
+		
+
         {
           "id": "EWI_setB_StartTime",
           "label": "Start Time",
@@ -2064,25 +2039,31 @@
           "width_lg": 6
         },
         {
-          "id": "EWI_SetB_samples_table",
-          "label": "Samples Table",
-          "type": "TableInput",
-          "tabName": "EWI",
-          "layoutGroup": "Set B Information",
-          "colHeaders": [
-            "EWI",
-            "Velocity (ft/sec)",
-            "Depth (feet)",
-            "T-Rate",
-            "Volume (cc)",
-            "Time (sec)",
-            "Ratio of Vertical",
-            "Intake Efficiency"
-          ],
-          "rowHeaders": "true",
-          "value": [],
-          "width_xs": 6,
-          "width_lg": 6
+			"id": "EWI_SetB_samples_table",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"tabName": "EWI",
+			"layoutGroup": "Set A Information",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"colSizes": [1,5,2,10,5,6,7,8],
+			"value":  [
+			  [
+				"EWI",
+				"SubQuestion::WQ_time",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"Fill Out Number Of Samples","","","","","","",""
+			  ]
+			],
+			"width_xs": 6,
+			"width_lg": 6
         },
         {
           "id": "EWI_timeDatum",
@@ -2142,7 +2123,7 @@
           "hidden": true,
           "type": "Text",
           "tabName": "EWI",
-          "value": "yippie",
+          "value": "",
           "layoutGroup": "QWDATA Info",
           "width_xs": 4,
           "width_lg": 4
@@ -2225,7 +2206,12 @@
           "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
-        }, {
+		}, 
+		
+		
+		
+		
+		{
 			"id": "test_table",
 			"type": "TableInput",
 			"tabName": "Question Page",
@@ -2234,28 +2220,19 @@
 			"rowHeaders": true,
 			"colSizes": [1,5,2,10,5,6,7,8],
 			"value": [
-			  [
-				"EDI",
-				"SubQuestion::WQ_time",
-				"Depth (feet)",
-				"T-Rate",
-				"Volume (cc)",
-				"Time (sec)",
-				"Ratio of Vertical",
-				"Intake Efficiency"
-			  ],
-			  [
-				"30%","SubQuestion::EWI_fieldComposite","","","","","",""
-			  ],
-			  [
-				"50%","","","","","","",""
-			  ],
-			  [
-				"70%","","","","","","",""
-			  ],
-			  [
-				"90%","","","","","","",""
-			  ]
+				[
+					"EWI",
+					"SubQuestion::WQ_time",
+					"Depth (feet)",
+					"T-Rate",
+					"Volume (cc)",
+					"Time (sec)",
+					"Ratio of Vertical",
+					"Intake Efficiency"
+				  ],
+				  [
+					"Fill Out Number Of Samples","","","","","","",""
+				  ]
 			],
 			"width_xs": 12,
 			"width_lg": 12

@@ -1052,16 +1052,18 @@ class WebFF extends React.Component {
 			}
 
 
-			// // set EWI samples tables
-			// let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
-			// console.log("EWI: ", tempEWIValArr);
-			// // turn this into an array of 1-length array values for ingestion to table 
+			// set EWI samples tables
+			let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
+			console.log("EWI: ", tempEWIValArr);
+			// turn this into an array of 1-length array values for ingestion to table 
 			// let newVal = new Array(tempEWIValArr.length);
 			// for (let i = 0; i < tempEWIValArr.length; i++) {
 			// 	newVal[i] = [tempEWIValArr[i]];
 			// }
-			// this.setTableColumn("EWI_SetA_samples_table", 0, tempEWIValArr);
-			// this.setTableColumn("EWI_SetB_samples_table", 0, tempEWIValArr);
+			tempEWIValArr.unshift("");
+
+			this.setTableColumn("EWI_SetA_samples_table", 0, tempEWIValArr);
+			this.setTableColumn("EWI_SetB_samples_table", 0, tempEWIValArr);
 
 			// set EDI samples tables
 			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints);
@@ -1069,8 +1071,6 @@ class WebFF extends React.Component {
 			console.log("EDI values: ", tempEDIValArr);
 			this.setTableColumn("EDI_SetA_samples_table", 0, tempEDIValArr, this.buildRoutesAndRenderPages); //TODO: FIXME: expand (or contract) table to match
 			this.setTableColumn("EDI_SetB_samples_table", 0, tempEDIValArr, this.buildRoutesAndRenderPages);
-			// this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, () => console.log("value set"));
-			// this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, () => console.log("value set"));
 
 		}
 	}
