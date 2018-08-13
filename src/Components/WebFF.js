@@ -448,10 +448,10 @@ class WebFF extends React.Component {
 		}
 		switch (splitActionString[0]) {
 			case "ShowTab":
-				this.showTabOrPanel(splitActionString[1], true, true, this.buildRoutesAndRenderPages());
+				this.showTabOrPanel(splitActionString[1], true, true, this.buildRoutesAndRenderPages);
 				break;
 			case "HideTab":
-				this.showTabOrPanel(splitActionString[1], false, true, this.buildRoutesAndRenderPages());
+				this.showTabOrPanel(splitActionString[1], false, true, this.buildRoutesAndRenderPages);
 				break;
 			case "ShowQuestion":
 				this.showQuestion(splitActionString[1], true);
@@ -462,16 +462,16 @@ class WebFF extends React.Component {
 				this.buildRoutesAndRenderPages();
 				break;
 			case "ShowPanel":
-				this.showTabOrPanel(splitActionString[1], true, false, this.buildRoutesAndRenderPages());
+				this.showTabOrPanel(splitActionString[1], true, false, this.buildRoutesAndRenderPages);
 				break;
 			case "HidePanel":
-				this.showTabOrPanel(splitActionString[1], false, false, this.buildRoutesAndRenderPages());
+				this.showTabOrPanel(splitActionString[1], false, false, this.buildRoutesAndRenderPages);
 				break;
 			case "AddRowToTable":
-				this.addRowToTable(splitActionString[1]);
+				this.updateNumRowsOfTable(splitActionString[1], 1);
 				break;
 			case "RemoveRowFromTable":
-				this.removeRowFromTable(splitActionString[1]);
+				this.updateNumRowsOfTable(splitActionString[1], -1);
 				break;
 			case "AddColumnToTable":
 				this.addColumnToTable(splitActionString[1]);
@@ -484,20 +484,25 @@ class WebFF extends React.Component {
 		}
 	}
 
-	addRowToTable(q_id) { //TODO: copy values vs new values
+	updateNumRowsOfTable(q_id, numToAdd, CB) {  //TODO: FIXME: copying questions for new rows is going to be problematic
+		//q_id: questionID of the table
+		//numToAdd: number of rows to add to the table. If a negative value is passed, will subtract rows
+		//CB: callback function after setQuestionValue is called.
+		//note, new rows are copies of last row.  //TODO: make this copying optional by passing in array of columns to copy
 		let valArr = this.getQuestionValue(q_id).slice();
-		let newRow = valArr[valArr.length-1];
-		valArr.push(newRow);
-		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
+		let newRow = valArr[valArr.length - 1].slice();
+		if (numToAdd > 0)  // add rows
+			for (let i = 0; i < numToAdd; i++) {
+				valArr.push(newRow.slice());
+			}
+		else
+			for (let i = numToAdd; i < 0; i++) {
+				valArr.pop();
+			}
+		this.setQuestionValue(q_id, valArr, CB);
 	}
 
-	removeRowFromTable(q_id) {
-		let valArr = this.getQuestionValue(q_id).slice();
-		valArr.pop();
-		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
-	}
-
-	addColumnToTable(q_id) { //TODO: copy values vs new values
+	addColumnToTable(q_id) { //TODO: numToAdd
 		let valArr = this.getQuestionValue(q_id).slice();
 		valArr.forEach((row) => {
 			row.push(row[row.length - 1]);
@@ -505,7 +510,7 @@ class WebFF extends React.Component {
 		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
 
-	removeColumnFromTable(q_id) {
+	removeColumnFromTable(q_id) { //TODO: numToRemove
 		let valArr = this.getQuestionValue(q_id).slice();
 		valArr.forEach((row) => {
 			row.pop();
@@ -513,11 +518,11 @@ class WebFF extends React.Component {
 		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
 
-	overwriteTableColumn(q_id,colNum,arr) {
-		// does NOT check (or error out) if the arr is too big or two small. Dumb overwrite.
+	setTableColumn(q_id, colNum, arr) {
+		// expands entire 
 		let valArr = this.getQuestionValue(q_id).slice();
 		valArr.forEach((row, rowNum) => {
-			row.splice(colNum,1,arr[rowNum]);
+			row.splice(colNum, 1, arr[rowNum]);
 		});
 		this.setQuestionValue(q_id, valArr, () => this.buildRoutesAndRenderPages());
 	}
@@ -659,7 +664,7 @@ class WebFF extends React.Component {
 			this.setState({ questionsData: newQuestionsData }, CB);
 		} else {
 			let newDialogQuestions = this.state.dialogQuestions.slice();
-			
+
 			function ifIDMatchSetValue(questionData) {
 				if (questionData.id === q_id) {
 					questionData[key] = value;
@@ -1017,14 +1022,10 @@ class WebFF extends React.Component {
 
 
 	collectRunAndPropagateSamplePointData() {
-		//FIXME:  This overwrites values in the table if any exist //TODO: check current value and insert
-		//TODO: check that everything is loaded rather than just quetionsData
+		//TODO: check that everything is loaded before trying
 		let numSampPoints = null;
 		console.log("CRAPSPD: ", this.state);
-		// if (this.state.itemsLoaded.includes('questionsData')) {
-		// 	console.log("loaded");
-			numSampPoints = this.getQuestionValue("numberOfSamplingPoints");
-		// }
+		numSampPoints = this.getQuestionValue("numberOfSamplingPoints");
 		console.log(numSampPoints);
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
@@ -1042,6 +1043,7 @@ class WebFF extends React.Component {
 			}
 
 
+			// set EWI samples tables
 			let tempEWIValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
 			console.log("EWI: ", tempEWIValArr);
 			// turn this into an array of 1-length array values for ingestion to table 
@@ -1049,13 +1051,14 @@ class WebFF extends React.Component {
 			for (let i = 0; i < tempEWIValArr.length; i++) {
 				newVal[i] = [tempEWIValArr[i]];
 			}
-			this.setQuestionValue("EWI_SetA_samples_table", newVal, () => console.log("value set"));
-			this.setQuestionValue("EWI_SetB_samples_table", newVal, () => console.log("value set"));
+			this.setTableColumn("EWI_SetA_samples_table", 0, tempEDIValArr);
+			this.setTableColumn("EWI_SetB_samples_table", 0, tempEDIValArr);
 
-
+			// set EDI samples tables
 			let tempEDIValArr = provideEDISamplingPercentages(numSampPoints);//.map((item) => [item]);
 			console.log("EDI: ", tempEDIValArr);
-			this.overwriteTableColumn("EDI_SetA_samples_table",0,tempEDIValArr); //TODO: FIXME: expand (or contract) table to match
+			this.setTableColumn("EDI_SetA_samples_table", 0, tempEDIValArr); //TODO: FIXME: expand (or contract) table to match
+			this.setTableColumn("EDI_SetB_samples_table", 0, tempEDIValArr);
 			// this.setQuestionValue("EDI_SetA_samples_table", tempEDIValArr, () => console.log("value set"));
 			// this.setQuestionValue("EDI_SetB_samples_table", tempEDIValArr, () => console.log("value set"));
 

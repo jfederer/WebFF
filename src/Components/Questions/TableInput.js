@@ -28,6 +28,7 @@ const styles = theme => ({
 class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
+		
 		let numRows = this.props.value.length;
 		let numCols = 1; // tables with less than 1 column are not allowed
 		this.props.value.forEach(function (row) {
@@ -35,6 +36,7 @@ class TableInput extends React.Component {
 				numCols = row.length;
 			}
 		});
+		//console.log("table mad: rows: ", numRows, " cols: ", numCols);
 
 		let emptyTable = [];
 		for (var i = 0; i < numRows; i++) {
@@ -65,6 +67,7 @@ class TableInput extends React.Component {
 	}
 
 	handleTableQuestionChange(textSubQuestion) {
+		
 		let DEBUG = false;
 		if (DEBUG) console.log("handleTableQuestionChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
@@ -76,9 +79,9 @@ class TableInput extends React.Component {
 		if (DEBUG) console.log("questionVal: ", questionVal);
 		if (DEBUG) console.log("questionRow: ", questionRow);
 		if (DEBUG) console.log("questionCol: ", questionCol);
-		let tempTableValue = this.state.value;
+		let tempTableValue = this.props.value;
 		tempTableValue[questionRow][questionCol] = questionVal;
-		console.log(tempTableValue);
+		//console.log(tempTableValue);
 		this.setState({ value: tempTableValue }, () => {console.log(this.state.value); this.props.stateChangeHandler(this)});
 	}
 
