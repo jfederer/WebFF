@@ -522,7 +522,7 @@ class WebFF extends React.Component {
 	}
 
 	setTableColumn(q_id, colNum, arr, CB) {
-		// WARNING: expands or shrinks the entire column to match the number of rows in the given column
+		// WARNING: expands or shrinks the entire table to match the number of rows in the given column
 		// TODO: add flag(s) to clear out rest of table? -- no, do this as part of propagate, to much side-effect here
 		let valArr = this.getQuestionValue(q_id).slice();
 		console.log("Existing valArr.length: ", valArr.length);
