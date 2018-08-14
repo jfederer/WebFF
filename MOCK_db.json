@@ -342,9 +342,9 @@
             "Suspended": "suspended"
 		  },
 		  "actions": {
-			"bedload":"ShowQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh",
-			"bedMaterial":"ShowQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh",
-			"suspended":"ShowQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh"
+			"bedload":"ShowQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh&ShowQuestion::EWI_verticalsInComposite&ShowQuestion::EWI_compositeSamplesInCrossSection&ShowQuestion::EWI_tetherLine&ShowQuestion::EWI_bagMesh",
+			"bedMaterial":"ShowQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh",
+			"suspended":"ShowQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh"
 		  },
           "value": "suspended",
           "tabName": "Field Form",
@@ -2080,138 +2080,188 @@
           "width_xs": 4,
           "width_lg": 3
         },
-        {
-          "id": "EWI_bottleMaterial",
-          "hidden": true,
-          "label": "Bottle Material",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "Plastic": "Plastic",
-            "Glass": "Glass",
-            "Other": "Other"
-          },
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Sampler Info",
-          "width_xs": 4,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_bagMaterial",
-          "label": "Bag Material",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "Plastic": "Plastic",
-            "Glass": "Glass",
-            "Other": "Other"
-          },
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Sampler Info",
-          "width_xs": 4,
-          "width_lg": 3
-        },
-        {
-          "id": "EWI_sizeOfBottle",
-          "hidden": true,
-          "label": "Size of Bottle",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "Pint": "Pint",
-            "Quart": "Quart"
-          },
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Sampler Info",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "EWI_sizeOfBag",
-          "label": "Size of Bag",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "1 Liter": "1 Liter",
-            "3 Liter": "3 Liter"
-          },
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Sampler Info",
-          "width_xs": 4,
-          "width_lg": 2
-        },
-        {
-          "id": "EWI_NozzleMaterial",
-          "label": "Nozzle Material",
-          "XMLTag": "P72219",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "Brass": "Brass",
-            "Plastic": "Plastic",
-            "TFE": "TFE"
-          },
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Sampler Info",
-          "width_xs": 6,
-          "width_lg": 2
-        },
-        {
-          "id": "EWI_NozzleDiameter",
-          "label": "Nozzle Diameter",
-          "XMLTag": "P72220",
-          "type": "DropDown",
-          "includeBlank": true,
-          "options": {
-            "13/16": "13/16",
-            "1/4": "1/4",
-            "15/16": "15/16"
-          },
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Sampler Info",
-          "width_xs": 6,
-          "width_lg": 2
-        },
-  {
-          "id": "EWI_streamDepth",
-          "label": "Stream Depth(ft)",
-          "type": "Text",
-          "placeholder": "feet",
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Intake Efficiency Test",
-          "width_xs": 3,
-          "width_lg": 2
-        },
-        {
-          "id": "EWI_transitRate",
-          "label": "Transit Rate(ft/s)",
-          "type": "Text",
-          "placeholder": "feet / second",
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Intake Efficiency Test",
-          "width_xs": 3,
-          "width_lg": 2
-        },
-        {
-          "id": "EWI_streamVelocity",
-          "label": "Stream Velocity(ft)",
-          "XMLTag": "P72196",
-          "type": "Text",
-          "placeholder": "feet / second",
-          "value": "",
-          "tabName": "EWI",
-          "layoutGroup": "Intake Efficiency Test",
-          "width_xs": 3,
-          "width_lg": 2
-        },
+		{
+			"id": "EWI_bottleMaterial",
+			"hidden": true,
+			"label": "Bottle Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+			  "Plastic": "Plastic",
+			  "Glass": "Glass",
+			  "Other": "Other"
+			},
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		  },
+		  {
+			"id": "EWI_bagMaterial",
+			"label": "Bag Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+			  "Plastic": "Plastic",
+			  "Glass": "Glass",
+			  "Other": "Other"
+			},
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		  },
+		  {
+			"id": "EWI_sizeOfBottle",
+			"hidden": true,
+			"label": "Size of Bottle",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+			  "Pint": "Pint",
+			  "Quart": "Quart"
+			},
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  },
+		  {
+			"id": "EWI_sizeOfBag",
+			"label": "Size of Bag",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+			  "1 Liter": "1 Liter",
+			  "3 Liter": "3 Liter"
+			},
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  },
+		  {
+			  "id": "EWI_bagMesh",
+			  "hidden": true,
+			  "label": "Bag Mesh Size (mm)",
+			  "XMLTag":"P30333",
+			  "type": "Text",
+			  "value": "mm",
+			  "tabName": "EWI",
+			  "layoutGroup": "Sampler Info",
+			  "width_xs": 4,
+			  "width_lg": 3
+			},
+		  {
+			"id": "EWI_NozzleMaterial",
+			"label": "Nozzle Material",
+			"XMLTag": "P72219",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+			  "Brass": "Brass",
+			  "Plastic": "Plastic",
+			  "TFE": "TFE"
+			},
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  },
+		  {
+			"id": "EWI_NozzleDiameter",
+			"label": "Nozzle Diameter",
+			"XMLTag": "P72220",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options": {
+			  "13/16": "13/16",
+			  "1/4": "1/4",
+			  "15/16": "15/16"
+			},
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  }, 
+		  {
+			  "id": "EWI_tetherLine",
+			  "hidden": true,
+			  "label": "Tether Line Used",
+			  "XMLTag":"P04117",
+			  "type": "Toggle",
+			  "value": false,
+			  "tabName": "EWI",
+			  "layoutGroup": "Sampler Info",
+			  "width_xs": 4,
+			  "width_lg": 2
+			},
+			{
+			  "id": "EWI_compositeSamplesInCrossSection",
+			  "hidden": true,
+			  "label": "Composite Samples in Cross Sectional",
+			  "XMLTag":"P04118",
+			  "type": "Toggle",
+			  "value": false,
+			  "tabName": "EWI",
+			  "layoutGroup": "Sampler Info",
+			  "width_xs": 4,
+			  "width_lg": 2
+			},		
+			{
+			  "id": "EWI_verticalsInComposite",
+			  "hidden": true,
+			  "label": "Verticals In Composite",
+			  "XMLTag":"P04119",
+			  "type": "Toggle",
+			  "value": false,
+			  "tabName": "EWI",
+			  "layoutGroup": "Sampler Info",
+			  "width_xs": 4,
+			  "width_lg": 2
+			},
+  
+		  
+		  {
+			"id": "EWI_streamDepth",
+			"label": "Stream Depth(ft)",
+			"type": "Text",
+			"placeholder": "feet",
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		  },
+		  {
+			"id": "EWI_transitRate",
+			"label": "Transit Rate(ft/s)",
+			"type": "Text",
+			"placeholder": "feet / second",
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		  },
+		  {
+			"id": "EWI_streamVelocity",
+			"label": "Stream Velocity(ft)",
+			"XMLTag": "P72196",
+			"type": "Text",
+			"placeholder": "feet / second",
+			"value": "",
+			"tabName": "EWI",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		  },
         {
           "id": "EWI_sampleVolumeIET",
           "label": "Sample Volume for Test (mL)",
