@@ -342,9 +342,9 @@
             "Suspended": "suspended"
 		  },
 		  "actions": {
-			"bedload":"ShowQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended",
-			"bedMaterial":"ShowQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload",
-			"suspended":"ShowQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial"
+			"bedload":"ShowQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh",
+			"bedMaterial":"ShowQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh",
+			"suspended":"ShowQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh"
 		  },
           "value": "suspended",
           "tabName": "Field Form",
@@ -1248,7 +1248,19 @@
           "layoutGroup": "Sampler Info",
           "width_xs": 4,
           "width_lg": 2
-        },
+		},
+		{
+			"id": "EDI_bagMesh",
+			"hidden": true,
+			"label": "Bag Mesh Size (mm)",
+			"XMLTag":"P30333",
+			"type": "Text",
+			"value": "mm",
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		  },
         {
           "id": "EDI_NozzleMaterial",
           "label": "Nozzle Material",
@@ -1263,7 +1275,7 @@
           "value": "",
           "tabName": "EDI",
           "layoutGroup": "Sampler Info",
-          "width_xs": 6,
+          "width_xs": 4,
           "width_lg": 2
         },
         {
@@ -1280,9 +1292,45 @@
           "value": "",
           "tabName": "EDI",
           "layoutGroup": "Sampler Info",
-          "width_xs": 6,
+          "width_xs": 4,
           "width_lg": 2
-		},      
+		}, 
+		{
+			"id": "EDI_tetherLine",
+			"hidden": true,
+			"label": "Tether Line Used",
+			"XMLTag":"P04117",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  },
+		  {
+			"id": "EDI_compositeSamplesInCrossSection",
+			"hidden": true,
+			"label": "Composite Samples in Cross Sectional",
+			"XMLTag":"P04118",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  },		
+		  {
+			"id": "EDI_verticalsInComposite",
+			"hidden": true,
+			"label": "Verticals In Composite",
+			"XMLTag":"P04119",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "EDI",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		  },
 
 		
         {
