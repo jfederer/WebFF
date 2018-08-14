@@ -53,7 +53,9 @@ class ComputedValue extends React.Component {
 		//computes value from computationString based on values in LS and optionally updates state and LS
 		let DEBUG = false;
 		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
-		
+		if(this.props.questionsValues===null) {
+			return;
+		}
 		let computedValue = "";
 		let shouldCompute = true;
 
@@ -75,6 +77,7 @@ class ComputedValue extends React.Component {
 		// replace all instances of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
 			if (DEBUG) console.log("Working with item: ", splitCS[i]);
+			
 
 			if (!(splitCS[i] === '+' || splitCS[i] === '-' || splitCS[i] === '*' || splitCS[i] === '/' ||
 				splitCS[i] === '(' || splitCS[i] === ')' || splitCS[i] === '^' || splitCS[i] === "" ||
