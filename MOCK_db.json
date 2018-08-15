@@ -345,13 +345,14 @@
           "includeBlank": false,
           "options": {
             "Bedload": "bedload",
-            "Bed Material": "bedMaterial",
+            "Bottom Material": "bottom",
             "Suspended": "suspended"
 		  },
 		  "actions": {
-			"bedload":"ShowQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh&ShowQuestion::EWI_verticalsInComposite&ShowQuestion::EWI_compositeSamplesInCrossSection&ShowQuestion::EWI_tetherLine&ShowQuestion::EWI_bagMesh",
-			"bedMaterial":"ShowQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh",
-			"suspended":"ShowQuestion::EWI_samplerType_suspended&HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh"
+        "anyValue": "HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV",
+			"bedload":"ShowQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedloads&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh&ShowQuestion::EWI_verticalsInComposite&ShowQuestion::EWI_compositeSamplesInCrossSection&ShowQuestion::EWI_tetherLine&ShowQuestion::EWI_bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV",
+			"bottom":"ShowQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_bedMaterial&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV",
+			"suspended":"ShowQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV"
 		  },
           "value": "suspended",
           "tabName": "Field Form",
@@ -360,35 +361,17 @@
           "width_lg": 2
         },
         {
-          "id": "samplingMethod",
+          "id": "samplingMethod_bottom",
           "label": "Sampling Method",
           "XMLTag": "P82398",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
           "options": {
-            "EWI": "10",
-            "EDI": "20",
-            "Single Vertical": "30",
-            "DEMO:RemoveStnNumb": "40",
-            "DEMO:ShowStnNumb": "50",
-            "DEMO:Hide:PjctID_Hide:StnNumber": "55",
-            "DEMO:ShowProjectID": "70",
-            "DEMO:Show:StnNum_Hide:ProjectID": "60",
-            "DEMO:HideWeather": "80",
-            "DEMO:ShowWeather": "90"
-          },
-          "actions": {
-            "10": "ShowTab::EWI&HideTab::EDI",
-            "20": "ShowTab::EDI&HideTab::EWI",
-            "30": "ShowTab::EDI&ShowTab::EWI",
-            "40": "HideQuestion::stationNumber",
-            "50": "ShowQuestion::stationNumber",
-            "55": "HideQuestion::projectID&HideQuestion::stationNumber",
-            "60": "ShowQuestion::stationNumber&HideQuestion::projectID",
-            "70": "ShowQuestion::projectID",
-            "80": "HidePanel::FieldForm:Weather",
-            "90": "ShowPanel::FieldForm:Weather"
+            "POINT SAMPLE":"50",
+            "COMPOSITE - MULTIPLE POINT SAMPLES":"55",
+            "SEDIMENT CORE":"5010",
+            "OTHER":"8010"
           },
           "value": "",
           "layoutGroup": "Basic",
@@ -396,21 +379,94 @@
           "width_lg": 2
         },
         {
-          "id": "timeZone",
-          "label": "Time Zone",
+          "id": "samplingMethod_bedload",
+          "label": "Sampling Method",
+          "XMLTag": "P82398",
           "type": "DropDown",
           "tabName": "Field Form",
           "includeBlank": true,
           "options": {
-            "Hawaii-Aleutian": "Hawaii-Aleutian",
-            "Alaska": "Alaska",
-            "Pacific": "Pacific",
-            "Mountain": "Mountain",
-            "Central": "Central",
-            "Eastern": "Eastern",
-            "Atlantic": "Atlantic"
+            "POINT SAMPLE":"50",
+            "COMPOSITE - MULTIPLE POINT SAMPLES":"55",
+            "BEDLOAD, SINGLE EQUAL WIDTH INCREMENT (SEWI)":"1000",
+            "BEDLOAD, MULTIPLE EQUAL WIDTH INCREMENT (MEWI)":"1010",
+            "BEDLOAD, UNEQUAL WIDTH INCREMENT (UWI)":"1020",
+            "OTHER":"8010"
           },
           "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+        {
+          "id": "samplingMethod_suspended",
+          "label": "Sampling Method",
+          "XMLTag": "P82398",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "includeBlank": true,
+          "options": {
+            "EQUAL WIDTH INCREMENT (EWI)":"10",
+            "EQUAL WIDTH INCREMENT, NON-ISOKINETIC":"15",
+            "EQUAL DISCHARGE INCREMENT (EDI)":"20",
+            "TIMED SAMPLING INTERVAL":"25",
+            "SINGLE VERTICAL":"30",
+            "MULTIPLE VERTICALS":"40",
+            "POINT SAMPLE":"50",
+            "COMPOSITE - MULTIPLE POINT SAMPLES":"55",
+            "WEIGHTED BOTTLE":"60",
+            "GRAB SAMPLE (DIP)":"70",
+            "DISCHARGE INTEGRATED, EQUAL TRANSIT RATE (ETR)":"80",
+            "DISCHARGE INTEGRATED, CENTROID":"90",
+            "VAN DORN SAMPLER":"100",
+            "SEWAGE SAMPLER":"110",
+            "VELOCITY INTEGRATED":"120",
+            "SUSPSED; PUMPING - stream sample using a pumping mechanism":"900",
+            "SUSPSED;SINGLE-STAGE,nozzle at fixed stage,passively fillng":"910",
+            "SUSPSED; BOX-SINGLE VER, DEPTH-INT, Attached To Structure":"920",
+            "SUSPSED;PARTIAL DEPTH,DEPTH integrated,part of single vert.":"930",
+            "SUSPSED; PARTIAL WIDTH - DEP/WIDTH INT, part of X-section":"940",
+            "THIEF SAMPLE":"4010",
+            "OPEN-TOP BAILER":"4020",
+            "DOUBLE-VALVE BAILER":"4025",
+            "OTHER":"8010",
+            "GRAB SAMPLE AT WATER-SUPPLY TAP":"8030",
+            "SPIGOT (NON-WATER-SUPPLY)":"8040",
+            "GRAB SAMPLE AT TAP(S) ON A DAM":"8050"
+          },
+          "actions": {
+            "10": "ShowTab::EWI&HideTab::EDI",
+            "20": "ShowTab::EDI&HideTab::EWI"
+          },
+          "value": "",
+          "layoutGroup": "Basic",
+          "width_xs": 4,
+          "width_lg": 2
+        },
+       {
+          "id": "timeDatum",
+          "label": "Time Datum",
+          "XMLTag": "TimeDatum",
+          "type": "DropDown",
+          "tabName": "Field Form",
+          "options": {
+            "SITEFILE Default": "SITEFILE",
+            "Atlantic Standard Time": "AST",
+            "Atlantic Daylight Time": "ADT",
+            "Eastern Standard Time": "EST",
+            "Eastern Daylight Time": "EDT",
+            "Central Standard Time": "CST",
+            "Central Daylight Time": "CDT",
+            "Mountain Standard Time": "MST",
+            "Mountain Daylight Time": "MDT",
+            "Pacific Standard Time": "PST",
+            "Pacific Daylight Time": "PDT",
+            "Alaska Standard Time": "AKST",
+            "Alaska Daylight Time": "AKDT",
+            "Hawaii–Aleutian Standard Time": "HST",
+            "Hawaii–Aleutian Daylight Time": "HDT"
+          },
+          "value": "SITEFILE",
           "layoutGroup": "Basic",
           "width_xs": 3,
           "width_lg": 1
@@ -2125,7 +2181,8 @@
 			  "id": "EWI_tetherLine",
 			  "hidden": true,
 			  "label": "Tether Line Used",
-			  "XMLTag":"P04117",
+        "XMLTag":"P04117",
+        "checkbox":true,
 			  "type": "Toggle",
 			  "value": false,
 			  "tabName": "EWI",
@@ -2138,8 +2195,8 @@
 			  "hidden": true,
 			  "label": "Composite Samples in Cross Sectional",
 			  "XMLTag":"P04118",
-			  "type": "Toggle",
-			  "value": false,
+			  "type": "Text",
+			  "value": "",
 			  "tabName": "EWI",
 			  "layoutGroup": "Sampler Info",
 			  "width_xs": 4,
@@ -2150,8 +2207,8 @@
 			  "hidden": true,
 			  "label": "Verticals In Composite",
 			  "XMLTag":"P04119",
-			  "type": "Toggle",
-			  "value": false,
+			  "type": "Text",
+			  "value": "",
 			  "tabName": "EWI",
 			  "layoutGroup": "Sampler Info",
 			  "width_xs": 4,
@@ -2606,34 +2663,7 @@
 		
 
 
-		{
-			"id": "timeDatum",
-			"label": "Time Datum",
-			"XMLTag": "TimeDatum",
-			"type": "DropDown",
-			"tabName": "QWDATA",
-			"layoutGroup": "QWDATA Info",
-			"options": {
-			  "SITEFILE Default": "Use Default from SITEFILE",
-			  "Atlantic Standard Time": "AST",
-			  "Atlantic Daylight Time": "ADT",
-			  "Eastern Standard Time": "EST",
-			  "Eastern Daylight Time": "EDT",
-			  "Central Standard Time": "CST",
-			  "Central Daylight Time": "CDT",
-			  "Mountain Standard Time": "MST",
-			  "Mountain Daylight Time": "MDT",
-			  "Pacific Standard Time": "PST",
-			  "Pacific Daylight Time": "PDT",
-			  "Alaska Standard Time": "AKST",
-			  "Alaska Daylight Time": "AKDT",
-			  "Hawaii–Aleutian Standard Time": "HST",
-			  "Hawaii–Aleutian Daylight Time": "HDT"
-			},
-			"value": "Use Default from SITEFILE",
-			"width_xs": 4,
-			"width_lg": 4
-		  },
+
 		  {
 			"id": "collectingAgency",
 			"label": "Collecting Agency",
@@ -2667,7 +2697,43 @@
 			"layoutGroup": "QWDATA Info",
 			"width_xs": 4,
 			"width_lg": 4
-		  }, 
+      }, 
+		  {
+			"id": "samplingMethod_bedload_QWDATA_CV",
+			"label": "Sampling Method",
+			"type": "ComputedValue",
+			"tabName": "QWDATA",
+			"layoutGroup": "QWDATA Info",
+      "placeholder": "Select on Field Form page",
+      "computationString": "samplingMethod_bedload",
+			"value": "",
+			"width_xs": 4,
+			"width_lg": 4
+      },	 
+      {
+        "id": "samplingMethod_bottom_QWDATA_CV",
+        "label": "Sampling Method",
+        "type": "ComputedValue",
+        "tabName": "QWDATA",
+        "layoutGroup": "QWDATA Info",
+        "placeholder": "Select on Field Form page",
+        "computationString": "samplingMethod_bottom",
+        "value": "",
+        "width_xs": 4,
+        "width_lg": 4
+        },	 		 
+         {
+          "id": "samplingMethod_suspended_QWDATA_CV",
+          "label": "Sampling Method",
+          "type": "ComputedValue",
+          "tabName": "QWDATA",
+          "layoutGroup": "QWDATA Info",
+          "placeholder": "Select on Field Form page",
+          "computationString": "samplingMethod_suspended",
+          "value": "",
+          "width_xs": 4,
+          "width_lg": 4
+          },	 
 		{
 			"id": "QWDATATable",
 			"label": "QWDATA Table",
@@ -2690,7 +2756,9 @@
 				"ASTAT Code"
 			  ],
 			  [
-				"Fill Out Number Of Samples for at least one set","","","","","","","",""
+        "Fill Out Number Of Samples for at least one set","","","","","","","",""
+        ],[
+        "","","","","","","","",""
 			  ]
 			],
 			"width_xs": 12,

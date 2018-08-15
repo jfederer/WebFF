@@ -1090,7 +1090,20 @@ class WebFF extends React.Component {
 			let valArr = [];
 			// find out how many sets and find out number of samples in each set
 			///check if we are in EDI or EWI
-			switch (this.getQuestionValue("samplingMethod")) {
+			let samplingMethodQuestionIDString = "samplingMethod";
+			switch (this.getQuestionValue("sedimentType")) {
+				case 'bedload':
+					samplingMethodQuestionIDString += "_bedload";
+					break;
+				case 'bottom':
+					samplingMethodQuestionIDString += "_bottom";
+					break;
+				case 'suspended':
+					samplingMethodQuestionIDString += "_suspended";
+					break;
+			}
+
+			switch (this.getQuestionValue(samplingMethodQuestionIDString)) {  //TODO: renaming 
 				case '10':
 					EDIorEWI = "EWI";
 					break;
@@ -1107,15 +1120,14 @@ class WebFF extends React.Component {
 			for (let set = 0; set < valArr.length; set++) {
 				for (let i = 0; i < valArr[set]; i++) {
 					setNameArr.push(String.fromCharCode(65 + set));
-					sampNumArr.push(i+1);
+					sampNumArr.push(i + 1);
 				}
 			}
 
+			// push below the header
+			setNameArr.unshift("Set");
+			sampNumArr.unshift("Sample #");
 			// assign setNameArr and sampNumArr to first and second columns
-
-			console.log("setNameArr", setNameArr);
-			console.log("sampNumArr", sampNumArr);
-
 			this.setTableColumn("QWDATATable", 0, setNameArr, () => {
 				this.setTableColumn("QWDATATable", 1, sampNumArr, this.buildRoutesAndRenderPages);
 			});
