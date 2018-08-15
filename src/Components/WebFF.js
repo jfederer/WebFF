@@ -1045,20 +1045,50 @@ class WebFF extends React.Component {
 
 	collectRunAndPropagateSamplePointData(q_id) {
 		//TODO: check that everything is loaded before trying
-		let DEBUG = false;
+		let DEBUG = true;
 		let numSampPoints = null;
 		if (DEBUG) console.log("CRAPSPD: ", this.state);
+		if (DEBUG) console.log("q_id: ", q_id);
+
 		numSampPoints = this.getQuestionValue(q_id);
 		if (DEBUG) console.log("numSampPoints: ", numSampPoints);
 
+		
+		let samplingMethodQuestionIDString = "samplingMethod";
+		switch (this.getQuestionValue("sedimentType")) {
+			case 'bedload':
+				samplingMethodQuestionIDString += "_bedload";
+				break;
+			case 'bottom':
+				samplingMethodQuestionIDString += "_bottom";
+				break;
+			case 'suspended':
+				samplingMethodQuestionIDString += "_suspended";
+				break;
+		}
 
+		let sampMethod = "";
+		switch (this.getQuestionValue(samplingMethodQuestionIDString)) {  //TODO: renaming 
+			case '10':
+			sampMethod = "EWI";
+				break;
+			case '20':
+			sampMethod = "EDI";
+				break;
+			default:
+			sampMethod = "GROUP";
+				return;
+		}
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
-			// build the appropriate samples table on EDI and/or EWI pages
-			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable");
+			// build the appropriate samples table on EDI and/or EWI pages  TODO: waht is appropraite table for non-EDI/EWI
+			
+
+
+
 			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
 			let tempValArr;
-			if (tableToSetName.includes('EWI_')) {
+			if (sampMethod==="EWI") {
 				// pull variables from fields
 				let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
 				let RESZ = this.getQuestionValue("edgeOfSamplingZone_Right");
@@ -1073,50 +1103,33 @@ class WebFF extends React.Component {
 
 				tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
 				if (DEBUG) console.log("EWI values: ", tempValArr);
-			} else { //EDI
+			} else if (sampMethod==="EDI") { //EDI
 				tempValArr = provideEDISamplingPercentages(numSampPoints);
 				if (DEBUG) console.log("EDI values: ", tempValArr);
+			} else { // Generic 'Group' table
+				// fill out "Group" table values
+				tempValArr = new Array(numSampPoints).fill("");
 			}
 			tempValArr.unshift(""); //push past header
-
+			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable") + "_" + sampMethod;
+			
 			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
 
 
 
-			// build the QWDATA table first column
+
+			// build the QWDATA table first columns
 			let setNameArr = [];
 			let sampNumArr = [];
-			let EDIorEWI = "";
+
 			let valArr = [];
 			// find out how many sets and find out number of samples in each set
-			///check if we are in EDI or EWI
-			let samplingMethodQuestionIDString = "samplingMethod";
-			switch (this.getQuestionValue("sedimentType")) {
-				case 'bedload':
-					samplingMethodQuestionIDString += "_bedload";
-					break;
-				case 'bottom':
-					samplingMethodQuestionIDString += "_bottom";
-					break;
-				case 'suspended':
-					samplingMethodQuestionIDString += "_suspended";
-					break;
-			}
-
-			switch (this.getQuestionValue(samplingMethodQuestionIDString)) {  //TODO: renaming 
-				case '10':
-					EDIorEWI = "EWI";
-					break;
-				case '20':
-					EDIorEWI = "EDI";
-					break;
-				default:
-					return;
-			}
-
-			valArr.push(this.getQuestionValue(EDIorEWI + "_setA_numberOfSamplingPoints"));
-			valArr.push(this.getQuestionValue(EDIorEWI + "_setB_numberOfSamplingPoints"));
-			// loop through both, adding to set col and samp# col arr
+			let numOfSets = 3;
+			for(let i = 0; i< numOfSets; i++) {
+				let sampPointsQ_id = "set" + String.fromCharCode(65+i) + "_numberOfSamplingPoints";
+				valArr.push(this.getQuestionValue(sampPointsQ_id));
+			}			
+			// loop through adding to set col and samp# col arr
 			for (let set = 0; set < valArr.length; set++) {
 				for (let i = 0; i < valArr[set]; i++) {
 					setNameArr.push(String.fromCharCode(65 + set));
@@ -1249,6 +1262,7 @@ class WebFF extends React.Component {
 		//TODO: standardize 'styles' within questions
 		//TODO: standardize 'placeholder' within questions
 		//TODO: utilize isLoaded to hold off processing until done loading
+		//TODO: clear all tables when changing samplingMethod ?
 
 		if (menuText === "Test") {
 
