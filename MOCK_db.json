@@ -6,7 +6,8 @@
         "WaterQuality",
         "FieldForm",
         "EWI",
-        "EDI"
+		"EDI",
+		"QWDATA"
       ]
     },
     {
@@ -35,12 +36,18 @@
         },
         {
           "text": "EDI",
-          "route": "/EDI"
+		  "route": "/EDI",
+		  "icon":""
         },
         {
           "text": "EWI",
           "route": "/EWI",
           "icon": ""
+        },
+        {
+          "text": "QWDATA",
+          "route": "/QWDATA",
+          "icon": "SubtitlesIcon"
         }
       ]
     },
@@ -89,7 +96,7 @@
               "layoutGroup": "Basic",
               "width_xs": 7,
               "width_lg": 7,
-              "value": "yes"
+              "value": ""
             },
             {
               "id": "newStation_stationNumber",
@@ -1497,7 +1504,10 @@
 			"tabName": "EDI",
 			"layoutGroup": "Set A Information",
 			"width_xs": 3,
-			"width_lg": 3
+			"width_lg": 3,
+			"actions": {
+				"anyValue":"ShowTab::QWDATA"
+			}
 		  },
         {
           "id": "EDI_setA_numberOfContainers",
@@ -1642,6 +1652,9 @@
 			"placeholder": "Number of Points",
 			"tabName": "EDI",
 			"layoutGroup": "Set B Information",
+			"actions": {
+				"anyValue":"ShowTab::QWDATA"
+			},
 			"width_xs": 3,
 			"width_lg": 3
 		  },
@@ -1715,92 +1728,6 @@
 			"width_lg": 2
 		  },
         {
-          "id": "EDI_timeDatum",
-          "label": "Time Datum",
-          "XMLTag": "TimeDatum",
-          "type": "DropDown",
-          "tabName": "EDI",
-          "layoutGroup": "QWDATA Info",
-          "options": {
-            "SITEFILE Default": "Use Default from SITEFILE",
-            "Atlantic Standard Time": "AST",
-            "Atlantic Daylight Time": "ADT",
-            "Eastern Standard Time": "EST",
-            "Eastern Daylight Time": "EDT",
-            "Central Standard Time": "CST",
-            "Central Daylight Time": "CDT",
-            "Mountain Standard Time": "MST",
-            "Mountain Daylight Time": "MDT",
-            "Pacific Standard Time": "PST",
-            "Pacific Daylight Time": "PDT",
-            "Alaska Standard Time": "AKST",
-            "Alaska Daylight Time": "AKDT",
-            "Hawaii–Aleutian Standard Time": "HST",
-            "Hawaii–Aleutian Daylight Time": "HDT"
-          },
-          "value": "Use Default from SITEFILE",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "EDI_collectingAgency",
-          "label": "Collecting Agency",
-          "XMLTag": "CollecAgency",
-          "type": "DropDown",
-          "tabName": "EDI",
-          "layoutGroup": "QWDATA Info",
-          "options": {
-            "USGS-WRD": "USGS-WRD",
-            "USGS-GD": "USGS-GD",
-            "Observer": "Observer",
-            "Other": "Other"
-          },
-          "actions": {
-            "USGS-WRD": "HideQuestion::EDI_collectingAgencyOther",
-            "USGS-GD": "HideQuestion::EDI_collectingAgencyOther",
-            "Observer": "HideQuestion::EDI_collectingAgencyOther",
-            "Other": "ShowQuestion::EDI_collectingAgencyOther"
-          },
-          "value": "Use Default from SITEFILE",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "EDI_collectingAgencyOther",
-          "label": "Other:",
-          "XMLTag": "CollecAgencyOther",
-          "hidden": true,
-          "type": "Text",
-          "tabName": "EDI",
-          "value": "",
-          "layoutGroup": "QWDATA Info",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "TEST_rando",
-          "type": "Text",
-          "value": "exocitca"
-        },
-        {
-          "id": "EDI_QWDATA_Table",
-          "label": "QWDATA Samples Table",
-          "type": "TableInput",
-          "tabName": "EDI",
-          "layoutGroup": "QWDATA Info",
-          "colHeaders": [
-            "Set",
-            "Sample Number",
-            "Dist from Left Bank",
-            "Remark",
-            "Sample Time"
-          ],
-          "value": [],
-          "rowHeaders": "true",
-          "width_xs": 12,
-          "width_lg": 12
-        },
-        {
           "id": "EDI_sampleIsokinetic",
           "label": "Sample Isokinetic",
           "type": "Toggle",
@@ -1822,7 +1749,7 @@
           "layoutGroup": "Superfly Extras",
           "width_xs": 2,
           "width_lg": 2
-        },
+		},
         {
           "id": "EDI_feetAboveBed",
           "label": "Feet Sampler Stopped above bed",
@@ -1855,9 +1782,13 @@
           "layoutGroup": "Superfly Extras",
           "width_xs": 6,
           "width_lg": 3
-        },
+		},
 
-        {
+
+
+
+
+		{
           "id": "EWI_samplerType_suspended",
           "label": "Sampler Type",
           "XMLTag": "P84164",
@@ -2389,6 +2320,9 @@
 			"placeholder": "Number of Points",
 			"tabName": "EWI",
 			"layoutGroup": "Set A Information",
+			"actions": {
+				"anyValue":"ShowTab::QWDATA"
+			},
 			"width_xs": 3,
 			"width_lg": 3
 		  },
@@ -2537,6 +2471,9 @@
 			"placeholder": "Number of Points",
 			"tabName": "EWI",
 			"layoutGroup": "Set B Information",
+			"actions": {
+				"anyValue":"ShowTab::QWDATA"
+			},
 			"width_xs": 3,
 			"width_lg": 3
 		  },
@@ -2610,92 +2547,6 @@
 			"width_lg": 2
 		  },
         {
-          "id": "EWI_timeDatum",
-          "label": "Time Datum",
-          "XMLTag": "TimeDatum",
-          "type": "DropDown",
-          "tabName": "EWI",
-          "layoutGroup": "QWDATA Info",
-          "options": {
-            "SITEFILE Default": "Use Default from SITEFILE",
-            "Atlantic Standard Time": "AST",
-            "Atlantic Daylight Time": "ADT",
-            "Eastern Standard Time": "EST",
-            "Eastern Daylight Time": "EDT",
-            "Central Standard Time": "CST",
-            "Central Daylight Time": "CDT",
-            "Mountain Standard Time": "MST",
-            "Mountain Daylight Time": "MDT",
-            "Pacific Standard Time": "PST",
-            "Pacific Daylight Time": "PDT",
-            "Alaska Standard Time": "AKST",
-            "Alaska Daylight Time": "AKDT",
-            "Hawaii–Aleutian Standard Time": "HST",
-            "Hawaii–Aleutian Daylight Time": "HDT"
-          },
-          "value": "Use Default from SITEFILE",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "EWI_collectingAgency",
-          "label": "Collecting Agency",
-          "XMLTag": "CollecAgency",
-          "type": "DropDown",
-          "tabName": "EWI",
-          "layoutGroup": "QWDATA Info",
-          "options": {
-            "USGS-WRD": "USGS-WRD",
-            "USGS-GD": "USGS-GD",
-            "Observer": "Observer",
-            "Other": "Other"
-          },
-          "actions": {
-            "USGS-WRD": "HideQuestion::EWI_collectingAgencyOther",
-            "USGS-GD": "HideQuestion::EWI_collectingAgencyOther",
-            "Observer": "HideQuestion::EWI_collectingAgencyOther",
-            "Other": "ShowQuestion::EWI_collectingAgencyOther"
-          },
-          "value": "Use Default from SITEFILE",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "EWI_collectingAgencyOther",
-          "label": "Other:",
-          "XMLTag": "CollecAgencyOther",
-          "hidden": true,
-          "type": "Text",
-          "tabName": "EWI",
-          "value": "",
-          "layoutGroup": "QWDATA Info",
-          "width_xs": 4,
-          "width_lg": 4
-        },
-        {
-          "id": "TEST_rando",
-          "type": "Text",
-          "value": "exocitca"
-        },
-        {
-          "id": "EWI_QWDATA_Table",
-          "label": "QWDATA Samples Table",
-          "type": "TableInput",
-          "tabName": "EWI",
-          "layoutGroup": "QWDATA Info",
-          "colHeaders": [
-            "Set",
-            "Sample Number",
-            "Dist from Left Bank",
-            "Remark",
-            "Sample Time"
-          ],
-          "value": [],
-          "rowHeaders": "true",
-          "width_xs": 12,
-          "width_lg": 12
-        },
-        {
           "id": "EWI_sampleIsokinetic",
           "label": "Sample Isokinetic",
           "type": "Toggle",
@@ -2753,6 +2604,104 @@
 		}, 
 		
 		
+
+
+		{
+			"id": "timeDatum",
+			"label": "Time Datum",
+			"XMLTag": "TimeDatum",
+			"type": "DropDown",
+			"tabName": "QWDATA",
+			"layoutGroup": "QWDATA Info",
+			"options": {
+			  "SITEFILE Default": "Use Default from SITEFILE",
+			  "Atlantic Standard Time": "AST",
+			  "Atlantic Daylight Time": "ADT",
+			  "Eastern Standard Time": "EST",
+			  "Eastern Daylight Time": "EDT",
+			  "Central Standard Time": "CST",
+			  "Central Daylight Time": "CDT",
+			  "Mountain Standard Time": "MST",
+			  "Mountain Daylight Time": "MDT",
+			  "Pacific Standard Time": "PST",
+			  "Pacific Daylight Time": "PDT",
+			  "Alaska Standard Time": "AKST",
+			  "Alaska Daylight Time": "AKDT",
+			  "Hawaii–Aleutian Standard Time": "HST",
+			  "Hawaii–Aleutian Daylight Time": "HDT"
+			},
+			"value": "Use Default from SITEFILE",
+			"width_xs": 4,
+			"width_lg": 4
+		  },
+		  {
+			"id": "collectingAgency",
+			"label": "Collecting Agency",
+			"XMLTag": "CollecAgency",
+			"type": "DropDown",
+			"tabName": "QWDATA",
+			"layoutGroup": "QWDATA Info",
+			"options": {
+			  "USGS-WRD": "USGS-WRD",
+			  "USGS-GD": "USGS-GD",
+			  "Observer": "Observer",
+			  "Other": "Other"
+			},
+			"actions": {
+			  "USGS-WRD": "HideQuestion::collectingAgencyOther",
+			  "USGS-GD": "HideQuestion::collectingAgencyOther",
+			  "Observer": "HideQuestion::collectingAgencyOther",
+			  "Other": "ShowQuestion::collectingAgencyOther"
+			},
+			"value": "USGS-WRD",
+			"width_xs": 4,
+			"width_lg": 4
+		  },	        {
+			"id": "collectingAgencyOther",
+			"label": "Other:",
+			"XMLTag": "CollecAgencyOther",
+			"hidden": true,
+			"type": "Text",
+			"tabName": "QWDATA",
+			"value": "",
+			"layoutGroup": "QWDATA Info",
+			"width_xs": 4,
+			"width_lg": 4
+		  }, 
+		{
+			"id": "QWDATATable",
+			"label": "QWDATA Table",
+			"type": "TableInput",
+			"tabName": "QWDATA",
+			"layoutGroup": "QWDATA Information",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"colSizes": [1,2,2,2,2,2,2],
+			"value":  [
+			  [
+				"Set",
+				"Sample",
+				"Location from Left Bank",
+				"Sample Time",
+				"Hydrologic Event",
+				"Hydrologic Cond",
+				"Sample Medium",
+				"Sample Type",
+				"ASTAT Code"
+			  ],
+			  [
+				"Fill Out Number Of Samples for at least one set","","","","","","","",""
+			  ]
+			],
+			"width_xs": 12,
+			"width_lg": 12
+		  },
+
+
+
+
+
+
 		
 		
 		{
