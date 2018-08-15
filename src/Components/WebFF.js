@@ -40,6 +40,10 @@ import CompareIcon from '@material-ui/icons/Compare';
 import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import SubtitlesIcon from '@material-ui/icons/Subtitles';
+
+
+
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
@@ -370,6 +374,7 @@ class WebFF extends React.Component {
 			case 'EditIcon': return <EditIcon />
 			case 'CompareIcon': return <CompareIcon />
 			case 'SaveIcon': return <SaveIcon />
+			case 'SubtitlesIcon': return <SubtitlesIcon />
 
 			//TODO: additional good ones:  blur*, edit* (gives editor options...)
 			default: return <SettingsInputComponentIcon />
@@ -525,8 +530,8 @@ class WebFF extends React.Component {
 		// WARNING: expands or shrinks the entire table to match the number of rows in the given column
 		// TODO: add flag(s) to clear out rest of table? -- no, do this as part of propagate, to much side-effect here
 		let valArr = this.getQuestionValue(q_id).slice();
-		console.log("Existing valArr.length: ", valArr.length);
-		console.log("Incoming arr length: ", arr.length);
+		// console.log("Existing valArr.length: ", valArr.length);
+		// console.log("Incoming arr length: ", arr.length);
 		this.updateNumRowsOfTable(q_id, arr.length - valArr.length, () => {
 			valArr = this.getQuestionValue(q_id).slice();
 			valArr.forEach((row, rowNum) => {
@@ -823,6 +828,15 @@ class WebFF extends React.Component {
 
 		if (actionsExist) {
 			let q_val = this.getQuestionValue(q_id);
+
+			let anyValueCommandString = actions["anyValue"];
+			if (anyValueCommandString && q_val != "" && q_val != null) {
+				let actionsToDo = anyValueCommandString.split('&');
+				actionsToDo.forEach((action) => {
+					actionExecuter(action);
+				});
+			}
+
 			let commandString = actions[q_val];
 			if (commandString) {
 				let actionsToDo = commandString.split('&');
@@ -830,6 +844,7 @@ class WebFF extends React.Component {
 					actionExecuter(action);
 				});
 			}
+
 		}
 	}
 
@@ -1030,13 +1045,16 @@ class WebFF extends React.Component {
 
 	collectRunAndPropagateSamplePointData(q_id) {
 		//TODO: check that everything is loaded before trying
-		let DEBUG=false;
+		let DEBUG = false;
 		let numSampPoints = null;
-		if(DEBUG)console.log("CRAPSPD: ", this.state);
+		if (DEBUG) console.log("CRAPSPD: ", this.state);
 		numSampPoints = this.getQuestionValue(q_id);
-		if(DEBUG)console.log("numSampPoints: ", numSampPoints);
+		if (DEBUG) console.log("numSampPoints: ", numSampPoints);
+
+
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
+			// build the appropriate samples table on EDI and/or EWI pages
 			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable");
 			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
 			let tempValArr;
@@ -1054,14 +1072,54 @@ class WebFF extends React.Component {
 				}
 
 				tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
-				if(DEBUG)console.log("EWI values: ", tempValArr);
+				if (DEBUG) console.log("EWI values: ", tempValArr);
 			} else { //EDI
 				tempValArr = provideEDISamplingPercentages(numSampPoints);
-				if(DEBUG)console.log("EDI values: ", tempValArr);
+				if (DEBUG) console.log("EDI values: ", tempValArr);
 			}
 			tempValArr.unshift(""); //push past header
 
 			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
+
+
+
+			// build the QWDATA table first column
+			let setNameArr = [];
+			let sampNumArr = [];
+			let EDIorEWI = "";
+			let valArr = [];
+			// find out how many sets and find out number of samples in each set
+			///check if we are in EDI or EWI
+			switch (this.getQuestionValue("samplingMethod")) {
+				case '10':
+					EDIorEWI = "EWI";
+					break;
+				case '20':
+					EDIorEWI = "EDI";
+					break;
+				default:
+					return;
+			}
+
+			valArr.push(this.getQuestionValue(EDIorEWI + "_setA_numberOfSamplingPoints"));
+			valArr.push(this.getQuestionValue(EDIorEWI + "_setB_numberOfSamplingPoints"));
+			// loop through both, adding to set col and samp# col arr
+			for (let set = 0; set < valArr.length; set++) {
+				for (let i = 0; i < valArr[set]; i++) {
+					setNameArr.push(String.fromCharCode(65 + set));
+					sampNumArr.push(i+1);
+				}
+			}
+
+			// assign setNameArr and sampNumArr to first and second columns
+
+			console.log("setNameArr", setNameArr);
+			console.log("sampNumArr", sampNumArr);
+
+			this.setTableColumn("QWDATATable", 0, setNameArr, () => {
+				this.setTableColumn("QWDATATable", 1, sampNumArr, this.buildRoutesAndRenderPages);
+			});
+
 		}
 	}
 
