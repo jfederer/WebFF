@@ -41,6 +41,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
+import xmljs from 'xml-js';
 
 
 
@@ -799,6 +800,27 @@ class WebFF extends React.Component {
 		throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
 	}
 
+	getTableQuestionValue(q_id, header, rowNum) {
+		// q_id: string question ID associated with a tableInput question
+		// returns VALUE in table q_id in column with matching header and on row rowNum... 
+		// throws error if q_id value is not an array (which is must be in order to be a table's value)
+		if (this.getQuestionData(q_id).type !== "TableInput") {
+			throw new Error("Question (" + q_id + ") not of required 'TableInput' type.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
+		}
+
+		let QV = this.getQuestionValue(q_id);
+
+		// headers are located in the first row...
+		let col = QV[0].indexOf(header);
+
+		if (col < 0) {
+			throw new Error("Header (" + header + ") not found in first row of Question (" + q_id + ") value.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
+		}
+
+		return QV[rowNum][col];
+	}
+
+
 	setLoggedInUser(username) {
 		console.log(this);
 		// this.setState({ loggedInUser: username }, this.buildRoutesAndRenderPages);
@@ -830,7 +852,7 @@ class WebFF extends React.Component {
 			let q_val = this.getQuestionValue(q_id);
 
 			let anyValueCommandString = actions["anyValue"];
-			if (anyValueCommandString && q_val != "" && q_val != null) {
+			if (anyValueCommandString && q_val !== "" && q_val != null) {
 				let actionsToDo = anyValueCommandString.split('&');
 				actionsToDo.forEach((action) => {
 					actionExecuter(action);
@@ -1042,10 +1064,64 @@ class WebFF extends React.Component {
 		this.setState({ routesAndPages: newRoutesAndPages });
 	};
 
+	getSamplerTypeQuestionIDString() { // yes, this and the one below should be combined somehow
+		let samplTypeQuestionIDString = "samplerType";
+		switch (this.getQuestionValue("sedimentType")) {  //TODO: this needn't be a conditional...
+			case 'bedload':
+				samplTypeQuestionIDString += "_bedload";
+				break;
+			case 'bottom':
+				samplTypeQuestionIDString += "_bottom";
+				break;
+			default: //suspended
+				samplTypeQuestionIDString += "_suspended";
+				break;
+		}
+		return samplTypeQuestionIDString;
+	}
+
+	getSamplingMethodQuestionIDString() {
+		let samplingMethodQuestionIDString = "samplingMethod";
+		switch (this.getQuestionValue("sedimentType")) {  //TODO: this needn't be a conditional...
+			case 'bedload':
+				samplingMethodQuestionIDString += "_bedload";
+				break;
+			case 'bottom':
+				samplingMethodQuestionIDString += "_bottom";
+				break;
+			default: //suspended
+				samplingMethodQuestionIDString += "_suspended";
+				break;
+		}
+		return samplingMethodQuestionIDString;
+	}
+
+	getCurrentSetType() {
+		//note, for SEDLOGIN XML purposes... the string returned from this actually the sampling method.
+		// otherwise, this is used for collectRunAndPropagate
+		let samplingMethodQuestionIDString = this.getSamplingMethodQuestionIDString();
+
+		//console.log("samplingMethodQuestionIDString", samplingMethodQuestionIDString);
+		let sampMethod = "";
+		let QV = this.getQuestionValue(samplingMethodQuestionIDString);
+		//console.log("QV",QV);
+		switch (QV) {  //TODO: renaming 
+			case '10':
+				sampMethod = "EWI";
+				break;
+			case '20':
+				sampMethod = "EDI";
+				break;
+			default:
+				sampMethod = "OTHER";
+				break;
+		}
+		return sampMethod;
+	}
 
 	collectRunAndPropagateSamplePointData(q_id) {
 		//TODO: check that everything is loaded before trying
-		let DEBUG = true;
+		let DEBUG = false;
 		let numSampPoints = null;
 		if (DEBUG) console.log("CRAPSPD: ", this.state);
 		if (DEBUG) console.log("q_id: ", q_id);
@@ -1053,42 +1129,17 @@ class WebFF extends React.Component {
 		numSampPoints = this.getQuestionValue(q_id);
 		if (DEBUG) console.log("numSampPoints: ", numSampPoints);
 
-		
-		let samplingMethodQuestionIDString = "samplingMethod";
-		switch (this.getQuestionValue("sedimentType")) {
-			case 'bedload':
-				samplingMethodQuestionIDString += "_bedload";
-				break;
-			case 'bottom':
-				samplingMethodQuestionIDString += "_bottom";
-				break;
-			case 'suspended':
-				samplingMethodQuestionIDString += "_suspended";
-				break;
-		}
 
-		let sampMethod = "";
-		switch (this.getQuestionValue(samplingMethodQuestionIDString)) {  //TODO: renaming 
-			case '10':
-			sampMethod = "EWI";
-				break;
-			case '20':
-			sampMethod = "EDI";
-				break;
-			default:
-			sampMethod = "GROUP";
-				return;
-		}
+
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// build the appropriate samples table on EDI and/or EWI pages  TODO: waht is appropraite table for non-EDI/EWI
-			
 
 
-
+			let sampMethod = this.getCurrentSetType();
 			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
-			let tempValArr;
-			if (sampMethod==="EWI") {
+			let tempValArr=[];
+			if (sampMethod === "EWI") {
 				// pull variables from fields
 				let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
 				let RESZ = this.getQuestionValue("edgeOfSamplingZone_Right");
@@ -1102,17 +1153,22 @@ class WebFF extends React.Component {
 				}
 
 				tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
+				tempValArr.unshift("Dist from L bank"); //push past header
 				if (DEBUG) console.log("EWI values: ", tempValArr);
-			} else if (sampMethod==="EDI") { //EDI
+			} else if (sampMethod === "EDI") { //EDI
 				tempValArr = provideEDISamplingPercentages(numSampPoints);
 				if (DEBUG) console.log("EDI values: ", tempValArr);
-			} else { // Generic 'Group' table
+				tempValArr.unshift("EDI %"); //push past header
+			} else { // Generic 'OTHER' table
 				// fill out "Group" table values
-				tempValArr = new Array(numSampPoints).fill("");
+				for(let i = 0; i< numSampPoints; i++) {
+					tempValArr.push(i+1);
+				}
+				tempValArr.unshift("Sample #"); //push past header
 			}
-			tempValArr.unshift(""); //push past header
-			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable") + "_" + sampMethod;
 			
+			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable") + "_" + sampMethod;
+
 			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
 
 
@@ -1125,10 +1181,10 @@ class WebFF extends React.Component {
 			let valArr = [];
 			// find out how many sets and find out number of samples in each set
 			let numOfSets = 3;
-			for(let i = 0; i< numOfSets; i++) {
-				let sampPointsQ_id = "set" + String.fromCharCode(65+i) + "_numberOfSamplingPoints";
+			for (let i = 0; i < numOfSets; i++) {
+				let sampPointsQ_id = "set" + String.fromCharCode(65 + i) + "_numberOfSamplingPoints";
 				valArr.push(this.getQuestionValue(sampPointsQ_id));
-			}			
+			}
 			// loop through adding to set col and samp# col arr
 			for (let set = 0; set < valArr.length; set++) {
 				for (let i = 0; i < valArr[set]; i++) {
@@ -1237,7 +1293,108 @@ class WebFF extends React.Component {
 		this.updateDBInfo("users/" + this.state.loggedInUser, patchData, (resp) => null);
 	}
 
+	getNumberOfSetsInCurrentSamplingEvent() {
+		let howMany = 0;
+		for (let i = 0; i < 3; i++) {
+			if (this.getQuestionValue('set' + String.fromCharCode(65 + i) + '_numberOfSamplingPoints')) {
+				howMany++;
+			}
+		}
+		return howMany;
+	}
 
+	getNumberOfSamplesInSet(setName) {
+		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'),10);
+	}
+
+	buildParamObj(setName, sampleNum) {
+		let paramObj = {
+			"Param": {
+				"Name": "TODO",
+				"Value": "TODO",
+				"Rmrk": "TODO",
+				"NullQlfr": "TODO",
+				"Method": "TODO"
+			}
+
+		}
+		return paramObj;
+	}
+
+
+	buildSampleObj(setName, sampNum) {
+		// get total number of samples before this one to know what row we are looking at in QWDATA table
+		let setNum = setName.charCodeAt() - 65;
+		let totalNumberOfSamplesInPreviousSets = 0;
+		for (let i = setNum; i > 0; i--) {
+			let previousSetName = String.fromCharCode(i + 64);
+			totalNumberOfSamplesInPreviousSets += this.getNumberOfSamplesInSet(previousSetName);
+		}
+		let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
+
+		// build sample object
+		let sampleObj = {
+			"SampleNumber": sampNum + 1,
+			"BeginDate": this.getQuestionValue("sampleDate"), //TODO: MM-DD-YYYY
+			"BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
+			"TimeDatum": this.getQuestionValue("timeDatum"),
+			"AddOnAnalyses": "TODO",
+			"CollecAgency": this.getQuestionValue("collectingAgency"),
+			"colllectorInitials": this.getQuestionValue("compiledBy"),
+			"Hstat": this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum),
+			"HydEvent": this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum),
+			"Stype": this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum),
+			"Astat": this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum),
+			"P71999": this.getQuestionValue("samplePurpose"),
+			"P82398": this.getQuestionValue(this.getSamplingMethodQuestionIDString()),
+			"P84164": this.getQuestionValue(this.getSamplerTypeQuestionIDString()),
+			"M2Lab": "TODO",
+			"ContainerNumber": "TODO"
+		}
+
+
+		return sampleObj;
+
+	}
+
+	buildSetObj(setName) {
+		let setObj = {
+			"Name": setName,
+			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
+			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually"),
+			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor").join(","),  //TODO: will need to change format of multi-choice storage
+			"SetType": this.getCurrentSetType()
+		}
+
+		let numOfSamples = this.getQuestionValue("set" + setName + "_numberOfSamplingPoints");
+
+		for (let i = 0; i < numOfSamples; i++) {
+			setObj["Sample" + i] = this.buildSampleObj(setName, i);
+		}
+
+		return setObj;
+	}
+
+	buildSampleEventtObj() {
+		let SEObj = {
+			"Event": {
+				"EventNumber": 1,
+				"SiteID": this.getQuestionValue('stationNumber'),
+				"AgencyCode": this.getQuestionValue('agencyCode'),
+				"SedTranspMode": this.getQuestionValue('sedimentType'),
+				"SmplMediumCode": this.getQuestionValue('sampleMedium'),
+				"AvgRepMeasures": "TODO"
+			}
+		}
+
+		let numberOfSets = this.getNumberOfSetsInCurrentSamplingEvent();
+
+		for (let i = 0; i < numberOfSets; i++) {
+			let setName = String.fromCharCode(65 + i);
+			SEObj.Event["Set" + i] = this.buildSetObj(setName);
+		}
+		return SEObj;
+	}
 
 	handleSystemMenuItemClicked(menuText) {
 		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
@@ -1263,8 +1420,23 @@ class WebFF extends React.Component {
 		//TODO: standardize 'placeholder' within questions
 		//TODO: utilize isLoaded to hold off processing until done loading
 		//TODO: clear all tables when changing samplingMethod ?
+		//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
+		//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
+		//TODO: FIXME: fill out QWDATA last row, then add another set... copies data in.  Perhaps re-think the 'copy above'.
+		
 
 		if (menuText === "Test") {
+
+
+			let SLCXML = {
+				"SedWE_data": this.buildSampleEventtObj()
+			}
+
+			console.log("SLCXML", SLCXML);
+
+			var options = { compact: true, ignoreComment: true, spaces: 4 };
+			var result = xmljs.json2xml(SLCXML, options);
+			console.log("XML: ", result);
 
 			return;
 		}
