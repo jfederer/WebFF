@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SystemMenu from './SystemMenu.js';
+import ParametersPage from './ParametersPage.js';
 import NavMenu from './NavMenu.js';
 import Dashboard from './Dashboard.js';
 import { styles } from '../style';
@@ -802,6 +803,7 @@ class WebFF extends React.Component {
 
 	getTableQuestionValue(q_id, header, rowNum) {
 		// q_id: string question ID associated with a tableInput question
+		// header: string matching the item in row 0.  If header is a number, will grab that column.
 		// returns VALUE in table q_id in column with matching header and on row rowNum... 
 		// throws error if q_id value is not an array (which is must be in order to be a table's value)
 		if (this.getQuestionData(q_id).type !== "TableInput") {
@@ -812,6 +814,10 @@ class WebFF extends React.Component {
 
 		// headers are located in the first row...
 		let col = QV[0].indexOf(header);
+
+		if(!Number.isNaN(header)) {
+			col = header;
+		}		
 
 		if (col < 0) {
 			throw new Error("Header (" + header + ") not found in first row of Question (" + q_id + ") value.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
@@ -1029,6 +1035,18 @@ class WebFF extends React.Component {
 			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
 		}
 
+		let sampleEventLocations = [];
+		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
+		for(let i=0;i<numSets;i++) {
+			let numSamps = this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
+			let table_q_id = "set"+String.fromCharCode(65 + i)+"_samplesTable_"+this.getCurrentSetType();
+			let setLocations = [];
+			for(let k=1; k<=numSamps; k++) {
+				setLocations.push(this.getTableQuestionValue(table_q_id,0,k));
+			}
+			sampleEventLocations.push(setLocations);
+		}
+
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
 				<Route exact path="/" render={() => <h1>HOME</h1>} />
@@ -1040,6 +1058,16 @@ class WebFF extends React.Component {
 					globalState={this.state}
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
+				/>} />
+				<Route path="/ParametersPage" render={() => <ParametersPage
+					appBarTextCB={this.setAppBarText}
+					systemCB={this.questionChangeSystemCallback}
+					sampleEventLocations={sampleEventLocations} // size of this 2d array determines table sets and sample column
+				
+					questionsData={this.state.questionsData}
+					questionsValues={questionsValues}
+					hiddenPanels={this.state.hiddenPanels}
+					globalState={this.state}
 				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
@@ -1307,7 +1335,7 @@ class WebFF extends React.Component {
 		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'),10);
 	}
 
-	buildParamObj(setName, sampleNum) {
+	buildParamObj(setName, QWDATARowNum) {
 		let paramObj = {
 			"Param": {
 				"Name": "TODO",
@@ -1396,6 +1424,16 @@ class WebFF extends React.Component {
 		return SEObj;
 	}
 
+
+	getSelectedText(elementId) {
+		var elt = document.getElementById(elementId);
+	
+		if (!elt || elt.selectedIndex == -1)
+			return null;
+	
+		return elt.options[elt.selectedIndex].text;
+	}
+
 	handleSystemMenuItemClicked(menuText) {
 		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
 		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
@@ -1428,18 +1466,24 @@ class WebFF extends React.Component {
 		if (menuText === "Test") {
 
 
-			let SLCXML = {
-				"SedWE_data": this.buildSampleEventtObj()
-			}
+		// 	let SLCXML = {
+		// 		"SedWE_data": this.buildSampleEventtObj()
+		// 	}
 
-			console.log("SLCXML", SLCXML);
+		// 	console.log("SLCXML", SLCXML);
 
-			var options = { compact: true, ignoreComment: true, spaces: 4 };
-			var result = xmljs.json2xml(SLCXML, options);
-			console.log("XML: ", result);
+		// 	var options = { compact: true, ignoreComment: true, spaces: 4 };
+		// 	var result = xmljs.json2xml(SLCXML, options);
+		// 	console.log("XML: ", result);
+
+	
+		
+		var text = this.getSelectedText("DD_1");
+			console.log(text);
 
 			return;
 		}
+
 
 		if (menuText === "Sync Current Event to Database") {
 			this.syncSamplingEventToDB(this.state.curSamplingEventName);

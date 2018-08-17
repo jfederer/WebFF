@@ -1509,13 +1509,22 @@
           "colHeaders": true,
           "rowHeaders": true,
           "colSizes": [
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1
           ],
           "value": [
             [
@@ -1525,7 +1534,10 @@
               "Volume (cc)",
               "Time (sec)",
               "Ratio of Vertical",
-              "Intake Efficiency"
+			  "Intake Efficiency",
+			  "P00001 Val","P00001 Rmk","P00001 Mth",
+			  "P00065 Val","P00065 Rmk","P00001 Mth",
+			  "P00010 Val", "P00010 Rmk", "P00010 Mth", "P00010 nQ"
             ],
             [
               "Fill Out Number Of Samples",
@@ -1533,7 +1545,17 @@
               "",
               "",
               "",
-              "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
               ""
             ]
           ],
