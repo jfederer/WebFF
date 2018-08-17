@@ -811,14 +811,16 @@ class WebFF extends React.Component {
 		}
 
 		let QV = this.getQuestionValue(q_id);
-
+		//console.log("QV: ", QV);
 		// headers are located in the first row...
 		let col = QV[0].indexOf(header);
-
-		if(!Number.isNaN(header)) {
-			col = header;
-		}		
-
+		
+		if (col < 0) { /// if the header wasn't found, let's assume we are a number...
+			if (!Number.isNaN(header)) {
+				col = header;
+			}
+		}
+		
 		if (col < 0) {
 			throw new Error("Header (" + header + ") not found in first row of Question (" + q_id + ") value.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
 		}
@@ -1037,12 +1039,12 @@ class WebFF extends React.Component {
 
 		let sampleEventLocations = [];
 		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
-		for(let i=0;i<numSets;i++) {
+		for (let i = 0; i < numSets; i++) {
 			let numSamps = this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
-			let table_q_id = "set"+String.fromCharCode(65 + i)+"_samplesTable_"+this.getCurrentSetType();
+			let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + this.getCurrentSetType();
 			let setLocations = [];
-			for(let k=1; k<=numSamps; k++) {
-				setLocations.push(this.getTableQuestionValue(table_q_id,0,k));
+			for (let k = 1; k <= numSamps; k++) {
+				setLocations.push(this.getTableQuestionValue(table_q_id, 0, k));
 			}
 			sampleEventLocations.push(setLocations);
 		}
@@ -1059,11 +1061,11 @@ class WebFF extends React.Component {
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
 				/>} />
-				<Route path="/ParametersPage" render={() => <ParametersPage
+				<Route path="/Parameters" render={() => <ParametersPage
 					appBarTextCB={this.setAppBarText}
 					systemCB={this.questionChangeSystemCallback}
 					sampleEventLocations={sampleEventLocations} // size of this 2d array determines table sets and sample column
-				
+
 					questionsData={this.state.questionsData}
 					questionsValues={questionsValues}
 					hiddenPanels={this.state.hiddenPanels}
@@ -1161,12 +1163,11 @@ class WebFF extends React.Component {
 
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
-			// build the appropriate samples table on EDI and/or EWI pages  TODO: waht is appropraite table for non-EDI/EWI
-
+			// build the appropriate samples table on EDI and/or EWI and/or OTHER pages 
 
 			let sampMethod = this.getCurrentSetType();
 			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
-			let tempValArr=[];
+			let tempValArr = [];
 			if (sampMethod === "EWI") {
 				// pull variables from fields
 				let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
@@ -1189,12 +1190,12 @@ class WebFF extends React.Component {
 				tempValArr.unshift("EDI %"); //push past header
 			} else { // Generic 'OTHER' table
 				// fill out "Group" table values
-				for(let i = 0; i< numSampPoints; i++) {
-					tempValArr.push(i+1);
+				for (let i = 0; i < numSampPoints; i++) {
+					tempValArr.push(i + 1);
 				}
 				tempValArr.unshift("Sample #"); //push past header
 			}
-			
+
 			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable") + "_" + sampMethod;
 
 			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
@@ -1204,7 +1205,6 @@ class WebFF extends React.Component {
 
 			// build the QWDATA table first columns
 			let setNameArr = [];
-			let sampNumArr = [];
 
 			let valArr = [];
 			// find out how many sets and find out number of samples in each set
@@ -1216,17 +1216,15 @@ class WebFF extends React.Component {
 			// loop through adding to set col and samp# col arr
 			for (let set = 0; set < valArr.length; set++) {
 				for (let i = 0; i < valArr[set]; i++) {
-					setNameArr.push(String.fromCharCode(65 + set));
-					sampNumArr.push(i + 1);
+					setNameArr.push(String.fromCharCode(65 + set) + "-" + (i+1));
 				}
 			}
 
 			// push below the header
-			setNameArr.unshift("Set");
-			sampNumArr.unshift("Sample #");
+			setNameArr.unshift("Set-Sample#");
 			// assign setNameArr and sampNumArr to first and second columns
 			this.setTableColumn("QWDATATable", 0, setNameArr, () => {
-				this.setTableColumn("QWDATATable", 1, sampNumArr, this.buildRoutesAndRenderPages);
+				this.buildRoutesAndRenderPages();
 			});
 
 		}
@@ -1322,6 +1320,9 @@ class WebFF extends React.Component {
 	}
 
 	getNumberOfSetsInCurrentSamplingEvent() {
+		if (this.state.curSamplingEventName === null) {
+			return 0;
+		}
 		let howMany = 0;
 		for (let i = 0; i < 3; i++) {
 			if (this.getQuestionValue('set' + String.fromCharCode(65 + i) + '_numberOfSamplingPoints')) {
@@ -1332,7 +1333,7 @@ class WebFF extends React.Component {
 	}
 
 	getNumberOfSamplesInSet(setName) {
-		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'),10);
+		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'), 10);
 	}
 
 	buildParamObj(setName, QWDATARowNum) {
@@ -1363,7 +1364,7 @@ class WebFF extends React.Component {
 		// build sample object
 		let sampleObj = {
 			"SampleNumber": sampNum + 1,
-			"BeginDate": this.getQuestionValue("sampleDate"), //TODO: MM-DD-YYYY
+			"BeginDate": this.getQuestionValue("sampleDate"),
 			"BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
 			"TimeDatum": this.getQuestionValue("timeDatum"),
 			"AddOnAnalyses": "TODO",
@@ -1427,10 +1428,10 @@ class WebFF extends React.Component {
 
 	getSelectedText(elementId) {
 		var elt = document.getElementById(elementId);
-	
+
 		if (!elt || elt.selectedIndex == -1)
 			return null;
-	
+
 		return elt.options[elt.selectedIndex].text;
 	}
 
@@ -1460,26 +1461,29 @@ class WebFF extends React.Component {
 		//TODO: clear all tables when changing samplingMethod ?
 		//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
 		//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
-		//TODO: FIXME: fill out QWDATA last row, then add another set... copies data in.  Perhaps re-think the 'copy above'.
-		
+		//TODO: FIXME: fill out QWDATA last row, then add another set... copies data in.  Perhaps re-think the 'copy above'. 
+		//TODO: "distance" -> "sample number" on parameter page when sampleEventType===OTHER
+		//TODO: "Location from Left Bank" filled out from samplesTable when sampleEventType===EWI
+		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
+
 
 		if (menuText === "Test") {
 
 
-		// 	let SLCXML = {
-		// 		"SedWE_data": this.buildSampleEventtObj()
-		// 	}
+			let SLCXML = {
+				"SedWE_data": this.buildSampleEventtObj()
+			}
 
-		// 	console.log("SLCXML", SLCXML);
+			console.log("SLCXML", SLCXML);
 
-		// 	var options = { compact: true, ignoreComment: true, spaces: 4 };
-		// 	var result = xmljs.json2xml(SLCXML, options);
-		// 	console.log("XML: ", result);
+			var options = { compact: true, ignoreComment: true, spaces: 4 };
+			var result = xmljs.json2xml(SLCXML, options);
+			console.log("XML: ", result);
 
-	
-		
-		var text = this.getSelectedText("DD_1");
-			console.log(text);
+
+
+			// var text = this.getSelectedText("DD_1");
+			// 	console.log(text);
 
 			return;
 		}
