@@ -809,7 +809,7 @@ class WebFF extends React.Component {
 		// header: string matching the item in row 0.  If header is a number, will grab that column.
 		// returns VALUE in table q_id in column with matching header and on row rowNum... 
 		// throws error if q_id value is not an array (which is must be in order to be a table's value)
-		if (this.getQuestionData(q_id).type !== "TableInput") {
+		if (!(this.getQuestionData(q_id).type === "TableInput" || this.getQuestionData(q_id).type === "ParametersTable")) {
 			throw new Error("Question (" + q_id + ") not of required 'TableInput' type.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
 		}
 
@@ -817,13 +817,13 @@ class WebFF extends React.Component {
 		//console.log("QV: ", QV);
 		// headers are located in the first row...
 		let col = QV[0].indexOf(header);
-		
+
 		if (col < 0) { /// if the header wasn't found, let's assume we are a number...
 			if (!Number.isNaN(header)) {
 				col = header;
 			}
 		}
-		
+
 		if (col < 0) {
 			throw new Error("Header (" + header + ") not found in first row of Question (" + q_id + ") value.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
 		}
@@ -929,7 +929,7 @@ class WebFF extends React.Component {
 		let propagateSamplePointData = false;
 		if (Q.props.id.includes("numberOfSamplingPoints")) {
 			propagateSamplePointData = true; // want to run it later because we want values to propagate through teh system first
-			this.showTabOrPanel("Parameters",true,true)
+			this.showTabOrPanel("Parameters", true, true)
 		}
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
@@ -1041,7 +1041,7 @@ class WebFF extends React.Component {
 			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
 		}
 
-		
+
 
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
@@ -1215,7 +1215,7 @@ class WebFF extends React.Component {
 			// loop through adding to set col and samp# col arr
 			for (let set = 0; set < valArr.length; set++) {
 				for (let i = 0; i < valArr[set]; i++) {
-					setNameArr.push(String.fromCharCode(65 + set) + "-" + (i+1));
+					setNameArr.push(String.fromCharCode(65 + set) + "-" + (i + 1));
 				}
 			}
 
@@ -1335,16 +1335,13 @@ class WebFF extends React.Component {
 		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'), 10);
 	}
 
-	buildParamObj(setName, QWDATARowNum) {
+	buildParamObj(QWDATARowNum, pCode) {
 		let paramObj = {
-			"Param": {
-				"Name": "TODO",
-				"Value": "TODO",
-				"Rmrk": "TODO",
-				"NullQlfr": "TODO",
-				"Method": "TODO"
-			}
-
+			"Name": pCode,
+			"Value": this.getTableQuestionValue("parametersTable", pCode + "_val", QWDATARowNum),
+			"Rmrk": this.getTableQuestionValue("parametersTable", pCode + "_rmk", QWDATARowNum),
+			"NullQlfr": this.getTableQuestionValue("parametersTable", pCode + "_nq", QWDATARowNum),
+			"Method": this.getTableQuestionValue("parametersTable", pCode + "_mth", QWDATARowNum),
 		}
 		return paramObj;
 	}
@@ -1380,6 +1377,22 @@ class WebFF extends React.Component {
 			"ContainerNumber": "TODO"
 		}
 
+		// build param part of sample object using the same row
+		let parametersTableHeaders = this.getQuestionValue("parametersTable")[0];
+		if (parametersTableHeaders === null | parametersTableHeaders.length < 4) { // there was no parameters table info or headers
+			return sampleObj;
+		}
+
+		let activePCodes = {};
+		for (let i = 0; i < parametersTableHeaders.length; i++) {
+			activePCodes[parametersTableHeaders[i].split("_")[0]] = true;
+		}
+		let activePCodesArr = Object.keys(activePCodes);
+		for (let i = 0; i < activePCodesArr.length; i++) {
+			sampleObj["Param" + i] = this.buildParamObj(QWDATARowNum, activePCodesArr[i]);
+		}
+		//console.log("activePCodes: ", activePCodes);
+		//console.log("PARAM: ", this.getQuestionValue("parametersTable")[0]);
 
 		return sampleObj;
 
