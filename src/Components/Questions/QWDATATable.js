@@ -62,11 +62,15 @@ class QWDATATable extends React.Component {
 
 		this.state = {
 			value: emptyTable,
-			dialogOpen: false,
-			dialogValue: ""
+			dialogM2LOpen: false,
+			dialogM2LValue: "",
+			dialogAddOnOpen: false,
+			dialogAddOnValue: []
 		};
 
 		this.handleTableQuestionChange = this.handleTableQuestionChange.bind(this);
+		this.dialogM2LTextChangeHandler = this.dialogM2LTextChangeHandler.bind(this);
+		this.addOnChangeHandler = this.addOnChangeHandler.bind(this);
 	};
 
 	componentWillMount() {
@@ -75,28 +79,45 @@ class QWDATATable extends React.Component {
 
 	}
 
-	handleClickOpen = (row, col) => {
+	handleM2LClickOpen = (row, col) => {
+		this.setState({ dialogM2LOpen: true, dialogM2LValue: this.state.value[row][col], curRow: row, curCol: col });
+	};
+
+	handleAddOnClickOpen = (row, col) => {
 		console.log(row, " x ", col);
-		this.setState({ dialogOpen: true, dialogValue:this.state.value[row][col], curRow:row, curCol:col });
-	  };
-	
+		this.setState({ dialogAddOnOpen: true, dialogAddOnValue: this.state.value[row][col], curRow: row, curCol: col });
+	};
 
-	  handleSave = () => {
-		  console.log(this.state.curRow, " x ", this.state.curCol);
-		  console.log(this.state.value);
+
+	handleM2LSave = () => {
 		let newVal = this.state.value.slice();
-		newVal[this.state.curRow][this.state.curCol] = this.state.dialogValue;
-		this.setState({value:newVal});
+		newVal[this.state.curRow][this.state.curCol] = this.state.dialogM2LValue;
+		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });
 		this.handleClose();
-	  }
+	}
 
-	  handleClose = () => {
-		this.setState({ dialogOpen: false });
-	  };
+	handleAddOnSave = () => {
+		console.log(this.state.curRow, " x ", this.state.curCol);
+		console.log(this.state.value);
+		let newVal = this.state.value.slice();
+		newVal[this.state.curRow][this.state.curCol] = this.state.dialogAddOnValue;
+		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });
+		this.handleClose();
+	}
 
-	  dialogTextChangeHandler = (e) => {
-		  this.setState({dialogValue:e.target.value}, () => { this.props.stateChangeHandler(this) });
-	  }
+	handleClose = () => {
+		this.setState({ dialogM2LOpen: false, dialogAddOnOpen: false });
+	};
+
+	dialogM2LTextChangeHandler = (e) => {
+		this.setState({ dialogM2LValue: e.target.value }, () => { this.props.stateChangeHandler(this) });
+	}
+
+	addOnChangeHandler = (mcq) => {
+		this.setState({dialogAddOnValue:mcq.state.value});
+	}
+
+	
 
 
 	handleTableQuestionChange(textSubQuestion) {
@@ -130,7 +151,9 @@ class QWDATATable extends React.Component {
 				let cellQuestion = null;
 
 				if (this.props.value[0][col] === "M2Lab" && row !== 0) {
-					cellQuestion = <Button onClick={() => this.handleClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : "Edit"}</Button>
+					cellQuestion = <Button onClick={() => this.handleM2LClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : "Edit"}</Button>
+				} else if (this.props.value[0][col] === "Add-on Analyses" && row !== 0) {
+					cellQuestion = <Button onClick={() => this.handleAddOnClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : this.props.value[row][col].join(",")}</Button>
 				} else {
 
 					// check if this is a subQuestion
@@ -197,6 +220,8 @@ class QWDATATable extends React.Component {
 
 		let tableBody = <TableBody>{tableRows}</TableBody>;
 
+		console.log("Dialog Add On value: ", this.state.dialogAddOnValue);
+
 		return <React.Fragment>
 			<Table key={this.props.id + "_table"} className={classes.table}>
 				{/* {colGroup} */}
@@ -204,35 +229,74 @@ class QWDATATable extends React.Component {
 				{tableBody}
 			</Table>
 			<Dialog
-				open={this.state.dialogOpen}
+				open={this.state.dialogM2LOpen}
 				onClose={this.handleClose}
 				aria-labelledby="form-dialog-title"
-			><form className="commentForm" onSubmit={this.handleSave}>
-				<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						Enter the message you'd like to send to the lab about this particular sample
+			><form className="commentForm" onSubmit={this.handleM2LSave}>
+					<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							Enter the message you'd like to send to the lab about this particular sample
 				  </DialogContentText>
-					<TextField
-						autoFocus
-						value={this.state.dialogValue}
-						onChange={this.dialogTextChangeHandler}
-						margin="dense"
-						id="M2L_Dialog"
-						label="Message To Lab"
-						rows={5}
-						fullWidth
-						multiline
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={this.handleClose} color="primary">
-						Cancel
+						<TextField
+							autoFocus
+							value={this.state.dialogM2LValue}
+							onChange={this.dialogM2LTextChangeHandler}
+							margin="dense"
+							id="M2L_Dialog"
+							label="Message To Lab"
+							rows={5}
+							fullWidth
+							multiline
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={this.handleClose} color="primary">
+							Cancel
 				  </Button>
-					<Button onClick={this.handleSave} color="primary">
-						Save
+						<Button onClick={this.handleM2LSave} color="primary">
+							Save
 				  </Button>
-				</DialogActions>
+					</DialogActions>
+				</form>
+			</Dialog>
+
+			<Dialog
+				open={this.state.dialogAddOnOpen}
+				onClose={this.handleClose}
+				aria-labelledby="form-dialog-title"
+			><form className="commentForm" onSubmit={this.handleAddOnSave}>
+					<DialogTitle id="form-dialog-title">Add on Analyses</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							Select the available add-on analyses you'd like to have done on this sample
+				  </DialogContentText>
+						<Question
+							id="AddOnAnalyses"
+							type="MultipleChoice"
+							options={{
+								"Sand-Fine break": "SF",
+								"Sand Analysis": "SA",
+								"Loss-on-ignition": "LOI",
+								"Full-size Fractions": "Z"
+							}
+							}
+							value={this.state.dialogAddOnValue}
+							stateChangeHandler={this.addOnChangeHandler}
+						/>
+
+
+						{/* //  {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} /> */}
+
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={this.handleClose} color="primary">
+							Cancel
+				  </Button>
+						<Button onClick={this.handleAddOnSave} color="primary">
+							Save
+				  </Button>
+					</DialogActions>
 				</form>
 			</Dialog>
 		</React.Fragment>

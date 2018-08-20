@@ -451,7 +451,9 @@ class WebFF extends React.Component {
 		//   PARAMETER is the parameter string to said action, generally this will be a questionID, though panels are identified like PAGENAME:PANELNAME.
 		// note, actionExecuter does NOT check for validity of the PARAMETER part of the actionString.
 		// void return
-		// note, does not throw errors and instead only warns.  Actions as of 2018/08/8 are all only GUI sugar and thus shouldn't break the app.
+		// note, does not throw errors and instead only warns.  
+
+		//console.log(actionString);
 		let splitActionString = actionString.split('::');
 		if (splitActionString.length !== 2) {
 			console.warn("Requested action string '" + actionString + "' is malformed.  Must only have one '::' per action.  Separate actions with '&'.");
@@ -1403,7 +1405,7 @@ class WebFF extends React.Component {
 			"Name": setName,
 			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
 			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually"),
-			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor").join(","),  //TODO: will need to change format of multi-choice storage
+			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_"+this.getQuestionValue("sedimentType")).join(","), 
 			"SetType": this.getCurrentSetType()
 		}
 

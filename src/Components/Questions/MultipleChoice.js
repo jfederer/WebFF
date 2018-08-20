@@ -22,7 +22,11 @@ class MultipleChoice extends React.Component {
     }
 
     handleValueChange = choiceVal => event => { 
-        let tempValueArr = this.props.value.slice();
+        let tempValueArr = []
+        if(this.props.value!=="") {
+            tempValueArr = this.props.value.slice();
+        }
+        
 
         if (event.target.checked) {
             tempValueArr.push(choiceVal);
@@ -36,6 +40,8 @@ class MultipleChoice extends React.Component {
     };
 
     render() {
+        console.log(this.state);
+        console.log("this.state.value", this.state.value);
         // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
         return <FormControl component="fieldset" key={this.props.id}>
             <FormLabel component="legend">{this.props.label}</FormLabel>

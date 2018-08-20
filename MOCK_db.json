@@ -343,10 +343,10 @@
             "Suspended": "suspended"
           },
           "actions": {
-            "anyValue": "HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV",
-            "bedload": "ShowQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedloads&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh&ShowQuestion::EWI_verticalsInComposite&ShowQuestion::EWI_compositeSamplesInCrossSection&ShowQuestion::EWI_tetherLine&ShowQuestion::EWI_bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV",
-            "bottom": "ShowQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_bedMaterial&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV",
-            "suspended": "ShowQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV"
+            "anyValue": "HideQuestion::EWI_samplerType_bedload&HideQuestion::EWI_samplerType_bedMaterial&HideQuestion::EWI_samplerType_suspended&HideQuestion::EDI_samplerType_bedload&HideQuestion::EDI_samplerType_bedMaterial&HideQuestion::EDI_samplerType_suspended&HideQuestion::EDI_verticalsInComposite&HideQuestion::EDI_compositeSamplesInCrossSection&HideQuestion::EDI_tetherLine&HideQuestion::EDI_bagMesh&HideQuestion::EWI_verticalsInComposite&HideQuestion::EWI_compositeSamplesInCrossSection&HideQuestion::EWI_tetherLine&HideQuestion::EWI_bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV&HideQuestion::setA_AnalysedFor_bedload&HideQuestion::setA_AnalysedFor_bottom&HideQuestion::setA_AnalysedFor_suspended&HideQuestion::setB_AnalysedFor_bedload&HideQuestion::setB_AnalysedFor_bottom&HideQuestion::setB_AnalysedFor_suspended&HideQuestion::setC_AnalysedFor_bedload&HideQuestion::setC_AnalysedFor_bottom&HideQuestion::setC_AnalysedFor_suspended",
+            "bedload": "ShowQuestion::EWI_samplerType_bedload&ShowQuestion::EDI_samplerType_bedloads&ShowQuestion::EDI_verticalsInComposite&ShowQuestion::EDI_compositeSamplesInCrossSection&ShowQuestion::EDI_tetherLine&ShowQuestion::EDI_bagMesh&ShowQuestion::EWI_verticalsInComposite&ShowQuestion::EWI_compositeSamplesInCrossSection&ShowQuestion::EWI_tetherLine&ShowQuestion::EWI_bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV&ShowQuestion::setA_AnalysedFor_bedload&ShowQuestion::setB_AnalysedFor_bedload&ShowQuestion::setC_AnalysedFor_bedload",
+            "bottom": "ShowQuestion::EWI_samplerType_bedMaterial&ShowQuestion::EDI_samplerType_bedMaterial&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV&ShowQuestion::setA_AnalysedFor_bottom&ShowQuestion::setB_AnalysedFor_bottom&ShowQuestion::setC_AnalysedFor_bottom",
+            "suspended": "ShowQuestion::EWI_samplerType_suspended&ShowQuestion::EDI_samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV&ShowQuestion::setA_AnalysedFor_suspended&ShowQuestion::setB_AnalysedFor_suspended&ShowQuestion::setC_AnalysedFor_suspended"
           },
           "value": "suspended",
           "tabName": "Field Form",
@@ -368,7 +368,7 @@
             "OTHER": "8010"
           },
           "actions": {
-            "anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI"
+            "anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI&ShowQuestion::setA_samplesTable_OTHER&ShowQuestion::setB_samplesTable_OTHER&ShowQuestion::setC_samplesTable_OTHER"
           },
           "value": "",
           "layoutGroup": "Basic",
@@ -391,7 +391,7 @@
             "OTHER": "8010"
           },
           "actions": {
-            "anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI"
+            "anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI&ShowQuestion::setA_samplesTable_OTHER&ShowQuestion::setB_samplesTable_OTHER&ShowQuestion::setC_samplesTable_OTHER"
           },
           "value": "",
           "layoutGroup": "Basic",
@@ -1095,7 +1095,7 @@
           "width_lg": 3
         },
         {
-          "id": "samplerType_bedMaterial",
+          "id": "samplerType_bottom",
           "label": "Sampler Type",
           "XMLTag": "P84164",
           "type": "DropDown",
@@ -1653,7 +1653,42 @@
           "width_lg": 10
         },
         {
-          "id": "setA_AnalysedFor",
+          "id": "setA_AnalysedFor_bedload",
+          "label": "Analyze Set A for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Loss-on-ignition": "LOI",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set A Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "setA_AnalysedFor_bottom",
+          "label": "Analyze Set A for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Loss-on-ignition": "LOI",
+            "Bulk Density":"BD",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set A Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "setA_AnalysedFor_suspended",
           "label": "Analyze Set A for:",
           "XMLTag": "Analyses",
           "type": "MultipleChoice",
@@ -1902,27 +1937,62 @@
 			"width_xs": 10,
 			"width_lg": 10
 		  },
-        {
-          "id": "setB_AnalysedFor",
-          "label": "Analyze Set B for:",
-          "XMLTag": "Analyses",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "DataEntry",
-          "layoutGroup": "Set B Information",
-          "width_xs": 2,
-          "width_lg": 2
+      {
+        "id": "setB_AnalysedFor_bedload",
+        "label": "Analyze Set B for:",
+        "XMLTag": "Analyses",
+        "type": "MultipleChoice",
+        "options": {
+          "Sand-Fine break": "SF",
+          "Sand Analysis": "SA",
+          "Loss-on-ignition": "LOI",
+          "Full-size Fractions": "Z"
         },
+        "value": [],
+        "tabName": "DataEntry",
+        "layoutGroup": "Set B Information",
+        "width_xs": 2,
+        "width_lg": 2
+      },
+      {
+        "id": "setB_AnalysedFor_bottom",
+        "label": "Analyze Set B for:",
+        "XMLTag": "Analyses",
+        "type": "MultipleChoice",
+        "options": {
+          "Sand-Fine break": "SF",
+          "Sand Analysis": "SA",
+          "Loss-on-ignition": "LOI",
+          "Bulk Density":"BD",
+          "Full-size Fractions": "Z"
+        },
+        "value": [],
+        "tabName": "DataEntry",
+        "layoutGroup": "Set B Information",
+        "width_xs": 2,
+        "width_lg": 2
+      },
+      {
+        "id": "setB_AnalysedFor_suspended",
+        "label": "Analyze Set B for:",
+        "XMLTag": "Analyses",
+        "type": "MultipleChoice",
+        "options": {
+          "Concentration": "C",
+          "Sand-Fine break": "SF",
+          "Sand Analysis": "SA",
+          "Turbidity": "T",
+          "Loss-on-ignition": "LOI",
+          "Dissolved Solids": "DS",
+          "Specific Conductance": "SC",
+          "Full-size Fractions": "Z"
+        },
+        "value": [],
+        "tabName": "DataEntry",
+        "layoutGroup": "Set B Information",
+        "width_xs": 2,
+        "width_lg": 2
+      },
         {
           "id": "showSetC",
           "label": "Show Set C",
@@ -2151,27 +2221,62 @@
 			"width_xs": 10,
 			"width_lg": 10
 		  },
-        {
-          "id": "setC_AnalysedFor",
-          "label": "Analyze Set C for:",
-          "XMLTag": "Analyses",
-          "type": "MultipleChoice",
-          "options": {
-            "Concentration": "C",
-            "Sand-Fine break": "SF",
-            "Sand Analysis": "SA",
-            "Turbidity": "T",
-            "Loss-on-ignition": "LOI",
-            "Dissolved Solids": "DS",
-            "Specific Conductance": "SC",
-            "Full-size Fractions": "Z"
-          },
-          "value": [],
-          "tabName": "DataEntry",
-          "layoutGroup": "Set C Information",
-          "width_xs": 2,
-          "width_lg": 2
+      {
+        "id": "setC_AnalysedFor_bedload",
+        "label": "Analyze Set C for:",
+        "XMLTag": "Analyses",
+        "type": "MultipleChoice",
+        "options": {
+          "Sand-Fine break": "SF",
+          "Sand Analysis": "SA",
+          "Loss-on-ignition": "LOI",
+          "Full-size Fractions": "Z"
         },
+        "value": [],
+        "tabName": "DataEntry",
+        "layoutGroup": "Set C Information",
+        "width_xs": 2,
+        "width_lg": 2
+      },
+      {
+        "id": "setC_AnalysedFor_bottom",
+        "label": "Analyze Set C for:",
+        "XMLTag": "Analyses",
+        "type": "MultipleChoice",
+        "options": {
+          "Sand-Fine break": "SF",
+          "Sand Analysis": "SA",
+          "Loss-on-ignition": "LOI",
+          "Bulk Density":"BD",
+          "Full-size Fractions": "Z"
+        },
+        "value": [],
+        "tabName": "DataEntry",
+        "layoutGroup": "Set C Information",
+        "width_xs": 2,
+        "width_lg": 2
+      },
+      {
+        "id": "setC_AnalysedFor_suspended",
+        "label": "Analyze Set C for:",
+        "XMLTag": "Analyses",
+        "type": "MultipleChoice",
+        "options": {
+          "Concentration": "C",
+          "Sand-Fine break": "SF",
+          "Sand Analysis": "SA",
+          "Turbidity": "T",
+          "Loss-on-ignition": "LOI",
+          "Dissolved Solids": "DS",
+          "Specific Conductance": "SC",
+          "Full-size Fractions": "Z"
+        },
+        "value": [],
+        "tabName": "DataEntry",
+        "layoutGroup": "Set C Information",
+        "width_xs": 2,
+        "width_lg": 2
+      },
         {
           "id": "sampleIsokinetic",
           "label": "Sample Isokinetic",
@@ -2328,6 +2433,7 @@
               "Sample Medium",
               "Sample Type",
               "ASTAT Code",
+              "Add-on Analyses",
               "M2Lab"
             ],
             [
@@ -2340,9 +2446,11 @@
               "",
               "",
               "",
+              "",
               ""
             ],
             [
+              "",
               "",
               "",
               "",
