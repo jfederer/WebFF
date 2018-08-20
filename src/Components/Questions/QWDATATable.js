@@ -8,6 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -15,20 +22,20 @@ import Question from '../Question';
 const styles = theme => ({
 	table: {
 		width: "100%",
-	//	backgroundColor: "#911"
+		//	backgroundColor: "#911"
 	},
 	tableCell: {
 		padding: 5,
 		flexShrink: 0,
 	},
-	
+
 });
 
 
 class QWDATATable extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
 		let numRows = this.props.value.length;
 		let numCols = 1; // tables with less than 1 column are not allowed
 		this.props.value.forEach(function (row) {
@@ -54,7 +61,9 @@ class QWDATATable extends React.Component {
 		}
 
 		this.state = {
-			value: emptyTable
+			value: emptyTable,
+			dialogOpen: false,
+			dialogValue: ""
 		};
 
 		this.handleTableQuestionChange = this.handleTableQuestionChange.bind(this);
@@ -66,8 +75,32 @@ class QWDATATable extends React.Component {
 
 	}
 
+	handleClickOpen = (row, col) => {
+		console.log(row, " x ", col);
+		this.setState({ dialogOpen: true, dialogValue:this.state.value[row][col], curRow:row, curCol:col });
+	  };
+	
+
+	  handleSave = () => {
+		  console.log(this.state.curRow, " x ", this.state.curCol);
+		  console.log(this.state.value);
+		let newVal = this.state.value.slice();
+		newVal[this.state.curRow][this.state.curCol] = this.state.dialogValue;
+		this.setState({value:newVal});
+		this.handleClose();
+	  }
+
+	  handleClose = () => {
+		this.setState({ dialogOpen: false });
+	  };
+
+	  dialogTextChangeHandler = (e) => {
+		  this.setState({dialogValue:e.target.value}, () => { this.props.stateChangeHandler(this) });
+	  }
+
+
 	handleTableQuestionChange(textSubQuestion) {
-		
+
 		let DEBUG = false;
 		if (DEBUG) console.log("handleTableQuestionChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
@@ -82,7 +115,7 @@ class QWDATATable extends React.Component {
 		let tempTableValue = this.props.value;
 		tempTableValue[questionRow][questionCol] = questionVal;
 		//console.log(tempTableValue);
-		this.setState({ value: tempTableValue }, () => {this.props.stateChangeHandler(this)});
+		this.setState({ value: tempTableValue }, () => { this.props.stateChangeHandler(this) });
 	}
 
 	buildRow(curRow, row) { //FUTURE:  build even the text questions as sub questions... auto-generating them
@@ -96,30 +129,35 @@ class QWDATATable extends React.Component {
 				// let adHocProps = { id: subQkey, type: "Text", label: "", value: cellContent }
 				let cellQuestion = null;
 
-				// check if this is a subQuestion
-				if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
-					let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
-					if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
-					let questionData = this.props.globalState.questionsData.filter((Q)=>Q.id===subQuestionID)[0];
-					if (DEBUG) console.log("questionData", questionData);
-					adHocProps = { ...adHocProps, ...questionData, key:subQkey };
-					if (DEBUG) console.log("adHocProps", adHocProps);
-					cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
+				if (this.props.value[0][col] === "M2Lab" && row !== 0) {
+					cellQuestion = <Button onClick={() => this.handleClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : "Edit"}</Button>
+				} else {
 
-					// if this question is in a header location, wrap it in the header div
-					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
-						cellQuestion = <div className={classes.header}>{cellQuestion}</div>
-					}
-				} else {  // this is just a text field and rather than make a separate custom sub queston for each, 
-					// we'll extract the values as they change and put them into the 2d array of values representing the table
-					// TODO: dynamically build questions (id: tableQ_ID+row+col)
+					// check if this is a subQuestion
+					if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
+						let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
+						if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
+						let questionData = this.props.globalState.questionsData.filter((Q) => Q.id === subQuestionID)[0];
+						if (DEBUG) console.log("questionData", questionData);
+						adHocProps = { ...adHocProps, ...questionData, key: subQkey };
+						if (DEBUG) console.log("adHocProps", adHocProps);
+						cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
 
-					// just text could either be a header (whereby it should NOT become a question)
-					// or it needs to be a text question in the table
-					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
-						cellQuestion = <div className={classes.header}>{cellContent}</div>
-					} else {
-						cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} />
+						// if this question is in a header location, wrap it in the header div
+						if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
+							cellQuestion = <div className={classes.header}>{cellQuestion}</div>
+						}
+					} else {  // this is just a text field and rather than make a separate custom sub queston for each, 
+						// we'll extract the values as they change and put them into the 2d array of values representing the table
+						// TODO: dynamically build questions (id: tableQ_ID+row+col)
+
+						// just text could either be a header (whereby it should NOT become a question)
+						// or it needs to be a text question in the table
+						if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
+							cellQuestion = <div className={classes.header}>{cellContent}</div>
+						} else {
+							cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} />
+						}
 					}
 				}
 				return (
@@ -128,26 +166,16 @@ class QWDATATable extends React.Component {
 					</TableCell>
 				)
 			})}
+
+
 		</TableRow>
 	}
 
 
 	render() {
-				//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-				const { classes } = this.props;
-
-		//let numRows = this.props.value.length;
-		// let numCols = 1; // tables with less than 1 column are not allowed
-		// this.props.value.forEach(function (row) {
-		// 	if (row.length > numCols) {
-		// 		numCols = row.length;
-		// 	}
-		// });
-
-		//console.log("Table Size: ", numRows, " x ", numCols); // correct
-
-		//TODO: read-only columns list
-
+		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+		const { classes } = this.props;
+		console.log(this.props);
 		let tableValues = this.props.value;
 
 		// build the JSX tableRows based on will-mount-calculated tableValues
@@ -169,11 +197,45 @@ class QWDATATable extends React.Component {
 
 		let tableBody = <TableBody>{tableRows}</TableBody>;
 
-		return <Table key={this.props.id + "_table"} className={classes.table}>
-			{/* {colGroup} */}
-			{tableHeader}
-			{tableBody}
-		</Table>
+		return <React.Fragment>
+			<Table key={this.props.id + "_table"} className={classes.table}>
+				{/* {colGroup} */}
+				{tableHeader}
+				{tableBody}
+			</Table>
+			<Dialog
+				open={this.state.dialogOpen}
+				onClose={this.handleClose}
+				aria-labelledby="form-dialog-title"
+			><form className="commentForm" onSubmit={this.handleSave}>
+				<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Enter the message you'd like to send to the lab about this particular sample
+				  </DialogContentText>
+					<TextField
+						autoFocus
+						value={this.state.dialogValue}
+						onChange={this.dialogTextChangeHandler}
+						margin="dense"
+						id="M2L_Dialog"
+						label="Message To Lab"
+						rows={5}
+						fullWidth
+						multiline
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={this.handleClose} color="primary">
+						Cancel
+				  </Button>
+					<Button onClick={this.handleSave} color="primary">
+						Save
+				  </Button>
+				</DialogActions>
+				</form>
+			</Dialog>
+		</React.Fragment>
 	}
 }
 

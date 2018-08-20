@@ -809,7 +809,7 @@ class WebFF extends React.Component {
 		// header: string matching the item in row 0.  If header is a number, will grab that column.
 		// returns VALUE in table q_id in column with matching header and on row rowNum... 
 		// throws error if q_id value is not an array (which is must be in order to be a table's value)
-		if (!(this.getQuestionData(q_id).type === "TableInput" || this.getQuestionData(q_id).type === "ParametersTable")) {
+		if (!(this.getQuestionData(q_id).type === "TableInput" || this.getQuestionData(q_id).type === "ParametersTable" || this.getQuestionData(q_id).type === "QWDATATable")) {
 			throw new Error("Question (" + q_id + ") not of required 'TableInput' type.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
 		}
 
@@ -1373,7 +1373,7 @@ class WebFF extends React.Component {
 			"P71999": this.getQuestionValue("samplePurpose"),
 			"P82398": this.getQuestionValue(this.getSamplingMethodQuestionIDString()),
 			"P84164": this.getQuestionValue(this.getSamplerTypeQuestionIDString()),
-			"M2Lab": "TODO",
+			"M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum),
 			"ContainerNumber": "TODO"
 		}
 

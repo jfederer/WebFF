@@ -2300,16 +2300,6 @@
           "width_lg": 4
         },
         {
-          "id": "M2Lab",
-          "type": "Text",
-          "tabName": "QWDATA",
-          "layoutGroup": "Message To Lab",
-          "rows": 5,
-          "value": "",
-          "width_xs": 12,
-          "width_lg": 12
-        },
-        {
           "id": "QWDATATable",
           "label": "QWDATA Table",
           "type": "QWDATATable",
@@ -2324,7 +2314,8 @@
             2,
             2,
             2,
-            2
+            2,
+            1
           ],
           "value": [
             [
@@ -2336,7 +2327,8 @@
               "Hydrologic Cond",
               "Sample Medium",
               "Sample Type",
-              "ASTAT Code"
+              "ASTAT Code",
+              "M2Lab"
             ],
             [
               "Fill Out Number Of Samples for at least one set",
@@ -2347,9 +2339,11 @@
               "",
               "",
               "",
+              "",
               ""
             ],
             [
+              "",
               "",
               "",
               "",
