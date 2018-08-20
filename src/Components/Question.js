@@ -14,6 +14,7 @@ import Hidden from '@material-ui/core/Hidden';
 import ComputedValue from './Questions/ComputedValue';
 import ButtonInput from './Questions/ButtonInput';
 import ParametersTable from './Questions/ParametersTable';
+import QWDATATable from './Questions/QWDATATable';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -113,6 +114,10 @@ class Question extends React.Component {
 				theQ = <ParametersTable {...this.props} />;
 				break;
 			}
+			case 'QWDATATable' : {
+				theQ = <QWDATATable {...this.props} />;
+				break;
+			}
 			default: {
 				//TODO: Throw error
 				console.log("Question " +this.props.type+ " doesn't match any type");
@@ -160,7 +165,7 @@ class Question extends React.Component {
 		label: PropTypes.string,
 		placeholder: PropTypes.string,
 		XMLTag: PropTypes.string,
-		type: PropTypes.oneOf(['Text', "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
+		type: PropTypes.oneOf(['Text', "QWDATATable", "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

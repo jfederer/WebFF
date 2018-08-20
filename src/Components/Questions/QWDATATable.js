@@ -25,7 +25,7 @@ const styles = theme => ({
 });
 
 
-class TableInput extends React.Component {
+class QWDATATable extends React.Component {
 	constructor(props) {
 		super(props);
 		
@@ -177,7 +177,7 @@ class TableInput extends React.Component {
 	}
 }
 
-TableInput.propTypes = {
+QWDATATable.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
 	stateChangeHandler: PropTypes.func,
@@ -186,8 +186,7 @@ TableInput.propTypes = {
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLTag: PropTypes.string,
-	type: PropTypes.oneOf(["TableInput"]).isRequired,
-	selectOptions: PropTypes.arrayOf(PropTypes.object)
+	type: PropTypes.oneOf(["QWDATATable"]).isRequired
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
 	// (ie: "if dropDown... select_options prop(array or strings) is required")
@@ -195,4 +194,4 @@ TableInput.propTypes = {
 
 };
 
-export default withStyles(styles)(TableInput);
+export default withStyles(styles)(QWDATATable);
