@@ -68,7 +68,7 @@ class QuestionPage extends React.Component {
 				questionPanels.push(
 				<div key={tabName + layoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
-						questions={createQuestionComponents(layoutGroupQuestionsData, systemCB, this.props.globalState, this.props.questionsValues)} 
+						questions={createQuestionComponents(layoutGroupQuestionsData, systemCB, this.props.globalState, this.props.questionsValues, this.props)} 
 						panelName={layoutGroupNames[i]}
 						key={tabName + layoutGroupNames[i]}
 						grey={i%2===1} />

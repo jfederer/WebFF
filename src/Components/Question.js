@@ -13,6 +13,7 @@ import TimeInput from './Questions/TimeInput';
 import Hidden from '@material-ui/core/Hidden';
 import ComputedValue from './Questions/ComputedValue';
 import ButtonInput from './Questions/ButtonInput';
+import ParametersTable from './Questions/ParametersTable';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -65,6 +66,8 @@ class Question extends React.Component {
 	};
 
 	buildQuestion() {
+
+
 		// const { classes } = this.props;
 		var theQ = {};
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
@@ -104,6 +107,10 @@ class Question extends React.Component {
 			}
 			case 'ButtonInput' : {
 				theQ = <ButtonInput {...this.props} />;
+				break;
+			}
+			case 'ParametersTable' : {
+				theQ = <ParametersTable {...this.props} />;
 				break;
 			}
 			default: {
@@ -153,7 +160,7 @@ class Question extends React.Component {
 		label: PropTypes.string,
 		placeholder: PropTypes.string,
 		XMLTag: PropTypes.string,
-		type: PropTypes.oneOf(['Text', "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
+		type: PropTypes.oneOf(['Text', "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

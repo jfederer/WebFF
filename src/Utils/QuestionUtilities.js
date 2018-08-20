@@ -2,7 +2,7 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 
 
-export const createQuestionComponents = (questionsData, changeHandler, _globalState, questionsValues) => {
+export const createQuestionComponents = (questionsData, changeHandler, _globalState, questionsValues, allProps) => {
     // creates one question component for every question in questionsData
 	// overwrites questionsData value with passed in value in questionsValues
 	let questionComponents = [];
@@ -17,8 +17,18 @@ export const createQuestionComponents = (questionsData, changeHandler, _globalSt
 				value = questionsValues[questionData.id]
 				//console.log("Value from questionVALUES: ", value);
 			}
+	//		console.log(allProps);
+			let allPropFuncs = {};
+			Object.keys(allProps).map((propKey)=> {
+				if(typeof(allProps[propKey])=== "function") {
+					allPropFuncs[propKey]=allProps[propKey];
+					return;
+				}
+			});
 
-			return <Question {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState}/>
+	//		console.log(allPropFuncs);
+
+			return <Question {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} />
 		});
     }
 

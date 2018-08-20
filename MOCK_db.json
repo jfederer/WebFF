@@ -5,9 +5,9 @@
       "hiddenTabsArr": [
         "WaterQuality",
         "FieldForm",
-        "DataEntry",
-        "QWDATA",
-        "Parameters"
+		"DataEntry",
+		"Parameters",
+        "QWDATA"
       ]
     },
     {
@@ -33,16 +33,16 @@
           "text": "Data Entry",
           "route": "/DataEntry",
           "icon": "EditIcon"
-        },
-        {
-          "text": "Parameters",
-          "route": "/Parameters"
-        },
+		},
+		{
+			"text": "Parameters",
+			"route": "/Parameters"
+		  },
         {
           "text": "QWDATA",
           "route": "/QWDATA",
           "icon": "SubtitlesIcon"
-        }      
+        }
       ]
     },
     {
@@ -484,7 +484,7 @@
         },
         {
           "id": "compiledBy",
-          "label": "Collector Initials",
+          "label": "Compiled By",
           "type": "Text",
           "value": "",
           "tabName": "Field Form",
@@ -1479,7 +1479,7 @@
           "width_xs": 3,
           "width_lg": 3,
           "actions": {
-            "anyValue": "ShowTab::QWDATA&ShowTab::Parameters"
+            "anyValue": "ShowTab::QWDATA"
           }
         },
         {
@@ -1514,22 +1514,22 @@
           "colHeaders": true,
           "rowHeaders": true,
           "colSizes": [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1,
+			1
           ],
           "value": [
             [
@@ -1539,17 +1539,10 @@
               "Volume (cc)",
               "Time (sec)",
               "Ratio of Vertical",
-              "Intake Efficiency",
-              "P00001 Val",
-              "P00001 Rmk",
-              "P00001 Mth",
-              "P00065 Val",
-              "P00065 Rmk",
-              "P00001 Mth",
-              "P00010 Val",
-              "P00010 Rmk",
-              "P00010 Mth",
-              "P00010 nQ"
+			  "Intake Efficiency",
+			  "P00001 Val","P00001 Rmk","P00001 Mth",
+			  "P00065 Val","P00065 Rmk","P00001 Mth",
+			  "P00010 Val", "P00010 Rmk", "P00010 Mth", "P00010 nQ"
             ],
             [
               "Fill Out Number Of Samples",
@@ -1557,17 +1550,17 @@
               "",
               "",
               "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
               ""
             ]
           ],
@@ -1624,38 +1617,38 @@
           "layoutGroup": "Set A Information",
           "colHeaders": true,
           "rowHeaders": true,
-          "colSizes": [
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2
-          ],
-          "value": [
-            [
-              "Sample #",
-              "Distance from left bank",
-              "Depth (feet)",
-              "T-Rate",
-              "Volume (cc)",
-              "Time (sec)",
-              "Ratio of Vertical",
-              "Intake Efficiency"
-            ],
-            [
-              "Fill Out Number Of Samples",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
-            ]
-          ],
+		  "colSizes": [
+			1,
+			2,
+			2,
+			2,
+			2,
+			2,
+			2,
+			2
+		  ],
+		  "value": [
+			[
+			  "Sample #",
+			  "Distance from left bank",
+			  "Depth (feet)",
+			  "T-Rate",
+			  "Volume (cc)",
+			  "Time (sec)",
+			  "Ratio of Vertical",
+			  "Intake Efficiency"
+			],
+			[
+			  "Fill Out Number Of Samples",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  "",
+			  ""
+			]
+		  ],
           "width_xs": 10,
           "width_lg": 10
         },
@@ -1741,8 +1734,8 @@
           "label": "Avg Gage Ht",
           "tabName": "DataEntry",
           "layoutGroup": "Set B Information",
-          "type": "ComputedValue",
-          "value": "",
+		  "type": "ComputedValue",
+		  "value":"",
           "computationString": "(setB_StartGageHeight+setB_EndGageHeight)/2",
           "width_xs": 4,
           "width_lg": 2
@@ -1758,7 +1751,7 @@
           "width_xs": 3,
           "width_lg": 3,
           "actions": {
-            "anyValue": "ShowTab::QWDATA&ShowTab::Parameters"
+            "anyValue": "ShowTab::QWDATA"
           }
         },
         {
@@ -1864,51 +1857,51 @@
           ],
           "width_xs": 10,
           "width_lg": 10
-        },
-        {
-          "id": "setB_samplesTable_OTHER",
-          "label": "Samples Table",
-          "type": "TableInput",
-          "hidden": true,
-          "tabName": "DataEntry",
-          "layoutGroup": "Set B Information",
-          "colHeaders": true,
-          "rowHeaders": true,
-          "colSizes": [
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2
-          ],
-          "value": [
-            [
-              "Sample #",
-              "Distance from left bank",
-              "Depth (feet)",
-              "T-Rate",
-              "Volume (cc)",
-              "Time (sec)",
-              "Ratio of Vertical",
-              "Intake Efficiency"
-            ],
-            [
-              "Fill Out Number Of Samples",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
-            ]
-          ],
-          "width_xs": 10,
-          "width_lg": 10
-        },
+		},
+		{
+			"id": "setB_samplesTable_OTHER",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"hidden": true,
+			"tabName": "DataEntry",
+			"layoutGroup": "Set B Information",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"colSizes": [
+				1,
+				2,
+				2,
+				2,
+				2,
+				2,
+				2,
+				2
+			  ],
+			  "value": [
+				[
+				  "Sample #",
+				  "Distance from left bank",
+				  "Depth (feet)",
+				  "T-Rate",
+				  "Volume (cc)",
+				  "Time (sec)",
+				  "Ratio of Vertical",
+				  "Intake Efficiency"
+				],
+				[
+				  "Fill Out Number Of Samples",
+				  "",
+				  "",
+				  "",
+				  "",
+				  "",
+				  "",
+				  ""
+				]
+			  ],
+			"width_xs": 10,
+			"width_lg": 10
+		  },
         {
           "id": "setB_AnalysedFor",
           "label": "Analyze Set B for:",
@@ -2007,7 +2000,7 @@
           "width_xs": 3,
           "width_lg": 3,
           "actions": {
-            "anyValue": "ShowTab::QWDATA&ShowTab::Parameters"
+            "anyValue": "ShowTab::QWDATA"
           }
         },
         {
@@ -2113,51 +2106,51 @@
           ],
           "width_xs": 10,
           "width_lg": 10
-        },
-        {
-          "id": "setC_samplesTable_OTHER",
-          "label": "Samples Table",
-          "type": "TableInput",
-          "hidden": true,
-          "tabName": "DataEntry",
-          "layoutGroup": "Set C Information",
-          "colHeaders": true,
-          "rowHeaders": true,
-          "colSizes": [
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2
-          ],
-          "value": [
-            [
-              "Sample #",
-              "Distance from left bank",
-              "Depth (feet)",
-              "T-Rate",
-              "Volume (cc)",
-              "Time (sec)",
-              "Ratio of Vertical",
-              "Intake Efficiency"
-            ],
-            [
-              "Fill Out Number Of Samples",
-              "",
-              "",
-              "",
-              "",
-              "",
-              "",
-              ""
-            ]
-          ],
-          "width_xs": 10,
-          "width_lg": 10
-        },
+		},
+		{
+			"id": "setC_samplesTable_OTHER",
+			"label": "Samples Table",
+			"type": "TableInput",
+			"hidden": true,
+			"tabName": "DataEntry",
+			"layoutGroup": "Set C Information",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"colSizes": [
+			  1,
+			  2,
+			  2,
+			  2,
+			  2,
+			  2,
+			  2,
+			  2
+			],
+			"value": [
+			  [
+				"Sample #",
+				"Distance from left bank",
+				"Depth (feet)",
+				"T-Rate",
+				"Volume (cc)",
+				"Time (sec)",
+				"Ratio of Vertical",
+				"Intake Efficiency"
+			  ],
+			  [
+				"Fill Out Number Of Samples",
+				"",
+				"",
+				"",
+				"",
+				"",
+				"",
+				""
+			  ]
+			],
+			"width_xs": 10,
+			"width_lg": 10
+		  },
         {
           "id": "setC_AnalysedFor",
           "label": "Analyze Set C for:",
@@ -2335,7 +2328,8 @@
           ],
           "value": [
             [
-              "Set-Sample",
+              "Set",
+              "Sample",
               "Location from Left Bank",
               "Sample Time",
               "Hydrologic Event",
@@ -2352,9 +2346,11 @@
               "",
               "",
               "",
+              "",
               ""
             ],
             [
+              "",
               "",
               "",
               "",
@@ -2367,7 +2363,7 @@
           ],
           "width_xs": 12,
           "width_lg": 12
-        },
+		},
         {
           "id": "test_table",
           "type": "TableInput",
@@ -2460,7 +2456,21 @@
             "1": "RemoveColumnFromTable::test_table"
           },
           "layoutGroup": "Field Parameters"
-        }
+		},
+		{
+			"id": "parametersTable",
+			"label": "Parameters Table",
+			"type": "ParametersTable",
+			"tabName": "Parameters",
+			"layoutGroup": "Parameters",
+			"colHeaders": true,
+			"rowHeaders": true,
+			"value": [
+			  [  ]			  
+			],
+			"width_xs": 12,
+			"width_lg": 12
+		  }
       ]
     }
   ],
@@ -2496,7 +2506,473 @@
           "projectID": "BAC",
           "agencyCode": "ATF"
         }
-      ]
+      ],
+      "SamplingEvent:2018-08-16@17:44:32": {
+        "id": "2018-08-16@17:44:32",
+        "questionsValues": {
+          "stationName": "Elm Creek",
+          "stationNumber": "05287890",
+          "projectName": "Elm Creek Project Name",
+          "projectID": "059YE",
+          "agencyCode": "USGS",
+          "sampleDate": "2018-08-16",
+          "sedimentType": "suspended",
+          "samplingMethod_bottom": "",
+          "samplingMethod_bedload": "",
+          "samplingMethod_suspended": "20",
+          "timeDatum": "SITEFILE",
+          "samplingTeam": "Joe Ken XML team!",
+          "compiledBy": "JK",
+          "sameDaySample": "false",
+          "sky": "",
+          "precipitation": "",
+          "temperature": "",
+          "wind": "",
+          "windDirection": "",
+          "hydrologicEvent": "Routine Sample",
+          "hydrologicCondition": "Peak Stage",
+          "sampleMedium": "Surface Water",
+          "sampleType": "Composite (ISCO)",
+          "samplePurpose": "Cross-section Variation",
+          "analysisStatus": "I",
+          "streamMixing": "Well Mixed",
+          "streamColor": "Green",
+          "edgeOfWater_Left": "10",
+          "edgeOfSamplingZone_Left": "20",
+          "edgeOfSamplingZone_Right": "600",
+          "edgeOfWater_Right": "620",
+          "streamWidth": 610,
+          "pier1_start": "30",
+          "pier2_start": "160",
+          "pier3_start": "210",
+          "pier4_start": "300",
+          "pier5_start": "",
+          "pier6_start": "",
+          "pier1_end": "150",
+          "pier2_end": "200",
+          "pier3_end": "260",
+          "pier4_end": "450",
+          "pier5_end": "",
+          "pier6_end": "",
+          "samplerType_suspended": "4020",
+          "samplerType_bedMaterial": "",
+          "samplerType_bedload": "",
+          "bottleMaterial": "",
+          "bagMaterial": "",
+          "sizeOfBottle": "",
+          "sizeOfBag": "",
+          "bagMesh": "mm",
+          "NozzleMaterial": "",
+		  "NozzleDiameter": "",
+		  "M2Lab":"",
+          "tetherLine": false,
+          "compositeSamplesInCrossSection": false,
+          "verticalsInComposite": false,
+          "streamDepth": "",
+          "transitRate": "",
+          "streamVelocity": "",
+          "sampleVolumeIET": "",
+          "durationIEF": "",
+          "NozzleMaterial_IET": "",
+          "NozzleDiameter_IET": "",
+          "ratioOfVertical": "",
+          "intakeEfficiency": "",
+          "setA_StartTime": "",
+          "setA_EndTime": "",
+          "setA_StartGageHeight": "",
+          "setA_EndGageHeight": "",
+          "setA_AvgGageHeight": "",
+          "setA_numberOfSamplingPoints": "5",
+          "setA_numberOfContainers": "5",
+          "setA_analyzeIndividually": "",
+          "setA_samplesTable_EDI": [
+            [
+              "",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "10%",
+              "5",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "30%",
+              "10",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "50%",
+              "15",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "70%",
+              "10",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "90%",
+              "5",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "setA_samplesTable_EWI": [
+            [
+              "DataEntry",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "setA_samplesTable_GROUP": [
+            [
+              "Distance from left bank",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "setA_AnalysedFor": [
+            "SA",
+            "T"
+          ],
+          "showSetB": true,
+          "setB_StartTime": "",
+          "setB_EndTime": "",
+          "setB_StartGageHeight": "",
+          "setB_EndGageHeight": "",
+          "setB_numberOfSamplingPoints": "3",
+          "setB_numberOfContainers": "",
+          "setB_analyzeIndividually": "",
+          "setB_samplesTable_EDI": [
+            [
+              "",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "16.7%",
+              "3",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "50%",
+              "6",
+              "5",
+              "5",
+              "6",
+              "7",
+              "8"
+            ],
+            [
+              "83.3%",
+              "9",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "setB_samplesTable_EWI": [
+            [
+              "DataEntry",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "setB_AnalysedFor": [
+            "C",
+            "SF",
+            "SA"
+          ],
+          "showSetC": true,
+          "setC_StartTime": "",
+          "setC_EndTime": "",
+          "setC_StartGageHeight": "",
+          "setC_EndGageHeight": "",
+          "setC_numberOfSamplingPoints": "2",
+          "setC_numberOfContainers": "",
+          "setC_analyzeIndividually": "",
+          "setC_samplesTable_EDI": [
+            [
+              "",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "25%",
+              "33",
+              "332",
+              "333",
+              "334",
+              "335",
+              "336"
+            ],
+            [
+              "75%",
+              "33",
+              "332",
+              "333",
+              "334",
+              "335",
+              "336"
+            ]
+          ],
+          "setC_samplesTable_EWI": [
+            [
+              "DataEntry",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "setC_AnalysedFor": [],
+          "sampleIsokinetic": false,
+          "additionalSampleCollected": false,
+          "feetAboveBed": "",
+          "fieldComposite": true,
+          "compositeWithGallonContainers": true,
+          "collectingAgency": "USGS-WRD",
+          "collectingAgencyOther": "",
+          "samplingMethod_bedload_QWDATA_CV": "",
+          "samplingMethod_bottom_QWDATA_CV": "",
+          "samplingMethod_suspended_QWDATA_CV": "20",
+          "QWDATATable": [
+            [
+              "Set",
+              "Sample #",
+              "Location from Left Bank",
+              "Sample Time",
+              "Hydrologic Event",
+              "Hydrologic Cond",
+              "Sample Medium",
+              "Sample Type",
+              "ASTAT Code"
+            ],
+            [
+              "A",
+              1,
+              "11",
+              "111",
+              "1111",
+              "11111",
+              "111111",
+              "1111111",
+              "1111111"
+            ],
+            [
+              "A",
+              2,
+              "2",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "22222222"
+            ],
+            [
+              "A",
+              3,
+              "3",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "33333333"
+            ],
+            [
+              "A",
+              4,
+              "4",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "44444444"
+            ],
+            [
+              "A",
+              5,
+              "5",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "55555555"
+            ],
+            [
+              "B",
+              1,
+              "6b1",
+              "b1b1",
+              "b1b1b1",
+              "b1b1b11b",
+              "b1b1b1b1b1",
+              "b1b1b1b1b1b11bb",
+              "66666666"
+            ],
+            [
+              "B",
+              2,
+              "7b2",
+              "b2b2",
+              "b2b2b2",
+              "b2b2b2b2b2",
+              "b2b2b2b2b2",
+              "b2b2b22bb2b2",
+              "77677777"
+            ],
+            [
+              "B",
+              3,
+              "8888",
+              "8888",
+              "8888",
+              "888888",
+              "888888",
+              "88888888",
+              "8888888888"
+            ],
+            [
+              "C",
+              1,
+              "9999",
+              "9",
+              "9",
+              "9",
+              "9",
+              "9",
+              "9"
+            ],
+            [
+              "C",
+              2,
+              "10888",
+              "10",
+              "10",
+              "10",
+              "10",
+              "10",
+              "10"
+            ]
+          ],
+          "test_table": [
+            [
+              "EWI",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "ButtonTest1": "1",
+          "ButtonTest2": "1",
+          "ButtonTest3": "1",
+          "ButtonTest4": "1"
+        }
+      }
     }
   ]
 }

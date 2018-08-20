@@ -10,7 +10,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SystemMenu from './SystemMenu.js';
-import ParametersPage from './ParametersPage.js';
 import NavMenu from './NavMenu.js';
 import Dashboard from './Dashboard.js';
 import { styles } from '../style';
@@ -112,6 +111,10 @@ class WebFF extends React.Component {
 		this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
 		this.getQuestionValue = this.getQuestionValue.bind(this);
 		this.setQuestionValue = this.setQuestionValue.bind(this);
+		this.getNumberOfSetsInCurrentSamplingEvent = this.getNumberOfSetsInCurrentSamplingEvent.bind(this);
+		this.getNumberOfSamplesInSet = this.getNumberOfSamplesInSet.bind(this);
+		this.getCurrentSetType = this.getCurrentSetType.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
 
@@ -926,6 +929,7 @@ class WebFF extends React.Component {
 		let propagateSamplePointData = false;
 		if (Q.props.id.includes("numberOfSamplingPoints")) {
 			propagateSamplePointData = true; // want to run it later because we want values to propagate through teh system first
+			this.showTabOrPanel("Parameters",true,true)
 		}
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
@@ -1037,17 +1041,7 @@ class WebFF extends React.Component {
 			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
 		}
 
-		let sampleEventLocations = [];
-		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
-		for (let i = 0; i < numSets; i++) {
-			let numSamps = this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
-			let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + this.getCurrentSetType();
-			let setLocations = [];
-			for (let k = 1; k <= numSamps; k++) {
-				setLocations.push(this.getTableQuestionValue(table_q_id, 0, k));
-			}
-			sampleEventLocations.push(setLocations);
-		}
+		
 
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
@@ -1061,7 +1055,7 @@ class WebFF extends React.Component {
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
 				/>} />
-				<Route path="/Parameters" render={() => <ParametersPage
+				{/* <Route path="/Parameters" render={() => <ParametersPage
 					appBarTextCB={this.setAppBarText}
 					systemCB={this.questionChangeSystemCallback}
 					sampleEventLocations={sampleEventLocations} // size of this 2d array determines table sets and sample column
@@ -1070,7 +1064,7 @@ class WebFF extends React.Component {
 					questionsValues={questionsValues}
 					hiddenPanels={this.state.hiddenPanels}
 					globalState={this.state}
-				/>} />
+				/>} /> */}
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
 					tabName={this.props.location.pathname.slice(1)}
@@ -1080,6 +1074,11 @@ class WebFF extends React.Component {
 					questionsValues={questionsValues}
 					hiddenPanels={this.state.hiddenPanels}
 					globalState={this.state}
+					getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
+					getNumberOfSamplesInSet={this.getNumberOfSamplesInSet}
+					getCurrentSetType={this.getCurrentSetType}
+					getTableQuestionValue={this.getTableQuestionValue}
+
 				/>} />
 				{/* {this.state.navMenu} */}
 				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
