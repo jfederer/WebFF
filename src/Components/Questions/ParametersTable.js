@@ -166,7 +166,7 @@ class ParametersTable extends React.Component {
 
 		let sampleEventLocations = [];
 		let numSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
-		let setType = this.props.getCurrentSetType(); //EDI, EWI, or OTHER
+		let setType = this.props.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
 
 		for (let i = 0; i < numSets; i++) {
 			let numSamps = this.props.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
@@ -195,7 +195,7 @@ class ParametersTable extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		let setType = this.props.getCurrentSetType();
+		let setType = this.props.getCurrentSampleEventMethod();
 		let firstColumn = this.buildFirstColumn();
 
 

@@ -40,8 +40,8 @@ class MultipleChoice extends React.Component {
     };
 
     render() {
-        console.log(this.state);
-        console.log("this.state.value", this.state.value);
+        // console.log(this.state);
+        // console.log("this.state.value", this.state.value);
         // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
         return <FormControl component="fieldset" key={this.props.id}>
             <FormLabel component="legend">{this.props.label}</FormLabel>

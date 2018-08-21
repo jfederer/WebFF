@@ -113,7 +113,7 @@ class WebFF extends React.Component {
 		this.setQuestionValue = this.setQuestionValue.bind(this);
 		this.getNumberOfSetsInCurrentSamplingEvent = this.getNumberOfSetsInCurrentSamplingEvent.bind(this);
 		this.getNumberOfSamplesInSet = this.getNumberOfSamplesInSet.bind(this);
-		this.getCurrentSetType = this.getCurrentSetType.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		this.getCurrentSampleEventMethod = this.getCurrentSampleEventMethod.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 		this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
@@ -1078,8 +1078,9 @@ class WebFF extends React.Component {
 					globalState={this.state}
 					getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
 					getNumberOfSamplesInSet={this.getNumberOfSamplesInSet}
-					getCurrentSetType={this.getCurrentSetType}
+					getCurrentSampleEventMethod={this.getCurrentSampleEventMethod}
 					getTableQuestionValue={this.getTableQuestionValue}
+					getQuestionValue={this.getQuestionValue}
 
 				/>} />
 				{/* {this.state.navMenu} */}
@@ -1127,7 +1128,7 @@ class WebFF extends React.Component {
 		return samplingMethodQuestionIDString;
 	}
 
-	getCurrentSetType() {
+	getCurrentSampleEventMethod() {
 		//note, for SEDLOGIN XML purposes... the string returned from this actually the sampling method.
 		// otherwise, this is used for collectRunAndPropagate
 		let samplingMethodQuestionIDString = this.getSamplingMethodQuestionIDString();
@@ -1166,7 +1167,7 @@ class WebFF extends React.Component {
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// build the appropriate samples table on EDI and/or EWI and/or OTHER pages 
 
-			let sampMethod = this.getCurrentSetType();
+			let sampMethod = this.getCurrentSampleEventMethod();
 			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
 			let tempValArr = [];
 			if (sampMethod === "EWI") {
@@ -1365,7 +1366,7 @@ class WebFF extends React.Component {
 			"BeginDate": this.getQuestionValue("sampleDate"),
 			"BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
 			"TimeDatum": this.getQuestionValue("timeDatum"),
-			"AddOnAnalyses": "TODO",
+			"AddOnAnalyses": this.getTableQuestionValue("QWDATATable", "Add-on Analyses", QWDATARowNum).join(','),
 			"CollecAgency": this.getQuestionValue("collectingAgency"),
 			"colllectorInitials": this.getQuestionValue("compiledBy"),
 			"Hstat": this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum),
@@ -1375,8 +1376,7 @@ class WebFF extends React.Component {
 			"P71999": this.getQuestionValue("samplePurpose"),
 			"P82398": this.getQuestionValue(this.getSamplingMethodQuestionIDString()),
 			"P84164": this.getQuestionValue(this.getSamplerTypeQuestionIDString()),
-			"M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum),
-			"ContainerNumber": "TODO"
+			"M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum)
 		}
 
 		// build param part of sample object using the same row
@@ -1406,7 +1406,7 @@ class WebFF extends React.Component {
 			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
 			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually"),
 			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_"+this.getQuestionValue("sedimentType")).join(","), 
-			"SetType": this.getCurrentSetType()
+			"SetType": this.getCurrentSampleEventMethod()
 		}
 
 		let numOfSamples = this.getQuestionValue("set" + setName + "_numberOfSamplingPoints");
@@ -1426,7 +1426,7 @@ class WebFF extends React.Component {
 				"AgencyCode": this.getQuestionValue('agencyCode'),
 				"SedTranspMode": this.getQuestionValue('sedimentType'),
 				"SmplMediumCode": this.getQuestionValue('sampleMedium'),
-				"AvgRepMeasures": "TODO"
+				"AvgRepMeasures": this.getQuestionValue('avgRepMeasures')?'Y':'N'
 			}
 		}
 

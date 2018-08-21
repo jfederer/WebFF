@@ -15,6 +15,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -31,6 +32,24 @@ const styles = theme => ({
 
 });
 
+
+const allAddOnOpts_bedload = {
+	"Full size fractions": "Z"
+}
+
+const allAddOnOpts_bottom = {
+	"Sand-fine break": "SF",
+	"Loss-on-ignition": "LOI",
+	"Sand Analysis": "SA",
+	"Full size fractions": "Z"
+}
+
+const allAddOnOpts_suspended = {
+	"Sand-fine break": "SF",
+	"Sand Analysis": "SA",
+	"Loss-on-ignition": "LOI",
+	"Full size fractions": "Z"
+}
 
 class QWDATATable extends React.Component {
 	constructor(props) {
@@ -65,7 +84,8 @@ class QWDATATable extends React.Component {
 			dialogM2LOpen: false,
 			dialogM2LValue: "",
 			dialogAddOnOpen: false,
-			dialogAddOnValue: []
+			dialogAddOnValue: [],
+			rowAddOnOptions: {}
 		};
 
 		this.handleTableQuestionChange = this.handleTableQuestionChange.bind(this);
@@ -85,7 +105,42 @@ class QWDATATable extends React.Component {
 
 	handleAddOnClickOpen = (row, col) => {
 		console.log(row, " x ", col);
-		this.setState({ dialogAddOnOpen: true, dialogAddOnValue: this.state.value[row][col], curRow: row, curCol: col });
+		let addOnOpts = {};
+		//load up addOnOpts 
+		let sedType = this.props.getQuestionValue("sedimentType");
+		switch (sedType) {
+			case "bedload": Object.assign(addOnOpts, allAddOnOpts_bedload); break;
+			case "bottom": Object.assign(addOnOpts, allAddOnOpts_bottom); break;
+			default:  Object.assign(addOnOpts, allAddOnOpts_suspended);
+			// case "bedload": addOnOpts = allAddOnOpts_bedload; break;
+			// case "bottom": addOnOpts = allAddOnOpts_bottom; break;
+			// default:  addOnOpts = allAddOnOpts_suspended;
+		}
+		console.log("addOnOpts (base):", addOnOpts);
+
+		// get what set name we are in from the front of the row
+		let setName = this.state.value[row][0].split("-")[0];
+		console.log("setName:", setName);
+
+		// combined with the sediment type
+		let analysesQ_id = "set"+setName+"_AnalysedFor_"+sedType;
+		console.log("analysesQ_id:", analysesQ_id);
+
+		// will get us the question we need ....
+		let alreadyDoing = this.props.getQuestionValue(analysesQ_id);
+		console.log("alreadyDoing:", alreadyDoing);
+		
+		// ...to 'subtract' from the list of options
+		for(let i =0; i<alreadyDoing.length; i++) {
+			Object.keys(addOnOpts).map((key)=> {
+				if(addOnOpts[key]===alreadyDoing[i]) {
+					delete addOnOpts[key];
+				}
+			})
+		}
+		console.log("addOnOpts (filtered):", addOnOpts);
+
+		this.setState({ dialogAddOnOpen: true, rowAddOnOptions: addOnOpts, dialogAddOnValue: this.state.value[row][col], curRow: row, curCol: col });
 	};
 
 
@@ -114,10 +169,10 @@ class QWDATATable extends React.Component {
 	}
 
 	addOnChangeHandler = (mcq) => {
-		this.setState({dialogAddOnValue:mcq.state.value});
+		this.setState({ dialogAddOnValue: mcq.state.value });
 	}
 
-	
+
 
 
 	handleTableQuestionChange(textSubQuestion) {
@@ -198,7 +253,7 @@ class QWDATATable extends React.Component {
 	render() {
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		const { classes } = this.props;
-		console.log(this.props);
+	//	console.log(this.props);
 		let tableValues = this.props.value;
 
 		// build the JSX tableRows based on will-mount-calculated tableValues
@@ -220,7 +275,7 @@ class QWDATATable extends React.Component {
 
 		let tableBody = <TableBody>{tableRows}</TableBody>;
 
-		console.log("Dialog Add On value: ", this.state.dialogAddOnValue);
+	//	console.log("Dialog Add On value: ", this.state.dialogAddOnValue);
 
 		return <React.Fragment>
 			<Table key={this.props.id + "_table"} className={classes.table}>
@@ -271,19 +326,15 @@ class QWDATATable extends React.Component {
 						<DialogContentText>
 							Select the available add-on analyses you'd like to have done on this sample
 				  </DialogContentText>
+						{Object.keys(this.state.rowAddOnOptions).length === 0 && this.state.rowAddOnOptions.constructor === Object ?
+						<Typography>There are no available add-on analyses for this sample</Typography> :
 						<Question
 							id="AddOnAnalyses"
 							type="MultipleChoice"
-							options={{
-								"Sand-Fine break": "SF",
-								"Sand Analysis": "SA",
-								"Loss-on-ignition": "LOI",
-								"Full-size Fractions": "Z"
-							}
-							}
+							options={this.state.rowAddOnOptions}
 							value={this.state.dialogAddOnValue}
 							stateChangeHandler={this.addOnChangeHandler}
-						/>
+						/>}
 
 
 						{/* //  {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} /> */}

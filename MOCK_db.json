@@ -5,8 +5,8 @@
       "hiddenTabsArr": [
         "WaterQuality",
         "FieldForm",
-		"DataEntry",
-		"Parameters",
+        "DataEntry",
+        "Parameters",
         "QWDATA"
       ]
     },
@@ -33,11 +33,11 @@
           "text": "Data Entry",
           "route": "/DataEntry",
           "icon": "EditIcon"
-		},
-		{
-			"text": "Parameters",
-			"route": "/Parameters"
-		  },
+        },
+        {
+          "text": "Parameters",
+          "route": "/Parameters"
+        },
         {
           "text": "QWDATA",
           "route": "/QWDATA",
@@ -694,8 +694,35 @@
           "type": "DropDown",
           "includeBlank": true,
           "options": {
-            "Routine": "Routine",
-            "Cross-section Variation": "Cross-section Variation"
+            "10 - ROUTINE": "10",
+            "15 - NAWQA - NATIONAL WATER-QUALITY ASSESSMENT": "15",
+            "20 - NASQAN": "20",
+            "25 - NMN - National Monitoring Network": "25",
+            "30 - BENCHMARK": "30",
+            "35 - RASA, REGIONAL AQUIFER SYSTEMS ANALYSIS": "35",
+            "40 - SW NETWORK": "40",
+            "50 - GW NETWORK": "50",
+            "60 - LOWFLOW NETWORK": "60",
+            "70 - HIGHFLOW NETWORK": "70",
+            "80 - ACID RAIN": "80",
+            "80.01 - BULK OR UNDEFINED (BU)": "80.01",
+            "80.02 - SAMPLE RELATED PROBLEM (NS)": "80.02",
+            "80.03 - DRY WET-SIDE SAMPLE (NA)": "80.03",
+            "80.04 - COMPLETELY MISSING SAMPLES (UN)": "80.04",
+            "80.05 - LONG DURATION SAMPLE (LD)": "80.05",
+            "80.06 - SAMPLING PROTOCOL (TIME) (SP)": "80.06",
+            "80.07 - SAMPLER MALFUNCTION (S)": "80.07",
+            "90 - SNOW SURVEY": "90",
+            "100 - MT. ST. HELENS": "100",
+            "110 - SEEPAGE STUDY": "110",
+            "120 - IRRIGATION EFFECTS": "120",
+            "130 - RECHARGE": "130",
+            "140 - INJECTION": "140",
+            "150 - BANK ERODIBILITY": "150",
+            "160 - NATIONAL BLANK AND SPIKE PROGRAM": "160",
+            "170 - QUALITY ASSURANCE": "170",
+            "180 - CROSS-SECTION VARIATION": "180",
+            "190 - GROUND-WATER/SURFACE-WATER INTERACTION STUDY": "190"
           },
           "value": "",
           "tabName": "Field Form",
@@ -1514,22 +1541,22 @@
           "colHeaders": true,
           "rowHeaders": true,
           "colSizes": [
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1,
-			1
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           "value": [
             [
@@ -1539,10 +1566,17 @@
               "Volume (cc)",
               "Time (sec)",
               "Ratio of Vertical",
-			  "Intake Efficiency",
-			  "P00001 Val","P00001 Rmk","P00001 Mth",
-			  "P00065 Val","P00065 Rmk","P00001 Mth",
-			  "P00010 Val", "P00010 Rmk", "P00010 Mth", "P00010 nQ"
+              "Intake Efficiency",
+              "P00001 Val",
+              "P00001 Rmk",
+              "P00001 Mth",
+              "P00065 Val",
+              "P00065 Rmk",
+              "P00001 Mth",
+              "P00010 Val",
+              "P00010 Rmk",
+              "P00010 Mth",
+              "P00010 nQ"
             ],
             [
               "Fill Out Number Of Samples",
@@ -1550,17 +1584,17 @@
               "",
               "",
               "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
               ""
             ]
           ],
@@ -1617,38 +1651,38 @@
           "layoutGroup": "Set A Information",
           "colHeaders": true,
           "rowHeaders": true,
-		  "colSizes": [
-			1,
-			2,
-			2,
-			2,
-			2,
-			2,
-			2,
-			2
-		  ],
-		  "value": [
-			[
-			  "Sample #",
-			  "Distance from left bank",
-			  "Depth (feet)",
-			  "T-Rate",
-			  "Volume (cc)",
-			  "Time (sec)",
-			  "Ratio of Vertical",
-			  "Intake Efficiency"
-			],
-			[
-			  "Fill Out Number Of Samples",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  "",
-			  ""
-			]
-		  ],
+          "colSizes": [
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "value": [
+            [
+              "Sample #",
+              "Distance from left bank",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
           "width_xs": 10,
           "width_lg": 10
         },
@@ -1678,7 +1712,7 @@
             "Sand-Fine break": "SF",
             "Sand Analysis": "SA",
             "Loss-on-ignition": "LOI",
-            "Bulk Density":"BD",
+            "Bulk Density": "BD",
             "Full-size Fractions": "Z"
           },
           "value": [],
@@ -1716,11 +1750,22 @@
           "layoutGroup": "Set A Information",
           "value": false,
           "actions": {
-            "true": "ShowPanel::DataEntry:Set B Information",
-            "false": "HidePanel::DataEntry:Set B Information"
+            "true": "ShowPanel::DataEntry:Set B Information&ShowPanel::DataEntry:Average Representational Measures",
+            "false": "HidePanel::DataEntry:Set B Information&HidePanel::DataEntry:Average Representational Measures"
           },
           "width_xs": 2,
           "width_lg": 1
+        },
+        {
+          "id": "avgRepMeasures",
+          "label": "Average Representational Measures of these sets",
+          "type": "Toggle",
+          "tabName": "DataEntry",
+          "layoutGroup": "Average Representational Measures",
+          "checkbox": true,
+          "value": false,
+          "width_xs": 8,
+          "width_lg": 6
         },
         {
           "id": "setB_StartTime",
@@ -1769,8 +1814,8 @@
           "label": "Avg Gage Ht",
           "tabName": "DataEntry",
           "layoutGroup": "Set B Information",
-		  "type": "ComputedValue",
-		  "value":"",
+          "type": "ComputedValue",
+          "value": "",
           "computationString": "(setB_StartGageHeight+setB_EndGageHeight)/2",
           "width_xs": 4,
           "width_lg": 2
@@ -1892,107 +1937,107 @@
           ],
           "width_xs": 10,
           "width_lg": 10
-		},
-		{
-			"id": "setB_samplesTable_OTHER",
-			"label": "Samples Table",
-			"type": "TableInput",
-			"hidden": true,
-			"tabName": "DataEntry",
-			"layoutGroup": "Set B Information",
-			"colHeaders": true,
-			"rowHeaders": true,
-			"colSizes": [
-				1,
-				2,
-				2,
-				2,
-				2,
-				2,
-				2,
-				2
-			  ],
-			  "value": [
-				[
-				  "Sample #",
-				  "Distance from left bank",
-				  "Depth (feet)",
-				  "T-Rate",
-				  "Volume (cc)",
-				  "Time (sec)",
-				  "Ratio of Vertical",
-				  "Intake Efficiency"
-				],
-				[
-				  "Fill Out Number Of Samples",
-				  "",
-				  "",
-				  "",
-				  "",
-				  "",
-				  "",
-				  ""
-				]
-			  ],
-			"width_xs": 10,
-			"width_lg": 10
-		  },
-      {
-        "id": "setB_AnalysedFor_bedload",
-        "label": "Analyze Set B for:",
-        "XMLTag": "Analyses",
-        "type": "MultipleChoice",
-        "options": {
-          "Sand-Fine break": "SF",
-          "Sand Analysis": "SA",
-          "Loss-on-ignition": "LOI",
-          "Full-size Fractions": "Z"
         },
-        "value": [],
-        "tabName": "DataEntry",
-        "layoutGroup": "Set B Information",
-        "width_xs": 2,
-        "width_lg": 2
-      },
-      {
-        "id": "setB_AnalysedFor_bottom",
-        "label": "Analyze Set B for:",
-        "XMLTag": "Analyses",
-        "type": "MultipleChoice",
-        "options": {
-          "Sand-Fine break": "SF",
-          "Sand Analysis": "SA",
-          "Loss-on-ignition": "LOI",
-          "Bulk Density":"BD",
-          "Full-size Fractions": "Z"
+        {
+          "id": "setB_samplesTable_OTHER",
+          "label": "Samples Table",
+          "type": "TableInput",
+          "hidden": true,
+          "tabName": "DataEntry",
+          "layoutGroup": "Set B Information",
+          "colHeaders": true,
+          "rowHeaders": true,
+          "colSizes": [
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "value": [
+            [
+              "Sample #",
+              "Distance from left bank",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "width_xs": 10,
+          "width_lg": 10
         },
-        "value": [],
-        "tabName": "DataEntry",
-        "layoutGroup": "Set B Information",
-        "width_xs": 2,
-        "width_lg": 2
-      },
-      {
-        "id": "setB_AnalysedFor_suspended",
-        "label": "Analyze Set B for:",
-        "XMLTag": "Analyses",
-        "type": "MultipleChoice",
-        "options": {
-          "Concentration": "C",
-          "Sand-Fine break": "SF",
-          "Sand Analysis": "SA",
-          "Turbidity": "T",
-          "Loss-on-ignition": "LOI",
-          "Dissolved Solids": "DS",
-          "Specific Conductance": "SC",
-          "Full-size Fractions": "Z"
+        {
+          "id": "setB_AnalysedFor_bedload",
+          "label": "Analyze Set B for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Loss-on-ignition": "LOI",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set B Information",
+          "width_xs": 2,
+          "width_lg": 2
         },
-        "value": [],
-        "tabName": "DataEntry",
-        "layoutGroup": "Set B Information",
-        "width_xs": 2,
-        "width_lg": 2
-      },
+        {
+          "id": "setB_AnalysedFor_bottom",
+          "label": "Analyze Set B for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Loss-on-ignition": "LOI",
+            "Bulk Density": "BD",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set B Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "setB_AnalysedFor_suspended",
+          "label": "Analyze Set B for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set B Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
         {
           "id": "showSetC",
           "label": "Show Set C",
@@ -2176,107 +2221,107 @@
           ],
           "width_xs": 10,
           "width_lg": 10
-		},
-		{
-			"id": "setC_samplesTable_OTHER",
-			"label": "Samples Table",
-			"type": "TableInput",
-			"hidden": true,
-			"tabName": "DataEntry",
-			"layoutGroup": "Set C Information",
-			"colHeaders": true,
-			"rowHeaders": true,
-			"colSizes": [
-			  1,
-			  2,
-			  2,
-			  2,
-			  2,
-			  2,
-			  2,
-			  2
-			],
-			"value": [
-			  [
-				"Sample #",
-				"Distance from left bank",
-				"Depth (feet)",
-				"T-Rate",
-				"Volume (cc)",
-				"Time (sec)",
-				"Ratio of Vertical",
-				"Intake Efficiency"
-			  ],
-			  [
-				"Fill Out Number Of Samples",
-				"",
-				"",
-				"",
-				"",
-				"",
-				"",
-				""
-			  ]
-			],
-			"width_xs": 10,
-			"width_lg": 10
-		  },
-      {
-        "id": "setC_AnalysedFor_bedload",
-        "label": "Analyze Set C for:",
-        "XMLTag": "Analyses",
-        "type": "MultipleChoice",
-        "options": {
-          "Sand-Fine break": "SF",
-          "Sand Analysis": "SA",
-          "Loss-on-ignition": "LOI",
-          "Full-size Fractions": "Z"
         },
-        "value": [],
-        "tabName": "DataEntry",
-        "layoutGroup": "Set C Information",
-        "width_xs": 2,
-        "width_lg": 2
-      },
-      {
-        "id": "setC_AnalysedFor_bottom",
-        "label": "Analyze Set C for:",
-        "XMLTag": "Analyses",
-        "type": "MultipleChoice",
-        "options": {
-          "Sand-Fine break": "SF",
-          "Sand Analysis": "SA",
-          "Loss-on-ignition": "LOI",
-          "Bulk Density":"BD",
-          "Full-size Fractions": "Z"
+        {
+          "id": "setC_samplesTable_OTHER",
+          "label": "Samples Table",
+          "type": "TableInput",
+          "hidden": true,
+          "tabName": "DataEntry",
+          "layoutGroup": "Set C Information",
+          "colHeaders": true,
+          "rowHeaders": true,
+          "colSizes": [
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "value": [
+            [
+              "Sample #",
+              "Distance from left bank",
+              "Depth (feet)",
+              "T-Rate",
+              "Volume (cc)",
+              "Time (sec)",
+              "Ratio of Vertical",
+              "Intake Efficiency"
+            ],
+            [
+              "Fill Out Number Of Samples",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "width_xs": 10,
+          "width_lg": 10
         },
-        "value": [],
-        "tabName": "DataEntry",
-        "layoutGroup": "Set C Information",
-        "width_xs": 2,
-        "width_lg": 2
-      },
-      {
-        "id": "setC_AnalysedFor_suspended",
-        "label": "Analyze Set C for:",
-        "XMLTag": "Analyses",
-        "type": "MultipleChoice",
-        "options": {
-          "Concentration": "C",
-          "Sand-Fine break": "SF",
-          "Sand Analysis": "SA",
-          "Turbidity": "T",
-          "Loss-on-ignition": "LOI",
-          "Dissolved Solids": "DS",
-          "Specific Conductance": "SC",
-          "Full-size Fractions": "Z"
+        {
+          "id": "setC_AnalysedFor_bedload",
+          "label": "Analyze Set C for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Loss-on-ignition": "LOI",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set C Information",
+          "width_xs": 2,
+          "width_lg": 2
         },
-        "value": [],
-        "tabName": "DataEntry",
-        "layoutGroup": "Set C Information",
-        "width_xs": 2,
-        "width_lg": 2
-      },
+        {
+          "id": "setC_AnalysedFor_bottom",
+          "label": "Analyze Set C for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Loss-on-ignition": "LOI",
+            "Bulk Density": "BD",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set C Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
+        {
+          "id": "setC_AnalysedFor_suspended",
+          "label": "Analyze Set C for:",
+          "XMLTag": "Analyses",
+          "type": "MultipleChoice",
+          "options": {
+            "Concentration": "C",
+            "Sand-Fine break": "SF",
+            "Sand Analysis": "SA",
+            "Turbidity": "T",
+            "Loss-on-ignition": "LOI",
+            "Dissolved Solids": "DS",
+            "Specific Conductance": "SC",
+            "Full-size Fractions": "Z"
+          },
+          "value": [],
+          "tabName": "DataEntry",
+          "layoutGroup": "Set C Information",
+          "width_xs": 2,
+          "width_lg": 2
+        },
         {
           "id": "sampleIsokinetic",
           "label": "Sample Isokinetic",
@@ -2446,7 +2491,7 @@
               "",
               "",
               "",
-              "",
+              [],
               ""
             ],
             [
@@ -2459,13 +2504,13 @@
               "",
               "",
               "",
-              "",
+              [],
               ""
             ]
           ],
           "width_xs": 12,
           "width_lg": 12
-		},
+        },
         {
           "id": "test_table",
           "type": "TableInput",
@@ -2558,21 +2603,21 @@
             "1": "RemoveColumnFromTable::test_table"
           },
           "layoutGroup": "Field Parameters"
-		},
-		{
-			"id": "parametersTable",
-			"label": "Parameters Table",
-			"type": "ParametersTable",
-			"tabName": "Parameters",
-			"layoutGroup": "Parameters",
-			"colHeaders": true,
-			"rowHeaders": true,
-			"value": [
-			  [  ]			  
-			],
-			"width_xs": 12,
-			"width_lg": 12
-		  }
+        },
+        {
+          "id": "parametersTable",
+          "label": "Parameters Table",
+          "type": "ParametersTable",
+          "tabName": "Parameters",
+          "layoutGroup": "Parameters",
+          "colHeaders": true,
+          "rowHeaders": true,
+          "value": [
+            []
+          ],
+          "width_xs": 12,
+          "width_lg": 12
+        }
       ]
     }
   ],
@@ -2665,8 +2710,8 @@
           "sizeOfBag": "",
           "bagMesh": "mm",
           "NozzleMaterial": "",
-		  "NozzleDiameter": "",
-		  "M2Lab":"",
+          "NozzleDiameter": "",
+          "M2Lab": "",
           "tetherLine": false,
           "compositeSamplesInCrossSection": false,
           "verticalsInComposite": false,
