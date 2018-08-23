@@ -1,0 +1,36 @@
+<html>
+<head>
+<script>
+
+function sendData(){
+//str1.length != 0 && str2.length != 0 && str3.length != 0
+	 var xmlhttp = new XMLHttpRequest();
+	 xmlhttp.onreadystatechange = function() {
+		  if (this.readyState == 4 && this.status == 200) {
+			  document.getElementById("txt").innerHTML = this.responseText;
+		  }
+	 };
+	 xmlhttp.open("GET", "sedWeConnect.php?q="/*+ string*/, true); 
+	 xmlhttp.send();
+	document.getElementById("done").innerHTML = "started at: " + Date();
+}
+
+</script>
+
+</head>
+
+<body>
+<p style="text-align: center;"><b>Click to communicate:</b></p>
+
+
+<div style="text-align: center">
+	<button type="button" onclick="sendData()">Connect</button>
+</div>
+
+
+<p id="done" style="text-align: center"></p>
+<p id="txt" style="text-align: center"></p>
+
+</body>
+
+</html>

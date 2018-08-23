@@ -42,6 +42,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import xmljs from 'xml-js';
+import { saveFile } from '../Utils/FileHandling';
 
 
 
@@ -1405,7 +1406,7 @@ class WebFF extends React.Component {
 			"Name": setName,
 			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
 			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually"),
-			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_"+this.getQuestionValue("sedimentType")).join(","), 
+			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_" + this.getQuestionValue("sedimentType")).join(","),
 			"SetType": this.getCurrentSampleEventMethod()
 		}
 
@@ -1426,7 +1427,7 @@ class WebFF extends React.Component {
 				"AgencyCode": this.getQuestionValue('agencyCode'),
 				"SedTranspMode": this.getQuestionValue('sedimentType'),
 				"SmplMediumCode": this.getQuestionValue('sampleMedium'),
-				"AvgRepMeasures": this.getQuestionValue('avgRepMeasures')?'Y':'N'
+				"AvgRepMeasures": this.getQuestionValue('avgRepMeasures') ? 'Y' : 'N'
 			}
 		}
 
@@ -1447,6 +1448,35 @@ class WebFF extends React.Component {
 			return null;
 
 		return elt.options[elt.selectedIndex].text;
+	}
+
+	getSedLOGINcompatibleXML() {
+		let SLCXML = {
+			"SedWE_data": this.buildSampleEventtObj()
+		}
+
+		var options = { compact: true, ignoreComment: true, spaces: 4 };
+		var result = xmljs.json2xml(SLCXML, options);
+
+		// remove numbers from "set"
+		var reg = /<Set\d+/g;
+		let cleanXML = result.replace(reg, "<Set")
+		reg = /<\/Set\d+/g;
+		cleanXML = cleanXML.replace(reg, "</Set")
+
+		// remove numbers from "sample"
+		reg = /<Sample\d+/g;
+		cleanXML = cleanXML.replace(reg, "<Sample")
+		reg = /<\/Sample\d+/g;
+		cleanXML = cleanXML.replace(reg, "</Sample")
+
+		// remove numbers from "param"
+		reg = /<Param\d+/g;
+		cleanXML = cleanXML.replace(reg, "<Param")
+		reg = /<\/Param\d+/g;
+		cleanXML = cleanXML.replace(reg, "</Param")
+
+		return cleanXML;
 	}
 
 	handleSystemMenuItemClicked(menuText) {
@@ -1481,24 +1511,45 @@ class WebFF extends React.Component {
 		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
 
 
-		if (menuText === "Test") {
+
+		if (menuText == "Test Mongo") {
 
 
-			let SLCXML = {
-				"SedWE_data": this.buildSampleEventtObj()
-			}
+			const DEBUG = true;
+			const API = 'http://152.61.248.218/testMongo.php';
+			// const query = "needleID=hiddenPanels";
+			const query = "";
 
-			console.log("SLCXML", SLCXML);
+			let URI = API;
+			if (DEBUG) console.log("Function: fetchDBInfo @ " + URI);
+			fetch(URI, {
+				method: 'POST',
+				headers: new Headers({
+					'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+				}),
+				body: query
+			})
+				.then(function (response) {
+					if (response.status >= 200 && response.status < 300) {
+						return response.text()
+					}
+					throw new Error(response.statusText)
+				})
+				.then(function (response) {
+					console.log(response);
+					let parsedResponse = JSON.parse(response);
+					console.log(parsedResponse);
+					console.log(parsedResponse[0][query+"Arr"]);
+				})
+				.catch(error => console.log("Error fetching " + URI + "("+query+")\n" + error));
 
-			var options = { compact: true, ignoreComment: true, spaces: 4 };
-			var result = xmljs.json2xml(SLCXML, options);
-			console.log("XML: ", result);
+		}
 
 
 
-			// var text = this.getSelectedText("DD_1");
-			// 	console.log(text);
-
+		if (menuText === "Save XML") {
+			let d = new Date();
+			saveFile("SedWE_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + ".txt", this.getSedLOGINcompatibleXML());
 			return;
 		}
 

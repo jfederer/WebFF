@@ -16,6 +16,7 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import SyncIcon from '@material-ui/icons/Sync';
+import CodeIcon from '@material-ui/icons/Code';
 
 const styles = {
   list: {
@@ -33,11 +34,17 @@ class SystemMenu extends React.Component {
     const systemMenu = (
       <div className={classes.list}>
         <List>
-        <ListItem button onClick={()=>this.props.menuItemClickHandler('Test')}>
+        <ListItem button onClick={()=>this.props.menuItemClickHandler('Test Mongo')}>
             <ListItemIcon>
               <BuildIcon />
             </ListItemIcon>
-            <ListItemText primary="Test" />
+            <ListItemText primary="Test Mongo" />
+          </ListItem>
+        <ListItem button onClick={()=>this.props.menuItemClickHandler('Save XML')}>
+            <ListItemIcon>
+              <CodeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Save SedLOGIN-compatible XML" />
           </ListItem>
 		  <ListItem button onClick={()=>this.props.menuItemClickHandler('Sync Current Event to Database')}>
             <ListItemIcon>

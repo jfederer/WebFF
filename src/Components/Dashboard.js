@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import {saveFile} from '../Utils/FileHandling';
 import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
@@ -102,9 +101,9 @@ class Dashboard extends React.Component {
 			  </Grid>
 			</Grid>
 
-			<Grid container spacing={24}>
+			{/* <Grid container spacing={24}>
 			  <Grid item xs>
-				<Paper className={classes.paper}><b>File Download</b><br />
+				 <Paper className={classes.paper}><b>File Download</b><br />
 				<Button onClick={()=>	{
 							let d = new Date();
 							saveFile("WebFF_"+ d.getFullYear() + (d.getMonth()+1) + d.getDate() + d.getHours() + d.getMinutes() + 
@@ -117,9 +116,9 @@ class Dashboard extends React.Component {
 							".txt", this.collectValues(false));
 						}}>
 						Save Current Samling Event to CSV</Button>
-					</Paper>
-			  </Grid>
-			</Grid>
+					</Paper> 
+			  </Grid> 
+			</Grid>*/}
 		  </div>
 		);
 	}
