@@ -34,59 +34,59 @@ class SystemMenu extends React.Component {
     const systemMenu = (
       <div className={classes.list}>
         <List>
-        <ListItem button onClick={()=>this.props.menuItemClickHandler('Test Mongo')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Test Mongo')}>
             <ListItemIcon>
               <BuildIcon />
             </ListItemIcon>
             <ListItemText primary="Test Mongo" />
           </ListItem>
-        <ListItem button onClick={()=>this.props.menuItemClickHandler('Save XML')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Save XML')}>
             <ListItemIcon>
               <CodeIcon />
             </ListItemIcon>
-            <ListItemText primary="Save SedLOGIN-compatible XML" />
+            <ListItemText primary="Save XML" />
           </ListItem>
-		  <ListItem button onClick={()=>this.props.menuItemClickHandler('Sync Current Event to Database')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Sync Current Event to Database')}>
             <ListItemIcon>
               <SyncIcon />
             </ListItemIcon>
             <ListItemText primary="Sync Current Event to Database" />
           </ListItem>
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('Add/Remove Station')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Add/Remove Station')}>
             <ListItemIcon>
               <NoteAddIcon />
             </ListItemIcon>
             <ListItemText primary="Add/Remove Station" />
           </ListItem>
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('Add New Question')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Add New Question')}>
             <ListItemIcon>
               <PlaylistAddIcon />
             </ListItemIcon>
             <ListItemText primary="Add Question" />
           </ListItem>
 
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('User Manual')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('User Manual')}>
             <ListItemIcon>
               <HelpIcon />
             </ListItemIcon>
             <ListItemText primary="User Manual" />
           </ListItem>
 
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('Settings')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Settings')}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary="Settings" />
           </ListItem>
 
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('About')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('About')}>
             <ListItemIcon>
               <InfoIcon />
             </ListItemIcon>
             <ListItemText primary="About" />
           </ListItem>
 
-          <ListItem button onClick={()=>this.props.menuItemClickHandler('Switch User')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Switch User')}>
             <ListItemIcon>
               <PermIdentityIcon />
             </ListItemIcon>

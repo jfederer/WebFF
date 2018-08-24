@@ -42,9 +42,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import xmljs from 'xml-js';
-import { saveFile } from '../Utils/FileHandling';
 
-
+import XMLDialog from './XMLDialog';
 
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -65,6 +64,9 @@ const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:";
 
 
 class WebFF extends React.Component {
+
+
+
 	constructor(props) {
 		super(props);
 
@@ -74,7 +76,7 @@ class WebFF extends React.Component {
 
 			navMenuInfo: [],
 			navMenuExpanded: false,
-
+			XMLDialogOpen: false,
 			isDialogQuestionsLoaded: false,
 			dialogQuestions: [],
 			dialogOpen: false,
@@ -116,9 +118,10 @@ class WebFF extends React.Component {
 		this.getNumberOfSamplesInSet = this.getNumberOfSamplesInSet.bind(this);
 		this.getCurrentSampleEventMethod = this.getCurrentSampleEventMethod.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 		this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		this.getSedLOGINcompatibleXML = this.getSedLOGINcompatibleXML.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
-
+	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
 		this.gatherSystemConfig(criticalDefaultSystemNodes, "defaultConfig");  //load default configurations
 		this.gatherUserConfig(criticalUserNodes, "users/" + this.state.loggedInUser); //load user configuration
@@ -129,7 +132,6 @@ class WebFF extends React.Component {
 		// if(this.state.curSamplingEventName===null || this.state.curSamplingEventName === '') { //TODO: multiple reloads mess this up if it starts null
 		// 	window.location.replace("/Dashboard");
 		// 	console.log("Redirected");
-		// }
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
@@ -441,6 +443,14 @@ class WebFF extends React.Component {
 	handleSystemMenuClose = () => {  //FUTURE: this seems tightly coupled.
 		this.setState({ systemMenuOpen: false });
 	};
+
+	handleXMLDialogOpen = (CB) => {
+		this.setState({ XMLDialogOpen: true }, CB);
+	}
+
+	handleXMLDialogClose = () => {
+		this.setState({ XMLDialogOpen: false });
+	}
 
 	setAppBarText = (txt) => {
 		this.setState({ appBarText: txt });
@@ -1479,6 +1489,8 @@ class WebFF extends React.Component {
 		return cleanXML;
 	}
 
+
+
 	handleSystemMenuItemClicked(menuText) {
 		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
 		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
@@ -1511,7 +1523,6 @@ class WebFF extends React.Component {
 		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
 
 
-
 		if (menuText == "Test Mongo") {
 
 
@@ -1539,17 +1550,16 @@ class WebFF extends React.Component {
 					console.log(response);
 					let parsedResponse = JSON.parse(response);
 					console.log(parsedResponse);
-					console.log(parsedResponse[0][query+"Arr"]);
+					console.log(parsedResponse[0][query + "Arr"]);
 				})
-				.catch(error => console.log("Error fetching " + URI + "("+query+")\n" + error));
+				.catch(error => console.log("Error fetching " + URI + "(" + query + ")\n" + error));
 
 		}
 
 
 
 		if (menuText === "Save XML") {
-			let d = new Date();
-			saveFile("SedWE_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + ".txt", this.getSedLOGINcompatibleXML());
+			this.handleXMLDialogOpen();
 			return;
 		}
 
@@ -1637,7 +1647,11 @@ class WebFF extends React.Component {
 				<NavMenu isExpanded={this.state.navMenuExpanded}
 					closeHandler={this.handleLeftDrawerClose}
 					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
-
+				<XMLDialog isOpen={this.state.XMLDialogOpen}
+					handleXMLDialogClose={this.handleXMLDialogClose}
+					getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
+					username={this.state.loggedInUser}
+				/>
 				<main className={classes.content} >
 					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
