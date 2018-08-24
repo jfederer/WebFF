@@ -165,7 +165,7 @@ class XMLDialog extends React.Component {
             {this.state.showSedLOGINQs ?
             <React.Fragment>
               <Divider></Divider>
-              <Grid item xs={12}><Typography>{this.props.username}, please enter the SedLOGIN project ID and your Active Directory password</Typography></Grid>
+              <Grid item xs={12}><Typography>{this.props.username}, enter the SedLOGIN project ID and your Active Directory password</Typography></Grid>
               <Grid item xs={4}>
                   <TextField
                     margin="dense"
