@@ -63,9 +63,7 @@ class XMLDialog extends React.Component {
     const DEBUG = true;
     const API = 'http://152.61.248.218/sedWeConnect.php';
     let username = this.props.username.split('@')[0];
-    console.log(username);
-    console.log(p_id);
-    const query = "user="+username+"&pw="+encodeURIComponent(pass)+"&p_id="+p_id+"&xml="+SLCXML;
+    const query = "user="+username+"&pw="+encodeURIComponent(pass)+"&p_id="+p_id+"&xml="+encodeURIComponent(SLCXML);
 
 
     let URI = API;

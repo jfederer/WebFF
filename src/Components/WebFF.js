@@ -42,6 +42,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import xmljs from 'xml-js';
+import Login from './Login';
 
 import XMLDialog from './XMLDialog';
 
@@ -62,6 +63,7 @@ var needToSyncStationDataToQuestionData = false;
 
 const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:";
 
+const isDEV = false;
 
 class WebFF extends React.Component {
 
@@ -97,7 +99,7 @@ class WebFF extends React.Component {
 			hiddenTabs: [],
 			stations: [],
 
-			loggedInUser: "jfederer@usgs.gov",
+			loggedInUser: "jfed@usgs.gov",
 
 			curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
 		};
@@ -123,8 +125,8 @@ class WebFF extends React.Component {
 	}
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
-		this.gatherSystemConfig(criticalDefaultSystemNodes, "defaultConfig");  //load default configurations
-		this.gatherUserConfig(criticalUserNodes, "users/" + this.state.loggedInUser); //load user configuration
+		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
+		this.gatherUserConfig(criticalUserNodes); //load user configuration
 
 
 
@@ -180,13 +182,11 @@ class WebFF extends React.Component {
 	}
 
 
-
-
-	gatherSystemConfig(nodesToGather, query) {
-		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
+	gatherSystemConfig(nodesToGather) {
+		// first looks in LS for every element in nodesToGather.  If not found, pulls everything from DB.
 		let DEBUG = false;
 
-		if (DEBUG) console.log("gatherConfig: ", nodesToGather, query);
+		if (DEBUG) console.log("gatherConfig: ", nodesToGather);
 		// check if ALL critical items are loaded into LS
 		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
 		let allLoadedInLS = true;
@@ -217,8 +217,8 @@ class WebFF extends React.Component {
 			}
 		} else {
 			// pull everything from DB
-
-			this.fetchDBInfo(query, (JSONresponse) => {
+			//DEBUG=false;
+			this.fetchDBInfo('', 'defaultConfig', (JSONresponse) => {
 				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 				JSONresponse.forEach((configNode) => {
 					if (DEBUG) console.log("ConfigNode: ", configNode);
@@ -243,13 +243,15 @@ class WebFF extends React.Component {
 	}
 
 
-	gatherUserConfig(nodesToGather, query) {
+	gatherUserConfig(nodesToGather) {
+		// should not be called unless this.state.loggedInUser is set to something like jfederer@usgs.gov
+
 		//FIXME: likely bug source, as all these setStates happen async...  perhaps find a way to chain/batch them.
 
 		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
 		let DEBUG = false;
 
-		if (DEBUG) console.log("gatherConfig: ", nodesToGather, "&", query);
+		if (DEBUG) console.log("gatherConfig: ", nodesToGather);
 		// check if ALL critical items are loaded into LS
 		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
 		let allLoadedInLS = true;
@@ -291,33 +293,47 @@ class WebFF extends React.Component {
 
 		} else {
 			// pull everything from DB
-			this.fetchDBInfo(query, (JSONresponse) => {
+			this.fetchDBInfo(this.state.loggedInUser, 'users', (JSONresponse) => {
+				DEBUG=true;
 				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 				let nodeArr = [];
-				for (let i = 0; i < nodesToGather.length; i++) {
-					JSONresponse[nodesToGather[i]].forEach((configNode) => {
-						if (DEBUG) console.log("ConfigNode: ", configNode);
-						// let nodeName = configNode.id;
-						//TODO: error and duplication checking -- particularly important as custom questions exist
-						// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
-						nodeArr.push(configNode);
-					});
-					this.setState({ [nodesToGather[i]]: nodeArr }, () => {
-						if (DEBUG) console.log("STATE: ", this.state);
-						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
-						let newItemsLoaded = this.state.itemsLoaded;
-						newItemsLoaded.push(nodesToGather[i]);
-						this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
-					});
-				}
 
-				// pull sampling events from DB response
-				let allNodeNames = Object.keys(JSONresponse);
-				for (let i = 0; i < allNodeNames.length; i++) {
-					if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-						this.setState({ [allNodeNames[i]]: JSONresponse[allNodeNames[i]] }, () => itemsToSyncToLS.push(allNodeNames[i]));
+				// check that this user even exists in database
+				if (JSONresponse.length===1) {
+					// this user exists in the database	
+					for (let i = 0; i < nodesToGather.length; i++) {
+						JSONresponse[nodesToGather[i]].forEach((configNode) => {
+							if (DEBUG) console.log("ConfigNode: ", configNode);
+							// let nodeName = configNode.id;
+							//TODO: error and duplication checking -- particularly important as custom questions exist
+							// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
+							nodeArr.push(configNode);
+						});
+						this.setState({ [nodesToGather[i]]: nodeArr }, () => {
+							if (DEBUG) console.log("STATE: ", this.state);
+							if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
+							let newItemsLoaded = this.state.itemsLoaded;
+							newItemsLoaded.push(nodesToGather[i]);
+							this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
+						});
 					}
-				}
+	
+					// pull sampling events from DB response
+					let allNodeNames = Object.keys(JSONresponse);
+					for (let i = 0; i < allNodeNames.length; i++) {
+						if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+							this.setState({ [allNodeNames[i]]: JSONresponse[allNodeNames[i]] }, () => itemsToSyncToLS.push(allNodeNames[i]));
+						}
+					}
+
+				} else {
+					// this user does not exist in the database - we must create their entry
+					console.log("NEW USER!!!");
+					this.updateDBInfo("id",this.state.loggedInUser,{"stations":[],"customQuestions":[]},(res)=>console.log(res));
+				};
+
+
+				
 			});
 		}
 	}
@@ -389,10 +405,32 @@ class WebFF extends React.Component {
 		}
 	}
 
-	fetchDBInfo(_query, successCB) {
+	fetchDBInfo(_query, _collection, successCB) {
+
+
 		const DEBUG = false;
-		const API = 'http://localhost:3004/';
-		const query = _query;
+		if(true)console.log("fetchDBInfo(", _query, ", ", _collection, ")");
+
+
+		// sort out differences in local dev server and production server calls
+		const API = 'http://152.61.248.218/mongoFetch.php/';
+		let query = '';
+
+		if (_query !== '') {
+			query = 'needleID=' + encodeURIComponent(_query);
+		}
+
+		if (_collection !== '') {
+			if (query !== '') {
+				query += '&';
+			}
+			query += "collection=" + _collection;
+		}
+
+		if (isDEV) {
+			const API = 'http://localhost:3004/';
+			query = encodeURIComponent(_query);
+		}
 
 		function handleErrors(response) {
 			// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
@@ -404,19 +442,23 @@ class WebFF extends React.Component {
 		}
 
 		if (DEBUG) console.log("Function: fetchDBInfo @ " + API + query);
-		fetch(API + query)
+		fetch(API, {
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+			}),
+			body: query
+		})
 			.then(handleErrors)
-			.then(response => response.json())
-			.then(
-				parsedJSON => {
-					if (DEBUG) console.log("Parsed JSON: ");
-					if (DEBUG) console.log(parsedJSON);
-					// // setTimeout(() => {
-					successCB(parsedJSON);
-					if (DEBUG) console.log("CurrentState: ");
-					if (DEBUG) console.log(this.state);
-					// }, 1200);
-				})
+			.then(response => 
+				response.json()
+			)
+			.then(parsedJSON => {
+				if (DEBUG) console.log("Parsed JSON: ", parsedJSON);
+				// // setTimeout(() => {
+				successCB(parsedJSON);
+				// }, 1200);
+			})
 			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
@@ -846,9 +888,7 @@ class WebFF extends React.Component {
 
 
 	setLoggedInUser(username) {
-		console.log(this);
-		// this.setState({ loggedInUser: username }, this.buildRoutesAndRenderPages);
-		this.setState({ loggedInUser: username }, this.componentWillMount); //TODO: not rebuilding for new users
+		this.setState({ loggedInUser: username }, this.buildRoutesAndRenderPages); //TODO: not rebuilding for new users
 	}
 
 
@@ -1058,8 +1098,7 @@ class WebFF extends React.Component {
 
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
-				<Route exact path="/" render={() => <h1>HOME</h1>} />
-
+				<Route exact path="/" component={Login} />
 				<Route path="/Dashboard" render={() => <Dashboard
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
@@ -1243,13 +1282,23 @@ class WebFF extends React.Component {
 		}
 	}
 
-	updateDBInfo(location, data, CB) {
+	updateDBInfo(needleKey, needle, newData, CB) {
 		// attempts to update location
 		// returns the ENTIRE newly updated data element.
 
 		const DEBUG = true;
-		const API = 'http://localhost:3004/';
-		const query = location;
+
+
+		const API = 'http://152.61.248.218/mongoPatch.php/';
+		const query = "needleKey=" + encodeURIComponent(needleKey) + "&" + "needle=" + encodeURIComponent(needle) + "&" + "newData=" + encodeURIComponent(JSON.stringify(newData));
+		if (isDEV) {
+			const API = 'http://localhost:3004';
+			const query = needleKey;
+		}
+
+
+
+
 		// function handleErrors(response) {
 		// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
 		// 	if (!response.ok) {
@@ -1258,20 +1307,23 @@ class WebFF extends React.Component {
 		// 	return response;
 		// }
 
-		let URI = API + query;
+		let URI = API; // + query;
 
 		if (DEBUG) console.log("Function: fetchDBInfo PATCH @ " + URI);
 
 		fetch(URI, {
-			method: 'PATCH',
+			method: 'POST',
 			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
+				//	'Accept': 'application/json',
+				'Content-Type': 'application/x-www-form-urlencoded',
+				//	'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(data)
+			body: query
+			//JSON.stringify(newData)
 		}).then(function (response) {
 			if (response.status === 200) {
-				return response.json();
+				return response.text();
+				// return response.json();
 			}
 			return null;
 		}).then(function (json) {
@@ -1525,34 +1577,14 @@ class WebFF extends React.Component {
 
 		if (menuText == "Test Mongo") {
 
+			// this.fetchDBInfo("", '', (response) => console.log("Nothing: ", response));
+			// this.fetchDBInfo("hiddenPanels", '', (response) => console.log("hiddenPanels: ", response));
+			// this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
+			// this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
 
-			const DEBUG = true;
-			const API = 'http://152.61.248.218/testMongo.php';
-			// const query = "needleID=hiddenPanels";
-			const query = "";
 
-			let URI = API;
-			if (DEBUG) console.log("Function: fetchDBInfo @ " + URI);
-			fetch(URI, {
-				method: 'POST',
-				headers: new Headers({
-					'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
-				}),
-				body: query
-			})
-				.then(function (response) {
-					if (response.status >= 200 && response.status < 300) {
-						return response.text()
-					}
-					throw new Error(response.statusText)
-				})
-				.then(function (response) {
-					console.log(response);
-					let parsedResponse = JSON.parse(response);
-					console.log(parsedResponse);
-					console.log(parsedResponse[0][query + "Arr"]);
-				})
-				.catch(error => console.log("Error fetching " + URI + "(" + query + ")\n" + error));
+			this.updateDBInfo("id","dialogQuestions",{"id": "dialogQuestions","dialogQuestionsArr": [{"dialogName": "Add/Remove Station","dialogDescription": "Add a new station to, or remove and existing station from, your personalized station list","questions": [{"id": "editStation_AddOrRemove","label": "Add or Remove station","type": "DropDown","includeBlank": true,"options": {"Add New Station": "Add","Remove Existing Station": "Remove"},"actions": {"Add": "HideQuestion::deleteStation_stationName&ShowQuestion::newStation_stationName&ShowQuestion::newStation_stationNumber&ShowQuestion::newStation_projectName&ShowQuestion::newStation_projectID&ShowQuestion::newStation_agencyCode","Remove": "ShowQuestion::deleteStation_stationName&HideQuestion::newStation_stationName&HideQuestion::newStation_stationNumber&HideQuestion::newStation_projectName&HideQuestion::newStation_projectID&HideQuestion::newStation_agencyCode"},"value": "Smite","width_xs": 12,"width_lg": 12},{"id": "deleteStation_stationName","label": "Select Station To Remove","type": "DropDown","hidden": true,"includeBlank": true,"options": {"Add New Station": "Add","Remove Existing Station": "Remove"},"value": ""},{"id": "newStation_stationName","label": "Station Name","hidden": true,"type": "Text","tabName": "Add New Station","layoutGroup": "Basic","width_xs": 7,"width_lg": 7,"value": ""},{"id": "newStation_stationNumber","label": "Station Number","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 5,"width_lg": 5},{"id": "newStation_projectName","label": "Project Name","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 6,"width_lg": 6},{"id": "newStation_projectID","label": "Project ID","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 3,"width_lg": 3},{"id": "newStation_agencyCode","label": "Agency Code","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 3,"width_lg": 3}]},{"dialogName": "Add New Question","dialogDescription": "Fill out the following to add a new question to the program","questions": [{"id": "newQuestion_label","label": "Label","type": "Text","width_xs": 6,"width_lg": 3,"value": ""},{"id": "newQuestion_id","label": "Unique ID","type": "Text","placeholder": "Must be globally unique","value": "","width_xs": 6,"width_lg": 6},{"id": "newQuestion_type","label": "Question Type","type": "DropDown","includeBlank": true,"options": {"Checkbox": "Checkbox","Computed Value": "ComputedValue","Date": "DateInput","Drop Down": "DropDown","Multiple Choice": "MultipleChoice","Table": "TableInput","Text": "Text","Time": "TimeInput","Toggle": "Toggle"},"value": ""},{"id": "newQuestion_tabName","label": "Tab Name","helperText": "Name of tab where this question resides","placeholder": "spaces acceptable","type": "Text","value": "","width_xs": 4,"width_lg": 3},{"id": "newQuestion_layoutGroup","label": "Layout Group","helperText": "Group on Tab where question resides","placeholder": "Spaces acceptable","type": "Text","value": "","width_xs": 4,"width_lg": 3},{"id": "newQuestion_initalValue_textValue","label": "Initial Value","type": "Text","placeholder": "Can be left blank","value": "","width_xs": 12,"width_lg": 12},{"id": "newQuestion_width_xs","label": "Width when screen is small","type": "Text","placeholder": "1-12","value": "","width_xs": 6,"width_lg": 6},{"id": "newQuestion_width_lg","label": "Width when screen is small","type": "Text","placeholder": "Can be left blank","value": "","width_xs": 6,"width_lg": 6}]},{"dialogName": "User Manual","dialogDescription": "Holding Times-Sample holding times are specified in the USEPA Region 4 Analytical Support\\nBranch Laboratory Operations and Quality Assurance Manual (ASBLOQAM),\\nMost Recent Version. Field investigators should note that the holding time for an\\nun-preserved VOC sediment sample is 48 hours. Arrangements should be made to\\nship the sediment VOC samples to the laboratory by overnight delivery the day they\\nare collected so the laboratory may preserve and/or analyze the sample within 48\\nhours of collection.\\n\\nPercent Solids\\nSamplers must ensure that the laboratory has sufficient material to determine\\npercent solids in the VOC sediment sample to correct the analytical results to dry\\nweight. If other analyses requiring percent solids determination are being\\nperformed upon the sample, these results may be used. If not, a separate sample\\n(minimum of 2 oz.) for percent solids determination will be required.\\n\\n Safety\\nMethanol is a toxic and flammable liquid. Therefore, methanol must be handled\\nwith all required safety precautions related to toxic and flammable liquids.\\nInhalation of methanol vapors must be avoided. Vials should be opened and closed\\nquickly during the sample preservation procedure. Methanol must be handled in a\\nventilated area. Use protective gloves when handling the methanol vials. Store\\nmethanol away from sources of ignition such as extreme heat or open flames. The\\nvials of methanol should be stored in a cooler with ice at all times.\\n\\nShipping\\nMethanol and sodium bisulfate are considered dangerous goods, therefore shipment\\nof samples preserved with these materials by common carrier is regulated by the\\nU.S. Department of Transportation and the International Air Transport Association\\n(IATA). The rules of shipment found in Title 49 of the Code of Federal Regulations\\n(49 CFR parts 171 to 179) and the current edition of the IATA Dangerous Goods\\nRegulations must be followed when shipping methanol and sodium bisulfate.\\nConsult the above documents or the carrier for additional information. Shipment\\nof the quantities of methanol and sodium bisulfate used for sample preservation\\nfalls under the exemption for small quantities. A summary of the requirements for\\nshipping samples follows. Refer to the code for a complete review of the\\nrequirements.","questions": []},{"dialogName": "Switch User","dialogDescription": "WebFF recognizes who you are based on your email.","questions": [{"id": "switchUser_email","label": "Email Address","type": "Text","placeholder": "username@usgs.gov","width_xs": 12,"width_lg": 12,"ref": "switchUser_email","value": ""}]},{"dialogName": "Settings","dialogDescription": "WebFF recognizes who you are based on your email.","questions": [{"id": "settings_paper","label": "Outline Fields","type": "Toggle","placeholder": "username@usgs.gov","value": false,"width_xs": 12,"width_lg": 12}]}]},(res)=>console.log(res));
+			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
 
 		}
 
@@ -1600,65 +1632,66 @@ class WebFF extends React.Component {
 		// console.log("RENDER");
 
 		return (
-			<div className={classes.root} >
-				<AppBar
-					position="absolute"
-					className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
-				>
-					<Toolbar disableGutters={!this.state.navMenuExpanded}>
-						<IconButton
-							color="inherit"
-							aria-label="expand drawer"
-							onClick={this.handleLeftDrawerOpen}
-							className={classNames(classes.menuButton, this.state.navMenuExpanded && classes.hide)}
-						>
-							<ChevronRightIcon />
-						</IconButton>
+			this.state.loggedInUser === '' ? <Login setUser={this.setUser} /> :
+				<div className={classes.root} >
+					<AppBar
+						position="absolute"
+						className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
+					>
+						<Toolbar disableGutters={!this.state.navMenuExpanded}>
+							<IconButton
+								color="inherit"
+								aria-label="expand drawer"
+								onClick={this.handleLeftDrawerOpen}
+								className={classNames(classes.menuButton, this.state.navMenuExpanded && classes.hide)}
+							>
+								<ChevronRightIcon />
+							</IconButton>
 
-						<Typography variant="title" color="inherit" noWrap>
-							{this.state.appBarText}
-						</Typography>
+							<Typography variant="title" color="inherit" noWrap>
+								{this.state.appBarText}
+							</Typography>
 
-						<IconButton
-							color="inherit"
-							aria-label="System Menu"
-							onClick={this.handleSystemMenuIconClicked}
-							className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
-						>
-							<MenuIcon />
-						</IconButton>
-					</Toolbar>
+							<IconButton
+								color="inherit"
+								aria-label="System Menu"
+								onClick={this.handleSystemMenuIconClicked}
+								className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
+							>
+								<MenuIcon />
+							</IconButton>
+						</Toolbar>
 
-				</AppBar>
+					</AppBar>
 
-				<SystemMenu isOpen={this.state.systemMenuOpen}
-					closeHandler={this.handleSystemMenuClose}
-					menuItemClickHandler={this.handleSystemMenuItemClicked} />
-				<SystemDialog isOpen={this.state.dialogOpen}
-					closeHandler={this.handleDialogClose}
-					dialogQuestions={this.state.curDialogQuestions}
-					dialogName={this.state.curDialogName}
-					dialogDescription={this.state.curDialogDescription}
-					stateChangeHandler={this.dialogQuestionChangeSystemCallback}
-					globalState={this.state}
-					setLoggedInUser={this.setLoggedInUser}
-					addStation={this.addStation}
-					removeStation={this.removeStation} />
-				<NavMenu isExpanded={this.state.navMenuExpanded}
-					closeHandler={this.handleLeftDrawerClose}
-					menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
-				<XMLDialog isOpen={this.state.XMLDialogOpen}
-					handleXMLDialogClose={this.handleXMLDialogClose}
-					getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
-					username={this.state.loggedInUser}
-				/>
-				<main className={classes.content} >
-					<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
+					<SystemMenu isOpen={this.state.systemMenuOpen}
+						closeHandler={this.handleSystemMenuClose}
+						menuItemClickHandler={this.handleSystemMenuItemClicked} />
+					<SystemDialog isOpen={this.state.dialogOpen}
+						closeHandler={this.handleDialogClose}
+						dialogQuestions={this.state.curDialogQuestions}
+						dialogName={this.state.curDialogName}
+						dialogDescription={this.state.curDialogDescription}
+						stateChangeHandler={this.dialogQuestionChangeSystemCallback}
+						globalState={this.state}
+						setLoggedInUser={this.setLoggedInUser}
+						addStation={this.addStation}
+						removeStation={this.removeStation} />
+					<NavMenu isExpanded={this.state.navMenuExpanded}
+						closeHandler={this.handleLeftDrawerClose}
+						menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
+					<XMLDialog isOpen={this.state.XMLDialogOpen}
+						handleXMLDialogClose={this.handleXMLDialogClose}
+						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
+						username={this.state.loggedInUser}
+					/>
+					<main className={classes.content} >
+						<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
-					{this.state.routesAndPages}
+						{this.state.routesAndPages}
 
-				</main>
-			</div >
+					</main>
+				</div >
 		);
 	}
 }
