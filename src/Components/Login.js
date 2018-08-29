@@ -1,31 +1,42 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar/AppBar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
+import Icon from '@material-ui/core/Icon';
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: ''
+             username: ''
         }
     }
+
+    handleClick = (e) => {
+        //console.log(this.state.username);
+        this.props.setLoggedInUser(this.state.username);
+        window.location.href = '/Dashboard';
+    }
+
+    handleTextChange = (e) => {
+        //console.log(e.target.value);
+        this.setState({ username: e.target.value });
+    }
+
     render() {
         return (
-                    <div>
-                        <AppBar
-                            title="Login"
-                        />
-                        <TextField
-                            placeholder="username@usgs.gov"
-                            label="Enter Your Username"
-                            onChange={(event, newValue) => this.setState({ username: newValue })}
-                        />
-                        <br />
-                        <br />
-                        <Button label="Submit" primary  onClick={(event) => this.handleClick(event)} />
-                    </div>
+            <div>
+                <TextField
+                    placeholder="username@usgs.gov"
+                    label="Enter Your Username"
+                    onChange={this.handleTextChange}
+                    value={this.state.username}
+                />
+                <br />
+                <br />
+                <Button variant="contained" color="primary" onClick={(event) => this.handleClick(event)}>
+                    Login
+                <Icon></Icon>
+                </Button>
+            </div>
         );
     }
 }

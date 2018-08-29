@@ -36,8 +36,8 @@ class SystemDialog extends React.Component {
 			case "Add/Remove Station": { //HARDCODE
 				//console.log("Adding New Station");
 
-				if(document.getElementById("editStation_AddOrRemove").value==="Add") {
-					let addStationElementIDs=["stationName", "stationNumber","projectName","projectID","agencyCode"];
+				if (document.getElementById("editStation_AddOrRemove").value === "Add") {
+					let addStationElementIDs = ["stationName", "stationNumber", "projectName", "projectID", "agencyCode"];
 					let stnObj = {};
 
 					for (let i = 0; i < addStationElementIDs.length; i++) {
@@ -45,9 +45,9 @@ class SystemDialog extends React.Component {
 						let short_q_id = addStationElementIDs[i];
 						stnObj[short_q_id] = document.getElementById(q_id).value;  //TODO: FIXME: fails badly if getElement returns null
 					}
-	
+
 					this.props.addStation(stnObj["stationName"], stnObj["stationNumber"], stnObj["projectName"], stnObj["projectID"], stnObj["agencyCode"]); // HARDCODE (change addStation to accept object would be better)
-					
+
 					this.props.closeHandler();
 				} else {
 					//TODO: REMOVE STATION
@@ -70,13 +70,15 @@ class SystemDialog extends React.Component {
 	}
 
 
-	render() {
+	buildDialog() {
 		const { closeHandler, dialogName, dialogDescription, dialogQuestions } = this.props;
+		// console.log("SystemDialog.props: ", this.props);
+		// console.log("dialogQuestions: ", dialogQuestions);
 
-		//TODO: callback function for these questions
-		//TODO: questionPanel could actually be a questionPage...allowing for multiple panels... perhaps useful in the 'settings' dialog?
-
-
+		if (dialogQuestions === null || dialogQuestions.length === 0) {
+			// console.log("null dialogQuestions");
+			return null;
+		} else 
 		return (
 			<Dialog
 				open={this.props.isOpen}
@@ -89,7 +91,7 @@ class SystemDialog extends React.Component {
 						{dialogDescription}:
             			</DialogContentText>
 					<QuestionPanel
-						questions={createQuestionComponents(dialogQuestions, this.props.stateChangeHandler, this.props.globalState)}
+						questions={createQuestionComponents(dialogQuestions, this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues, this.props)}
 
 						key={dialogName} />
 
@@ -101,8 +103,20 @@ class SystemDialog extends React.Component {
 			</Dialog>
 		);
 	}
-}
 
+
+	render() {
+
+		//console.log("SD.props: ", this.props);
+
+		//TODO: callback function for these questions
+		//TODO: questionPanel could actually be a questionPage...allowing for multiple panels... perhaps useful in the 'settings' dialog?
+
+
+		return this.buildDialog();
+
+	}
+}
 
 
 

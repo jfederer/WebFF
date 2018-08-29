@@ -6,7 +6,7 @@ export const createQuestionComponents = (questionsData, changeHandler, _globalSt
     // creates one question component for every question in questionsData
 	// overwrites questionsData value with passed in value in questionsValues
 	let questionComponents = [];
-	//console.log(questionsValues);
+	// console.log("createQuestionComponents: questionsData", questionsData);
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
         questionComponents = questionsData.map(questionData => {
 

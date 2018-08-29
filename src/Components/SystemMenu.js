@@ -46,11 +46,11 @@ class SystemMenu extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Save XML" />
           </ListItem>
-          <ListItem button onClick={() => this.props.menuItemClickHandler('Sync Current Event to Database')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Sync Data to Database')}>
             <ListItemIcon>
               <SyncIcon />
             </ListItemIcon>
-            <ListItemText primary="Sync Current Event to Database" />
+            <ListItemText primary="Sync Data to Database" />
           </ListItem>
           <ListItem button onClick={() => this.props.menuItemClickHandler('Add/Remove Station')}>
             <ListItemIcon>

@@ -52,13 +52,13 @@ import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
-const criticalUserNodes = ['stations'];
+const criticalUserNodes = ['stations', 'customQuestions'];
 const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
 var itemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
-itemsToSyncToLS.push("loggedInUser", "curSamplingEventName");
+itemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
-var needToSyncStationDataToQuestionData = false;
+var needToSyncStationDataToQuestionData = true;
 
 
 const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:";
@@ -81,6 +81,7 @@ class WebFF extends React.Component {
 			XMLDialogOpen: false,
 			isDialogQuestionsLoaded: false,
 			dialogQuestions: [],
+			dialogValues: {},
 			dialogOpen: false,
 			curDialogDescription: "",
 			curDialogName: "",
@@ -99,9 +100,10 @@ class WebFF extends React.Component {
 			hiddenTabs: [],
 			stations: [],
 
-			loggedInUser: "jfed@usgs.gov",
-
+			loggedInUser: (localStorage.getItem('loggedInUser'))?JSON.parse(localStorage.getItem('loggedInUser')):null,
+			needsToUpdateDB: (localStorage.getItem('needsToUpdateDB'))?JSON.parse(localStorage.getItem('needsToUpdateDB')):[],
 			curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
+
 		};
 
 		this.navigationControl = this.navigationControl.bind(this);
@@ -126,10 +128,14 @@ class WebFF extends React.Component {
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
 		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
-		this.gatherUserConfig(criticalUserNodes); //load user configuration
-
-
-
+		
+		if(this.state.loggedInUser) {
+			console.log(this.state.loggedInUser + "is logged in");
+			this.gatherUserConfig(criticalUserNodes); //load user configuration
+		} else {
+			console.log("No one is logged in... stop your business");
+		}
+		
 		//TODO: collect station info and combine with default questions and data
 		// if(this.state.curSamplingEventName===null || this.state.curSamplingEventName === '') { //TODO: multiple reloads mess this up if it starts null
 		// 	window.location.replace("/Dashboard");
@@ -137,7 +143,7 @@ class WebFF extends React.Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
-		//console.log("CWU");
+		//console.log("CWU: NEXTSTATE: ", nextState);
 		itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
 
 		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
@@ -157,6 +163,7 @@ class WebFF extends React.Component {
 	}
 
 	attemptToSyncStationDataToQuestionData(stationsIn) {
+		//console.log("attemptToSyncStationDataToQuestionData(" + stationsIn + ")");
 		let stationNameQ = this.getQuestionData("stationName");
 		if (stationNameQ === null) {
 			return;
@@ -254,6 +261,7 @@ class WebFF extends React.Component {
 		if (DEBUG) console.log("gatherConfig: ", nodesToGather);
 		// check if ALL critical items are loaded into LS
 		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
+		//TODO: remove the kludge and combine those if statements
 		let allLoadedInLS = true;
 		for (let i = 0; i < nodesToGather.length; i++) {
 			if (DEBUG) console.log(localStorage.getItem(nodesToGather[i]));
@@ -294,18 +302,21 @@ class WebFF extends React.Component {
 		} else {
 			// pull everything from DB
 			this.fetchDBInfo(this.state.loggedInUser, 'users', (JSONresponse) => {
-				DEBUG=true;
+				DEBUG = false;
 				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
-				let nodeArr = [];
+
 
 				// check that this user even exists in database
-				if (JSONresponse.length===1) {
+				if (JSONresponse.length === 1) {
 					// this user exists in the database	
+					let userData = JSONresponse[0];
 					for (let i = 0; i < nodesToGather.length; i++) {
-						JSONresponse[nodesToGather[i]].forEach((configNode) => {
-							if (DEBUG) console.log("ConfigNode: ", configNode);
+						let nodeArr = [];
+						if (DEBUG) console.log("gathering: ", nodesToGather[i]);
+						userData[nodesToGather[i]].forEach((configNode) => {
+							if (DEBUG) console.log("userData[" + nodesToGather[i] + "]: ", configNode);
 							// let nodeName = configNode.id;
-							//TODO: error and duplication checking -- particularly important as custom questions exist
+							//TODO: error and duplication checking -- particularly important once custom questions exist
 							// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
 							nodeArr.push(configNode);
 						});
@@ -317,23 +328,23 @@ class WebFF extends React.Component {
 							this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
 						});
 					}
-	
+
 					// pull sampling events from DB response
-					let allNodeNames = Object.keys(JSONresponse);
+					let allNodeNames = Object.keys(userData);
 					for (let i = 0; i < allNodeNames.length; i++) {
 						if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-							this.setState({ [allNodeNames[i]]: JSONresponse[allNodeNames[i]] }, () => itemsToSyncToLS.push(allNodeNames[i]));
+							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => itemsToSyncToLS.push(allNodeNames[i]));
 						}
 					}
 
 				} else {
 					// this user does not exist in the database - we must create their entry
 					console.log("NEW USER!!!");
-					this.updateDBInfo("id",this.state.loggedInUser,{"stations":[],"customQuestions":[]},(res)=>console.log(res));
+					this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": [] }, (res) => console.log(res));
 				};
 
 
-				
+
 			});
 		}
 	}
@@ -357,7 +368,7 @@ class WebFF extends React.Component {
 		let newSamplingEventID = this.getDateTimeString();
 		let samplingEventName = SAMPLING_EVENT_IDENTIFIER + newSamplingEventID;
 
-		// load initial values from questionsData  (and dialogQuestions?)
+		// load initial values from questionsData  (and not for dialog questions, as those are saved to this.state.dialogValues) )
 		let questionsValues = {};
 		this.state.questionsData.forEach((Q) => {
 			questionsValues[Q.id] = Q.value;
@@ -409,7 +420,7 @@ class WebFF extends React.Component {
 
 
 		const DEBUG = false;
-		if(true)console.log("fetchDBInfo(", _query, ", ", _collection, ")");
+		if (true) console.log("fetchDBInfo(", _query, ", ", _collection, ")");
 
 
 		// sort out differences in local dev server and production server calls
@@ -450,7 +461,7 @@ class WebFF extends React.Component {
 			body: query
 		})
 			.then(handleErrors)
-			.then(response => 
+			.then(response =>
 				response.json()
 			)
 			.then(parsedJSON => {
@@ -781,12 +792,24 @@ class WebFF extends React.Component {
 		// value: value that should be saved in state
 		// CB: function that should be called after setState
 		// returns void (TODO: return questoinData format associated with the q_id WITH the updated value inserted)
-		// sets the value of the first question it finds while searching in this order:currentSamplingEvent, dialogQuestions, then, finally, questionsData.
-		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
+		// sets the value of the first question it finds while searching in this order: dialogQuestions, currentSamplingEvent.
+		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic and throws an error
 		// throws error if no question is found
 
 		let DEBUG = false;
 		if (DEBUG) console.log("setQuestionValue(" + q_id + ", " + value + ")");
+
+		// search in dialog questions  (note, if we search current sampling event first -- and we try to modify a dialog before loading an event, things crash... so we search the dialog questions first)
+		let newDQ = this.state.dialogQuestions.slice();
+		for (let i = 0; newDQ && i < newDQ.length; i++) {
+			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
+				if (newDQ[i].questions[k].id === q_id) {
+					newDQ[i].questions[k].value = value;
+					this.setState({ "dialogQuestions": newDQ }, CB);
+					return;
+				}
+			}
+		}
 
 		// search in current Sampling Event
 		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
@@ -802,26 +825,17 @@ class WebFF extends React.Component {
 			return;
 		}
 
-		// search in dialog questions
-		let newDQ = this.state.dialogQuestions.slice();
-		for (let i = 0; newDQ && i < newDQ.length; i++) {
-			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
-				if (newDQ[i].questions[k].id === q_id) {
-					newDQ[i].questions[k].value = value;
-					this.setState({ "dialogQuestions": newDQ }, CB);
-					return;
-				}
-			}
-		}
+
 
 		// search in questions data.  given this should be very rare, give a warning.
 		let newQD = this.state.questionsData.slice();
 		for (let i = 0; newQD && i < newQD.length; i++) {
 			if (newQD[i].id === q_id) {
-				console.warn("Setting value (" + value + ") on " + q_id + " and it only exists in questionsDialog.  This should be investigated, as it should be very rare.")
-				newQD[i].value = value;
-				this.setState({ questionsData: newQD }, CB);
-				return;
+				throw new Error("Setting value (" + value + ") on " + q_id + " and it only exists in questionsDialog.  This should be investigated.");
+				// console.warn("Setting value (" + value + ") on " + q_id + " and it only exists in questionsDialog.  This should be investigated, as it should be very rare.")
+				// newQD[i].value = value;
+				// this.setState({ questionsData: newQD }, CB);
+				// return;
 			}
 		}
 
@@ -830,9 +844,19 @@ class WebFF extends React.Component {
 
 	getQuestionValue(q_id) { //****  //TODO: error reasonably when  curSamplingEvent is undefined
 		// q_id: string question ID associated with a question
-		// returns VALUE associated with the q_id... first searching currentSamplingEvent, then searching the dialogQuestions, then, finally, questionsData.
+		// returns VALUE associated with the q_id... first searching dialogQuestions, then searching the currentSamplingEvent, then, finally, questionsData.
 		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
 		// throws error if no question is found
+
+		//note: searched first because if we search for a dialog question before loading a current sampling event, it would throw an error
+		for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
+			for (let k = 0; this.state.dialogQuestions[i] && k < this.state.dialogQuestions[i].questions.length; k++) {
+				if (this.state.dialogQuestions[i].questions[k].id === q_id) {
+					return this.state.dialogQuestions[i].questions[k].value;
+				}
+			}
+		}
+
 		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
 		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
 			// current sampling event is not loaded or is malformed.
@@ -842,13 +866,7 @@ class WebFF extends React.Component {
 			return curSE.questionsValues[q_id];
 		}
 
-		for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
-			for (let k = 0; this.state.dialogQuestions[i] && k < this.state.dialogQuestions[i].questions.length; k++) {
-				if (this.state.dialogQuestions[i].questions[k].id === q_id) {
-					return this.state.dialogQuestions[i].questions[k].value;
-				}
-			}
-		}
+
 
 		for (let i = 0; i < this.state.questionsData.length; i++) {
 			if (this.state.questionsData[i].id === q_id) {
@@ -935,13 +953,13 @@ class WebFF extends React.Component {
 	}
 
 	dialogQuestionChangeSystemCallback(Q) {
-		console.log("DialogQuestion: ", Q);
+		//console.log("DialogQuestion: ", Q);
 		this.questionChangeSystemCallback(Q, true);
 	}
 
 	questionChangeSystemCallback(Q, dialogQuestion) {
 		// Q: Question COMPONENT (presumably that just called this)
-		// dialogQuestoin: Boolean of if Q is a 'dialogQuestion'. Optional (missing value will be treated as normal question)
+		// dialogQuestoin: Boolean of if Q is a 'dialogQuestion'. Optional (missing value will be treated as normal question by setQuestionValue)
 		// updates value of Q in state, checks for action string, executes any actions
 
 		let DEBUG = false;
@@ -1067,7 +1085,10 @@ class WebFF extends React.Component {
 			return false;
 		});
 
-		this.setState({ stations: newStations }, () => { this.attemptToSyncStationDataToQuestionData(); this.syncStationsToDB(); });
+		this.setState({ stations: newStations }, () => {
+			this.attemptToSyncStationDataToQuestionData();
+			this.markForDBUpdate('stations');
+		});
 	}
 
 	addStation(stationName, stationNumber, projectName, projectID, agencyCode) {
@@ -1080,11 +1101,14 @@ class WebFF extends React.Component {
 		}
 		let newStations = this.state.stations.slice();
 		newStations.push(newStation);
-		console.log("newStations: ", newStations);
-		console.log("this.state.stations: ", this.state.stations);
+		//	console.log("newStations: ", newStations);
+		//	console.log("this.state.stations: ", this.state.stations);
 		//TODO: validation
 
-		this.setState({ stations: newStations }, () => { this.attemptToSyncStationDataToQuestionData(); this.syncStationsToDB(); });
+		this.setState({ stations: newStations }, () => {
+			this.attemptToSyncStationDataToQuestionData();
+			this.markForDBUpdate('stations');
+		});
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
@@ -1098,7 +1122,11 @@ class WebFF extends React.Component {
 
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
-				<Route exact path="/" component={Login} />
+				<Route exact path="/" render={() => <Login
+					appBarTextCB={this.setAppBarText}
+					text="Sediment Field Forms"
+					setLoggedInUser={this.setLoggedInUser}
+				/>} />
 				<Route path="/Dashboard" render={() => <Dashboard
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
@@ -1290,7 +1318,11 @@ class WebFF extends React.Component {
 
 
 		const API = 'http://152.61.248.218/mongoPatch.php/';
-		const query = "needleKey=" + encodeURIComponent(needleKey) + "&" + "needle=" + encodeURIComponent(needle) + "&" + "newData=" + encodeURIComponent(JSON.stringify(newData));
+		const query =
+			"needleKey=" + encodeURIComponent(needleKey) + "&" +
+			"needle=" + encodeURIComponent(needle) + "&" +
+			"newData=" + encodeURIComponent(JSON.stringify(newData));
+		//"username=" + encodeURIComponent(this.state.loggedInUser) + "&" +
 		if (isDEV) {
 			const API = 'http://localhost:3004';
 			const query = needleKey;
@@ -1331,57 +1363,29 @@ class WebFF extends React.Component {
 		}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
-	// createDBInfo(location, data) {
-	// 	// attempts to update location
-	// 	// returns the ENTIRE newly updated data element.
-
-	// 	const DEBUG = true;
-	// 	const API = 'http://localhost:3004/';
-	// 	const query = location;
-	// 	// function handleErrors(response) {
-	// 	// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-	// 	// 	if (!response.ok) {
-	// 	// 		throw Error(response.statusText);
-	// 	// 	}
-	// 	// 	return response;
-	// 	// }
-
-	// 	let URI=API + query;
-
-	// 	fetch(URI, {
-	// 		method: 'PUT',
-	// 		headers: {
-	// 			'Accept': 'application/json',
-	// 			'Content-Type': 'application/json'
-	// 		},
-	// 		body: JSON.stringify(data)
-	// 	}).then(function (response) {
-	// 		if(response.status===404 && !putAlreadyAttempted) {
-	// 			// the resource didn't exist and needs to be 'put' instead of 'patched'.
-	// 			console.log("this was a 404");
-	// 			this.putDBInfo(location, data, true, put);
-	// 		}
-	// 		console.log("Response: ", response);
-	// 		return response.json();
-	// 	}).then(function (json) {
-	// 		return "dsfsdf";
-	// 	}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
-	// }
-
-
-
-	syncStationsToDB() {
-		let patchData = { "stations": this.state.stations };
-		this.updateDBInfo("users/" + this.state.loggedInUser, patchData, (resp) => null);
+	markForDBUpdate(toUpdate) {
+		if (this.state.needsToUpdateDB.includes(toUpdate)) {
+			return;
+		} else {
+			let newNeedsToUpdateDB = this.state.needsToUpdateDB.slice();
+			newNeedsToUpdateDB.push(toUpdate);
+			this.setState({ needsToUpdateDB: newNeedsToUpdateDB });
+		}
 	}
 
-	syncSamplingEventToDB(samplingEventName) {
-		//console.log(Object.keys(localStorage));
-
-		//example to syncCurrentSamplingEvent: this.syncSamplingEventToDB(this.state.curSamplingEventName);
-
-		let patchData = { [samplingEventName]: this.state[samplingEventName] };
-		this.updateDBInfo("users/" + this.state.loggedInUser, patchData, (resp) => null);
+	updateDatabase() {
+		console.log("Updating database...");
+		let toUpdate = this.state.needsToUpdateDB;
+		for (let i = 0; i < toUpdate.length; i++) {
+			console.log("Updating " + toUpdate[i]);
+			let patchData = { [toUpdate[i]]: this.state[toUpdate[i]] };
+			this.updateDBInfo("id", this.state.loggedInUser, patchData, (res) => {
+				console.log(res);
+				let newNeedsToUpdateDB = this.state.needsToUpdateDB.slice();
+				newNeedsToUpdateDB.splice(newNeedsToUpdateDB.indexOf(toUpdate[i],1));
+				this.setState({ needsToUpdateDB: newNeedsToUpdateDB });
+			});
+		}
 	}
 
 	getNumberOfSetsInCurrentSamplingEvent() {
@@ -1583,7 +1587,7 @@ class WebFF extends React.Component {
 			// this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
 
 
-			this.updateDBInfo("id","dialogQuestions",{"id": "dialogQuestions","dialogQuestionsArr": [{"dialogName": "Add/Remove Station","dialogDescription": "Add a new station to, or remove and existing station from, your personalized station list","questions": [{"id": "editStation_AddOrRemove","label": "Add or Remove station","type": "DropDown","includeBlank": true,"options": {"Add New Station": "Add","Remove Existing Station": "Remove"},"actions": {"Add": "HideQuestion::deleteStation_stationName&ShowQuestion::newStation_stationName&ShowQuestion::newStation_stationNumber&ShowQuestion::newStation_projectName&ShowQuestion::newStation_projectID&ShowQuestion::newStation_agencyCode","Remove": "ShowQuestion::deleteStation_stationName&HideQuestion::newStation_stationName&HideQuestion::newStation_stationNumber&HideQuestion::newStation_projectName&HideQuestion::newStation_projectID&HideQuestion::newStation_agencyCode"},"value": "Smite","width_xs": 12,"width_lg": 12},{"id": "deleteStation_stationName","label": "Select Station To Remove","type": "DropDown","hidden": true,"includeBlank": true,"options": {"Add New Station": "Add","Remove Existing Station": "Remove"},"value": ""},{"id": "newStation_stationName","label": "Station Name","hidden": true,"type": "Text","tabName": "Add New Station","layoutGroup": "Basic","width_xs": 7,"width_lg": 7,"value": ""},{"id": "newStation_stationNumber","label": "Station Number","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 5,"width_lg": 5},{"id": "newStation_projectName","label": "Project Name","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 6,"width_lg": 6},{"id": "newStation_projectID","label": "Project ID","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 3,"width_lg": 3},{"id": "newStation_agencyCode","label": "Agency Code","hidden": true,"type": "Text","tabName": "Add Station","value": "","layoutGroup": "Basic","width_xs": 3,"width_lg": 3}]},{"dialogName": "Add New Question","dialogDescription": "Fill out the following to add a new question to the program","questions": [{"id": "newQuestion_label","label": "Label","type": "Text","width_xs": 6,"width_lg": 3,"value": ""},{"id": "newQuestion_id","label": "Unique ID","type": "Text","placeholder": "Must be globally unique","value": "","width_xs": 6,"width_lg": 6},{"id": "newQuestion_type","label": "Question Type","type": "DropDown","includeBlank": true,"options": {"Checkbox": "Checkbox","Computed Value": "ComputedValue","Date": "DateInput","Drop Down": "DropDown","Multiple Choice": "MultipleChoice","Table": "TableInput","Text": "Text","Time": "TimeInput","Toggle": "Toggle"},"value": ""},{"id": "newQuestion_tabName","label": "Tab Name","helperText": "Name of tab where this question resides","placeholder": "spaces acceptable","type": "Text","value": "","width_xs": 4,"width_lg": 3},{"id": "newQuestion_layoutGroup","label": "Layout Group","helperText": "Group on Tab where question resides","placeholder": "Spaces acceptable","type": "Text","value": "","width_xs": 4,"width_lg": 3},{"id": "newQuestion_initalValue_textValue","label": "Initial Value","type": "Text","placeholder": "Can be left blank","value": "","width_xs": 12,"width_lg": 12},{"id": "newQuestion_width_xs","label": "Width when screen is small","type": "Text","placeholder": "1-12","value": "","width_xs": 6,"width_lg": 6},{"id": "newQuestion_width_lg","label": "Width when screen is small","type": "Text","placeholder": "Can be left blank","value": "","width_xs": 6,"width_lg": 6}]},{"dialogName": "User Manual","dialogDescription": "Holding Times-Sample holding times are specified in the USEPA Region 4 Analytical Support\\nBranch Laboratory Operations and Quality Assurance Manual (ASBLOQAM),\\nMost Recent Version. Field investigators should note that the holding time for an\\nun-preserved VOC sediment sample is 48 hours. Arrangements should be made to\\nship the sediment VOC samples to the laboratory by overnight delivery the day they\\nare collected so the laboratory may preserve and/or analyze the sample within 48\\nhours of collection.\\n\\nPercent Solids\\nSamplers must ensure that the laboratory has sufficient material to determine\\npercent solids in the VOC sediment sample to correct the analytical results to dry\\nweight. If other analyses requiring percent solids determination are being\\nperformed upon the sample, these results may be used. If not, a separate sample\\n(minimum of 2 oz.) for percent solids determination will be required.\\n\\n Safety\\nMethanol is a toxic and flammable liquid. Therefore, methanol must be handled\\nwith all required safety precautions related to toxic and flammable liquids.\\nInhalation of methanol vapors must be avoided. Vials should be opened and closed\\nquickly during the sample preservation procedure. Methanol must be handled in a\\nventilated area. Use protective gloves when handling the methanol vials. Store\\nmethanol away from sources of ignition such as extreme heat or open flames. The\\nvials of methanol should be stored in a cooler with ice at all times.\\n\\nShipping\\nMethanol and sodium bisulfate are considered dangerous goods, therefore shipment\\nof samples preserved with these materials by common carrier is regulated by the\\nU.S. Department of Transportation and the International Air Transport Association\\n(IATA). The rules of shipment found in Title 49 of the Code of Federal Regulations\\n(49 CFR parts 171 to 179) and the current edition of the IATA Dangerous Goods\\nRegulations must be followed when shipping methanol and sodium bisulfate.\\nConsult the above documents or the carrier for additional information. Shipment\\nof the quantities of methanol and sodium bisulfate used for sample preservation\\nfalls under the exemption for small quantities. A summary of the requirements for\\nshipping samples follows. Refer to the code for a complete review of the\\nrequirements.","questions": []},{"dialogName": "Switch User","dialogDescription": "WebFF recognizes who you are based on your email.","questions": [{"id": "switchUser_email","label": "Email Address","type": "Text","placeholder": "username@usgs.gov","width_xs": 12,"width_lg": 12,"ref": "switchUser_email","value": ""}]},{"dialogName": "Settings","dialogDescription": "WebFF recognizes who you are based on your email.","questions": [{"id": "settings_paper","label": "Outline Fields","type": "Toggle","placeholder": "username@usgs.gov","value": false,"width_xs": 12,"width_lg": 12}]}]},(res)=>console.log(res));
+
 			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
 
 		}
@@ -1596,8 +1600,8 @@ class WebFF extends React.Component {
 		}
 
 
-		if (menuText === "Sync Current Event to Database") {
-			this.syncSamplingEventToDB(this.state.curSamplingEventName);
+		if (menuText === "Sync Data to Database") {
+			this.updateDatabase();
 			return;
 		}
 
@@ -1629,11 +1633,13 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		// console.log("RENDER");
+		// console.log("WebFF: curDialogQuestions: ", this.state.curDialogQuestions);
 
 		return (
-			this.state.loggedInUser === '' ? <Login setUser={this.setUser} /> :
-				<div className={classes.root} >
+			<React.Fragment>
+			{ (this.state.loggedInUser === '')
+			? <div><Login setLoggedInUser={this.setLoggedInUser} />No one is logged in</div> 
+			: <div className={classes.root} >
 					<AppBar
 						position="absolute"
 						className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
@@ -1673,6 +1679,7 @@ class WebFF extends React.Component {
 						dialogName={this.state.curDialogName}
 						dialogDescription={this.state.curDialogDescription}
 						stateChangeHandler={this.dialogQuestionChangeSystemCallback}
+						dialogValues={this.state.dialogValues}
 						globalState={this.state}
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
@@ -1692,6 +1699,8 @@ class WebFF extends React.Component {
 
 					</main>
 				</div >
+			}
+			</React.Fragment>
 		);
 	}
 }
