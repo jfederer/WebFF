@@ -289,6 +289,7 @@ class WebFF extends React.Component {
 				if (!newItemsLoaded.includes(nodesToGather[i])) {
 					newItemsLoaded.push(nodesToGather[i])
 				}
+				console.log("Parsing: ", nodesToGather[i]);
 				this.setState({
 					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
 					itemsLoaded: newItemsLoaded
@@ -1492,8 +1493,8 @@ class WebFF extends React.Component {
 		let SEObj = {
 			"Event": {
 				"EventNumber": 1,
-				"SiteID": this.getQuestionValue('stationNumber'),
-				"AgencyCode": this.getQuestionValue('agencyCode'),
+				"SiteId": this.getQuestionValue('stationNumber'),
+				"AgencyCd": this.getQuestionValue('agencyCode'),
 				"SedTranspMode": this.getQuestionValue('sedimentType'),
 				"SmplMediumCode": this.getQuestionValue('sampleMedium'),
 				"AvgRepMeasures": this.getQuestionValue('avgRepMeasures') ? 'Y' : 'N'
