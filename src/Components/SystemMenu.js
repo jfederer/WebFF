@@ -34,12 +34,12 @@ class SystemMenu extends React.Component {
     const systemMenu = (
       <div className={classes.list}>
         <List>
-          <ListItem button onClick={() => this.props.menuItemClickHandler('Test Mongo')}>
+          {/* <ListItem button onClick={() => this.props.menuItemClickHandler('Test Mongo')}>
             <ListItemIcon>
               <BuildIcon />
             </ListItemIcon>
             <ListItemText primary="Test Mongo" />
-          </ListItem>
+          </ListItem> */}
           <ListItem button onClick={() => this.props.menuItemClickHandler('Save XML')}>
             <ListItemIcon>
               <CodeIcon />
@@ -58,19 +58,19 @@ class SystemMenu extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Add/Remove Station" />
           </ListItem>
-          <ListItem button onClick={() => this.props.menuItemClickHandler('Add New Question')}>
+          <ListItem button onClick={() => this.props.menuItemClickHandler('Add/Remove Question')}>
             <ListItemIcon>
-              <PlaylistAddIcon />
+            <HelpIcon />
             </ListItemIcon>
-            <ListItemText primary="Add Question" />
+            <ListItemText primary="Add/Remove Question" />
           </ListItem>
 
-          <ListItem button onClick={() => this.props.menuItemClickHandler('User Manual')}>
+          {/* <ListItem button onClick={() => this.props.menuItemClickHandler('User Manual')}>
             <ListItemIcon>
-              <HelpIcon />
+              
             </ListItemIcon>
             <ListItemText primary="User Manual" />
-          </ListItem>
+          </ListItem> */}
 
           <ListItem button onClick={() => this.props.menuItemClickHandler('Settings')}>
             <ListItemIcon>

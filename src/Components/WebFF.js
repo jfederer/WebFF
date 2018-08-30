@@ -43,8 +43,10 @@ import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import xmljs from 'xml-js';
 import Login from './Login';
-
+import { Redirect } from 'react-router-dom';
+import { isReasonablyValidUsernameInLS } from '../Utils/ValidationUtilities';
 import XMLDialog from './XMLDialog';
+import QuestionDialog from './QuestionDialog';
 
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -78,7 +80,10 @@ class WebFF extends React.Component {
 
 			navMenuInfo: [],
 			navMenuExpanded: false,
+			
 			XMLDialogOpen: false,
+			questionDialogOpen: false,
+
 			isDialogQuestionsLoaded: false,
 			dialogQuestions: [],
 			dialogValues: {},
@@ -100,8 +105,8 @@ class WebFF extends React.Component {
 			hiddenTabs: [],
 			stations: [],
 
-			loggedInUser: (localStorage.getItem('loggedInUser'))?JSON.parse(localStorage.getItem('loggedInUser')):null,
-			needsToUpdateDB: (localStorage.getItem('needsToUpdateDB'))?JSON.parse(localStorage.getItem('needsToUpdateDB')):[],
+			loggedInUser: (localStorage.getItem('loggedInUser')) ? JSON.parse(localStorage.getItem('loggedInUser')) : null,
+			needsToUpdateDB: (localStorage.getItem('needsToUpdateDB')) ? JSON.parse(localStorage.getItem('needsToUpdateDB')) : [],
 			curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
 
 		};
@@ -128,14 +133,15 @@ class WebFF extends React.Component {
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
 		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
-		
-		if(this.state.loggedInUser) {
+
+		if (isReasonablyValidUsernameInLS()) {
 			console.log(this.state.loggedInUser + "is logged in");
 			this.gatherUserConfig(criticalUserNodes); //load user configuration
 		} else {
-			console.log("No one is logged in... stop your business");
+			console.log("No one is logged in... stop your business"); //TOOD: redirect to /
+
 		}
-		
+
 		//TODO: collect station info and combine with default questions and data
 		// if(this.state.curSamplingEventName===null || this.state.curSamplingEventName === '') { //TODO: multiple reloads mess this up if it starts null
 		// 	window.location.replace("/Dashboard");
@@ -503,6 +509,13 @@ class WebFF extends React.Component {
 
 	handleXMLDialogClose = () => {
 		this.setState({ XMLDialogOpen: false });
+	}
+	handleQuestionDialogOpen = (CB) => {
+		this.setState({ questionDialogOpen: true }, CB);
+	}
+
+	handleQuestionDialogClose = () => {
+		this.setState({ questionDialogOpen: false });
 	}
 
 	setAppBarText = (txt) => {
@@ -1122,11 +1135,11 @@ class WebFF extends React.Component {
 
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
-				<Route exact path="/" render={() => <Login
-					appBarTextCB={this.setAppBarText}
-					text="Sediment Field Forms"
-					setLoggedInUser={this.setLoggedInUser}
-				/>} />
+				<Route exact path="/" render={() => {
+					return <Login
+						setLoggedInUser={this.setLoggedInUser}
+					/>
+				}} />
 				<Route path="/Dashboard" render={() => <Dashboard
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
@@ -1135,16 +1148,6 @@ class WebFF extends React.Component {
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
 				/>} />
-				{/* <Route path="/Parameters" render={() => <ParametersPage
-					appBarTextCB={this.setAppBarText}
-					systemCB={this.questionChangeSystemCallback}
-					sampleEventLocations={sampleEventLocations} // size of this 2d array determines table sets and sample column
-
-					questionsData={this.state.questionsData}
-					questionsValues={questionsValues}
-					hiddenPanels={this.state.hiddenPanels}
-					globalState={this.state}
-				/>} /> */}
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
 					tabName={this.props.location.pathname.slice(1)}
@@ -1382,7 +1385,7 @@ class WebFF extends React.Component {
 			this.updateDBInfo("id", this.state.loggedInUser, patchData, (res) => {
 				console.log(res);
 				let newNeedsToUpdateDB = this.state.needsToUpdateDB.slice();
-				newNeedsToUpdateDB.splice(newNeedsToUpdateDB.indexOf(toUpdate[i],1));
+				newNeedsToUpdateDB.splice(newNeedsToUpdateDB.indexOf(toUpdate[i], 1));
 				this.setState({ needsToUpdateDB: newNeedsToUpdateDB });
 			});
 		}
@@ -1579,7 +1582,7 @@ class WebFF extends React.Component {
 		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
 
 
-		if (menuText == "Test Mongo") {
+		if (menuText == "Test") {
 
 			// this.fetchDBInfo("", '', (response) => console.log("Nothing: ", response));
 			// this.fetchDBInfo("hiddenPanels", '', (response) => console.log("hiddenPanels: ", response));
@@ -1596,6 +1599,11 @@ class WebFF extends React.Component {
 
 		if (menuText === "Save XML") {
 			this.handleXMLDialogOpen();
+			return;
+		}
+
+		if (menuText === "Add/Remove Question") {
+			this.handleQuestionDialogOpen();
 			return;
 		}
 
@@ -1635,11 +1643,16 @@ class WebFF extends React.Component {
 		const { classes } = this.props;
 		// console.log("WebFF: curDialogQuestions: ", this.state.curDialogQuestions);
 
+
+		// 	{ (isReasonablyValidUsernameInLS())
+		// 		? <div><Login setLoggedInUser={this.setLoggedInUser} />No one is logged in</div> 
+		// }
+
+
 		return (
 			<React.Fragment>
-			{ (this.state.loggedInUser === '')
-			? <div><Login setLoggedInUser={this.setLoggedInUser} />No one is logged in</div> 
-			: <div className={classes.root} >
+
+				<div className={classes.root} >
 					<AppBar
 						position="absolute"
 						className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
@@ -1692,14 +1705,19 @@ class WebFF extends React.Component {
 						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
 						username={this.state.loggedInUser}
 					/>
+					<QuestionDialog isOpen={this.state.questionDialogOpen}
+						handleQuestionDialogClose={this.handleQuestionDialogClose}
+					/>
+
 					<main className={classes.content} >
 						<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
 						{this.state.routesAndPages}
-
+						{!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
+							? <Redirect to='/' />
+							: null}
 					</main>
 				</div >
-			}
 			</React.Fragment>
 		);
 	}
