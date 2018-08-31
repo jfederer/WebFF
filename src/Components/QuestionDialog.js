@@ -14,6 +14,12 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const styles = theme => ({
   root: {
@@ -32,7 +38,7 @@ class QuestionDialog extends React.Component {
 
     this.state = {
       creatingQ: "",
-
+      addQuestion_id_value: "",
 
     };
 
@@ -62,9 +68,9 @@ class QuestionDialog extends React.Component {
     setTimeout(() => {
       this.setState({
         creatingQ: "",
-      });		
-	  }, 250);
-    
+      });
+    }, 250);
+
   }
 
   passwordChangeHandler = (e) => {
@@ -122,6 +128,48 @@ class QuestionDialog extends React.Component {
                 </Grid>
               </React.Fragment>
               : null}
+
+            {this.state.creatingQ === ""
+              ? <React.Fragment>
+              <Grid item xs={4}>
+                <TextField
+                  margin="dense"
+                  id="addQuestion_id"
+                  label="Question ID"
+                  placeholder="Must Be Globally Unique"
+                  onChange={this.textChangeHandler}
+                  value={this.state.addQuestion_id_value}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  margin="dense"
+                  id="addQuestion_label"
+                  label="Question Label"
+                  onChange={this.textChangeHandler}
+                  value={this.state.addQuestion_label}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <InputLabel htmlFor="age-simple">Age</InputLabel>
+                <Select
+                  value={this.state.age}
+                  onChange={this.handleChange}
+                  inputProps={{
+                    name: 'age',
+                    id: 'age-simple',
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </Grid> 
+              </React.Fragment>
+            : null}
 
 
 

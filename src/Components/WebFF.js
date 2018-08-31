@@ -56,14 +56,13 @@ import SystemDialog from './SystemDialog';
 
 const criticalUserNodes = ['stations', 'customQuestions'];
 const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
-var itemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
-itemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
+
 
 const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
-var needToSyncStationDataToQuestionData = true;
+var needToSyncStationDataToQuestionData = true; 
 
 
-const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:";
+const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:"; //TODO: add colon
 
 const isDEV = false;
 
@@ -73,8 +72,12 @@ class WebFF extends React.Component {
 
 	constructor(props) {
 		super(props);
+		var allItemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
+		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 		this.state = {
+			itemsToSyncToLS:allItemsToSyncToLS,
+
 			itemsLoaded: [],
 			usePaper: false,
 
@@ -104,6 +107,7 @@ class WebFF extends React.Component {
 
 			hiddenTabs: [],
 			stations: [],
+			customQuestions: [],
 
 			loggedInUser: (localStorage.getItem('loggedInUser')) ? JSON.parse(localStorage.getItem('loggedInUser')) : null,
 			needsToUpdateDB: (localStorage.getItem('needsToUpdateDB')) ? JSON.parse(localStorage.getItem('needsToUpdateDB')) : [],
@@ -132,6 +136,7 @@ class WebFF extends React.Component {
 	}
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
+	
 		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
 
 		if (isReasonablyValidUsernameInLS()) {
@@ -149,8 +154,8 @@ class WebFF extends React.Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
-		//console.log("CWU: NEXTSTATE: ", nextState);
-		itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
+		//console.log("CWU: items: ", nextState.itemsToSyncToLS);
+		nextState.itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
 
 		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
 		//console.log("NEXTSTATIONS: ", nextState.stations);
@@ -257,6 +262,7 @@ class WebFF extends React.Component {
 
 
 	gatherUserConfig(nodesToGather) {
+		console.log("GATHERING USER CONFIGURATION");
 		// should not be called unless this.state.loggedInUser is set to something like jfederer@usgs.gov
 
 		//FIXME: likely bug source, as all these setStates happen async...  perhaps find a way to chain/batch them.
@@ -264,7 +270,7 @@ class WebFF extends React.Component {
 		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
 		let DEBUG = false;
 
-		if (DEBUG) console.log("gatherConfig: ", nodesToGather);
+		if (DEBUG) console.log("gatherUSERConfig: ", nodesToGather);
 		// check if ALL critical items are loaded into LS
 		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
 		//TODO: remove the kludge and combine those if statements
@@ -300,7 +306,7 @@ class WebFF extends React.Component {
 			let allNodeNames = Object.keys(localStorage);
 			for (let i = 0; i < allNodeNames.length; i++) {
 				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-					this.setState({ [allNodeNames[i]]: JSON.parse(localStorage.getItem(allNodeNames[i])) }, () => itemsToSyncToLS.push(allNodeNames[i]));
+					this.setState({ [allNodeNames[i]]: JSON.parse(localStorage.getItem(allNodeNames[i])) }, () => this.addToItemsToSyncToLS(allNodeNames[i]));
 				}
 			}
 
@@ -338,16 +344,20 @@ class WebFF extends React.Component {
 
 					// pull sampling events from DB response
 					let allNodeNames = Object.keys(userData);
+					console.log("Pulling:", allNodeNames);
+					
 					for (let i = 0; i < allNodeNames.length; i++) {
 						if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => itemsToSyncToLS.push(allNodeNames[i]));
+							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+								this.addToItemsToSyncToLS(allNodeNames[i]);
+							});
 						}
 					}
 
 				} else {
 					// this user does not exist in the database - we must create their entry
-					console.log("NEW USER!!!");
-					this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": [] }, (res) => console.log(res));
+					console.warn("Creating a new user must be done online"); //TODO: allow this to be done offline
+					this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": []}, (res) => console.log(res)); //TODO: add sampling event names so we can switch users
 				};
 
 
@@ -387,15 +397,25 @@ class WebFF extends React.Component {
 		}
 
 		//ensure this sampling event will be sync'd to LS
-		itemsToSyncToLS.push(samplingEventName);
+		this.addToItemsToSyncToLS(samplingEventName);
 
 		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
 		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName: samplingEventName }, () => {
 			this.runAllActionsForCurrentSamplingEvent();
-			// this.collectRunAndPropagateSamplePointData(); 
+			// this.collectRunAndPropagateSamplePointData();
 		});
-	}
 
+		//TODO:
+//TODO:
+//TODO:
+//TODO:
+//TODO:	Reset all question values to defaults
+//TODO:
+//TODO:
+//TODO:
+//TODO:
+		this.markForDBUpdate(samplingEventName);
+	}
 
 
 	materialIcon(icon) {
@@ -431,7 +451,7 @@ class WebFF extends React.Component {
 
 
 		// sort out differences in local dev server and production server calls
-		const API = 'http://152.61.248.218/mongoFetch.php/';
+		const API = 'https://152.61.248.218/mongoFetch.php/';
 		let query = '';
 
 		if (_query !== '') {
@@ -446,7 +466,7 @@ class WebFF extends React.Component {
 		}
 
 		if (isDEV) {
-			const API = 'http://localhost:3004/';
+			const API = 'https://localhost:3004/';
 			query = encodeURIComponent(_query);
 		}
 
@@ -920,7 +940,9 @@ class WebFF extends React.Component {
 
 
 	setLoggedInUser(username) {
-		this.setState({ loggedInUser: username }, this.buildRoutesAndRenderPages); //TODO: not rebuilding for new users
+		//TODO: Reset everything to defaults
+
+		this.setState({ loggedInUser: username }, ()=>{this.componentWillMount(); this.buildRoutesAndRenderPages();}); 
 	}
 
 
@@ -1024,6 +1046,7 @@ class WebFF extends React.Component {
 				this.collectRunAndPropagateSamplePointData(Q.props.id);
 			}
 			this.buildRoutesAndRenderPages();
+			this.markForDBUpdate(this.state.curSamplingEventName);
 		});
 	}
 
@@ -1145,9 +1168,9 @@ class WebFF extends React.Component {
 					appBarTextCB={this.setAppBarText}
 					text="Dashboard"
 					navControl={this.navigationControl}
-					globalState={this.state}
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
+					samplingEvents={Object.keys(this.state).filter((key)=>key.startsWith("SamplingEvent:"))}
 				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
@@ -1321,14 +1344,14 @@ class WebFF extends React.Component {
 		const DEBUG = true;
 
 
-		const API = 'http://152.61.248.218/mongoPatch.php/';
+		const API = 'https://152.61.248.218/mongoPatch.php/';
 		const query =
 			"needleKey=" + encodeURIComponent(needleKey) + "&" +
 			"needle=" + encodeURIComponent(needle) + "&" +
 			"newData=" + encodeURIComponent(JSON.stringify(newData));
 		//"username=" + encodeURIComponent(this.state.loggedInUser) + "&" +
 		if (isDEV) {
-			const API = 'http://localhost:3004';
+			const API = 'https://localhost:3004';
 			const query = needleKey;
 		}
 
@@ -1374,6 +1397,17 @@ class WebFF extends React.Component {
 			let newNeedsToUpdateDB = this.state.needsToUpdateDB.slice();
 			newNeedsToUpdateDB.push(toUpdate);
 			this.setState({ needsToUpdateDB: newNeedsToUpdateDB });
+		}
+	}
+
+	addToItemsToSyncToLS(toSync, CB) {
+		if (this.state.itemsToSyncToLS.includes(toSync)) {
+			CB;
+			return;
+		} else {
+			let newitemsToSyncToLS = this.state.itemsToSyncToLS.slice();
+			newitemsToSyncToLS.push(toSync);
+			this.setState({ itemsToSyncToLS: newitemsToSyncToLS }, CB);
 		}
 	}
 
@@ -1464,9 +1498,6 @@ class WebFF extends React.Component {
 		for (let i = 0; i < activePCodesArr.length; i++) {
 			sampleObj["Param" + i] = this.buildParamObj(QWDATARowNum, activePCodesArr[i]);
 		}
-		//console.log("activePCodes: ", activePCodes);
-		//console.log("PARAM: ", this.getQuestionValue("parametersTable")[0]);
-
 		return sampleObj;
 
 	}
@@ -1475,7 +1506,7 @@ class WebFF extends React.Component {
 		let setObj = {
 			"Name": setName,
 			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
-			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually"),
+			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually") ? 'Y' : 'N',
 			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_" + this.getQuestionValue("sedimentType")).join(","),
 			"SetType": this.getCurrentSampleEventMethod()
 		}

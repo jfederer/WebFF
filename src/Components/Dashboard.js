@@ -24,36 +24,36 @@ class Dashboard extends React.Component {
 		this.props.appBarTextCB('SedWE Dashboard');
 	}
 
-	collectValues(xml) {
-		//TODO:  This is super-raw.  Sill includes subquestions and all sorts of junk
-		let allQD = this.props.globalState.questionsData;
-		let retString = "";
-		for(let i=0; i< allQD.length; i++) {
-			if(allQD[i].value!==null && allQD[i].value!=="") {
-				let tag = allQD[i].id;
-				if(allQD[i].XMLTag !== null && allQD[i].XMLTag !== "") {
-					tag = allQD[i].XMLTag;
-				}
-				if (xml) {
-					retString += "\r\n<" + tag + ">"+allQD[i].value+"</"+ tag + ">";
-				} else {
-					retString += "\r\n" + tag + ","+allQD[i].value;
-				}
-			}
-		}
-	//	console.log(retString);
-		return retString;
-	}
+	// collectValues(xml) {
+	// 	//TODO:  This is super-raw.  Sill includes subquestions and all sorts of junk
+	// 	let allQD = this.props.globalState.questionsData;
+	// 	let retString = "";
+	// 	for(let i=0; i< allQD.length; i++) {
+	// 		if(allQD[i].value!==null && allQD[i].value!=="") {
+	// 			let tag = allQD[i].id;
+	// 			if(allQD[i].XMLTag !== null && allQD[i].XMLTag !== "") {
+	// 				tag = allQD[i].XMLTag;
+	// 			}
+	// 			if (xml) {
+	// 				retString += "\r\n<" + tag + ">"+allQD[i].value+"</"+ tag + ">";
+	// 			} else {
+	// 				retString += "\r\n" + tag + ","+allQD[i].value;
+	// 			}
+	// 		}
+	// 	}
+	// //	console.log(retString);
+	// 	return retString;
+	// }
 
 	
 
 	render() {
 		const { classes } = this.props;
 
-		//KLUDGE
-		let samplingEventNames = Object.keys(this.props.globalState).filter((key)=>key.startsWith("SamplingEvent:"));
+console.log(this.props.samplingEvents);
+		let samplingEventNames = this.props.samplingEvents;
 		let recentFiveSamplingEvents = samplingEventNames.sort().slice(0,5);
-		//console.log(samplingEventNames);
+		console.log("Dashboard Sampling Events: ", samplingEventNames);
 
 
 		return (
