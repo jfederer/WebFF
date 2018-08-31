@@ -55,21 +55,14 @@ const styles = theme => ({
 class Question extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log(this.props.id + " value is " + this.props.value);
+		let startValue = this.props.value;
 		this.state = {
-			value: this.props.value, //FUTURE: Look into just using the XMLTag as the key and the 'value' as the value... might make conversion to XML simpler.
+			value: this.props.value?this.props.value:"", 
 		};
-		//console.log(this.props);
-	};
-
-	componentWillMount() {
-		// this.setState({ key: this.props.id });
-		// this.setState({ value: this.props.value });
 	};
 
 	buildQuestion() {
-
-
-		// const { classes } = this.props;
 		var theQ = {};
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
 

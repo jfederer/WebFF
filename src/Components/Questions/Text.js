@@ -18,10 +18,11 @@ const styles = theme => ({
 });
 
 class Text extends React.Component {
+	
 
-	componentWillMount() {
-		this.setState({ value: this.props.value });
-	}
+	// componentWillMount() {
+	// 	this.setState({ value: this.props.value?this.props.value:"" });
+	// }
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 		this.setState({
@@ -35,12 +36,13 @@ class Text extends React.Component {
 	render() {
 		const { classes } = this.props;
 
+		//console.log(this.props);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		let thisSize = this.props.size ? this.props.size : 1;
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
 
 		return <TextField
-			value={this.props.value}
+			value={this.props.value?this.props.value:""}
 			onChange={this.handleValueChange("value")}
 			key={this.props.id}
 			id={this.props.id}
@@ -54,6 +56,7 @@ class Text extends React.Component {
 			}}
 			multiline={this.props.multiline}
 			rows={this.props.rows}
+			required={this.props.required}
 		/>;
 
 	}

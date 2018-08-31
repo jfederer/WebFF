@@ -200,7 +200,42 @@ class WebFF extends React.Component {
 	}
 
 
+	buildCombinedQuestionsData(CB) {
+		console.log("buildCombinedQuestionsData?");
+		if(this.state.customQuestions===null || this.state.customQuestions.length===0) {
+			return;
+		}
+		console.log("Need to combine");
+		
+		let newQuestionsData = this.state.defaultQuestionsData.slice();
+		for(let i=0;i<this.state.customQuestions.length; i++) {
+			console.log("Looking to add: ", this.state.customQuestions[i]);
+			let matchFound = false;
+			newQuestionsData.filter((Q)=>{
+				if (Q.id===this.state.customQuestions[i].id) {
+					console.log("Found a match, not adding: ", Q.id);
+					matchFound = true;
+				}
+				return true;
+			});
+			if(!matchFound) {
+				console.log("pushing");
+				newQuestionsData.push(this.state.customQuestions[i]);
+			}
+		}
+		console.log("Setting: ", newQuestionsData);
+		this.setState({questionsData:newQuestionsData}, ()=>{
+			this.buildRoutesAndRenderPages();
+			CB?CB():null
+		});
+	}
+
 	gatherSystemConfig(nodesToGather) {
+
+
+//TODO: NEXT FIXME:  TODO:  FIXME:  --- when pulling this from the DB, populate defaultQuestions too.  ... or, perhaps do it the first time a custom question is made in combineQuestions?
+
+
 		// first looks in LS for every element in nodesToGather.  If not found, pulls everything from DB.
 		let DEBUG = false;
 
@@ -299,14 +334,23 @@ class WebFF extends React.Component {
 				this.setState({
 					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
 					itemsLoaded: newItemsLoaded
-				}, this.buildRoutesAndRenderPages);
+				}, () => {
+					this.buildCombinedQuestionsData(()=>{
+						console.log("state.qd: ", this.state.questionsData);
+						this.buildRoutesAndRenderPages();
+					});
+				});
 			}
 
 			// pull eventSamples
 			let allNodeNames = Object.keys(localStorage);
 			for (let i = 0; i < allNodeNames.length; i++) {
 				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-					this.setState({ [allNodeNames[i]]: JSON.parse(localStorage.getItem(allNodeNames[i])) }, () => this.addToItemsToSyncToLS(allNodeNames[i]));
+					this.setState({ 
+						[allNodeNames[i]]: JSON.parse(localStorage.getItem(allNodeNames[i])) 
+					}, () => {
+						this.addToItemsToSyncToLS(allNodeNames[i])
+					});
 				}
 			}
 
@@ -338,18 +382,21 @@ class WebFF extends React.Component {
 							if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
 							let newItemsLoaded = this.state.itemsLoaded;
 							newItemsLoaded.push(nodesToGather[i]);
-							this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
+							this.setState({ "itemsLoaded": newItemsLoaded }, () => {
+								this.buildCombinedQuestionsData();
+								this.buildRoutesAndRenderPages();
+							}); //performance
 						});
 					}
 
 					// pull sampling events from DB response
 					let allNodeNames = Object.keys(userData);
-					console.log("Pulling:", allNodeNames);
 					
 					for (let i = 0; i < allNodeNames.length; i++) {
 						if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
 							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
 								this.addToItemsToSyncToLS(allNodeNames[i]);
+								this.buildRoutesAndRenderPages();
 							});
 						}
 					}
@@ -359,25 +406,10 @@ class WebFF extends React.Component {
 					console.warn("Creating a new user must be done online"); //TODO: allow this to be done offline
 					this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": []}, (res) => console.log(res)); //TODO: add sampling event names so we can switch users
 				};
-
-
-
 			});
 		}
 	}
 
-
-	getDateTimeString() {
-		let d = new Date();
-		let dateOfMonthString = ('0' + d.getDate()).slice(-2);
-		let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
-		let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
-		let hoursString = ('0' + d.getHours()).slice(-2);
-		let minutesString = ('0' + (d.getMinutes())).slice(-2);
-		let secondsString = ('0' + (d.getSeconds())).slice(-2);
-		let timeString = hoursString + ":" + minutesString + ":" + secondsString;
-		return dateString + "@" + timeString;
-	}
 
 
 	createNewSamplingEvent() {
@@ -539,9 +571,6 @@ class WebFF extends React.Component {
 		this.setState({ questionDialogOpen: false });
 	}
 
-	setAppBarText = (txt) => {
-		this.setState({ appBarText: txt });
-	};
 
 	actionExecuter = (actionString) => { //****   //performance - are we building routes and needlessly rendering pages?
 		//actionString: string in format: 'ACTION_NAME::PARAMETER' where...
@@ -750,201 +779,6 @@ class WebFF extends React.Component {
 
 
 
-	setQuestionData(q_id, key, value, CB) { //**
-		// q_id: string question ID associated with a question
-		// key: string used as key in questionData object
-		// value: value that key will be set to
-		// CB: callback function to be called after the value has been set
-		// void return
-
-		// sets the 'key' element to 'value' for the question with question id of q_id ... 
-		// when looking for q_id, searches default questions (questionsData) first, TODO: then dialog questions, then TODO: user/station questions
-		// TODO: if the key is 'value', offload to "setQuestionValue" function
-
-		// TODO: throws error if no question matching q_id is found
-
-		// TODO: performance: rebuilds entire questionsData... needlessly?
-
-		if (key === "value") { // updating value is special and has it's own storage locations.  Call appropriate function that handles it well.
-			this.setQuestionValue(q_id, value, CB);
-			return;
-		}
-
-		let anyFound = false;
-		var newQuestionsData = this.state.questionsData.filter(questionData => {
-			if (questionData.id === q_id) {
-				questionData[key] = value;
-				anyFound = true;
-			}
-			return questionData;
-		});
-
-		if (anyFound) {
-			this.setState({ questionsData: newQuestionsData }, CB);
-		} else {
-			let newDialogQuestions = this.state.dialogQuestions.slice();
-
-			function ifIDMatchSetValue(questionData) {
-				if (questionData.id === q_id) {
-					questionData[key] = value;
-					anyFound = true;
-				}
-				return questionData;
-			}
-
-			for (let i = 0; i < newDialogQuestions.length && !anyFound; i++) {
-				var specificDialogQuestions = newDialogQuestions[i].questions.map(ifIDMatchSetValue);
-				if (anyFound) {
-					newDialogQuestions[i].questions = specificDialogQuestions;
-					this.setState({ dialogQuestions: newDialogQuestions }, CB);
-				}
-			}
-		}
-	}
-
-	getQuestionData(q_id) {
-		// returns question from questionsData that has q_id.  If none is found, return null
-		// WARNING: DO NOT USE THIS TO ACCESS "VALUE" unless you are aware it might be wrong (the value stored in questionsData is the default... the real 'value' is stored in the samplingEvent)
-		// TODO: verify all uses of this function are safe and/or depricate and/or remove this function
-		let retArr = this.state.questionsData.filter(questionData => {
-			if (questionData.id === q_id) {
-				return questionData;
-			}
-			return null;
-		});
-
-		if (retArr.length === 1) {
-			return retArr[0];
-		} else {
-			//TODO: throw error
-			return null;
-		}
-	}
-
-	setQuestionValue(q_id, value, CB) { //**** // return should be better
-		// q_id: string question ID associated with a question
-		// value: value that should be saved in state
-		// CB: function that should be called after setState
-		// returns void (TODO: return questoinData format associated with the q_id WITH the updated value inserted)
-		// sets the value of the first question it finds while searching in this order: dialogQuestions, currentSamplingEvent.
-		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic and throws an error
-		// throws error if no question is found
-
-		let DEBUG = false;
-		if (DEBUG) console.log("setQuestionValue(" + q_id + ", " + value + ")");
-
-		// search in dialog questions  (note, if we search current sampling event first -- and we try to modify a dialog before loading an event, things crash... so we search the dialog questions first)
-		let newDQ = this.state.dialogQuestions.slice();
-		for (let i = 0; newDQ && i < newDQ.length; i++) {
-			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
-				if (newDQ[i].questions[k].id === q_id) {
-					newDQ[i].questions[k].value = value;
-					this.setState({ "dialogQuestions": newDQ }, CB);
-					return;
-				}
-			}
-		}
-
-		// search in current Sampling Event
-		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
-		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
-			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in setQuestionValue(" + q_id + ", " + value + ")");
-		}
-		if (q_id in curSE.questionsValues) {
-			let newQuestionsValues = curSE.questionsValues;
-			//console.log("newQuestionsValues PRE)", newQuestionsValues); //TODO: the value is already correct here... BEFORE we have even set it.
-			newQuestionsValues[q_id] = value;
-			let newCurSE = { ...curSE, questionsValues: newQuestionsValues };
-			this.setState({ [this.state.curSamplingEventName]: newCurSE }, CB);
-			return;
-		}
-
-
-
-		// search in questions data.  given this should be very rare, give a warning.
-		let newQD = this.state.questionsData.slice();
-		for (let i = 0; newQD && i < newQD.length; i++) {
-			if (newQD[i].id === q_id) {
-				throw new Error("Setting value (" + value + ") on " + q_id + " and it only exists in questionsDialog.  This should be investigated.");
-				// console.warn("Setting value (" + value + ") on " + q_id + " and it only exists in questionsDialog.  This should be investigated, as it should be very rare.")
-				// newQD[i].value = value;
-				// this.setState({ questionsData: newQD }, CB);
-				// return;
-			}
-		}
-
-		throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
-	}
-
-	getQuestionValue(q_id) { //****  //TODO: error reasonably when  curSamplingEvent is undefined
-		// q_id: string question ID associated with a question
-		// returns VALUE associated with the q_id... first searching dialogQuestions, then searching the currentSamplingEvent, then, finally, questionsData.
-		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
-		// throws error if no question is found
-
-		//note: searched first because if we search for a dialog question before loading a current sampling event, it would throw an error
-		for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
-			for (let k = 0; this.state.dialogQuestions[i] && k < this.state.dialogQuestions[i].questions.length; k++) {
-				if (this.state.dialogQuestions[i].questions[k].id === q_id) {
-					return this.state.dialogQuestions[i].questions[k].value;
-				}
-			}
-		}
-
-		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
-		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
-			// current sampling event is not loaded or is malformed.
-			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in getQuestionValue(" + q_id + ")");
-		}
-		if (q_id in curSE.questionsValues) {
-			return curSE.questionsValues[q_id];
-		}
-
-
-
-		for (let i = 0; i < this.state.questionsData.length; i++) {
-			if (this.state.questionsData[i].id === q_id) {
-				return this.state.questionsData[i].value;
-			}
-		}
-
-		throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
-	}
-
-	getTableQuestionValue(q_id, header, rowNum) {
-		// q_id: string question ID associated with a tableInput question
-		// header: string matching the item in row 0.  If header is a number, will grab that column.
-		// returns VALUE in table q_id in column with matching header and on row rowNum... 
-		// throws error if q_id value is not an array (which is must be in order to be a table's value)
-		if (!(this.getQuestionData(q_id).type === "TableInput" || this.getQuestionData(q_id).type === "ParametersTable" || this.getQuestionData(q_id).type === "QWDATATable")) {
-			throw new Error("Question (" + q_id + ") not of required 'TableInput' type.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
-		}
-
-		let QV = this.getQuestionValue(q_id);
-		//console.log("QV: ", QV);
-		// headers are located in the first row...
-		let col = QV[0].indexOf(header);
-
-		if (col < 0) { /// if the header wasn't found, let's assume we are a number...
-			if (!Number.isNaN(header)) {
-				col = header;
-			}
-		}
-
-		if (col < 0) {
-			throw new Error("Header (" + header + ") not found in first row of Question (" + q_id + ") value.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
-		}
-
-		return QV[rowNum][col];
-	}
-
-
-	setLoggedInUser(username) {
-		//TODO: Reset everything to defaults
-
-		this.setState({ loggedInUser: username }, ()=>{this.componentWillMount(); this.buildRoutesAndRenderPages();}); 
-	}
-
 
 	parseActionsFromQuestion(Q, actionExecuter) {  //****
 		// Q can be a Question Component OR questionData object -- differentiated by the presence of 'props'.
@@ -989,7 +823,6 @@ class WebFF extends React.Component {
 	}
 
 	dialogQuestionChangeSystemCallback(Q) {
-		//console.log("DialogQuestion: ", Q);
 		this.questionChangeSystemCallback(Q, true);
 	}
 
@@ -1049,46 +882,6 @@ class WebFF extends React.Component {
 			this.markForDBUpdate(this.state.curSamplingEventName);
 		});
 	}
-
-	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
-		//this function saves updated question "values" (must be located at "Q.state.value")
-		// returns updated questionsData object
-		var DEBUG = false;
-		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
-		if (Q == null) { //POC
-			console.log("Question passed to getQuestionsDataWithUpdatedValue was null or undefined");
-			return;
-		}
-
-		// find the specific question in questionsData  or curDialogQuestions based on the id,then update the value property
-		let questionsToFilter = this.state.curDialogQuestions;
-		if (!dialogQuestions) {
-			questionsToFilter = this.state.questionsData;
-		}
-
-		var newQuestionsData = questionsToFilter.filter(questionData => {
-			//console.log("QuestionData: ", questionData);
-			if (questionData.id === Q.props.id) {
-				if (DEBUG) console.log("------FOUND!--------");
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
-
-				questionData.value = Q.state.value;
-
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
-			} else {
-				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
-			}
-			return questionData;
-		});
-
-		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
-
-		return newQuestionsData;
-	}
-
-
-
 
 	loadSamplingEvent(samplingEventName) {
 		//TODO: return all items to default state BEFORE loading and running?
@@ -1201,60 +994,6 @@ class WebFF extends React.Component {
 		this.setState({ routesAndPages: newRoutesAndPages });
 	};
 
-	getSamplerTypeQuestionIDString() { // yes, this and the one below should be combined somehow
-		let samplTypeQuestionIDString = "samplerType";
-		switch (this.getQuestionValue("sedimentType")) {  //TODO: this needn't be a conditional...
-			case 'bedload':
-				samplTypeQuestionIDString += "_bedload";
-				break;
-			case 'bottom':
-				samplTypeQuestionIDString += "_bottom";
-				break;
-			default: //suspended
-				samplTypeQuestionIDString += "_suspended";
-				break;
-		}
-		return samplTypeQuestionIDString;
-	}
-
-	getSamplingMethodQuestionIDString() {
-		let samplingMethodQuestionIDString = "samplingMethod";
-		switch (this.getQuestionValue("sedimentType")) {  //TODO: this needn't be a conditional...
-			case 'bedload':
-				samplingMethodQuestionIDString += "_bedload";
-				break;
-			case 'bottom':
-				samplingMethodQuestionIDString += "_bottom";
-				break;
-			default: //suspended
-				samplingMethodQuestionIDString += "_suspended";
-				break;
-		}
-		return samplingMethodQuestionIDString;
-	}
-
-	getCurrentSampleEventMethod() {
-		//note, for SEDLOGIN XML purposes... the string returned from this actually the sampling method.
-		// otherwise, this is used for collectRunAndPropagate
-		let samplingMethodQuestionIDString = this.getSamplingMethodQuestionIDString();
-
-		//console.log("samplingMethodQuestionIDString", samplingMethodQuestionIDString);
-		let sampMethod = "";
-		let QV = this.getQuestionValue(samplingMethodQuestionIDString);
-		//console.log("QV",QV);
-		switch (QV) {  //TODO: renaming 
-			case '10':
-				sampMethod = "EWI";
-				break;
-			case '20':
-				sampMethod = "EDI";
-				break;
-			default:
-				sampMethod = "OTHER";
-				break;
-		}
-		return sampMethod;
-	}
 
 	collectRunAndPropagateSamplePointData(q_id) {
 		//TODO: check that everything is loaded before trying
@@ -1265,9 +1004,6 @@ class WebFF extends React.Component {
 
 		numSampPoints = this.getQuestionValue(q_id);
 		if (DEBUG) console.log("numSampPoints: ", numSampPoints);
-
-
-
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// build the appropriate samples table on EDI and/or EWI and/or OTHER pages 
@@ -1337,6 +1073,376 @@ class WebFF extends React.Component {
 		}
 	}
 
+	addToItemsToSyncToLS(toSync, CB) {
+		if (this.state.itemsToSyncToLS.includes(toSync)) {
+			CB;
+			return;
+		} else {
+			let newitemsToSyncToLS = this.state.itemsToSyncToLS.slice();
+			newitemsToSyncToLS.push(toSync);
+			this.setState({ itemsToSyncToLS: newitemsToSyncToLS }, CB);
+		}
+	}
+
+	customQuestionAdder = (q_obj, CB) => {
+		let newCustomQuestions = this.state.customQuestions.slice();
+		newCustomQuestions.push(q_obj);
+		this.setState({customQuestions:newCustomQuestions}, () => {
+			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB); });
+	}
+	customQuestionDeleter = (q_id, CB) => {
+		let newCustomQuestions = this.state.customQuestions.slice();
+		newCustomQuestions = newCustomQuestions.filter((Q)=>Q.id!==q_id)
+		this.setState({customQuestions:newCustomQuestions}, () => {
+			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB); });
+	}
+
+
+	//.......GGG.........................................................
+	//......G...S...EEEEE...EEEEEEE......................................
+	//......GSS.....E..........E.........................................
+	//.........GGG..EEEEE......E.........................................
+	//......G...G...E..........E.........................................
+	//.......GGG....EEEEE......E.........................................
+
+
+
+	setQuestionData(q_id, key, value, CB) { //**
+		// q_id: string question ID associated with a question
+		// key: string used as key in questionData object
+		// value: value that key will be set to
+		// CB: callback function to be called after the value has been set
+		// void return
+
+		// sets the 'key' element to 'value' for the question with question id of q_id ... 
+		// when looking for q_id, searches default questions (questionsData) first, TODO: then dialog questions, then TODO: user/station questions
+		// TODO: if the key is 'value', offload to "setQuestionValue" function
+
+		// TODO: throws error if no question matching q_id is found
+
+		// TODO: performance: rebuilds entire questionsData... needlessly?
+
+		if (key === "value") { // updating value is special and has it's own storage locations.  Call appropriate function that handles it well.
+			this.setQuestionValue(q_id, value, CB);
+			return;
+		}
+
+		let anyFound = false;
+		var newQuestionsData = this.state.questionsData.filter(questionData => {
+			if (questionData.id === q_id) {
+				questionData[key] = value;
+				anyFound = true;
+			}
+			return questionData;
+		});
+
+		if (anyFound) {
+			this.setState({ questionsData: newQuestionsData }, CB);
+		} else {
+			let newDialogQuestions = this.state.dialogQuestions.slice();
+
+			function ifIDMatchSetValue(questionData) {
+				if (questionData.id === q_id) {
+					questionData[key] = value;
+					anyFound = true;
+				}
+				return questionData;
+			}
+
+			for (let i = 0; i < newDialogQuestions.length && !anyFound; i++) {
+				var specificDialogQuestions = newDialogQuestions[i].questions.map(ifIDMatchSetValue);
+				if (anyFound) {
+					newDialogQuestions[i].questions = specificDialogQuestions;
+					this.setState({ dialogQuestions: newDialogQuestions }, CB);
+				}
+			}
+		}
+	}
+
+	setQuestionValue(q_id, value, CB) { //**** // return should be better
+		// q_id: string question ID associated with a question
+		// value: value that should be saved in state
+		// CB: function that should be called after setState
+		// returns void (TODO: return questoinData format associated with the q_id WITH the updated value inserted)
+		// sets the value of the first question it finds while searching in this order: dialogQuestions, currentSamplingEvent.
+		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic and throws an error
+		// throws error if no question is found
+
+		let DEBUG = false;
+		if (DEBUG) console.log("setQuestionValue(" + q_id + ", " + value + ")");
+
+		// search in dialog questions  (note, if we search current sampling event first -- and we try to modify a dialog before loading an event, things crash... so we search the dialog questions first)
+		let newDQ = this.state.dialogQuestions.slice();
+		for (let i = 0; newDQ && i < newDQ.length; i++) {
+			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
+				if (newDQ[i].questions[k].id === q_id) {
+					newDQ[i].questions[k].value = value;
+					this.setState({ "dialogQuestions": newDQ }, CB);
+					return;
+				}
+			}
+		}
+
+		// search in current Sampling Event
+		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
+		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
+			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in setQuestionValue(" + q_id + ", " + value + ")");
+		}
+		if (q_id in curSE.questionsValues) {
+			let newQuestionsValues = curSE.questionsValues;
+			//console.log("newQuestionsValues PRE)", newQuestionsValues); //TODO: the value is already correct here... BEFORE we have even set it.
+			newQuestionsValues[q_id] = value;
+			let newCurSE = { ...curSE, questionsValues: newQuestionsValues };
+			this.setState({ [this.state.curSamplingEventName]: newCurSE }, CB);
+			return;
+		}
+
+
+
+		// search in questions data - if it's hear, that means it's a new custom question since this sample event was made.  given this should be very rare, give a warning.
+		let newQD = this.state.questionsData.slice();
+		for (let i = 0; newQD && i < newQD.length; i++) {
+			if (newQD[i].id === q_id) {
+				console.warn("Attempting to set value (" + value + ") on " + q_id + " and it only exists in questionsData.  This should be investigated, as it should be very rare.  Only expected when this is a custom question newer than the sampling event.")
+				// set value in the sampling event, making a new key
+//				console.log(curSE);//let newCurSE
+				curSE.questionsValues[q_id] = value;
+				this.setState({[this.state.curSamplingEventName]:curSE}, CB?CB():null);
+				 return;
+			}
+		}
+
+		throw new Error("Question not found in current sampling event, dialog questions, user custom or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
+	}
+
+	setLoggedInUser(username) {
+		//TODO: Reset everything to defaults
+
+		this.setState({ loggedInUser: username }, ()=>{this.componentWillMount(); this.buildRoutesAndRenderPages();}); 
+	}
+
+	setAppBarText = (txt) => {
+		this.setState({ appBarText: txt });
+	};
+
+	//.......GGG.........................................................
+	//......G...G...EEEEE...EEEEEEE......................................
+	//......G.......E..........E.........................................
+	//......G..GGG..EEEEE......E.........................................
+	//......G...G...E..........E.........................................
+	//.......GGG....EEEEE......E.........................................
+
+	getDateTimeString() {
+		let d = new Date();
+		let dateOfMonthString = ('0' + d.getDate()).slice(-2);
+		let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
+		let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
+		let hoursString = ('0' + d.getHours()).slice(-2);
+		let minutesString = ('0' + (d.getMinutes())).slice(-2);
+		let secondsString = ('0' + (d.getSeconds())).slice(-2);
+		let timeString = hoursString + ":" + minutesString + ":" + secondsString;
+		return dateString + "@" + timeString;
+	}
+
+	getQuestionData(q_id) {
+		// returns question from questionsData that has q_id.  If none is found, return null
+		// WARNING: DO NOT USE THIS TO ACCESS "VALUE" unless you are aware it might be wrong (the value stored in questionsData is the default... the real 'value' is stored in the samplingEvent)
+		// TODO: verify all uses of this function are safe and/or depricate and/or remove this function
+		let retArr = this.state.questionsData.filter(questionData => {
+			if (questionData.id === q_id) {
+				return questionData;
+			}
+			return null;
+		});
+
+		if (retArr.length === 1) {
+			return retArr[0];
+		} else {
+			//TODO: throw error
+			return null;
+		}
+	}
+	
+	getQuestionValue(q_id) { //****  //TODO: error reasonably when  curSamplingEvent is undefined
+		// q_id: string question ID associated with a question
+		// returns VALUE associated with the q_id... first searching dialogQuestions, then searching the currentSamplingEvent, then, finally, questionsData.
+		// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
+		// throws error if no question is found
+
+		//note: searched first because if we search for a dialog question before loading a current sampling event, it would throw an error
+		for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
+			for (let k = 0; this.state.dialogQuestions[i] && k < this.state.dialogQuestions[i].questions.length; k++) {
+				if (this.state.dialogQuestions[i].questions[k].id === q_id) {
+					return this.state.dialogQuestions[i].questions[k].value;
+				}
+			}
+		}
+
+		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
+		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object) || !curSE.questionsValues) { // current sampling event is not loaded or is malformed.
+			// current sampling event is not loaded or is malformed.
+			throw new Error("current sampling event, " + curSE + " is not loaded or is malformed in getQuestionValue(" + q_id + ")");
+		}
+		if (q_id in curSE.questionsValues) {
+			return curSE.questionsValues[q_id];
+		}
+
+
+
+		for (let i = 0; i < this.state.questionsData.length; i++) {
+			if (this.state.questionsData[i].id === q_id) {
+				return this.state.questionsData[i].value;
+			}
+		}
+
+		throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
+	}
+
+	getTableQuestionValue(q_id, header, rowNum) {
+		// q_id: string question ID associated with a tableInput question
+		// header: string matching the item in row 0.  If header is a number, will grab that column.
+		// returns VALUE in table q_id in column with matching header and on row rowNum... 
+		// throws error if q_id value is not an array (which is must be in order to be a table's value)
+		if (!(this.getQuestionData(q_id).type === "TableInput" || this.getQuestionData(q_id).type === "ParametersTable" || this.getQuestionData(q_id).type === "QWDATATable")) {
+			throw new Error("Question (" + q_id + ") not of required 'TableInput' type.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
+		}
+
+		let QV = this.getQuestionValue(q_id);
+		//console.log("QV: ", QV);
+		// headers are located in the first row...
+		let col = QV[0].indexOf(header);
+
+		if (col < 0) { /// if the header wasn't found, let's assume we are a number...
+			if (!Number.isNaN(header)) {
+				col = header;
+			}
+		}
+
+		if (col < 0) {
+			throw new Error("Header (" + header + ") not found in first row of Question (" + q_id + ") value.  WebFF.getTableQuestionValue(" + q_id + ", " + header + ", " + rowNum + ")");
+		}
+
+		return QV[rowNum][col];
+	}
+
+
+	getQuestionsDataWithUpdatedValue(Q, dialogQuestions) {
+		//this function saves updated question "values" (must be located at "Q.state.value")
+		// returns updated questionsData object
+		var DEBUG = false;
+		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
+		if (Q == null) { //POC
+			console.log("Question passed to getQuestionsDataWithUpdatedValue was null or undefined");
+			return;
+		}
+
+		// find the specific question in questionsData  or curDialogQuestions based on the id,then update the value property
+		let questionsToFilter = this.state.curDialogQuestions;
+		if (!dialogQuestions) {
+			questionsToFilter = this.state.questionsData;
+		}
+
+		var newQuestionsData = questionsToFilter.filter(questionData => {
+			//console.log("QuestionData: ", questionData);
+			if (questionData.id === Q.props.id) {
+				if (DEBUG) console.log("------FOUND!--------");
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (pre): ", questionData);
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q.state.value", Q.state.value);
+
+				questionData.value = Q.state.value;
+
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: questionData (post)", questionData);
+			} else {
+				if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: no");
+			}
+			return questionData;
+		});
+
+		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
+
+		return newQuestionsData;
+	}
+
+	getNumberOfSetsInCurrentSamplingEvent() {
+		if (this.state.curSamplingEventName === null) {
+			return 0;
+		}
+		let howMany = 0;
+		for (let i = 0; i < 3; i++) {
+			if (this.getQuestionValue('set' + String.fromCharCode(65 + i) + '_numberOfSamplingPoints')) {
+				howMany++;
+			}
+		}
+		return howMany;
+	}
+
+	getNumberOfSamplesInSet(setName) {
+		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'), 10);
+	}
+
+	getSamplerTypeQuestionIDString() { // yes, this and the one below should be combined somehow
+		let samplTypeQuestionIDString = "samplerType";
+		switch (this.getQuestionValue("sedimentType")) {  //TODO: this needn't be a conditional...
+			case 'bedload':
+				samplTypeQuestionIDString += "_bedload";
+				break;
+			case 'bottom':
+				samplTypeQuestionIDString += "_bottom";
+				break;
+			default: //suspended
+				samplTypeQuestionIDString += "_suspended";
+				break;
+		}
+		return samplTypeQuestionIDString;
+	}
+
+	getSamplingMethodQuestionIDString() {
+		let samplingMethodQuestionIDString = "samplingMethod";
+		switch (this.getQuestionValue("sedimentType")) {  //TODO: this needn't be a conditional...
+			case 'bedload':
+				samplingMethodQuestionIDString += "_bedload";
+				break;
+			case 'bottom':
+				samplingMethodQuestionIDString += "_bottom";
+				break;
+			default: //suspended
+				samplingMethodQuestionIDString += "_suspended";
+				break;
+		}
+		return samplingMethodQuestionIDString;
+	}
+
+	getCurrentSampleEventMethod() {
+		//note, for SEDLOGIN XML purposes... the string returned from this actually the sampling method.
+		// otherwise, this is used for collectRunAndPropagate
+		let samplingMethodQuestionIDString = this.getSamplingMethodQuestionIDString();
+
+		//console.log("samplingMethodQuestionIDString", samplingMethodQuestionIDString);
+		let sampMethod = "";
+		let QV = this.getQuestionValue(samplingMethodQuestionIDString);
+		//console.log("QV",QV);
+		switch (QV) {  //TODO: renaming 
+			case '10':
+				sampMethod = "EWI";
+				break;
+			case '20':
+				sampMethod = "EDI";
+				break;
+			default:
+				sampMethod = "OTHER";
+				break;
+		}
+		return sampMethod;
+	}
+
+		//........BBBB.....BBBB..........................................
+		//........B...B....B...B.........................................
+		//........B....B...B...B.........................................
+		//........B....B...BBBB..........................................
+		//........B....B...B...B.........................................
+		//........B...B....B...B.........................................
+		//........BBBB.....BBBB..........................................
+
 	updateDBInfo(needleKey, needle, newData, CB) {
 		// attempts to update location
 		// returns the ENTIRE newly updated data element.
@@ -1354,9 +1460,6 @@ class WebFF extends React.Component {
 			const API = 'https://localhost:3004';
 			const query = needleKey;
 		}
-
-
-
 
 		// function handleErrors(response) {
 		// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
@@ -1400,17 +1503,6 @@ class WebFF extends React.Component {
 		}
 	}
 
-	addToItemsToSyncToLS(toSync, CB) {
-		if (this.state.itemsToSyncToLS.includes(toSync)) {
-			CB;
-			return;
-		} else {
-			let newitemsToSyncToLS = this.state.itemsToSyncToLS.slice();
-			newitemsToSyncToLS.push(toSync);
-			this.setState({ itemsToSyncToLS: newitemsToSyncToLS }, CB);
-		}
-	}
-
 	updateDatabase() {
 		console.log("Updating database...");
 		let toUpdate = this.state.needsToUpdateDB;
@@ -1426,22 +1518,14 @@ class WebFF extends React.Component {
 		}
 	}
 
-	getNumberOfSetsInCurrentSamplingEvent() {
-		if (this.state.curSamplingEventName === null) {
-			return 0;
-		}
-		let howMany = 0;
-		for (let i = 0; i < 3; i++) {
-			if (this.getQuestionValue('set' + String.fromCharCode(65 + i) + '_numberOfSamplingPoints')) {
-				howMany++;
-			}
-		}
-		return howMany;
-	}
 
-	getNumberOfSamplesInSet(setName) {
-		return parseInt(this.getQuestionValue('set' + setName + '_numberOfSamplingPoints'), 10);
-	}
+
+
+	//....B...B...M.......M...M...............................
+	//.....B.B....MM.....MM...M...............................
+	//......B.....M.M...M.M...M...............................
+	//.....B.B....M..M.M..M...M...............................
+	//....B...B...M...M...M...MMMMMM..........................
 
 	buildParamObj(QWDATARowNum, pCode) {
 		let paramObj = {
@@ -1621,7 +1705,7 @@ class WebFF extends React.Component {
 			// this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
 			// this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
 
-
+			this.buildCombinedQuestionsData(()=>console.log("CALLBACK!!"));
 
 			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
 
@@ -1739,6 +1823,8 @@ class WebFF extends React.Component {
 					/>
 					<QuestionDialog isOpen={this.state.questionDialogOpen}
 						handleQuestionDialogClose={this.handleQuestionDialogClose}
+						customQuestionAdder={this.customQuestionAdder}
+						customQuestionDeleter={this.customQuestionDeleter}
 					/>
 
 					<main className={classes.content} >
