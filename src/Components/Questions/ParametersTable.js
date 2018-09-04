@@ -133,7 +133,7 @@ class ParametersTable extends React.Component {
 			pCodesToShow: defaultPCodesToShow,
 			value: nowValue
 		};
-		console.log("Value at end of constructor: ", this.state.value);
+		//console.log("Value at end of constructor: ", this.state.value);
 
 		this.handleValueChange = this.handleValueChange.bind(this);
 	}
@@ -143,11 +143,11 @@ class ParametersTable extends React.Component {
 
 
 	handleValueChange = (row, col) => e => {
-		console.log("this.state.value: ", this.state.value);
-		console.log("row: ", row, "col: ", col);
-		console.log("e.target.value", e.target.value);
+		// console.log("this.state.value: ", this.state.value);
+		// console.log("row: ", row, "col: ", col);
+		// console.log("e.target.value", e.target.value);
 		let newVal = this.state.value.slice();
-		console.log("newVal: ", newVal);
+		// console.log("newVal: ", newVal);
 		newVal[row][col] = e.target.value;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });
 	}
@@ -201,7 +201,7 @@ class ParametersTable extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Paper className={classes.root}>
+				{/* <Paper className={classes.root}> */}
 					<Table className={classes.table}>
 						<TableHead>
 							<TableRow>
@@ -269,7 +269,7 @@ class ParametersTable extends React.Component {
 						<Button onClick={(() => this.setState({ showNQ: !this.state.showNQ }))}>{this.state.showNQ ? "Hide " : "Show "}{"Null Qualifiers"}</Button>
 						<Button onClick={(() => this.setState({ showRmk: !this.state.showRmk }))}>{this.state.showRmk ? "Hide " : "Show "}{"Remark Codes"}</Button>
 					</center>
-				</Paper>
+				{/* </Paper> */}
 				{this.state.showNQ?<Paper>{Object.keys(nq_options_meanings).map((key)=> <Typography key={"paramNQMeanings_"+key} className={classes.nq_options_meanings}><b>{key}</b>{"  :  " + nq_options_meanings[key]}</Typography>)}</Paper>:null}
 			</React.Fragment>
 		);

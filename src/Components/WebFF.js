@@ -47,6 +47,7 @@ import { Redirect } from 'react-router-dom';
 import { isReasonablyValidUsernameInLS } from '../Utils/ValidationUtilities';
 import XMLDialog from './XMLDialog';
 import QuestionDialog from './QuestionDialog';
+import EventManager from './EventManager';
 
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -55,11 +56,11 @@ import SystemDialog from './SystemDialog';
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
 const criticalUserNodes = ['stations', 'customQuestions'];
-const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'hiddenPanels', 'hiddenTabs'];
+const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'defaultQuestionsData', 'hiddenPanels', 'hiddenTabs'];
 
 
 const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
-var needToSyncStationDataToQuestionData = true; 
+var needToSyncStationDataToQuestionData = true;
 
 
 const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:"; //TODO: add colon
@@ -76,14 +77,14 @@ class WebFF extends React.Component {
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 		this.state = {
-			itemsToSyncToLS:allItemsToSyncToLS,
+			itemsToSyncToLS: allItemsToSyncToLS,
 
 			itemsLoaded: [],
 			usePaper: false,
 
 			navMenuInfo: [],
 			navMenuExpanded: false,
-			
+
 			XMLDialogOpen: false,
 			questionDialogOpen: false,
 
@@ -136,7 +137,7 @@ class WebFF extends React.Component {
 	}
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
-	
+
 		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
 
 		if (isReasonablyValidUsernameInLS()) {
@@ -202,38 +203,38 @@ class WebFF extends React.Component {
 
 	buildCombinedQuestionsData(CB) {
 		console.log("buildCombinedQuestionsData?");
-		if(this.state.customQuestions===null || this.state.customQuestions.length===0) {
+		if (this.state.customQuestions === null || this.state.customQuestions.length === 0) {
 			return;
 		}
 		console.log("Need to combine");
-		
+
 		let newQuestionsData = this.state.defaultQuestionsData.slice();
-		for(let i=0;i<this.state.customQuestions.length; i++) {
+		for (let i = 0; i < this.state.customQuestions.length; i++) {
 			console.log("Looking to add: ", this.state.customQuestions[i]);
 			let matchFound = false;
-			newQuestionsData.filter((Q)=>{
-				if (Q.id===this.state.customQuestions[i].id) {
+			newQuestionsData.filter((Q) => {
+				if (Q.id === this.state.customQuestions[i].id) {
 					console.log("Found a match, not adding: ", Q.id);
 					matchFound = true;
 				}
 				return true;
 			});
-			if(!matchFound) {
+			if (!matchFound) {
 				console.log("pushing");
 				newQuestionsData.push(this.state.customQuestions[i]);
 			}
 		}
 		console.log("Setting: ", newQuestionsData);
-		this.setState({questionsData:newQuestionsData}, ()=>{
+		this.setState({ questionsData: newQuestionsData }, () => {
 			this.buildRoutesAndRenderPages();
-			CB?CB():null
+			CB ? CB() : null
 		});
 	}
 
 	gatherSystemConfig(nodesToGather) {
 
 
-//TODO: NEXT FIXME:  TODO:  FIXME:  --- when pulling this from the DB, populate defaultQuestions too.  ... or, perhaps do it the first time a custom question is made in combineQuestions?
+		//TODO: NEXT FIXME:  TODO:  FIXME:  --- when pulling this from the DB, populate defaultQuestions too.  ... or, perhaps do it the first time a custom question is made in combineQuestions?
 
 
 		// first looks in LS for every element in nodesToGather.  If not found, pulls everything from DB.
@@ -282,13 +283,20 @@ class WebFF extends React.Component {
 					let nodeArr = configNode[nodeArrName];
 					if (DEBUG) console.log("nodeArr: ", nodeArr);
 					if (DEBUG) console.log("this.state.itemsLoaded: ", this.state.itemsLoaded);
-
+					console.log("SYSTEM CONFIG LOADING: " + nodeName);
+					if (nodeName === "questionsData") {
+						// save the original results from the DB as the defaultQuestionsData
+						this.setState({ defaultQuestionsData: nodeArr }, () => console.log("DEFAULT QUESTION DATA SET!!!!"));
+					}
 					this.setState({ [nodeName]: nodeArr }, () => {
 						if (DEBUG) console.log("STATE: ", this.state);
 						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
 						let newItemsLoaded = this.state.itemsLoaded;
 						newItemsLoaded.push(nodeName);
-						this.setState({ "itemsLoaded": newItemsLoaded }, this.buildRoutesAndRenderPages); //performance
+						this.setState({ "itemsLoaded": newItemsLoaded }, () => {
+							this.buildRoutesAndRenderPages();
+						}
+						); //performance
 					});
 				});
 			});
@@ -298,116 +306,123 @@ class WebFF extends React.Component {
 
 	gatherUserConfig(nodesToGather) {
 		console.log("GATHERING USER CONFIGURATION");
+		// if data is in both DB and LS -- LS version is considered authoritative
+
 		// should not be called unless this.state.loggedInUser is set to something like jfederer@usgs.gov
 
 		//FIXME: likely bug source, as all these setStates happen async...  perhaps find a way to chain/batch them.
 
 		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
-		let DEBUG = false;
+		let DEBUG = true;
 
 		if (DEBUG) console.log("gatherUSERConfig: ", nodesToGather);
-		// check if ALL critical items are loaded into LS
-		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
-		//TODO: remove the kludge and combine those if statements
-		let allLoadedInLS = true;
-		for (let i = 0; i < nodesToGather.length; i++) {
-			if (DEBUG) console.log(localStorage.getItem(nodesToGather[i]));
-			if (!localStorage.getItem(nodesToGather[i]) || localStorage.getItem(nodesToGather[i]) === "null") {
-				allLoadedInLS = false;
-			}
-			if (nodesToGather[i] === "stations" && localStorage.getItem(nodesToGather[i]) === "[]") {  //KLUDGE to allow for extra searching for stations given it's non-null in the constructor
-				allLoadedInLS = false;
-			}
-		}
-		if (DEBUG) console.log("allLoadedInLS: ", allLoadedInLS);
 
-		if (allLoadedInLS) {
-			if (DEBUG) console.log("pulling from LS");
+		//first, attempt to pull all conifg and sampling event info from DB
+		// pull config info from DB
+		// TODO: check if online and skip if not.
+		this.fetchDBInfo(this.state.loggedInUser, 'users', (JSONresponse) => {
+			DEBUG = true;
+			if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 
-			// pull everything from LS
-			for (let i = 0; i < nodesToGather.length; i++) {
-				let newItemsLoaded = this.state.itemsLoaded;
-				if (!newItemsLoaded.includes(nodesToGather[i])) {
-					newItemsLoaded.push(nodesToGather[i])
-				}
-				console.log("Parsing: ", nodesToGather[i]);
-				this.setState({
-					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
-					itemsLoaded: newItemsLoaded
-				}, () => {
-					this.buildCombinedQuestionsData(()=>{
-						console.log("state.qd: ", this.state.questionsData);
-						this.buildRoutesAndRenderPages();
+			// check that this user even exists in database
+			if (JSONresponse.length > 1) {
+				throw new Error("User query for \'" + this.state.loggedInUser + "\' returned more than one result.  Please contact jfederer@usgs.gov to resolve.");
+			}
+
+			if (JSONresponse.length === 0) {
+				// this user does not exist in the database - we must create their entry
+				console.warn("Creating a new user must be done online"); //TODO: allow this to be done offline
+				this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": [] });
+			};
+
+			if (JSONresponse.length === 1) {
+				// this user exists in the database	
+				let userData = JSONresponse[0];
+				for (let i = 0; i < nodesToGather.length; i++) {
+					let nodeArr = [];
+					if (DEBUG) console.log("gathering: ", nodesToGather[i]);
+					userData[nodesToGather[i]].forEach((configNode) => {
+						if (DEBUG) console.log("userData[" + nodesToGather[i] + "]: ", configNode);
+						// let nodeName = configNode.id;
+						//TODO: error and duplication checking -- particularly important once custom questions exist
+						// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
+						nodeArr.push(configNode);
 					});
-				});
+					this.setState({ [nodesToGather[i]]: nodeArr }, () => {
+						if (DEBUG) console.log("STATE: ", this.state);
+						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
+						let newItemsLoaded = this.state.itemsLoaded.slice();
+						newItemsLoaded.push(nodesToGather[i]);
+						this.setState({ "itemsLoaded": newItemsLoaded }, () => {
+							this.buildCombinedQuestionsData(() => {
+								this.buildRoutesAndRenderPages();
+							});
+
+						}); //performance
+					});
+				}
+
+				// pull sampling events from DB response
+				let allNodeNames = Object.keys(userData);
+
+				for (let i = 0; i < allNodeNames.length; i++) {
+					if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+						this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+							this.addToItemsToSyncToLS(allNodeNames[i]);
+							this.buildRoutesAndRenderPages();
+						});
+					}
+				}
+			} // end one user found in DB
+
+
+			// after loading everything we can from DB 
+			// (This is still the callback from the fetchDB call), 
+			// let's load everything we can from LS.
+			// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
+
+			if (DEBUG) console.log("pulling config info from  LS");
+			for (let i = 0; i < nodesToGather.length; i++) {
+				console.log("Parsing LS: ", nodesToGather[i]);
+				let node = localStorage.getItem(nodesToGather[i]);
+				if (!node || node !== "null" || node !== [] || node.length !== 0) {
+					// set this item as loaded.  //TODO: never do anythign with this... so perhaps remove, or utilitze e in the future
+					let newItemsLoaded = this.state.itemsLoaded;
+					if (!newItemsLoaded.includes(nodesToGather[i])) {
+						newItemsLoaded.push(nodesToGather[i])
+					}
+					this.setState({
+						[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
+						itemsLoaded: newItemsLoaded
+					}, () => {
+
+						this.buildCombinedQuestionsData(() => {
+							this.buildRoutesAndRenderPages();
+						});
+					});
+				}
 			}
 
-			// pull eventSamples
+			// see what sampling events might be in LS and add them to our list of samplingEvents:
+			if (DEBUG) console.log("pulling Sampling Event info from  LS");
 			let allNodeNames = Object.keys(localStorage);
 			for (let i = 0; i < allNodeNames.length; i++) {
 				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-					this.setState({ 
-						[allNodeNames[i]]: JSON.parse(localStorage.getItem(allNodeNames[i])) 
-					}, () => {
-						this.addToItemsToSyncToLS(allNodeNames[i])
-					});
+					let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
+					if (SE.user === this.state.loggedInUser) {
+						this.setState({
+							[allNodeNames[i]]: SE
+						}, () => {
+							if (DEBUG) console.log("Setting SE: " + allNodeNames[i]);
+							this.addToItemsToSyncToLS(allNodeNames[i]);
+							this.buildRoutesAndRenderPages();
+						});
+					}
 				}
 			}
 
 
-
-		} else {
-			// pull everything from DB
-			this.fetchDBInfo(this.state.loggedInUser, 'users', (JSONresponse) => {
-				DEBUG = false;
-				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
-
-
-				// check that this user even exists in database
-				if (JSONresponse.length === 1) {
-					// this user exists in the database	
-					let userData = JSONresponse[0];
-					for (let i = 0; i < nodesToGather.length; i++) {
-						let nodeArr = [];
-						if (DEBUG) console.log("gathering: ", nodesToGather[i]);
-						userData[nodesToGather[i]].forEach((configNode) => {
-							if (DEBUG) console.log("userData[" + nodesToGather[i] + "]: ", configNode);
-							// let nodeName = configNode.id;
-							//TODO: error and duplication checking -- particularly important once custom questions exist
-							// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
-							nodeArr.push(configNode);
-						});
-						this.setState({ [nodesToGather[i]]: nodeArr }, () => {
-							if (DEBUG) console.log("STATE: ", this.state);
-							if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
-							let newItemsLoaded = this.state.itemsLoaded;
-							newItemsLoaded.push(nodesToGather[i]);
-							this.setState({ "itemsLoaded": newItemsLoaded }, () => {
-								this.buildCombinedQuestionsData();
-								this.buildRoutesAndRenderPages();
-							}); //performance
-						});
-					}
-
-					// pull sampling events from DB response
-					let allNodeNames = Object.keys(userData);
-					
-					for (let i = 0; i < allNodeNames.length; i++) {
-						if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
-								this.addToItemsToSyncToLS(allNodeNames[i]);
-								this.buildRoutesAndRenderPages();
-							});
-						}
-					}
-
-				} else {
-					// this user does not exist in the database - we must create their entry
-					console.warn("Creating a new user must be done online"); //TODO: allow this to be done offline
-					this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": []}, (res) => console.log(res)); //TODO: add sampling event names so we can switch users
-				};
-			});
-		}
+		}); // end fetchDB callback
 	}
 
 
@@ -425,6 +440,8 @@ class WebFF extends React.Component {
 
 		let newSamplingEvent = {
 			id: newSamplingEventID,
+			user: this.state.loggedInUser,
+			//submittedToSedLOGIN: false,
 			questionsValues: questionsValues
 		}
 
@@ -438,14 +455,14 @@ class WebFF extends React.Component {
 		});
 
 		//TODO:
-//TODO:
-//TODO:
-//TODO:
-//TODO:	Reset all question values to defaults
-//TODO:
-//TODO:
-//TODO:
-//TODO:
+		//TODO:
+		//TODO:
+		//TODO:
+		//TODO:	Reset all question values to defaults
+		//TODO:
+		//TODO:
+		//TODO:
+		//TODO:
 		this.markForDBUpdate(samplingEventName);
 	}
 
@@ -483,7 +500,7 @@ class WebFF extends React.Component {
 
 
 		// sort out differences in local dev server and production server calls
-		const API = 'https://152.61.248.218/mongoFetch.php/';
+		const API = 'http://152.61.248.218/mongoFetch.php/';
 		let query = '';
 
 		if (_query !== '') {
@@ -963,7 +980,14 @@ class WebFF extends React.Component {
 					navControl={this.navigationControl}
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
-					samplingEvents={Object.keys(this.state).filter((key)=>key.startsWith("SamplingEvent:"))}
+					samplingEvents={Object.keys(this.state).filter((key) => key.startsWith(SAMPLING_EVENT_IDENTIFIER))}
+				/>} />
+				<Route path="/AllEvents" render={() => <EventManager
+					appBarTextCB={this.setAppBarText}
+					navControl={this.navigationControl}
+					createNewSamplingEvent={this.createNewSamplingEvent}
+					loadSamplingEvent={this.loadSamplingEvent}
+					samplingEvents={Object.keys(this.state).filter((key) => key.startsWith(SAMPLING_EVENT_IDENTIFIER))}
 				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
@@ -1064,7 +1088,7 @@ class WebFF extends React.Component {
 			}
 
 			// push below the header
-			setNameArr.unshift("Set-Sample#");
+			setNameArr.unshift("Set-Sample @ Dist");
 			// assign setNameArr and sampNumArr to first and second columns
 			this.setTableColumn("QWDATATable", 0, setNameArr, () => {
 				this.buildRoutesAndRenderPages();
@@ -1087,14 +1111,16 @@ class WebFF extends React.Component {
 	customQuestionAdder = (q_obj, CB) => {
 		let newCustomQuestions = this.state.customQuestions.slice();
 		newCustomQuestions.push(q_obj);
-		this.setState({customQuestions:newCustomQuestions}, () => {
-			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB); });
+		this.setState({ customQuestions: newCustomQuestions }, () => {
+			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB);
+		});
 	}
 	customQuestionDeleter = (q_id, CB) => {
 		let newCustomQuestions = this.state.customQuestions.slice();
-		newCustomQuestions = newCustomQuestions.filter((Q)=>Q.id!==q_id)
-		this.setState({customQuestions:newCustomQuestions}, () => {
-			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB); });
+		newCustomQuestions = newCustomQuestions.filter((Q) => Q.id !== q_id)
+		this.setState({ customQuestions: newCustomQuestions }, () => {
+			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB);
+		});
 	}
 
 
@@ -1205,10 +1231,10 @@ class WebFF extends React.Component {
 			if (newQD[i].id === q_id) {
 				console.warn("Attempting to set value (" + value + ") on " + q_id + " and it only exists in questionsData.  This should be investigated, as it should be very rare.  Only expected when this is a custom question newer than the sampling event.")
 				// set value in the sampling event, making a new key
-//				console.log(curSE);//let newCurSE
+				//				console.log(curSE);//let newCurSE
 				curSE.questionsValues[q_id] = value;
-				this.setState({[this.state.curSamplingEventName]:curSE}, CB?CB():null);
-				 return;
+				this.setState({ [this.state.curSamplingEventName]: curSE }, CB ? CB() : null);
+				return;
 			}
 		}
 
@@ -1218,7 +1244,18 @@ class WebFF extends React.Component {
 	setLoggedInUser(username) {
 		//TODO: Reset everything to defaults
 
-		this.setState({ loggedInUser: username }, ()=>{this.componentWillMount(); this.buildRoutesAndRenderPages();}); 
+		this.setState({ loggedInUser: username }, () => { 
+			this.setUserConfigToDefault();
+			this.componentWillMount(); 
+			this.buildRoutesAndRenderPages(); 
+		});
+	}
+
+	setUserConfigToDefault() {
+		criticalUserNodes.forEach((nodeName) => {
+			console.log("resetting: ", nodeName);
+			localStorage.setItem(nodeName,[]);
+		});
 	}
 
 	setAppBarText = (txt) => {
@@ -1262,7 +1299,7 @@ class WebFF extends React.Component {
 			return null;
 		}
 	}
-	
+
 	getQuestionValue(q_id) { //****  //TODO: error reasonably when  curSamplingEvent is undefined
 		// q_id: string question ID associated with a question
 		// returns VALUE associated with the q_id... first searching dialogQuestions, then searching the currentSamplingEvent, then, finally, questionsData.
@@ -1435,13 +1472,13 @@ class WebFF extends React.Component {
 		return sampMethod;
 	}
 
-		//........BBBB.....BBBB..........................................
-		//........B...B....B...B.........................................
-		//........B....B...B...B.........................................
-		//........B....B...BBBB..........................................
-		//........B....B...B...B.........................................
-		//........B...B....B...B.........................................
-		//........BBBB.....BBBB..........................................
+	//........BBBB.....BBBB..........................................
+	//........B...B....B...B.........................................
+	//........B....B...B...B.........................................
+	//........B....B...BBBB..........................................
+	//........B....B...B...B.........................................
+	//........B...B....B...B.........................................
+	//........BBBB.....BBBB..........................................
 
 	updateDBInfo(needleKey, needle, newData, CB) {
 		// attempts to update location
@@ -1450,7 +1487,7 @@ class WebFF extends React.Component {
 		const DEBUG = true;
 
 
-		const API = 'https://152.61.248.218/mongoPatch.php/';
+		const API = 'http://152.61.248.218/mongoPatch.php/';
 		const query =
 			"needleKey=" + encodeURIComponent(needleKey) + "&" +
 			"needle=" + encodeURIComponent(needle) + "&" +
@@ -1705,7 +1742,7 @@ class WebFF extends React.Component {
 			// this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
 			// this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
 
-			this.buildCombinedQuestionsData(()=>console.log("CALLBACK!!"));
+			this.buildCombinedQuestionsData(() => console.log("CALLBACK!!"));
 
 			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
 

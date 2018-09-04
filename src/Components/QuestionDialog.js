@@ -50,8 +50,7 @@ const defaultState = {
   addQuestion_sizelg: "",
   deleteQuestion_qid: "",
   addSubmitButtonDisabled: true,
-  deleteSubmitButtonDisabled: true,
-  customQuestionsList: {}
+  deleteSubmitButtonDisabled: true
 }
 
 class QuestionDialog extends React.Component {
@@ -59,21 +58,12 @@ class QuestionDialog extends React.Component {
     super(props);
     this.state = {}
     Object.assign(this.state, defaultState);
-
-
   }
 
-  componentDidMount() {
-    let options = {};
-    let CQ = localStorage.getItem("customQuestions");
-    if (CQ) {
-      CQ = JSON.parse(CQ);
-      for (let i = 0; i < CQ.length; i++) {
-        options[CQ[i].id] = CQ[i].id;
-      }
-    }
-    this.setState({ customQuestionsList: options })
+  componentDidMount() {  // when loading from DB, this gets nothing... look into  pulling from props (don't set state, just calculate in render)
+
   }
+  
 
   pushToSedLOGINClickHandler = () => {
 
@@ -198,6 +188,18 @@ class QuestionDialog extends React.Component {
   //TODO: there might not be existing custom questions -- hide the delete button and dialog info if there isn't
   render() {
     const { classes } = this.props;
+    let customQuestionsList ={};
+    if(this.state.creatingQ===false) { // if this is a delete question
+      let options = {};
+      let CQ = localStorage.getItem("customQuestions");
+      if (CQ) {
+        CQ = JSON.parse(CQ);
+        for (let i = 0; i < CQ.length; i++) {
+          options[CQ[i].id] = CQ[i].id;
+        }
+      }
+      customQuestionsList=options;
+    }
 
     return (
       <Dialog
@@ -309,7 +311,7 @@ class QuestionDialog extends React.Component {
                     includeBlank={true}
                     value={this.state.deleteQuestion_qid}
                     stateChangeHandler={this.QChangeHandler}
-                    options={this.state.customQuestionsList}
+                    options={customQuestionsList}
                     type="DropDown"
                   />
                 </Grid>

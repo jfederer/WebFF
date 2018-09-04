@@ -194,6 +194,37 @@ class QWDATATable extends React.Component {
 		this.setState({ value: tempTableValue }, () => { this.props.stateChangeHandler(this) });
 	}
 
+
+	buildFirstColumn() {// builds first column of table -- the one that shows information data about the sample. ... also determines size of table... so useful in constructor.
+
+		let sampleEventLocations = [];
+		let numSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
+		let setType = this.props.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+
+		for (let i = 0; i < numSets; i++) {
+			let numSamps = this.props.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
+			let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
+			let setLocations = [];
+			for (let k = 1; k <= numSamps; k++) {
+				setLocations.push(this.props.getTableQuestionValue(table_q_id, 0, k));
+			}
+			sampleEventLocations.push(setLocations);
+		}
+
+		let firstColumn = [];
+		for (let i = 0; i < sampleEventLocations.length; i++) {
+			let setName = String.fromCharCode(65 + i)
+			for (let k = 0; k < sampleEventLocations[i].length; k++) {
+				let ending = '';
+				if (setType !== 'OTHER') ending = " @ " + sampleEventLocations[i][k];
+				firstColumn.push(setName + "-" + (k + 1) + ending);
+			}
+		}
+
+		return firstColumn;
+	}
+
+
 	buildRow(curRow, row) { //FUTURE:  build even the text questions as sub questions... auto-generating them
 		const { classes } = this.props;
 		return <TableRow key={this.props.id + "_row_" + row}>
@@ -208,35 +239,18 @@ class QWDATATable extends React.Component {
 				if (this.props.value[0][col] === "M2Lab" && row !== 0) {
 					cellQuestion = <Button onClick={() => this.handleM2LClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : "Edit"}</Button>
 				} else if (this.props.value[0][col] === "Add-on Analyses" && row !== 0) {
-					cellQuestion = <Button onClick={() => this.handleAddOnClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : this.props.value[row][col].join(",")}</Button>
+					console.log("val: \'",  this.props.value[row][col], "\'");
+					cellQuestion = <Button onClick={() => this.handleAddOnClickOpen(row, col)}>{this.props.value[row][col] === "" || this.props.value[row][col].length===0 ? "Add" : this.props.value[row][col].join(",")}</Button>
 				} else {
-
-					// check if this is a subQuestion
-					if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
-						let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
-						if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
-						let questionData = this.props.globalState.questionsData.filter((Q) => Q.id === subQuestionID)[0];
-						if (DEBUG) console.log("questionData", questionData);
-						adHocProps = { ...adHocProps, ...questionData, key: subQkey };
-						if (DEBUG) console.log("adHocProps", adHocProps);
-						cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
-
-						// if this question is in a header location, wrap it in the header div
-						if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
-							cellQuestion = <div className={classes.header}>{cellQuestion}</div>
-						}
-					} else {  // this is just a text field and rather than make a separate custom sub queston for each, 
-						// we'll extract the values as they change and put them into the 2d array of values representing the table
-						// TODO: dynamically build questions (id: tableQ_ID+row+col)
 
 						// just text could either be a header (whereby it should NOT become a question)
 						// or it needs to be a text question in the table
 						if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
 							cellQuestion = <div className={classes.header}>{cellContent}</div>
 						} else {
-							cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} />
+							cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} value="BLah"/>
 						}
-					}
+					// }
 				}
 				return (
 					<TableCell className={classes.tableCell} key={this.props.id + "_row:" + row + "_col:" + col}>
