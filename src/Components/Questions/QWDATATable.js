@@ -54,8 +54,84 @@ class QWDATATable extends React.Component {
 	};
 
 	componentWillMount() {
-		// console.log("CWM:");
+		console.log("QWDATA CWM:");
+		console.log("QWDATA CWM STATE: ", this.state);
+		console.log("QWDATA CQM PROPS: ", this.props);
 
+
+
+
+		let newValue = this.props.value.slice();
+
+		// check that the Add-on analysis values are arrays
+				let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
+//		let needsArraysAdded = false;
+		if(AddOnAnalysesIndex<0) { throw new Error("Add-on Analyses not found in header of QWDATA table")}
+		for(let row=1; row<newValue.length; row++) {
+			if(!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
+//				needsArraysAdded = true;
+				newValue[row][AddOnAnalysesIndex]=[];
+			}
+		}
+
+		//set the first column values to something correct
+		let sampleEventLocations = [];
+		let numSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
+		let setType = this.props.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+
+		for (let i = 0; i < numSets; i++) {
+			let numSamps = this.props.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
+			let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
+			let setLocations = [];
+			for (let k = 1; k <= numSamps; k++) {
+				let location = 0;
+				if(setType==="EWI") {
+					location = this.props.getTableQuestionValue(table_q_id, 0, k);
+				} else {
+					location = this.props.getTableQuestionValue(table_q_id, "Dist from L bank", k);
+				}
+
+					
+				
+				setLocations.push(location);
+			}
+			sampleEventLocations.push(setLocations);
+		}
+
+
+
+		let firstColumn = [];
+
+		
+		for (let i = 0; i < sampleEventLocations.length; i++) {
+			let setName = String.fromCharCode(65 + i)
+			for (let k = 0; k < sampleEventLocations[i].length; k++) {
+				let ending = '';
+				if (sampleEventLocations[i][k] !== '') ending = " @ " + sampleEventLocations[i][k];
+				firstColumn.push(setName + "-" + (k + 1) + ending);
+			}
+		}
+		// push below the header
+		firstColumn.unshift("Set-Sample @ Dist");
+
+		console.log("FIRST COLUMN: ", firstColumn);
+
+		let SetSampDistIndex = newValue[0].indexOf("Set-Sample @ Dist");
+		let needsArraysAdded = false;
+		if(SetSampDistIndex<0) { throw new Error("\'Set-Sample @ Dist\' not found in header of QWDATA table")}
+		for(let row=1; row<newValue.length; row++) {
+			if(!Array.isArray(newValue[row][SetSampDistIndex])) {
+//				needsArraysAdded = true;
+				newValue[row][SetSampDistIndex]=firstColumn[row];
+			}
+		}
+
+//		if(needsArraysAdded) {
+			this.setState({value:newValue});
+	//		return;
+	//	}
+
+		console.log("CWM done");
 
 	}
 
@@ -228,11 +304,11 @@ class QWDATATable extends React.Component {
 														value={this.state.value[rowNum][colNum]}
 													/>
 													let thisSampleDescript = this.state.value[rowNum][0]
-													console.log("thisSampleDescript: ", thisSampleDescript);
+													//console.log("thisSampleDescript: ", thisSampleDescript);
 													let thisSetName = thisSampleDescript.split("-")[0];
-													console.log("thisSetName ", thisSetName);
+													//console.log("thisSetName ", thisSetName);
 													let thisSampleNum = thisSampleDescript.split("-")[1].split(" @")[0];
-													console.log("thisSampleNum ", thisSampleNum);
+													//console.log("thisSampleNum ", thisSampleNum);
 													
 													
 													break;

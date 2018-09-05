@@ -52,7 +52,7 @@ import EventManager from './EventManager';
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
-import QWDATATable from './Questions/QWDATATable.js';
+//import QWDATATable from './Questions/QWDATATable.js';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
@@ -685,7 +685,6 @@ class WebFF extends React.Component {
 
 	setTableColumn(q_id, colNum, arr, CB) {
 		// WARNING: expands or shrinks the entire table to match the number of rows in the given column
-		// TODO: add flag(s) to clear out rest of table? -- no, do this as part of propagate, to much side-effect here
 		console.log("q_id:", q_id);
 		let valArr = this.getQuestionValue(q_id).slice();
 		// console.log("Existing valArr.length: ", valArr.length);
@@ -1084,28 +1083,15 @@ class WebFF extends React.Component {
 		let sampleEventLocations = [];
 		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
 		let setType = this.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
-
+		let totalSamps = 0;
 		for (let i = 0; i < numSets; i++) {
-			let numSamps = this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
-			let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
-			let setLocations = [];
-			for (let k = 1; k <= numSamps; k++) {
-				setLocations.push(this.getTableQuestionValue(table_q_id, 0, k));
-			}
-			sampleEventLocations.push(setLocations);
+			totalSamps += this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
 		}
 
-		let firstColumn = [];
-		for (let i = 0; i < sampleEventLocations.length; i++) {
-			let setName = String.fromCharCode(65 + i)
-			for (let k = 0; k < sampleEventLocations[i].length; k++) {
-				let ending = '';
-				if (setType !== 'OTHER') ending = " @ " + sampleEventLocations[i][k];
-				firstColumn.push(setName + "-" + (k + 1) + ending);
-			}
-		}
-		// push below the header
-		firstColumn.unshift("Sets-Sample @ Dist");
+		
+		let firstColumn = new Array(totalSamps).fill("Set-Sample @ Dist");
+
+		firstColumn.unshift("Set-Sample @ Dist");
 
 		this.setTableColumn("QWDATATable", 0, firstColumn, () => {
 			this.buildRoutesAndRenderPages();
@@ -1138,12 +1124,32 @@ class WebFF extends React.Component {
 					let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
 					let timeSinceStart = (sampNum * msBetweenSamples);
 					let d = new Date(startDateTime.getTime() + timeSinceStart);
-					estimatedTimeColumn[QWDATARowNum] = ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2);
+					estimatedTimeColumn[QWDATARowNum] = startTime && endTime
+						? ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2)
+						: "";
 				}
 			}
 
 			this.setTableColumn("QWDATATable", 1, estimatedTimeColumn, () => {
 				this.buildRoutesAndRenderPages();
+
+
+				let newValue = this.getQuestionValue("QWDATATable").slice();
+
+				// check that the Add-on analysis values are arrays
+				let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
+		//		let needsArraysAdded = false;
+				if(AddOnAnalysesIndex<0) { throw new Error("Add-on Analyses not found in header of QWDATA table in propagate")}
+				for(let row=1; row<newValue.length; row++) {
+					if(!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
+		//				needsArraysAdded = true;
+						newValue[row][AddOnAnalysesIndex]=[];
+					}
+				}
+
+				this.setQuestionValue("QWDATATable", newValue, ()=> console.log("PROPAGATE DONE VALUE: ", this.getQuestionValue("QWDATATable")));
+
+				;
 			});
 
 
