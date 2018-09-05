@@ -25,7 +25,7 @@ class Dashboard extends React.Component {
 
 		// pull existing sampling events from props and from LS
 
-		console.log("Dashboard Mounted Props: ", this.props);
+	//	console.log("Dashboard Mounted Props: ", this.props);
 	}
 
 
