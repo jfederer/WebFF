@@ -231,8 +231,8 @@ class QWDATATable extends React.Component {
 		}
 
 		const { classes } = this.props;
-		console.log("QWDATA Render props.value: ", this.props.value);
-		console.log("QWDATA Render state: ", this.state);
+		// console.log("QWDATA Render props.value: ", this.props.value);
+		// console.log("QWDATA Render state: ", this.state);
 		let classlessProps = this.props;
 		delete classlessProps[classes];
 

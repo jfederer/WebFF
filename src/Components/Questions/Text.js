@@ -25,6 +25,10 @@ class Text extends React.Component {
 	// }
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		let newVal = event.target.value.trim();
+		if(!isNaN(newVal)) {
+			newVal = Number(event.target.value)
+		}
 		this.setState({
 			[value]: event.target.value
 		}, () => {

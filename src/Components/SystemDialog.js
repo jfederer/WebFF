@@ -55,13 +55,11 @@ class SystemDialog extends React.Component {
 					this.props.closeHandler();
 				}
 				break;
-			}
 
-			// case "Add/Remove Question" : {
-			// 						// let addDialog = globalState.dialogQuestions.filter((dialog) => {
-			// 		// 	return dialog.dialogName === dialogName;
-			// 		// })[0];
-			// }
+			}
+			case "Settings":
+				this.props.closeHandler();
+				break;
 			default: {
 				console.log(dialogName + "submit button is not yet implemented");
 			}
@@ -78,30 +76,30 @@ class SystemDialog extends React.Component {
 		if (dialogQuestions === null || dialogQuestions.length === 0) {
 			// console.log("null dialogQuestions");
 			return null;
-		} else 
-		return (
-			<Dialog
-				open={this.props.isOpen}
-				onClose={this.props.closeHandler}
-				aria-labelledby="form-dialog-title"
-			>
-				<DialogTitle id="form-dialog-title">{dialogName}</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						{dialogDescription}:
+		} else
+			return (
+				<Dialog
+					open={this.props.isOpen}
+					onClose={this.props.closeHandler}
+					aria-labelledby="form-dialog-title"
+				>
+					<DialogTitle id="form-dialog-title">{dialogName}</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							{dialogDescription}:
             			</DialogContentText>
-					<QuestionPanel
-						questions={createQuestionComponents(dialogQuestions, this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues, this.props)}
+						<QuestionPanel
+							questions={createQuestionComponents(dialogQuestions, this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues, this.props)}
 
-						key={dialogName} />
+							key={dialogName} />
 
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={closeHandler} color="primary">Cancel</Button>
-					<Button onClick={() => this.dialogSubmitHandler(dialogName, this.props.globalState)} color="primary">Submit</Button>
-				</DialogActions>
-			</Dialog>
-		);
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={closeHandler} color="primary">Cancel</Button>
+						<Button onClick={() => this.dialogSubmitHandler(dialogName, this.props.globalState)} color="primary">Submit</Button>
+					</DialogActions>
+				</Dialog>
+			);
 	}
 
 

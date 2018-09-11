@@ -152,8 +152,8 @@ class QuestionDialog extends React.Component {
           value: "",  //TODO: add question  
           tabName: this.state.addQuestion_tab,
           layoutGroup: this.state.addQuestion_panel,
-          width_xs: parseInt(this.state.addQuestion_sizexs, 10),
-          width_lg: parseInt(this.state.addQuestion_sizelg, 10)
+          width_xs: isNaN(parseInt(this.state.addQuestion_sizexs, 10))?null:parseInt(this.state.addQuestion_sizexs, 10),
+          width_lg: isNaN(parseInt(this.state.addQuestion_sizelg, 10))?null:parseInt(this.state.addQuestion_sizelg, 10)
         }
         break;
       case "Checkbox":
@@ -165,8 +165,8 @@ class QuestionDialog extends React.Component {
           value: "",  //TODO: add question  
           tabName: this.state.addQuestion_tab,
           layoutGroup: this.state.addQuestion_panel,
-          width_xs: parseInt(this.state.addQuestion_sizexs, 10),
-          width_lg: parseInt(this.state.addQuestion_sizelg, 10)
+          width_xs: isNaN(parseInt(this.state.addQuestion_sizexs, 10))?null:parseInt(this.state.addQuestion_sizexs, 10),
+          width_lg: isNaN(parseInt(this.state.addQuestion_sizelg, 10))?null:parseInt(this.state.addQuestion_sizelg, 10)
         }
         break;
       default:

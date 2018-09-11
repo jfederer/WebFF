@@ -16,6 +16,8 @@ import { saveFile } from '../Utils/FileHandling';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
+const SEDLOGIN_SUCCESS_MESSAGE = "Imported 1 event into SedLOGIN project";
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -57,7 +59,7 @@ class XMLDialog extends React.Component {
 
   pushXMLToSedLOGIN(p_id,pass) {
     
-    this.updateStatus("Attempting to push to SedLOGIN... this may take a minute");
+    this.updateStatus("Attempting to push to SedLOGIN... this may take a minute\n");
 
     const SLCXML = this.props.getSedLOGINcompatibleXML();
     const DEBUG = true;
@@ -83,6 +85,9 @@ class XMLDialog extends React.Component {
       })
       .then((response) => {
         this.updateStatus(response);
+        if(response.includes(SEDLOGIN_SUCCESS_MESSAGE)) {
+          this.props.setShippedStatus(null, true);
+        }
         //TODO: add loader
       })
       .catch(error => console.log("Error fetching " + URI + "(" + query + ")\n" + error));

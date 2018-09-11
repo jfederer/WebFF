@@ -3,7 +3,6 @@ export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID
 	"Sample Time": null,
 	"Hydrologic Event": "hydrologicEvent",
 	"Hydrologic Cond": "hydrologicCondition",
-	"Sample Medium": "sampleMedium",
 	"Sample Type": "sampleType",
 	"ASTAT Code": "analysisStatus",
 	"Add-on Analyses": null,

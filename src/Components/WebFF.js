@@ -47,7 +47,7 @@ import { Redirect } from 'react-router-dom';
 import { isReasonablyValidUsernameInLS } from '../Utils/ValidationUtilities';
 import XMLDialog from './XMLDialog';
 import QuestionDialog from './QuestionDialog';
-import EventManager from './EventManager';
+import EventsManager from './EventsManager';
 
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -63,13 +63,16 @@ const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questions
 const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
 var needToSyncStationDataToQuestionData = true;
 
-
-const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent:"; //TODO: add colon
+const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent::"; //TODO: add colon
 
 const isDEV = false;
 
-class WebFF extends React.Component {
 
+const defaultHiddenTabs = ["WaterQuality", "FieldForm", "DataEntry", "Parameters", "QWDATA"];
+
+const defaultHiddenPanels = ["DataEntry:IntakeEfficiencyTest"];
+
+class WebFF extends React.Component {
 
 
 	constructor(props) {
@@ -80,8 +83,11 @@ class WebFF extends React.Component {
 		this.state = {
 			itemsToSyncToLS: allItemsToSyncToLS,
 
+			syncIntervalFunction: null,
+
 			itemsLoaded: [],
 			usePaper: false,
+			syncDelay: 300000,
 
 			navMenuInfo: [],
 			navMenuExpanded: false,
@@ -127,14 +133,18 @@ class WebFF extends React.Component {
 		this.removeStation = this.removeStation.bind(this);
 		this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
 		this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
+		this.getQuestionValueFromEvent = this.getQuestionValueFromEvent.bind(this);
 		this.getQuestionValue = this.getQuestionValue.bind(this);
 		this.getQuestionData = this.getQuestionData.bind(this);
 		this.setQuestionValue = this.setQuestionValue.bind(this);
 		this.setTableColumn = this.setTableColumn.bind(this);
+		this.getEventDetails = this.getEventDetails.bind(this);
+		this.deleteSamplingEvent = this.deleteSamplingEvent.bind(this);
 		this.getNumberOfSetsInCurrentSamplingEvent = this.getNumberOfSetsInCurrentSamplingEvent.bind(this);
 		this.getNumberOfSamplesInSet = this.getNumberOfSamplesInSet.bind(this);
 		this.getCurrentSampleEventMethod = this.getCurrentSampleEventMethod.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 		this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		this.setShippedStatus = this.setShippedStatus.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 		this.getSedLOGINcompatibleXML = this.getSedLOGINcompatibleXML.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
@@ -147,19 +157,22 @@ class WebFF extends React.Component {
 			console.log(this.state.loggedInUser + "is logged in");
 			this.gatherUserConfig(criticalUserNodes); //load user configuration
 		} else {
-			console.log("No one is logged in... stop your business"); //TOOD: redirect to /
+			console.log("No one is logged in... requesting user id"); //TOOD: redirect to /
 
 		}
+	}
 
-		//TODO: collect station info and combine with default questions and data
-		// if(this.state.curSamplingEventName===null || this.state.curSamplingEventName === '') { //TODO: multiple reloads mess this up if it starts null
-		// 	window.location.replace("/Dashboard");
-		// 	console.log("Redirected");
+	componentDidMount() {
+
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
 		//console.log("CWU: items: ", nextState.itemsToSyncToLS);
-		nextState.itemsToSyncToLS.forEach((item) => localStorage.setItem(item, JSON.stringify(nextState[item])));
+		nextState.itemsToSyncToLS.forEach((item) => {
+			if (item !== "defaultQuestionsData") { // don't ever modify defaultQuestions after the initial config load
+				localStorage.setItem(item, JSON.stringify(nextState[item]));
+			}
+		});
 
 		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
 		//console.log("NEXTSTATIONS: ", nextState.stations);
@@ -289,8 +302,16 @@ class WebFF extends React.Component {
 					console.log("SYSTEM CONFIG LOADING: " + nodeName);
 					if (nodeName === "questionsData") {
 						// save the original results from the DB as the defaultQuestionsData
-						this.setState({ defaultQuestionsData: nodeArr }, () => console.log("DEFAULT QUESTION DATA SET!!!!"));
+						this.setState({ defaultQuestionsData: nodeArr });
 					}
+					// if (nodeName === "hiddenTabs") {
+					// 	// save the original results from the DB as the defaultQuestionsData
+					// 	this.setState({ defaultHiddenTabs: nodeArr });
+					// }
+					// if (nodeName === "hiddenPanels") {
+					// 	// save the original results from the DB as the defaultQuestionsData
+					// 	this.setState({ defaultHiddenPanels: nodeArr });
+					// }
 					this.setState({ [nodeName]: nodeArr }, () => {
 						if (DEBUG) console.log("STATE: ", this.state);
 						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
@@ -304,10 +325,14 @@ class WebFF extends React.Component {
 				});
 			});
 		}
+
+
 	}
 
 
 	gatherUserConfig(nodesToGather) {
+		//TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
+
 		console.log("GATHERING USER CONFIGURATION");
 		// if data is in both DB and LS -- LS version is considered authoritative
 
@@ -323,8 +348,8 @@ class WebFF extends React.Component {
 		//first, attempt to pull all conifg and sampling event info from DB
 		// pull config info from DB
 		// TODO: check if online and skip if not.
+
 		this.fetchDBInfo(this.state.loggedInUser, 'users', (JSONresponse) => {
-			DEBUG = false;
 			if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 
 			// check that this user even exists in database
@@ -370,103 +395,137 @@ class WebFF extends React.Component {
 
 				for (let i = 0; i < allNodeNames.length; i++) {
 					if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-						this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
-							this.addToItemsToSyncToLS(allNodeNames[i]);
-							this.buildRoutesAndRenderPages();
-						});
+						if (localStorage.getItem(allNodeNames[i])) {
+							console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
+						} else {
+							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+								this.addToItemsToSyncToLS(allNodeNames[i]);
+								this.buildRoutesAndRenderPages();
+							});
+						}
 					}
 				}
 			} // end one user found in DB
 
-
 			// after loading everything we can from DB 
 			// (This is still the callback from the fetchDB call), 
 			// let's load everything we can from LS.
-			// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
+			this.getUserConfigFromLS(nodesToGather);
 
-			if (DEBUG) console.log("pulling config info from  LS");
-			for (let i = 0; i < nodesToGather.length; i++) {
-				console.log("Parsing LS: ", nodesToGather[i]);
-				let node = localStorage.getItem(nodesToGather[i]);
-				if (!node || node !== "null" || node !== [] || node.length !== 0) {
-					// set this item as loaded.  //TODO: never do anythign with this... so perhaps remove, or utilitze e in the future
-					let newItemsLoaded = this.state.itemsLoaded;
-					if (!newItemsLoaded.includes(nodesToGather[i])) {
-						newItemsLoaded.push(nodesToGather[i])
-					}
+		}, this.getUserConfigFromLS(nodesToGather)); // end fetchDB callback
+
+		var syncInterval = setInterval(() => this.updateDatabase(), this.state.syncDelay);
+		// store intervalId in the state so it can be accessed later:
+		this.setState({ syncIntervalFunction: syncInterval });
+
+	}
+
+	getUserConfigFromLS(nodesToGather) {
+		// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
+		let DEBUG = true;
+		if (DEBUG) console.log("getUserConfigFromLS");
+		for (let i = 0; i < nodesToGather.length; i++) {
+			console.log("Parsing LS: ", nodesToGather[i]);
+			let node = localStorage.getItem(nodesToGather[i]);
+			if (!node || node !== "null" || node !== [] || node.length !== 0) {
+				// set this item as loaded.  //TODO: never do anythign with this... so perhaps remove, or utilitze e in the future
+				let newItemsLoaded = this.state.itemsLoaded;
+				if (!newItemsLoaded.includes(nodesToGather[i])) {
+					newItemsLoaded.push(nodesToGather[i])
+				}
+				this.setState({
+					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
+					itemsLoaded: newItemsLoaded
+				}, () => {
+
+					this.buildCombinedQuestionsData(() => {
+						this.buildRoutesAndRenderPages();
+					});
+				});
+			}
+		}
+
+		// see what sampling events might be in LS and add them to our list of samplingEvents:
+		if (DEBUG) console.log("pulling Sampling Event info from  LS");
+		let allNodeNames = Object.keys(localStorage);
+		for (let i = 0; i < allNodeNames.length; i++) {
+			if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+				let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
+				if (SE.user === this.state.loggedInUser) {
 					this.setState({
-						[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
-						itemsLoaded: newItemsLoaded
+						[allNodeNames[i]]: SE
 					}, () => {
-
-						this.buildCombinedQuestionsData(() => {
-							this.buildRoutesAndRenderPages();
-						});
+						if (DEBUG) console.log("Setting SE: " + allNodeNames[i]);
+						this.addToItemsToSyncToLS(allNodeNames[i]);
+						this.buildRoutesAndRenderPages();
 					});
 				}
 			}
-
-			// see what sampling events might be in LS and add them to our list of samplingEvents:
-			if (DEBUG) console.log("pulling Sampling Event info from  LS");
-			let allNodeNames = Object.keys(localStorage);
-			for (let i = 0; i < allNodeNames.length; i++) {
-				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-					let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
-					if (SE.user === this.state.loggedInUser) {
-						this.setState({
-							[allNodeNames[i]]: SE
-						}, () => {
-							if (DEBUG) console.log("Setting SE: " + allNodeNames[i]);
-							this.addToItemsToSyncToLS(allNodeNames[i]);
-							this.buildRoutesAndRenderPages();
-						});
-					}
-				}
-			}
-
-
-		}); // end fetchDB callback
+		}
 	}
 
 
+	deleteSamplingEvent(eventName) {
+		let newEvent = this.state[eventName];
+		newEvent.deleted = true;
+		this.setState({[eventName]:newEvent});
+		this.markForDBUpdate(eventName);
+		this.buildRoutesAndRenderPages();
+	}
 
-	createNewSamplingEvent() {
-		// create new sampling event 
-		let newSamplingEventID = this.getDateTimeString();
+	createNewSamplingEvent(optionalName) {
+		let newSamplingEventID = optionalName;
+		console.log(optionalName);
+
+		if(!newSamplingEventID) {
+			newSamplingEventID = this.getDateTimeString();
+		}
+
 		let samplingEventName = SAMPLING_EVENT_IDENTIFIER + newSamplingEventID;
 
-		// load initial values from questionsData  (and not for dialog questions, as those are saved to this.state.dialogValues) )
+		// load initial values from questionsData  //TODO: needed?  Could just write them as they are needed rather than writing a bunch that might never get used
 		let questionsValues = {};
 		this.state.questionsData.forEach((Q) => {
+			// if (Q.id === "setA_samplesTable_EWI") {
+			// 	console.log("SET A EWI VALUE: ", Q.value);
+			// }
 			questionsValues[Q.id] = Q.value;
+		});
+
+		//reset all question values to defaults.  
+		//TODO: this shoudl not be needed but for some reason, the EWI/EDI/OTHER sample tables values get stored in questionsData
+		//console.log(this.state.defaultQuestionsData);
+		// this.state.defaultQuestionsData.forEach((defQ)=> {
+		// 	questionsValues[defQ.id]=defQ.value;
+		// });
+
+		this.setState({
+			hiddenTabs: defaultHiddenTabs.slice(),
+			hiddenPanels: defaultHiddenPanels.slice()
 		});
 
 		let newSamplingEvent = {
 			id: newSamplingEventID,
 			user: this.state.loggedInUser,
-			//submittedToSedLOGIN: false,
+			shippedStatus: false,
 			questionsValues: questionsValues
 		}
 
 		//ensure this sampling event will be sync'd to LS
 		this.addToItemsToSyncToLS(samplingEventName);
 
-		//save it to the state    (note, we'll use Object.keys(localStorage) to get this later)
-		this.setState({ [samplingEventName]: newSamplingEvent, curSamplingEventName: samplingEventName }, () => {
+		//save it to the state  
+		this.setState({
+			[samplingEventName]: newSamplingEvent,
+			curSamplingEventName: samplingEventName
+		}, () => {
 			this.runAllActionsForCurrentSamplingEvent();
 			// this.collectRunAndPropagateSamplePointData();
 		});
 
-		//TODO:
-		//TODO:
-		//TODO:
-		//TODO:
-		//TODO:	Reset all question values to defaults
-		//TODO:
-		//TODO:
-		//TODO:
-		//TODO:
+
 		this.markForDBUpdate(samplingEventName);
+		this.buildRoutesAndRenderPages();
 	}
 
 
@@ -495,12 +554,11 @@ class WebFF extends React.Component {
 		}
 	}
 
-	fetchDBInfo(_query, _collection, successCB) {
+	fetchDBInfo(_query, _collection, successCB, failureCB) {
 
 
 		const DEBUG = false;
-		if (true) console.log("fetchDBInfo(", _query, ", ", _collection, ")");
-
+		if (DEBUG) console.log("fetchDBInfo(", _query, ", ", _collection, ")");
 
 		// sort out differences in local dev server and production server calls
 		const API = 'http://152.61.248.218/mongoFetch.php/';
@@ -549,7 +607,16 @@ class WebFF extends React.Component {
 				successCB(parsedJSON);
 				// }, 1200);
 			})
-			.catch(error => console.log("Error fetching " + API + query + "\n" + error));
+			// .catch(error => {  });
+			.catch(error => {
+				console.log(failureCB);
+				if (typeof failureCB === "function") {
+					failureCB(error);
+				}
+				else {
+					console.error("Error fetching " + API + query + "\n" + error);
+				}
+			});
 	}
 
 	handleDialogOpen() {
@@ -600,7 +667,7 @@ class WebFF extends React.Component {
 		// void return
 		// note, does not throw errors and instead only warns.  
 
-		//console.log(actionString);
+		//if (true) console.log("actionExecuter(", actionString, ")");
 		let splitActionString = actionString.split('::');
 		if (splitActionString.length !== 2) {
 			console.warn("Requested action string '" + actionString + "' is malformed.  Must only have one '::' per action.  Separate actions with '&'.");
@@ -643,17 +710,18 @@ class WebFF extends React.Component {
 		}
 	}
 
-	updateNumRowsOfTable(q_id, numToAdd, CB) {  //TODO: FIXME: copying questions for new rows is going to be problematic
+	updateNumRowsOfTable(q_id, numToAdd, CB) {
 		//q_id: questionID of the table
-		//numToAdd: number of rows to add to the table. If a negative value is passed, will subtract rows
+		//numToAdd: number of rows to add to the table. If a negative value is passed, will subtract rows from end
 		//CB: callback function after setQuestionValue is called.
 		//note, new rows are copies of last row.  //TODO: make this copying optional by passing in array of columns to copy
 		//note, TODO: if would be replicating colHeaders, just puts in blanks instead
-		//console.log("QID: ", q_id, " : ", this.getQuestionValue(q_id));
+		console.log("updateNumRowsOfTable(" + q_id + ", " + numToAdd + ")");
 
 		let valArr = this.getQuestionValue(q_id).slice();
 
-		// let newRow = valArr[valArr.length - 1].slice(); Night REFACTOR
+		console.log("Starting valArr: ", valArr);
+
 		let newRow = new Array(valArr[0].length).fill("");
 
 		if (numToAdd > 0)  // add rows
@@ -664,7 +732,9 @@ class WebFF extends React.Component {
 			for (let i = numToAdd; i < 0; i++) {
 				valArr.pop();
 			}
-		this.setQuestionValue(q_id, valArr, CB);
+		console.log("setting questoin value at end of update Num Rows Of Table: ", valArr);
+		this.setQuestionValue(q_id, valArr, this.isFunction(CB) ? CB : null);
+		console.log("leaving updateNumRowsOfTable");
 	}
 
 	addColumnToTable(q_id) { //TODO: numToAdd
@@ -684,18 +754,28 @@ class WebFF extends React.Component {
 	}
 
 	setTableColumn(q_id, colNum, arr, CB) {
+		console.log("setTableColumn(" + q_id + ", " + colNum + ", ", arr, ")");
 		// WARNING: expands or shrinks the entire table to match the number of rows in the given column
-		console.log("q_id:", q_id);
 		let valArr = this.getQuestionValue(q_id).slice();
-		// console.log("Existing valArr.length: ", valArr.length);
-		// console.log("Incoming arr length: ", arr.length);
-		this.updateNumRowsOfTable(q_id, arr.length - valArr.length, () => {
-			valArr = this.getQuestionValue(q_id).slice();
-			valArr.forEach((row, rowNum) => {
-				row.splice(colNum, 1, arr[rowNum]);
-			});
-			this.setQuestionValue(q_id, valArr, CB ? CB : null);
-		});
+		console.log("setTableColumn value", valArr); //TOOD: somehow the values from propagate are already in here at this point (but it's the wrong size)
+		//console.log("setTableColumn Existing valArr.length: ", valArr.length);
+		//console.log("setTableColumn Incoming arr length: ", arr.length);
+
+		this.updateNumRowsOfTable(q_id, arr.length - valArr.length, () => this.insertColumnValuesAfterItHasBeenResized(q_id, colNum, arr, CB));
+		//CB;
+		console.log("leaving setTableColumn");
+	}
+
+	insertColumnValuesAfterItHasBeenResized(q_id, colNum, arr, CB) {
+		console.log("insertColumnValuesAfterItHasBeenResized(", q_id, colNum, arr, ")");
+		let newValArr = this.getQuestionValue(q_id).slice();
+		console.log("insertColumnValuesAfterItHasBeenResized: valArr (before insert): ", newValArr);
+		for (let rowNum = 0; rowNum < newValArr.length; rowNum++) {
+			newValArr[rowNum][colNum] = arr[rowNum];
+		}
+		console.log("insertColumnValuesAfterItHasBeenResized: valArr (after insert): ", newValArr);
+		this.setQuestionValue(q_id, newValArr, () => this.isFunction(CB) ? CB() : null);
+		console.log("leaving insertColumnValuesAfterItHasBeenResized");
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
@@ -855,7 +935,7 @@ class WebFF extends React.Component {
 		// updates value of Q in state, checks for action string, executes any actions
 
 		let DEBUG = false;
-		if (true) console.log("questionChangeSystemCallback: ", Q, "   dialogQuestion: ", dialogQuestion);
+		if (DEBUG) console.log("questionChangeSystemCallback: ", Q, "   dialogQuestion: ", dialogQuestion);
 		if (DEBUG) console.log("this.state.curSamplingEventName: ", this.state.curSamplingEventName);
 		if (DEBUG) console.log("this.state[this.state.curSamplingEventName]: ", this.state[this.state.curSamplingEventName]);
 
@@ -866,6 +946,21 @@ class WebFF extends React.Component {
 		//HARDCODE for paper settings:
 		if (Q.props.id === "settings_paper") {
 			this.setState({ usePaper: Q.state.value });
+			this.handleSystemMenuItemClicked("Settings");
+		}
+
+
+		//HARDCODE for settings_syncDelay
+		if (Q.props.id === "settings_syncDelay") {
+			clearInterval(this.state.syncIntervalFunction);
+			if (Q.state.value < 1) {
+				alert("Sync Interval must be greater than 1 minute");
+			}
+			this.setState({ syncDelay: Q.state.value * 60 * 1000 }, () => {
+				var syncInterval = setInterval(() => this.updateDatabase(), this.state.syncDelay);
+				// store intervalId in the state so it can be accessed later:
+				this.setState({ syncIntervalFunction: syncInterval });
+			});
 			this.handleSystemMenuItemClicked("Settings");
 		}
 
@@ -890,7 +985,7 @@ class WebFF extends React.Component {
 
 		//HARDCODE for numberOfSamplingPoints
 		let propagateSamplePointData = false;
-		if (Q.props.id.includes("numberOfSamplingPoints")) {
+		if (Q.props.id.includes("numberOfSamplingPoints")) {  //TODO: build list of questions which should trigger propagation
 			propagateSamplePointData = true; // want to run it later because we want values to propagate through teh system first
 			this.showTabOrPanel("Parameters", true, true)
 		}
@@ -907,6 +1002,7 @@ class WebFF extends React.Component {
 	}
 
 	loadSamplingEvent(samplingEventName) {
+		console.log("loadSamplingEvent");
 		//TODO: return all items to default state BEFORE loading and running?
 		this.setState({ curSamplingEventName: samplingEventName }, () => {
 			this.runAllActionsForCurrentSamplingEvent();
@@ -916,6 +1012,7 @@ class WebFF extends React.Component {
 
 
 	runAllActionsForCurrentSamplingEvent() { //***   not a fan of the use of getQuestionData
+		console.log("runAllActionsForCurrentSamplingEvent");
 		// runs through every question in questionsData, if that question has actions checks the value of said question and runs appropraite actions
 		let DEBUG = false;
 		this.state.questionsData.forEach((questionData) => { // for each question
@@ -971,7 +1068,10 @@ class WebFF extends React.Component {
 			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
 		}
 
-
+		let allSamplingEvents = Object.keys(this.state).filter((key) => key.startsWith(SAMPLING_EVENT_IDENTIFIER));
+		let thisUsersSamplingEvents = allSamplingEvents.filter((SEname) => {
+			return this.state[SEname].user === this.state.loggedInUser && !this.state[SEname].deleted;
+		});
 
 		var newRoutesAndPages = (
 			<Switch> {/* only match ONE route at a time */}
@@ -982,18 +1082,22 @@ class WebFF extends React.Component {
 				}} />
 				<Route path="/Dashboard" render={() => <Dashboard
 					appBarTextCB={this.setAppBarText}
-					text="Dashboard"
 					navControl={this.navigationControl}
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
-					samplingEvents={Object.keys(this.state).filter((key) => key.startsWith(SAMPLING_EVENT_IDENTIFIER))}
+					samplingEvents={thisUsersSamplingEvents}
+					getEventDetails={this.getEventDetails}
+					deleteSamplingEvent={this.deleteSamplingEvent} 
+					samplingEventIdentifier ={SAMPLING_EVENT_IDENTIFIER}
 				/>} />
-				<Route path="/AllEvents" render={() => <EventManager
+				<Route path="/EventsManager" render={() => <EventsManager
 					appBarTextCB={this.setAppBarText}
 					navControl={this.navigationControl}
 					createNewSamplingEvent={this.createNewSamplingEvent}
 					loadSamplingEvent={this.loadSamplingEvent}
-					samplingEvents={Object.keys(this.state).filter((key) => key.startsWith(SAMPLING_EVENT_IDENTIFIER))}
+					samplingEvents={thisUsersSamplingEvents}
+					getEventDetails={this.getEventDetails}
+					deleteSamplingEvent={this.deleteSamplingEvent}
 				/>} />
 				<Route render={() => <QuestionPage
 					appBarTextCB={this.setAppBarText}
@@ -1027,6 +1131,7 @@ class WebFF extends React.Component {
 
 
 	collectRunAndPropagateSamplePointData(q_id) {
+		console.log("collectRunAndPropagateSamplePointData(" + q_id + ")");
 		//TODO: check that everything is loaded before trying
 		let DEBUG = false;
 		let numSampPoints = null;
@@ -1072,14 +1177,17 @@ class WebFF extends React.Component {
 
 			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable") + "_" + sampMethod;
 
+			//console.log("TEMPVAR: ", tempValArr);
+
 			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
 
 			this.propagateQWDATAInfo();
-
+			//console.log("leaving collectRunAndPropagateSamplePointData");
 		}
 	}
 
 	propagateQWDATAInfo() {
+		console.log("propagateQWDATAInfo");
 		let sampleEventLocations = [];
 		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
 		let setType = this.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
@@ -1088,7 +1196,7 @@ class WebFF extends React.Component {
 			totalSamps += this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
 		}
 
-		
+
 		let firstColumn = new Array(totalSamps).fill("Set-Sample @ Dist");
 
 		firstColumn.unshift("Set-Sample @ Dist");
@@ -1138,16 +1246,16 @@ class WebFF extends React.Component {
 
 				// check that the Add-on analysis values are arrays
 				let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
-		//		let needsArraysAdded = false;
-				if(AddOnAnalysesIndex<0) { throw new Error("Add-on Analyses not found in header of QWDATA table in propagate")}
-				for(let row=1; row<newValue.length; row++) {
-					if(!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
-		//				needsArraysAdded = true;
-						newValue[row][AddOnAnalysesIndex]=[];
+				//		let needsArraysAdded = false;
+				if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table in propagate") }
+				for (let row = 1; row < newValue.length; row++) {
+					if (!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
+						//				needsArraysAdded = true;
+						newValue[row][AddOnAnalysesIndex] = [];
 					}
 				}
 
-				this.setQuestionValue("QWDATATable", newValue, ()=> console.log("PROPAGATE DONE VALUE: ", this.getQuestionValue("QWDATATable")));
+				this.setQuestionValue("QWDATATable", newValue, () => console.log("PROPAGATE DONE VALUE: ", this.getQuestionValue("QWDATATable")));
 
 				;
 			});
@@ -1256,7 +1364,7 @@ class WebFF extends React.Component {
 		// throws error if no question is found
 
 		let DEBUG = false;
-		if (DEBUG) console.log("setQuestionValue(" + q_id + ", " + value + ")");
+		if (DEBUG) console.log("setQuestionValue(" + q_id + ", ", value, ")");
 
 		// search in dialog questions  (note, if we search current sampling event first -- and we try to modify a dialog before loading an event, things crash... so we search the dialog questions first)
 		let newDQ = this.state.dialogQuestions.slice();
@@ -1295,29 +1403,52 @@ class WebFF extends React.Component {
 			}
 		}
 
-		throw new Error("Question not found in current sampling event, dialog questions, user custom or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
+		throw new Error("Question not found in current sampling event, dialog questions, user custom or default config questions.  WebFF.setQuestionValue(" + q_id + ")");
 	}
 
 	setLoggedInUser(username) {
-		//TODO: Reset everything to defaults
 
-		this.setState({ loggedInUser: username }, () => {
+		this.setState({
+			loggedInUser: username,
+			hiddenTabs: defaultHiddenTabs.slice(),
+			hiddenPanels: defaultHiddenPanels.slice()
+		}, () => {
 			this.setUserConfigToDefault();
 			this.componentWillMount();
 			this.buildRoutesAndRenderPages();
+			this.props.history.push('/Dashboard');
 		});
+
 	}
 
 	setUserConfigToDefault() {
+		// tabs back to default hidden
+		//TODO: tabs back to default hidden on create sampling event too
+
 		criticalUserNodes.forEach((nodeName) => {
 			console.log("resetting: ", nodeName);
-			localStorage.setItem(nodeName, []);
+			this.setState({ nodeName: [] });
 		});
 	}
 
 	setAppBarText = (txt) => {
 		this.setState({ appBarText: txt });
 	};
+
+	setShippedStatus(eventName, status) {
+		let realEventName = eventName;
+		if (!eventName) {
+			realEventName = this.state.curSamplingEventName;
+		}
+		if (!this.state[realEventName]) {
+			throw new Error("Attempting to set shipped status on event that is not loaded. -- setShippedStatus(" + eventName + ", " + status + ")");
+		}
+
+		let newEvent = this.state[realEventName];
+		newEvent.shippedStatus = status;
+		this.setState({ [realEventName]: newEvent }, this.markForDBUpdate(realEventName));
+
+	}
 
 
 	isCurrentSamplingEventReady(caller) {
@@ -1345,6 +1476,18 @@ class WebFF extends React.Component {
 	//......G...G...E..........E.........................................
 	//.......GGG....EEEEE......E.........................................
 
+	getQuestionValueFromEvent(eventName, q_id) {
+		//TODO: merge with the real getQuestionValue
+		if (q_id in this.state[eventName].questionsValues) {
+			let ret = this.state[eventName].questionsValues[q_id];
+			if (Array.isArray(ret)) {
+				return ret.slice();
+			}
+			return ret;
+		}
+		throw new Error("get data (", q_id, ") from specific event (", eventName, ")");
+	}
+
 	getQuestionValue(q_id) { //****  //TODO: error reasonably when  curSamplingEvent is undefined
 		// q_id: string question ID associated with a question
 		// returns VALUE associated with the q_id... first searching dialogQuestions, then searching the currentSamplingEvent, then, finally, questionsData.
@@ -1355,7 +1498,11 @@ class WebFF extends React.Component {
 		for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
 			for (let k = 0; this.state.dialogQuestions[i] && k < this.state.dialogQuestions[i].questions.length; k++) {
 				if (this.state.dialogQuestions[i].questions[k].id === q_id) {
-					return this.state.dialogQuestions[i].questions[k].value;
+					let ret = this.state.dialogQuestions[i].questions[k].value;
+					if (Array.isArray(ret)) {
+						return ret.slice();
+					}
+					return ret;
 				}
 			}
 		}
@@ -1363,18 +1510,35 @@ class WebFF extends React.Component {
 		let curSE = this.isCurrentSamplingEventReady("getQuestionValue(" + q_id + ")");
 
 		if (q_id in curSE.questionsValues) {
-			return curSE.questionsValues[q_id];
+			let ret = curSE.questionsValues[q_id];
+			if (Array.isArray(ret)) {
+				return ret.slice();
+			}
+			return ret;
 		}
 
 		for (let i = 0; i < this.state.questionsData.length; i++) {
 			if (this.state.questionsData[i].id === q_id) {
-				return this.state.questionsData[i].value;
+				let ret = this.state.questionsData[i].value;
+				if (Array.isArray(ret)) {
+					return ret.slice();
+				}
+				return ret;
 			}
 		}
 
 		throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
 	}
 
+	getEventDetails(eventName, node) {
+		// console.log("Event: ", this.state[eventName]);
+		// console.log("Node/"+node+": ", this.state[eventName][node]);
+		if (typeof this.state[eventName][node] === "undefined") {
+			return this.getQuestionValueFromEvent(eventName, node);
+		} else {
+			return this.state[eventName][node];
+		}
+	}
 
 	getDateTimeString() {
 		let d = new Date();
@@ -1441,7 +1605,7 @@ class WebFF extends React.Component {
 		//this function saves updated question "values" (must be located at "Q.state.value")
 		// returns updated questionsData object
 		var DEBUG = false;
-		if (DEBUG) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
+		if (true) console.log("getQuestionsDataWithUpdatedValue: Q: ", Q);
 		if (Q == null) { //POC
 			console.log("Question passed to getQuestionsDataWithUpdatedValue was null or undefined");
 			return;
@@ -1615,13 +1779,18 @@ class WebFF extends React.Component {
 	}
 
 	updateDatabase() {
-		console.log("Updating database...");
+
 		let toUpdate = this.state.needsToUpdateDB;
+		if (toUpdate.length === 0) {
+			console.log("Updating database....nothing to update in DB, skipping");
+			return;
+		}
+		console.log("Updating database...");
 		for (let i = 0; i < toUpdate.length; i++) {
 			console.log("Updating " + toUpdate[i]);
 			let patchData = { [toUpdate[i]]: this.state[toUpdate[i]] };
 			this.updateDBInfo("id", this.state.loggedInUser, patchData, (res) => {
-				console.log(res);
+				//		console.log(res);
 				let newNeedsToUpdateDB = this.state.needsToUpdateDB.slice();
 				newNeedsToUpdateDB.splice(newNeedsToUpdateDB.indexOf(toUpdate[i], 1));
 				this.setState({ needsToUpdateDB: newNeedsToUpdateDB });
@@ -1745,6 +1914,7 @@ class WebFF extends React.Component {
 	}
 
 
+
 	getSelectedText(elementId) {
 		var elt = document.getElementById(elementId);
 
@@ -1811,9 +1981,6 @@ class WebFF extends React.Component {
 		//TODO: clear all tables when changing samplingMethod ?
 		//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
 		//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
-		//TODO: FIXME: fill out QWDATA last row, then add another set... copies data in.  Perhaps re-think the 'copy above'. 
-		//TODO: "distance" -> "sample number" on parameter page when sampleEventType===OTHER
-		//TODO: "Location from Left Bank" filled out from samplesTable when sampleEventType===EWI
 		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
 
 
@@ -1825,15 +1992,19 @@ class WebFF extends React.Component {
 			// this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
 
 			//this.buildCombinedQuestionsData(() => console.log("CALLBACK!!"));
-			this.propagateQWDATAInfo();
+			// this.propagateQWDATAInfo();
 			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
-
+			this.setShippedStatus(null, true);
 		}
 
 
 
 		if (menuText === "Save XML") {
 			this.handleXMLDialogOpen();
+			return;
+		}
+		if (menuText === "About") {
+			alert("This is Sediment Field Forms (SedFF) version Alpha 0.01 built by jfederer@usgs.gov and kaskach@usgs.gov");
 			return;
 		}
 
@@ -1872,6 +2043,10 @@ class WebFF extends React.Component {
 			console.log(menuText + " is not yet implemented");
 		}
 
+	}
+
+	isFunction(functionToCheck) {
+		return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 	}
 
 	render() {
@@ -1936,6 +2111,7 @@ class WebFF extends React.Component {
 						closeHandler={this.handleLeftDrawerClose}
 						menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
 					<XMLDialog isOpen={this.state.XMLDialogOpen}
+						setShippedStatus={this.setShippedStatus}
 						handleXMLDialogClose={this.handleXMLDialogClose}
 						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
 						username={this.state.loggedInUser}

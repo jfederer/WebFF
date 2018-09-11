@@ -31,8 +31,9 @@ class QuestionPanel extends React.Component {
 		const { questions } = this.props;
 
 		let gridedQuestions = questions.map((question) => {
-			// console.log(props.width_xs);
-			// console.log(props.width_lg);
+			// console.log(question.props.label, " props.width_xs ", question.props.width_xs);
+			// console.log(question.props.label, "props.width_lg ", question.props.width_lg);
+			
 			if (!question.props.hidden)
 				if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
 					// neither lg or xs are set.
