@@ -146,6 +146,7 @@ class WebFF extends React.Component {
 		this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 		this.setShippedStatus = this.setShippedStatus.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 		this.getSedLOGINcompatibleXML = this.getSedLOGINcompatibleXML.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		this.getDescriptiveColumnForTable = this.getDescriptiveColumnForTable.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
 	// }
@@ -468,7 +469,7 @@ class WebFF extends React.Component {
 	deleteSamplingEvent(eventName) {
 		let newEvent = this.state[eventName];
 		newEvent.deleted = true;
-		this.setState({[eventName]:newEvent});
+		this.setState({ [eventName]: newEvent });
 		this.markForDBUpdate(eventName);
 		this.buildRoutesAndRenderPages();
 	}
@@ -477,7 +478,7 @@ class WebFF extends React.Component {
 		let newSamplingEventID = optionalName;
 		console.log(optionalName);
 
-		if(!newSamplingEventID) {
+		if (!newSamplingEventID) {
 			newSamplingEventID = this.getDateTimeString();
 		}
 
@@ -667,7 +668,7 @@ class WebFF extends React.Component {
 		// void return
 		// note, does not throw errors and instead only warns.  
 
-		//if (true) console.log("actionExecuter(", actionString, ")");
+		if (true) console.log("actionExecuter(", actionString, ")");
 		let splitActionString = actionString.split('::');
 		if (splitActionString.length !== 2) {
 			console.warn("Requested action string '" + actionString + "' is malformed.  Must only have one '::' per action.  Separate actions with '&'.");
@@ -704,6 +705,12 @@ class WebFF extends React.Component {
 				break;
 			case "RemoveColumnFromTable":
 				this.removeColumnFromTable(splitActionString[1]);
+				break;
+			case "SetValue":
+				let qid = splitActionString[1].split(":")[0];
+				let val = splitActionString[1].split(":")[1];
+
+				this.setQuestionValue(qid, val, () => console.log("Set Value!"));
 				break;
 			default:
 				console.warn("Requested action '" + splitActionString[0] + "' not recognized");
@@ -1006,8 +1013,10 @@ class WebFF extends React.Component {
 		//TODO: return all items to default state BEFORE loading and running?
 		this.setState({ curSamplingEventName: samplingEventName }, () => {
 			this.runAllActionsForCurrentSamplingEvent();
+			this.setState({ hiddenTabs: [] }); //TODO: KLUDGE
 		}
 		);
+
 	}
 
 
@@ -1024,7 +1033,8 @@ class WebFF extends React.Component {
 				}
 				this.parseActionsFromQuestion(this.getQuestionData(questionData.id), this.actionExecuter);
 			}
-		})
+
+		});
 	}
 
 	removeStation(stationIDToDelete) {
@@ -1087,8 +1097,8 @@ class WebFF extends React.Component {
 					loadSamplingEvent={this.loadSamplingEvent}
 					samplingEvents={thisUsersSamplingEvents}
 					getEventDetails={this.getEventDetails}
-					deleteSamplingEvent={this.deleteSamplingEvent} 
-					samplingEventIdentifier ={SAMPLING_EVENT_IDENTIFIER}
+					deleteSamplingEvent={this.deleteSamplingEvent}
+					samplingEventIdentifier={SAMPLING_EVENT_IDENTIFIER}
 				/>} />
 				<Route path="/EventsManager" render={() => <EventsManager
 					appBarTextCB={this.setAppBarText}
@@ -1114,6 +1124,7 @@ class WebFF extends React.Component {
 					getTableQuestionValue={this.getTableQuestionValue}
 					getQuestionValue={this.getQuestionValue}
 					getQuestionData={this.getQuestionData}
+					getDescriptiveColumnForTable={this.getDescriptiveColumnForTable}
 
 				/>} />
 				{/* {this.state.navMenu} */}
@@ -1187,16 +1198,16 @@ class WebFF extends React.Component {
 	}
 
 	propagateQWDATAInfo() {
-		console.log("propagateQWDATAInfo");
+		//console.log("propagateQWDATAInfo");
 		let sampleEventLocations = [];
 		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
 		let setType = this.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
 		let totalSamps = 0;
 		for (let i = 0; i < numSets; i++) {
-			totalSamps += this.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
+			let setName = String.fromCharCode(65 + i);
+			let ai = !this.getQuestionValue("set" + setName + "_samplesComposited");
+			totalSamps += ai ? this.getNumberOfSamplesInSet(setName) : 1;
 		}
-
-
 		let firstColumn = new Array(totalSamps).fill("Set-Sample @ Dist");
 
 		firstColumn.unshift("Set-Sample @ Dist");
@@ -1217,6 +1228,7 @@ class WebFF extends React.Component {
 				let numberOfSamplesInSet = this.getNumberOfSamplesInSet(thisSetName);
 				let startTime = this.getQuestionValue("set" + thisSetName + "_StartTime");
 				let endTime = this.getQuestionValue("set" + thisSetName + "_EndTime");
+				let ai = !this.getQuestionValue("set" + thisSetName + "_samplesComposited");
 				let startDateTime = new Date("January 1, 2000 " + startTime)
 				let endDateTime = new Date("January 1, 2000 " + endTime)
 				let msElapsed = Math.abs(endDateTime - startDateTime);
@@ -1224,11 +1236,13 @@ class WebFF extends React.Component {
 
 				let totalNumberOfSamplesInPreviousSets = 0;
 				for (let i = setNum; i > 0; i--) {
+					// if this set was a composite, it was only one line in the QWDATA Table
 					let previousSetName = String.fromCharCode(i + 64);
-					totalNumberOfSamplesInPreviousSets += this.getNumberOfSamplesInSet(previousSetName);
+					let previousSetAI = !this.getQuestionValue("set" + previousSetName + "_samplesComposited");
+					totalNumberOfSamplesInPreviousSets += previousSetAI ? this.getNumberOfSamplesInSet(previousSetName) : 1;
 				}
 
-				for (let sampNum = 0; sampNum < numberOfSamplesInSet; sampNum++) {
+				for (let sampNum = 0; sampNum < (ai ? numberOfSamplesInSet : 1); sampNum++) {
 					let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
 					let timeSinceStart = (sampNum * msBetweenSamples);
 					let d = new Date(startDateTime.getTime() + timeSinceStart);
@@ -1365,6 +1379,14 @@ class WebFF extends React.Component {
 
 		let DEBUG = false;
 		if (DEBUG) console.log("setQuestionValue(" + q_id + ", ", value, ")");
+
+		// sometimes boolean values are coming in as strings, fix that.
+		if (value === "true") {
+			value = true;
+		}
+		if (value === "false") {
+			value = false;
+		}
 
 		// search in dialog questions  (note, if we search current sampling event first -- and we try to modify a dialog before loading an event, things crash... so we search the dialog questions first)
 		let newDQ = this.state.dialogQuestions.slice();
@@ -1571,6 +1593,60 @@ class WebFF extends React.Component {
 		}
 	}
 
+	getDescriptiveColumnForTable() {
+		let sampleEventLocations = [];
+		let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
+		let setType = this.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+
+		for (let i = 0; i < numSets; i++) {
+			let setName = String.fromCharCode(65 + i);
+			let numSamps = this.getNumberOfSamplesInSet(setName);
+			let ai = !this.getQuestionValue("set" + setName + "_samplesComposited");
+			let setLocations = [];
+			if (ai) {
+				let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
+				for (let k = 1; k <= numSamps; k++) {
+					let location = 0;
+					if (setType === "EWI") {
+						location = this.getTableQuestionValue(table_q_id, 0, k);
+					} else {
+						location = this.getTableQuestionValue(table_q_id, "Dist from L bank", k);
+					}
+
+					setLocations.push(location);
+				}
+			} else {
+				setLocations.push("Comp"); // for a composite, there isn't really a 'location'
+			}
+			sampleEventLocations.push(setLocations);
+		}
+
+		let firstColumn = [];
+
+		// fill out the firstColumn based on the sampleEventLoations generated above
+		for (let i = 0; i < sampleEventLocations.length; i++) {
+			let setName = String.fromCharCode(65 + i)
+			for (let k = 0; k < sampleEventLocations[i].length; k++) {
+
+				switch (sampleEventLocations[i][k]) {
+					case '':
+						firstColumn.push(setName + "-" + (k + 1));
+						break;
+					case "Comp":
+						firstColumn.push(setName + " Comp");
+						break;
+					default:
+						firstColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
+				}
+			}
+		}
+		// push below the header
+		firstColumn.unshift("Set-Sample @ Dist");
+
+		// console.log("FIRST COLUMN: ", firstColumn);
+		return firstColumn;
+
+	}
 
 
 	getTableQuestionValue(q_id, header, rowNum) {
@@ -1800,7 +1876,6 @@ class WebFF extends React.Component {
 
 
 
-
 	//....B...B...M.......M...M...............................
 	//.....B.B....MM.....MM...M...............................
 	//......B.....M.M...M.M...M...............................
@@ -1825,7 +1900,8 @@ class WebFF extends React.Component {
 		let totalNumberOfSamplesInPreviousSets = 0;
 		for (let i = setNum; i > 0; i--) {
 			let previousSetName = String.fromCharCode(i + 64);
-			totalNumberOfSamplesInPreviousSets += this.getNumberOfSamplesInSet(previousSetName);
+			let previousAI = !this.getQuestionValue("set" + previousSetName + "_samplesComposited");
+			totalNumberOfSamplesInPreviousSets += previousAI ? this.getNumberOfSamplesInSet(previousSetName) : 1;
 		}
 		let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
 
@@ -1874,18 +1950,21 @@ class WebFF extends React.Component {
 
 	}
 
+
+
 	buildSetObj(setName) {
 		let setObj = {
-			"Name": setName,
+			"Name": this.getQuestionValue('groupOfSamples')?"Sngl":setName,
 			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
-			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_analyzeIndividually") ? 'Y' : 'N',
+			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_samplesComposited") ? 'N' : 'Y',
 			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_" + this.getQuestionValue("sedimentType")).join(","),
 			"SetType": this.getCurrentSampleEventMethod()
 		}
 
-		let numOfSamples = this.getQuestionValue("set" + setName + "_numberOfSamplingPoints");
+		let ai = !this.getQuestionValue("set" + setName + "_samplesComposited");
+		let numOfSampleBlocks = ai ? this.getQuestionValue("set" + setName + "_numberOfSamplingPoints") : 1;
 
-		for (let i = 0; i < numOfSamples; i++) {
+		for (let i = 0; i < numOfSampleBlocks; i++) {
 			setObj["Sample" + i] = this.buildSampleObj(setName, i);
 		}
 
@@ -2004,7 +2083,7 @@ class WebFF extends React.Component {
 			return;
 		}
 		if (menuText === "About") {
-			alert("This is Sediment Field Forms (SedFF) version Alpha 0.01 built by jfederer@usgs.gov and kaskach@usgs.gov");
+			alert("This is Sediment Field Forms (SedFF) version Alpha 0.02 built by jfederer@usgs.gov and kaskach@usgs.gov on Sept 11, 2018");
 			return;
 		}
 

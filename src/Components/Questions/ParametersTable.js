@@ -95,14 +95,10 @@ class ParametersTable extends React.Component {
 		super(props);
 
 		// sampleEventLocations is a double array whereby each 'row' of the array is teh set and each col is the sample location.
-		console.log("const!");
-
 		let nowValue = [];
 
-		console.log(this.props.value.length);
+		if (this.props.value.length === 1 && this.props.value[0].length === 0) {// if no vakye was sent
 
-		if (this.props.value.length === 1 && this.props.value[0].length === 0) {
-			console.log("Building new header");
 			// build header from scratch
 			let headerRow = [];
 			for (let pCode in defaultPCodesToShow) {
@@ -112,20 +108,17 @@ class ParametersTable extends React.Component {
 			}
 			nowValue.push(headerRow);
 
-
 			// build default values (blanks)
-			let firstColumn = this.buildFirstColumn();
+			let firstColumn = this.props.getDescriptiveColumnForTable();
 			for (let i = 0; i < firstColumn.length; i++) {
 				let emptyRow = new Array(headerRow.length).fill("");
 				nowValue.push(emptyRow);
 			}
 
-		} else {
+		} else { // if a value was sent
 			// accept the value that was sent...
 			nowValue = this.props.value;
 		}
-
-
 
 		this.state = {
 			showRmk: false,
@@ -162,115 +155,116 @@ class ParametersTable extends React.Component {
 
 	}
 
-	buildFirstColumn() {// builds first column of table -- the one that shows information data about the sample. ... also determines size of table... so useful in constructor.
+	// buildFirstColumn() {// builds first column of table -- the one that shows information data about the sample. ... also determines size of table... so useful in constructor.
 
-		let sampleEventLocations = [];
-		let numSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
-		let setType = this.props.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+	// 	let sampleEventLocations = [];
+	// 	let numSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
+	// 	let setType = this.props.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
 
-		for (let i = 0; i < numSets; i++) {
-			let numSamps = this.props.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
-			let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
-			let setLocations = [];
-			for (let k = 1; k <= numSamps; k++) {
-				setLocations.push(this.props.getTableQuestionValue(table_q_id, 0, k));
-			}
-			sampleEventLocations.push(setLocations);
-		}
+	// 	for (let i = 0; i < numSets; i++) {
+	// 		let numSamps = this.props.getNumberOfSamplesInSet(String.fromCharCode(65 + i));
+	// 		let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
+	// 		let setLocations = [];
+	// 		for (let k = 1; k <= numSamps; k++) {
+	// 			setLocations.push(this.props.getTableQuestionValue(table_q_id, 0, k));
+	// 		}
+	// 		sampleEventLocations.push(setLocations);
+	// 	}
 
-		let firstColumn = [];
-		for (let i = 0; i < sampleEventLocations.length; i++) {
-			let setName = String.fromCharCode(65 + i)
-			for (let k = 0; k < sampleEventLocations[i].length; k++) {
-				let ending = '';
-				if (setType !== 'OTHER') ending = " @ " + sampleEventLocations[i][k];
-				firstColumn.push(setName + "-" + (k + 1) + ending);
-			}
-		}
+	// 	let firstColumn = [];
+	// 	for (let i = 0; i < sampleEventLocations.length; i++) {
+	// 		let setName = String.fromCharCode(65 + i)
+	// 		for (let k = 0; k < sampleEventLocations[i].length; k++) {
+	// 			let ending = '';
+	// 			if (setType !== 'OTHER') ending = " @ " + sampleEventLocations[i][k];
+	// 			firstColumn.push(setName + "-" + (k + 1) + ending);
+	// 		}
+	// 	}
 
-		return firstColumn;
-	}
+	// 	return firstColumn;
+	// }
 
 
 
 	render() {
 		const { classes } = this.props;
 		let setType = this.props.getCurrentSampleEventMethod();
-		let firstColumn = this.buildFirstColumn();
+		let firstColumn = this.props.getDescriptiveColumnForTable();
 
 
 		return (
 			<React.Fragment>
 				{/* <Paper className={classes.root}> */}
-					<Table className={classes.table}>
-						<TableHead>
-							<TableRow>
-								<TableCell className={classes.tableCell}>Set-Sample{(setType !== 'OTHER') ? " @ Dist" : null}</TableCell>
-								{this.state.pCodesToShow.map((header) => {
-									return (
-										<TableCell className={classes.tableCell} key={"Param_" + header}>{header}</TableCell>
-									);
-								})}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{firstColumn.map((col, rowNum) => {
-								let realRowNum = rowNum + 1;
+				<Table className={classes.table}>
+					<TableHead>
+						<TableRow>
+							<TableCell className={classes.tableCell}>{firstColumn[0]}</TableCell>
+							{this.state.pCodesToShow.map((header) => {
 								return (
-									<TableRow key={col + realRowNum}>
-										<TableCell className={classes.tableCell}>
-											{col}
-										</TableCell>
-										{this.state.pCodesToShow.map((pCode, colNum) => {
-											let realColNum = colNum * types.length;
-											return <TableCell key={pCode + realRowNum} className={classes.tableCell}>
-												{/* VALUE */}
-												<input
-													id={pCode + "_val_" + realRowNum + 1}
-													type="text" size={1}
-													placeholder="Value"
-													value={this.state.value[realRowNum][realColNum]}
-													onChange={this.handleValueChange(realRowNum, realColNum)} />
-
-												{/* METHOD CODE */}
-												<select
-													id={pCode + "_mth_" + (realRowNum + 1)}
-													value={this.state.value[realRowNum][realColNum + 1]}
-													onChange={this.handleValueChange(realRowNum, realColNum + 1)}
-												>
-													{mth_options[pCode].map(mthCode => <option key={"mth_row:" + realRowNum + "_col:" + realColNum + "opt:" + mthCode} value={mthCode}>{mthCode}</option>)}
-												</select>
-
-												{/* REMARK CODE */}
-												<select
-													hidden={!this.state.showRmk}
-													id={pCode + "Rmk_" + (realRowNum + 1)}
-													value={this.state.value[realRowNum][realColNum + 2]}
-													onChange={this.handleValueChange(realRowNum, realColNum + 2)} >
-													{Object.keys(rmk_options).map(key => <option key={"rmk_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={rmk_options[key]}>{key}</option>)}
-												</select>
-
-												{/* NULL QUALIFIER */}
-												<select
-													hidden={!this.state.showNQ}
-													id={pCode + "_nq_" + (realRowNum + 1)}
-													value={this.state.value[realRowNum][realColNum + 3]}
-													onChange={this.handleValueChange(realRowNum, realColNum + 3)}>
-													{Object.keys(nq_options).map(key => <option key={"nq_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={nq_options[key]}>{key}</option>)}
-												</select>
-											</TableCell>
-										})}
-									</TableRow>
+									<TableCell className={classes.tableCell} key={"Param_" + header}>{header}</TableCell>
 								);
 							})}
-						</TableBody>
-					</Table>
-					<center>
-						<Button onClick={(() => this.setState({ showNQ: !this.state.showNQ }))}>{this.state.showNQ ? "Hide " : "Show "}{"Null Qualifiers"}</Button>
-						<Button onClick={(() => this.setState({ showRmk: !this.state.showRmk }))}>{this.state.showRmk ? "Hide " : "Show "}{"Remark Codes"}</Button>
-					</center>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{firstColumn.map((col, rowNum) => {
+							if(rowNum===0) return; //skip the header
+							let realRowNum = rowNum;
+							return (
+								<TableRow key={col + realRowNum}>
+									<TableCell className={classes.tableCell}>
+										{col}
+									</TableCell>
+									{this.state.pCodesToShow.map((pCode, colNum) => {
+										let realColNum = colNum * types.length;
+										return <TableCell key={pCode + realRowNum} className={classes.tableCell}>
+											{/* VALUE */}
+											<input
+												id={pCode + "_val_" + realRowNum + 1}
+												type="text" size={1}
+												placeholder="Value"
+												value={this.state.value[realRowNum][realColNum]}
+												onChange={this.handleValueChange(realRowNum, realColNum)} />
+
+											{/* METHOD CODE */}
+											<select
+												id={pCode + "_mth_" + (realRowNum + 1)}
+												value={this.state.value[realRowNum][realColNum + 1]}
+												onChange={this.handleValueChange(realRowNum, realColNum + 1)}
+											>
+												{mth_options[pCode].map(mthCode => <option key={"mth_row:" + realRowNum + "_col:" + realColNum + "opt:" + mthCode} value={mthCode}>{mthCode}</option>)}
+											</select>
+
+											{/* REMARK CODE */}
+											<select
+												hidden={!this.state.showRmk}
+												id={pCode + "Rmk_" + (realRowNum + 1)}
+												value={this.state.value[realRowNum][realColNum + 2]}
+												onChange={this.handleValueChange(realRowNum, realColNum + 2)} >
+												{Object.keys(rmk_options).map(key => <option key={"rmk_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={rmk_options[key]}>{key}</option>)}
+											</select>
+
+											{/* NULL QUALIFIER */}
+											<select
+												hidden={!this.state.showNQ}
+												id={pCode + "_nq_" + (realRowNum + 1)}
+												value={this.state.value[realRowNum][realColNum + 3]}
+												onChange={this.handleValueChange(realRowNum, realColNum + 3)}>
+												{Object.keys(nq_options).map(key => <option key={"nq_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={nq_options[key]}>{key}</option>)}
+											</select>
+										</TableCell>
+									})}
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+				<center>
+					<Button onClick={(() => this.setState({ showNQ: !this.state.showNQ }))}>{this.state.showNQ ? "Hide " : "Show "}{"Null Qualifiers"}</Button>
+					<Button onClick={(() => this.setState({ showRmk: !this.state.showRmk }))}>{this.state.showRmk ? "Hide " : "Show "}{"Remark Codes"}</Button>
+				</center>
 				{/* </Paper> */}
-				{this.state.showNQ?<Paper>{Object.keys(nq_options_meanings).map((key)=> <Typography key={"paramNQMeanings_"+key} className={classes.nq_options_meanings}><b>{key}</b>{"  :  " + nq_options_meanings[key]}</Typography>)}</Paper>:null}
+				{this.state.showNQ ? <Paper>{Object.keys(nq_options_meanings).map((key) => <Typography key={"paramNQMeanings_" + key} className={classes.nq_options_meanings}><b>{key}</b>{"  :  " + nq_options_meanings[key]}</Typography>)}</Paper> : null}
 			</React.Fragment>
 		);
 	}
