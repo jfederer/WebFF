@@ -29,6 +29,16 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 let counter = 0;
+
+//const loadingData = {id:99999, , "d"}
+const loadingData = {
+  id: 9999,
+  eventName: "data loading...",
+  sampleDate: "data loading...",
+  stationName: "data loading...",
+  shippedStatus: "data loading..."
+};
+
 function createData(eventName, sampleDate, stationName, shippedStatus) {
   counter += 1;
   return { id: counter, eventName, sampleDate, stationName, shippedStatus };
@@ -227,7 +237,11 @@ class EventsManager extends React.Component {
 
   //eventName, sampleDate, stationName, shippedStatus
   componentDidMount() {
+    this.buildData();
 
+  }
+
+  buildData() {
     let newData = [];
     this.props.samplingEvents.forEach((eventName) => {
       newData.push(createData(eventName,
@@ -236,16 +250,6 @@ class EventsManager extends React.Component {
         this.props.getEventDetails(eventName, "shippedStatus")));
     });
 
-
-    // let newData = [
-
-    //     createData('Cupcake', "sept1", "Willow creek",  false),
-    //     createData('Donut', "apr4", "Minehaha",  false),
-    //     createData('Eclair', "oct1", "Rush River",  true),
-    //     createData('Frozen yoghurt', "dec9", "Rum River",  true),
-    //     createData('Gingerbread', "Nov9", "Cobbler Creek",  false),
-    //     createData('Honeycomb', "Jan2", "Mississippi",  true)
-    //   ];
     this.setState({ data: newData });
   }
 
@@ -265,17 +269,17 @@ class EventsManager extends React.Component {
   }
 
   handleDeleteDialogCancel = () => {
-    this.setState({ showConfirmDelete: false, selected:[] });
+    this.setState({ showConfirmDelete: false, selected: [] });
   }
 
   handleDeleteDialogConfirm = () => {
     let removedEventNames = [];
-    this.state.toDeleteList.map((event)=> {
+    this.state.toDeleteList.map((event) => {
       this.props.deleteSamplingEvent(event.eventName);
       removedEventNames.push(event.eventName);
     });
-    let filteredData = this.state.data.filter((evt)=>!removedEventNames.includes(evt.eventName));
-    this.setState({data:filteredData});
+    let filteredData = this.state.data.filter((evt) => !removedEventNames.includes(evt.eventName));
+    this.setState({ data: filteredData });
     this.handleDeleteDialogCancel();
   }
 
@@ -319,83 +323,106 @@ class EventsManager extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
 
+  arraysEqual(arr1, arr2) {
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    //  console.log("CWU");
+    //  console.log("SES:", this.props.samplingEvents);
+    if (!this.arraysEqual(this.props.samplingEvents, nextProps.samplingEvents)) {
+      this.buildData();
+    }
+
+  }
+
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
+
+
     return (
       <React.Fragment>
         <Paper className={classes.root}>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            deleteClickedHandler={this.handleDeleteButtonClick}
-            isSelected={this.isSelected}
-            data={data} />
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="tableTitle">
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
-              />
-              <TableBody>
-                {stableSort(data, getSorting(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(n => {
-                    const isSelected = this.isSelected(n.id);
-                    return (
-                      <TableRow
-                        hover
-                        // onClick={event => this.handleClick(event, n.id)}
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={n.id}
-                        selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Link to='/FieldForm'>
-                            <Button onClick={() => {
-                              this.props.loadSamplingEvent(n.eventName);
-                            }
-                            }>{n.eventName.replace(this.props.samplingEventIdentifier,"")}</Button>
-                          </Link>
-                        </TableCell>
-                        <TableCell >{n.sampleDate}</TableCell>
-                        <TableCell >{n.stationName}</TableCell>
-                        <TableCell >{n.shippedStatus ? "Shipped" : "Not Shipped"}</TableCell>
+          {data.length === 0
+            ? "There are either no events, or they are loading..."
+            : <React.Fragment><EnhancedTableToolbar
+              numSelected={selected.length}
+              deleteClickedHandler={this.handleDeleteButtonClick}
+              isSelected={this.isSelected}
+              data={data} />
+              <div className={classes.tableWrapper}>
+                <Table className={classes.table} aria-labelledby="tableTitle">
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={this.handleSelectAllClick}
+                    onRequestSort={this.handleRequestSort}
+                    rowCount={data.length}
+                  />
+                  <TableBody>
+                    {stableSort(data, getSorting(order, orderBy))
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map(n => {
+                        const isSelected = this.isSelected(n.id);
+                        return (
+                          <TableRow
+                            hover
+                            // onClick={event => this.handleClick(event, n.id)}
+                            role="checkbox"
+                            aria-checked={isSelected}
+                            tabIndex={-1}
+                            key={n.id}
+                            selected={isSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox checked={isSelected} onClick={event => this.handleClick(event, n.id)} />
+                            </TableCell>
+                            <TableCell component="th" scope="row" padding="none">
+                              <Link to='/FieldForm'>
+                                <Button onClick={() => {
+                                  this.props.loadSamplingEvent(n.eventName);
+                                }
+                                }>{n.eventName.replace(this.props.samplingEventIdentifier, "")}</Button>
+                              </Link>
+                            </TableCell>
+                            <TableCell >{n.sampleDate}</TableCell>
+                            <TableCell >{n.stationName}</TableCell>
+                            <TableCell >{n.shippedStatus ? "Shipped" : "Not Shipped"}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 49 * emptyRows }}>
+                        <TableCell colSpan={6} />
                       </TableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <TablePagination
-            component="div"
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            backIconButtonProps={{
-              'aria-label': 'Previous Page',
-            }}
-            nextIconButtonProps={{
-              'aria-label': 'Next Page',
-            }}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+              <TablePagination
+                component="div"
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page',
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+              />
+            </React.Fragment>}
         </Paper>
         <Dialog
           disableBackdropClick
@@ -408,12 +435,12 @@ class EventsManager extends React.Component {
           <DialogTitle id="confirmation-dialog-title">CONFIRM DELETION!</DialogTitle>
 
           <DialogContent>
-          <DialogContentText>
+            <DialogContentText>
               Confirm that you want to delete the following sampling event(s):
             </DialogContentText>
             <List>
-              {this.state.toDeleteList.map((se) => <ListItem key={"ListItem_"+se.eventName+se.id}>{se.eventName + " " + se.sampleDate + " " + se.stationName}</ListItem>)}
-              </List>
+              {this.state.toDeleteList.map((se) => <ListItem key={"ListItem_" + se.eventName + se.id}>{se.eventName + " " + se.sampleDate + " " + se.stationName}</ListItem>)}
+            </List>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleDeleteDialogCancel} color="primary">

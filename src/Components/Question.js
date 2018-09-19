@@ -56,7 +56,6 @@ class Question extends React.Component {
 	constructor(props) {
 		super(props);
 		//console.log(this.props.id + " value is " + this.props.value);
-		let startValue = this.props.value;
 		this.state = {
 			value: this.props.value?this.props.value:"", 
 		};
@@ -138,6 +137,8 @@ class Question extends React.Component {
 		let withToolTip = withPaper;
 		if (tooltip != null) {
 			withToolTip = <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{withPaper}</Tooltip>
+		//	console.log("Adding tooltip: ", tooltip, "for question: ", this.props.label);
+			
 		}
 
 		let withHidden = withToolTip;

@@ -54,9 +54,6 @@ class QWDATATable extends React.Component {
 	};
 
 	componentWillMount() {
-		console.log("QWDATA CWM:");
-		console.log("QWDATA CWM STATE: ", this.state);
-		console.log("QWDATA CQM PROPS: ", this.props);
 
 		let newValue = this.props.value.slice();
 
@@ -170,6 +167,7 @@ class QWDATATable extends React.Component {
 	}
 
 
+
 	handleValueChange = (row, col) => e => {
 		//  console.log("this.state.value: ", this.state.value);
 		//  console.log("row: ", row, "col: ", col);
@@ -181,38 +179,60 @@ class QWDATATable extends React.Component {
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });
 	}
 
+	getKeyFromValue(obj, value) {
+		let retKey = null;
+		Object.keys(obj).forEach((key)=> {
+			if(obj[key]===value) {
+				retKey = key;
+			}
+		});
+		return retKey;
+	}
+
 	render() {
 		if (!this.props.globalState.curSamplingEventName) {
 			return <React.Fragment></React.Fragment>;  //no event name event loaded, just return
 		}
 
 		const { classes } = this.props;
-		// console.log("QWDATA Render props.value: ", this.props.value);
+		// console.log("QWDATA Render props: ", this.props);
+		
 		// console.log("QWDATA Render state: ", this.state);
 		let classlessProps = this.props;
 		delete classlessProps[classes];
 
-
+		let evtName = this.props.globalState.curSamplingEventName;
 
 
 		return (
 			<React.Fragment>
+				<br></br>
+				<Typography  style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
 				<Table className={classes.table}>
 					<TableHead>
 						<TableRow>
 							{Object.keys(this.state.headers).map((headerKey) => {
 								let headerValue = this.state.headers[headerKey];
 								let defaultValue = null;
+								let displayValue = null;
 								if (headerValue) {
-									defaultValue = this.props.getQuestionValue(this.state.headers[headerKey]);
+									let qidForDefaultValue = this.state.headers[headerKey];
+									// console.log("qidForDefaultValue: ", qidForDefaultValue);
+									defaultValue = this.props.getQuestionValue(qidForDefaultValue);
+									// console.log("Default Value: ", defaultValue);
+									if(defaultValue) {
+										let Q = this.props.getQuestionData(qidForDefaultValue);	
+										// console.log(Q);
+										displayValue = this.getKeyFromValue(Q.options, defaultValue);
+									} 
 								}
 
 								return (
 									<TableCell className={classes.tableCell} key={"QWDATA_" + headerKey} >
 										{headerKey}
-										{defaultValue ? <br /> : null}
-										{defaultValue
-											? "(" + defaultValue + ")"
+										{displayValue ? <br /> : null}
+										{displayValue
+											? "(" + displayValue + ")"
 											: null}
 									</TableCell>
 								);

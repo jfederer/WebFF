@@ -56,6 +56,8 @@ import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
+const FUNCDEBUG = false;
+
 const criticalUserNodes = ['stations', 'customQuestions'];
 const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'defaultQuestionsData', 'hiddenPanels', 'hiddenTabs'];
 
@@ -64,9 +66,12 @@ const questionIDsLinkedToStationName = ["stationNumber", "projectName", "project
 var needToSyncStationDataToQuestionData = true;
 
 const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent::"; //TODO: add colon
-
+const PHP_FILE_LOCATION = "https://152.61.248.218/";
+// const PHP_FILE_LOCATION = "https://sedff.usgs.gov/";
 const isDEV = false;
+const MAX_NUM_OF_SETS = 3;
 
+const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TOdO: need to ensure no custom questions include these 
 
 const defaultHiddenTabs = ["WaterQuality", "FieldForm", "DataEntry", "Parameters", "QWDATA"];
 
@@ -151,6 +156,7 @@ class WebFF extends React.Component {
 	}
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
+		if(FUNCDEBUG) console.log("FUNC: componentWillMount()");
 
 		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
 
@@ -158,16 +164,14 @@ class WebFF extends React.Component {
 			console.log(this.state.loggedInUser + "is logged in");
 			this.gatherUserConfig(criticalUserNodes); //load user configuration
 		} else {
-			console.log("No one is logged in... requesting user id"); //TOOD: redirect to /
-
+			console.log("No one is logged in... requesting user id"); 
+			
+			//TOOD: redirect to /
 		}
 	}
 
-	componentDidMount() {
-
-	}
-
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
+		if(FUNCDEBUG) console.log("FUNC: componentWillUpdate(",nextProps, nextState,")");
 		//console.log("CWU: items: ", nextState.itemsToSyncToLS);
 		nextState.itemsToSyncToLS.forEach((item) => {
 			if (item !== "defaultQuestionsData") { // don't ever modify defaultQuestions after the initial config load
@@ -192,7 +196,8 @@ class WebFF extends React.Component {
 	}
 
 	attemptToSyncStationDataToQuestionData(stationsIn) {
-		//console.log("attemptToSyncStationDataToQuestionData(" + stationsIn + ")");
+		if(FUNCDEBUG) console.log("FUNC: attemptToSyncStationDataToQuestionData(", stationsIn,")");
+		
 		let stationNameQ = this.getQuestionData("stationName");
 		if (stationNameQ === null) {
 			return;
@@ -219,7 +224,7 @@ class WebFF extends React.Component {
 
 
 	buildCombinedQuestionsData(CB) {
-		// console.log("buildCombinedQuestionsData?");
+		if(FUNCDEBUG) console.log("FUNC: buildCombinedQuestionsData(", CB, ")");
 		if (this.state.customQuestions === null || this.state.customQuestions.length === 0) {
 			return;
 		}
@@ -249,7 +254,7 @@ class WebFF extends React.Component {
 	}
 
 	gatherSystemConfig(nodesToGather) {
-
+		if(FUNCDEBUG) console.log("FUNC: gatherSystemConfig(", nodesToGather, ")");
 
 		//TODO: NEXT FIXME:  TODO:  FIXME:  --- when pulling this from the DB, populate defaultQuestions too.  ... or, perhaps do it the first time a custom question is made in combineQuestions?
 
@@ -332,9 +337,10 @@ class WebFF extends React.Component {
 
 
 	gatherUserConfig(nodesToGather) {
+		if(FUNCDEBUG) console.log("FUNC: gatherUserConfig(", nodesToGather, ")");
 		//TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
 
-		console.log("GATHERING USER CONFIGURATION");
+		
 		// if data is in both DB and LS -- LS version is considered authoritative
 
 		// should not be called unless this.state.loggedInUser is set to something like jfederer@usgs.gov
@@ -343,8 +349,6 @@ class WebFF extends React.Component {
 
 		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
 		let DEBUG = false;
-
-		if (DEBUG) console.log("gatherUSERConfig: ", nodesToGather);
 
 		//first, attempt to pull all conifg and sampling event info from DB
 		// pull config info from DB
@@ -422,6 +426,7 @@ class WebFF extends React.Component {
 	}
 
 	getUserConfigFromLS(nodesToGather) {
+		if(FUNCDEBUG) console.log("FUNC: getUserConfigFromLS(", nodesToGather, ")");
 		// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
 		let DEBUG = true;
 		if (DEBUG) console.log("getUserConfigFromLS");
@@ -467,6 +472,7 @@ class WebFF extends React.Component {
 
 
 	deleteSamplingEvent(eventName) {
+		if(FUNCDEBUG) console.log("FUNC: deleteSamplingEvent(", eventName, ")");
 		let newEvent = this.state[eventName];
 		newEvent.deleted = true;
 		this.setState({ [eventName]: newEvent });
@@ -475,8 +481,8 @@ class WebFF extends React.Component {
 	}
 
 	createNewSamplingEvent(optionalName) {
+		if(FUNCDEBUG) console.log("FUNC: createNewSamplingEvent(", optionalName, ")");
 		let newSamplingEventID = optionalName;
-		console.log(optionalName);
 
 		if (!newSamplingEventID) {
 			newSamplingEventID = this.getDateTimeString();
@@ -531,6 +537,7 @@ class WebFF extends React.Component {
 
 
 	materialIcon(icon) {
+		if(FUNCDEBUG) console.log("FUNC: materialIcon(", icon, ")");
 		switch (icon) {
 			case 'DashboardIcon': return <DashboardIcon />
 			case 'ImportContactsIcon': return <ImportContactsIcon />
@@ -558,11 +565,11 @@ class WebFF extends React.Component {
 	fetchDBInfo(_query, _collection, successCB, failureCB) {
 
 
-		const DEBUG = false;
+		const DEBUG = true;
 		if (DEBUG) console.log("fetchDBInfo(", _query, ", ", _collection, ")");
 
 		// sort out differences in local dev server and production server calls
-		const API = 'http://152.61.248.218/mongoFetch.php/';
+		const API = PHP_FILE_LOCATION + 'mongoFetch.php/';
 		let query = '';
 
 		if (_query !== '') {
@@ -601,6 +608,7 @@ class WebFF extends React.Component {
 			.then(handleErrors)
 			.then(response =>
 				response.json()
+				//  response.text()
 			)
 			.then(parsedJSON => {
 				if (DEBUG) console.log("Parsed JSON: ", parsedJSON);
@@ -668,7 +676,7 @@ class WebFF extends React.Component {
 		// void return
 		// note, does not throw errors and instead only warns.  
 
-		if (true) console.log("actionExecuter(", actionString, ")");
+		// if (true) console.log("actionExecuter(", actionString, ")");
 		let splitActionString = actionString.split('::');
 		if (splitActionString.length !== 2) {
 			console.warn("Requested action string '" + actionString + "' is malformed.  Must only have one '::' per action.  Separate actions with '&'.");
@@ -739,9 +747,9 @@ class WebFF extends React.Component {
 			for (let i = numToAdd; i < 0; i++) {
 				valArr.pop();
 			}
-		console.log("setting questoin value at end of update Num Rows Of Table: ", valArr);
+		// console.log("setting questoin value at end of update Num Rows Of Table: ", valArr);
 		this.setQuestionValue(q_id, valArr, this.isFunction(CB) ? CB : null);
-		console.log("leaving updateNumRowsOfTable");
+		// console.log("leaving updateNumRowsOfTable");
 	}
 
 	addColumnToTable(q_id) { //TODO: numToAdd
@@ -761,28 +769,28 @@ class WebFF extends React.Component {
 	}
 
 	setTableColumn(q_id, colNum, arr, CB) {
-		console.log("setTableColumn(" + q_id + ", " + colNum + ", ", arr, ")");
+		// console.log("setTableColumn(" + q_id + ", " + colNum + ", ", arr, ")");
 		// WARNING: expands or shrinks the entire table to match the number of rows in the given column
 		let valArr = this.getQuestionValue(q_id).slice();
-		console.log("setTableColumn value", valArr); //TOOD: somehow the values from propagate are already in here at this point (but it's the wrong size)
+		// console.log("setTableColumn value", valArr); //TOOD: somehow the values from propagate are already in here at this point (but it's the wrong size)
 		//console.log("setTableColumn Existing valArr.length: ", valArr.length);
 		//console.log("setTableColumn Incoming arr length: ", arr.length);
 
 		this.updateNumRowsOfTable(q_id, arr.length - valArr.length, () => this.insertColumnValuesAfterItHasBeenResized(q_id, colNum, arr, CB));
 		//CB;
-		console.log("leaving setTableColumn");
+		// console.log("leaving setTableColumn");
 	}
 
 	insertColumnValuesAfterItHasBeenResized(q_id, colNum, arr, CB) {
-		console.log("insertColumnValuesAfterItHasBeenResized(", q_id, colNum, arr, ")");
+		// console.log("insertColumnValuesAfterItHasBeenResized(", q_id, colNum, arr, ")");
 		let newValArr = this.getQuestionValue(q_id).slice();
-		console.log("insertColumnValuesAfterItHasBeenResized: valArr (before insert): ", newValArr);
+		// console.log("insertColumnValuesAfterItHasBeenResized: valArr (before insert): ", newValArr);
 		for (let rowNum = 0; rowNum < newValArr.length; rowNum++) {
 			newValArr[rowNum][colNum] = arr[rowNum];
 		}
-		console.log("insertColumnValuesAfterItHasBeenResized: valArr (after insert): ", newValArr);
+		// console.log("insertColumnValuesAfterItHasBeenResized: valArr (after insert): ", newValArr);
 		this.setQuestionValue(q_id, newValArr, () => this.isFunction(CB) ? CB() : null);
-		console.log("leaving insertColumnValuesAfterItHasBeenResized");
+		// console.log("leaving insertColumnValuesAfterItHasBeenResized");
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
@@ -991,11 +999,18 @@ class WebFF extends React.Component {
 		}
 
 		//HARDCODE for numberOfSamplingPoints
-		let propagateSamplePointData = false;
-		if (Q.props.id.includes("numberOfSamplingPoints")) {  //TODO: build list of questions which should trigger propagation
+		if (Q.props.id.includes("numberOfSamplingPoints")) {
 			propagateSamplePointData = true; // want to run it later because we want values to propagate through teh system first
 			this.showTabOrPanel("Parameters", true, true)
 		}
+
+
+		let propagateSamplePointData = false;
+		QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION.forEach((qIDIncludeString) => {
+			if (Q.props.id.includes(qIDIncludeString)) {
+				propagateSamplePointData = true;
+			}
+		});
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
 		this.setQuestionValue(Q.props.id, Q.state.value, () => {
@@ -1082,75 +1097,102 @@ class WebFF extends React.Component {
 		let thisUsersSamplingEvents = allSamplingEvents.filter((SEname) => {
 			return this.state[SEname].user === this.state.loggedInUser && !this.state[SEname].deleted;
 		});
+		this.setState({ thisUsersSamplingEvents: thisUsersSamplingEvents }, () => {
 
-		var newRoutesAndPages = (
-			<Switch> {/* only match ONE route at a time */}
-				<Route exact path="/" render={() => {
-					return <Login
-						setLoggedInUser={this.setLoggedInUser}
-					/>
-				}} />
-				<Route path="/Dashboard" render={() => <Dashboard
-					appBarTextCB={this.setAppBarText}
-					navControl={this.navigationControl}
-					createNewSamplingEvent={this.createNewSamplingEvent}
-					loadSamplingEvent={this.loadSamplingEvent}
-					samplingEvents={thisUsersSamplingEvents}
-					getEventDetails={this.getEventDetails}
-					deleteSamplingEvent={this.deleteSamplingEvent}
-					samplingEventIdentifier={SAMPLING_EVENT_IDENTIFIER}
-				/>} />
-				<Route path="/EventsManager" render={() => <EventsManager
-					appBarTextCB={this.setAppBarText}
-					navControl={this.navigationControl}
-					createNewSamplingEvent={this.createNewSamplingEvent}
-					loadSamplingEvent={this.loadSamplingEvent}
-					samplingEvents={thisUsersSamplingEvents}
-					getEventDetails={this.getEventDetails}
-					deleteSamplingEvent={this.deleteSamplingEvent}
-				/>} />
-				<Route render={() => <QuestionPage
-					appBarTextCB={this.setAppBarText}
-					tabName={this.props.location.pathname.slice(1)}
-					navControl={this.navigationControl}
-					systemCB={this.questionChangeSystemCallback}
-					questionsData={this.state.questionsData}
-					questionsValues={questionsValues}
-					hiddenPanels={this.state.hiddenPanels}
-					globalState={this.state}
-					getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
-					getNumberOfSamplesInSet={this.getNumberOfSamplesInSet}
-					getCurrentSampleEventMethod={this.getCurrentSampleEventMethod}
-					getTableQuestionValue={this.getTableQuestionValue}
-					getQuestionValue={this.getQuestionValue}
-					getQuestionData={this.getQuestionData}
-					getDescriptiveColumnForTable={this.getDescriptiveColumnForTable}
 
-				/>} />
-				{/* {this.state.navMenu} */}
-				{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
-				<Route render={() => <ErrorPage
-					errMsg="Route was not found"
-					appBarTextCB={this.setAppBarText}
-					navControl={this.navigationControl}
-				/>} />
-			</Switch>
-		); //performance
 
-		this.setState({ routesAndPages: newRoutesAndPages });
+			var newRoutesAndPages = (
+				<Switch> {/* only match ONE route at a time */}
+					<Route exact path="/" render={() => {
+						return <Login
+							setLoggedInUser={this.setLoggedInUser}
+						/>
+					}} />
+					<Route path="/Dashboard" render={() => <Dashboard
+						appBarTextCB={this.setAppBarText}
+						navControl={this.navigationControl}
+						createNewSamplingEvent={this.createNewSamplingEvent}
+						loadSamplingEvent={this.loadSamplingEvent}
+						samplingEvents={this.state.thisUsersSamplingEvents}
+						getEventDetails={this.getEventDetails}
+						deleteSamplingEvent={this.deleteSamplingEvent}
+						samplingEventIdentifier={SAMPLING_EVENT_IDENTIFIER}
+					/>} />
+					<Route path="/EventsManager" render={() => <EventsManager
+						appBarTextCB={this.setAppBarText}
+						navControl={this.navigationControl}
+						createNewSamplingEvent={this.createNewSamplingEvent}
+						loadSamplingEvent={this.loadSamplingEvent}
+						samplingEvents={thisUsersSamplingEvents}
+						getEventDetails={this.getEventDetails}
+						deleteSamplingEvent={this.deleteSamplingEvent}
+					/>} />
+					<Route render={() => <QuestionPage
+						appBarTextCB={this.setAppBarText}
+						tabName={this.props.location.pathname.slice(1)}
+						navControl={this.navigationControl}
+						systemCB={this.questionChangeSystemCallback}
+						questionsData={this.state.questionsData}
+						questionsValues={questionsValues}
+						hiddenPanels={this.state.hiddenPanels}
+						globalState={this.state}
+						getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
+						getNumberOfSamplesInSet={this.getNumberOfSamplesInSet}
+						getCurrentSampleEventMethod={this.getCurrentSampleEventMethod}
+						getTableQuestionValue={this.getTableQuestionValue}
+						getQuestionValue={this.getQuestionValue}
+						getQuestionData={this.getQuestionData}
+						getDescriptiveColumnForTable={this.getDescriptiveColumnForTable}
+
+					/>} />
+					{/* {this.state.navMenu} */}
+					{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
+					<Route render={() => <ErrorPage
+						errMsg="Route was not found"
+						appBarTextCB={this.setAppBarText}
+						navControl={this.navigationControl}
+					/>} />
+				</Switch>
+			); //performance
+
+			this.setState({ routesAndPages: newRoutesAndPages });
+		});
 	};
 
 
 	collectRunAndPropagateSamplePointData(q_id) {
+		let DEBUG = false;
 		console.log("collectRunAndPropagateSamplePointData(" + q_id + ")");
 		//TODO: check that everything is loaded before trying
-		let DEBUG = false;
-		let numSampPoints = null;
+
+
 		if (DEBUG) console.log("CRAPSPD: ", this.state);
 		if (DEBUG) console.log("q_id: ", q_id);
 
-		numSampPoints = this.getQuestionValue(q_id);
-		if (DEBUG) console.log("numSampPoints: ", numSampPoints);
+		// if the q_id includes edgeOfSamplingZone ... run the below for each set that has numberOfSamplingPoints...
+		if (q_id.includes("edgeOfSamplingZone")) {
+			//if both edges are set...
+
+			for (let i = 0; i < MAX_NUM_OF_SETS; i++) {
+				let setName = String.fromCharCode(65 + i);
+				let sampQID = "set" + setName + "_numberOfSamplingPoints";
+				this.propagateNumSamplesData(sampQID);
+			}
+		}
+
+		if (q_id.includes("numberOfSamplingPoints")) {
+			this.propagateNumSamplesData(q_id);
+		}
+
+		this.propagateQWDATAInfo();
+		//console.log("leaving collectRunAndPropagateSamplePointData");
+	}
+
+
+	propagateNumSamplesData(q_id) {
+		let DEBUG = false;
+		let numSampPoints = this.getQuestionValue(q_id);
+		if (DEBUG) console.log("propagateNumSamplesData: numSampPoints: ", numSampPoints);
 
 		if (numSampPoints !== null && numSampPoints !== "" && numSampPoints > 0) {
 			// build the appropriate samples table on EDI and/or EWI and/or OTHER pages 
@@ -1159,9 +1201,12 @@ class WebFF extends React.Component {
 			//note, the exact name of these questions must match.  Tightly coupled. Don't like.  Easy.
 			let tempValArr = [];
 			if (sampMethod === "EWI") {
+				if (DEBUG) console.log("Building EWI first column");
 				// pull variables from fields
 				let LESZ = this.getQuestionValue("edgeOfSamplingZone_Left");
 				let RESZ = this.getQuestionValue("edgeOfSamplingZone_Right");
+				if (DEBUG) console.log("Left Edge SZ: ", LESZ);
+				if (DEBUG) console.log("Right Edge SZ: ", RESZ);
 				let pierlocs = [];
 				let pierWids = [];
 				for (let i = 0; i < 6; i++) {
@@ -1172,13 +1217,15 @@ class WebFF extends React.Component {
 				}
 
 				tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierlocs, pierWids, numSampPoints);
-				tempValArr.unshift("Dist from L bank"); //push past header
-				if (DEBUG) console.log("EWI values: ", tempValArr);
+				tempValArr.unshift("Distance from L bank, feet"); //push past header
+
 			} else if (sampMethod === "EDI") { //EDI
+				if (DEBUG) console.log("Building EDI first column");
 				tempValArr = provideEDISamplingPercentages(numSampPoints);
-				if (DEBUG) console.log("EDI values: ", tempValArr);
 				tempValArr.unshift("EDI %"); //push past header
+
 			} else { // Generic 'OTHER' table
+				if (DEBUG) console.log("Building OTHER first column");
 				// fill out "Group" table values
 				for (let i = 0; i < numSampPoints; i++) {
 					tempValArr.push(i + 1);
@@ -1186,14 +1233,11 @@ class WebFF extends React.Component {
 				tempValArr.unshift("Sample #"); //push past header
 			}
 
+			if (DEBUG) console.log("First column values: ", tempValArr);
+
 			let tableToSetName = q_id.replace("numberOfSamplingPoints", "samplesTable") + "_" + sampMethod;
 
-			//console.log("TEMPVAR: ", tempValArr);
-
 			this.setTableColumn(tableToSetName, 0, tempValArr, this.buildRoutesAndRenderPages);
-
-			this.propagateQWDATAInfo();
-			//console.log("leaving collectRunAndPropagateSamplePointData");
 		}
 	}
 
@@ -1588,8 +1632,8 @@ class WebFF extends React.Component {
 		if (retArr.length === 1) {
 			return retArr[0];
 		} else {
-			//TODO: throw error
 			return null;
+			//throw new Error("getQuestionData found " + retArr.length + " matching values when looking for question data - getQuestionData("+q_id+")");
 		}
 	}
 
@@ -1607,10 +1651,11 @@ class WebFF extends React.Component {
 				let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
 				for (let k = 1; k <= numSamps; k++) {
 					let location = 0;
-					if (setType === "EWI") {
+					if (setType === "EWI") { //TODO: this is probably a useless conditional now that the headers are the same
 						location = this.getTableQuestionValue(table_q_id, 0, k);
 					} else {
-						location = this.getTableQuestionValue(table_q_id, "Dist from L bank", k);
+						location = this.getTableQuestionValue(table_q_id, "Distance from L bank, feet", k);
+					//	console.log("LOCATION for " + table_q_id + ": ", location);
 					}
 
 					setLocations.push(location);
@@ -1719,7 +1764,7 @@ class WebFF extends React.Component {
 			return 0;
 		}
 		let howMany = 0;
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < MAX_NUM_OF_SETS; i++) {
 			if (this.getQuestionValue('set' + String.fromCharCode(65 + i) + '_numberOfSamplingPoints')) {
 				howMany++;
 			}
@@ -1764,7 +1809,7 @@ class WebFF extends React.Component {
 	}
 
 	getCurrentSampleEventMethod() {
-		//note, for SEDLOGIN XML purposes... the string returned from this actually the sampling method.
+		//note, for SEDLOGIN XML purposes... the string returned from this actually the sampling method not the 'value'.
 		// otherwise, this is used for collectRunAndPropagate
 		let samplingMethodQuestionIDString = this.getSamplingMethodQuestionIDString();
 
@@ -1801,7 +1846,7 @@ class WebFF extends React.Component {
 		const DEBUG = true;
 
 
-		const API = 'http://152.61.248.218/mongoPatch.php/';
+		const API = PHP_FILE_LOCATION + 'mongoPatch.php/';
 		const query =
 			"needleKey=" + encodeURIComponent(needleKey) + "&" +
 			"needle=" + encodeURIComponent(needle) + "&" +
@@ -1882,13 +1927,21 @@ class WebFF extends React.Component {
 	//.....B.B....M..M.M..M...M...............................
 	//....B...B...M...M...M...MMMMMM..........................
 
-	buildParamObj(QWDATARowNum, pCode) {
+	buildParamTableParamObj(QWDATARowNum, pCode) {
 		let paramObj = {
 			"Name": pCode,
 			"Value": this.getTableQuestionValue("parametersTable", pCode + "_val", QWDATARowNum),
 			"Rmrk": this.getTableQuestionValue("parametersTable", pCode + "_rmk", QWDATARowNum),
 			"NullQlfr": this.getTableQuestionValue("parametersTable", pCode + "_nq", QWDATARowNum),
 			"Method": this.getTableQuestionValue("parametersTable", pCode + "_mth", QWDATARowNum),
+		}
+		return paramObj;
+	}
+
+	buildParamObj(pCode, value) {
+		let paramObj = {
+			"Name": pCode,
+			"Value": value
 		}
 		return paramObj;
 	}
@@ -1932,7 +1985,7 @@ class WebFF extends React.Component {
 			"M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum)
 		}
 
-		// build param part of sample object using the same row
+		// build param part of sample object from the parameters table headers
 		let parametersTableHeaders = this.getQuestionValue("parametersTable")[0];
 		if (parametersTableHeaders === null | parametersTableHeaders.length < 4) { // there was no parameters table info or headers
 			return sampleObj;
@@ -1944,17 +1997,94 @@ class WebFF extends React.Component {
 		}
 		let activePCodesArr = Object.keys(activePCodes);
 		for (let i = 0; i < activePCodesArr.length; i++) {
-			sampleObj["Param" + i] = this.buildParamObj(QWDATARowNum, activePCodesArr[i]);
+			sampleObj["Param" + i] = this.buildParamTableParamObj(QWDATARowNum, activePCodesArr[i]);
 		}
-		return sampleObj;
 
+		//build the param part of the sample object from the pCodes not in the parameters page
+		let curParamNum = activePCodesArr.length;
+
+		//  "Average Gage Height", if calculated, should be written to P00065.
+		//  //TODO: If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
+		// QWDATA can also accept this if left blank.
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight")); 
+
+		//  - the "Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
+		if(!this.getQuestionValue("groupOfSamples")) {
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P00063", this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"));
+		}
+
+		//  - the Distance from L Bank should be written to P00009.
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00009", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Distance from L bank, feet", sampNum+1));
+
+		//  - Transit rate, sampler, feet per second  should be written to P50015.
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum+1)); 
+
+		//  - Start Time should be written to P82073, 
+		//  - End Time should be written to P82074.  
+		//  These should be written in 24-hour military time, with NO colon between the hour & minutes.
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P82073", this.getQuestionValue("set" + setName + "_StartTime").replace(":","")); 
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P82074", this.getQuestionValue("set" + setName + "_EndTime").replace(":",""));
+
+		// - the "Stream Width", if calculated, should be written to P00004.  
+		// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
+	//	try {
+			let streamWidth = Math.abs(this.getQuestionValue("streamWidth"));
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth); 
+		// } catch (e) {
+		// 	console.warn("Stream Width not added to XML");
+		// }
+		
+
+		// - - Mean Depth of Stream (00064), 
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00064", this.getQuestionValue("meanStreamDepth")); 
+		
+		// - - Stream Velocity (00055)
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00055", this.getQuestionValue("streamVelocity")); 
+		
+
+		// IET testing
+		// - - Stream Velocity (ft) - - should be written to P72196
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P72196", this.getQuestionValue("streamVelocity_IET")); //TODO: stream velocity question name collision 
+		// - - Seconds Sampler collected water - - should be written to P72217
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P72217", this.getQuestionValue("duration_IET")); 
+		// - - Sample Volume for Test (mL) - - should be written to P72218
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P72218", this.getQuestionValue("sampleVolume_IET")); 
+		// - - Nozzle Material - - should be written to P72219
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P72219", this.getQuestionValue("nozzleMaterial_IET")); 
+		// - - Nozzle Diameter - - should be written to P72220
+		sampleObj["Param" + curParamNum++] = this.buildParamObj("P72220", this.getQuestionValue("nozzleDiameter_IET")); 
+	   
+		
+
+		// for Bedload samples only:  
+		if (this.getQuestionValue("sedimentType") === "bedload") {
+			//  - - Bag Mesh Size, in mm - - should be P30333.
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P30333", this.getQuestionValue("bagMesh")); 
+
+			//  - - Tether Line Used - -  should be P04117.
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P04117", this.getQuestionValue("tetherLine")?1:0);
+
+			//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P04118", this.getQuestionValue("compositeSamplesInCrossSection")); 
+
+			//  - - Verticals in composite sample, a number - - should be P04119. 
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P04119", this.getQuestionValue("verticalsInComposite")); 
+			
+			//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P04120", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Rest time on Bed for Bed load sample, seconds", sampNum+1));//TODO: test
+		
+			//  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P04121", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Horizontal width of Vertical, feet", sampNum+1)); //TODO: test
+		}
+
+		return sampleObj;
 	}
 
 
 
 	buildSetObj(setName) {
 		let setObj = {
-			"Name": this.getQuestionValue('groupOfSamples')?"Sngl":setName,
+			"Name": this.getQuestionValue('groupOfSamples') ? "Sngl" : setName,
 			"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
 			"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_samplesComposited") ? 'N' : 'Y',
 			"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_" + this.getQuestionValue("sedimentType")).join(","),
@@ -2064,7 +2194,7 @@ class WebFF extends React.Component {
 
 
 		if (menuText == "Test") {
-
+			console.log("Starting Test 4");
 			// this.fetchDBInfo("", '', (response) => console.log("Nothing: ", response));
 			// this.fetchDBInfo("hiddenPanels", '', (response) => console.log("hiddenPanels: ", response));
 			// this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
@@ -2073,7 +2203,69 @@ class WebFF extends React.Component {
 			//this.buildCombinedQuestionsData(() => console.log("CALLBACK!!"));
 			// this.propagateQWDATAInfo();
 			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
-			this.setShippedStatus(null, true);
+			//this.setShippedStatus(null, true);
+
+
+			// sort out differences in local dev server and production server calls
+			const API = PHP_FILE_LOCATION + 'test_middle.php/';
+			let query = '';
+
+			console.log("Testing connection: ", API, ")");
+
+
+			// if (_query !== '') {
+			// 	query = 'needleID=' + encodeURIComponent(_query);
+			// }
+
+			// if (_collection !== '') {
+			// 	if (query !== '') {
+			// 		query += '&';
+			// 	}
+			// 	query += "collection=" + _collection;
+			// }
+
+			// if (isDEV) {
+			// 	const API = 'https://localhost:3004/';
+			// 	query = encodeURIComponent(_query);
+			// }
+
+			function handleErrors(response) {
+				// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+				if (!response.ok) {
+					throw Error(response.statusText);
+				}
+				//note 404 is not found and 400 is a mal-formed request
+				return response;
+			}
+
+			fetch(API, {
+				method: 'POST',
+				headers: new Headers({
+					'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+				}),
+				body: query
+			})
+				.then(handleErrors)
+				.then(response => {
+					//console.log("RAW response: ", response);
+					let respT = response.text();
+					console.log("Response text: ", respT);
+
+					// return response.json();
+					return respT;
+				}
+				)
+				.then(parsedJSON => {
+					console.log("Parsed JSON: ", parsedJSON);
+					// // setTimeout(() => {
+					//successCB(parsedJSON);
+					// }, 1200);
+				})
+				// .catch(error => {  });
+				.catch(error => {
+					console.error("Error fetching " + API + query + "\n" + error);
+				}
+				);
 		}
 
 
@@ -2083,7 +2275,7 @@ class WebFF extends React.Component {
 			return;
 		}
 		if (menuText === "About") {
-			alert("This is Sediment Field Forms (SedFF) version Alpha 0.02 built by jfederer@usgs.gov and kaskach@usgs.gov on Sept 11, 2018");
+			alert("This is Sediment Field Forms (SedFF) version Beta 0.7.11 built by jfederer@usgs.gov and kaskach@usgs.gov on Sept 11, 2018");
 			return;
 		}
 

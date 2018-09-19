@@ -26,3 +26,8 @@ export const allAddOnOpts_suspended = {
 	"Loss-on-ignition": "LOI",
 	"Full size fractions": "Z"
 }
+export const allTubidityOpts = {
+	"Turbidity, NTU, 400-600nm, 90 30degs": "63675",
+	"Sand Analysis": "63676",
+	"Loss-on-ignition": "63680"
+}

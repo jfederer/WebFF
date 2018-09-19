@@ -20,29 +20,27 @@ class DateInput extends React.Component {
 	constructor(props) {
 		let DEBUG=false;
 		super(props);
-		if(DEBUG)console.log("CONSTRUCTOR: Props.value: ", props.value);
+		if(DEBUG)console.log("DateInput: CONSTRUCTOR: Props.value: ", props.value);
 		if (this.props.value != null) {
-			if(DEBUG)console.log("CONSTRUCTOR: Props.value not equal null");
 			this.state = {
 				value: this.props.value
 			};
 		} else {
-			if(DEBUG)console.log("CONSTRUCTOR: props.value equals null")
+			if(DEBUG)console.log("DateInput: CONSTRUCTOR: props.value was null, building 'now' datestring")
 			let d = new Date();
 			if(DEBUG)console.log("CONSTRUCTOR: Date: ", d)
 			let dateOfMonthString = ('0' + d.getDate()).slice(-2);
 			let monthString = ('0' + (d.getMonth()+1)).slice(-2);
 			let dateString = d.getFullYear() + "-" + monthString +"-" + dateOfMonthString;
-			if(DEBUG)console.log("CONSTRUCTOR: datestring: ", dateString);
+			if(DEBUG)console.log("DateInput: CONSTRUCTOR: datestring: ", dateString);
 			this.state = {
 				value: dateString
 			}
-			this.props.stateChangeHandler(this);
-			if(DEBUG)console.log("CONSTRUCTOR: state.value: ", this.state.value);
 		}
 	};
 
 	componentWillMount() {
+		this.props.stateChangeHandler(this);
 		//this.setState({ value: this.props.value });
 	}
 

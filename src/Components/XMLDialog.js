@@ -53,7 +53,7 @@ class XMLDialog extends React.Component {
 
   saveXML() {
     let d = new Date();
-    saveFile("SedWE_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + ".txt", this.props.getSedLOGINcompatibleXML());
+    saveFile("SedWE_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + ".xml", this.props.getSedLOGINcompatibleXML());
     return;
   }
 
@@ -63,7 +63,7 @@ class XMLDialog extends React.Component {
 
     const SLCXML = this.props.getSedLOGINcompatibleXML();
     const DEBUG = true;
-    const API = 'http://152.61.248.218/sedWeConnect.php';
+    const API = 'https://152.61.248.218/sedWeConnect.php';
     let username = this.props.username.split('@')[0];
     const query = "user="+username+"&pw="+encodeURIComponent(pass)+"&p_id="+p_id+"&xml="+encodeURIComponent(SLCXML);
 

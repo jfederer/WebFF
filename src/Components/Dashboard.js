@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -61,9 +61,8 @@ class Dashboard extends React.Component {
 	render() {
 		const { classes } = this.props;
 
-		//console.log(this.props.samplingEvents);
-		let samplingEventNames = this.props.samplingEvents;
-		let recentFiveSamplingEvents = samplingEventNames.sort().reverse().slice(0, 5);
+
+		// let samplingEventNames = this.props.samplingEvents;
 		//	console.log("Dashboard Sampling Events: ", samplingEventNames);
 
 		const MyLink = props => <Link to="/FieldForm" {...props} />

@@ -1,4 +1,4 @@
-import React from 'react'; //lets me use JSX
+// import React from 'react'; //lets me use JSX
 
 export const isReasonablyValidUsernameInLS = () => {
         //let user = JSON.parse(localStorage.getItem('loggedInUser'));
