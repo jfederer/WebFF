@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
 //this.state.value always contains the up-to-date question values/answers.
 
 const styles = theme => ({
@@ -18,21 +17,21 @@ const styles = theme => ({
 
 class DateInput extends React.Component {
 	constructor(props) {
-		let DEBUG=false;
+		let DEBUG = false;
 		super(props);
-		if(DEBUG)console.log("DateInput: CONSTRUCTOR: Props.value: ", props.value);
+		if (DEBUG) console.log("DateInput: CONSTRUCTOR: Props.value: ", props.value);
 		if (this.props.value != null) {
 			this.state = {
 				value: this.props.value
 			};
 		} else {
-			if(DEBUG)console.log("DateInput: CONSTRUCTOR: props.value was null, building 'now' datestring")
+			if (DEBUG) console.log("DateInput: CONSTRUCTOR: props.value was null, building 'now' datestring")
 			let d = new Date();
-			if(DEBUG)console.log("CONSTRUCTOR: Date: ", d)
+			if (DEBUG) console.log("CONSTRUCTOR: Date: ", d)
 			let dateOfMonthString = ('0' + d.getDate()).slice(-2);
-			let monthString = ('0' + (d.getMonth()+1)).slice(-2);
-			let dateString = d.getFullYear() + "-" + monthString +"-" + dateOfMonthString;
-			if(DEBUG)console.log("DateInput: CONSTRUCTOR: datestring: ", dateString);
+			let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
+			let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
+			if (DEBUG) console.log("DateInput: CONSTRUCTOR: datestring: ", dateString);
 			this.state = {
 				value: dateString
 			}
@@ -54,6 +53,14 @@ class DateInput extends React.Component {
 		);
 	};
 
+	getDateString(date) {
+		console.log(date);
+		
+		return date.getUTCFullYear() + "/" +
+			("0" + (date.getUTCMonth() + 1)).slice(-2) + "/" +
+			("0" + date.getUTCDate()).slice(-2);
+	}
+
 	render() {
 		const { classes } = this.props;
 		//console.log("value: ", this.state.value);
@@ -72,6 +79,7 @@ class DateInput extends React.Component {
 				shrink: true,
 			}}
 			onChange={this.handleValueChange(this.props.id)}
+			style={{ margin: 0 }}
 		/>
 	}
 }

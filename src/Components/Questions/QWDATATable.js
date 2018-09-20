@@ -33,11 +33,11 @@ const styles = theme => ({
 
 });
 
-var firstColumn = [];
 
 class QWDATATable extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log("QWDATA TABLE CONSTRUCTOR");
 
 		this.state = {
 			value: this.props.value,
@@ -53,9 +53,16 @@ class QWDATATable extends React.Component {
 		this.addOnChangeHandler = this.addOnChangeHandler.bind(this);
 	};
 
-	componentWillMount() {
 
+	componentWillMount() {
 		let newValue = this.props.value.slice();
+
+		// note, much of this will break upon resizing or adding columns
+
+		//build correct header  
+		for (let i = 0; i < newValue[0].length; i++) {
+			newValue[0][i] = Object.keys(this.state.headers)[i];
+		}
 
 		// check that the Add-on analysis values are arrays
 		let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
@@ -70,8 +77,7 @@ class QWDATATable extends React.Component {
 		//set the first column values to something correct
 		let desriptiveColumn = this.props.getDescriptiveColumnForTable();
 		let SetSampDistIndex = newValue[0].indexOf("Set-Sample @ Dist");
-		let needsArraysAdded = false;
-		if (SetSampDistIndex < 0) { throw new Error("\'Set-Sample @ Dist\' not found in header of QWDATA table") }
+		if (SetSampDistIndex < 0) { throw new Error("'Set-Sample @ Dist' not found in header of QWDATA table") }
 		for (let row = 1; row < newValue.length; row++) {
 			if (!Array.isArray(newValue[row][SetSampDistIndex])) {
 				//				needsArraysAdded = true;
@@ -79,13 +85,14 @@ class QWDATATable extends React.Component {
 			}
 		}
 
-		//		if(needsArraysAdded) {
+		// //set the sample dates from the field form entry
+		// let defaultDate = this.props.getQuestionValue("sampleDate");
+		// let sampleDateIndex = newValue[0].indexOf("Sample Date");
+		// for (let row = 1; row < newValue.length; row++) {
+		// 	newValue[row][sampleDateIndex] = defaultDate;
+		// }
+
 		this.setState({ value: newValue });
-		//		return;
-		//	}
-
-		console.log("CWM done");
-
 	}
 
 	componentDidMount() {
@@ -130,6 +137,7 @@ class QWDATATable extends React.Component {
 				if (addOnOpts[key] === alreadyDoing[i]) {
 					delete addOnOpts[key];
 				}
+				return null;
 			})
 		}
 		// console.log("addOnOpts (filtered):", addOnOpts);
@@ -180,9 +188,10 @@ class QWDATATable extends React.Component {
 	}
 
 	getKeyFromValue(obj, value) {
+
 		let retKey = null;
-		Object.keys(obj).forEach((key)=> {
-			if(obj[key]===value) {
+		Object.keys(obj).forEach((key) => {
+			if (obj[key] === value) {
 				retKey = key;
 			}
 		});
@@ -196,23 +205,25 @@ class QWDATATable extends React.Component {
 
 		const { classes } = this.props;
 		// console.log("QWDATA Render props: ", this.props);
-		
+
 		// console.log("QWDATA Render state: ", this.state);
 		let classlessProps = this.props;
 		delete classlessProps[classes];
 
-		let evtName = this.props.globalState.curSamplingEventName;
+		// let evtName = this.props.globalState.curSamplingEventName;
 
 
 		return (
 			<React.Fragment>
 				<br></br>
-				<Typography  style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
+				<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
 				<Table className={classes.table}>
 					<TableHead>
 						<TableRow>
 							{Object.keys(this.state.headers).map((headerKey) => {
 								let headerValue = this.state.headers[headerKey];
+								// console.log(headerKey +"="+headerValue);
+
 								let defaultValue = null;
 								let displayValue = null;
 								if (headerValue) {
@@ -220,11 +231,14 @@ class QWDATATable extends React.Component {
 									// console.log("qidForDefaultValue: ", qidForDefaultValue);
 									defaultValue = this.props.getQuestionValue(qidForDefaultValue);
 									// console.log("Default Value: ", defaultValue);
-									if(defaultValue) {
-										let Q = this.props.getQuestionData(qidForDefaultValue);	
-										// console.log(Q);
+									if (defaultValue) {
+										let Q = this.props.getQuestionData(qidForDefaultValue);
 										displayValue = this.getKeyFromValue(Q.options, defaultValue);
-									} 
+									}
+								}
+
+								if (headerKey === "Sample Date") {
+									displayValue = this.props.getQuestionValue("sampleDate")
 								}
 
 								return (
@@ -276,18 +290,20 @@ class QWDATATable extends React.Component {
 														key={keyText}
 														type="TimeInput"
 														stateChangeHandler={this.handleValueChange(rowNum, colNum)}
-														// value={timeColumn[rowNum]}
 														value={this.state.value[rowNum][colNum]}
 													/>
-												//	let thisSampleDescript = this.state.value[rowNum][0]
-													//console.log("thisSampleDescript: ", thisSampleDescript);
-												//	let thisSetName = thisSampleDescript.split("-")[0];
-													//console.log("thisSetName ", thisSetName);
-												//	let thisSampleNum = thisSampleDescript.split("-")[1].split(" @")[0];
-													//console.log("thisSampleNum ", thisSampleNum);
-
-
 													break;
+												case "Sample Date":
+													Q = <Question {...this.classlessProps}
+														label=""
+														id={keyText}
+														key={keyText}
+														type="DateInput"
+														stateChangeHandler={this.handleValueChange(rowNum, colNum)}
+														value={this.state.value[rowNum][colNum]}
+													/>
+													break;
+												default: throw new Error(headerKey + " case not handled in QWDATA table");
 											}
 										} else {
 											//console.log(this.state.headers[headerKey]);

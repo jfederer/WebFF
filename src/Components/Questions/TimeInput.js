@@ -6,40 +6,39 @@ import TextField from '@material-ui/core/TextField';
 //this.state.value always contains the up-to-date time in this question
 
 const styles = theme => ({
-	container: {
+	timeInput: {
+		margin: 0,
+		fullWidth: true,
+		wrap: 'nowrap',
 		display: 'flex',
 		flexWrap: 'wrap',
-	},
-	textField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
 	},
 });
 
 class TimeInput extends React.Component {
 	constructor(props) {
-		let DEBUG=false;
+		let DEBUG = false;
 		super(props);
 
-		if(DEBUG)console.log("CONSTRUCTOR INSTRUCTOR DEDUCTOR");
-		if(DEBUG)console.log("CONSTRUCTOR: Props.value: ", props.value);
+		if (DEBUG) console.log("CONSTRUCTOR INSTRUCTOR DEDUCTOR");
+		if (DEBUG) console.log("CONSTRUCTOR: Props.value: ", props.value);
 		if (this.props.value != null) {
-			if(DEBUG)console.log("CONSTRUCTOR: Props.value not equal null");
+			if (DEBUG) console.log("CONSTRUCTOR: Props.value not equal null");
 			this.state = {
 				value: this.props.value
 			};
 		} else {
-			if(DEBUG)console.log("CONSTRUCTOR: props.value equals null")
+			if (DEBUG) console.log("CONSTRUCTOR: props.value equals null")
 			let d = new Date();
-			if(DEBUG)console.log("CONSTRUCTOR: Date: ", d)
+			if (DEBUG) console.log("CONSTRUCTOR: Date: ", d)
 			let hoursString = ('0' + d.getHours()).slice(-2);
 			let minutesString = ('0' + (d.getMinutes())).slice(-2);
 			let timeString = hoursString + ":" + minutesString;
-			if(DEBUG)console.log("CONSTRUCTOR: timeString: ", timeString);
+			if (DEBUG) console.log("CONSTRUCTOR: timeString: ", timeString);
 			this.state = {
 				value: timeString
 			}
-			if(DEBUG)console.log("CONSTRUCTOR: state.value: ", this.state.value);
+			if (DEBUG) console.log("CONSTRUCTOR: state.value: ", this.state.value);
 		}
 	};
 
@@ -48,10 +47,37 @@ class TimeInput extends React.Component {
 	}
 
 	handleValueChange = value => event => {
+
+		// validate and format the input
+		let newVal = event.target.value;
+		newVal = newVal.replace(':', '');
+		if (isNaN(newVal)) { // don't allow letters
+			return;
+		}
+
+		if (newVal.length > 4) { // don't allow more than 4 characters
+			return;
+		}
+
+		if (newVal.length === 2) {
+			if (newVal > 24) {
+				return;
+			}
+		}
+
+		if (newVal.length === 4) {
+			if (newVal.slice(2) > 59) {
+				return;
+			}
+		}
+
+		if (newVal.length > 2) {
+			newVal = newVal.slice(0, 2) + ":" + newVal.slice(2);
+		}
+
 		this.setState({
-			value: event.target.value
+			value: newVal
 		}, () => {
-			console.log(this.props.stateChangeHandler);
 			this.props.stateChangeHandler(this)
 		}
 		);
@@ -62,23 +88,19 @@ class TimeInput extends React.Component {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
 
-		return <TextField
-		id={this.props.id}
-		key={this.props.id}
-		label={this.props.label}
-		fullWidth
-        type="time"
-		value={this.state.value}
-		xmltag={this.props.XMLTag}
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        inputProps={{
-          step: this.props.step,
-		}}
-		onChange={this.handleValueChange(this.props.id)}
-      />
+		return <TextField className={classes.timeInput}
+			id={this.props.id}
+			key={this.props.id}
+			label={this.props.label}
+			fullWidth
+			margin="none"
+			type="text"
+			value={this.state.value}
+			xmltag={this.props.XMLTag}
+			placeholder={'HHMM'}
+			onChange={this.handleValueChange(this.props.id)}
+			// style = {{width: 52, marginLeft:2}} //assign the width as your requirement
+		/>
 	}
 }
 

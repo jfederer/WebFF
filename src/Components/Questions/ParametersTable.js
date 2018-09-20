@@ -9,8 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
+// import Select from '@material-ui/core/Select';
+// import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -322,7 +322,7 @@ class ParametersTable extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		let setType = this.props.getCurrentSampleEventMethod();
+		// let setType = this.props.getCurrentSampleEventMethod();
 		let firstColumn = this.props.getDescriptiveColumnForTable();
 
 
@@ -353,10 +353,9 @@ class ParametersTable extends React.Component {
 					</TableHead>
 					<TableBody>
 						{firstColumn.map((col, rowNum) => {
-							if (rowNum === 0) return; //skip the header
+							if (rowNum === 0) return null; //skip the header
 							let realRowNum = rowNum;
-							return (
-								<TableRow key={col + realRowNum}>
+							return <TableRow key={col + realRowNum}>
 									<TableCell className={classes.tableCell}>
 										{col}
 									</TableCell>
@@ -400,7 +399,6 @@ class ParametersTable extends React.Component {
 										</TableCell>
 									})}
 								</TableRow>
-							);
 						})}
 					</TableBody>
 				</Table>

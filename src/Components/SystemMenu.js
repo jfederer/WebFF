@@ -13,7 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HelpIcon from '@material-ui/icons/Help';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+// import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import SyncIcon from '@material-ui/icons/Sync';
 import CodeIcon from '@material-ui/icons/Code';

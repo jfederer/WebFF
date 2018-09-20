@@ -31,13 +31,13 @@ import ListItem from '@material-ui/core/ListItem';
 let counter = 0;
 
 //const loadingData = {id:99999, , "d"}
-const loadingData = {
-  id: 9999,
-  eventName: "data loading...",
-  sampleDate: "data loading...",
-  stationName: "data loading...",
-  shippedStatus: "data loading..."
-};
+// const loadingData = {
+//   id: 9999,
+//   eventName: "data loading...",
+//   sampleDate: "data loading...",
+//   stationName: "data loading...",
+//   shippedStatus: "data loading..."
+// };
 
 function createData(eventName, sampleDate, stationName, shippedStatus) {
   counter += 1;
@@ -277,6 +277,7 @@ class EventsManager extends React.Component {
     this.state.toDeleteList.map((event) => {
       this.props.deleteSamplingEvent(event.eventName);
       removedEventNames.push(event.eventName);
+      return null;
     });
     let filteredData = this.state.data.filter((evt) => !removedEventNames.includes(evt.eventName));
     this.setState({ data: filteredData });

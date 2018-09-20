@@ -1,5 +1,6 @@
 export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID"   (null Q_id means this is a special case)
 	"Set-Sample @ Dist": null,
+	"Sample Date": null,
 	"Sample Time": null,
 	"Hydrologic Event": "hydrologicEvent",
 	"Hydrologic Cond": "hydrologicCondition",

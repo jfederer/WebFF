@@ -22,8 +22,8 @@ export const createQuestionComponents = (questionsData, changeHandler, _globalSt
 			Object.keys(allProps).map((propKey)=> {
 				if(typeof(allProps[propKey])=== "function") {
 					allPropFuncs[propKey]=allProps[propKey];
-					return;
 				}
+				return null;
 			});
 
 	//		console.log(allPropFuncs);
