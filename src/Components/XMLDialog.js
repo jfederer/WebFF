@@ -69,10 +69,12 @@ class XMLDialog extends React.Component {
       if (key === 'questionsValues') {
         Object.keys(curEvt[key]).map((QVkey) => {
           allData += "\n<" + QVkey + ">" + curEvt[key][QVkey] + "</" + QVkey + ">";
+          return null;
         });
       } else {
         allData += "\n<" + key + ">" + curEvt[key] + "</" + key + ">";
       }
+      return null;
     })
     saveFile("SedFF_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + "_AllData.xml", allData);
     return;

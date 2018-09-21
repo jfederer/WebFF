@@ -56,7 +56,7 @@ import SystemDialog from './SystemDialog';
 
 // import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 
-const FUNCDEBUG = false;
+const FUNCDEBUG = true;
 
 const criticalUserNodes = ['stations', 'customQuestions'];
 const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'defaultQuestionsData', 'hiddenPanels', 'hiddenTabs'];
