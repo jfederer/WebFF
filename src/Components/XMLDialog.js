@@ -37,11 +37,12 @@ class XMLDialog extends React.Component {
       showStatus: false,
       statusMessage: "",
       showSedLOGINQs: false,
-      pw:"",
-      SedLOGINprojectID:""
+      pw: "",
+      SedLOGINprojectID: ""
     };
 
     this.saveXML = this.saveXML.bind(this);
+    this.saveAllXML = this.saveAllXML.bind(this);
     this.pushXMLToSedLOGIN = this.pushXMLToSedLOGIN.bind(this);
     this.updateStatus = this.updateStatus.bind(this);
     this.updateStatus = this.updateStatus.bind(this);
@@ -53,19 +54,39 @@ class XMLDialog extends React.Component {
 
   saveXML() {
     let d = new Date();
-    saveFile("SedWE_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + ".xml", this.props.getSedLOGINcompatibleXML());
+    //TODO: get the eventName
+    saveFile("SedFF_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + "_SedLOGINCompatible.xml", this.props.getSedLOGINcompatibleXML());
     return;
   }
 
-  pushXMLToSedLOGIN(p_id,pass) {
-    
+
+  saveAllXML() {
+    let d = new Date();
+    //TODO: get the eventName
+    let allData = this.props.getSedLOGINcompatibleXML();
+    let curEvt = this.props.globalState[this.props.globalState.curSamplingEventName];
+    Object.keys(curEvt).map((key) => {
+      if (key === 'questionsValues') {
+        Object.keys(curEvt[key]).map((QVkey) => {
+          allData += "\n<" + QVkey + ">" + curEvt[key][QVkey] + "</" + QVkey + ">";
+        });
+      } else {
+        allData += "\n<" + key + ">" + curEvt[key] + "</" + key + ">";
+      }
+    })
+    saveFile("SedFF_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + "_AllData.xml", allData);
+    return;
+  }
+
+  pushXMLToSedLOGIN(p_id, pass) {
+
     this.updateStatus("Attempting to push to SedLOGIN... this may take a minute\n");
 
     const SLCXML = this.props.getSedLOGINcompatibleXML();
     const DEBUG = true;
     const API = 'https://152.61.248.218/sedWeConnect.php';
     let username = this.props.username.split('@')[0];
-    const query = "user="+username+"&pw="+encodeURIComponent(pass)+"&p_id="+p_id+"&xml="+encodeURIComponent(SLCXML);
+    const query = "user=" + username + "&pw=" + encodeURIComponent(pass) + "&p_id=" + p_id + "&xml=" + encodeURIComponent(SLCXML);
 
 
     let URI = API;
@@ -85,7 +106,7 @@ class XMLDialog extends React.Component {
       })
       .then((response) => {
         this.updateStatus(response);
-        if(response.includes(SEDLOGIN_SUCCESS_MESSAGE)) {
+        if (response.includes(SEDLOGIN_SUCCESS_MESSAGE)) {
           this.props.setShippedStatus(null, true);
         }
         //TODO: add loader
@@ -94,30 +115,34 @@ class XMLDialog extends React.Component {
   }
 
   pushToSedLOGINClickHandler = () => {
-    
+
     this.setState({ showSedLOGINQs: true })
   }
-  
+
   doneClickHandler = () => {
-    this.setState({
-      showStatus: false,
-      statusMessage: "",
-      showSedLOGINQs: false
+    this.props.handleXMLDialogClose(()=> {
+      setTimeout(() => {
+        this.setState({
+          showStatus: false,
+          statusMessage: "",
+          showSedLOGINQs: false
+        });
+      }, 250);
+     
     });
-    this.props.handleXMLDialogClose();
   }
 
-  sedLoginSubmitHandler = () =>{
+  sedLoginSubmitHandler = () => {
     this.setState({ showStatus: true });
     this.setState({ showSedLOGINQs: false })
     this.pushXMLToSedLOGIN(this.state.SedLOGINprojectID, this.state.pw);
   }
 
   passwordChangeHandler = (e) => {
-    this.setState({pw:e.target.value});
+    this.setState({ pw: e.target.value });
   }
   projectIDChangeHandler = (e) => {
-    this.setState({SedLOGINprojectID:e.target.value});
+    this.setState({ SedLOGINprojectID: e.target.value });
   }
 
   updateStatus(textToAdd) {
@@ -139,15 +164,18 @@ class XMLDialog extends React.Component {
 
           <Grid justify="space-around" container spacing={24}>
             <Grid item xs={12}>
-                <DialogContentText>
-                  Save the current event to your computer, or directly upload it to SedLOGIN
+              <DialogContentText>
+                Save the current event to your computer, or directly upload it to SedLOGIN
             </DialogContentText>
             </Grid>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}><Button onClick={this.saveXML}>Save XML to file</Button></Paper>
+            <Grid item xs={4} >
+              <Paper style={{ height: '90%' }} className={classes.paper}><Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button></Paper>
             </Grid>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}><Button onClick={this.pushToSedLOGINClickHandler}>Push to SedLOGIN</Button></Paper>
+            <Grid item xs={4} >
+              <Paper style={{ height: '90%' }} className={classes.paper}><Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button></Paper>
+            </Grid>
+            <Grid item xs={4} >
+              <Paper style={{ height: '90%' }} className={classes.paper}><Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button></Paper>
             </Grid>
 
             {this.state.showStatus ? <Grid item xs={12}>
@@ -165,10 +193,10 @@ class XMLDialog extends React.Component {
             </Grid> : null}
 
             {this.state.showSedLOGINQs ?
-            <React.Fragment>
-              <Divider></Divider>
-              <Grid item xs={12}><Typography>{this.props.username}, enter the SedLOGIN project ID and your Active Directory password</Typography></Grid>
-              <Grid item xs={4}>
+              <React.Fragment>
+                <Divider></Divider>
+                <Grid item xs={12}><Typography>{this.props.username}, enter the SedLOGIN project ID and your Active Directory password</Typography></Grid>
+                <Grid item xs={4}>
                   <TextField
                     margin="dense"
                     id="sedLOGINProjectID"
@@ -177,8 +205,8 @@ class XMLDialog extends React.Component {
                     onChange={this.projectIDChangeHandler}
                     value={this.state.SedLOGINprojectID}
                   />
-              </Grid>
-              <Grid item xs={8}>
+                </Grid>
+                <Grid item xs={8}>
                   <TextField
                     margin="dense"
                     type="password"
@@ -188,14 +216,14 @@ class XMLDialog extends React.Component {
                     fullWidth
                     value={this.state.pw}
                   />
-              </Grid>
-              <Grid item xs={12}>
+                </Grid>
+                <Grid item xs={12}>
                   <Button
                     variant="contained"
                     margin="dense"
                     onClick={this.sedLoginSubmitHandler}
                   >Submit to SedLOGIN</Button>
-              </Grid> 
+                </Grid>
               </React.Fragment>
               : null}
 

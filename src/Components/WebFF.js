@@ -68,7 +68,7 @@ var needToSyncStationDataToQuestionData = true;
 const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent::"; //TODO: add colon
 const PHP_FILE_LOCATION = "https://152.61.248.218/";
 // const PHP_FILE_LOCATION = "https://sedff.usgs.gov/";
-const isDEV = false;
+// const isDEV = false;
 const MAX_NUM_OF_SETS = 3;
 
 const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TOdO: need to ensure no custom questions include these 
@@ -654,14 +654,14 @@ class WebFF extends React.Component {
 
 	handleXMLDialogOpen = (CB) => {
 		this.setState({ XMLDialogOpen: true }, ()=> {
-			if(typeof CB === "function") {
-				CB();
-			}
+			if(typeof CB === "function") CB(); 
 		});
 	}
 
-	handleXMLDialogClose = () => {
-		this.setState({ XMLDialogOpen: false });
+	handleXMLDialogClose = (CB) => {
+		this.setState({ XMLDialogOpen: false }, ()=> {
+			if(typeof CB === "function") CB(); 
+		});
 	}
 	handleQuestionDialogOpen = (CB) => {
 		this.setState({ questionDialogOpen: true }, ()=> {
@@ -2205,78 +2205,81 @@ class WebFF extends React.Component {
 
 
 		if (menuText === "Test") {
-			console.log("Starting Test 4");
+			console.log("Starting ALL-XML-TEST");
+
+
+
 			// this.fetchDBInfo("", '', (response) => console.log("Nothing: ", response));
-			// this.fetchDBInfo("hiddenPanels", '', (response) => console.log("hiddenPanels: ", response));
-			// this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
-			// this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
+			// // this.fetchDBInfo("hiddenPanels", '', (response) => console.log("hiddenPanels: ", response));
+			// // this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
+			// // this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
 
-			//this.buildCombinedQuestionsData(() => console.log("CALLBACK!!"));
-			// this.propagateQWDATAInfo();
-			//this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
-			//this.setShippedStatus(null, true);
-
-
-			// sort out differences in local dev server and production server calls
-			const API = PHP_FILE_LOCATION + 'test_middle.php/';
-			let query = '';
-
-			console.log("Testing connection: ", API, ")");
+			// //this.buildCombinedQuestionsData(() => console.log("CALLBACK!!"));
+			// // this.propagateQWDATAInfo();
+			// //this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
+			// //this.setShippedStatus(null, true);
 
 
-			// if (_query !== '') {
-			// 	query = 'needleID=' + encodeURIComponent(_query);
-			// }
+			// // sort out differences in local dev server and production server calls
+			// const API = PHP_FILE_LOCATION + 'test_middle.php/';
+			// let query = '';
 
-			// if (_collection !== '') {
-			// 	if (query !== '') {
-			// 		query += '&';
+			// console.log("Testing connection: ", API, ")");
+
+
+			// // if (_query !== '') {
+			// // 	query = 'needleID=' + encodeURIComponent(_query);
+			// // }
+
+			// // if (_collection !== '') {
+			// // 	if (query !== '') {
+			// // 		query += '&';
+			// // 	}
+			// // 	query += "collection=" + _collection;
+			// // }
+
+			// // if (isDEV) {
+			// // 	const API = 'https://localhost:3004/';
+			// // 	query = encodeURIComponent(_query);
+			// // }
+
+			// function handleErrors(response) {
+			// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
+			// 	if (!response.ok) {
+			// 		throw Error(response.statusText);
 			// 	}
-			// 	query += "collection=" + _collection;
+			// 	//note 404 is not found and 400 is a mal-formed request
+			// 	return response;
 			// }
 
-			// if (isDEV) {
-			// 	const API = 'https://localhost:3004/';
-			// 	query = encodeURIComponent(_query);
-			// }
+			// fetch(API, {
+			// 	method: 'POST',
+			// 	headers: new Headers({
+			// 		'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+			// 	}),
+			// 	body: query
+			// })
+			// 	.then(handleErrors)
+			// 	.then(response => {
+			// 		//console.log("RAW response: ", response);
+			// 		let respT = response.text();
+			// 		console.log("Response text: ", respT);
 
-			function handleErrors(response) {
-				// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-				if (!response.ok) {
-					throw Error(response.statusText);
-				}
-				//note 404 is not found and 400 is a mal-formed request
-				return response;
-			}
-
-			fetch(API, {
-				method: 'POST',
-				headers: new Headers({
-					'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
-				}),
-				body: query
-			})
-				.then(handleErrors)
-				.then(response => {
-					//console.log("RAW response: ", response);
-					let respT = response.text();
-					console.log("Response text: ", respT);
-
-					// return response.json();
-					return respT;
-				}
-				)
-				.then(parsedJSON => {
-					console.log("Parsed JSON: ", parsedJSON);
-					// // setTimeout(() => {
-					//successCB(parsedJSON);
-					// }, 1200);
-				})
-				// .catch(error => {  });
-				.catch(error => {
-					console.error("Error fetching " + API + query + "\n" + error);
-				}
-				);
+			// 		// return response.json();
+			// 		return respT;
+			// 	}
+			// 	)
+			// 	.then(parsedJSON => {
+			// 		console.log("Parsed JSON: ", parsedJSON);
+			// 		// // setTimeout(() => {
+			// 		//successCB(parsedJSON);
+			// 		// }, 1200);
+			// 	})
+			// 	// .catch(error => {  });
+			// 	.catch(error => {
+			// 		console.error("Error fetching " + API + query + "\n" + error);
+			// 	}
+			// 	);
 		}
 
 
@@ -2397,6 +2400,7 @@ class WebFF extends React.Component {
 						handleXMLDialogClose={this.handleXMLDialogClose}
 						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
 						username={this.state.loggedInUser}
+						globalState={this.state}
 					/>
 					<QuestionDialog isOpen={this.state.questionDialogOpen}
 						handleQuestionDialogClose={this.handleQuestionDialogClose}
