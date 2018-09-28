@@ -781,7 +781,7 @@ export const questionsData =
 
         {
             "id": "meanStreamDepth",
-            "label": "Mean Stream Depth",
+            "label": "Mean Stream Depth (ft)",
             "type": "Text",
             "value": "",
             "tabName": "Field Form",
@@ -793,7 +793,7 @@ export const questionsData =
 
         {
             "id": "streamVelocity",
-            "label": "Stream Velocity",
+            "label": "Stream Velocity (ft/s)",
             "type": "Text",
             "placeholder": "P00055",
             "value": "",
