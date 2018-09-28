@@ -34,12 +34,12 @@ class SystemMenu extends React.Component {
     const systemMenu = (
       <div className={classes.list}>
         <List>
-          <ListItem button onClick={() => this.props.menuItemClickHandler('Test')}>
+          {/* <ListItem button onClick={() => this.props.menuItemClickHandler('Test')}>
             <ListItemIcon>
               <BuildIcon />
             </ListItemIcon>
             <ListItemText primary="Test" />
-          </ListItem>
+          </ListItem> */}
           <ListItem button onClick={() => this.props.menuItemClickHandler('Save XML')}>
             <ListItemIcon>
               <CodeIcon />

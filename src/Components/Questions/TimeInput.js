@@ -66,12 +66,13 @@ class TimeInput extends React.Component {
 		}
 
 		if (newVal.length === 4) {
+			if (newVal.slice(0, 2) > 24) {
+				return;
+			}
+
 			if (newVal.slice(2) > 59) {
 				return;
 			}
-		}
-
-		if (newVal.length > 2) {
 			newVal = newVal.slice(0, 2) + ":" + newVal.slice(2);
 		}
 

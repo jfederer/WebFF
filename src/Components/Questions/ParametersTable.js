@@ -17,6 +17,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Question from '../Question';
+import { pCodes, nq_options, nq_options_meanings, rmk_options, mth_options, types, defaultPCodesToShow } from '../../Utils/QuestionOptions';
+import { safeCopy } from '../../Utils/Utilities';
 
 const styles = theme => ({
 	root: {
@@ -40,70 +42,7 @@ const styles = theme => ({
 		margin: "0px"
 	}
 });
-const pCodes = {
-	"Water Temp C": "P00010",
-	"Air Temp C": "P00020",
-	"Dissolved Oxygen": "P00300",
-	"pH": "P00400",
-	"Inst Disch": "P00061",
-	"Gage Height": "P00065",
-	"Specific Cond": "P00095",
-	"Turb NTU, 400-600nm, 90  30 degs": "P63675",
-	"Turb, NTRU, 400-600nm, multiple angles": "P63676",
-	"Turb, FNU, 780-900nm, 90  2.5 degs": "P63680",
-	"Transparency": "P65225",
-	"Velocity to compute isokinetic transit rate, feet per second": "P72196"
-};
 
-//TODO: add a "null" default for all these
-
-const nq_options = {
-	"nQ": null,
-	"a": "a",
-	"b": "b",
-	"e": "e",
-	"f": "f",
-	"x": "x"
-}
-const nq_options_meanings = {
-	"a": "planned measurement was not made",
-	"b": "sample broken/spilled in shipment",
-	"e": "required equipment not functional or available",
-	"f": "sample discarded: improper filter used",
-	"x": "result failed quality assurence review"
-}
-
-const rmk_options = {
-	"rmk": null,
-	"<": "<",
-	">": ">",
-	"E": "E",
-	"M": "M",
-	"N": "N",
-	"A": "A",
-	"V": "V",
-	"S": "S",
-	"U": "U"
-}
-
-const mth_options = {
-	"P00061": ["mth", "G0011", "Q-EST", "QADCP", "QFLUM", "QIDIR", "QSCMM", "QSLPQ", "QSTGQ", "QTRAC", "QUNSP", "QVELO", "QVOLM", "QWEIR", "ZEROF"],
-	"P00010": ["mth", "G0004", "THM01", "THM02", "THM03", "THM07"],
-	"P00020": ["mth", "G0005", "THM04", "THM05"],
-	"P00300": ["mth", "AZIDE", "G0017", "G0018", "IND02", "IND03", "INDGO", "INDKT", "LUMIN", "MEMB2", "MEMBR", "RHODA", "SPC10", "WINKL"],
-	"P00400": ["mth", "EL003", "EL009", "PAPER", "PROBE"],
-	"P00065": ["mth", "ACOUS", "CLIP", "CSG", "ENCD", "ETG", "FLOAT", "G0012", "HWM", "INSD", "LPRNT", "MANO", "NCAC", "NCLZ", "NCRD", "NTRAN", "OTSD", "RP", "STAF1", "STAFF", "STRAN", "WWG"],
-	"P00095": ["mth", "SC001", "SC003"],
-	"P63675": ["mth", "TBD03", "TS028", "TS088", "TS089", "TS093", "TS094", "TS095", "TS096", "TS097", "TS099", "TS102", "TS103", "TS104", "TS105", "TS106", "TS108", "TS109", "TS110", "TS111", "TS112", "TS113", "TS114", "TS116", "TS117", "TS118", "TS120", "TS121", "TS122", "TS124", "TS126", "TS127", "TS128", "TS130", "TS131", "TS132", "TS133", "TS134", "TS135", "TS136", "TS137", "TS138", "TS158", "TS159", "TS160", "TS161", "TS162", "TS163", "TS164", "TS165", "TS166", "TS188"],
-	"P63676": ["mth", "TS027", "TS090", "TS091", "TS092", "TS098", "TS100", "TS101", "TS107", "TS115", "TS116", "TS117", "TS119", "TS123", "TS125", "TS129", "TS141", "TS167", "TS168", "TS169", "TS192", "TS193", "TS196"],
-	"P63680": ["mth", "TS031", "TS032", "TS034", "TS035", "TS036", "TS037", "TS038", "TS040", "TS041", "TS042", "TS043", "TS044", "TS047", "TS048", "TS049", "TS050", "TS053", "TS054", "TS055", "TS056", "TS057", "TS058", "TS059", "TS060", "TS061", "TS062", "TS063", "TS064", "TS065", "TS066", "TS067", "TS068", "TS069", "TS070", "TS071", "TS074", "TS075", "TS076", "TS078", "TS080", "TS081", "TS082", "TS084", "TS085", "TS086", "TS087", "TS145", "TS146", "TS147", "TS148", "TS149", "TS150", "TS151", "TS156", "TS173", "TS174", "TS175", "TS176", "TS177", "TS178", "TS189", "TS198", "TS208", "TS209", "TS213", "TS214", "TS216"],
-	"P65225": ["mth", "TTUBE"],
-	"P72196": ["mth", "SADVM", "UADVM", "V-EST", "VADCP", "VADV", "VELC", "VICE", "VIPAA", "VIPYG", "VOTT", "VPAA", "VPYG", "VRAD", "VTIME", "VTRNS", "VULT"]
-}
-
-const types = ["_val", "_mth", "_rmk", "_nq"];
-
-const defaultPCodesToShow = ["P00010", "P00020", "P00061", "P00065", "P00095", "P00300", "P00400"];
 
 
 
@@ -115,7 +54,7 @@ class ParametersTable extends React.Component {
 		// sampleEventLocations is a double array whereby each 'row' of the array is teh set and each col is the sample location.
 		let nowValue = [];
 		let startingPCodes = [];
-		if (this.props.value.length === 1 && this.props.value[0].length === 0) {// if no value was sent
+		if (this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
 			console.log("Handed null value");
 
 			// build header from scratch
@@ -125,34 +64,69 @@ class ParametersTable extends React.Component {
 					headerRow.push(defaultPCodesToShow[pCode] + types[type]);
 				}
 			}
+			headerRow.unshift("Set-Sample @ Dist");
 			nowValue.push(headerRow);
 
 			// build default values (blanks)
 			let firstColumn = this.props.getDescriptiveColumnForTable();
-			for (let i = 0; i < firstColumn.length; i++) {
-				let emptyRow = new Array(headerRow.length).fill("");
+			console.log("FIRST COLUMN: ", firstColumn);
+			for (let i = 1; i < firstColumn.length; i++) {
+				let emptyRow = new Array(headerRow.length-1).fill("");
+				emptyRow.unshift(firstColumn[i]);
 				nowValue.push(emptyRow);
 			}
 
-			startingPCodes = defaultPCodesToShow;
+			startingPCodes = safeCopy(defaultPCodesToShow);
 
 		} else { // if a value was sent
-			// accept the value that was sent for value
-			console.log("Handed existing value");
-
-			nowValue = this.props.value;
+			// need to ensure the value has the right number of columns
+			console.log("Handed existing value: ", this.props.value);
 
 			// find all pCodes in header
 			let pCodesInHeader = [];
-			for (let i = 0; i < this.props.value[0].length; i++) {
+			for (let i = 1; i < this.props.value[0].length; i++) { // start at 1 to skip the set-sample @ dist
 				let pCode = this.props.value[0][i].split("_")[0];
 				if (!pCodesInHeader.includes(pCode)) {
 					pCodesInHeader.push(pCode);
 				}
 			}
 
-			//console.log("Found PCODES: ", pCodesInHeader);
-			startingPCodes = pCodesInHeader;
+			nowValue = [];
+			// build new header row, note, the header row should still be correct.
+			nowValue.push(safeCopy(this.props.value[0])); // 
+
+			// build rows based on existing values  //TODO: FIXME:
+			let firstColumn = this.props.getDescriptiveColumnForTable(); // firstColumn will now be the authoritative new [0] element in each row
+			console.log("NEW FIRST COLUMN: ", firstColumn);
+			for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
+				console.log("Looking for...", firstColumn[newRowNum]);
+				//look in props.value for existing matching row
+				let matchingOldRow = -1;
+				for(let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
+					console.log("against..." + this.props.value[oldRow][0]);
+					if(firstColumn[newRowNum] === this.props.value[oldRow][0]) {
+						console.log("MATCH!");
+						
+						matchingOldRow = oldRow;
+						break;
+					}
+				} 
+
+				let newRow = [];
+				if(matchingOldRow != -1) {
+					console.log(firstColumn[newRowNum] + " DID find a match");
+					newRow = safeCopy(this.props.value[matchingOldRow]);
+				} else {
+					console.log(firstColumn[newRowNum] + " never found a match");
+					
+					newRow = new Array(this.props.value[0].length-1).fill("");
+					newRow.unshift(firstColumn[newRowNum]);
+				}
+			 	nowValue.push(newRow);
+			}
+
+
+			startingPCodes = safeCopy(pCodesInHeader);
 		}
 
 		this.state = {
@@ -316,7 +290,6 @@ class ParametersTable extends React.Component {
 		for (let i = 0; i < availPCodeKeys.length; i++) {
 			pCodesAvailableForAdding[availPCodeKeys[i]] = pCodes[availPCodeKeys[i]];
 		}
-		console.log("HEEEEEEEE");
 		return pCodesAvailableForAdding;
 	}
 
@@ -325,7 +298,9 @@ class ParametersTable extends React.Component {
 		// let setType = this.props.getCurrentSampleEventMethod();
 		let firstColumn = this.props.getDescriptiveColumnForTable();
 
+		console.log("PCODES TO SHOW: ", this.state.pCodesToShow);
 
+		
 
 		return (
 			<React.Fragment>
@@ -338,7 +313,6 @@ class ParametersTable extends React.Component {
 						<TableRow>
 							<TableCell className={classes.tableCell}>{firstColumn[0]}</TableCell>
 							{this.state.pCodesToShow.map((header) => {
-
 								return (
 									<TableCell className={classes.tableCell} key={"Param_" + header}>
 										{this.getKeyFromValue(pCodes, header)}
@@ -353,52 +327,52 @@ class ParametersTable extends React.Component {
 					</TableHead>
 					<TableBody>
 						{firstColumn.map((col, rowNum) => {
-							if (rowNum === 0) return null; //skip the header
+							if (rowNum === 0) return null; //skip the header because the 'real' header row is long
 							let realRowNum = rowNum;
 							return <TableRow key={col + realRowNum}>
-									<TableCell className={classes.tableCell}>
-										{col}
+								<TableCell className={classes.tableCell}>
+									{this.state.value[rowNum][0]}
+								</TableCell>
+								{this.state.pCodesToShow.map((pCode, colNum) => {
+									let realColNum = (colNum * types.length) + 1;
+									return <TableCell key={pCode + realRowNum} className={classes.tableCell}>
+										{/* VALUE */}
+										<input
+											id={pCode + "_val_" + realRowNum + 1}
+											type="text" size={1}
+											placeholder="Value"
+											value={this.state.value[realRowNum][realColNum]}
+											onChange={this.handleValueChange(realRowNum, realColNum)} />
+
+										{/* METHOD CODE */}
+										<select
+											id={pCode + "_mth_" + (realRowNum + 1)}
+											value={this.state.value[realRowNum][realColNum + 1]}
+											onChange={this.handleValueChange(realRowNum, realColNum + 1)}
+										>
+											{mth_options[pCode].map(mthCode => <option key={"mth_row:" + realRowNum + "_col:" + realColNum + "opt:" + mthCode} value={mthCode}>{mthCode}</option>)}
+										</select>
+
+										{/* REMARK CODE */}
+										<select
+											hidden={!this.state.showRmk}
+											id={pCode + "Rmk_" + (realRowNum + 1)}
+											value={this.state.value[realRowNum][realColNum + 2]}
+											onChange={this.handleValueChange(realRowNum, realColNum + 2)} >
+											{Object.keys(rmk_options).map(key => <option key={"rmk_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={rmk_options[key]}>{key}</option>)}
+										</select>
+
+										{/* NULL QUALIFIER */}
+										<select
+											hidden={!this.state.showNQ}
+											id={pCode + "_nq_" + (realRowNum + 1)}
+											value={this.state.value[realRowNum][realColNum + 3]}
+											onChange={this.handleValueChange(realRowNum, realColNum + 3)}>
+											{Object.keys(nq_options).map(key => <option key={"nq_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={nq_options[key]}>{key}</option>)}
+										</select>
 									</TableCell>
-									{this.state.pCodesToShow.map((pCode, colNum) => {
-										let realColNum = colNum * types.length;
-										return <TableCell key={pCode + realRowNum} className={classes.tableCell}>
-											{/* VALUE */}
-											<input
-												id={pCode + "_val_" + realRowNum + 1}
-												type="text" size={1}
-												placeholder="Value"
-												value={this.state.value[realRowNum][realColNum]}
-												onChange={this.handleValueChange(realRowNum, realColNum)} />
-
-											{/* METHOD CODE */}
-											<select
-												id={pCode + "_mth_" + (realRowNum + 1)}
-												value={this.state.value[realRowNum][realColNum + 1]}
-												onChange={this.handleValueChange(realRowNum, realColNum + 1)}
-											>
-												{mth_options[pCode].map(mthCode => <option key={"mth_row:" + realRowNum + "_col:" + realColNum + "opt:" + mthCode} value={mthCode}>{mthCode}</option>)}
-											</select>
-
-											{/* REMARK CODE */}
-											<select
-												hidden={!this.state.showRmk}
-												id={pCode + "Rmk_" + (realRowNum + 1)}
-												value={this.state.value[realRowNum][realColNum + 2]}
-												onChange={this.handleValueChange(realRowNum, realColNum + 2)} >
-												{Object.keys(rmk_options).map(key => <option key={"rmk_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={rmk_options[key]}>{key}</option>)}
-											</select>
-
-											{/* NULL QUALIFIER */}
-											<select
-												hidden={!this.state.showNQ}
-												id={pCode + "_nq_" + (realRowNum + 1)}
-												value={this.state.value[realRowNum][realColNum + 3]}
-												onChange={this.handleValueChange(realRowNum, realColNum + 3)}>
-												{Object.keys(nq_options).map(key => <option key={"nq_row:" + realRowNum + "_col:" + realColNum + "opt:" + key} value={nq_options[key]}>{key}</option>)}
-											</select>
-										</TableCell>
-									})}
-								</TableRow>
+								})}
+							</TableRow>
 						})}
 					</TableBody>
 				</Table>

@@ -210,6 +210,19 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -224,34 +237,64 @@ const styles = theme => ({
 });
 
 class EventsManager extends React.Component {
-  state = {
-    order: 'asc',
-    orderBy: 'calories',
-    selected: [],
-    data: [],
-    page: 0,
-    rowsPerPage: 5,
-    showConfirmDelete: false,
-    toDeleteList: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      order: 'asc',
+      orderBy: 'calories',
+      selected: [],
+      data: [],
+      page: 0,
+      rowsPerPage: 5,
+      showConfirmDelete: false,
+      toDeleteList: []
+    };
+  }
 
   //eventName, sampleDate, stationName, shippedStatus
-  componentDidMount() {
+  componentWillMount() {
+    console.log("EM: CWM");
     this.buildData();
+  }
+
+  componentDidMount() {
+    console.log("EM: CDM");
+    this.buildData();
+  }
+
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("EM: CWU - curr_props: ", this.props.samplingEvents);
+    console.log("EM: CWU - next_props: ", nextProps.samplingEvents);
+
+    
+    if ((!this.arraysEqual(this.props.samplingEvents, nextProps.samplingEvents)) ||
+        this.state.data.length !== nextProps.samplingEvents) {
+      console.log("BUILD IT!");
+      
+      this.buildData(nextProps.samplingEvents);
+    }
 
   }
 
-  buildData() {
+  buildData(ses) {
+    let sampEvents = this.props.samplingEvents;
+    if(ses) {
+      sampEvents = ses;
+    }
+    console.log("BUILD DATA: ", newData);
     let newData = [];
-    this.props.samplingEvents.forEach((eventName) => {
+    sampEvents.forEach((eventName) => {
       newData.push(createData(eventName,
         this.props.getEventDetails(eventName, "sampleDate"),
         this.props.getEventDetails(eventName, "stationName"),
         this.props.getEventDetails(eventName, "shippedStatus")));
     });
-
-    this.setState({ data: newData });
+    console.log("BUILT DATA: ", newData);
+    
+    this.setState({ data: newData }, ()=>console.log("SET DATA: ", newData));
   }
+
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -279,9 +322,11 @@ class EventsManager extends React.Component {
       removedEventNames.push(event.eventName);
       return null;
     });
-    let filteredData = this.state.data.filter((evt) => !removedEventNames.includes(evt.eventName));
-    this.setState({ data: filteredData });
-    this.handleDeleteDialogCancel();
+
+    // let filteredData = this.state.data.filter((evt) => !removedEventNames.includes(evt.eventName));
+    // this.setState({ data: filteredData });
+
+    this.handleDeleteDialogCancel(); // just close the dialog
   }
 
   handleSelectAllClick = event => {
@@ -333,32 +378,30 @@ class EventsManager extends React.Component {
     return true;
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    //  console.log("CWU");
-    //  console.log("SES:", this.props.samplingEvents);
-    if (!this.arraysEqual(this.props.samplingEvents, nextProps.samplingEvents)) {
-      this.buildData();
-    }
-
-  }
+  
 
   render() {
     const { classes } = this.props;
+    // const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+
+    console.log("EM: PROPS: SEs:", this.props.samplingEvents );
+    console.log("EM: STATE: DATA:", data );
+    // let data = this.buildDataForRender();
+
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
-
 
     return (
       <React.Fragment>
         <Paper className={classes.root}>
           {data.length === 0
             ? "There are either no events, or they are loading..."
-            : <React.Fragment><EnhancedTableToolbar
-              numSelected={selected.length}
-              deleteClickedHandler={this.handleDeleteButtonClick}
-              isSelected={this.isSelected}
-              data={data} />
+            : <React.Fragment>
+              <EnhancedTableToolbar
+                numSelected={selected.length}
+                deleteClickedHandler={this.handleDeleteButtonClick}
+                isSelected={this.isSelected}
+                data={data} />
               <div className={classes.tableWrapper}>
                 <Table className={classes.table} aria-labelledby="tableTitle">
                   <EnhancedTableHead

@@ -15,8 +15,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { saveFile } from '../Utils/FileHandling';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { PHP_FILE_LOCATION, SEDLOGIN_SUCCESS_MESSAGE } from '../Utils/Constants';
 
-const SEDLOGIN_SUCCESS_MESSAGE = "Imported 1 event into SedLOGIN project";
 
 const styles = theme => ({
   root: {
@@ -86,7 +86,7 @@ class XMLDialog extends React.Component {
 
     const SLCXML = this.props.getSedLOGINcompatibleXML();
     const DEBUG = true;
-    const API = 'https://152.61.248.218/sedWeConnect.php';
+    const API = PHP_FILE_LOCATION + 'sedLOGINPush.php';
     let username = this.props.username.split('@')[0];
     const query = "user=" + username + "&pw=" + encodeURIComponent(pass) + "&p_id=" + p_id + "&xml=" + encodeURIComponent(SLCXML);
 
@@ -122,7 +122,7 @@ class XMLDialog extends React.Component {
   }
 
   doneClickHandler = () => {
-    this.props.handleXMLDialogClose(()=> {
+    this.props.handleXMLDialogClose(() => {
       setTimeout(() => {
         this.setState({
           showStatus: false,
@@ -130,7 +130,7 @@ class XMLDialog extends React.Component {
           showSedLOGINQs: false
         });
       }, 250);
-     
+
     });
   }
 

@@ -13,38 +13,17 @@ import SystemMenu from './SystemMenu.js';
 import NavMenu from './NavMenu.js';
 import Dashboard from './Dashboard.js';
 import { styles } from '../style';
+import { safeCopy } from '../Utils/Utilities';
 import 'typeface-roboto';
 import {
 	Route,
 	Switch
 } from 'react-router-dom';
 import ErrorPage from './Errors/ErrorPage';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import { Link } from 'react-router-dom';
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import OpacityIcon from '@material-ui/icons/Opacity';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ReorderIcon from '@material-ui/icons/Reorder';
-import ColorizeIcon from '@material-ui/icons/Colorize';
-import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-import FilterDramaIcon from '@material-ui/icons/FilterDrama';
-import StraightenIcon from '@material-ui/icons/Straighten';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import GroupAddIcon from '@material-ui/icons/PersonAdd';
-import CompareIcon from '@material-ui/icons/Compare';
-import SaveIcon from '@material-ui/icons/Save';
-import EditIcon from '@material-ui/icons/Edit';
-import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
-import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import xmljs from 'xml-js';
 import Login from './Login';
 import { Redirect } from 'react-router-dom';
-import { isReasonablyValidUsernameInLS } from '../Utils/ValidationUtilities';
+import { isReasonablyValidUsernameInLS, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 import XMLDialog from './XMLDialog';
 import QuestionDialog from './QuestionDialog';
 import EventsManager from './EventsManager';
@@ -52,40 +31,32 @@ import EventsManager from './EventsManager';
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
-//import QWDATATable from './Questions/QWDATATable.js';
-
-// import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-
-const FUNCDEBUG = true;
-
-const criticalUserNodes = ['stations', 'customQuestions'];
-const criticalDefaultSystemNodes = ['navMenuInfo', 'dialogQuestions', 'questionsData', 'defaultQuestionsData', 'hiddenPanels', 'hiddenTabs'];
+import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels, defaultNavMenuInfo } from '../Utils/DefaultConfig';
+import {
+	PHP_FILE_LOCATION, PROGRAM_VERSION, USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
+	QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
+} from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
 
-const questionIDsLinkedToStationName = ["stationNumber", "projectName", "projectID", "agencyCode"];
+const FUNCDEBUG = false;
+
 var needToSyncStationDataToQuestionData = true;
-
-const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent::"; //TODO: add colon
-const PHP_FILE_LOCATION = "https://152.61.248.218/";
-// const PHP_FILE_LOCATION = "https://sedff.usgs.gov/";
-// const isDEV = false;
-const MAX_NUM_OF_SETS = 3;
-
-const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TOdO: need to ensure no custom questions include these 
-
-const defaultHiddenTabs = ["WaterQuality", "FieldForm", "DataEntry", "Parameters", "QWDATA"];
-
-const defaultHiddenPanels = ["DataEntry:IntakeEfficiencyTest"];
 
 class WebFF extends React.Component {
 
-
 	constructor(props) {
+		console.log("CONSTRUCT");
+		
 		super(props);
-		var allItemsToSyncToLS = criticalDefaultSystemNodes.concat(criticalUserNodes);
+		var allItemsToSyncToLS = USER_DB_NODES.slice();
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 		this.state = {
+			// system config
+			questionsData: questionsData,
+			dialogQuestions: dialogQuestions,
+
+
 			itemsToSyncToLS: allItemsToSyncToLS,
 
 			syncIntervalFunction: null,
@@ -94,31 +65,28 @@ class WebFF extends React.Component {
 			usePaper: false,
 			syncDelay: 300000,
 
-			navMenuInfo: [],
+			navMenuInfo: defaultNavMenuInfo,
 			navMenuExpanded: false,
 
 			XMLDialogOpen: false,
 			questionDialogOpen: false,
 
-			isDialogQuestionsLoaded: false,
-			dialogQuestions: [],
 			dialogValues: {},
 			dialogOpen: false,
 			curDialogDescription: "",
 			curDialogName: "",
 			curDialogQuestions: [],
 
-			defaultQuestionsData: [],
-			isQuestionsDataLoaded: false,
-			questionsData: [],
+			defaultQuestionsData: questionsData.slice(),
 
-			hiddenPanels: [],
+			hiddenTabs: defaultHiddenTabs,
+			hiddenPanels: defaultHiddenPanels,
 
 			systemMenuOpen: false,
 
 			appBarText: "Sediment Field Forms",
 
-			hiddenTabs: [],
+
 			stations: [],
 			customQuestions: [],
 
@@ -127,6 +95,19 @@ class WebFF extends React.Component {
 			curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
 
 		};
+
+		if (isReasonablyValidUsernameInLS()) {
+			// load all events from LS if the user is logged in. // this is a kludge bugfix for when people refresh the page
+			let allNodeNames = Object.keys(localStorage);
+			for (let i = 0; i < allNodeNames.length; i++) {
+				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+					let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
+					if (SE.user === this.state.loggedInUser) {
+						this.state[allNodeNames[i]] = SE;
+					}
+				}
+			}
+		}
 
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
@@ -157,31 +138,40 @@ class WebFF extends React.Component {
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
 		if (FUNCDEBUG) console.log("FUNC: componentWillMount()");
+		this.setState({ showLoadingApp: true });
 
-		this.gatherSystemConfig(criticalDefaultSystemNodes);  //load default configurations
+		if (navigator.onLine) {
+			ensureProgramVersionUpToDate(PROGRAM_VERSION);
+		}
 
 		if (isReasonablyValidUsernameInLS()) {
 			console.log(this.state.loggedInUser + "is logged in");
-			this.gatherUserConfig(criticalUserNodes); //load user configuration
+			this.setState({
+				loggedInUser: JSON.parse(localStorage.getItem('loggedInUser'))
+			},
+				this.gatherUserConfig(USER_DB_NODES) // after setting loggedInUser, load user configuration);
+			);
+
 		} else {
 			console.log("No one is logged in... requesting user id");
+			this.buildRoutesAndRenderPages(); // router handles showing the login
+		}
 
-			//TOOD: redirect to /
+		if(this.state.curSamplingEventName) {  // this is likely a page refresh
+			this.setState({ hiddenTabs: [] }); //TODO: KLUDGE
+		} else {
+			this.setState({ hiddenTabs: defaultHiddenTabs });
 		}
 	}
 
 	componentWillUpdate(nextProps, nextState) { // when state updates, write it to LS
-		if (FUNCDEBUG) console.log("FUNC: componentWillUpdate(", nextProps, nextState, ")");
-		//console.log("CWU: items: ", nextState.itemsToSyncToLS);
+		// if (FUNCDEBUG) console.log("FUNC: componentWillUpdate(", nextProps, nextState, ")");
 		nextState.itemsToSyncToLS.forEach((item) => {
-			if (item !== "defaultQuestionsData") { // don't ever modify defaultQuestions after the initial config load
-				localStorage.setItem(item, JSON.stringify(nextState[item]));
-			}
+			localStorage.setItem(item, JSON.stringify(nextState[item]));
 		});
 
-		// check if "stations" value changed update options in questionsData appropriately if it did... checking that questionData might not actually be fully loaded yet
-		//console.log("NEXTSTATIONS: ", nextState.stations);
-		//console.log("STATIONS: ", this.state.stations);
+		// check if "stations" value changed.
+		// update options in questionsData appropriately if it did... 
 		if (needToSyncStationDataToQuestionData) {
 			if (nextState && this.state.questionsData !== nextState.questionData) {
 				this.attemptToSyncStationDataToQuestionData();
@@ -192,7 +182,6 @@ class WebFF extends React.Component {
 			needToSyncStationDataToQuestionData = true;
 			this.attemptToSyncStationDataToQuestionData(nextState.stations);
 		}
-
 	}
 
 	attemptToSyncStationDataToQuestionData(stationsIn) {
@@ -211,7 +200,6 @@ class WebFF extends React.Component {
 			stationsToSync = this.state.stations.slice();
 		}
 
-
 		for (let i = 0; stationsToSync !== null && i < stationsToSync.length; i++) {
 			newOptions[stationsToSync[i].id] = stationsToSync[i].id;
 		}
@@ -226,9 +214,10 @@ class WebFF extends React.Component {
 	buildCombinedQuestionsData(CB) {
 		if (FUNCDEBUG) console.log("FUNC: buildCombinedQuestionsData(", CB, ")");
 		if (this.state.customQuestions === null || this.state.customQuestions.length === 0) {
+			// no custom questions
 			return;
 		}
-		// console.log("Need to combine");
+
 
 		let newQuestionsData = this.state.defaultQuestionsData.slice();
 		for (let i = 0; i < this.state.customQuestions.length; i++) {
@@ -249,210 +238,142 @@ class WebFF extends React.Component {
 		// console.log("Setting: ", newQuestionsData);
 		this.setState({ questionsData: newQuestionsData }, () => {
 			this.buildRoutesAndRenderPages();
-			if(typeof CB === "function") CB();
+			if (typeof CB === "function") CB();
 		});
-	}
-
-	gatherSystemConfig(nodesToGather) {
-		if (FUNCDEBUG) console.log("FUNC: gatherSystemConfig(", nodesToGather, ")");
-
-		//TODO: NEXT FIXME:  TODO:  FIXME:  --- when pulling this from the DB, populate defaultQuestions too.  ... or, perhaps do it the first time a custom question is made in combineQuestions?
-
-
-		// first looks in LS for every element in nodesToGather.  If not found, pulls everything from DB.
-		let DEBUG = false;
-
-		if (DEBUG) console.log("gatherConfig: ", nodesToGather);
-		// check if ALL critical items are loaded into LS
-		// FUTURE: empty arrays count.... and we might want to double-check that against the DB
-		let allLoadedInLS = true;
-		for (let i = 0; i < nodesToGather.length; i++) {
-			if (DEBUG) console.log(localStorage.getItem(nodesToGather[i]));
-			if (!localStorage.getItem(nodesToGather[i]) || localStorage.getItem(nodesToGather[i]) === "null") {
-				allLoadedInLS = false;
-			}
-			if (nodesToGather[i] === "stations" && localStorage.getItem(nodesToGather[i]) === "[]") {  //KLUDGE to allow for extra searching for stations given it's non-null in the constructor
-				allLoadedInLS = false;
-			}
-		}
-		if (DEBUG) console.log("allLoadedInLS: ", allLoadedInLS);
-
-		if (allLoadedInLS) {
-			if (DEBUG) console.log("pulling from LS");
-
-			// pull everything from LS
-			for (let i = 0; i < nodesToGather.length; i++) {
-				let newItemsLoaded = this.state.itemsLoaded;
-				if (!newItemsLoaded.includes(nodesToGather[i])) {
-					newItemsLoaded.push(nodesToGather[i])
-				}
-				this.setState({
-					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
-					itemsLoaded: newItemsLoaded
-				}, this.buildRoutesAndRenderPages);
-			}
-		} else {
-			// pull everything from DB
-			//DEBUG=false;
-			this.fetchDBInfo('', 'defaultConfig', (JSONresponse) => {
-				if (DEBUG) console.log("JSONresponse: ", JSONresponse);
-				JSONresponse.forEach((configNode) => {
-					if (DEBUG) console.log("ConfigNode: ", configNode);
-					let nodeName = configNode.id;
-					if (DEBUG) console.log("NodeName: ", nodeName);
-					let nodeArrName = nodeName + "Arr";
-					if (DEBUG) console.log("NodeArrName: ", nodeArrName)
-					let nodeArr = configNode[nodeArrName];
-					if (DEBUG) console.log("nodeArr: ", nodeArr);
-					if (DEBUG) console.log("this.state.itemsLoaded: ", this.state.itemsLoaded);
-					console.log("SYSTEM CONFIG LOADING: " + nodeName);
-					if (nodeName === "questionsData") {
-						// save the original results from the DB as the defaultQuestionsData
-						this.setState({ defaultQuestionsData: nodeArr });
-					}
-					// if (nodeName === "hiddenTabs") {
-					// 	// save the original results from the DB as the defaultQuestionsData
-					// 	this.setState({ defaultHiddenTabs: nodeArr });
-					// }
-					// if (nodeName === "hiddenPanels") {
-					// 	// save the original results from the DB as the defaultQuestionsData
-					// 	this.setState({ defaultHiddenPanels: nodeArr });
-					// }
-					this.setState({ [nodeName]: nodeArr }, () => {
-						if (DEBUG) console.log("STATE: ", this.state);
-						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
-						let newItemsLoaded = this.state.itemsLoaded;
-						newItemsLoaded.push(nodeName);
-						this.setState({ "itemsLoaded": newItemsLoaded }, () => {
-							this.buildRoutesAndRenderPages();
-						}
-						); //performance
-					});
-				});
-			});
-		}
-
-
 	}
 
 
 	gatherUserConfig(nodesToGather) {
 		if (FUNCDEBUG) console.log("FUNC: gatherUserConfig(", nodesToGather, ")");
-		//TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
-
+		let DEBUG = false;
 
 		// if data is in both DB and LS -- LS version is considered authoritative
-
 		// should not be called unless this.state.loggedInUser is set to something like jfederer@usgs.gov
 
 		//FIXME: likely bug source, as all these setStates happen async...  perhaps find a way to chain/batch them.
 
-		// first looks in LS for every element in nodes.  If not found, pulls everything from DB.
-		let DEBUG = false;
 
 		//first, attempt to pull all conifg and sampling event info from DB
 		// pull config info from DB
 		// TODO: check if online and skip if not.
 
-		this.fetchDBInfo(this.state.loggedInUser, 'users', (JSONresponse) => {
-			if (DEBUG) console.log("JSONresponse: ", JSONresponse);
+		if (navigator.onLine) { //TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
+			if (DEBUG) console.log("Online!... going to fetch from DB.");
 
-			// check that this user even exists in database
-			if (JSONresponse.length > 1) {
-				throw new Error("User query for '" + this.state.loggedInUser + "' returned more than one result.  Please contact jfederer@usgs.gov to resolve.");
-			}
+			this.fetchDBInfo(this.state.loggedInUser, 'users',
+				(JSONresponse) => {
+					if (DEBUG) console.log("JSONresponse: ", JSONresponse);
 
-			if (JSONresponse.length === 0) {
-				// this user does not exist in the database - we must create their entry
-				console.warn("Creating a new user must be done online"); //TODO: allow this to be done offline
-				this.updateDBInfo("id", this.state.loggedInUser, { "stations": [], "customQuestions": [] });
-			};
+					// check that this user even exists in database
+					if (JSONresponse.length > 1) {
+						throw new Error("User query for '" + this.state.loggedInUser + "' returned more than one result.  Please contact jfederer@usgs.gov to resolve.");
+					}
 
-			if (JSONresponse.length === 1) {
-				// this user exists in the database	
-				let userData = JSONresponse[0];
-				for (let i = 0; i < nodesToGather.length; i++) {
-					let nodeArr = [];
-					if (DEBUG) console.log("gathering: ", nodesToGather[i]);
-					userData[nodesToGather[i]].forEach((configNode) => {
-						if (DEBUG) console.log("userData[" + nodesToGather[i] + "]: ", configNode);
-						// let nodeName = configNode.id;
-						//TODO: error and duplication checking -- particularly important once custom questions exist
-						// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking. (perhaps not actually easier)
-						nodeArr.push(configNode);
-					});
-					this.setState({ [nodesToGather[i]]: nodeArr }, () => {
-						if (DEBUG) console.log("STATE: ", this.state);
-						if (DEBUG) console.log("ITEMSLOADED: ", this.state.itemsLoaded);
-						let newItemsLoaded = this.state.itemsLoaded.slice();
-						newItemsLoaded.push(nodesToGather[i]);
-						this.setState({ "itemsLoaded": newItemsLoaded }, () => {
-							this.buildCombinedQuestionsData(() => {
-								this.buildRoutesAndRenderPages();
+					if (JSONresponse.length === 0) {
+						// this user did not exist in the database - we must create their entry
+						this.createNewUser(this.state.loggedInUser);
+					};
+
+					if (JSONresponse.length === 1) {
+						// this user exists in the database
+						let userData = JSONresponse[0];
+
+						//  exact nodesToGather from the user data into nodeArr
+						for (let i = 0; i < nodesToGather.length; i++) {
+							let nodeArr = [];
+							if (DEBUG) console.log("Extracting: ", nodesToGather[i]);
+
+							userData[nodesToGather[i]].forEach((configNode) => {
+								if (DEBUG) console.log("userData[" + nodesToGather[i] + "]: ", configNode);
+								// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking in the future. (perhaps not actually easier)
+								//TODO: error and duplication checking 
+								nodeArr.push(configNode);
 							});
 
-						}); //performance
-					});
-				}
-
-				// pull sampling events from DB response
-				let allNodeNames = Object.keys(userData);
-
-				for (let i = 0; i < allNodeNames.length; i++) {
-					if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-						if (localStorage.getItem(allNodeNames[i])) {
-							console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
-						} else {
-							this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
-								this.addToItemsToSyncToLS(allNodeNames[i]);
-								this.buildRoutesAndRenderPages();
+							// put nodeArr (the data extracted from userData) into approparite place in state
+							this.setState({ [nodesToGather[i]]: nodeArr }, () => {
+								this.buildCombinedQuestionsData(() => {
+									this.buildRoutesAndRenderPages();
+								});
 							});
 						}
-					}
+
+						// pull sampling events from DB response
+						let allNodeNames = Object.keys(userData);
+						for (let i = 0; i < allNodeNames.length; i++) {
+							if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+								if (localStorage.getItem(allNodeNames[i])) {
+									console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
+								}
+								if (userData[allNodeNames[i]].deleted) {
+									console.log(allNodeNames[i] + " is a previously-deleted event. Ignoring DB values for this.");
+								} else {
+									// loading Event from DB into LS
+									this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+										this.addToItemsToSyncToLS(allNodeNames[i]);
+										this.buildRoutesAndRenderPages();
+									});
+								}
+							}
+						}
+					} // end one user found in DB
+
+					// after loading everything we can from DB 
+					// (This is still the callback from the fetchDB call), 
+					// let's load everything we can from LS.
+					this.getUserConfigFromLS(nodesToGather);
+				},
+				() => {
+					console.warn("Call to DB failed, attempting to gather from LS");
+					this.getUserConfigFromLS(nodesToGather)
 				}
-			} // end one user found in DB
+			); // end fetchDB callback
 
-			// after loading everything we can from DB 
-			// (This is still the callback from the fetchDB call), 
-			// let's load everything we can from LS.
-			this.getUserConfigFromLS(nodesToGather);
+		} else {
+			// not online
+			this.getUserConfigFromLS(nodesToGather, null, () => console.log("TODO: redirect to Error page with 'not online and not enough data in LS to function' error"));
 
-		}, this.getUserConfigFromLS(nodesToGather)); // end fetchDB callback
-
+		}
+		// set syncInterval for database backups
 		var syncInterval = setInterval(() => this.updateDatabase(), this.state.syncDelay);
-		// store intervalId in the state so it can be accessed later:
 		this.setState({ syncIntervalFunction: syncInterval });
+	}
+
+
+	getUserConfigFromLS(nodesToGather, successCB, failureCB) {
+
+
+
+		if (FUNCDEBUG) console.log("FUNC: getUserConfigFromLS(", nodesToGather, ")");
+		// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
+		let DEBUG = false;
+		if (DEBUG) console.log("getUserConfigFromLS");
+		if (nodesToGather) {
+			for (let i = 0; i < nodesToGather.length; i++) {
+				console.log("Parsing LS: ", nodesToGather[i]);
+				let node = localStorage.getItem(nodesToGather[i]);
+				if (!node || node !== "null" || node !== [] || node.length !== 0) {
+					this.setState({
+						[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i]))
+					}, () => {
+
+						this.buildCombinedQuestionsData(() => {
+							this.buildRoutesAndRenderPages();
+						});
+					});
+				} else {
+					failureCB;
+				}
+			}
+		}
+		// see what sampling events might be in LS and add them to our list of samplingEvents:
+		this.loadSamplingEventsFromLS();
 
 	}
 
-	getUserConfigFromLS(nodesToGather) {
-		if (FUNCDEBUG) console.log("FUNC: getUserConfigFromLS(", nodesToGather, ")");
-		// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
-		let DEBUG = true;
-		if (DEBUG) console.log("getUserConfigFromLS");
-		for (let i = 0; i < nodesToGather.length; i++) {
-			console.log("Parsing LS: ", nodesToGather[i]);
-			let node = localStorage.getItem(nodesToGather[i]);
-			if (!node || node !== "null" || node !== [] || node.length !== 0) {
-				// set this item as loaded.  //TODO: never do anythign with this... so perhaps remove, or utilitze e in the future
-				let newItemsLoaded = this.state.itemsLoaded;
-				if (!newItemsLoaded.includes(nodesToGather[i])) {
-					newItemsLoaded.push(nodesToGather[i])
-				}
-				this.setState({
-					[nodesToGather[i]]: JSON.parse(localStorage.getItem(nodesToGather[i])),
-					itemsLoaded: newItemsLoaded
-				}, () => {
+	loadSamplingEventsFromLS() {
+		if (FUNCDEBUG) console.log("FUNC: loadSamplingEventsFromLS()");
 
-					this.buildCombinedQuestionsData(() => {
-						this.buildRoutesAndRenderPages();
-					});
-				});
-			}
-		}
-
-		// see what sampling events might be in LS and add them to our list of samplingEvents:
-		if (DEBUG) console.log("pulling Sampling Event info from  LS");
 		let allNodeNames = Object.keys(localStorage);
 		for (let i = 0; i < allNodeNames.length; i++) {
 			if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
@@ -461,26 +382,35 @@ class WebFF extends React.Component {
 					this.setState({
 						[allNodeNames[i]]: SE
 					}, () => {
-						if (DEBUG) console.log("Setting SE: " + allNodeNames[i]);
 						this.addToItemsToSyncToLS(allNodeNames[i]);
-						this.buildRoutesAndRenderPages();
+						// this.buildRoutesAndRenderPages(); //performance on load
 					});
 				}
 			}
 		}
 	}
 
+	createNewUser(username) {
+		console.warn("Creating a new user must be done online"); //TODO: allow this to be done offline
+		//TODO: probably okay to just do this in LS and then add it to the sync list
+		this.updateDBInfo("id", username, { "stations": [], "customQuestions": [] });
+	}
+
 
 	deleteSamplingEvent(eventName) {
 		if (FUNCDEBUG) console.log("FUNC: deleteSamplingEvent(", eventName, ")");
-		let newEvent = this.state[eventName];
+		let newEvent = safeCopy(this.state[eventName]);
 		newEvent.deleted = true;
-		this.setState({ [eventName]: newEvent });
-		this.markForDBUpdate(eventName);
-		this.buildRoutesAndRenderPages();
+		this.setState({ [eventName]: newEvent }, () => {this.markForDBUpdate(eventName);
+
+		//TODO: directly update sampling events list?
+
+		this.buildRoutesAndRenderPages();}
+	);
+
 	}
 
-	createNewSamplingEvent(optionalName) {
+	createNewSamplingEvent(optionalName, CB) {
 		if (FUNCDEBUG) console.log("FUNC: createNewSamplingEvent(", optionalName, ")");
 		let newSamplingEventID = optionalName;
 
@@ -490,25 +420,11 @@ class WebFF extends React.Component {
 
 		let samplingEventName = SAMPLING_EVENT_IDENTIFIER + newSamplingEventID;
 
-		// load initial values from questionsData  //TODO: needed?  Could just write them as they are needed rather than writing a bunch that might never get used
+		// load initial values from questionsData  
+		//FUTURE: needed?  Could just write them as they are needed rather than writing a bunch that might never get used
 		let questionsValues = {};
 		this.state.questionsData.forEach((Q) => {
-			// if (Q.id === "setA_samplesTable_EWI") {
-			// 	console.log("SET A EWI VALUE: ", Q.value);
-			// }
-			questionsValues[Q.id] = Q.value;
-		});
-
-		//reset all question values to defaults.  
-		//TODO: this shoudl not be needed but for some reason, the EWI/EDI/OTHER sample tables values get stored in questionsData
-		//console.log(this.state.defaultQuestionsData);
-		// this.state.defaultQuestionsData.forEach((defQ)=> {
-		// 	questionsValues[defQ.id]=defQ.value;
-		// });
-
-		this.setState({
-			hiddenTabs: defaultHiddenTabs.slice(),
-			hiddenPanels: defaultHiddenPanels.slice()
+			questionsValues[Q.id] = safeCopy(Q.value);
 		});
 
 		let newSamplingEvent = {
@@ -524,10 +440,13 @@ class WebFF extends React.Component {
 		//save it to the state  
 		this.setState({
 			[samplingEventName]: newSamplingEvent,
-			curSamplingEventName: samplingEventName
+			curSamplingEventName: samplingEventName,
+			hiddenTabs: defaultHiddenTabs.slice(),
+			hiddenPanels: defaultHiddenPanels.slice()
 		}, () => {
 			this.runAllActionsForCurrentSamplingEvent();
 			// this.collectRunAndPropagateSamplePointData();
+			if (typeof CB === "function") CB();
 		});
 
 
@@ -536,32 +455,6 @@ class WebFF extends React.Component {
 	}
 
 
-	materialIcon(icon) {
-		if (FUNCDEBUG) console.log("FUNC: materialIcon(", icon, ")");
-		switch (icon) {
-			case 'DashboardIcon': return <DashboardIcon />
-			case 'ImportContactsIcon': return <ImportContactsIcon />
-			case 'OpacityIcon': return <OpacityIcon />
-			case 'ReorderIcon': return <ReorderIcon />
-			case 'ColorizeIcon': return <ColorizeIcon />
-			case 'FilterDramaIcon': return <FilterDramaIcon />
-			case 'StraightenIcon': return <StraightenIcon />
-			case 'LibraryAddIcon': return <LibraryAddIcon />
-			case 'PlaylistAddIcon': return <PlaylistAddIcon />
-			case 'PersonAddIcon': return <PersonAddIcon />
-			case 'GroupAddIcon': return <GroupAddIcon />
-			case 'PlaylistAddCheckIcon': return <PlaylistAddCheckIcon />
-			case 'NoteAddIcon': return <NoteAddIcon />
-			case 'EditIcon': return <EditIcon />
-			case 'CompareIcon': return <CompareIcon />
-			case 'SaveIcon': return <SaveIcon />
-			case 'SubtitlesIcon': return <SubtitlesIcon />
-
-			//TODO: additional good ones:  blur*, edit* (gives editor options...)
-			default: return <SettingsInputComponentIcon />
-		}
-	}
-
 	fetchDBInfo(_query, _collection, successCB, failureCB) {
 
 
@@ -569,7 +462,7 @@ class WebFF extends React.Component {
 		if (DEBUG) console.log("fetchDBInfo(", _query, ", ", _collection, ")");
 
 		// sort out differences in local dev server and production server calls
-		const API = PHP_FILE_LOCATION + 'mongoFetch.php/';
+		const API = PHP_FILE_LOCATION + 'dbFetch.php/';
 		let query = '';
 
 		if (_query !== '') {
@@ -648,24 +541,24 @@ class WebFF extends React.Component {
 		this.setState({ systemMenuOpen: true });
 	};
 
-	handleSystemMenuClose = () => { 
+	handleSystemMenuClose = () => {
 		this.setState({ systemMenuOpen: false });
 	};
 
 	handleXMLDialogOpen = (CB) => {
-		this.setState({ XMLDialogOpen: true }, ()=> {
-			if(typeof CB === "function") CB(); 
+		this.setState({ XMLDialogOpen: true }, () => {
+			if (typeof CB === "function") CB();
 		});
 	}
 
 	handleXMLDialogClose = (CB) => {
-		this.setState({ XMLDialogOpen: false }, ()=> {
-			if(typeof CB === "function") CB(); 
+		this.setState({ XMLDialogOpen: false }, () => {
+			if (typeof CB === "function") CB();
 		});
 	}
 	handleQuestionDialogOpen = (CB) => {
-		this.setState({ questionDialogOpen: true }, ()=> {
-			if(typeof CB === "function") {
+		this.setState({ questionDialogOpen: true }, () => {
+			if (typeof CB === "function") {
 				CB();
 			}
 		});
@@ -756,8 +649,8 @@ class WebFF extends React.Component {
 				valArr.pop();
 			}
 		// console.log("setting questoin value at end of update Num Rows Of Table: ", valArr);
-		this.setQuestionValue(q_id, valArr, ()=>{
-			if(typeof CB === "function") CB();
+		this.setQuestionValue(q_id, valArr, () => {
+			if (typeof CB === "function") CB();
 		});
 		// console.log("leaving updateNumRowsOfTable");
 	}
@@ -799,38 +692,12 @@ class WebFF extends React.Component {
 			newValArr[rowNum][colNum] = arr[rowNum];
 		}
 		// console.log("insertColumnValuesAfterItHasBeenResized: valArr (after insert): ", newValArr);
-		this.setQuestionValue(q_id, newValArr, () => {if(typeof CB === "function") CB();});
+		this.setQuestionValue(q_id, newValArr, () => { if (typeof CB === "function") CB(); });
 		// console.log("leaving insertColumnValuesAfterItHasBeenResized");
 	}
 
 	navigationControl(tabName, add) { //TODO: remove and fix... it's just a pass-along and might not be needed given we navigate from state now
 		this.showTabOrPanel(tabName, add, true);
-	}
-
-	jsonToNavMenu(jsonNavData) {
-		// this function filters tabs based on the "showXYZ" items in state
-		// console.log(jsonNavData);
-		var retMenu = [];
-		for (var i = 0; i < jsonNavData.length; i++) {
-			var menuItem = jsonNavData[i];
-			var shouldInclude = !this.state.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
-
-			// use icon?
-			let useIcon = true;
-			if (menuItem.icon === "") {
-				useIcon = false;
-			}
-
-			if (shouldInclude) retMenu.push(
-				<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
-					{(useIcon) ? <ListItemIcon>
-						{this.materialIcon(menuItem.icon)}
-					</ListItemIcon> : null}
-					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-				</ListItem>
-			);
-		}
-		return retMenu;
 	}
 
 	showTabOrPanel(name, toShow, isTab, CB) {  //*****
@@ -857,7 +724,7 @@ class WebFF extends React.Component {
 			listName = "hiddenPanels";
 		}
 
-		this.setState((prevState, props) => ({ [listName]: processHidden([...prevState[listName]]) }), () => {if(typeof CB === "function") CB();})
+		this.setState((prevState, props) => ({ [listName]: processHidden([...prevState[listName]]) }), () => { if (typeof CB === "function") CB(); })
 	}
 
 	showQuestion(questionID, toShow) {
@@ -1002,8 +869,8 @@ class WebFF extends React.Component {
 			let stationData = this.state.stations[stationIndex];
 			if (DEBUG) console.log("stationData", stationData);
 
-			for (let i = 0; i < questionIDsLinkedToStationName.length; i++) {
-				let q_id = questionIDsLinkedToStationName[i];
+			for (let i = 0; i < QIDS_LINKED_TO_STATION_NAME.length; i++) {
+				let q_id = QIDS_LINKED_TO_STATION_NAME[i];
 				this.setQuestionValue(q_id, stationData[q_id], this.buildRoutesAndRenderPages);
 			}
 		}
@@ -1014,7 +881,7 @@ class WebFF extends React.Component {
 			propagateSamplePointData = true; // want to run it later because we want values to propagate through teh system first
 			this.showTabOrPanel("Parameters", true, true)
 		}
-		
+
 		QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION.forEach((qIDIncludeString) => {
 			if (Q.props.id.includes(qIDIncludeString)) {
 				propagateSamplePointData = true;
@@ -1033,9 +900,11 @@ class WebFF extends React.Component {
 	}
 
 	loadSamplingEvent(samplingEventName) {
-		console.log("loadSamplingEvent");
+		if (FUNCDEBUG) console.log("loadSamplingEvent(" + samplingEventName + ")");
+
 		//TODO: return all items to default state BEFORE loading and running?
 		this.setState({ curSamplingEventName: samplingEventName }, () => {
+			console.log("CUR SAMP EVENT SENT");
 			this.runAllActionsForCurrentSamplingEvent();
 			this.setState({ hiddenTabs: [] }); //TODO: KLUDGE
 		}
@@ -1045,7 +914,7 @@ class WebFF extends React.Component {
 
 
 	runAllActionsForCurrentSamplingEvent() { //***   not a fan of the use of getQuestionData
-		console.log("runAllActionsForCurrentSamplingEvent");
+		if (FUNCDEBUG) console.log("runAllActionsForCurrentSamplingEvent()");
 		// runs through every question in questionsData, if that question has actions checks the value of said question and runs appropraite actions
 		let DEBUG = false;
 		this.state.questionsData.forEach((questionData) => { // for each question
@@ -1096,7 +965,7 @@ class WebFF extends React.Component {
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
-		//  console.log("BAR");
+		if (FUNCDEBUG) console.log("FUNC: buildRoutesAndRenderPages()");
 		let questionsValues = null;
 		if (this.state[this.state.curSamplingEventName]) {
 			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
@@ -1108,11 +977,14 @@ class WebFF extends React.Component {
 		});
 		this.setState({ thisUsersSamplingEvents: thisUsersSamplingEvents }, () => {
 
-
+			console.log("THIS USERES SAMPLING EVENTS: ", this.state.thisUsersSamplingEvents);
+			
 
 			var newRoutesAndPages = (
 				<Switch> {/* only match ONE route at a time */}
 					<Route exact path="/" render={() => {
+						// console.log("ROUTE");
+
 						return <Login
 							setLoggedInUser={this.setLoggedInUser}
 						/>
@@ -1127,7 +999,7 @@ class WebFF extends React.Component {
 						deleteSamplingEvent={this.deleteSamplingEvent}
 						samplingEventIdentifier={SAMPLING_EVENT_IDENTIFIER}
 					/>} />
-					<Route path="/EventsManager" render={() => <EventsManager
+					{/* <Route path="/EventsManager" render={() => <EventsManager
 						appBarTextCB={this.setAppBarText}
 						navControl={this.navigationControl}
 						createNewSamplingEvent={this.createNewSamplingEvent}
@@ -1135,25 +1007,29 @@ class WebFF extends React.Component {
 						samplingEvents={thisUsersSamplingEvents}
 						getEventDetails={this.getEventDetails}
 						deleteSamplingEvent={this.deleteSamplingEvent}
-					/>} />
-					<Route render={() => <QuestionPage
-						appBarTextCB={this.setAppBarText}
-						tabName={this.props.location.pathname.slice(1)}
-						navControl={this.navigationControl}
-						systemCB={this.questionChangeSystemCallback}
-						questionsData={this.state.questionsData}
-						questionsValues={questionsValues}
-						hiddenPanels={this.state.hiddenPanels}
-						globalState={this.state}
-						getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
-						getNumberOfSamplesInSet={this.getNumberOfSamplesInSet}
-						getCurrentSampleEventMethod={this.getCurrentSampleEventMethod}
-						getTableQuestionValue={this.getTableQuestionValue}
-						getQuestionValue={this.getQuestionValue}
-						getQuestionData={this.getQuestionData}
-						getDescriptiveColumnForTable={this.getDescriptiveColumnForTable}
+					/>} /> */}
+					<Route render={() => {
+						// console.log("QP");
 
-					/>} />
+						return <QuestionPage
+							appBarTextCB={this.setAppBarText}
+							tabName={this.props.location.pathname.slice(1)}
+							navControl={this.navigationControl}
+							systemCB={this.questionChangeSystemCallback}
+							questionsData={this.state.questionsData}
+							questionsValues={questionsValues}
+							hiddenPanels={this.state.hiddenPanels}
+							globalState={this.state}
+							getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
+							getNumberOfSamplesInSet={this.getNumberOfSamplesInSet}
+							getCurrentSampleEventMethod={this.getCurrentSampleEventMethod}
+							getTableQuestionValue={this.getTableQuestionValue}
+							getQuestionValue={this.getQuestionValue}
+							getQuestionData={this.getQuestionData}
+							getDescriptiveColumnForTable={this.getDescriptiveColumnForTable}
+
+						/>
+					}} />
 					{/* {this.state.navMenu} */}
 					{/* //FUTURE: do some processing on pathname to give good human-readable tabnames */}
 					<Route render={() => <ErrorPage
@@ -1322,7 +1198,7 @@ class WebFF extends React.Component {
 					}
 				}
 
-				this.setQuestionValue("QWDATATable", newValue, () => console.log("PROPAGATE DONE VALUE: ", this.getQuestionValue("QWDATATable")));
+				this.setQuestionValue("QWDATATable", newValue, () => console.log("PROPAGATE QWDATA DONE VALUE: ", this.getQuestionValue("QWDATATable")));
 
 				;
 			});
@@ -1335,12 +1211,12 @@ class WebFF extends React.Component {
 
 	addToItemsToSyncToLS(toSync, CB) {
 		if (this.state.itemsToSyncToLS.includes(toSync)) {
-			if(typeof CB === "function") CB();
+			if (typeof CB === "function") CB();
 			return;
 		} else {
 			let newitemsToSyncToLS = this.state.itemsToSyncToLS.slice();
 			newitemsToSyncToLS.push(toSync);
-			this.setState({ itemsToSyncToLS: newitemsToSyncToLS }, ()=>{if(typeof CB === "function") CB();});
+			this.setState({ itemsToSyncToLS: newitemsToSyncToLS }, () => { if (typeof CB === "function") CB(); });
 		}
 	}
 
@@ -1399,7 +1275,7 @@ class WebFF extends React.Component {
 		});
 
 		if (anyFound) {
-			this.setState({ questionsData: newQuestionsData }, ()=>{if(typeof CB === "function") CB();});
+			this.setState({ questionsData: newQuestionsData }, () => { if (typeof CB === "function") CB(); });
 		} else {
 			let newDialogQuestions = this.state.dialogQuestions.slice();
 
@@ -1415,7 +1291,7 @@ class WebFF extends React.Component {
 				var specificDialogQuestions = newDialogQuestions[i].questions.map(ifIDMatchSetValue);
 				if (anyFound) {
 					newDialogQuestions[i].questions = specificDialogQuestions;
-					this.setState({ dialogQuestions: newDialogQuestions }, ()=>{if(typeof CB === "function") CB();});
+					this.setState({ dialogQuestions: newDialogQuestions }, () => { if (typeof CB === "function") CB(); });
 				}
 			}
 		}
@@ -1447,7 +1323,7 @@ class WebFF extends React.Component {
 			for (let k = 0; newDQ[i] && k < newDQ[i].questions.length; k++) {
 				if (newDQ[i].questions[k].id === q_id) {
 					newDQ[i].questions[k].value = value;
-					this.setState({ "dialogQuestions": newDQ }, ()=>{if(typeof CB === "function") CB();});
+					this.setState({ "dialogQuestions": newDQ }, () => { if (typeof CB === "function") CB(); });
 					return;
 				}
 			}
@@ -1459,7 +1335,7 @@ class WebFF extends React.Component {
 			let newQuestionsValues = curSE.questionsValues;
 			newQuestionsValues[q_id] = value;
 			let newCurSE = { ...curSE, questionsValues: newQuestionsValues };
-			this.setState({ [this.state.curSamplingEventName]: newCurSE }, ()=>{if(typeof CB === "function") CB();});
+			this.setState({ [this.state.curSamplingEventName]: newCurSE }, () => { if (typeof CB === "function") CB(); });
 			return;
 		}
 
@@ -1473,7 +1349,7 @@ class WebFF extends React.Component {
 				// set value in the sampling event, making a new key
 				//				console.log(curSE);//let newCurSE
 				curSE.questionsValues[q_id] = value;
-				this.setState({ [this.state.curSamplingEventName]: curSE }, ()=>{if(typeof CB === "function") CB();});
+				this.setState({ [this.state.curSamplingEventName]: curSE }, () => { if (typeof CB === "function") CB(); });
 				return;
 			}
 		}
@@ -1500,7 +1376,7 @@ class WebFF extends React.Component {
 		// tabs back to default hidden
 		//TODO: tabs back to default hidden on create sampling event too
 
-		criticalUserNodes.forEach((nodeName) => {
+		USER_DB_NODES.forEach((nodeName) => {
 			console.log("resetting: ", nodeName);
 			this.setState({ nodeName: [] });
 		});
@@ -1527,13 +1403,23 @@ class WebFF extends React.Component {
 
 
 	isCurrentSamplingEventReady(caller) {
+		if(FUNCDEBUG) console.log("isCurrentSamplingEventReady(" + caller + ")");
+
 		if (this.state.curSamplingEVentName === "" || this.state.curSamplingEventName === null) {
 			throw new Error("current sampling event is not set.  --  " + caller);
 		}
 
 		let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
+
+
 		if ((Object.keys(curSE).length === 0 && curSE.constructor === Object)) { // current sampling event is not loaded or is malformed.
-			throw new Error("current sampling event, " + this.state.curSamplingEventName + " is not loaded -- " + caller);
+			// try to load sampling events from LS
+			this.loadSamplingEventsFromLS();
+			// then recheck:
+			let curSE = Object.assign({}, this.state[this.state.curSamplingEventName]);
+			if ((Object.keys(curSE).length === 0 && curSE.constructor === Object)) {
+				throw new Error("current sampling event, " + this.state.curSamplingEventName + " is not loaded -- " + caller);
+			}
 		}
 
 		if (!curSE.questionsValues) {
@@ -1628,6 +1514,8 @@ class WebFF extends React.Component {
 	}
 
 	getQuestionData(q_id) {
+		if (FUNCDEBUG) console.log("FUNC: getQuestionData(" + q_id + ")");
+
 		// returns question from questionsData that has q_id.  If none is found, return null
 		// WARNING: DO NOT USE THIS TO ACCESS "VALUE" unless you are aware it might be wrong (the value stored in questionsData is the default... the real 'value' is stored in the samplingEvent)
 		// TODO: verify all uses of this function are safe and/or depricate and/or remove this function
@@ -1854,25 +1742,12 @@ class WebFF extends React.Component {
 
 		const DEBUG = true;
 
-
-		const API = PHP_FILE_LOCATION + 'mongoPatch.php/';
+		const API = PHP_FILE_LOCATION + 'dbPatch.php/';
+		// const API = PHP_FILE_LOCATION + 'mongoPatch_backend.php/';
 		const query =
 			"needleKey=" + encodeURIComponent(needleKey) + "&" +
 			"needle=" + encodeURIComponent(needle) + "&" +
 			"newData=" + encodeURIComponent(JSON.stringify(newData));
-		//"username=" + encodeURIComponent(this.state.loggedInUser) + "&" +
-		// if (isDEV) {
-		// 	const API = 'https://localhost:3004';
-		// 	const query = needleKey;
-		// }
-
-		// function handleErrors(response) {
-		// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-		// 	if (!response.ok) {
-		// 		throw Error(response.statusText);
-		// 	}
-		// 	return response;
-		// }
 
 		let URI = API; // + query;
 
@@ -1890,11 +1765,13 @@ class WebFF extends React.Component {
 		}).then(function (response) {
 			if (response.status === 200) {
 				return response.text();
-				// return response.json();
+				// might be more useful to return JSON
 			}
 			return null;
-		}).then(function (json) {
-			CB(json);
+		}).then(function (text) {
+			console.log("DB response text: ", text);
+
+			if (typeof CB === "function") CB(text);
 		}).catch(error => console.log("Error fetching " + API + query + "\n" + error));
 	}
 
@@ -1967,8 +1844,6 @@ class WebFF extends React.Component {
 		}
 		let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
 
-		console.log(this.getQuestionValue("sampleDate"));
-
 		// build sample object
 		let sampleObj = {
 			"SampleNumber": sampNum + 1,
@@ -2001,25 +1876,29 @@ class WebFF extends React.Component {
 		// build param part of sample object from the parameters table headers
 		let parametersTableHeaders = this.getQuestionValue("parametersTable")[0];
 		if (parametersTableHeaders === null | parametersTableHeaders.length < 4) { // there was no parameters table info or headers
-			return sampleObj;
+			return sampleObj;  //FIXME: This should either alert or not return... there are other params now.
 		}
 
 		let activePCodes = {};
 		for (let i = 0; i < parametersTableHeaders.length; i++) {
 			activePCodes[parametersTableHeaders[i].split("_")[0]] = true;
 		}
-		let activePCodesArr = Object.keys(activePCodes);
+		let activePCodesArr = Object.keys(activePCodes).filter((el) => el !== "Set-Sample @ Dist");
+
 		for (let i = 0; i < activePCodesArr.length; i++) {
 			sampleObj["Param" + i] = this.buildParamTableParamObj(QWDATARowNum, activePCodesArr[i]);
 		}
 
+
+
 		//build the param part of the sample object from the pCodes not in the parameters page
 		let curParamNum = activePCodesArr.length;
 
+		// REMOVED per KASKACH request that this be a param block instead of a sample-level item.
 		//  "Average Gage Height", if calculated, should be written to P00065.
-		//  //TODO: If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
+		//  If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
 		// QWDATA can also accept this if left blank.
-		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
+		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
 
 		//  - the "Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
 		if (!this.getQuestionValue("groupOfSamples")) {
@@ -2042,7 +1921,10 @@ class WebFF extends React.Component {
 		// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
 		//	try {
 		let streamWidth = Math.abs(this.getQuestionValue("streamWidth"));
-		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth);
+		if(streamWidth!==0) {
+			sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth);
+		}
+		
 		// } catch (e) {
 		// 	console.warn("Stream Width not added to XML");
 		// }
@@ -2116,6 +1998,7 @@ class WebFF extends React.Component {
 
 	buildSampleEventtObj() {
 		let SEObj = {
+			"SedFF_version": PROGRAM_VERSION,
 			"Event": {
 				"EventNumber": 1,
 				"SiteId": this.getQuestionValue('stationNumber'),
@@ -2289,7 +2172,7 @@ class WebFF extends React.Component {
 			return;
 		}
 		if (menuText === "About") {
-			alert("This is Sediment Field Forms (SedFF) version Beta 0.7.11 built by jfederer@usgs.gov and kaskach@usgs.gov on Sept 11, 2018");
+			alert("This is Sediment Field Forms (SedFF) version " + PROGRAM_VERSION + " built by jfederer@usgs.gov and kaskach@usgs.gov on Sept 11, 2018");
 			return;
 		}
 
@@ -2394,7 +2277,8 @@ class WebFF extends React.Component {
 						removeStation={this.removeStation} />
 					<NavMenu isExpanded={this.state.navMenuExpanded}
 						closeHandler={this.handleLeftDrawerClose}
-						menuItems={this.jsonToNavMenu(this.state.navMenuInfo)} />
+						navMenuInfo={this.state.navMenuInfo}
+						hiddenTabs={this.state.hiddenTabs} />
 					<XMLDialog isOpen={this.state.XMLDialogOpen}
 						setShippedStatus={this.setShippedStatus}
 						handleXMLDialogClose={this.handleXMLDialogClose}

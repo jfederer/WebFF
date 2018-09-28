@@ -119,7 +119,7 @@ class TableInput extends React.Component {
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
 						cellQuestion = <div className={classes.header}>{cellContent}</div>
 					} else {
-						cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} />
+						cellQuestion = <Question {...adHocProps} size={1} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} />
 					}
 				}
 				return (

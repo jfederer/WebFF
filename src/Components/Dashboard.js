@@ -48,7 +48,14 @@ class Dashboard extends React.Component {
 	}
 
 	handleBrandNewButtonClick = () => {
-		this.props.createNewSamplingEvent(this.state.newSamplingEventName ? this.state.newSamplingEventName : "");
+		console.log("handleBrandNewButtonClick()");
+
+		this.props.createNewSamplingEvent(this.state.newSamplingEventName
+			? this.state.newSamplingEventName
+			: ""
+			// ,
+			// () => { window.history.push('/FieldForm') }
+		);
 		this.props.navControl("Water Quality", true);
 		this.props.navControl("Field Form", true);
 	}
@@ -66,6 +73,8 @@ class Dashboard extends React.Component {
 		//	console.log("Dashboard Sampling Events: ", samplingEventNames);
 
 		const MyLink = props => <Link to="/FieldForm" {...props} />
+
+		console.log("DB: PROPS: SEs:", this.props.samplingEvents );
 
 		return (
 			<React.Fragment>
@@ -109,11 +118,11 @@ class Dashboard extends React.Component {
 
 							/>
 							<br />
-							<Button 
-							component={MyLink} 
-							disabled={this.state.newEventButtonDisabled} 
-							onClick={this.handleBrandNewButtonClick}
-							variant="outlined">
+							<Button
+								component={MyLink} 
+								disabled={this.state.newEventButtonDisabled}
+								onClick={this.handleBrandNewButtonClick}
+								variant="outlined">
 								{this.state.newEventButtonDisabled
 									? "EVENT MUST HAVE UNIQUE NAME"
 									: "CREATE NEW EVENT"}
@@ -124,7 +133,7 @@ class Dashboard extends React.Component {
 				</Grid>
 
 				<EventsManager
-				samplingEventIdentifier={this.props.samplingEventIdentifier}
+					samplingEventIdentifier={this.props.samplingEventIdentifier}
 					createNewSamplingEvent={this.props.createNewSamplingEvent}
 					loadSamplingEvent={this.props.loadSamplingEvent}
 					samplingEvents={this.props.samplingEvents}
