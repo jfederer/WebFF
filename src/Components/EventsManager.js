@@ -253,25 +253,29 @@ class EventsManager extends React.Component {
 
   //eventName, sampleDate, stationName, shippedStatus
   componentWillMount() {
-    console.log("EM: CWM");
+    // console.log("EM: CWM");
     this.buildData();
   }
 
   componentDidMount() {
-    console.log("EM: CDM");
+    // console.log("EM: CDM");
     this.buildData();
   }
 
 
   componentWillUpdate(nextProps, nextState) {
-    console.log("EM: CWU - curr_props: ", this.props.samplingEvents);
-    console.log("EM: CWU - next_props: ", nextProps.samplingEvents);
-
+    // console.log("EM: CWU - curr_props: ", this.props.samplingEvents);
+    // console.log("EM: CWU - next_props: ", nextProps.samplingEvents);
+	// console.log("EM: CWU - this.state.data: ", this.state.data);
     
-    if ((!this.arraysEqual(this.props.samplingEvents, nextProps.samplingEvents)) ||
-        this.state.data.length !== nextProps.samplingEvents) {
-      console.log("BUILD IT!");
-      
+	if (!this.arraysEqual(this.props.samplingEvents, nextProps.samplingEvents)) {
+		// console.log("SHOULD BUILD 1 IT!");
+		this.buildData(nextProps.samplingEvents);
+	}
+	
+
+	if (this.state.data.length !== nextProps.samplingEvents.length) {
+    //   console.log("SHOULD BUILD 2 IT!");
       this.buildData(nextProps.samplingEvents);
     }
 
@@ -282,7 +286,7 @@ class EventsManager extends React.Component {
     if(ses) {
       sampEvents = ses;
     }
-    console.log("BUILD DATA: ", newData);
+    // console.log("BUILD DATA: ", newData);
     let newData = [];
     sampEvents.forEach((eventName) => {
       newData.push(createData(eventName,
@@ -290,9 +294,9 @@ class EventsManager extends React.Component {
         this.props.getEventDetails(eventName, "stationName"),
         this.props.getEventDetails(eventName, "shippedStatus")));
     });
-    console.log("BUILT DATA: ", newData);
+    // console.log("BUILT DATA: ", newData);
     
-    this.setState({ data: newData }, ()=>console.log("SET DATA: ", newData));
+    this.setState({ data: newData });
   }
 
 
@@ -385,8 +389,8 @@ class EventsManager extends React.Component {
     // const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
 
-    console.log("EM: PROPS: SEs:", this.props.samplingEvents );
-    console.log("EM: STATE: DATA:", data );
+    // console.log("EM: PROPS: SEs:", this.props.samplingEvents );
+    // console.log("EM: STATE: DATA:", data );
     // let data = this.buildDataForRender();
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);

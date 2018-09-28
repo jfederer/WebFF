@@ -26,8 +26,6 @@ import { Redirect } from 'react-router-dom';
 import { isReasonablyValidUsernameInLS, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 import XMLDialog from './XMLDialog';
 import QuestionDialog from './QuestionDialog';
-import EventsManager from './EventsManager';
-
 import QuestionPage from './QuestionPage';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
@@ -46,7 +44,7 @@ class WebFF extends React.Component {
 
 	constructor(props) {
 		console.log("CONSTRUCT");
-		
+
 		super(props);
 		var allItemsToSyncToLS = USER_DB_NODES.slice();
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
@@ -157,7 +155,7 @@ class WebFF extends React.Component {
 			this.buildRoutesAndRenderPages(); // router handles showing the login
 		}
 
-		if(this.state.curSamplingEventName) {  // this is likely a page refresh
+		if (this.state.curSamplingEventName) {  // this is likely a page refresh
 			this.setState({ hiddenTabs: [] }); //TODO: KLUDGE
 		} else {
 			this.setState({ hiddenTabs: defaultHiddenTabs });
@@ -302,18 +300,21 @@ class WebFF extends React.Component {
 						let allNodeNames = Object.keys(userData);
 						for (let i = 0; i < allNodeNames.length; i++) {
 							if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+								console.log("Attempting to load " + allNodeNames[i] + " from DB.");
 								if (localStorage.getItem(allNodeNames[i])) {
 									console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
+									continue;
 								}
 								if (userData[allNodeNames[i]].deleted) {
 									console.log(allNodeNames[i] + " is a previously-deleted event. Ignoring DB values for this.");
-								} else {
-									// loading Event from DB into LS
-									this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
-										this.addToItemsToSyncToLS(allNodeNames[i]);
-										this.buildRoutesAndRenderPages();
-									});
+									continue;
 								}
+
+								// loading Event from DB into LS
+								this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+									this.addToItemsToSyncToLS(allNodeNames[i]);
+									this.buildRoutesAndRenderPages();
+								});
 							}
 						}
 					} // end one user found in DB
@@ -341,9 +342,6 @@ class WebFF extends React.Component {
 
 
 	getUserConfigFromLS(nodesToGather, successCB, failureCB) {
-
-
-
 		if (FUNCDEBUG) console.log("FUNC: getUserConfigFromLS(", nodesToGather, ")");
 		// LS is the 'authoritative version' and will overwrite info that got pulled from DB by default.  //FUTURE: allow reconstruction from DB info via 'settings' panel.
 		let DEBUG = false;
@@ -401,12 +399,14 @@ class WebFF extends React.Component {
 		if (FUNCDEBUG) console.log("FUNC: deleteSamplingEvent(", eventName, ")");
 		let newEvent = safeCopy(this.state[eventName]);
 		newEvent.deleted = true;
-		this.setState({ [eventName]: newEvent }, () => {this.markForDBUpdate(eventName);
+		this.setState({ [eventName]: newEvent }, () => {
+			this.markForDBUpdate(eventName);
 
-		//TODO: directly update sampling events list?
+			//TODO: directly update sampling events list?
 
-		this.buildRoutesAndRenderPages();}
-	);
+			this.buildRoutesAndRenderPages();
+		}
+		);
 
 	}
 
@@ -977,8 +977,8 @@ class WebFF extends React.Component {
 		});
 		this.setState({ thisUsersSamplingEvents: thisUsersSamplingEvents }, () => {
 
-			console.log("THIS USERES SAMPLING EVENTS: ", this.state.thisUsersSamplingEvents);
-			
+			// console.log("THIS USERES SAMPLING EVENTS: ", this.state.thisUsersSamplingEvents);
+
 
 			var newRoutesAndPages = (
 				<Switch> {/* only match ONE route at a time */}
@@ -1403,7 +1403,7 @@ class WebFF extends React.Component {
 
 
 	isCurrentSamplingEventReady(caller) {
-		if(FUNCDEBUG) console.log("isCurrentSamplingEventReady(" + caller + ")");
+		if (FUNCDEBUG) console.log("isCurrentSamplingEventReady(" + caller + ")");
 
 		if (this.state.curSamplingEVentName === "" || this.state.curSamplingEventName === null) {
 			throw new Error("current sampling event is not set.  --  " + caller);
@@ -1921,10 +1921,10 @@ class WebFF extends React.Component {
 		// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
 		//	try {
 		let streamWidth = Math.abs(this.getQuestionValue("streamWidth"));
-		if(streamWidth!==0) {
+		if (streamWidth !== 0) {
 			sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth);
 		}
-		
+
 		// } catch (e) {
 		// 	console.warn("Stream Width not added to XML");
 		// }

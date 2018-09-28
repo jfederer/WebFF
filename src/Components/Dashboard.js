@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
 	}
 
 	handleBrandNewButtonClick = () => {
-		console.log("handleBrandNewButtonClick()");
+		// console.log("handleBrandNewButtonClick()");
 
 		this.props.createNewSamplingEvent(this.state.newSamplingEventName
 			? this.state.newSamplingEventName
@@ -74,7 +74,7 @@ class Dashboard extends React.Component {
 
 		const MyLink = props => <Link to="/FieldForm" {...props} />
 
-		console.log("DB: PROPS: SEs:", this.props.samplingEvents );
+		// console.log("DB: PROPS: SEs:", this.props.samplingEvents );
 
 		return (
 			<React.Fragment>
