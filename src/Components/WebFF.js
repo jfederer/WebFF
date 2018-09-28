@@ -1181,7 +1181,7 @@ class WebFF extends React.Component {
 				}
 			}
 
-			this.setTableColumn("QWDATATable", 1, estimatedTimeColumn, () => {
+			this.setTableColumn("QWDATATable", 2, estimatedTimeColumn, () => {
 				this.buildRoutesAndRenderPages();
 
 
