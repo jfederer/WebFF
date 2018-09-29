@@ -239,7 +239,7 @@ class QWDATATable extends React.Component {
 
 								if (headerKey === "Sample Date") {
 									let sdArr = this.props.getQuestionValue("sampleDate").split("-");
-									displayValue = sdArr[2]+"/"+sdArr[1]+"/"+sdArr[0];
+									displayValue = sdArr[1]+"/"+sdArr[2]+"/"+sdArr[0];
 									console.log(displayValue);
 								}
 

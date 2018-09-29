@@ -1,7 +1,7 @@
 export const PHP_FILE_LOCATION = "https://152.61.248.218/php/";
 // export const PHP_FILE_LOCATION = "https://sedff.usgs.gov/php/";
 
-export const PROGRAM_VERSION = '0.9.2';
+export const PROGRAM_VERSION = '0.9.4';
 
 export const SEDLOGIN_SUCCESS_MESSAGE = "Imported 1 event into SedLOGIN project";
 

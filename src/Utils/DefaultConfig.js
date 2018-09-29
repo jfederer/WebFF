@@ -1627,7 +1627,7 @@ export const questionsData =
             "layoutGroup": "Set A Information",
             "type": "ComputedValue",
             "computationString": "(setA_StartGageHeight+setA_EndGageHeight)/2",
-            "value":"",
+            "value": "",
             "width_xs": 4,
             "width_lg": 2
         },
@@ -2114,7 +2114,7 @@ export const questionsData =
             "layoutGroup": "Set C Information",
             "type": "ComputedValue",
             "computationString": "(setC_StartGageHeight+setC_EndGageHeight)/2",
-            "value":"",
+            "value": "",
             "width_xs": 4,
             "width_lg": 2
         },
@@ -2390,14 +2390,18 @@ export const questionsData =
                 "ASTAT Code",
                 "Add-on Analyses",
                 "M2Lab"],
-            ["Fill Out Number Of Samples for at least one set",
+            [
+                "Fill Out Number Of Samples for at least one set",
+                "",
                 "",
                 "",
                 "",
                 "",
                 "",
                 [],
-                ""]],
+                ""
+            ]
+            ],
             "width_xs": 12,
             "width_lg": 12
         },
