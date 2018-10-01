@@ -79,7 +79,7 @@ class ParametersTable extends React.Component {
 			startingPCodes = safeCopy(defaultPCodesToShow);
 
 		} else { // if a value was sent
-			// need to ensure the value has the right number of columns
+			// need to ensure the value has the right number of rows
 			console.log("Handed existing value: ", this.props.value);
 
 			// find all pCodes in header

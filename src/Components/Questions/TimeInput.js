@@ -47,7 +47,6 @@ class TimeInput extends React.Component {
 	}
 
 	handleValueChange = value => event => {
-
 		// validate and format the input
 		let newVal = event.target.value;
 		newVal = newVal.replace(':', '');
@@ -96,7 +95,7 @@ class TimeInput extends React.Component {
 			fullWidth
 			margin="none"
 			type="text"
-			value={this.state.value}
+			value={this.props.value}
 			xmltag={this.props.XMLTag}
 			placeholder={'HHMM'}
 			onChange={this.handleValueChange(this.props.id)}

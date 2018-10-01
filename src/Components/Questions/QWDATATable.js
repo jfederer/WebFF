@@ -17,6 +17,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
+import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -34,10 +35,19 @@ const styles = theme => ({
 });
 
 
+var preRequisiteInfo = {
+	descriptiveColumn: null
+
+
+}
+
+
 class QWDATATable extends React.Component {
 	constructor(props) {
 		super(props);
 		console.log("QWDATA TABLE CONSTRUCTOR");
+
+
 
 		let nowValue = [];
 		// let startingPCodes = [];
@@ -46,153 +56,243 @@ class QWDATATable extends React.Component {
 
 			// build header from scratch
 			let headerRow = [];
-			for (let header in Object.keys(allQWDATAOptionalHeaders)) {
+			Object.keys(allQWDATAOptionalHeaders).forEach((header) => {
 				headerRow.push(header);
-			}
+			});
 			nowValue.push(headerRow);
 
 			// build default values (blanks)
-			let firstColumn = this.props.getDescriptiveColumnForTable(); // this gives us number of rows too
-			console.log("QWDATA FIRST COLUMN: ", firstColumn);
-			for (let i = 1; i < firstColumn.length; i++) {
-				let emptyRow = new Array(headerRow.length-1).fill("");
-				emptyRow.unshift(firstColumn[i]);
+			preRequisiteInfo.descriptiveColumn = this.props.getDescriptiveColumnForTable(); // this gives us number of rows too
+
+			//console.log("QWDATA descriptiveColumn: ", preRequisiteInfo.descriptiveColumn);
+			for (let i = 1; i < preRequisiteInfo.descriptiveColumn.length; i++) {
+				let emptyRow = new Array(headerRow.length - 1).fill("");
+				emptyRow.unshift(preRequisiteInfo.descriptiveColumn[i]);
 				nowValue.push(emptyRow);
 			}
 
-			// startingPCodes = safeCopy(defaultPCodesToShow);
+			console.log(nowValue);
 
-		} else { // if a value was sent
-			// need to ensure the value has the right number of columns
-			console.log("Handed existing value: ", this.props.value);
-
-			// find all pCodes in header
-			let pCodesInHeader = [];
-			for (let i = 1; i < this.props.value[0].length; i++) { // start at 1 to skip the set-sample @ dist
-				let pCode = this.props.value[0][i].split("_")[0];
-				if (!pCodesInHeader.includes(pCode)) {
-					pCodesInHeader.push(pCode);
+			// make the Add-on analysis values arrays
+			let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
+			if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+			for (let row = 1; row < nowValue.length; row++) { // skip header row
+				if (!Array.isArray(nowValue[row][AddOnAnalysesIndex])) {
+					nowValue[row][AddOnAnalysesIndex] = [];
 				}
 			}
+
+			// fill out the estimated time, if possible
+			this.insertEstimatedTime(nowValue);
+
+		}
+		else { // if a value was sent
+			// need to ensure the value has the right number of rows
+			console.log("Handed existing value: ", this.props.value);
 
 			nowValue = [];
 			// build new header row, note, the header row should still be correct.
 			nowValue.push(safeCopy(this.props.value[0])); // 
 
-			// build rows based on existing values  //TODO: FIXME:
-			let firstColumn = this.props.getDescriptiveColumnForTable(); // firstColumn will now be the authoritative new [0] element in each row
-			console.log("NEW FIRST COLUMN: ", firstColumn);
-			for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
-				console.log("Looking for...", firstColumn[newRowNum]);
+			// build rows based on existing values
+			preRequisiteInfo.descriptiveColumn = this.props.getDescriptiveColumnForTable(); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
+			// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
+			for (let newRowNum = 1; newRowNum < preRequisiteInfo.descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
+				// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
 				//look in props.value for existing matching row
 				let matchingOldRow = -1;
-				for(let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
-					console.log("against..." + this.props.value[oldRow][0]);
-					if(firstColumn[newRowNum] === this.props.value[oldRow][0]) {
-						console.log("MATCH!");
-						
+				for (let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
+					// console.log("against..." + this.props.value[oldRow][0]);
+					if (preRequisiteInfo.descriptiveColumn[newRowNum] === this.props.value[oldRow][0]) {
+						// console.log("MATCH!");
+
 						matchingOldRow = oldRow;
 						break;
 					}
-				} 
+				}
 
 				let newRow = [];
-				if(matchingOldRow != -1) {
-					console.log(firstColumn[newRowNum] + " DID find a match");
+				if (matchingOldRow != -1) {
 					newRow = safeCopy(this.props.value[matchingOldRow]);
 				} else {
-					console.log(firstColumn[newRowNum] + " never found a match");
-					
-					newRow = new Array(this.props.value[0].length-1).fill("");
-					newRow.unshift(firstColumn[newRowNum]);
+					newRow = new Array(this.props.value[0].length - 1).fill("");
+					newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
 				}
-			 	nowValue.push(newRow);
+				nowValue.push(newRow);
 			}
-
-
-			startingPCodes = safeCopy(pCodesInHeader);
 		}
 
-		// this.state = {
-		// 	showRmk: false,
-		// 	showNQ: false,
-		// 	showAddColumnDialog: false,
-		// 	showSetDefaultValueDialog: false,
-		// 	pCodesToShow: startingPCodes,
-		// 	pCodeToAdd: "",
-		// 	value: nowValue,
-		// 	parameterDefaultValue_val: "",
-		// 	parameterDefaultValue_mth: "",
-		// 	parameterDefaultValue_rmk: "",
-		// 	parameterDefaultValue_nq: "",
-		// 	parameterDefaultOverwiteExistingValues: false,
-		// 	curPCode: ""
-		// };
 
 
-		// this.handleValueChange = this.handleValueChange.bind(this);
 
+		// 	// let sampleEventLocations = [];
+		// 	let numSets = this.getNumberOfSetsInCurrentSamplingEvent();
+		// 	// let setType = this.getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+		// 	let totalSamps = 0;
+		// 	for (let i = 0; i < numSets; i++) {
+		// 		let setName = String.fromCharCode(65 + i);
+		// 		let ai = !this.getQuestionValue("set" + setName + "_samplesComposited");
+		// 		totalSamps += ai ? this.getNumberOfSamplesInSet(setName) : 1;
+		// 	}
+		// 	let firstColumn = new Array(totalSamps).fill("Set-Sample @ Dist");
+
+		// 	firstColumn.unshift("Set-Sample @ Dist");
+
+		// 	this.setTableColumn("QWDATATable", 0, firstColumn, () => {
+		// 		this.buildRoutesAndRenderPages();
+
+		// 		// after the table is the right size, and various routs and such have been made, let's pull values for the qwdata table
+		// 		// note, this is a potential problem for users, as it will overwrite values in there.  Mgiht want to reset, not sure.  Ask ken.
+
+
+
+
+		// 		this.setTableColumn("QWDATATable", 2, this.getEstimatedTimeColumn(), () => {
+		// 			this.buildRoutesAndRenderPages();
+
+
+		// 			let newValue = this.getQuestionValue("QWDATATable").slice();
+
+		// 			// check that the Add-on analysis values are arrays
+		// 			let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
+		// 			//		let needsArraysAdded = false;
+		// 			if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table in propagate") }
+		// 			for (let row = 1; row < newValue.length; row++) {
+		// 				if (!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
+		// 					//				needsArraysAdded = true;
+		// 					newValue[row][AddOnAnalysesIndex] = [];
+		// 				}
+		// 			}
+
+		// 			this.setQuestionValue("QWDATATable", newValue, () => console.log("PROPAGATE QWDATA DONE VALUE: ", this.getQuestionValue("QWDATATable")));
+
+		// 			;
+		// 		});
+
+
+		// 	});
+		// }
+
+
+		let rdy = true;
+		Object.keys(preRequisiteInfo).forEach((key) => {
+			if (preRequisiteInfo[key] === null) {
+				rdy = false;
+			}
+		})
 
 		this.state = {
-			value: this.props.value,
+			value: nowValue,
 			dialogM2LOpen: false,
 			dialogM2LValue: "",
 			dialogAddOnOpen: false,
 			dialogAddOnValue: [],
 			rowAddOnOptions: {},
-			headers: allQWDATAOptionalHeaders
+			readyToDisplay: rdy
 		};
 
 		this.dialogM2LTextChangeHandler = this.dialogM2LTextChangeHandler.bind(this);
 		this.addOnChangeHandler = this.addOnChangeHandler.bind(this);
+		this.insertEstimatedTime = this.insertEstimatedTime.bind(this);
 	};
 
 
 	componentWillMount() {
-		let newValue = this.props.value.slice();
+		console.log("QDWATAA CWM");
 
-		// note, much of this will break upon resizing or adding columns
 
-		//build correct header  
-		for (let i = 0; i < newValue[0].length; i++) {
-			newValue[0][i] = Object.keys(this.state.headers)[i];
-		}
+		// let newValue = this.props.value.slice();
 
-		// check that the Add-on analysis values are arrays
-		let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
-		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+		// // note, much of this will break upon resizing or adding columns
 
-		for (let row = 1; row < newValue.length; row++) {
-			if (!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
-				newValue[row][AddOnAnalysesIndex] = [];
-			}
-		}
-
-		//set the first column values to something correct
-		let desriptiveColumn = this.props.getDescriptiveColumnForTable();
-		let SetSampDistIndex = newValue[0].indexOf("Set-Sample @ Dist");
-		if (SetSampDistIndex < 0) { throw new Error("'Set-Sample @ Dist' not found in header of QWDATA table") }
-		for (let row = 1; row < newValue.length; row++) {
-			if (!Array.isArray(newValue[row][SetSampDistIndex])) {
-				//				needsArraysAdded = true;
-				newValue[row][SetSampDistIndex] = desriptiveColumn[row];
-			}
-		}
-
-		// //set the sample dates from the field form entry
-		// let defaultDate = this.props.getQuestionValue("sampleDate");
-		// let sampleDateIndex = newValue[0].indexOf("Sample Date");
-		// for (let row = 1; row < newValue.length; row++) {
-		// 	newValue[row][sampleDateIndex] = defaultDate;
+		// //build correct header  
+		// for (let i = 0; i < newValue[0].length; i++) {
+		// 	newValue[0][i] = Object.keys(this.state.headers)[i];
 		// }
 
-		this.setState({ value: newValue });
+		// // check that the Add-on analysis values are arrays
+		// let AddOnAnalysesIndex = newValue[0].indexOf("Add-on Analyses");
+		// if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+
+		// for (let row = 1; row < newValue.length; row++) {
+		// 	if (!Array.isArray(newValue[row][AddOnAnalysesIndex])) {
+		// 		newValue[row][AddOnAnalysesIndex] = [];
+		// 	}
+		// }
+
+		// //set the first column values to something correct
+		// let desriptiveColumn = this.props.getDescriptiveColumnForTable();
+		// let SetSampDistIndex = newValue[0].indexOf("Set-Sample @ Dist");
+		// if (SetSampDistIndex < 0) { throw new Error("'Set-Sample @ Dist' not found in header of QWDATA table") }
+		// for (let row = 1; row < newValue.length; row++) {
+		// 	if (!Array.isArray(newValue[row][SetSampDistIndex])) {
+		// 		//				needsArraysAdded = true;
+		// 		newValue[row][SetSampDistIndex] = desriptiveColumn[row];
+		// 	}
+		// }
+
+		// // //set the sample dates from the field form entry
+		// // let defaultDate = this.props.getQuestionValue("sampleDate");
+		// // let sampleDateIndex = newValue[0].indexOf("Sample Date");
+		// // for (let row = 1; row < newValue.length; row++) {
+		// // 	newValue[row][sampleDateIndex] = defaultDate;
+		// // }
+
+		// this.setState({ value: newValue });
 	}
 
 	componentDidMount() {
-		// console.log("CDM: ");
-		// console.log("QWDATA CDM: ", this.props);
+		console.log("QWDATA: CDM");
+		this.props.stateChangeHandler(this);
 	}
+
+	insertEstimatedTime(value) {
+		let etc = this.getEstimatedTimeColumn();
+		let SampleTimeIndex = value[0].indexOf("Sample Time");
+		if (SampleTimeIndex < 0) { throw new Error("Sample Time not found in header of QWDATA table") }
+		for (let row = 1; row < value.length; row++) { // skip header row
+			if (!Array.isArray(value[row][SampleTimeIndex])) {
+				value[row][SampleTimeIndex] = etc[row];
+			}
+		}
+		return value;
+	}
+
+	getEstimatedTimeColumn() {
+		let estimatedTimeColumn = new Array(this.props.getDescriptiveColumnForTable().length).fill("");
+		let numberOfSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
+
+		for (let setNum = 0; setNum < numberOfSets; setNum++) {
+			let thisSetName = String.fromCharCode(65 + setNum);
+			let numberOfSamplesInSet = this.props.getNumberOfSamplesInSet(thisSetName);
+			let startTime = this.props.getQuestionValue("set" + thisSetName + "_StartTime");
+			let endTime = this.props.getQuestionValue("set" + thisSetName + "_EndTime");
+			let ai = !this.props.getQuestionValue("set" + thisSetName + "_samplesComposited");
+			let startDateTime = new Date("January 1, 2000 " + startTime)
+			let endDateTime = new Date("January 1, 2000 " + endTime)
+			let msElapsed = Math.abs(endDateTime - startDateTime);
+			let msBetweenSamples = msElapsed / (numberOfSamplesInSet - 1);
+
+			let totalNumberOfSamplesInPreviousSets = 0;
+			for (let i = setNum; i > 0; i--) {
+				// if this set was a composite, it was only one line in the QWDATA Table
+				let previousSetName = String.fromCharCode(i + 64);
+				let previousSetAI = !this.props.getQuestionValue("set" + previousSetName + "_samplesComposited");
+				totalNumberOfSamplesInPreviousSets += previousSetAI ? this.props.getNumberOfSamplesInSet(previousSetName) : 1;
+			}
+
+			for (let sampNum = 0; sampNum < (ai ? numberOfSamplesInSet : 1); sampNum++) {
+				let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
+				let timeSinceStart = (sampNum * msBetweenSamples);
+				let d = new Date(startDateTime.getTime() + timeSinceStart);
+				estimatedTimeColumn[QWDATARowNum] = startTime && endTime
+					? ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2)
+					: "";
+			}
+		}
+		return estimatedTimeColumn;
+	}
+
 
 	handleM2LClickOpen = (row, col) => {
 		this.setState({ dialogM2LOpen: true, dialogM2LValue: this.state.value[row][col], curRow: row, curCol: col });
@@ -268,14 +368,13 @@ class QWDATATable extends React.Component {
 		this.setState({ dialogAddOnValue: mcq.state.value });
 	}
 
-
-
 	handleValueChange = (row, col) => e => {
+
 		//  console.log("this.state.value: ", this.state.value);
 		//  console.log("row: ", row, "col: ", col);
 		//  console.log("e", e);
 		//  console.log("e.state.value", e.state.value);
-		let newVal = this.state.value.slice();
+		let newVal = safeCopy(this.state.value); //.slice();
 		//  console.log("newVal: ", newVal);
 		newVal[row][col] = e.state.value;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });
@@ -292,6 +391,27 @@ class QWDATATable extends React.Component {
 		return retKey;
 	}
 
+	handleEstimateClick = (e) => {
+
+		var txt;
+		var r = window.confirm("Are you sure you want to overwrite current values in the Sample Time column with estimated values?");
+		if (r !== true) {
+			return;
+		}
+
+		let newVal = this.insertEstimatedTime(this.state.value);
+		let SampleTimeIndex = newVal[0].indexOf("Sample Time");
+		if (SampleTimeIndex < 0) { throw new Error("Sample Time not found in header of QWDATA table") }
+		let etc = this.getEstimatedTimeColumn();
+
+		for (let row = 1; row < newVal.length; row++) { // skip header row
+			newVal[row][SampleTimeIndex] = etc[row];
+		}
+		this.setState({ value: newVal }, () => {
+			this.props.stateChangeHandler(this);
+		});
+	}
+
 	render() {
 		if (!this.props.globalState.curSamplingEventName) {
 			return <React.Fragment></React.Fragment>;  //no event name event loaded, just return
@@ -306,208 +426,206 @@ class QWDATATable extends React.Component {
 
 		// let evtName = this.props.globalState.curSamplingEventName;
 
-
 		return (
-			<React.Fragment>
-				<br></br>
-				<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
-				<Table className={classes.table}>
-					<TableHead>
-						<TableRow>
-							{Object.keys(this.state.headers).map((headerKey) => {
-								let headerValue = this.state.headers[headerKey];
-								// console.log(headerKey +"="+headerValue);
+			this.state.readyToDisplay
+				? <React.Fragment>
+					<br></br>
+					<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
+					<Table className={classes.table}>
+						<TableHead>
+							<TableRow>
+								{this.state.value[0].map((headerKey) => {
+									let headerValue = allQWDATAOptionalHeaders[headerKey];
+									// console.log(headerKey +"="+headerValue);
 
-								let defaultValue = null;
-								let displayValue = null;
-								if (headerValue) {
-									let qidForDefaultValue = this.state.headers[headerKey];
-									// console.log("qidForDefaultValue: ", qidForDefaultValue);
-									defaultValue = this.props.getQuestionValue(qidForDefaultValue);
-									// console.log("Default Value: ", defaultValue);
-									if (defaultValue) {
-										let Q = this.props.getQuestionData(qidForDefaultValue);
-										displayValue = this.getKeyFromValue(Q.options, defaultValue);
+									let defaultValue = null;
+									let displayValue = null;
+									if (headerValue) {
+										let qidForDefaultValue = headerValue;
+										// console.log("qidForDefaultValue: ", qidForDefaultValue);
+										defaultValue = this.props.getQuestionValue(qidForDefaultValue);
+										// console.log("Default Value: ", defaultValue);
+										if (defaultValue) {
+											let Q = this.props.getQuestionData(qidForDefaultValue);
+											displayValue = this.getKeyFromValue(Q.options, defaultValue);
+										}
 									}
-								}
 
-								if (headerKey === "Sample Date") {
-									let sdArr = this.props.getQuestionValue("sampleDate").split("-");
-									displayValue = sdArr[1]+"/"+sdArr[2]+"/"+sdArr[0];
-								}
+									if (headerKey === "Sample Date") {
+										let sdArr = this.props.getQuestionValue("sampleDate").split("-");
+										displayValue = sdArr[1] + "/" + sdArr[2] + "/" + sdArr[0];
+									}
+									if (headerKey === "Sample Time") {
+										displayValue = <button onClick={this.handleEstimateClick}>Estimate</button>;
+									}
 
+									return (
+										<TableCell className={classes.tableCell} key={"QWDATA_" + headerKey} >
+											{headerKey}
+											{displayValue ? <br /> : null}
+											{displayValue
+												? <React.Fragment>({displayValue})</React.Fragment>
+												: null}
+										</TableCell>
+									);
+								})}
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{this.state.value.map((row, rowNum) => {
+								if (rowNum === 0) {
+									return null;
+								}
+								let realRowNum = rowNum + 1;
 								return (
-									<TableCell className={classes.tableCell} key={"QWDATA_" + headerKey} >
-										{headerKey}
-										{displayValue ? <br /> : null}
-										{displayValue
-											? "(" + displayValue + ")"
-											: null}
-									</TableCell>
+									<TableRow key={"ROW:" + realRowNum}>
+										{this.state.value[0].map((headerKey, colNum) => {
+											let Q;
+											let keyText = "QWDATA_row:" + rowNum + "_col:" + colNum;
+											// console.log("this.state.value[0]", this.state.value[0]);
+											// console.log("headerKey", headerKey);
+
+
+											if (allQWDATAOptionalHeaders[headerKey] === null) {
+												switch (headerKey) {
+													case "Set-Sample @ Dist":
+														Q = this.state.value[rowNum][colNum];
+														break;
+													case "Add-on Analyses":
+														Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
+															this.state.value[rowNum][colNum] === "" || this.state.value[rowNum][colNum].length === 0
+																? "Add"
+																: this.state.value[rowNum][colNum].join(",")}
+														</Button>
+														break;
+													case "M2Lab":
+														Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
+															this.state.value[rowNum][colNum] === ""
+																? "Add"
+																: "Edit"}
+														</Button>;
+														break;
+													case "Sample Time":
+														Q = <Question {...this.classlessProps}
+															label=""
+															id={keyText}
+															key={keyText}
+															type="TimeInput"
+															stateChangeHandler={this.handleValueChange(rowNum, colNum)}
+															value={this.state.value[rowNum][colNum]}
+														/>
+														break;
+													case "Sample Date":
+														Q = <Question {...this.classlessProps}
+															label=""
+															id={keyText}
+															key={keyText}
+															type="DateInput"
+															stateChangeHandler={this.handleValueChange(rowNum, colNum)}
+															value={this.state.value[rowNum][colNum]}
+														/>
+														break;
+													default: throw new Error(headerKey + " case not handled in QWDATA table");
+												}
+											} else {
+												let motherQuestion = this.props.getQuestionData(allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
+
+												Q = <Question {...this.classlessProps}
+													label={null}
+													type="DropDown"
+													id={keyText}
+													key={keyText}
+													options={motherQuestion.options}
+													includeBlank={true}
+													stateChangeHandler={this.handleValueChange(rowNum, colNum)}
+													value={this.state.value[rowNum][colNum]}
+												/>
+											}
+											return (
+												<TableCell key={"row:" + realRowNum + "_col:" + colNum} className={classes.tableCell}>{Q}</TableCell>
+											);
+										})}
+									</TableRow>
 								);
 							})}
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{this.props.value.map((row, rowNum) => {
-							if (rowNum === 0) {
-								return null;
-							}
-							let realRowNum = rowNum + 1;
-							return (
-								<TableRow key={"ROW:" + realRowNum}>
-									{Object.keys(this.state.headers).map((headerKey, colNum) => {
-										let Q;
-										let keyText = "QWDATA_row:" + rowNum + "_col:" + colNum;
-										if (this.state.headers[headerKey] === null) {
-											switch (headerKey) {
-												case "Set-Sample @ Dist":
-													Q = this.state.value[rowNum][colNum];
-													break;
-												case "Add-on Analyses":
-													Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
-														this.state.value[rowNum][colNum] === "" || this.state.value[rowNum][colNum].length === 0
-															? "Add"
-															: this.state.value[rowNum][colNum].join(",")}
-													</Button>
-													break;
-												case "M2Lab":
-													Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
-														this.state.value[rowNum][colNum] === ""
-															? "Add"
-															: "Edit"}
-													</Button>;
-													break;
-												case "Sample Time":
-													Q = <Question {...this.classlessProps}
-														label=""
-														id={keyText}
-														key={keyText}
-														type="TimeInput"
-														stateChangeHandler={this.handleValueChange(rowNum, colNum)}
-														value={this.state.value[rowNum][colNum]}
-													/>
-													break;
-												case "Sample Date":
-													Q = <Question {...this.classlessProps}
-														label=""
-														id={keyText}
-														key={keyText}
-														type="DateInput"
-														stateChangeHandler={this.handleValueChange(rowNum, colNum)}
-														value={this.state.value[rowNum][colNum]}
-													/>
-													break;
-												default: throw new Error(headerKey + " case not handled in QWDATA table");
-											}
-										} else {
-											//console.log(this.state.headers[headerKey]);
-											//console.log(this);
-											let motherQuestion = this.props.getQuestionData(this.state.headers[headerKey]);
-											//console.log(motherQuestion);
-
-											Q = <Question {...this.classlessProps}
-												label={null}
-												type="DropDown"
-												id={keyText}
-												key={keyText}
-												options={motherQuestion.options}
-												includeBlank={true}
-												stateChangeHandler={this.handleValueChange(rowNum, colNum)}
-												value={this.state.value[rowNum][colNum]}
-											/>
-										}
+						</TableBody>
+					</Table>
 
 
 
 
 
 
-
-										return (
-											<TableCell key={"row:" + realRowNum + "_col:" + colNum} className={classes.tableCell}>{Q}</TableCell>
-										);
-									})}
-								</TableRow>
-							);
-						})}
-					</TableBody>
-				</Table>
-
-
-
-
-
-
-				<Dialog
-					open={this.state.dialogM2LOpen}
-					onClose={this.handleClose}
-					aria-labelledby="form-dialog-title"
-				><form className="commentForm" onSubmit={this.handleM2LSave}>
-						<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
-						<DialogContent>
-							<DialogContentText>
-								Enter the message you'd like to send to the lab about this particular sample
+					<Dialog
+						open={this.state.dialogM2LOpen}
+						onClose={this.handleClose}
+						aria-labelledby="form-dialog-title"
+					><form className="commentForm" onSubmit={this.handleM2LSave}>
+							<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
+							<DialogContent>
+								<DialogContentText>
+									Enter the message you'd like to send to the lab about this particular sample
 				  </DialogContentText>
-							<TextField
-								autoFocus
-								value={this.state.dialogM2LValue}
-								onChange={this.dialogM2LTextChangeHandler}
-								margin="dense"
-								id="M2L_Dialog"
-								label="Message To Lab"
-								rows={5}
-								fullWidth
-								multiline
-							/>
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={this.handleClose} color="primary">
-								Cancel
+								<TextField
+									autoFocus
+									value={this.state.dialogM2LValue}
+									onChange={this.dialogM2LTextChangeHandler}
+									margin="dense"
+									id="M2L_Dialog"
+									label="Message To Lab"
+									rows={5}
+									fullWidth
+									multiline
+								/>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={this.handleClose} color="primary">
+									Cancel
 				  </Button>
-							<Button onClick={this.handleM2LSave} color="primary">
-								Save
+								<Button onClick={this.handleM2LSave} color="primary">
+									Save
 				  </Button>
-						</DialogActions>
-					</form>
-				</Dialog>
+							</DialogActions>
+						</form>
+					</Dialog>
 
-				<Dialog
-					open={this.state.dialogAddOnOpen}
-					onClose={this.handleClose}
-					aria-labelledby="form-dialog-title"
-				><form className="commentForm" onSubmit={this.handleAddOnSave}>
-						<DialogTitle id="form-dialog-title">Add on Analyses</DialogTitle>
-						<DialogContent>
-							<DialogContentText>
-								Select the available add-on analyses you'd like to have done on this sample
+					<Dialog
+						open={this.state.dialogAddOnOpen}
+						onClose={this.handleClose}
+						aria-labelledby="form-dialog-title"
+					><form className="commentForm" onSubmit={this.handleAddOnSave}>
+							<DialogTitle id="form-dialog-title">Add on Analyses</DialogTitle>
+							<DialogContent>
+								<DialogContentText>
+									Select the available add-on analyses you'd like to have done on this sample
 				  </DialogContentText>
-							{Object.keys(this.state.rowAddOnOptions).length === 0 && this.state.rowAddOnOptions.constructor === Object ?
-								<Typography>There are no available add-on analyses for this sample</Typography> :
-								<Question
-									id="AddOnAnalyses"
-									type="MultipleChoice"
-									options={this.state.rowAddOnOptions}
-									value={this.state.dialogAddOnValue}
-									stateChangeHandler={this.addOnChangeHandler}
-								/>}
+								{Object.keys(this.state.rowAddOnOptions).length === 0 && this.state.rowAddOnOptions.constructor === Object ?
+									<Typography>There are no available add-on analyses for this sample</Typography> :
+									<Question
+										id="AddOnAnalyses"
+										type="MultipleChoice"
+										options={this.state.rowAddOnOptions}
+										value={this.state.dialogAddOnValue}
+										stateChangeHandler={this.addOnChangeHandler}
+									/>}
 
 
-							{/* //  {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} /> */}
+								{/* //  {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} /> */}
 
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={this.handleClose} color="primary">
-								Cancel
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={this.handleClose} color="primary">
+									Cancel
 				  </Button>
-							<Button onClick={this.handleAddOnSave} color="primary">
-								Save
+								<Button onClick={this.handleAddOnSave} color="primary">
+									Save
 				  </Button>
-						</DialogActions>
-					</form>
-				</Dialog>
+							</DialogActions>
+						</form>
+					</Dialog>
 
-			</React.Fragment>
+				</React.Fragment>
+				: <Typography>You have not yet set the required items to render this table.</Typography>
 		);
 	}
 }
