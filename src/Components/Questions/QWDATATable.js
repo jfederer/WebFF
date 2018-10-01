@@ -39,6 +39,100 @@ class QWDATATable extends React.Component {
 		super(props);
 		console.log("QWDATA TABLE CONSTRUCTOR");
 
+		let nowValue = [];
+		// let startingPCodes = [];
+		if (this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
+			console.log("Handed null value, building blank QWDATA Table");
+
+			// build header from scratch
+			let headerRow = [];
+			for (let header in Object.keys(allQWDATAOptionalHeaders)) {
+				headerRow.push(header);
+			}
+			nowValue.push(headerRow);
+
+			// build default values (blanks)
+			let firstColumn = this.props.getDescriptiveColumnForTable(); // this gives us number of rows too
+			console.log("QWDATA FIRST COLUMN: ", firstColumn);
+			for (let i = 1; i < firstColumn.length; i++) {
+				let emptyRow = new Array(headerRow.length-1).fill("");
+				emptyRow.unshift(firstColumn[i]);
+				nowValue.push(emptyRow);
+			}
+
+			// startingPCodes = safeCopy(defaultPCodesToShow);
+
+		} else { // if a value was sent
+			// need to ensure the value has the right number of columns
+			console.log("Handed existing value: ", this.props.value);
+
+			// find all pCodes in header
+			let pCodesInHeader = [];
+			for (let i = 1; i < this.props.value[0].length; i++) { // start at 1 to skip the set-sample @ dist
+				let pCode = this.props.value[0][i].split("_")[0];
+				if (!pCodesInHeader.includes(pCode)) {
+					pCodesInHeader.push(pCode);
+				}
+			}
+
+			nowValue = [];
+			// build new header row, note, the header row should still be correct.
+			nowValue.push(safeCopy(this.props.value[0])); // 
+
+			// build rows based on existing values  //TODO: FIXME:
+			let firstColumn = this.props.getDescriptiveColumnForTable(); // firstColumn will now be the authoritative new [0] element in each row
+			console.log("NEW FIRST COLUMN: ", firstColumn);
+			for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
+				console.log("Looking for...", firstColumn[newRowNum]);
+				//look in props.value for existing matching row
+				let matchingOldRow = -1;
+				for(let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
+					console.log("against..." + this.props.value[oldRow][0]);
+					if(firstColumn[newRowNum] === this.props.value[oldRow][0]) {
+						console.log("MATCH!");
+						
+						matchingOldRow = oldRow;
+						break;
+					}
+				} 
+
+				let newRow = [];
+				if(matchingOldRow != -1) {
+					console.log(firstColumn[newRowNum] + " DID find a match");
+					newRow = safeCopy(this.props.value[matchingOldRow]);
+				} else {
+					console.log(firstColumn[newRowNum] + " never found a match");
+					
+					newRow = new Array(this.props.value[0].length-1).fill("");
+					newRow.unshift(firstColumn[newRowNum]);
+				}
+			 	nowValue.push(newRow);
+			}
+
+
+			startingPCodes = safeCopy(pCodesInHeader);
+		}
+
+		// this.state = {
+		// 	showRmk: false,
+		// 	showNQ: false,
+		// 	showAddColumnDialog: false,
+		// 	showSetDefaultValueDialog: false,
+		// 	pCodesToShow: startingPCodes,
+		// 	pCodeToAdd: "",
+		// 	value: nowValue,
+		// 	parameterDefaultValue_val: "",
+		// 	parameterDefaultValue_mth: "",
+		// 	parameterDefaultValue_rmk: "",
+		// 	parameterDefaultValue_nq: "",
+		// 	parameterDefaultOverwiteExistingValues: false,
+		// 	curPCode: ""
+		// };
+
+
+		// this.handleValueChange = this.handleValueChange.bind(this);
+
+
 		this.state = {
 			value: this.props.value,
 			dialogM2LOpen: false,
