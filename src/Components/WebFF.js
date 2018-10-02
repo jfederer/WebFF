@@ -478,7 +478,10 @@ class WebFF extends React.Component {
 			// }
 		});
 
-		// newQuestionsValues.sampleDate = "BLAH";
+		let d = new Date();
+		let ds = this.getDateString(d);
+		console.log("DATE: ", ds);
+		newQuestionsValues.sampleDate=ds;
 		// console.log("TRACK DATE: newQuestionsValues.sampleDate: ", newQuestionsValues.sampleDate);
 		// console.log("TRACK DATE: newQuestionsValues: ", newQuestionsValues);
 		
@@ -486,7 +489,8 @@ class WebFF extends React.Component {
 			id: newSamplingEventID,
 			user: this.state.loggedInUser,
 			shippedStatus: false,
-			questionsValues: newQuestionsValues
+			questionsValues: newQuestionsValues,
+			modifiedDate: new Date().toString()
 		}
 		console.log("TRACK DATE: NEWSE: ", newSamplingEvent);
 		console.log("TRACK DATE: NEWSE.questionsValues[sampleDate]: ", newSamplingEvent.questionsValues["sampleDate"]);
@@ -912,7 +916,7 @@ class WebFF extends React.Component {
 
 		//HARDCODE for sampleDate
 		if (Q.props.id === "sampleDate") {
-
+			console.log("CHANGING SAMPLE DATE");
 		}
 
 		//HARDCODE for stationName drop down
@@ -948,7 +952,7 @@ class WebFF extends React.Component {
 		});
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
-		this.setQuestionValue(Q.props.id, Q.state.value, () => {
+		this.setQuestionValue(Q.props.id, safeCopy(Q.state.value), () => {
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
 				this.collectRunAndPropagateSamplePointData(Q.props.id);
@@ -1494,14 +1498,17 @@ class WebFF extends React.Component {
 
 	getDateTimeString() {
 		let d = new Date();
-		let dateOfMonthString = ('0' + d.getDate()).slice(-2);
-		let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
-		let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
 		let hoursString = ('0' + d.getHours()).slice(-2);
 		let minutesString = ('0' + (d.getMinutes())).slice(-2);
 		let secondsString = ('0' + (d.getSeconds())).slice(-2);
 		let timeString = hoursString + ":" + minutesString + ":" + secondsString;
-		return dateString + "@" + timeString;
+		return this.getDateString(d) + "@" + timeString;
+	}
+
+	getDateString(d) {
+		let dateOfMonthString = ('0' + d.getDate()).slice(-2);
+		let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
+		return d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
 	}
 
 	getQuestionData(q_id) {
