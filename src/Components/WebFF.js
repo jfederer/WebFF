@@ -301,20 +301,24 @@ class WebFF extends React.Component {
 						for (let i = 0; i < allNodeNames.length; i++) {
 							if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
 								console.log("Attempting to load " + allNodeNames[i] + " from DB.");
-								if (localStorage.getItem(allNodeNames[i])) {
-									console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
-									continue;
-								}
+								// if (localStorage.getItem(allNodeNames[i])) {
+								// 	console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
+								// 	continue;
+								// }
 								if (userData[allNodeNames[i]].deleted) {
 									console.log(allNodeNames[i] + " is a previously-deleted event. Ignoring DB values for this.");
 									continue;
 								}
-
-								// loading Event from DB into LS
-								this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
-									this.addToItemsToSyncToLS(allNodeNames[i]);
+								this.coniditionallyIngestSE(userData[allNodeNames[i]], () => {
+									// this.addToItemsToSyncToLS(allNodeNames[i]);
 									this.buildRoutesAndRenderPages();
 								});
+
+								// loading Event from DB into LS
+								// this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+								// 	this.addToItemsToSyncToLS(allNodeNames[i]);
+								// 	this.buildRoutesAndRenderPages();
+								// });
 							}
 						}
 					} // end one user found in DB
@@ -377,14 +381,47 @@ class WebFF extends React.Component {
 			if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
 				let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
 				if (SE.user === this.state.loggedInUser) {
-					this.setState({
-						[allNodeNames[i]]: SE
-					}, () => {
-						this.addToItemsToSyncToLS(allNodeNames[i]);
-						// this.buildRoutesAndRenderPages(); //performance on load
-					});
+					// SE is reasonable.  Check if it's newer than what might be existing
+					this.coniditionallyIngestSE(SE);
 				}
 			}
+		}
+	}
+
+	coniditionallyIngestSE(SE, CB) {
+		let shouldAdd = false;
+		let reason = "";
+		if (!this.state[SE.id]) { // if this event isn't already loaded, load it
+			console.log("HERE Test 1");
+			shouldAdd = true;
+		} else {
+			reason += "Event already existed."
+			// this event is already loaded, see which is newer
+			if (!this.state[SE.id].modifieDate) { // if existing event does not have modified date, overwrite it (it's likely old)
+				console.log("HERE test 2");
+				shouldAdd = true;
+			} else {
+				let LSModDate = new Date(SE.modifiedDate);
+				let ExistModDate = new Date(this.state[SE.id].modifieDate);
+				if (LSModDate > ExistModDate) { // if the version in LS is newer, load that
+					console.log("HERE test 3");
+					shouldAdd = true;
+				} else {
+					reason += "Event was not newer";
+				}
+			}
+		}
+
+		if (shouldAdd) {
+			console.log("HERE: Loading ", SE);
+			this.setState({
+				[SE.id]: SE
+			}, () => {
+				this.addToItemsToSyncToLS(SE.id);
+				if (typeof CB === "function") CB();
+			});
+		} else {
+			console.log("HERE: NOT LOADING: " + reason, SE);
 		}
 	}
 
@@ -895,8 +932,18 @@ class WebFF extends React.Component {
 				this.collectRunAndPropagateSamplePointData(Q.props.id);
 			}
 			this.buildRoutesAndRenderPages();
+			this.updateCurrentEventModifiedDate();
 			this.markForDBUpdate(this.state.curSamplingEventName);
 		});
+	}
+
+	updateCurrentEventModifiedDate() {
+		let newEvent = safeCopy(this.state[this.state.curSamplingEventName]);
+		newEvent.dateModified = new Date().toString();
+		this.setState({ [this.state.curSamplingEventName]: newEvent }, () => {
+			this.markForDBUpdate(this.state.curSamplingEventName);
+		}
+		);
 	}
 
 	loadSamplingEvent(samplingEventName) {
