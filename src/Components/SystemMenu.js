@@ -17,10 +17,14 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import SyncIcon from '@material-ui/icons/Sync';
 import CodeIcon from '@material-ui/icons/Code';
-
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import { Link } from 'react-router-dom';
 const styles = {
   list: {
     width: 'auto',
+  },
+  noUnderline: {
+    textDecoration: 'none'
   }
 };
 
@@ -64,13 +68,18 @@ class SystemMenu extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Add/Remove Question" />
           </ListItem>
-
-          {/* <ListItem button onClick={() => this.props.menuItemClickHandler('User Manual')}>
+          <a className={classes.noUnderline} href="https://docs.google.com/document/d/15rctoHyXupM6MiDQSHd9Hfb4nxkssAXY3lI7DThjYNc/edit?usp=sharing" target="_blank">
+          <ListItem button onClick={() => this.props.menuItemClickHandler('User Manual')}>
+          {/* <ListItem button onClick={() => this.props.menuItemClickHandler('User Manual')}> */}
+          
+          
             <ListItemIcon>
-              
+              <ImportContactsIcon />
             </ListItemIcon>
             <ListItemText primary="User Manual" />
-          </ListItem> */}
+         
+          </ListItem>
+          </a>
 
           <ListItem button onClick={() => this.props.menuItemClickHandler('Settings')}>
             <ListItemIcon>

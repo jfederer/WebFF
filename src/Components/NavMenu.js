@@ -29,7 +29,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
-
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 class NavMenu extends React.Component {
 
@@ -78,6 +78,7 @@ class NavMenu extends React.Component {
 			case 'CompareIcon': return <CompareIcon />
 			case 'SaveIcon': return <SaveIcon />
 			case 'SubtitlesIcon': return <SubtitlesIcon />
+			case 'AssignmentIcon': return <AssignmentIcon />
 
 			//FUTURE: additional good ones:  blur*, edit* (gives editor options...)
 			default: return <SettingsInputComponentIcon />

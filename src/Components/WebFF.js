@@ -448,6 +448,7 @@ class WebFF extends React.Component {
 	}
 
 	createNewSamplingEvent(optionalName, CB) {
+		console.log("TRACK DATE: CNSE:");
 		if (FUNCDEBUG) console.log("FUNC: createNewSamplingEvent(", optionalName, ")");
 		let newSamplingEventID = optionalName;
 
@@ -459,17 +460,37 @@ class WebFF extends React.Component {
 
 		// load initial values from questionsData  
 		//FUTURE: needed?  Could just write them as they are needed rather than writing a bunch that might never get used
-		let questionsValues = {};
-		this.state.questionsData.forEach((Q) => {
-			questionsValues[Q.id] = safeCopy(Q.value);
+		let newQuestionsValues = {};
+		console.log("TRACK DATE: this.state.questionsData: ", this.state.questionsData);
+		
+		this.state.questionsData.forEach((Q, i) => {
+			// if (Q.id === "sampleDate") {
+			// 	newQuestionsValues[Q.id] = Object.assign({}, Q.value);
+			// }
+
+			newQuestionsValues[Q.id] = safeCopy(Q.value);
+
+			// if (Q.id === "sampleDate") {
+			// 	console.log(Q.id, "index: ", i);
+			// 	newQuestionsValues.sampleDate = "BLERGH";
+			// 	console.log("TRACK DATE: VALUE IT GOT: " + newQuestionsValues.sampleDate); //null
+			// 	console.log("TRACK DATE: ENTIRE NewQV: ", newQuestionsValues); //date (wrong)
+			// }
 		});
 
+		// newQuestionsValues.sampleDate = "BLAH";
+		// console.log("TRACK DATE: newQuestionsValues.sampleDate: ", newQuestionsValues.sampleDate);
+		// console.log("TRACK DATE: newQuestionsValues: ", newQuestionsValues);
+		
 		let newSamplingEvent = {
 			id: newSamplingEventID,
 			user: this.state.loggedInUser,
 			shippedStatus: false,
-			questionsValues: questionsValues
+			questionsValues: newQuestionsValues
 		}
+		console.log("TRACK DATE: NEWSE: ", newSamplingEvent);
+		console.log("TRACK DATE: NEWSE.questionsValues[sampleDate]: ", newSamplingEvent.questionsValues["sampleDate"]);
+
 
 		//ensure this sampling event will be sync'd to LS
 		this.addToItemsToSyncToLS(samplingEventName);
@@ -481,14 +502,15 @@ class WebFF extends React.Component {
 			hiddenTabs: defaultHiddenTabs.slice(),
 			hiddenPanels: defaultHiddenPanels.slice()
 		}, () => {
+			console.log("TRACK DATE: NEW SE IN STATE: ", this.state[samplingEventName]);
 			this.runAllActionsForCurrentSamplingEvent();
 			// this.collectRunAndPropagateSamplePointData();
 			if (typeof CB === "function") CB();
 		});
 
 
-		this.markForDBUpdate(samplingEventName);
-		this.buildRoutesAndRenderPages();
+		this.markForDBUpdate(samplingEventName);  //TODO: move this to after setState completes?
+		this.buildRoutesAndRenderPages(); //TODO: move this to after setState completes?
 	}
 
 

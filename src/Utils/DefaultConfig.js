@@ -19,7 +19,7 @@ export const defaultNavMenuInfo = [
     {
         "text": "Field Form",
         "route": "/FieldForm",
-        "icon": "ImportContactsIcon"
+        "icon": "AssignmentIcon"
     },
     {
         "text": "Data Entry",
