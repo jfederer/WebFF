@@ -53,8 +53,8 @@ class Dashboard extends React.Component {
 		this.props.createNewSamplingEvent(this.state.newSamplingEventName
 			? this.state.newSamplingEventName
 			: ""
-			// ,
-			// () => { window.history.push('/FieldForm') }
+			,
+			() => this.props.history.push('/FieldForm')
 		);
 		this.props.navControl("Water Quality", true);
 		this.props.navControl("Field Form", true);
@@ -119,7 +119,7 @@ class Dashboard extends React.Component {
 							/>
 							<br />
 							<Button
-								component={MyLink} 
+								// component={MyLink} 
 								disabled={this.state.newEventButtonDisabled}
 								onClick={this.handleBrandNewButtonClick}
 								variant="outlined">

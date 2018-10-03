@@ -328,7 +328,7 @@ export const questionsData =
             "type": "DateInput",
             "tabName": "Field Form",
             "placeholder": "yyyymmdd",
-            "value": null,
+            "value": "NOW",
             "layoutGroup": "Basic",
             "width_xs": 4,
             "width_lg": 2

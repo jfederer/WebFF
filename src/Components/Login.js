@@ -22,9 +22,6 @@ class Login extends React.Component {
     }
 
     componentWillMount() {
-        console.log("LOGIN: CWM");
-
-
         this.setState({ toDashboard: isReasonablyValidUsernameInLS() ? true : false });
     }
 
@@ -40,7 +37,6 @@ class Login extends React.Component {
     }
 
     render() {
-        console.log("LOGIN: RENDER");
         if (this.state.toDashboard === true) {
             return <Redirect to='/Dashboard' />
         }

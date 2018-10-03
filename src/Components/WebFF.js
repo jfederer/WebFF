@@ -36,14 +36,14 @@ import {
 } from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
 
-const FUNCDEBUG = false;
+const FUNCDEBUG = true;
 
 var needToSyncStationDataToQuestionData = true;
 
 class WebFF extends React.Component {
 
 	constructor(props) {
-		console.log("CONSTRUCT");
+		if(FUNCDEBUG) console.log("FUNC: WebFF Constructor");
 
 		super(props);
 		var allItemsToSyncToLS = USER_DB_NODES.slice();
@@ -257,6 +257,7 @@ class WebFF extends React.Component {
 
 		if (navigator.onLine) { //TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
 			if (DEBUG) console.log("Online!... going to fetch from DB.");
+			this.getUserConfigFromLS(nodesToGather, null, () => console.log("Done gathering from LS, looking at DB"));
 
 			this.fetchDBInfo(this.state.loggedInUser, 'users',
 				(JSONresponse) => {
@@ -309,7 +310,8 @@ class WebFF extends React.Component {
 									console.log(allNodeNames[i] + " is a previously-deleted event. Ignoring DB values for this.");
 									continue;
 								}
-								this.coniditionallyIngestSE(userData[allNodeNames[i]], () => {
+								
+								this.conditionallyIngestSE(userData[allNodeNames[i]], () => {
 									// this.addToItemsToSyncToLS(allNodeNames[i]);
 									this.buildRoutesAndRenderPages();
 								});
@@ -381,30 +383,28 @@ class WebFF extends React.Component {
 			if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
 				let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
 				if (SE.user === this.state.loggedInUser) {
-					// SE is reasonable.  Check if it's newer than what might be existing
-					this.coniditionallyIngestSE(SE);
+					// SE is reasonable.  Check if it should be added
+					
+					this.conditionallyIngestSE(SE);
 				}
 			}
 		}
 	}
 
-	coniditionallyIngestSE(SE, CB) {
+	conditionallyIngestSE(SE, CB) {
 		let shouldAdd = false;
 		let reason = "";
-		if (!this.state[SE.id]) { // if this event isn't already loaded, load it
-			console.log("HERE Test 1");
+		if (!this.state[SAMPLING_EVENT_IDENTIFIER + SE.id]) { // if this event isn't already loaded, load it
 			shouldAdd = true;
 		} else {
 			reason += "Event already existed."
 			// this event is already loaded, see which is newer
-			if (!this.state[SE.id].modifieDate) { // if existing event does not have modified date, overwrite it (it's likely old)
-				console.log("HERE test 2");
+			if (!this.state[SAMPLING_EVENT_IDENTIFIER + SE.id].modifieDate) { // if existing event does not have modified date, overwrite it (it's likely old)
 				shouldAdd = true;
 			} else {
 				let LSModDate = new Date(SE.modifiedDate);
-				let ExistModDate = new Date(this.state[SE.id].modifieDate);
+				let ExistModDate = new Date(this.state[SAMPLING_EVENT_IDENTIFIER + SE.id].modifieDate);
 				if (LSModDate > ExistModDate) { // if the version in LS is newer, load that
-					console.log("HERE test 3");
 					shouldAdd = true;
 				} else {
 					reason += "Event was not newer";
@@ -413,15 +413,14 @@ class WebFF extends React.Component {
 		}
 
 		if (shouldAdd) {
-			console.log("HERE: Loading ", SE);
 			this.setState({
-				[SE.id]: SE
+				[SAMPLING_EVENT_IDENTIFIER+SE.id]: SE
 			}, () => {
-				this.addToItemsToSyncToLS(SE.id);
+				this.addToItemsToSyncToLS(SAMPLING_EVENT_IDENTIFIER+SE.id);
 				if (typeof CB === "function") CB();
 			});
 		} else {
-			console.log("HERE: NOT LOADING: " + reason, SE);
+			console.log("Not loading ", SE.id, " because " + reason, SE);
 		}
 	}
 
@@ -460,31 +459,12 @@ class WebFF extends React.Component {
 
 		// load initial values from questionsData  
 		//FUTURE: needed?  Could just write them as they are needed rather than writing a bunch that might never get used
-		let newQuestionsValues = {};
-		console.log("TRACK DATE: this.state.questionsData: ", this.state.questionsData);
-		
+		let newQuestionsValues = {};		
 		this.state.questionsData.forEach((Q, i) => {
-			// if (Q.id === "sampleDate") {
-			// 	newQuestionsValues[Q.id] = Object.assign({}, Q.value);
-			// }
-
 			newQuestionsValues[Q.id] = safeCopy(Q.value);
-
-			// if (Q.id === "sampleDate") {
-			// 	console.log(Q.id, "index: ", i);
-			// 	newQuestionsValues.sampleDate = "BLERGH";
-			// 	console.log("TRACK DATE: VALUE IT GOT: " + newQuestionsValues.sampleDate); //null
-			// 	console.log("TRACK DATE: ENTIRE NewQV: ", newQuestionsValues); //date (wrong)
-			// }
 		});
 
-		let d = new Date();
-		let ds = this.getDateString(d);
-		console.log("DATE: ", ds);
-		newQuestionsValues.sampleDate=ds;
-		// console.log("TRACK DATE: newQuestionsValues.sampleDate: ", newQuestionsValues.sampleDate);
-		// console.log("TRACK DATE: newQuestionsValues: ", newQuestionsValues);
-		
+
 		let newSamplingEvent = {
 			id: newSamplingEventID,
 			user: this.state.loggedInUser,
@@ -492,12 +472,12 @@ class WebFF extends React.Component {
 			questionsValues: newQuestionsValues,
 			modifiedDate: new Date().toString()
 		}
-		console.log("TRACK DATE: NEWSE: ", newSamplingEvent);
-		console.log("TRACK DATE: NEWSE.questionsValues[sampleDate]: ", newSamplingEvent.questionsValues["sampleDate"]);
 
 
 		//ensure this sampling event will be sync'd to LS
 		this.addToItemsToSyncToLS(samplingEventName);
+		console.log("TRACK DATE: NEW SE sampleDate: ", newSamplingEvent.questionsValues.sampleDate);
+	
 
 		//save it to the state  
 		this.setState({
@@ -506,7 +486,9 @@ class WebFF extends React.Component {
 			hiddenTabs: defaultHiddenTabs.slice(),
 			hiddenPanels: defaultHiddenPanels.slice()
 		}, () => {
-			console.log("TRACK DATE: NEW SE IN STATE: ", this.state[samplingEventName]);
+			
+			console.log("TRACK DATE: NEW SE IN STATE: ", this.state[samplingEventName].questionsValues.sampleDate);
+	
 			this.runAllActionsForCurrentSamplingEvent();
 			// this.collectRunAndPropagateSamplePointData();
 			if (typeof CB === "function") CB();
@@ -977,7 +959,6 @@ class WebFF extends React.Component {
 
 		//TODO: return all items to default state BEFORE loading and running?
 		this.setState({ curSamplingEventName: samplingEventName }, () => {
-			console.log("CUR SAMP EVENT SENT");
 			this.runAllActionsForCurrentSamplingEvent();
 			this.setState({ hiddenTabs: [] }); //TODO: KLUDGE
 		}
@@ -1038,7 +1019,7 @@ class WebFF extends React.Component {
 	}
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
-		if (FUNCDEBUG) console.log("FUNC: buildRoutesAndRenderPages()");
+		// if (FUNCDEBUG) console.log("FUNC: buildRoutesAndRenderPages()");
 		let questionsValues = null;
 		if (this.state[this.state.curSamplingEventName]) {
 			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
