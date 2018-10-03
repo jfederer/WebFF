@@ -36,7 +36,7 @@ import {
 } from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
 
-const FUNCDEBUG = true;
+const FUNCDEBUG = false;
 
 var needToSyncStationDataToQuestionData = true;
 
@@ -447,7 +447,7 @@ class WebFF extends React.Component {
 	}
 
 	createNewSamplingEvent(optionalName, CB) {
-		console.log("TRACK DATE: CNSE:");
+		// console.log("TRACK DATE: createNewSamplingEvent:");
 		if (FUNCDEBUG) console.log("FUNC: createNewSamplingEvent(", optionalName, ")");
 		let newSamplingEventID = optionalName;
 
@@ -464,7 +464,6 @@ class WebFF extends React.Component {
 			newQuestionsValues[Q.id] = safeCopy(Q.value);
 		});
 
-
 		let newSamplingEvent = {
 			id: newSamplingEventID,
 			user: this.state.loggedInUser,
@@ -476,7 +475,8 @@ class WebFF extends React.Component {
 
 		//ensure this sampling event will be sync'd to LS
 		this.addToItemsToSyncToLS(samplingEventName);
-		console.log("TRACK DATE: NEW SE sampleDate: ", newSamplingEvent.questionsValues.sampleDate);
+
+		// console.log("TRACK DATE: createNewSamplingEvent: NEW SE sampleDate: ", newSamplingEvent.questionsValues.sampleDate);
 	
 
 		//save it to the state  
@@ -487,16 +487,17 @@ class WebFF extends React.Component {
 			hiddenPanels: defaultHiddenPanels.slice()
 		}, () => {
 			
-			console.log("TRACK DATE: NEW SE IN STATE: ", this.state[samplingEventName].questionsValues.sampleDate);
+			// console.log("TRACK DATE: NEW SE IN STATE: ", this.state[samplingEventName].questionsValues.sampleDate);
 	
 			this.runAllActionsForCurrentSamplingEvent();
 			// this.collectRunAndPropagateSamplePointData();
+			this.markForDBUpdate(samplingEventName);  //TODO: move this to after setState completes?
+		this.buildRoutesAndRenderPages(); //TODO: move this to after setState completes?
 			if (typeof CB === "function") CB();
 		});
 
 
-		this.markForDBUpdate(samplingEventName);  //TODO: move this to after setState completes?
-		this.buildRoutesAndRenderPages(); //TODO: move this to after setState completes?
+		
 	}
 
 
@@ -898,7 +899,7 @@ class WebFF extends React.Component {
 
 		//HARDCODE for sampleDate
 		if (Q.props.id === "sampleDate") {
-			console.log("CHANGING SAMPLE DATE");
+			// console.log("CHANGING SAMPLE DATE", Q);
 		}
 
 		//HARDCODE for stationName drop down
@@ -1020,11 +1021,16 @@ class WebFF extends React.Component {
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		// if (FUNCDEBUG) console.log("FUNC: buildRoutesAndRenderPages()");
-		let questionsValues = null;
-		if (this.state[this.state.curSamplingEventName]) {
-			questionsValues = this.state[this.state.curSamplingEventName].questionsValues;
-		}
+		
+		// console.log("TRACK DATE: BRARP: sampleDate:", this.state[this.state.curSamplingEventName].questionsValues.sampleDate );
+		// console.log("TRACK DATE: BRARP: curSamplingEventName:", this.state.curSamplingEventName);
+		// let questionsValues = null;
+		// if (this.state[this.state.curSamplingEventName]) { //todo: not sure what this is doing... remove?
+		// 	console.log("TRACK DATE: BRARP: doing the safecopy");
+		// 	questionsValues = safeCopy(this.state[this.state.curSamplingEventName].questionsValues);
+		// }
 
+		// get sampling events to help render eventsManager
 		let allSamplingEvents = Object.keys(this.state).filter((key) => key.startsWith(SAMPLING_EVENT_IDENTIFIER));
 		let thisUsersSamplingEvents = allSamplingEvents.filter((SEname) => {
 			return this.state[SEname].user === this.state.loggedInUser && !this.state[SEname].deleted;
@@ -1071,7 +1077,7 @@ class WebFF extends React.Component {
 							navControl={this.navigationControl}
 							systemCB={this.questionChangeSystemCallback}
 							questionsData={this.state.questionsData}
-							questionsValues={questionsValues}
+							questionsValues={safeCopy(this.state[this.state.curSamplingEventName].questionsValues)}
 							hiddenPanels={this.state.hiddenPanels}
 							globalState={this.state}
 							getNumberOfSetsInCurrentSamplingEvent={this.getNumberOfSetsInCurrentSamplingEvent}
@@ -2198,7 +2204,7 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		// console.log("WebFF: curDialogQuestions: ", this.state.curDialogQuestions);
+		// console.log("TRACK DATE: WEBFF RENDER: ", this.state[this.state.curSamplingEventName].questionsValues.sampleDate);
 
 
 		// 	{ (isReasonablyValidUsernameInLS())

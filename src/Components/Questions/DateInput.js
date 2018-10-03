@@ -17,7 +17,7 @@ const styles = theme => ({
 
 class DateInput extends React.Component {
 	constructor(props) {
-		let DEBUG = true;
+		let DEBUG = false;
 		super(props);
 		if (DEBUG) console.log("DateInput: CONSTRUCTOR: Props.value: ", props.value);
 		if (this.props.value != null) {
