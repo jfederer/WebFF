@@ -384,7 +384,7 @@ class WebFF extends React.Component {
 				let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
 				if (SE.user === this.state.loggedInUser) {
 					// SE is reasonable.  Check if it should be added
-					
+					console.log("Attempting to load " + allNodeNames[i] + " from Local Storage.");
 					this.conditionallyIngestSE(SE);
 				}
 			}
@@ -395,19 +395,21 @@ class WebFF extends React.Component {
 		let shouldAdd = false;
 		let reason = "";
 		if (!this.state[SAMPLING_EVENT_IDENTIFIER + SE.id]) { // if this event isn't already loaded, load it
+			console.log("Event not in state, loading.");
 			shouldAdd = true;
 		} else {
-			reason += "Event already existed."
+			reason += "Event already existed in state and "
 			// this event is already loaded, see which is newer
-			if (!this.state[SAMPLING_EVENT_IDENTIFIER + SE.id].modifieDate) { // if existing event does not have modified date, overwrite it (it's likely old)
+			if (!this.state[SAMPLING_EVENT_IDENTIFIER + SE.id].dateModified) { // if existing event does not have modified date, overwrite it (it's likely old and/or mal-formed, overwrite it)
+				console.log("the sampling event in state has no modified date, loading");
 				shouldAdd = true;
 			} else {
-				let LSModDate = new Date(SE.modifiedDate);
-				let ExistModDate = new Date(this.state[SAMPLING_EVENT_IDENTIFIER + SE.id].modifieDate);
+				let LSModDate = new Date(SE.dateModified);
+				let ExistModDate = new Date(this.state[SAMPLING_EVENT_IDENTIFIER + SE.id].dateModified);
 				if (LSModDate > ExistModDate) { // if the version in LS is newer, load that
 					shouldAdd = true;
 				} else {
-					reason += "Event was not newer";
+					reason += "the event was not newer";
 				}
 			}
 		}
@@ -420,7 +422,8 @@ class WebFF extends React.Component {
 				if (typeof CB === "function") CB();
 			});
 		} else {
-			console.log("Not loading ", SE.id, " because " + reason, SE);
+			console.log("Not loading ", SE.id, " because " + reason);
+			this.addToItemsToSyncToLS(SAMPLING_EVENT_IDENTIFIER+SE.id);
 		}
 	}
 
@@ -469,7 +472,7 @@ class WebFF extends React.Component {
 			user: this.state.loggedInUser,
 			shippedStatus: false,
 			questionsValues: newQuestionsValues,
-			modifiedDate: new Date().toString()
+			dateModified: new Date().toString()
 		}
 
 
@@ -936,17 +939,18 @@ class WebFF extends React.Component {
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
 		this.setQuestionValue(Q.props.id, safeCopy(Q.state.value), () => {
+		
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
 				this.collectRunAndPropagateSamplePointData(Q.props.id);
 			}
 			this.buildRoutesAndRenderPages();
-			this.updateCurrentEventModifiedDate();
+			this.updateCurrentEventDateModified();
 			this.markForDBUpdate(this.state.curSamplingEventName);
 		});
 	}
 
-	updateCurrentEventModifiedDate() {
+	updateCurrentEventDateModified() {
 		let newEvent = safeCopy(this.state[this.state.curSamplingEventName]);
 		newEvent.dateModified = new Date().toString();
 		this.setState({ [this.state.curSamplingEventName]: newEvent }, () => {
@@ -1213,7 +1217,8 @@ class WebFF extends React.Component {
 		let newCustomQuestions = this.state.customQuestions.slice();
 		newCustomQuestions = newCustomQuestions.filter((Q) => Q.id !== q_id)
 		this.setState({ customQuestions: newCustomQuestions }, () => {
-			this.markForDBUpdate('customQuestions'); this.buildCombinedQuestionsData(CB);
+			this.markForDBUpdate('customQuestions'); 
+			this.buildCombinedQuestionsData(CB);
 		});
 	}
 
@@ -1577,6 +1582,14 @@ class WebFF extends React.Component {
 
 
 	getTableQuestionValue(q_id, header, rowNum) {
+		console.log("getTableQuestionValue(",
+			q_id,
+			", ", 
+			header,
+			", ", 
+			rowNum,
+			")"
+		)
 		// q_id: string question ID associated with a tableInput question
 		// header: string matching the item in row 0.  If header is a number, will grab that column.
 		// returns VALUE in table q_id in column with matching header and on row rowNum... 
@@ -2157,7 +2170,7 @@ class WebFF extends React.Component {
 			return;
 		}
 		if (menuText === "About") {
-			alert("This is Sediment Field Forms (SedFF) version " + PROGRAM_VERSION + " built by jfederer@usgs.gov and kaskach@usgs.gov on Sept 11, 2018");
+			alert("This is Sediment Field Forms (SedFF) version " + PROGRAM_VERSION + " built by jfederer@usgs.gov and kaskach@usgs.gov on Nov 14, 2018");
 			return;
 		}
 

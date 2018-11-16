@@ -118,6 +118,16 @@ class QWDATATable extends React.Component {
 					newRow = new Array(this.props.value[0].length - 1).fill("");
 					newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
 				}
+
+				// ensure add-on analysis is an array
+				console.log(newRow);
+				
+				let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
+				if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+				if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
+					newRow[AddOnAnalysesIndex] = [];
+				}
+
 				nowValue.push(newRow);
 			}
 		}
