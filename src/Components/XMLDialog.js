@@ -27,6 +27,9 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  dialogCustomizedWidth: {
+    'max-width': '60%'
+  }
 });
 
 class XMLDialog extends React.Component {
@@ -37,6 +40,7 @@ class XMLDialog extends React.Component {
       showStatus: false,
       statusMessage: "",
       showSedLOGINQs: false,
+      username: this.props.username.split('@')[0],
       pw: "",
       SedLOGINprojectID: ""
     };
@@ -80,14 +84,15 @@ class XMLDialog extends React.Component {
     return;
   }
 
-  pushXMLToSedLOGIN(p_id, pass) {
+  pushXMLToSedLOGIN(p_id, user, pass) {
 
     this.updateStatus("Attempting to push to SedLOGIN... this may take a minute\n");
 
     const SLCXML = this.props.getSedLOGINcompatibleXML();
     const DEBUG = true;
     const API = PHP_FILE_LOCATION + 'sedLOGINPush.php';
-    let username = this.props.username.split('@')[0];
+    // let username = this.props.username.split('@')[0];
+    let username = user;
     const query = "user=" + username + "&pw=" + encodeURIComponent(pass) + "&p_id=" + p_id + "&xml=" + encodeURIComponent(SLCXML);
 
 
@@ -137,12 +142,17 @@ class XMLDialog extends React.Component {
   sedLoginSubmitHandler = () => {
     this.setState({ showStatus: true });
     this.setState({ showSedLOGINQs: false })
-    this.pushXMLToSedLOGIN(this.state.SedLOGINprojectID, this.state.pw);
+    this.pushXMLToSedLOGIN(this.state.SedLOGINprojectID, this.state.username, this.state.pw);
   }
 
   passwordChangeHandler = (e) => {
     this.setState({ pw: e.target.value });
   }
+
+  usernameChangeHandler = (e) => {
+    this.setState({ username: e.target.value });
+  }
+
   projectIDChangeHandler = (e) => {
     this.setState({ SedLOGINprojectID: e.target.value });
   }
@@ -159,6 +169,8 @@ class XMLDialog extends React.Component {
         open={this.props.isOpen}
         onClose={this.props.handleXMLDialogClose}
         aria-labelledby="form-dialog-title"
+        fullWidth
+        classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
       >
         <DialogTitle id="form-dialog-title">Save SedLOGIN-compatible XML</DialogTitle>
         <DialogContent>
@@ -171,13 +183,19 @@ class XMLDialog extends React.Component {
             </DialogContentText>
             </Grid>
             <Grid item xs={4} >
-              <Paper style={{ height: '90%' }} className={classes.paper}><Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button></Paper>
+              <Paper style={{ height: '90%' }} className={classes.paper}>
+                <Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button>
+              </Paper>
             </Grid>
             <Grid item xs={4} >
-              <Paper style={{ height: '90%' }} className={classes.paper}><Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button></Paper>
+              <Paper style={{ height: '90%' }} className={classes.paper}>
+                <Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button>
+              </Paper>
             </Grid>
             <Grid item xs={4} >
-              <Paper style={{ height: '90%' }} className={classes.paper}><Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button></Paper>
+              <Paper style={{ height: '90%' }} className={classes.paper}>
+                <Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button>
+              </Paper>
             </Grid>
 
             {this.state.showStatus ? <Grid item xs={12}>
@@ -197,8 +215,8 @@ class XMLDialog extends React.Component {
             {this.state.showSedLOGINQs ?
               <React.Fragment>
                 <Divider></Divider>
-                <Grid item xs={12}><Typography>{this.props.username}, enter the SedLOGIN project ID and your Active Directory password</Typography></Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12}><Typography>Enter the SedLOGIN Project ID, Username, and Password.<br />The Username/Password will typically be the same as your active directory login.</Typography></Grid>
+                <Grid item xs={3}>
                   <TextField
                     margin="dense"
                     id="sedLOGINProjectID"
@@ -208,12 +226,22 @@ class XMLDialog extends React.Component {
                     value={this.state.SedLOGINprojectID}
                   />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={5}>
+                  <TextField
+                    margin="dense"
+                    id="username"
+                    label="SedLOGIN username"
+                    onChange={this.usernameChangeHandler}
+                    fullWidth
+                    value={this.state.username}
+                  />
+                </Grid>
+                <Grid item xs={4}>
                   <TextField
                     margin="dense"
                     type="password"
-                    id="ADPass"
-                    label="Active Directory Password"
+                    id="pass"
+                    label="Password"
                     onChange={this.passwordChangeHandler}
                     fullWidth
                     value={this.state.pw}

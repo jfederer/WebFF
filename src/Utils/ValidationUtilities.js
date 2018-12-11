@@ -22,7 +22,7 @@ export const ensureProgramVersionUpToDate = (localVersion) => {
         .then(response => response.text())
         .then((repos) => {
             if (repos !== localVersion) {
-                alert("You are using an out-of-date version of SedFF. \nWe will reload to get the newest version. You may see this message 3 times.");
+                alert("You are using an out-of-date version of SedFF ("+localVersion+").\nWe will reload to get the newest version ("+repos+").\n\n You may see this message multiple times.");
                 window.location.reload(true);
             }
         }
