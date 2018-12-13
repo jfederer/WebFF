@@ -14,5 +14,6 @@ const ConnectedList = ({ articles }) => (
     ))}
   </ul>
 );
+
 const List = connect(mapStateToProps)(ConnectedList);
 export default List;

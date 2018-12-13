@@ -14,29 +14,25 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from '../Styles/styles';
 
-import { ADD_ARTICLE } from '../Constants/ActionTypes';
-import Form from "./Form";
-import List from "./List";
-
 import {
 	BrowserRouter as Router
-} from 'react-router-dom'
-// import { SimpleAction } from './Actions/SimpleAction'
+} from 'react-router-dom';
+import { setNavMenuExpand } from '../Store/Actions/NavMenu';
 
-const mapStateToProps = state => ({
-	...state
-})
 
-// const mapDispatchToProps = dispatch => ({
-// 	simpleAction: () => dispatch(SimpleAction())
-// })
+const mapStateToProps = (state) => {
+	return {
+		...state
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setNavMenuExpand: (value) => dispatch(setNavMenuExpand(value))
+	}
+}
 
 class SedFF extends React.Component {
-
-
-	addArticle = article => {
-		return { type: ADD_ARTICLE, payload: article };
-	}
 
 
 	render() {
@@ -44,38 +40,37 @@ class SedFF extends React.Component {
 
 		return (
 			<React.Fragment>
-<Form />
-<List />
 				<div className={classes.root} >
-					{/* <AppBar
+					<AppBar
 						position="absolute"
-						className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
+						className={classNames(classes.appBar, this.props.navMenuExpanded && classes.appBarShift)}
 					>
-						<Toolbar disableGutters={!this.state.navMenuExpanded}>
+						<Toolbar disableGutters={!this.props.navMenuExpanded}>
 							<IconButton
 								color="inherit"
 								aria-label="expand drawer"
-								onClick={this.handleLeftDrawerOpen}
-								className={classNames(classes.menuButton, this.state.navMenuExpanded && classes.hide)}
+								onClick={()=>this.props.setNavMenuExpand(true)}
+								className={classNames(classes.menuButton, this.props.navMenuExpanded && classes.hide)}
 							>
 								<ChevronRightIcon />
 							</IconButton>
 
 							<Typography variant="title" color="inherit" noWrap>
-								{this.state.appBarText}
+								{this.props.appBarText}
 							</Typography>
+
 
 							<IconButton
 								color="inherit"
 								aria-label="System Menu"
 								onClick={this.handleSystemMenuIconClicked}
-								className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
+								className={classNames(classes.menuButton, classes.rightJustify, this.props.systemMenuOpen && classes.hide)}
 							>
 								<MenuIcon />
 							</IconButton>
 						</Toolbar>
 
-					</AppBar> */}
+					</AppBar>
 
 					{/* <SystemMenu isOpen={this.state.systemMenuOpen}
 						closeHandler={this.handleSystemMenuClose}
@@ -111,9 +106,6 @@ class SedFF extends React.Component {
 					<main className={classes.content} >
 						<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 						{/* <Router> */}
-						<Typography>Hi, Router...</Typography>
-						<button onClick={this.addArticle}>Add Article</button>
-						<pre>State:{this.state}</pre>
 						{/* </Router> */}
 						{/* {this.state.routesAndPages}
 						{!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
@@ -128,4 +120,4 @@ class SedFF extends React.Component {
 
 SedFF = withStyles(styles, { withTheme: true })(SedFF);
 // export default connect(mapStateToProps, mapDispatchToProps)(SedFF);
-export default connect(mapStateToProps, null)(SedFF);
+export default connect(mapStateToProps, mapDispatchToProps)(SedFF);

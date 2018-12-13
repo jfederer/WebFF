@@ -5,7 +5,8 @@ import { addArticle } from "../Actions/index";
 
 const mapDispatchToProps = dispatch => {
 	return {
-		addArticle: article => dispatch(addArticle(article))
+		addArticle: article => dispatch(addArticle(article)),
+		addArticleDos: article => dispatch(addArticle(article))
 	};
 };
 
@@ -31,6 +32,15 @@ class ConnectedForm extends Component {
 		this.setState({ title: "" });
 	}
 
+	handleDos = (event) => {
+		event.preventDefault();
+		const { title } = this.state;
+		const id = uuidv1();
+		let titlename = title+"_DOS!";
+		this.props.addArticleDos({ title:titlename, id });
+		this.setState({ title: "" });
+	}
+
 	render() {
 		const { title } = this.state;
 		return (
@@ -47,6 +57,9 @@ class ConnectedForm extends Component {
 				</div>
 				<button type="submit" className="btn btn-success btn-lg">
 					SAVE
+        </button>
+				<button onClick={this.handleDos} className="btn btn-success btn-lg">
+					SAVE DOS
         </button>
 			</form>
 		);
