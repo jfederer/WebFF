@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import { UI } from './UI';
 
 const RootReducer = combineReducers({
-	// visibilityFilter,
+	UI
 	// todos
   });
   

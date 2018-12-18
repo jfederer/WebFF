@@ -36,11 +36,17 @@ class XMLDialog extends React.Component {
   constructor(props) {
     super(props);
 
+
+	let realUsername = "";
+	if(this.props.username) {
+		realUsername = this.props.username.split('@')[0];
+	}
+
     this.state = {
       showStatus: false,
       statusMessage: "",
       showSedLOGINQs: false,
-      username: this.props.username.split('@')[0],
+      username: realUsername,
       pw: "",
       SedLOGINprojectID: ""
     };

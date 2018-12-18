@@ -6,17 +6,28 @@ import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
 	BrowserRouter as Router
-} from 'react-router-dom'
+} from 'react-router-dom';
+
+import { Provider } from 'react-redux'
+import { createStore } from 'redux';
+import RootReducer from './Reducers/RootReducer';
+
+const initialState = {};
+
+const store = createStore(RootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+
+
 class App extends React.Component {
 
 	render() {
 		return (
-			<React.Fragment>
+			<Provider store={store}>
 				<CssBaseline />
 				<Router>
 					<WebFF />
 				</Router>
-			</React.Fragment>
+			</Provider>
 		);
 	}
 }

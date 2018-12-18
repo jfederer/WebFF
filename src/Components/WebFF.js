@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
@@ -34,6 +35,8 @@ import {
 	PHP_FILE_LOCATION, PROGRAM_VERSION, USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
 	QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
+
+import { setSysMenuExpand, setNavMenuExpand } from '../Actions/UI';
 
 
 const FUNCDEBUG = false;
@@ -109,7 +112,7 @@ class WebFF extends React.Component {
 
 		this.navigationControl = this.navigationControl.bind(this);
 		this.handleDialogOpen = this.handleDialogOpen.bind(this);
-		this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
+		// this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
 		this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
 		this.dialogQuestionChangeSystemCallback = this.dialogQuestionChangeSystemCallback.bind(this);
 		this.setLoggedInUser = this.setLoggedInUser.bind(this);
@@ -133,6 +136,35 @@ class WebFF extends React.Component {
 		this.getDescriptiveColumnForTable = this.getDescriptiveColumnForTable.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
+
+		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
+		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
+		//TODO: dynamic pier additions (perhaps do this via an action -- drop down or number input for # of piers.  Cheap, easy, dirty.)
+		//TODO: split analysis source code into check boxes
+		//TODO: Change labels or any question value as an 'action'.
+		//TODO: generalize EWI_setInfo_table
+		//TODO: not a fan of just handing around global state.
+		//TODO: regex to remove spaces in computation string
+		//TODO: computeValue calculate TIME values correctly?
+		//TODO: set 'value' of TimeInput questions correctly.
+		//TODO: pass state change handlers to dialogs so questions don't yell
+		//TODO: table width to contents? Wrap? No wrap but have min size?  Sub-questions and fields need sizes as well.
+		//TODO: vertical gridding or vertical panels? (might be able to solve with 'layout table' stuff)
+		//TODO: optional column headers for tables
+		//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
+		//TODO: Question order priority
+		//TODO: read-only columns in table
+		//TODO: refactor network tasks to UTIL
+		//TODO: standardize tooltips within questions
+		//TODO: standardize 'styles' within questions
+		//TODO: standardize 'placeholder' within questions
+		//TODO: utilize isLoaded to hold off processing until done loading
+		//TODO: clear all tables when changing samplingMethod ?
+		//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
+		//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
+		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
+
+
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
 		if (FUNCDEBUG) console.log("FUNC: componentWillMount()");
@@ -2056,164 +2088,10 @@ class WebFF extends React.Component {
 
 
 
-	handleSystemMenuItemClicked(menuText) {
-		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
-		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
-		//TODO: dynamic pier additions (perhaps do this via an action -- drop down or number input for # of piers.  Cheap, easy, dirty.)
-		//TODO: split analysis source code into check boxes
-		//TODO: Change labels or any question value as an 'action'.
-		//TODO: generalize EWI_setInfo_table
-		//TODO: not a fan of just handing around global state.
-		//TODO: regex to remove spaces in computation string
-		//TODO: computeValue calculate TIME values correctly?
-		//TODO: set 'value' of TimeInput questions correctly.
-		//TODO: pass state change handlers to dialogs so questions don't yell
-		//TODO: table width to contents? Wrap? No wrap but have min size?  Sub-questions and fields need sizes as well.
-		//TODO: vertical gridding or vertical panels? (might be able to solve with 'layout table' stuff)
-		//TODO: optional column headers for tables
-		//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
-		//TODO: Question order priority
-		//TODO: read-only columns in table
-		//TODO: refactor network tasks to UTIL
-		//TODO: standardize tooltips within questions
-		//TODO: standardize 'styles' within questions
-		//TODO: standardize 'placeholder' within questions
-		//TODO: utilize isLoaded to hold off processing until done loading
-		//TODO: clear all tables when changing samplingMethod ?
-		//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
-		//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
-		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
-
-
-		if (menuText === "Test") {
-			console.log("Starting ALL-XML-TEST");
-
-
-
-			// this.fetchDBInfo("", '', (response) => console.log("Nothing: ", response));
-			// // this.fetchDBInfo("hiddenPanels", '', (response) => console.log("hiddenPanels: ", response));
-			// // this.fetchDBInfo("jfederer@usgs.gov", "users", (response) => console.log("Users Collection, jfederer: ", response));
-			// // this.fetchDBInfo("", "users", (response) => console.log("Users Collection, all: ", response));
-
-			// //this.buildCombinedQuestionsData(() => console.log("CALLBACK!!"));
-			// // this.propagateQWDATAInfo();
-			// //this.updateDBInfo("id","testID",{"testKeyTwo":"2"},(res)=>console.log(res));
-			// //this.setShippedStatus(null, true);
-
-
-			// // sort out differences in local dev server and production server calls
-			// const API = PHP_FILE_LOCATION + 'test_middle.php/';
-			// let query = '';
-
-			// console.log("Testing connection: ", API, ")");
-
-
-			// // if (_query !== '') {
-			// // 	query = 'needleID=' + encodeURIComponent(_query);
-			// // }
-
-			// // if (_collection !== '') {
-			// // 	if (query !== '') {
-			// // 		query += '&';
-			// // 	}
-			// // 	query += "collection=" + _collection;
-			// // }
-
-			// // if (isDEV) {
-			// // 	const API = 'https://localhost:3004/';
-			// // 	query = encodeURIComponent(_query);
-			// // }
-
-			// function handleErrors(response) {
-			// 	// fetch only throws an error if there is a networking or permission problem (often due to offline).  A "ok" response indicates we actually got the info
-			// 	if (!response.ok) {
-			// 		throw Error(response.statusText);
-			// 	}
-			// 	//note 404 is not found and 400 is a mal-formed request
-			// 	return response;
-			// }
-
-			// fetch(API, {
-			// 	method: 'POST',
-			// 	headers: new Headers({
-			// 		'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
-			// 	}),
-			// 	body: query
-			// })
-			// 	.then(handleErrors)
-			// 	.then(response => {
-			// 		//console.log("RAW response: ", response);
-			// 		let respT = response.text();
-			// 		console.log("Response text: ", respT);
-
-			// 		// return response.json();
-			// 		return respT;
-			// 	}
-			// 	)
-			// 	.then(parsedJSON => {
-			// 		console.log("Parsed JSON: ", parsedJSON);
-			// 		// // setTimeout(() => {
-			// 		//successCB(parsedJSON);
-			// 		// }, 1200);
-			// 	})
-			// 	// .catch(error => {  });
-			// 	.catch(error => {
-			// 		console.error("Error fetching " + API + query + "\n" + error);
-			// 	}
-			// 	);
-		}
-
-
-
-		if (menuText === "Save XML") {
-			this.handleXMLDialogOpen();
-			return;
-		}
-		if (menuText === "About") {
-			alert("This is Sediment Field Forms (SedFF) version " + PROGRAM_VERSION + " built by jfederer@usgs.gov and kaskach@usgs.gov on Nov 14, 2018");
-			return;
-		}
-
-		if (menuText === "Add/Remove Question") {
-			this.handleQuestionDialogOpen();
-			return;
-		}
-
-
-		if (menuText === "Sync Data to Database") {
-			this.updateDatabase();
-			return;
-		}
-
-
-		// actually opening dialog 
-		// build the curDialogXXX data
-		this.setState({ curDialogName: menuText });
-
-		let filteredDialogInfo = this.state.dialogQuestions.filter((dialogItem) => {
-			return dialogItem.dialogName.replace(/ /g, '') === menuText.replace(/ /g, '')
-		});
-
-		if (filteredDialogInfo && filteredDialogInfo.length === 1) {
-			this.setState({
-				curDialogDescription: filteredDialogInfo[0].dialogDescription,
-				curDialogName: menuText,
-				curDialogQuestions: filteredDialogInfo[0].questions
-			}, () => { //open the dialog 
-				this.handleDialogOpen();
-			}
-			);
-
-		} else {
-			//TODO: ERR
-			console.log(menuText + " is not yet implemented");
-		}
-
-	}
-
 	isFunction(functionToCheck) {
 		return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 	}
+
 
 	render() {
 		const { classes } = this.props;
@@ -2231,14 +2109,14 @@ class WebFF extends React.Component {
 				<div className={classes.root} >
 					<AppBar
 						position="absolute"
-						className={classNames(classes.appBar, this.state.navMenuExpanded && classes.appBarShift)}
+						className={classNames(classes.appBar, this.props.UI.navMenuExpanded && classes.appBarShift)}
 					>
 						<Toolbar disableGutters={!this.state.navMenuExpanded}>
 							<IconButton
 								color="inherit"
 								aria-label="expand drawer"
-								onClick={this.handleLeftDrawerOpen}
-								className={classNames(classes.menuButton, this.state.navMenuExpanded && classes.hide)}
+								onClick={()=>this.props.setNavMenuExpand(true)}
+								className={classNames(classes.menuButton, this.props.UI.navMenuExpanded && classes.hide)}
 							>
 								<ChevronRightIcon />
 							</IconButton>
@@ -2250,7 +2128,7 @@ class WebFF extends React.Component {
 							<IconButton
 								color="inherit"
 								aria-label="System Menu"
-								onClick={this.handleSystemMenuIconClicked}
+								onClick={()=>this.props.setSysMenuExpand(true)}
 								className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
 							>
 								<MenuIcon />
@@ -2259,9 +2137,10 @@ class WebFF extends React.Component {
 
 					</AppBar>
 
-					<SystemMenu isOpen={this.state.systemMenuOpen}
-						closeHandler={this.handleSystemMenuClose}
-						menuItemClickHandler={this.handleSystemMenuItemClicked} />
+					<SystemMenu isOpen={this.props.UI.sysMenuExpanded}
+						closeHandler={()=>this.props.setSysMenuExpand(false)}
+						// menuItemClickHandler={this.handleSystemMenuItemClicked} 
+						/>
 					<SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
@@ -2273,8 +2152,8 @@ class WebFF extends React.Component {
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
 						removeStation={this.removeStation} />
-					<NavMenu isExpanded={this.state.navMenuExpanded}
-						closeHandler={this.handleLeftDrawerClose}
+					<NavMenu isExpanded={this.props.UI.navMenuExpanded}
+						closeHandler={()=>this.props.setNavMenuExpand(false)}
 						navMenuInfo={this.state.navMenuInfo}
 						hiddenTabs={this.state.hiddenTabs} />
 					<XMLDialog isOpen={this.state.XMLDialogOpen}
@@ -2299,6 +2178,10 @@ class WebFF extends React.Component {
 							: null}
 					</main>
 				</div >
+				<button onClick={this.props.tog}>Tog</button>
+				<button onClick={()=>this.props.set(false)}>Set False</button>
+				<button onClick={()=>this.props.set(true)}>Set True</button>
+				<pre>{JSON.stringify(this.props.UI)}</pre>
 			</React.Fragment>
 		);
 	}
@@ -2308,4 +2191,16 @@ WebFF.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withRouter(withStyles(styles, { withTheme: true })(WebFF));
+const mapStateToProps = function(state) {
+	return {
+	  UI: state.UI
+	}
+  }
+
+  const mapDispatchToProps = {
+	setNavMenuExpand: setNavMenuExpand,
+	setSysMenuExpand: setSysMenuExpand
+  }
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles, { withTheme: true })(WebFF)));
