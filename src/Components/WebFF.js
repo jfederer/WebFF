@@ -24,7 +24,7 @@ import ErrorPage from './Errors/ErrorPage';
 import xmljs from 'xml-js';
 import Login from './Login';
 import { Redirect } from 'react-router-dom';
-import { isReasonablyValidUsernameInLS, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
+import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 import XMLDialog from './XMLDialog';
 import QuestionDialog from './QuestionDialog';
 import QuestionPage from './QuestionPage';
@@ -36,8 +36,8 @@ import {
 	QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
-import { setSysMenuExpand, setNavMenuExpand } from '../Actions/UI';
-
+import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
+import { setCurrentUser } from '../Actions/User';
 
 const FUNCDEBUG = false;
 
@@ -46,17 +46,17 @@ var needToSyncStationDataToQuestionData = true;
 class WebFF extends React.Component {
 
 	constructor(props) {
-		if(FUNCDEBUG) console.log("FUNC: WebFF Constructor");
+		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
 
 		super(props);
 		var allItemsToSyncToLS = USER_DB_NODES.slice();
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 		this.state = {
+
 			// system config
 			questionsData: questionsData,
 			dialogQuestions: dialogQuestions,
-
 
 			itemsToSyncToLS: allItemsToSyncToLS,
 
@@ -67,7 +67,6 @@ class WebFF extends React.Component {
 			syncDelay: 300000,
 
 			navMenuInfo: defaultNavMenuInfo,
-			navMenuExpanded: false,
 
 			XMLDialogOpen: false,
 			questionDialogOpen: false,
@@ -83,22 +82,19 @@ class WebFF extends React.Component {
 			hiddenTabs: defaultHiddenTabs,
 			hiddenPanels: defaultHiddenPanels,
 
-			systemMenuOpen: false,
-
 			appBarText: "Sediment Field Forms",
-
 
 			stations: [],
 			customQuestions: [],
 
-			loggedInUser: (localStorage.getItem('loggedInUser')) ? JSON.parse(localStorage.getItem('loggedInUser')) : null,
+			// loggedInUser:
 			needsToUpdateDB: (localStorage.getItem('needsToUpdateDB')) ? JSON.parse(localStorage.getItem('needsToUpdateDB')) : [],
 			curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
 
 		};
 
 		if (isReasonablyValidUsernameInLS()) {
-			// load all events from LS if the user is logged in. // this is a kludge bugfix for when people refresh the page
+			// load all events from LS if the user is logged in. // TODO: this is a kludge bugfix for when people refresh the page
 			let allNodeNames = Object.keys(localStorage);
 			for (let i = 0; i < allNodeNames.length; i++) {
 				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
@@ -137,51 +133,48 @@ class WebFF extends React.Component {
 
 	}
 
-		//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
-		//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
-		//TODO: dynamic pier additions (perhaps do this via an action -- drop down or number input for # of piers.  Cheap, easy, dirty.)
-		//TODO: split analysis source code into check boxes
-		//TODO: Change labels or any question value as an 'action'.
-		//TODO: generalize EWI_setInfo_table
-		//TODO: not a fan of just handing around global state.
-		//TODO: regex to remove spaces in computation string
-		//TODO: computeValue calculate TIME values correctly?
-		//TODO: set 'value' of TimeInput questions correctly.
-		//TODO: pass state change handlers to dialogs so questions don't yell
-		//TODO: table width to contents? Wrap? No wrap but have min size?  Sub-questions and fields need sizes as well.
-		//TODO: vertical gridding or vertical panels? (might be able to solve with 'layout table' stuff)
-		//TODO: optional column headers for tables
-		//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
-		//TODO: Question order priority
-		//TODO: read-only columns in table
-		//TODO: refactor network tasks to UTIL
-		//TODO: standardize tooltips within questions
-		//TODO: standardize 'styles' within questions
-		//TODO: standardize 'placeholder' within questions
-		//TODO: utilize isLoaded to hold off processing until done loading
-		//TODO: clear all tables when changing samplingMethod ?
-		//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
-		//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
-		//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
+	//TODO: //FIXME: changes to stream characteritics blanks out value in EWI table
+	//TODO: if critical element for Bridge Wizard is removed from Field Form, what should we do?
+	//TODO: dynamic pier additions (perhaps do this via an action -- drop down or number input for # of piers.  Cheap, easy, dirty.)
+	//TODO: split analysis source code into check boxes
+	//TODO: Change labels or any question value as an 'action'.
+	//TODO: generalize EWI_setInfo_table
+	//TODO: not a fan of just handing around global state.
+	//TODO: regex to remove spaces in computation string
+	//TODO: computeValue calculate TIME values correctly?
+	//TODO: set 'value' of TimeInput questions correctly.
+	//TODO: pass state change handlers to dialogs so questions don't yell
+	//TODO: table width to contents? Wrap? No wrap but have min size?  Sub-questions and fields need sizes as well.
+	//TODO: vertical gridding or vertical panels? (might be able to solve with 'layout table' stuff)
+	//TODO: optional column headers for tables
+	//TODO: //FIXME: system dialogs need different state change handler because their values are stored elsewhere
+	//TODO: Question order priority
+	//TODO: read-only columns in table
+	//TODO: refactor network tasks to UTIL
+	//TODO: standardize tooltips within questions
+	//TODO: standardize 'styles' within questions
+	//TODO: standardize 'placeholder' within questions
+	//TODO: utilize isLoaded to hold off processing until done loading
+	//TODO: clear all tables when changing samplingMethod ?
+	//TODO: data entry 'table' should be an image or message or something else until sampling point is entered.
+	//TODO: allow to 'remove set' (not just hide, but actively remove it so it doesn't end up in xml or anywhere)
+	//TODO: add "resetQuestion" action... for helping with sticky values in questionTables
 
 
 	// }
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
 		if (FUNCDEBUG) console.log("FUNC: componentWillMount()");
-		this.setState({ showLoadingApp: true });
+		// this.setState({ showLoadingApp: true }); //TODO: redux, leading sign, false after load complete.
 
 		if (navigator.onLine) {
 			ensureProgramVersionUpToDate(PROGRAM_VERSION);
 		}
 
-		if (isReasonablyValidUsernameInLS()) {
-			console.log(this.state.loggedInUser + "is logged in");
-			this.setState({
-				loggedInUser: JSON.parse(localStorage.getItem('loggedInUser'))
-			},
-				this.gatherUserConfig(USER_DB_NODES) // after setting loggedInUser, load user configuration);
-			);
 
+
+		if (isReasonableUsername(this.props.user.username)) {
+			console.log(this.props.user.username + "is logged in");
+			this.gatherUserConfig(USER_DB_NODES); // after setting loggedInUser, load user configuration);
 		} else {
 			console.log("No one is logged in... requesting user id");
 			this.buildRoutesAndRenderPages(); // router handles showing the login
@@ -342,7 +335,7 @@ class WebFF extends React.Component {
 									console.log(allNodeNames[i] + " is a previously-deleted event. Ignoring DB values for this.");
 									continue;
 								}
-								
+
 								this.conditionallyIngestSE(userData[allNodeNames[i]], () => {
 									// this.addToItemsToSyncToLS(allNodeNames[i]);
 									this.buildRoutesAndRenderPages();
@@ -448,14 +441,14 @@ class WebFF extends React.Component {
 
 		if (shouldAdd) {
 			this.setState({
-				[SAMPLING_EVENT_IDENTIFIER+SE.id]: SE
+				[SAMPLING_EVENT_IDENTIFIER + SE.id]: SE
 			}, () => {
-				this.addToItemsToSyncToLS(SAMPLING_EVENT_IDENTIFIER+SE.id);
+				this.addToItemsToSyncToLS(SAMPLING_EVENT_IDENTIFIER + SE.id);
 				if (typeof CB === "function") CB();
 			});
 		} else {
 			console.log("Not loading ", SE.id, " because " + reason);
-			this.addToItemsToSyncToLS(SAMPLING_EVENT_IDENTIFIER+SE.id);
+			this.addToItemsToSyncToLS(SAMPLING_EVENT_IDENTIFIER + SE.id);
 		}
 	}
 
@@ -494,7 +487,7 @@ class WebFF extends React.Component {
 
 		// load initial values from questionsData  
 		//FUTURE: needed?  Could just write them as they are needed rather than writing a bunch that might never get used
-		let newQuestionsValues = {};		
+		let newQuestionsValues = {};
 		this.state.questionsData.forEach((Q, i) => {
 			newQuestionsValues[Q.id] = safeCopy(Q.value);
 		});
@@ -512,7 +505,7 @@ class WebFF extends React.Component {
 		this.addToItemsToSyncToLS(samplingEventName);
 
 		// console.log("TRACK DATE: createNewSamplingEvent: NEW SE sampleDate: ", newSamplingEvent.questionsValues.sampleDate);
-	
+
 
 		//save it to the state  
 		this.setState({
@@ -521,18 +514,18 @@ class WebFF extends React.Component {
 			hiddenTabs: defaultHiddenTabs.slice(),
 			hiddenPanels: defaultHiddenPanels.slice()
 		}, () => {
-			
+
 			// console.log("TRACK DATE: NEW SE IN STATE: ", this.state[samplingEventName].questionsValues.sampleDate);
-	
+
 			this.runAllActionsForCurrentSamplingEvent();
 			// this.collectRunAndPropagateSamplePointData();
 			this.markForDBUpdate(samplingEventName);  //TODO: move this to after setState completes?
-		this.buildRoutesAndRenderPages(); //TODO: move this to after setState completes?
+			this.buildRoutesAndRenderPages(); //TODO: move this to after setState completes?
 			if (typeof CB === "function") CB();
 		});
 
 
-		
+
 	}
 
 
@@ -610,21 +603,6 @@ class WebFF extends React.Component {
 		this.setState({ dialogOpen: false });
 	};
 
-	handleLeftDrawerOpen = () => {
-		this.setState({ navMenuExpanded: true });
-	};
-
-	handleLeftDrawerClose = () => {
-		this.setState({ navMenuExpanded: false });
-	};
-
-	handleSystemMenuIconClicked = () => {
-		this.setState({ systemMenuOpen: true });
-	};
-
-	handleSystemMenuClose = () => {
-		this.setState({ systemMenuOpen: false });
-	};
 
 	handleXMLDialogOpen = (CB) => {
 		this.setState({ XMLDialogOpen: true }, () => {
@@ -971,7 +949,7 @@ class WebFF extends React.Component {
 
 		if (DEBUG) console.log(Q.props.id, Q.state.value);
 		this.setQuestionValue(Q.props.id, safeCopy(Q.state.value), () => {
-		
+
 			this.parseActionsFromQuestion(Q, this.actionExecuter);
 			if (propagateSamplePointData) {
 				this.collectRunAndPropagateSamplePointData(Q.props.id);
@@ -1057,7 +1035,7 @@ class WebFF extends React.Component {
 
 	buildRoutesAndRenderPages = () => {   //TODO:  move to the render function -- currently needs to be called any time content on question pages needs to be modified.  Suspect structural issue with a nested setState inside the questionPage
 		// if (FUNCDEBUG) console.log("FUNC: buildRoutesAndRenderPages()");
-		
+
 		// console.log("TRACK DATE: BRARP: sampleDate:", this.state[this.state.curSamplingEventName].questionsValues.sampleDate );
 		// console.log("TRACK DATE: BRARP: curSamplingEventName:", this.state.curSamplingEventName);
 		// let questionsValues = null;
@@ -1249,7 +1227,7 @@ class WebFF extends React.Component {
 		let newCustomQuestions = this.state.customQuestions.slice();
 		newCustomQuestions = newCustomQuestions.filter((Q) => Q.id !== q_id)
 		this.setState({ customQuestions: newCustomQuestions }, () => {
-			this.markForDBUpdate('customQuestions'); 
+			this.markForDBUpdate('customQuestions');
 			this.buildCombinedQuestionsData(CB);
 		});
 	}
@@ -1616,9 +1594,9 @@ class WebFF extends React.Component {
 	getTableQuestionValue(q_id, header, rowNum) {
 		console.log("getTableQuestionValue(",
 			q_id,
-			", ", 
+			", ",
 			header,
-			", ", 
+			", ",
 			rowNum,
 			")"
 		)
@@ -2094,10 +2072,7 @@ class WebFF extends React.Component {
 
 
 	render() {
-		const { classes } = this.props;
-		// console.log("TRACK DATE: WEBFF RENDER: ", this.state[this.state.curSamplingEventName].questionsValues.sampleDate);
-
-
+		const { classes, UI } = this.props;
 		// 	{ (isReasonablyValidUsernameInLS())
 		// 		? <div><Login setLoggedInUser={this.setLoggedInUser} />No one is logged in</div> 
 		// }
@@ -2109,14 +2084,14 @@ class WebFF extends React.Component {
 				<div className={classes.root} >
 					<AppBar
 						position="absolute"
-						className={classNames(classes.appBar, this.props.UI.navMenuExpanded && classes.appBarShift)}
+						className={classNames(classes.appBar, UI.visibility.expandedNavMenu && classes.appBarShift)}
 					>
-						<Toolbar disableGutters={!this.state.navMenuExpanded}>
+						<Toolbar disableGutters={!UI.visibility.expandedNavMenu}>
 							<IconButton
 								color="inherit"
 								aria-label="expand drawer"
-								onClick={()=>this.props.setNavMenuExpand(true)}
-								className={classNames(classes.menuButton, this.props.UI.navMenuExpanded && classes.hide)}
+								onClick={() => this.props.setNavMenuExpand(true)}
+								className={classNames(classes.menuButton, UI.visibility.expandedNavMenu && classes.hide)}
 							>
 								<ChevronRightIcon />
 							</IconButton>
@@ -2128,8 +2103,8 @@ class WebFF extends React.Component {
 							<IconButton
 								color="inherit"
 								aria-label="System Menu"
-								onClick={()=>this.props.setSysMenuExpand(true)}
-								className={classNames(classes.menuButton, classes.rightJustify, this.state.systemMenuOpen && classes.hide)}
+								onClick={() => this.props.setSysMenuExpand(true)}
+								className={classNames(classes.menuButton, classes.rightJustify, UI.visibility.expandedSysMenu && classes.hide)}
 							>
 								<MenuIcon />
 							</IconButton>
@@ -2137,10 +2112,10 @@ class WebFF extends React.Component {
 
 					</AppBar>
 
-					<SystemMenu isOpen={this.props.UI.sysMenuExpanded}
-						closeHandler={()=>this.props.setSysMenuExpand(false)}
-						// menuItemClickHandler={this.handleSystemMenuItemClicked} 
-						/>
+					<SystemMenu isOpen={UI.visibility.expandedSysMenu}
+						closeHandler={() => this.props.setSysMenuExpand(false)}
+					// menuItemClickHandler={this.handleSystemMenuItemClicked} 
+					/>
 					<SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
@@ -2152,8 +2127,8 @@ class WebFF extends React.Component {
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
 						removeStation={this.removeStation} />
-					<NavMenu isExpanded={this.props.UI.navMenuExpanded}
-						closeHandler={()=>this.props.setNavMenuExpand(false)}
+					<NavMenu isExpanded={UI.visibility.expandedNavMenu}
+						closeHandler={() => this.props.setNavMenuExpand(false)}
 						navMenuInfo={this.state.navMenuInfo}
 						hiddenTabs={this.state.hiddenTabs} />
 					<XMLDialog isOpen={this.state.XMLDialogOpen}
@@ -2173,15 +2148,17 @@ class WebFF extends React.Component {
 						<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
 						{this.state.routesAndPages}
+
 						{!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
 							? <Redirect to='/' />
 							: null}
+
 					</main>
 				</div >
-				<button onClick={this.props.tog}>Tog</button>
-				<button onClick={()=>this.props.set(false)}>Set False</button>
-				<button onClick={()=>this.props.set(true)}>Set True</button>
-				<pre>{JSON.stringify(this.props.UI)}</pre>
+				<button onClick={() => this.props.setLoginDialogVisibility(false)}>Set False</button>
+				<button onClick={() => this.props.setLoginDialogVisibility(true)}>Set True</button>
+				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
+				<pre>{JSON.stringify(this.props.UI.visibility)}</pre>
 			</React.Fragment>
 		);
 	}
@@ -2191,16 +2168,19 @@ WebFF.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = function(state) {
+const mapStateToProps = function (state) {
 	return {
-	  UI: state.UI
+		UI: state.UI,
+		user: state.user
 	}
-  }
+}
 
-  const mapDispatchToProps = {
+const mapDispatchToProps = {
+	setLoginDialogVisibility: setLoginDialogVisibility,
+	setCurrentUser: setCurrentUser,
 	setNavMenuExpand: setNavMenuExpand,
 	setSysMenuExpand: setSysMenuExpand
-  }
+}
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles, { withTheme: true })(WebFF)));

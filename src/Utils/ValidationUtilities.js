@@ -8,10 +8,11 @@ export const isReasonablyValidUsernameInLS = () => {
     catch (e) {
         user = localStorage.getItem('loggedInUser');
     }
+    return isReasonableUsername(user);
+}
 
-    let ret = !(user === undefined || user === null || user === '' || user.indexOf('@usgs.gov') < 4);
-
-    return ret;
+export const isReasonableUsername = (user) => {
+	return !(user === undefined || user === null || user === '' || user.indexOf('@usgs.gov') < 4 || user.length < 11);
 }
 
 export const ensureProgramVersionUpToDate = (localVersion) => {

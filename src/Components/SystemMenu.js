@@ -20,7 +20,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import { Link } from 'react-router-dom';
 import { PROGRAM_VERSION } from '../Utils/Constants';
-import { systemMenuItemClicked } from '../Actions/UI';
+// import { systemMenuItemClicked } from '../Actions/UI';
 import { connect } from 'react-redux';
 
 const styles = {
@@ -232,7 +232,7 @@ class SystemMenu extends React.Component {
           </ListItem>
 
           {/* <ListItem button onClick={() => this.menuItemClickHandler('About')}> */}
-          <ListItem button onClick={() => this.props.dispatch(systemMenuItemClicked('About'))}>
+          <ListItem button onClick={() => this.menuItemClickHandler('About')}>
             <ListItemIcon>
               <InfoIcon />
             </ListItemIcon>

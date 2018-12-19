@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
@@ -44,7 +45,7 @@ class Login extends React.Component {
         return (
             <div>
                 <Dialog
-                    open={true}
+                    open={this.props.UI.visibility.loginDialog}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
@@ -75,7 +76,7 @@ class Login extends React.Component {
                     </DialogActions>
                 </Dialog>
 
-				
+				<pre></pre>
 
 
             </div>
@@ -83,5 +84,11 @@ class Login extends React.Component {
     }
 }
 
+const mapStateToProps = function (state) {
+	return {
+		UI: state.UI,
+		user: state.user
+	}
+}
 
-export default Login;
+export default connect(mapStateToProps, null)(Login);
