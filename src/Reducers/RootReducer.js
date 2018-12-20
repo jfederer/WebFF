@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { UI } from './UI';
-import { user } from './User';
+import { User } from './User';
+import { SedFF } from './SedFF';
 
 const RootReducer = combineReducers({
 	UI,
-	user
+	User,
+	SedFF
   });
   
   export default RootReducer;

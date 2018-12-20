@@ -1,5 +1,10 @@
-Store = [
-	{UI : [
+Store = {
+	SedFF : {
+		curUser :
+		curEvent :
+		curPage :
+	}
+	UI : {
 		visibility : {
 			menus :
 			tabs :
@@ -15,7 +20,7 @@ Store = [
 			}
 		},
 	]}
-	user: {
+	users: {
 		username :
 		sedloginusername :
 		settings : {
@@ -48,6 +53,8 @@ Store = [
 			usernames: []
 			lastModified:
 			status:
-			questionvalues:
+			questionvalues: {
+
+			}
 	]
 ]

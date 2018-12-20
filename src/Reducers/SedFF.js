@@ -1,19 +1,14 @@
 import { } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
-const initialUserState = {
-		username: (localStorage.getItem('loggedInUser')) && localStorage.getItem('loggedInUser') !== 'undefined'
+const initialSedFFState = {
+		currentUser: (localStorage.getItem('loggedInUser')) && localStorage.getItem('loggedInUser') !== 'undefined'
 			? JSON.parse(localStorage.getItem('loggedInUser')) 
-			: null, 
-		sedLoginUsername: "",
-		settings : {
-			backupInterval : 300000,
-			usePaper: false,
-			customQuestions: []
-		}
+			: null,
+		currentEvent: null
 };
 
-export function User(state = initialUserState, action) {
+export function SedFF(state = initialSedFFState, action) {
 	let newState = _.cloneDeep(state);
 	switch (action.type) {
 		// case SET_NAV_MENU_EXPAND:

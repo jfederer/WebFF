@@ -10,33 +10,6 @@ export const defaultHiddenPanels = [
     "DataEntry:IntakeEfficiencyTest"
 ];
 
-export const defaultNavMenuInfo = [
-    {
-        "text": "Dashboard",
-        "route": "/Dashboard",
-        "icon": "DashboardIcon"
-    },
-    {
-        "text": "Field Form",
-        "route": "/FieldForm",
-        "icon": "AssignmentIcon"
-    },
-    {
-        "text": "Data Entry",
-        "route": "/DataEntry",
-        "icon": "EditIcon"
-    },
-    {
-        "text": "Parameters",
-        "route": "/Parameters"
-    },
-    {
-        "text": "QWDATA",
-        "route": "/QWDATA",
-        "icon": "SubtitlesIcon"
-    }
-];
-
 
 
 export const dialogQuestions =

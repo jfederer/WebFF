@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.appBarTextCB('SedFF Dashboard');
+		// this.props.appBarTextCB('SedFF Dashboard');
 	}
 
 
@@ -132,14 +132,14 @@ class Dashboard extends React.Component {
 					</Grid>
 				</Grid>
 
-				<EventsManager
+				{/* <EventsManager
 					samplingEventIdentifier={this.props.samplingEventIdentifier}
 					createNewSamplingEvent={this.props.createNewSamplingEvent}
 					loadSamplingEvent={this.props.loadSamplingEvent}
 					samplingEvents={this.props.samplingEvents}
 					getEventDetails={this.props.getEventDetails}
 					deleteSamplingEvent={this.props.deleteSamplingEvent}
-				/>
+				/> */}
 
 
 			</React.Fragment>

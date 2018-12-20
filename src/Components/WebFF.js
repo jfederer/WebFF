@@ -29,7 +29,7 @@ import QuestionDialog from './QuestionDialog';
 // import QuestionPage from './QuestionPage';
 // import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
-import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels, defaultNavMenuInfo } from '../Utils/DefaultConfig';
+import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
 	PHP_FILE_LOCATION, PROGRAM_VERSION, USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
 	QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
@@ -80,8 +80,7 @@ class WebFF extends React.Component {
 			usePaper: false,
 			syncDelay: 300000,
 
-			navMenuInfo: defaultNavMenuInfo,
-
+		
 			XMLDialogOpen: false,
 			questionDialogOpen: false,
 
@@ -2195,7 +2194,8 @@ WebFF.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI,
-		user: state.user
+		user: state.User,
+		sedff: state.SedFF
 	}
 }
 

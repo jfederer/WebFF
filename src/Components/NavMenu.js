@@ -31,34 +31,39 @@ import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
+
+
+const menuItems = [
+	{
+		"text": "Dashboard",
+		"route": "/Dashboard",
+		"icon": "DashboardIcon"
+	},
+	{
+		"text": "Field Form",
+		"route": "/FieldForm",
+		"icon": "AssignmentIcon"
+	},
+	{
+		"text": "Data Entry",
+		"route": "/DataEntry",
+		"icon": "EditIcon"
+	},
+	{
+		"text": "Parameters",
+		"route": "/Parameters"
+	},
+	{
+		"text": "QWDATA",
+		"route": "/QWDATA",
+		"icon": "SubtitlesIcon"
+	}
+]
+
 class NavMenu extends React.Component {
 
-	jsonToNavMenu(jsonNavData) {
-		// this function filters tabs based on the "showXYZ" items in state
-		// console.log(jsonNavData);
-		var retMenu = [];
-		for (var i = 0; i < jsonNavData.length; i++) {
-			var menuItem = jsonNavData[i];
-			var shouldInclude = !this.props.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
-	
-			// use icon?
-			let useIcon = true;
-			if (menuItem.icon === "") {
-				useIcon = false;
-			}
-	
-			if (shouldInclude) retMenu.push(
-				<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
-					{(useIcon) ? <ListItemIcon>
-						{this.materialIcon(menuItem.icon)}
-					</ListItemIcon> : null}
-					<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-				</ListItem>
-			);
-		}
-		return retMenu;
-	}
-	
+
+
 	materialIcon(icon) {
 		switch (icon) {
 			case 'DashboardIcon': return <DashboardIcon />
@@ -85,16 +90,45 @@ class NavMenu extends React.Component {
 		}
 	}
 
+
+
+	// jsonToNavMenu(menuInfo) {
+	// 	// this function filters tabs based on the "showXYZ" items in state
+	// 	// console.log(jsonNavData);
+	// 	var retMenu = [];
+	// 	for (var i = 0; i < jsonNavData.length; i++) {
+	// 		var menuItem = jsonNavData[i];
+	// 		var shouldInclude = !this.props.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
+
+	// 		// use icon?
+	// 		let useIcon = true;
+	// 		if (menuItem.icon === "") {
+	// 			useIcon = false;
+	// 		}
+
+	// 		if (shouldInclude) retMenu.push(
+	// 			<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
+	// 				{(useIcon) ? <ListItemIcon>
+	// 					{this.materialIcon(menuItem.icon)}
+	// 				</ListItemIcon> : null}
+	// 				<ListItemText className={styles.navMenuText} primary={menuItem.text} />
+	// 			</ListItem>
+	// 		);
+	// 	}
+	// 	return retMenu;
+	// }
+
+
 	render() {
 		const { classes } = this.props;
 
-		let menuItems = this.jsonToNavMenu(this.props.navMenuInfo);
+		// let menuItems = this.jsonToNavMenu(this.props.navMenuInfo);
 
-		var navList = (
-			<div className={classes.list}>
-				{menuItems.length!==null ? <List>{menuItems}</List> : <h6>loading</h6>}
-			</div>
-		);
+		// var navList = (
+		// 	<div className={classes.list}>
+		// 		{menuItems.length !== null ?  : <h6>loading</h6>}
+		// 	</div>
+		// );
 
 		return (
 			<Drawer
@@ -109,7 +143,11 @@ class NavMenu extends React.Component {
 						<ChevronLeftIcon />
 					</IconButton>
 				</div>
-				{navList}
+				<List>
+				
+				</List>
+
+
 			</Drawer>
 		);
 	}
@@ -117,7 +155,7 @@ class NavMenu extends React.Component {
 
 NavMenu.propTypes = {
 	classes: PropTypes.object.isRequired,
-	navMenuInfo: PropTypes.array.isRequired  
+	navMenuInfo: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(NavMenu);
