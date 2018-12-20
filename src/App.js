@@ -5,7 +5,7 @@ import { styles } from './style';
 import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
-	BrowserRouter as Router
+	BrowserRouter
 } from 'react-router-dom';
 
 import { Provider } from 'react-redux'
@@ -24,9 +24,9 @@ class App extends React.Component {
 		return (
 			<Provider store={store}>
 				<CssBaseline />
-				<Router>
+				<BrowserRouter>
 					<WebFF />
-				</Router>
+				</BrowserRouter>
 			</Provider>
 		);
 	}
