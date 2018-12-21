@@ -59,7 +59,6 @@ export function UI(state = initialUIState, action) {
 		case SET_SWITCH_USER_DIALOG_VISIBILITY:
 			newState.visibility.switchUserDialog = action.payload;
 			break;
-
 		default:
 			return state
 	}
