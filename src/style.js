@@ -10,10 +10,10 @@ export const styles = theme => ({
 	},
 	appBar: {
 	  zIndex: theme.zIndex.drawer + 1,
-	  // transition: theme.transitions.create(['width', 'margin'], {
-	  //   easing: theme.transitions.easing.sharp,
-	  //   duration: theme.transitions.duration.leavingScreen,
-	  // }),
+	  transition: theme.transitions.create(['width', 'margin'], {
+	    easing: theme.transitions.easing.sharp,
+	    duration: theme.transitions.duration.leavingScreen,
+	  }),
 	},
 	appBarShift: {
 	  marginLeft: drawerWidth,

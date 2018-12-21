@@ -2140,10 +2140,9 @@ class WebFF extends React.Component {
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
 						removeStation={this.removeStation} />
-					<NavMenu isExpanded={UI.visibility.expandedNavMenu}
-						closeHandler={() => this.props.setNavMenuExpand(false)}
-						navMenuInfo={this.state.navMenuInfo}
-						hiddenTabs={this.state.hiddenTabs} />
+
+					<NavMenu />
+
 					<XMLDialog isOpen={this.state.XMLDialogOpen}
 						setShippedStatus={this.setShippedStatus}
 						handleXMLDialogClose={this.handleXMLDialogClose}

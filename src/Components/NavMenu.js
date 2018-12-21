@@ -1,161 +1,75 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { styles } from '../style';
+import { Link } from 'react-router-dom';
+
 import { withStyles } from '@material-ui/core/styles';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { styles } from '../style';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import { Link } from 'react-router-dom';
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import OpacityIcon from '@material-ui/icons/Opacity';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ReorderIcon from '@material-ui/icons/Reorder';
-import ColorizeIcon from '@material-ui/icons/Colorize';
-import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-import FilterDramaIcon from '@material-ui/icons/FilterDrama';
-import StraightenIcon from '@material-ui/icons/Straighten';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import GroupAddIcon from '@material-ui/icons/PersonAdd';
-import CompareIcon from '@material-ui/icons/Compare';
-import SaveIcon from '@material-ui/icons/Save';
-import EditIcon from '@material-ui/icons/Edit';
-import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
-import SubtitlesIcon from '@material-ui/icons/Subtitles';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 
+import { materialIconBuilder } from '../Utils/MaterialIcons';
 
+import { navMenuItems } from '../Constants/NavMenu';
+import { setNavMenuExpand } from '../Actions/UI';
 
-const menuItems = [
-	{
-		"text": "Dashboard",
-		"route": "/Dashboard",
-		"icon": "DashboardIcon"
-	},
-	{
-		"text": "Field Form",
-		"route": "/FieldForm",
-		"icon": "AssignmentIcon"
-	},
-	{
-		"text": "Data Entry",
-		"route": "/DataEntry",
-		"icon": "EditIcon"
-	},
-	{
-		"text": "Parameters",
-		"route": "/Parameters"
-	},
-	{
-		"text": "QWDATA",
-		"route": "/QWDATA",
-		"icon": "SubtitlesIcon"
-	}
-]
 
 class NavMenu extends React.Component {
-
-
-
-	materialIcon(icon) {
-		switch (icon) {
-			case 'DashboardIcon': return <DashboardIcon />
-			case 'ImportContactsIcon': return <ImportContactsIcon />
-			case 'OpacityIcon': return <OpacityIcon />
-			case 'ReorderIcon': return <ReorderIcon />
-			case 'ColorizeIcon': return <ColorizeIcon />
-			case 'FilterDramaIcon': return <FilterDramaIcon />
-			case 'StraightenIcon': return <StraightenIcon />
-			case 'LibraryAddIcon': return <LibraryAddIcon />
-			case 'PlaylistAddIcon': return <PlaylistAddIcon />
-			case 'PersonAddIcon': return <PersonAddIcon />
-			case 'GroupAddIcon': return <GroupAddIcon />
-			case 'PlaylistAddCheckIcon': return <PlaylistAddCheckIcon />
-			case 'NoteAddIcon': return <NoteAddIcon />
-			case 'EditIcon': return <EditIcon />
-			case 'CompareIcon': return <CompareIcon />
-			case 'SaveIcon': return <SaveIcon />
-			case 'SubtitlesIcon': return <SubtitlesIcon />
-			case 'AssignmentIcon': return <AssignmentIcon />
-
-			//FUTURE: additional good ones:  blur*, edit* (gives editor options...)
-			default: return <SettingsInputComponentIcon />
-		}
-	}
-
-
-
-	// jsonToNavMenu(menuInfo) {
-	// 	// this function filters tabs based on the "showXYZ" items in state
-	// 	// console.log(jsonNavData);
-	// 	var retMenu = [];
-	// 	for (var i = 0; i < jsonNavData.length; i++) {
-	// 		var menuItem = jsonNavData[i];
-	// 		var shouldInclude = !this.props.hiddenTabs.includes(menuItem.text.replace(/ /g, ''));
-
-	// 		// use icon?
-	// 		let useIcon = true;
-	// 		if (menuItem.icon === "") {
-	// 			useIcon = false;
-	// 		}
-
-	// 		if (shouldInclude) retMenu.push(
-	// 			<ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
-	// 				{(useIcon) ? <ListItemIcon>
-	// 					{this.materialIcon(menuItem.icon)}
-	// 				</ListItemIcon> : null}
-	// 				<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-	// 			</ListItem>
-	// 		);
-	// 	}
-	// 	return retMenu;
-	// }
-
-
 	render() {
 		const { classes } = this.props;
-
-		// let menuItems = this.jsonToNavMenu(this.props.navMenuInfo);
-
-		// var navList = (
-		// 	<div className={classes.list}>
-		// 		{menuItems.length !== null ?  : <h6>loading</h6>}
-		// 	</div>
-		// );
+		const { hiddenNavMenuItems, expandedNavMenu } = this.props.UI.visibility;
 
 		return (
 			<Drawer
 				variant="permanent"
 				classes={{
-					paper: classNames(classes.drawerPaper, !this.props.isExpanded && classes.drawerPaperClose),
+					paper: classNames(classes.drawerPaper, !expandedNavMenu && classes.drawerPaperClose),
 				}}
-				open={this.props.isExpanded}
+				open={expandedNavMenu}
 			>
 				<div className={classes.toolbar}>
-					<IconButton onClick={this.props.closeHandler}>
+					<IconButton onClick={() => this.props.setNavMenuExpand(false)}>
 						<ChevronLeftIcon />
 					</IconButton>
 				</div>
 				<List>
-				
+					{navMenuItems.map((menuItem) => {
+						return (
+							hiddenNavMenuItems === undefined || !hiddenNavMenuItems.includes(menuItem.text)
+								? <ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
+									<ListItemIcon>
+										{materialIconBuilder(menuItem.icon)}
+									</ListItemIcon>
+									<ListItemText className={styles.navMenuText} primary={menuItem.text} />
+								</ListItem>
+								: null
+						)
+					})}
+
 				</List>
-
-
 			</Drawer>
 		);
 	}
 }
 
 NavMenu.propTypes = {
-	classes: PropTypes.object.isRequired,
-	navMenuInfo: PropTypes.array.isRequired
+	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(NavMenu);
+const mapStateToProps = function (state) {
+	return {
+		UI: state.UI,
+	}
+}
+
+const mapDispatchToProps = {
+	setNavMenuExpand: setNavMenuExpand,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavMenu));
