@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
 
+import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import 'typeface-roboto';
@@ -10,13 +10,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import { materialIconBuilder } from '../Utils/MaterialIcons';
-import { Link } from 'react-router-dom';
-
-import { PROGRAM_VERSION } from '../Utils/Constants';
+import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
 //Action Creators
-import { syncToDB } from '../Actions/DB';
+import { syncToDB } from '../../Actions/DB';
 import {
 	setSysMenuExpand,
 	setExportDialogVisibility,
@@ -25,7 +22,7 @@ import {
 	setSettingsDialogVisibility,
 	setAboutDialogVisibility,
 	setSwitchUserDialogVisibility
-} from '../Actions/UI';
+} from '../../Actions/UI';
 
 
 

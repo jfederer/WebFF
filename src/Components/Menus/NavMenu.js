@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { styles } from '../style';
+import { styles } from '../../style';
 import { Link } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -14,10 +14,10 @@ import List from '@material-ui/core/List';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { materialIconBuilder } from '../Utils/MaterialIcons';
+import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
-import { navMenuItems } from '../Constants/NavMenu';
-import { setNavMenuExpand } from '../Actions/UI';
+import { navMenuItems } from '../../Constants/NavMenu';
+import { setNavMenuExpand } from '../../Actions/UI';
 
 
 class NavMenu extends React.Component {

@@ -20,14 +20,9 @@ import {
 	Switch
 } from 'react-router-dom';
 
-// import xmljs from 'xml-js';
-// import Login from './Login';
-// import { Redirect } from 'react-router-dom';
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
 import QuestionDialog from './QuestionDialog';
-// import QuestionPage from './QuestionPage';
-// import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import SystemDialog from './SystemDialog';
 import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
@@ -42,8 +37,8 @@ import { setCurrentUser } from '../Actions/User';
 import ExportDialog from './Dialogs/ExportDialog';
 
 // menus 
-import SystemMenu from './SystemMenu.js';
-import NavMenu from './NavMenu.js'; 
+import SystemMenu from './Menus/SystemMenu.js';
+import NavMenu from './Menus/NavMenu.js'; 
 
 // pages
 import Dashboard from './Pages/Dashboard';

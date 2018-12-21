@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -19,6 +20,7 @@ import { saveFile } from '../../Utils/FileHandling';
 
 import { PHP_FILE_LOCATION, SEDLOGIN_SUCCESS_MESSAGE } from '../../Utils/Constants';
 
+import { setExportDialogVisibility } from '../../Actions/UI';
 
 const styles = theme => ({
 	root: {
@@ -34,24 +36,25 @@ const styles = theme => ({
 	}
 });
 
+const initialState = {
+	showStatus: false,
+	statusMessage: "",
+	showSedLOGINQuestions: false,
+	SedLOGINprojectID: "",
+	sedLOGINUsername: "",
+	pw: ""
+};
+
 class ExportDialog extends React.Component {
 	constructor(props) {
 		super(props);
 
+		// let realUsername = "";
+		// if (this.props.username) {
+		// 	realUsername = this.props.username.split('@')[0];
+		// }
 
-		let realUsername = "";
-		if (this.props.username) {
-			realUsername = this.props.username.split('@')[0];
-		}
-
-		this.state = {
-			showStatus: false,
-			statusMessage: "",
-			showSedLOGINQs: false,
-			username: realUsername,
-			pw: "",
-			SedLOGINprojectID: ""
-		};
+		this.state =  _.cloneDeep(initialState);
 
 		this.saveXML = this.saveXML.bind(this);
 		this.saveAllXML = this.saveAllXML.bind(this);
@@ -134,18 +137,7 @@ class ExportDialog extends React.Component {
 		this.setState({ showSedLOGINQs: true })
 	}
 
-	doneClickHandler = () => {
-		this.props.handleXMLDialogClose(() => {
-			setTimeout(() => {
-				this.setState({
-					showStatus: false,
-					statusMessage: "",
-					showSedLOGINQs: false
-				});
-			}, 250);
 
-		});
-	}
 
 	sedLoginSubmitHandler = () => {
 		this.setState({ showStatus: true });
@@ -172,7 +164,18 @@ class ExportDialog extends React.Component {
 
 
 	closeHandler = () => {
-		this.props.setSysMenuExpand(false);
+		// 	this.props.handleXMLDialogClose(() => {
+		// 		setTimeout(() => {
+		// 			this.setState({
+		// 				showStatus: false,
+		// 				statusMessage: "",
+		// 				showSedLOGINQs: false
+		// 			});
+		// 		}, 250);
+
+		// 	});
+		// }
+		this.props.setExportDialogVisibility(false);
 	}
 
 	render() {
@@ -190,12 +193,11 @@ class ExportDialog extends React.Component {
 				<DialogTitle id="form-dialog-title">Save SedLOGIN-compatible XML</DialogTitle>
 				<DialogContent>
 
-
 					<Grid justify="space-around" container spacing={24}>
 						<Grid item xs={12}>
 							<DialogContentText>
 								Save the current event to your computer, or directly upload it to SedLOGIN
-            </DialogContentText>
+            				</DialogContentText>
 						</Grid>
 						<Grid item xs={4} >
 							<Paper style={{ height: '90%' }} className={classes.paper}>
@@ -278,7 +280,7 @@ class ExportDialog extends React.Component {
 
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={this.doneClickHandler} color="primary">
+					<Button onClick={this.closeHandler} color="primary">
 						Done
             </Button>
 				</DialogActions>
@@ -293,8 +295,12 @@ const mapStateToProps = function (state) {
 	}
 }
 
+const mapDispatchToProps = {
+	setExportDialogVisibility: setExportDialogVisibility,
+}
+
 ExportDialog.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(ExportDialog));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(ExportDialog));
