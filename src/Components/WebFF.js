@@ -22,7 +22,7 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import QuestionDialog from './QuestionDialog';
+// import QuestionDialog from './QuestionDialog';
 import SystemDialog from './SystemDialog';
 import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
@@ -2118,9 +2118,12 @@ class WebFF extends React.Component {
 					<SwitchUserDialog />
 					<SettingsDialog />
 					<AboutDialog />
-					<AddRemoveQuestionDialog />
+					<AddRemoveQuestionDialog
+						handleQuestionDialogClose={this.handleQuestionDialogClose}
+						customQuestionAdder={this.customQuestionAdder}
+						customQuestionDeleter={this.customQuestionDeleter} />
 					<AddRemoveStationDialog />
-					 
+
 					<SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
@@ -2142,11 +2145,9 @@ class WebFF extends React.Component {
 						username={this.state.loggedInUser}
 						globalState={this.state}
 					/>
-					<QuestionDialog isOpen={this.state.questionDialogOpen}
-						handleQuestionDialogClose={this.handleQuestionDialogClose}
-						customQuestionAdder={this.customQuestionAdder}
-						customQuestionDeleter={this.customQuestionDeleter}
-					/>
+					{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
+						
+					/> */}
 
 					<main className={classes.content} >
 						<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
