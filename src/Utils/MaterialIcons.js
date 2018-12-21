@@ -20,11 +20,25 @@ import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SubtitlesIcon from '@material-ui/icons/Subtitles';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import InfoIcon from '@material-ui/icons/Info';
+import SettingsIcon from '@material-ui/icons/Settings';
+import HelpIcon from '@material-ui/icons/Help';
+import BuildIcon from '@material-ui/icons/Build';
+import SyncIcon from '@material-ui/icons/Sync';
 
 
 export const materialIconBuilder = (iconName) => {
 	switch (iconName) {
 		case 'DashboardIcon': return <DashboardIcon />
+		case 'SyncIcon': return <SyncIcon />
+		case 'BuildIcon': return <BuildIcon />
+		case 'HelpIcon': return <HelpIcon />
+		case 'SettingsIcon': return <SettingsIcon />
+		case 'InfoIcon': return <InfoIcon />
+		case 'PermIdentityIcon': return <PermIdentityIcon />
+		case 'ChevronRightIcon': return <ChevronRightIcon />
 		case 'ImportContactsIcon': return <ImportContactsIcon />
 		case 'OpacityIcon': return <OpacityIcon />
 		case 'ReorderIcon': return <ReorderIcon />

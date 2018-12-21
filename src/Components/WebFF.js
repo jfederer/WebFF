@@ -2125,10 +2125,8 @@ class WebFF extends React.Component {
 
 					</AppBar>
 
-					<SystemMenu isOpen={UI.visibility.expandedSysMenu}
-						closeHandler={() => this.props.setSysMenuExpand(false)}
-					// menuItemClickHandler={this.handleSystemMenuItemClicked} 
-					/>
+					<SystemMenu isOpen={UI.visibility.expandedSysMenu}	/>
+					
 					<SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
@@ -2139,7 +2137,8 @@ class WebFF extends React.Component {
 						globalState={this.state}
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
-						removeStation={this.removeStation} />
+						removeStation={this.removeStation} 
+						/>
 
 					<NavMenu />
 
@@ -2177,10 +2176,10 @@ class WebFF extends React.Component {
 
 					</main>
 				</div >
-				<button onClick={() => this.props.setLoginDialogVisibility(false)}>Set False</button>
+				<button onClick={() => console.log(this.props)}>Print Props</button>
 				<button onClick={() => this.props.setLoginDialogVisibility(true)}>Set True</button>
 				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
-				<pre>{JSON.stringify(this.props.UI.visibility)}</pre>
+				{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 			</React.Fragment>
 		);
 	}
