@@ -24,7 +24,7 @@ import {
 // import Login from './Login';
 // import { Redirect } from 'react-router-dom';
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
-import XMLDialog from './XMLDialog';
+
 import QuestionDialog from './QuestionDialog';
 // import QuestionPage from './QuestionPage';
 // import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -38,6 +38,8 @@ import {
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
 import { setCurrentUser } from '../Actions/User';
 
+//dialogs
+import ExportDialog from './Dialogs/ExportDialog';
 
 // menus 
 import SystemMenu from './SystemMenu.js';
@@ -80,8 +82,6 @@ class WebFF extends React.Component {
 			usePaper: false,
 			syncDelay: 300000,
 
-		
-			XMLDialogOpen: false,
 			questionDialogOpen: false,
 
 			dialogValues: {},
@@ -2142,7 +2142,7 @@ class WebFF extends React.Component {
 
 					<NavMenu />
 
-					<XMLDialog isOpen={this.state.XMLDialogOpen}
+					<ExportDialog isOpen={this.state.XMLDialogOpen}
 						setShippedStatus={this.setShippedStatus}
 						handleXMLDialogClose={this.handleXMLDialogClose}
 						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}

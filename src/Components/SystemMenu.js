@@ -19,7 +19,7 @@ import { PROGRAM_VERSION } from '../Utils/Constants';
 import { syncToDB } from '../Actions/DB';
 import {
 	setSysMenuExpand,
-	setIODialogVisibility,
+	setExportDialogVisibility,
 	setAddRemoveStationDialogVisibility,
 	setAddRemoveQuestionDialogVisibility,
 	setSettingsDialogVisibility,
@@ -101,7 +101,7 @@ class SystemMenu extends React.Component {
 		const {
 			classes,
 			syncToDB,
-			setIODialogVisibility,
+			setExportDialogVisibility,
 			setAddRemoveStationDialogVisibility,
 			setAddRemoveQuestionDialogVisibility,
 			setSettingsDialogVisibility,
@@ -130,7 +130,7 @@ class SystemMenu extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Test" />
           </ListItem> */}
-						<ListItem button onClick={setIODialogVisibility} >
+						<ListItem button onClick={setExportDialogVisibility} >
 							<ListItemIcon>
 							{materialIconBuilder("CodeIcon")}
 							</ListItemIcon>
@@ -204,7 +204,7 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setSysMenuExpand: setSysMenuExpand,
 	syncToDB: syncToDB,
-	setIODialogVisibility: ()=>setIODialogVisibility(true),
+	setExportDialogVisibility: ()=>setExportDialogVisibility(true),
 	setAddRemoveStationDialogVisibility: ()=>setAddRemoveStationDialogVisibility(true),
 	setAddRemoveQuestionDialogVisibility: ()=>setAddRemoveQuestionDialogVisibility(true),
 	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),

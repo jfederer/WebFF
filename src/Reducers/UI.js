@@ -3,7 +3,7 @@ import {
 	SET_NAV_MENU_EXPAND, 
 	SET_SYS_MENU_EXPAND, 
 	SET_LOGIN_DIALOG_VISIBILITY, 
-	SET_IO_DIALOG_VISIBILITY,
+	SET_EXPORT_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY,
 	SET_SETTINGS_DIALOG_VISIBILITY,
@@ -18,14 +18,14 @@ const initialUIState = {
 	visibility: {
 		expandedNavMenu: false,
 		expandedSysMenu: false,
-		loginDialog: false,
+		loginDialogVisibility: false,
 		hiddenNavMenuItems: defaultHiddenNavMenuItems,
-		IODialog: false,
-		addRemoveStationDialog: false,
-		addRemoveQuestionDialog: false,
-		settingsDialog: false,
-		aboutDialog: false,
-		switchUserDialog: false
+		exportDialogVisibility: false,
+		addRemoveStationDialogVisibility: false,
+		addRemoveQuestionDialogVisibility: false,
+		settingsDialogVisibility: false,
+		aboutDialogVisibility: false,
+		switchUserDialogVisibility: false
 	}
 };
 
@@ -39,25 +39,25 @@ export function UI(state = initialUIState, action) {
 			newState.visibility.expandedSysMenu = action.payload;
 			break;
 		case SET_LOGIN_DIALOG_VISIBILITY:
-			newState.visibility.loginDialog = action.payload;
+			newState.visibility.loginDialogVisibility = action.payload;
 			break;
-		case SET_IO_DIALOG_VISIBILITY:
-			newState.visibility.IODialog = action.payload;
+		case SET_EXPORT_DIALOG_VISIBILITY:
+			newState.visibility.exportDialogVisibility = action.payload;
 			break;
 		case SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY:
-			newState.visibility.addRemoveStationDialog = action.payload;
+			newState.visibility.addRemoveStationDialogVisibility = action.payload;
 			break;
 		case SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY:
-			newState.visibility.addRemoveQuestionDialog = action.payload;
+			newState.visibility.addRemoveQuestionDialogVisibility = action.payload;
 			break;
 		case SET_SETTINGS_DIALOG_VISIBILITY:
-			newState.visibility.settingsDialog = action.payload;
+			newState.visibility.settingsDialogVisibility = action.payload;
 			break;
 		case SET_ABOUT_DIALOG_VISIBILITY:
-			newState.visibility.aboutDialog = action.payload;
+			newState.visibility.aboutDialogVisibility = action.payload;
 			break;
 		case SET_SWITCH_USER_DIALOG_VISIBILITY:
-			newState.visibility.switchUserDialog = action.payload;
+			newState.visibility.switchUserDialogVisibility = action.payload;
 			break;
 		default:
 			return state

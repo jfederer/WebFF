@@ -2,7 +2,7 @@ import {
 	SET_NAV_MENU_EXPAND, 
 	SET_SYS_MENU_EXPAND, 
 	SET_LOGIN_DIALOG_VISIBILITY, 
-	SET_IO_DIALOG_VISIBILITY,
+	SET_EXPORT_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY,
 	SET_SETTINGS_DIALOG_VISIBILITY,
@@ -23,8 +23,8 @@ export function setLoginDialogVisibility(visibilityValue) { //TODO:  (if visitib
 	return { type: SET_LOGIN_DIALOG_VISIBILITY, payload: visibilityValue }
 }
 
-export function setIODialogVisibility(visibilityValue) {  //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_IO_DIALOG_VISIBILITY, payload: visibilityValue }
+export function setExportDialogVisibility(visibilityValue) {  //TODO:  (if visitibility... show... if not, clear and hide)
+	return { type: SET_EXPORT_DIALOG_VISIBILITY, payload: visibilityValue }
 }
 
 export function setAddRemoveStationDialogVisibility(visibilityValue) { //TODO:  (if visitibility... show... if not, clear and hide)
