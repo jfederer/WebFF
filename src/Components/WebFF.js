@@ -35,10 +35,15 @@ import { setCurrentUser } from '../Actions/User';
 
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
+import SwitchUserDialog from './Dialogs/SwitchUserDialog';
+import SettingsDialog from './Dialogs/SettingsDialog';
+import AboutDialog from './Dialogs/AboutDialog';
+import AddRemoveQuestionDialog from './Dialogs/AddRemoveQuestionDialog';
+import AddRemoveStationDialog from './Dialogs/AddRemoveStationDialog';
 
 // menus 
 import SystemMenu from './Menus/SystemMenu.js';
-import NavMenu from './Menus/NavMenu.js'; 
+import NavMenu from './Menus/NavMenu.js';
 
 // pages
 import Dashboard from './Pages/Dashboard';
@@ -114,30 +119,30 @@ class WebFF extends React.Component {
 			}
 		}
 
-	// 	this.navigationControl = this.navigationControl.bind(this);
-	// 	this.handleDialogOpen = this.handleDialogOpen.bind(this);
-	// 	// this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
-	// 	this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
-	// 	this.dialogQuestionChangeSystemCallback = this.dialogQuestionChangeSystemCallback.bind(this);
-	// 	this.setLoggedInUser = this.setLoggedInUser.bind(this);
-	// 	this.addStation = this.addStation.bind(this);
-	// 	this.removeStation = this.removeStation.bind(this);
-	// 	this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
-	// 	this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
-	// 	this.getQuestionValueFromEvent = this.getQuestionValueFromEvent.bind(this);
-	// 	this.getQuestionValue = this.getQuestionValue.bind(this);
-	// 	this.getQuestionData = this.getQuestionData.bind(this);
-	// 	this.setQuestionValue = this.setQuestionValue.bind(this);
-	// 	this.setTableColumn = this.setTableColumn.bind(this);
-	// 	this.getEventDetails = this.getEventDetails.bind(this);
-	// 	this.deleteSamplingEvent = this.deleteSamplingEvent.bind(this);
-	// 	this.getNumberOfSetsInCurrentSamplingEvent = this.getNumberOfSetsInCurrentSamplingEvent.bind(this);
-	// 	this.getNumberOfSamplesInSet = this.getNumberOfSamplesInSet.bind(this);
-	// 	this.getCurrentSampleEventMethod = this.getCurrentSampleEventMethod.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
-	// 	this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
-	// 	this.setShippedStatus = this.setShippedStatus.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
-	// 	this.getSedLOGINcompatibleXML = this.getSedLOGINcompatibleXML.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
-	// 	this.getDescriptiveColumnForTable = this.getDescriptiveColumnForTable.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		// 	this.navigationControl = this.navigationControl.bind(this);
+		// 	this.handleDialogOpen = this.handleDialogOpen.bind(this);
+		// 	// this.handleSystemMenuItemClicked = this.handleSystemMenuItemClicked.bind(this);
+		// 	this.questionChangeSystemCallback = this.questionChangeSystemCallback.bind(this);
+		// 	this.dialogQuestionChangeSystemCallback = this.dialogQuestionChangeSystemCallback.bind(this);
+		// 	this.setLoggedInUser = this.setLoggedInUser.bind(this);
+		// 	this.addStation = this.addStation.bind(this);
+		// 	this.removeStation = this.removeStation.bind(this);
+		// 	this.createNewSamplingEvent = this.createNewSamplingEvent.bind(this);
+		// 	this.loadSamplingEvent = this.loadSamplingEvent.bind(this);
+		// 	this.getQuestionValueFromEvent = this.getQuestionValueFromEvent.bind(this);
+		// 	this.getQuestionValue = this.getQuestionValue.bind(this);
+		// 	this.getQuestionData = this.getQuestionData.bind(this);
+		// 	this.setQuestionValue = this.setQuestionValue.bind(this);
+		// 	this.setTableColumn = this.setTableColumn.bind(this);
+		// 	this.getEventDetails = this.getEventDetails.bind(this);
+		// 	this.deleteSamplingEvent = this.deleteSamplingEvent.bind(this);
+		// 	this.getNumberOfSetsInCurrentSamplingEvent = this.getNumberOfSetsInCurrentSamplingEvent.bind(this);
+		// 	this.getNumberOfSamplesInSet = this.getNumberOfSamplesInSet.bind(this);
+		// 	this.getCurrentSampleEventMethod = this.getCurrentSampleEventMethod.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		// 	this.getTableQuestionValue = this.getTableQuestionValue.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		// 	this.setShippedStatus = this.setShippedStatus.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		// 	this.getSedLOGINcompatibleXML = this.getSedLOGINcompatibleXML.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
+		// 	this.getDescriptiveColumnForTable = this.getDescriptiveColumnForTable.bind(this);  //FUTURE: move all these to a utility class and pass it the global state
 
 	}
 
@@ -611,18 +616,6 @@ class WebFF extends React.Component {
 	// 	this.setState({ dialogOpen: false });
 	// };
 
-
-	// handleXMLDialogOpen = (CB) => {
-	// 	this.setState({ XMLDialogOpen: true }, () => {
-	// 		if (typeof CB === "function") CB();
-	// 	});
-	// }
-
-	// handleXMLDialogClose = (CB) => {
-	// 	this.setState({ XMLDialogOpen: false }, () => {
-	// 		if (typeof CB === "function") CB();
-	// 	});
-	// }
 	// handleQuestionDialogOpen = (CB) => {
 	// 	this.setState({ questionDialogOpen: true }, () => {
 	// 		if (typeof CB === "function") {
@@ -2120,8 +2113,14 @@ class WebFF extends React.Component {
 
 					</AppBar>
 
-					<SystemMenu isOpen={UI.visibility.expandedSysMenu}	/>
-					
+					<NavMenu />
+					<SystemMenu />
+					<SwitchUserDialog />
+					<SettingsDialog />
+					<AboutDialog />
+					<AddRemoveQuestionDialog />
+					<AddRemoveStationDialog />
+					 
 					<SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
@@ -2132,14 +2131,13 @@ class WebFF extends React.Component {
 						globalState={this.state}
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
-						removeStation={this.removeStation} 
-						/>
+						removeStation={this.removeStation}
+					/>
 
-					<NavMenu />
 
-					<ExportDialog isOpen={this.state.XMLDialogOpen}
+
+					<ExportDialog
 						setShippedStatus={this.setShippedStatus}
-						handleXMLDialogClose={this.handleXMLDialogClose}
 						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
 						username={this.state.loggedInUser}
 						globalState={this.state}

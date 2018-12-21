@@ -291,7 +291,9 @@ class ExportDialog extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI
+		UI: state.UI, // to get dialog visibility
+		user: state.User,  // to get sedlogin username
+		sedff: state.SedFF // to get current user
 	}
 }
 
