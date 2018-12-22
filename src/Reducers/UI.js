@@ -45,7 +45,7 @@ export function UI(state = initialUIState, action) {
 			newState.visibility.exportDialogVisibility = action.payload;
 			break;
 		case SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY:
-			newState.visibility.addRemoveStationDialogVisibility = action.payload;
+			newState.visibility.addRemoveStationDialogVisibility = action.payload; 
 			break;
 		case SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY:
 			newState.visibility.addRemoveQuestionDialogVisibility = action.payload;
