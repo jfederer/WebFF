@@ -22,13 +22,13 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-// import QuestionDialog from './QuestionDialog';
 import SystemDialog from './SystemDialog';
 import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
-	PHP_FILE_LOCATION, PROGRAM_VERSION, USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
+	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
 	QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
+
 
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
 import { setCurrentUser } from '../Actions/User';
@@ -180,7 +180,7 @@ class WebFF extends React.Component {
 		// this.setState({ showLoadingApp: true }); //TODO: redux, leading sign, false after load complete.
 
 		if (navigator.onLine) {
-			ensureProgramVersionUpToDate(PROGRAM_VERSION);
+			ensureProgramVersionUpToDate();
 		}
 
 

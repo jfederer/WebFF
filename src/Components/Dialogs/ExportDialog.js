@@ -18,7 +18,8 @@ import Divider from '@material-ui/core/Divider';
 
 import { saveFile } from '../../Utils/FileHandling';
 
-import { PHP_FILE_LOCATION, SEDLOGIN_SUCCESS_MESSAGE } from '../../Utils/Constants';
+import { SEDLOGIN_SUCCESS_MESSAGE } from '../../Utils/Constants';
+import { PHP_FILE_LOCATION } from '../../Constants/Version';
 
 import { setExportDialogVisibility } from '../../Actions/UI';
 

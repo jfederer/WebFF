@@ -1,4 +1,4 @@
-import {PHP_FILE_LOCATION } from './Constants';
+import {PHP_FILE_LOCATION, PROGRAM_VERSION } from '../Constants/Version';
 
 export const isReasonablyValidUsernameInLS = () => {
     let user = "";
@@ -15,16 +15,16 @@ export const isReasonableUsername = (user) => {
 	return !(user === undefined || user === null || user === '' || user.indexOf('@usgs.gov') < 4 || user.length < 11);
 }
 
-export const ensureProgramVersionUpToDate = (localVersion) => {
-    console.log("Checking if program version " + localVersion + " needs to be updated...");
+export const ensureProgramVersionUpToDate = () => {
+    console.log("Checking if program version " + PROGRAM_VERSION + " needs to be updated...");
 
     let url = PHP_FILE_LOCATION + 'currentVersion.php';
     fetch(url)
         .then(response => response.text())
         .then((repos) => {
-            if (repos !== localVersion) {
-                alert("You are using an out-of-date version of SedFF ("+localVersion+").\nWe will reload to get the newest version ("+repos+").\n\n You may see this message multiple times.");
-                window.location.reload(true);
+            if (repos !== PROGRAM_VERSION) {
+                alert("You are using an out-of-date version of SedFF ("+PROGRAM_VERSION+").\n We will reload to get the newest version ("+repos+").\n\n You may see this message multiple times.");
+                window.location.reload(true); //TODO: should be a new action -- checking and updating are separate concepts
             }
         }
         );

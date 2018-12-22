@@ -5,25 +5,16 @@ import { connect } from 'react-redux';
 import { styles } from '../../style';
 
 import { withStyles } from '@material-ui/core/styles';
-// import Paper from '@material-ui/core/Paper';
-// import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-// import Typography from '@material-ui/core/Typography';
-// import Divider from '@material-ui/core/Divider';
+import Divider from '@material-ui/core/Divider';
 
+import SedFF_Logo from '../../Images/SedFF_Logo.png';
 
+import { PROGRAM_VERSION, RELEASE_DATE } from '../../Constants/Version';
 import { setAboutDialogVisibility } from '../../Actions/UI';
 
 class AboutDialog extends React.Component {
-	closeHandler = () => {
-		this.props.setAboutDialogVisibility(false);
-	}
 
 	render() {
 		const { classes } = this.props;
@@ -32,26 +23,24 @@ class AboutDialog extends React.Component {
 		return (
 			<Dialog
 				open={aboutDialogVisibility}
-				onClose={this.closeHandler}
-				aria-labelledby="form-dialog-title"
+				onClose={() => this.props.setAboutDialogVisibility(false)}
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
-				<DialogTitle id="form-dialog-title">About SedFF</DialogTitle>
+
 				<DialogContent>
-					About!!!
+					<center><img src={SedFF_Logo} width="500" height="200" />
+						<br />
+						Sediment Field Forms version {PROGRAM_VERSION}, released on {RELEASE_DATE}.</center>
+					<br />
+					<Divider />
+					<br />
+					SedFF was built by Joe Federer (jfederer@usgs.gov) and Ken Skach (kaskach@usgs.gov) under the direction of Molly Wood (mswood@usgs.gov) as a part of the Hydrologic Networks Branch / Observing Systems Division.
 				</DialogContent>
-				<DialogActions>
-					<Button onClick={this.closeHandler} color="primary">
-						Done
-            		</Button>
-				</DialogActions>
 			</Dialog>
 		);
 	}
 }
-
-
 
 const mapStateToProps = function (state) {
 	return {
