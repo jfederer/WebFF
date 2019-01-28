@@ -13,7 +13,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 
 import { styles } from '../style';
-import { safeCopy } from '../Utils/Utilities';
 import 'typeface-roboto';
 import {
 	Route,
@@ -22,7 +21,6 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import SystemDialog from './SystemDialog';
 import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
@@ -2110,21 +2108,32 @@ class WebFF extends React.Component {
 								<MenuIcon />
 							</IconButton>
 						</Toolbar>
-
 					</AppBar>
 
 					<NavMenu />
+
 					<SystemMenu />
-					<SwitchUserDialog />
-					<SettingsDialog />
-					<AboutDialog />
-					<AddRemoveQuestionDialog
+					<ExportDialog
+					//TODO: REDUX
+						setShippedStatus={this.setShippedStatus}
+						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
+						username={this.state.loggedInUser}
+						globalState={this.state}
+					/>
+					{/* <SyncDataDialog /> */}
+					<AddRemoveQuestionDialog 
+						//TODO: REDUX
 						handleQuestionDialogClose={this.handleQuestionDialogClose}
 						customQuestionAdder={this.customQuestionAdder}
 						customQuestionDeleter={this.customQuestionDeleter} />
-					<AddRemoveStationDialog />
+					<AddRemoveStationDialog /> 
+					<SettingsDialog />
+					<AboutDialog />
+					<SwitchUserDialog />
 
-					<SystemDialog isOpen={this.state.dialogOpen}
+					
+
+					{/* <SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
 						dialogName={this.state.curDialogName}
@@ -2135,16 +2144,11 @@ class WebFF extends React.Component {
 						setLoggedInUser={this.setLoggedInUser}
 						addStation={this.addStation}
 						removeStation={this.removeStation}
-					/>
+					/> */}
 
 
 
-					<ExportDialog
-						setShippedStatus={this.setShippedStatus}
-						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
-						username={this.state.loggedInUser}
-						globalState={this.state}
-					/>
+					
 					{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
 						
 					/> */}

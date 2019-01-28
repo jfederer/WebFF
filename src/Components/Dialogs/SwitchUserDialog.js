@@ -5,29 +5,46 @@ import { connect } from 'react-redux';
 import { styles } from '../../style';
 
 import { withStyles } from '@material-ui/core/styles';
-// import Paper from '@material-ui/core/Paper';
-// import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-// import Typography from '@material-ui/core/Typography';
-// import Divider from '@material-ui/core/Divider';
+import Divider from '@material-ui/core/Divider';
 
-
+import {isReasonableUsername} from '../../Utils/ValidationUtilities';
 import { setSwitchUserDialogVisibility } from '../../Actions/UI';
+import { setCurrentUser } from '../../Actions/User';
 
 class SwitchUserDialog extends React.Component {
-	closeHandler = () => {
+
+	constructor(props){
+		super(props);
+		this.state = { newUsername: ""};
+	  }
+
+	handleClose = () => {
 		this.props.setSwitchUserDialogVisibility(false);
 	}
+	handleSwitchUser = () => {
+		this.props.setCurrentUser(this.state.newUsername);
+		this.handleClose();
+	}
+
+	handleTextChange = (e) => {
+		this.setState({newUsername:e.target.value});
+	}
+
+	isNewUsernameValid = () => {
+		return isReasonableUsername(this.state.newUsername); // note, we are not checking that the username is different than the current because this might be a good way to backdoor reload a user.
+	}
+
 
 	render() {
 		const { classes } = this.props;
 		const { switchUserDialogVisibility } = this.props.UI.visibility;
+		const { currentUser } = this.props.sedff;
 
 		return (
 			<Dialog
@@ -39,11 +56,31 @@ class SwitchUserDialog extends React.Component {
 			>
 				<DialogTitle id="form-dialog-title">Switch User</DialogTitle>
 				<DialogContent>
-					SWITCH USER!!!
+					All your SedFF data is associated with your username.  For most, this will be your email address.  Your username must end in @usgs.gov.  If you wish to log in to SedFF with a different username, enter it below.
+					<Divider />			
+					<br />		
+					The currently logged in user is: <em>{currentUser}</em>
+					<Divider />
+					<br />
+					<br />
+					<TextField
+							autoFocus
+                            margin="dense"
+                            id="newusername"
+                            placeholder="username@usgs.gov"
+                            label="Enter New Username"
+                            type="email"
+                            fullWidth
+                            onChange={this.handleTextChange}
+                            value={this.state.newUsername}
+                        />
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={this.closeHandler} color="primary">
-						Done
+					<Button onClick={this.handleSwitchUser} disabled={!this.isNewUsernameValid()} color="primary">
+						Switch
+            		</Button>
+					<Button onClick={this.handleClose} color="primary">
+						Cancel
             		</Button>
 				</DialogActions>
 			</Dialog>
@@ -56,13 +93,13 @@ class SwitchUserDialog extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI, // to get dialog visibility
-		user: state.User,
-		sedff: state.SedFF
+		sedff: state.SedFF // to get current user
 	}
 }
 
 const mapDispatchToProps = {
 	setSwitchUserDialogVisibility: setSwitchUserDialogVisibility,
+	setCurrentUser: setCurrentUser
 }
 
 SwitchUserDialog.propTypes = {
