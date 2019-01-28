@@ -64,6 +64,7 @@ class WebFF extends React.Component {
 
 		super(props);
 		var allItemsToSyncToLS = USER_DB_NODES.slice();
+		
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 		this.state = {
