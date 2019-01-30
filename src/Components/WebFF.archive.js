@@ -2193,7 +2193,7 @@ WebFF.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI,
-		user: state.User,
+		users: state.Users,
 		sedff: state.SedFF
 	}
 }

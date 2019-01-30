@@ -1,25 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import EventsManager from '../Common/EventsManager';
-import TextField from '@material-ui/core/TextField';
+import { connect } from 'react-redux';
 
-const styles = theme => ({
-	root: {
-		flexGrow: 1,
-	},
-	paper: {
-		padding: theme.spacing.unit * 2,
-		textAlign: 'center',
-		color: theme.palette.text.secondary,
-	},
-});
+import { styles } from '../../style';
+import { withStyles } from '@material-ui/core/styles';
+
+import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { TextField, Grid, Divider, Button, Paper } from '@material-ui/core';
+
+import EventsManager from '../Common/EventsManager';
 
 class Dashboard extends React.Component {
 
@@ -36,10 +27,10 @@ class Dashboard extends React.Component {
 	handleSamplingEventNameChange = (e) => {
 		this.setState({ newSamplingEventName: e.target.value });
 
-		if (Object.keys(localStorage).includes(this.props.samplingEventIdentifier + e.target.value)) {
+		if (Object.keys(this.props.events).includes(e.target.value)) {
 			// WARNING, this will overwrite a deleted event
-			let matchedEventInLS = JSON.parse(localStorage.getItem(this.props.samplingEventIdentifier + e.target.value));
-			if (!matchedEventInLS.deleted) {
+			let matchedEvent = this.props.events[e.target.value];
+			if (!matchedEvent.deleted) {
 				this.setState({ newEventButtonDisabled: true });
 			}
 		} else {
@@ -65,11 +56,18 @@ class Dashboard extends React.Component {
 	}
 
 
+
 	render() {
-		const { classes } = this.props;
+		const { classes, currentUser } = this.props;
+		const {currentUsername} = this.props.sedff;
 
+	//	let samplingEvents = users[currentUsername]
+		
+		//eventIDs.map((id)=>this.props.events[id]);
 
-		// let samplingEventNames = this.props.samplingEvents;
+		console.log(currentUser);
+
+		 //= this.props.samplingEvents;
 		//	console.log("Dashboard Sampling Events: ", samplingEventNames);
 
 		const MyLink = props => <Link to="/FieldForm" {...props} />
@@ -147,9 +145,27 @@ class Dashboard extends React.Component {
 	}
 }
 
+const mapStateToProps = function (state) {
+	return {
+		UI: state.UI, // to get dialog visibility 
+		users: state.Users, // to get user settings
+		sedff: state.SedFF,
+		events: state.Events,
+		currentUser: state.Users[state.SedFF.currentUsername]
+	}
+}
+
+const mapDispatchToProps = {
+}
+
 Dashboard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	appBarTextCB: PropTypes.func
 };
 
-export default withRouter(withStyles(styles, { withTheme: true })(Dashboard));
+export default withRouter(
+	withStyles(styles, { withTheme: true })
+		(connect(mapStateToProps, mapDispatchToProps)
+			(Dashboard)
+		)
+);

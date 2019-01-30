@@ -35,8 +35,8 @@ class SettingsDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			backupInterval: this.props.user.settings.backupInterval,
-			sedLoginUsername: this.props.user.sedLoginUsername,
+			backupInterval: this.props.users[this.props.sedff.currentUsername].settings.backupInterval,
+			sedLoginUsername: this.props.users[this.props.sedff.currentUsername].sedLoginUsername,
 		};
 	}
 
@@ -62,10 +62,10 @@ class SettingsDialog extends React.Component {
 
 
 
-	render() {
+render() {
 		const { classes } = this.props;
 		const { settingsDialogVisibility } = this.props.UI.visibility;
-		const { outlineQuestions } = this.props.user.settings;
+		const { outlineQuestions } = this.props.users[this.props.sedff.currentUsername].settings;
 
 		return (
 			<Dialog
@@ -125,7 +125,7 @@ class SettingsDialog extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI, // to get dialog visibility 
-		user: state.User, // to get user settings
+		users: state.Users, // to get user settings
 		sedff: state.SedFF
 	}
 }

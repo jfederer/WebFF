@@ -5,7 +5,7 @@ const initialSedFFState = {
 		currentUsername: (localStorage.getItem('loggedInUser')) && localStorage.getItem('loggedInUser') !== 'undefined'
 			? JSON.parse(localStorage.getItem('loggedInUser')) 
 			// : null,
-			: "mERP",
+			: "jfederer@usgs.gov",
 		currentEvent: null
 };
 

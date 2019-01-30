@@ -1,12 +1,16 @@
 import { combineReducers } from 'redux';
 import { UI } from './UI';
-import { User } from './User';
+import { Users } from './User';
 import { SedFF } from './SedFF';
+import { Events } from './Events';
+import { LinkTables } from './LinkTables';
 
 const RootReducer = combineReducers({
 	UI,
-	User,
-	SedFF
+	Users,
+	SedFF,
+	Events,
+	LinkTables
   });
   
   export default RootReducer;

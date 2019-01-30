@@ -16,7 +16,8 @@ import { styles } from '../style';
 import 'typeface-roboto';
 import {
 	Route,
-	Switch
+	Switch,
+	Redirect
 } from 'react-router-dom';
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
@@ -130,8 +131,8 @@ class WebFF extends React.Component {
 
 
 
-		if (isReasonableUsername(this.props.user.username)) {
-			console.log(this.props.user.username + "is logged in");
+		if (isReasonableUsername(this.props.sedff.currentUsername)) {
+			console.log(this.props.sedff.currentUsername + "is logged in");
 			// this.gatherUserConfig(USER_DB_NODES); // after setting loggedInUser, load user configuration);
 		} else {
 			console.log("No one is logged in... requesting user id");
@@ -142,10 +143,13 @@ class WebFF extends React.Component {
 
 
 	render() {
-		const { classes, UI } = this.props;
-		// 	{ (isReasonablyValidUsernameInLS())
-		// 		? <div><Login setLoggedInUser={this.setLoggedInUser} />No one is logged in</div> 
-		// }
+		const { classes, UI, currentUser } = this.props;
+		
+		if(currentUser===undefined && this.props.location.pathname !== '/') {
+			console.log("There is no currentuser...going to login page");
+			return <Redirect to='/' />;
+		}
+		
 
 
 		return (
@@ -245,9 +249,8 @@ class WebFF extends React.Component {
 
 					</main>
 				</div >
-				<button onClick={() => console.log(this.props)}>Print Props</button>
-				<button onClick={() => this.props.setLoginDialogVisibility(true)}>Set True</button>
-				{this.props.user.settings.backupInterval}
+				<button onClick={() => console.log(this.props)}>Print Props</button><br/>
+				{JSON.stringify(currentUser)}
 				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
 				{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 			</React.Fragment>
@@ -262,8 +265,10 @@ WebFF.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI,
-		user: state.User,
-		sedff: state.SedFF
+		users: state.Users,
+		sedff: state.SedFF,
+		events: state.Events,
+		currentUser: state.Users[state.SedFF.currentUsername]
 	}
 }
 

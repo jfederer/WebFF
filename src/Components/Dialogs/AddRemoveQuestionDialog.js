@@ -323,7 +323,7 @@ class AddRemoveQuestionDialog extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI, // to get dialog visibility
-		user: state.User,
+		users: state.Users,
 		sedff: state.SedFF
 	}
 }
