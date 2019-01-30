@@ -26,7 +26,8 @@ const initialUIState = {
 		settingsDialogVisibility: false,
 		aboutDialogVisibility: false,
 		switchUserDialogVisibility: false
-	}
+	},
+	outlineQuestions: false
 };
 
 export function UI(state = initialUIState, action) {

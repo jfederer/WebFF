@@ -8,6 +8,12 @@ export const styles = theme => ({
 	  position: 'relative',
 	  display: 'flex',
 	},
+	hundredWidth: {
+		width: '100%',
+	},
+	inline: {
+		display: 'inline',
+	  },
 	appBar: {
 	  zIndex: theme.zIndex.drawer + 1,
 	  transition: theme.transitions.create(['width', 'margin'], {
@@ -80,4 +86,7 @@ export const styles = theme => ({
   selectEmpty: {
 	marginTop: theme.spacing.unit * 2,
   },
+  settingsTextField: {
+	marginLeft: "16px",
+}
   });

@@ -29,7 +29,8 @@ import {
 
 
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
-import { setCurrentUser } from '../Actions/User';
+import { setCurrentUser, loadUserData, loadUserDataToo } from '../Actions/SedFF';
+
 
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
@@ -2177,6 +2178,7 @@ class WebFF extends React.Component {
 				</div >
 				<button onClick={() => console.log(this.props)}>Print Props</button>
 				<button onClick={() => this.props.setLoginDialogVisibility(true)}>Set True</button>
+				{this.props.user.settings.backupInterval}
 				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
 				{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 			</React.Fragment>
@@ -2200,7 +2202,8 @@ const mapDispatchToProps = {
 	setLoginDialogVisibility: setLoginDialogVisibility,
 	setCurrentUser: setCurrentUser,
 	setNavMenuExpand: setNavMenuExpand,
-	setSysMenuExpand: setSysMenuExpand
+	setSysMenuExpand: setSysMenuExpand,
+	loadUserData: loadUserData
 }
 
 

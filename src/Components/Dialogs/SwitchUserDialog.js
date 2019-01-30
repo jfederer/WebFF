@@ -15,18 +15,22 @@ import Divider from '@material-ui/core/Divider';
 
 import {isReasonableUsername} from '../../Utils/ValidationUtilities';
 import { setSwitchUserDialogVisibility } from '../../Actions/UI';
-import { setCurrentUser } from '../../Actions/User';
+import { setCurrentUser } from '../../Actions/SedFF';
+
+const initialState =  { newUsername: ""};
 
 class SwitchUserDialog extends React.Component {
 
 	constructor(props){
 		super(props);
-		this.state = { newUsername: ""};
+		this.state = initialState;
 	  }
 
 	handleClose = () => {
 		this.props.setSwitchUserDialogVisibility(false);
+		setTimeout(this.setState(initialState), 250);
 	}
+
 	handleSwitchUser = () => {
 		this.props.setCurrentUser(this.state.newUsername);
 		this.handleClose();
@@ -44,12 +48,12 @@ class SwitchUserDialog extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { switchUserDialogVisibility } = this.props.UI.visibility;
-		const { currentUser } = this.props.sedff;
+		const { currentUsername } = this.props.sedff;
 
 		return (
 			<Dialog
 				open={switchUserDialogVisibility}
-				onClose={this.closeHandler}
+				onClose={this.handleClose}
 				aria-labelledby="form-dialog-title"
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
@@ -59,7 +63,7 @@ class SwitchUserDialog extends React.Component {
 					All your SedFF data is associated with your username.  For most, this will be your email address.  Your username must end in @usgs.gov.  If you wish to log in to SedFF with a different username, enter it below.
 					<Divider />			
 					<br />		
-					The currently logged in user is: <em>{currentUser}</em>
+					The currently logged in user is: <em>{currentUsername}</em>
 					<Divider />
 					<br />
 					<br />
@@ -98,8 +102,8 @@ const mapStateToProps = function (state) {
 }
 
 const mapDispatchToProps = {
-	setSwitchUserDialogVisibility: setSwitchUserDialogVisibility,
-	setCurrentUser: setCurrentUser
+	setSwitchUserDialogVisibility,
+	setCurrentUser
 }
 
 SwitchUserDialog.propTypes = {
