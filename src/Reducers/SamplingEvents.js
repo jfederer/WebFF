@@ -1,8 +1,8 @@
-import { CREATE_NEW_EVENT } from '../Constants/ActionTypes';
+import { CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
 //MOCK
-const initialEventsState = {
+const initialSamplingEventsState = {
 	"695833f2-e483-4c34-a962-d14f79037920": {
 		eventName: "Event1-JoeAndTom",
 		dateModified: "Wed Jan 30 2019 12:44:59 GMT-0600 (Central Standard Time)",
@@ -41,12 +41,12 @@ const initialEventsState = {
 
 // const initialEventsState = {};
 
-export function Events(state = initialEventsState, action) {
+export function SamplingEvents(state = initialSamplingEventsState, action) {
 		let newState = _.cloneDeep(state);
 switch (action.type) {
-	case CREATE_NEW_EVENT:
+	case CREATE_NEW_SAMPLING_EVENT:
 		//TODO:
-		alert("Creating new event: ", action.eventName);
+		alert("Creating new sampling event: ID: ", action.eventID, " Name: ", action.eventName);
 		return newState;
 	default:
 		return state

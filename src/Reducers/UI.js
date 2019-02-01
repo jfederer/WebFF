@@ -8,10 +8,12 @@ import {
 	SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY,
 	SET_SETTINGS_DIALOG_VISIBILITY,
 	SET_ABOUT_DIALOG_VISIBILITY,
-	SET_SWITCH_USER_DIALOG_VISIBILITY
+	SET_SWITCH_USER_DIALOG_VISIBILITY,
+	SET_APP_BAR_TEXT
 } from '../Constants/ActionTypes';
 
 import { defaultHiddenNavMenuItems } from '../Constants/NavMenu';
+
 
 
 const initialUIState = {
@@ -27,38 +29,42 @@ const initialUIState = {
 		aboutDialogVisibility: false,
 		switchUserDialogVisibility: false
 	},
-	outlineQuestions: false
+	outlineQuestions: false,
+	appBarText: "Sediment Fiel Forms"
 };
 
 export function UI(state = initialUIState, action) {
 	let newState = _.cloneDeep(state);
 	switch (action.type) {
 		case SET_NAV_MENU_EXPAND:
-			newState.visibility.expandedNavMenu = action.payload;
+			newState.visibility.expandedNavMenu = action.expandValue;
 			break;
 		case SET_SYS_MENU_EXPAND:
-			newState.visibility.expandedSysMenu = action.payload;
+			newState.visibility.expandedSysMenu = action.expandValue;
 			break;
 		case SET_LOGIN_DIALOG_VISIBILITY:
-			newState.visibility.loginDialogVisibility = action.payload;
+			newState.visibility.loginDialogVisibility = action.loginDialogVisibility;
 			break;
 		case SET_EXPORT_DIALOG_VISIBILITY:
-			newState.visibility.exportDialogVisibility = action.payload;
+			newState.visibility.exportDialogVisibility = action.exportDialogVisibility;
 			break;
 		case SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY:
-			newState.visibility.addRemoveStationDialogVisibility = action.payload; 
+			newState.visibility.addRemoveStationDialogVisibility = action.addRemoveStationDialogVisibility; 
 			break;
 		case SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY:
-			newState.visibility.addRemoveQuestionDialogVisibility = action.payload;
+			newState.visibility.addRemoveQuestionDialogVisibility = action.addRemoveQuestionDialogVisibility;
 			break;
 		case SET_SETTINGS_DIALOG_VISIBILITY:
-			newState.visibility.settingsDialogVisibility = action.payload;
+			newState.visibility.settingsDialogVisibility = action.settingsDialogVisibility;
 			break;
 		case SET_ABOUT_DIALOG_VISIBILITY:
-			newState.visibility.aboutDialogVisibility = action.payload;
+			newState.visibility.aboutDialogVisibility = action.aboutDialogVisibility;
 			break;
 		case SET_SWITCH_USER_DIALOG_VISIBILITY:
-			newState.visibility.switchUserDialogVisibility = action.payload;
+			newState.visibility.switchUserDialogVisibility = action.switchUserDialogVisibility;
+			break;
+		case SET_APP_BAR_TEXT:
+			newState.appBarText = action.appBarText;
 			break;
 		default:
 			return state

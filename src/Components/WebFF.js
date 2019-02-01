@@ -46,7 +46,7 @@ import SystemMenu from './Menus/SystemMenu.js';
 import NavMenu from './Menus/NavMenu.js';
 
 // pages
-import Dashboard from './Pages/Dashboard';
+import Dashboard from './Pages/Dashboard/Dashboard';
 import FieldForm from './Pages/FieldForm';
 import DataEntry from './Pages/DataEntry';
 import Parameters from './Pages/Parameters';
