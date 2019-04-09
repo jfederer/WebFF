@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.props.setAppBarText("Sediment Field Forms - Dashing!"); //TODO: after tested, remove dashing
+		this.props.setAppBarText("Sediment Field Forms");
 	}
 
 	render() {

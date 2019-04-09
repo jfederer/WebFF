@@ -30,7 +30,7 @@ const initialUIState = {
 		switchUserDialogVisibility: false
 	},
 	outlineQuestions: false,
-	appBarText: "Sediment Fiel Forms"
+	appBarText: "Sediment Field Forms"
 };
 
 export function UI(state = initialUIState, action) {

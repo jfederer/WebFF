@@ -171,7 +171,7 @@ class WebFF extends React.Component {
 							</IconButton>
 
 							<Typography variant="title" color="inherit" noWrap>
-								{this.state.appBarText}
+								{UI.appBarText}
 							</Typography>
 
 							<IconButton

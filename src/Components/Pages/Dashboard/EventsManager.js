@@ -1,3 +1,6 @@
+//TODO: delete just removes from view, does not delete from data
+//TODO: currently, selecting the row tries to load the event.  This is unwanted behavior.
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -64,15 +67,23 @@ class EventsManager extends React.Component {
 			filterType: 'checkbox',
 			print: false,
 			download: false,
-			onRowClick: this.onRowClick
+			onRowClick: this.onRowClick,
+			onRowsSelect: this.onRowsSelect
 		};
 
 		console.log("Sampling Events: ", this.props.samplingEvents);
 	}
 
 	onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
-		let eventID = rowMeta.dataIndex; //TODO: actually get event ID
-		this.props.loadSamplingEvent(eventID);
+		console.log("----RowClick");
+		console.log("rowData: ", rowData);
+		console.log("rowMeta: ", rowMeta);
+	}
+
+	onRowsSelect = (curRowSelected, allRowsSelected) => {
+		console.log("---RowSelect")
+		console.log("Row Selected: ", curRowSelected);
+		console.log("All Selected: ", allRowsSelected);
 	}
 
 	render() {
