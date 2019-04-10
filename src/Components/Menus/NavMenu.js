@@ -42,7 +42,7 @@ class NavMenu extends React.Component {
 					{navMenuItems.map((menuItem) => {
 						return (
 							hiddenNavMenuItems === undefined || !hiddenNavMenuItems.includes(menuItem.text)
-								? <ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route}>
+								? <ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route} >  {/* // onClick={()=>console.log("load page ", menuItem.text)}> */}
 									<ListItemIcon>
 										{materialIconBuilder(menuItem.icon)}
 									</ListItemIcon>

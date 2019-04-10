@@ -14,6 +14,7 @@ import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
 //Action Creators
 import { syncToDB } from '../../Actions/DB';
+import { setCurrentUser } from '../../Actions/SedFF';
 import {
 	setSysMenuExpand,
 	setExportDialogVisibility,
@@ -206,7 +207,8 @@ const mapDispatchToProps = {
 	setAddRemoveQuestionDialogVisibility: ()=>setAddRemoveQuestionDialogVisibility(true),
 	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),
 	setAboutDialogVisibility: ()=>setAboutDialogVisibility(true),
-	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true)
+	// setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) //TODO: this was removed for testing, replace
+	setSwitchUserDialogVisibility: ()=>setCurrentUser("bebble@bob.drop")
 }
 
 SystemMenu.propTypes = {

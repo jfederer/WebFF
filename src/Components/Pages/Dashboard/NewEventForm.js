@@ -11,6 +11,9 @@ import { Link } from 'react-router-dom';
 import { TextField, Grid, Divider, Button, Paper } from '@material-ui/core';
 
 import { createNewSamplingEvent } from '../../../Actions/SamplingEvents';
+import { showNavigationTab } from '../../../Actions/UI';
+import { loadSamplingEvent } from '../../../Actions/SedFF';
+
 
 class NewEventForm extends React.Component {
 
@@ -25,30 +28,44 @@ class NewEventForm extends React.Component {
 	handleSamplingEventNameChange = (e) => {
 		this.setState({ newSamplingEventName: e.target.value });
 
-		if (Object.keys(this.props.events).includes(e.target.value)) {
-			// WARNING, this will overwrite a deleted event
-			let matchedEvent = this.props.events[e.target.value];
-			if (!matchedEvent.deleted) {
-				this.setState({ newEventButtonDisabled: true });
-			}
-		} else {
-			this.setState({ newEventButtonDisabled: false });
-		}
+		//TODO: rebuild to redux... perhaps not needed
+		// if (Object.keys(this.props.events).includes(e.target.value)) {
+		// 	// WARNING, this will overwrite a deleted event
+		// 	let matchedEvent = this.props.events[e.target.value];
+		// 	if (!matchedEvent.deleted) {
+		// 		this.setState({ newEventButtonDisabled: true });
+		// 	}
+		// } else {
+		// 	this.setState({ newEventButtonDisabled: false });
+		// }
 	}
 
 	handleBrandNewButtonClick = () => {
 		// console.log("handleBrandNewButtonClick()");
 
-		this.props.createNewSamplingEvent(this.state.newSamplingEventName
-			? this.state.newSamplingEventName
-			: ""
-			,
-			() => this.props.history.push('/FieldForm')
+		this.props.createNewSamplingEvent(
+			this.state.newSamplingEventName
+				? this.state.newSamplingEventName
+				: ""  //deal with in action
 		);
-		this.props.navControl("Water Quality", true);
-		this.props.navControl("Field Form", true);
+
+		this.props.loadSamplingEvent(
+			//TODO: need uuid from created event...
+
+		)
+
 	}
 
+
+	// ,
+	// 		() => { //success  //TODO: this shoudl be LOAD  event action
+	// 			this.props.showNavigationTab("Field Form");
+	// 			this.props.showNavigationTab("Water Quality");
+	// 			this.props.history.push('/FieldForm');
+	// 		},
+	// 		() => { //failure
+	// 			alert("Failed to make new sampling event.");
+	// 		}
 
 	render() {
 		const { classes, currentUser } = this.props;
@@ -76,7 +93,7 @@ class NewEventForm extends React.Component {
 						}}
 
 					/>
-					
+
 					<br />
 					<Button
 						className={classes.dashboardWidgetButton}
@@ -88,8 +105,8 @@ class NewEventForm extends React.Component {
 							? "EVENT MUST HAVE UNIQUE NAME"
 							: "CREATE NEW EVENT"}
 					</Button>
-					</div>
-				
+				</div>
+
 			</Paper>
 		);
 	}
@@ -99,13 +116,15 @@ const mapStateToProps = function (state) {
 	return {
 		users: state.Users, // to get user settings
 		sedff: state.SedFF,
-		samplingEvents: state.SamplingEvents,
+		samplingEvents: state.SamplingEvents, //to get list of sampling events to check for uniqueness for that user
 		currentUser: state.Users[state.SedFF.currentUsername]
 	}
 }
 
 const mapDispatchToProps = {
-	createNewSamplingEvent
+	createNewSamplingEvent,
+	loadSamplingEvent,
+	showNavigationTab
 }
 
 NewEventForm.propTypes = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -49,23 +49,27 @@ class SettingsDialog extends React.Component {
 		//TODO: CSS for not valid
 
 		clearTimeout(debounce[stateValueName]);
-	
+
 		this.setState({ [stateValueName]: e.target.value },
 			() => {
 				debounce[stateValueName] = setTimeout(() => {
 					actionCreator(this.state[stateValueName]);
 				}
-				, 2000); // 2 seconds of debounce control
+					, 2000); // 2 seconds of debounce control
 			}
 		);
 	}
 
 
 
-render() {
+	render() {
 		const { classes } = this.props;
 		const { settingsDialogVisibility } = this.props.UI.visibility;
-		const { outlineQuestions } = this.props.users[this.props.sedff.currentUsername].settings;
+		const { isFetchingUserData } = this.props.sedff;
+		if (!isFetchingUserData) {
+			const { outlineQuestions } = this.props.users[this.props.sedff.currentUsername].settings;
+		}
+
 
 		return (
 			<Dialog
@@ -78,35 +82,42 @@ render() {
 				<DialogTitle id="form-dialog-title">Settings</DialogTitle>
 				<DialogContent>
 					<Paper>
-						<Typography>User Settings:</Typography>
-						<List className={classes.hundredWidth}>
-							<ListItem>
-								<Checkbox
-									checked={outlineQuestions}
-									onChange={() => this.props.setOutlineQuestions(!outlineQuestions)}
-								></Checkbox>
-								<label>Outline Questions</label>
-							</ListItem>
-							<ListItem >
-								<TextField
-									className={classes.settingsTextField}
-									label="Auto-Backup Interval"
-									value={this.state.backupInterval}
-									onChange={this.textFieldChangeHandler("backupInterval", this.props.setBackupInterval)}
-									InputProps={{
-										endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
-									}}
-								/>
-							</ListItem>
-							<ListItem >
-								<TextField
-									className={classes.settingsTextField}
-									label="SedLOGIN username"
-									value={this.state.sedLoginUsername}
-									onChange={this.textFieldChangeHandler("sedLoginUsername", this.props.setSedLoginUsername)}
-								/>
-							</ListItem>
-						</List>
+						{
+							isFetchingUserData ? (
+								<Fragment>
+								<Typography>User Settings:</Typography>
+								<List className={classes.hundredWidth}>
+									<ListItem>
+										<Checkbox
+											checked={this.props.users[this.props.sedff.currentUsername].settings.outlineQuestions}
+											onChange={() => this.props.setOutlineQuestions(!this.props.users[this.props.sedff.currentUsername].settings.outlineQuestions)}
+										></Checkbox>
+										<label>Outline Questions</label>
+									</ListItem>
+									<ListItem >
+										<TextField
+											className={classes.settingsTextField}
+											label="Auto-Backup Interval"
+											value={this.state.backupInterval}
+											onChange={this.textFieldChangeHandler("backupInterval", this.props.setBackupInterval)}
+											InputProps={{
+												endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
+											}}
+										/>
+									</ListItem>
+									<ListItem >
+										<TextField
+											className={classes.settingsTextField}
+											label="SedLOGIN username"
+											value={this.state.sedLoginUsername}
+											onChange={this.textFieldChangeHandler("sedLoginUsername", this.props.setSedLoginUsername)}
+										/>
+									</ListItem>
+								</List> 
+								</Fragment>
+						) : (
+									<h1>User Data Still Loading</h1>
+								)}
 					</Paper>
 
 				</DialogContent>
@@ -124,9 +135,9 @@ render() {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI, // to get dialog visibility 
+		UI: state.UI, // to get dialog visibility
 		users: state.Users, // to get user settings
-		sedff: state.SedFF
+		sedff: state.SedFF, // to see if loading is occurring
 	}
 }
 

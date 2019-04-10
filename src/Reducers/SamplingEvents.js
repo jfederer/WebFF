@@ -1,9 +1,11 @@
 import { CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
-//MOCK
-const initialSamplingEventsState = {
-	"695833f2-e483-4c34-a962-d14f79037920": {
+
+
+const initialState =  [ //MOCK //TODO:
+	{
+		eventID: "695833f2-e483-4c34-a962-d14f79037920",
 		eventName: "Event1-JoeAndTom",
 		dateModified: "Wed Jan 30 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Not Shipped",
@@ -12,8 +14,8 @@ const initialSamplingEventsState = {
 			question2: "1value2",
 			question3: "1value3"
 		}
-	},
-	"475c42c6-8642-4d0c-a98a-36d5374f00f4": {
+	},{
+		eventID: "475c42c6-8642-4d0c-a98a-36d5374f00f4",
 		eventName: "Event2-TomOnly",
 		dateModified: "Wed Jan 31 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Not Shipped",
@@ -22,8 +24,8 @@ const initialSamplingEventsState = {
 			question5: "2value5",
 			question6: "2value6"
 		}
-	},
-	"dd8c3689-d8a8-42ef-bf9f-a52a52f611b8": {
+	},{
+		eventID: "dd8c3689-d8a8-42ef-bf9f-a52a52f611b8",
 		eventName: "Event3-JoeOnly",
 		dateModified: "Wed Jan 29 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Shipped",
@@ -36,17 +38,18 @@ const initialSamplingEventsState = {
 			question6: "3value6"
 		}
 	}
-};
+]
+
 
 
 // const initialEventsState = {};
 
-export function SamplingEvents(state = initialSamplingEventsState, action) {
+export function SamplingEvents(state = initialState, action) {
 		let newState = _.cloneDeep(state);
 switch (action.type) {
 	case CREATE_NEW_SAMPLING_EVENT:
-		//TODO:
-		alert("Creating new sampling event: ID: ", action.eventID, " Name: ", action.eventName);
+	console.log("Event Reducer-> creating new sample event");
+		newState.push(action.event); // push acceptable because newState is a already a clone
 		return newState;
 	default:
 		return state

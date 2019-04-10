@@ -1,6 +1,6 @@
 //TODO: delete just removes from view, does not delete from data
 //TODO: currently, selecting the row tries to load the event.  This is unwanted behavior.
-
+//FUTURE: rename event
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

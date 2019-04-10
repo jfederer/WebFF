@@ -8,7 +8,8 @@ import {
 	SET_SETTINGS_DIALOG_VISIBILITY,
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
-	SET_APP_BAR_TEXT
+	SET_APP_BAR_TEXT,
+	SHOW_NAVIGATION_TAB
 } from '../Constants/ActionTypes';
 
 
@@ -50,5 +51,9 @@ export function setSwitchUserDialogVisibility(switchUserDialogVisibility) { //TO
 
 export function setAppBarText(appBarText) { //TODO:  (if visitibility... show... if not, clear and hide)
 	return { type: SET_APP_BAR_TEXT, appBarText: appBarText }
+}
+
+export function showNavigationTab(tabName) { //TODO:  (if visitibility... show... if not, clear and hide)
+	return { type: SHOW_NAVIGATION_TAB, tabName: tabName }
 }
 

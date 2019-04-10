@@ -9,7 +9,8 @@ import {
 	SET_SETTINGS_DIALOG_VISIBILITY,
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
-	SET_APP_BAR_TEXT
+	SET_APP_BAR_TEXT,
+	SHOW_NAVIGATION_TAB
 } from '../Constants/ActionTypes';
 
 import { defaultHiddenNavMenuItems } from '../Constants/NavMenu';
@@ -66,6 +67,9 @@ export function UI(state = initialUIState, action) {
 		case SET_APP_BAR_TEXT:
 			newState.appBarText = action.appBarText;
 			break;
+		case SHOW_NAVIGATION_TAB: {
+			newState.hiddenNavMenuItems = _.filter(state.hiddenNavMenuItems, (navMenuItem)=>navMenuItem.text!==action.tabName);
+		}
 		default:
 			return state
 	}

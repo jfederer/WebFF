@@ -202,7 +202,7 @@ class WebFF extends React.Component {
 						customQuestionAdder={this.customQuestionAdder}
 						customQuestionDeleter={this.customQuestionDeleter} />
 					<AddRemoveStationDialog />
-					<SettingsDialog />
+					{/* <SettingsDialog /> */}
 					<AboutDialog />
 					<SwitchUserDialog />
 
@@ -276,8 +276,7 @@ const mapDispatchToProps = {
 	setLoginDialogVisibility: setLoginDialogVisibility,
 	setCurrentUser: setCurrentUser,
 	setNavMenuExpand: setNavMenuExpand,
-	setSysMenuExpand: setSysMenuExpand,
-	loadUserData: loadUserData
+	setSysMenuExpand: setSysMenuExpand
 }
 
 
