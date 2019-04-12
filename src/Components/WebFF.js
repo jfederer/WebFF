@@ -30,7 +30,7 @@ import {
 
 
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
-import { setCurrentUser, loadUserData, loadUserDataToo } from '../Actions/SedFF';
+import { loadAndSetCurrentUser } from '../Actions/SedFF';
 
 
 //dialogs
@@ -273,10 +273,10 @@ const mapStateToProps = function (state) {
 }
 
 const mapDispatchToProps = {
-	setLoginDialogVisibility: setLoginDialogVisibility,
-	setCurrentUser: setCurrentUser,
-	setNavMenuExpand: setNavMenuExpand,
-	setSysMenuExpand: setSysMenuExpand
+	setLoginDialogVisibility,
+	loadAndSetCurrentUser,
+	setNavMenuExpand,
+	setSysMenuExpand
 }
 
 

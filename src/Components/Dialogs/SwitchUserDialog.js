@@ -15,7 +15,7 @@ import Divider from '@material-ui/core/Divider';
 
 import {isReasonableUsername} from '../../Utils/ValidationUtilities';
 import { setSwitchUserDialogVisibility } from '../../Actions/UI';
-import { setCurrentUser } from '../../Actions/SedFF';
+import { loadAndSetCurrentUser } from '../../Actions/SedFF';
 
 const initialState =  { newUsername: ""};
 
@@ -32,7 +32,7 @@ class SwitchUserDialog extends React.Component {
 	}
 
 	handleSwitchUser = () => {
-		this.props.setCurrentUser(this.state.newUsername);
+		this.props.loadAndSetCurrentUser(this.state.newUsername);
 		this.handleClose();
 	}
 
@@ -103,7 +103,7 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	setSwitchUserDialogVisibility,
-	setCurrentUser
+	loadAndSetCurrentUser
 }
 
 SwitchUserDialog.propTypes = {

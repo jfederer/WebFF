@@ -1,9 +1,11 @@
 import { 
 	SET_CURRENT_USERNAME, 
 	LOAD_USER_DATA, 
-	REQUEST_USER_DATA,
-	RECEIVE_USER_DATA,
-	LOAD_SAMPLING_EVENT } from '../Constants/ActionTypes';
+	REQUESTING_USER_DATA,
+	RECEIVED_USER_DATA,
+	MAKE_NEW_USER,
+	LOAD_SAMPLING_EVENT,
+	USER_DATA_LOAD_COMPLETE } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
 const initialSedFFState = {
@@ -24,16 +26,21 @@ export function SedFF(state = initialSedFFState, action) {
 		case LOAD_USER_DATA:
 			//TODO: 
 			 return newState;
-		case REQUEST_USER_DATA:
-		console.log("set is fetching to true");
+		case REQUESTING_USER_DATA:
 			newState.isFetchingUserData = true;
 			return newState;
-		case RECEIVE_USER_DATA:
+		case RECEIVED_USER_DATA:
 			//TODO:
-			console.log("set is fetching to false");
+			newState.isFetchingUserData = false;
+			return newState
+		case USER_DATA_LOAD_COMPLETE:
+			//TODO:
 			newState.isFetchingUserData = false;
 			return newState
 		case LOAD_SAMPLING_EVENT:
+			//TODO:
+			return newState;
+		case MAKE_NEW_USER:
 			//TODO:
 			return newState;
 		default:

@@ -14,7 +14,7 @@ import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
 //Action Creators
 import { syncToDB } from '../../Actions/DB';
-import { setCurrentUser } from '../../Actions/SedFF';
+import { loadAndSetCurrentUser } from '../../Actions/SedFF';
 import {
 	setSysMenuExpand,
 	setExportDialogVisibility,
@@ -208,7 +208,8 @@ const mapDispatchToProps = {
 	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),
 	setAboutDialogVisibility: ()=>setAboutDialogVisibility(true),
 	// setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) //TODO: this was removed for testing, replace
-	setSwitchUserDialogVisibility: ()=>setCurrentUser("bebble@bob.drop")
+	setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("nobdy@usgs.gov")
+	// setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("tvanheel@usgs.gov")
 }
 
 SystemMenu.propTypes = {
