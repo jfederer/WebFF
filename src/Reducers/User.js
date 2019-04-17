@@ -2,7 +2,8 @@ import {
 	SET_OUTLINE_QUESTIONS, 
 	SET_BACKUP_INTERVAL, 
 	SET_SEDLOGIN_USERNAME,
-	SET_USER_DATA
+	SET_USER_DATA,
+	MAKE_NEW_USER
  } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
@@ -41,8 +42,7 @@ export function Users(state = initialUserState, action) {
 			newState.sedLoginUsername = action.newSedLoginUsername; //FIXME: doesn't affect right part of store
 			return newState;
 		case SET_USER_DATA:
-		console.log("SET USER DATA!!");
-			//newState[action.user.username] = action.user;
+			newState[action.user.username] = action.user;
 			return newState
 		default:
 			return state

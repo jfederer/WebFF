@@ -71,7 +71,7 @@ class EventsManager extends React.Component {
 			onRowsSelect: this.onRowsSelect
 		};
 
-		console.log("Sampling Events: ", this.props.samplingEvents);
+	//	console.log("Sampling Events: ", this.props.samplingEvents);
 	}
 
 	onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
@@ -87,6 +87,36 @@ class EventsManager extends React.Component {
 	}
 
 	render() {
+		const { currentUser, sedff, linkTables, allSamplingEvents } = this.props;
+		
+		if(sedff.isFetchingUserData) {
+			return <p>BLAH!</p>
+		}
+
+		//console.log(data);
+
+		let currentUserEventIDs = linkTables.userEvents[currentUser.username];
+
+		let currentUserEvents = currentUserEventIDs.map( (eventID) => {
+			return allSamplingEvents.filter((samplingEvent) => { //OPTIMIZE: 1) Needlessly runs through entire array
+				return samplingEvent.eventID === eventID
+			})[0] 	// OPTIMIZE: this will only return ONE item and will not show an error.  Even with UUID, should check for multiple items returning
+		})
+
+		
+		//build table data
+		let data = currentUserEvents.map((event)=>			
+			 [
+				event.eventID, 
+				event.eventName, 
+				event.eventDate ? event.eventDate : "Event Date", //TODO: dig into question values
+				event.dateModified, //OPTIMIZE: shorter, human readable
+				event.stationName ? event.stationName : "Station Name",//TODO: dig into question values
+				event.shippedStatus
+			 ]
+		); 
+			
+			
 		return <MUIDataTable
 			title={"Events Manager"}
 			data={data}
@@ -98,10 +128,9 @@ class EventsManager extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI, // to get dialog visibility 
-		users: state.Users, // to get user settings
-		sedff: state.SedFF,
-		events: state.Events,
+		linkTables: state.LinkTables, // to get users event IDs
+		allSamplingEvents: state.SamplingEvents,
+		sedff: state.SedFF, // loading / fetching data
 		currentUser: state.Users[state.SedFF.currentUsername]
 	}
 }

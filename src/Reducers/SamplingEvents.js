@@ -1,5 +1,8 @@
-import { CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
 import _ from 'lodash';
+
+import { 
+	CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
+
 
 
 
@@ -48,7 +51,6 @@ export function SamplingEvents(state = initialState, action) {
 		let newState = _.cloneDeep(state);
 switch (action.type) {
 	case CREATE_NEW_SAMPLING_EVENT:
-	console.log("Event Reducer-> creating new sample event");
 		newState.push(action.event); // push acceptable because newState is a already a clone
 		return newState;
 	default:

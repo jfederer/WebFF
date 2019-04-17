@@ -207,8 +207,8 @@ const mapDispatchToProps = {
 	setAddRemoveQuestionDialogVisibility: ()=>setAddRemoveQuestionDialogVisibility(true),
 	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),
 	setAboutDialogVisibility: ()=>setAboutDialogVisibility(true),
-	// setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) //TODO: this was removed for testing, replace
-	setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("nobdy@usgs.gov")
+	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) //TODO: this was removed for testing, replace
+	// setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("nobdy@usgs.gov")
 	// setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("tvanheel@usgs.gov")
 }
 

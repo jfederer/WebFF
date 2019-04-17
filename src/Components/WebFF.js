@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import loading from '../Images/loading.gif';
 
 import { styles } from '../style';
 import 'typeface-roboto';
@@ -129,10 +130,9 @@ class WebFF extends React.Component {
 			ensureProgramVersionUpToDate();
 		}
 
-
-
 		if (isReasonableUsername(this.props.sedff.currentUsername)) {
 			console.log(this.props.sedff.currentUsername + "is logged in");
+			this.props.loadAndSetCurrentUser(this.props.sedff.currentUsername);
 			// this.gatherUserConfig(USER_DB_NODES); // after setting loggedInUser, load user configuration);
 		} else {
 			console.log("No one is logged in... requesting user id");
@@ -143,18 +143,19 @@ class WebFF extends React.Component {
 
 
 	render() {
-		const { classes, UI, currentUser } = this.props;
-		
-		if(currentUser===undefined && this.props.location.pathname !== '/') {
+		const { classes, sedff, UI, currentUser } = this.props;
+		const { isFetchingUserData} = sedff;
+
+		if (currentUser === undefined && this.props.location.pathname !== '/') {
 			console.log("There is no currentuser...going to login page");
 			return <Redirect to='/' />;
 		}
 		
-
-
 		return (
 			<React.Fragment>
-
+			{ isFetchingUserData==true 
+			? <img src={loading}></img>  //TODO:  better behavior
+			: <React.Fragment>
 				<div className={classes.root} >
 					<AppBar
 						position="absolute"
@@ -249,11 +250,15 @@ class WebFF extends React.Component {
 
 					</main>
 				</div >
-				<button onClick={() => console.log(this.props)}>Print Props</button><br/>
+				<button onClick={() => console.log(this.props)}>Print Props</button><br />
+				{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
 				{JSON.stringify(currentUser)}
 				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
 				{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
+				</React.Fragment>
+			}
 			</React.Fragment>
+						
 		);
 	}
 }

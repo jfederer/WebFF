@@ -8,9 +8,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-import { TextField, Grid, Divider, Button, Paper } from '@material-ui/core';
+import { TextField, Button, Paper } from '@material-ui/core';
 
-import { createNewSamplingEvent } from '../../../Actions/SamplingEvents';
+import { createNewSampingEventForUser } from '../../../Actions/SamplingEvents';
 import { showNavigationTab } from '../../../Actions/UI';
 import { loadSamplingEvent } from '../../../Actions/SedFF';
 
@@ -41,19 +41,12 @@ class NewEventForm extends React.Component {
 	}
 
 	handleBrandNewButtonClick = () => {
-		// console.log("handleBrandNewButtonClick()");
+		let newEventID = this.props.createNewSampingEventForUser( // this is a syncronous process
+			this.state.newSamplingEventName	? this.state.newSamplingEventName : "",  //deal with blank in action
+			this.props.currentUser.username
+		); 
 
-		this.props.createNewSamplingEvent(
-			this.state.newSamplingEventName
-				? this.state.newSamplingEventName
-				: ""  //deal with in action
-		);
-
-		this.props.loadSamplingEvent(
-			//TODO: need uuid from created event...
-
-		)
-
+		this.props.loadSamplingEvent(newEventID);
 	}
 
 
@@ -68,8 +61,7 @@ class NewEventForm extends React.Component {
 	// 		}
 
 	render() {
-		const { classes, currentUser } = this.props;
-		const { currentUsername } = this.props.sedff;
+		const { classes } = this.props;
 
 		const MyLink = props => <Link to="/FieldForm" {...props} />
 
@@ -115,14 +107,13 @@ class NewEventForm extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		users: state.Users, // to get user settings
-		sedff: state.SedFF,
 		samplingEvents: state.SamplingEvents, //to get list of sampling events to check for uniqueness for that user
 		currentUser: state.Users[state.SedFF.currentUsername]
 	}
 }
 
 const mapDispatchToProps = {
-	createNewSamplingEvent,
+	createNewSampingEventForUser,
 	loadSamplingEvent,
 	showNavigationTab
 }

@@ -1,32 +1,47 @@
-import { CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
-import { emptySamplingEvent } from '../Constants/SamplingEvent';
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 
+import {
+	CREATE_NEW_SAMPLING_EVENT,
+	REGISTER_EVENT_WITH_USERNAME
+} from '../Constants/ActionTypes';
+import { emptySamplingEvent } from '../Constants/DefaultObjects';
+
+
 export function createNewSamplingEvent(eventName) {
+	/* 
+	@desc syncronous function creates new, blank event based on template
+	@param eventName {string} - the new event name.  If empty string, will be given date-based name
+	@returns the eventID of the newly created event  (note, up to the reciever to link user and event in eventLinkTable)
+	*/
 	return dispatch => {
-		setTimeout(() => {
-			let newEvent = _.cloneDeep(emptySamplingEvent);
-			newEvent.eventID = uuidv4();
-			if (!eventName) { // if no event name give, the event name will be the date
-				let today = new Date();
-				let monthName = today.toLocaleString('en-us', { month: 'long' });
-				let dd = String(today.getDate()).padStart(2, '0');
-				let yyyy = today.getFullYear();
+		let newEvent = _.cloneDeep(emptySamplingEvent);
+		newEvent.eventID = uuidv4();
+		if (!eventName) { // if no event name give, the event name will be the date //FUTURE: build a setting for the default event name
+			let today = new Date();
+			let monthName = today.toLocaleString('en-us', { month: 'long' });
+			let dd = String(today.getDate()).padStart(2, '0');
+			let yyyy = today.getFullYear();
 
-				eventName = "Sampling Event on " + yyyy + " " + monthName + " " + dd;
-			}
+			eventName = "Sampling Event on " + yyyy + " " + monthName + " " + dd;
+		}
 
-			newEvent.eventName = eventName  //TODO: should be calling setEventName action instead?
+		newEvent.eventName = eventName  //OPTIMIZE: should be calling setEventName action instead?
 
-			newEvent.dateModified = new Date(); //TODO: should be calling eventModified action instead?
+		newEvent.dateModified = new Date(); //OPTIMIZE: should be calling eventModified action instead?
 
-			//TODO: call an optional callback 
-			//TODO: dispatch eventLinkTable event
+		//OPTIMIZE: call an optional callback 
 
-			console.log("Returning");
-			return { type: CREATE_NEW_SAMPLING_EVENT, event: newEvent }
-		}, 2000);
+		dispatch({ type: CREATE_NEW_SAMPLING_EVENT, event: newEvent });
+		return (newEvent.eventID);
 	}
 }
 
+
+export function createNewSampingEventForUser(eventName, username) {
+	return dispatch => {
+		let eventID = dispatch(createNewSamplingEvent(eventName));
+		dispatch({ type: REGISTER_EVENT_WITH_USERNAME, eventID, username });
+		return eventID;
+	}
+}
