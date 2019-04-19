@@ -12,7 +12,7 @@ import { TextField, Button, Paper } from '@material-ui/core';
 
 import { createNewSampingEventForUser } from '../../../Actions/SamplingEvents';
 import { showNavigationTab } from '../../../Actions/UI';
-import { loadSamplingEvent } from '../../../Actions/SedFF';
+import { loadAndSetCurrentSamplingEvent } from '../../../Actions/SedFF';
 
 
 class NewEventForm extends React.Component {
@@ -46,7 +46,7 @@ class NewEventForm extends React.Component {
 			this.props.currentUser.username
 		); 
 
-		this.props.loadSamplingEvent(newEventID);
+		this.props.loadAndSetCurrentSamplingEvent(newEventID);
 	}
 
 
@@ -114,7 +114,7 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	createNewSampingEventForUser,
-	loadSamplingEvent,
+	loadAndSetCurrentSamplingEvent,
 	showNavigationTab
 }
 

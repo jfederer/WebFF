@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 import MUIDataTable from "mui-datatables";
 
-import { loadSamplingEvent } from "../../../Actions/SedFF";
+import { loadAndSetCurrentSamplingEvent } from "../../../Actions/SedFF";
 
 const columns = [
 	{
@@ -81,7 +81,7 @@ class EventsManager extends React.Component {
 		console.log("rowData: ", rowData);
 		console.log("rowMeta: ", rowMeta);
 		console.log("Load Event: ", rowData[0]);
-		this.props.loadSamplingEvent(rowData[0]);
+		this.props.loadAndSetCurrentSamplingEvent(rowData[0]);
 	}
 
 	onRowsSelect = (curRowSelected, allRowsSelected) => {
@@ -141,7 +141,7 @@ const mapStateToProps = function (state) {
 }
 
 const mapDispatchToProps = {
-	loadSamplingEvent
+	loadAndSetCurrentSamplingEvent
 }
 
 EventsManager.propTypes = {

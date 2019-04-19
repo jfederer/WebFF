@@ -50,7 +50,7 @@ function userDataRequest(username) {
 	return { type: USER_DATA_REQUEST, username };
 }
 
-export function userDataAcquire(username) {
+function userDataAcquire(username) {
 		// check if username is in store
 		// if not, check from database
 		// if not, reject with false
@@ -77,24 +77,11 @@ export function userDataAcquire(username) {
 	}
 }
 
-
-// function delay(t, v) {
-// 	return new Promise(function (resolve) {
-// 		setTimeout(resolve.bind(null, v), t)
-// 	});
-// }
-
-
-
 function setCurrentUsername(username) {
 	return { type: SET_CURRENT_USERNAME, username }
 }
 
-function userDataLoadComplete() {
-	return { type: USER_DATA_LOAD_COMPLETE };
-}
-
-export function userDataIngest(userData) {
+function userDataIngest(userData) {
 	return (dispatch) => {
 		//TODO: ensure userdata is of appropriate format
 		// console.log(userData);
@@ -103,8 +90,13 @@ export function userDataIngest(userData) {
 	}
 }
 
+function userDataLoadComplete() {
+	return { type: USER_DATA_LOAD_COMPLETE };
+}
 
-export function loadSamplingEvent(eventID) { // safer way to set sampling event
+
+
+export function loadAndSetCurrentSamplingEvent(eventID) { // safer way to set sampling event
 	return (dispatch) => {
 		dispatch(samplingEventRequest(eventID));
 		//TODO: verify it's loaded in memory, fetch as needed,
