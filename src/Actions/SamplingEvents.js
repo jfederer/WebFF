@@ -26,9 +26,9 @@ export function createNewSamplingEvent(eventName) {
 			eventName = "Sampling Event on " + yyyy + " " + monthName + " " + dd;
 		}
 
-		newEvent.eventName = eventName  //OPTIMIZE: should be calling setEventName action instead?
+		newEvent.eventName = eventName;  //OPTIMIZE: should be calling setEventName action instead?
 
-		newEvent.dateModified = new Date(); //OPTIMIZE: should be calling eventModified action instead?
+		newEvent.dateModified = new Date().toString(); //OPTIMIZE: should be calling eventModified action instead?
 
 		//OPTIMIZE: call an optional callback 
 

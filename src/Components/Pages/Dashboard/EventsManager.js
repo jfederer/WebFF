@@ -54,12 +54,6 @@ const columns = [
 	}
 ];
 
-const data = [
-	["123", "Joe James", "Test Corp", "Yonkers", "NY", "done"],
-	["234", "John Walsh", "Test Corp", "Hartford", "CT", "not done"],
-	["345", "Bob Herm", "Test Corp", "Tampa", "FL", "not done"],
-	["456", "James Houston", "Test Corp", "Dallas", "TX", "not done"],
-];
 
 class EventsManager extends React.Component {
 	constructor(props) {
@@ -75,6 +69,7 @@ class EventsManager extends React.Component {
 
 	//	console.log("Sampling Events: ", this.props.samplingEvents);
 	}
+
 
 	onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
 		console.log("----RowClick");
@@ -95,18 +90,16 @@ class EventsManager extends React.Component {
 		const { currentUser, sedff, linkTables, allSamplingEvents } = this.props;
 		
 		if(sedff.isFetchingUserData) {
-			return <p>BLAH!</p>
+			return <p>BLAH!</p> //TODO:
 		}
-
-		//console.log(data);
 
 		let currentUserEventIDs = linkTables.userEvents[currentUser.username];
 
 		let currentUserEvents = currentUserEventIDs.map( (eventID) => {
-			return allSamplingEvents.filter((samplingEvent) => { //OPTIMIZE: 1) Needlessly runs through entire array
-				return samplingEvent.eventID === eventID
-			})[0] 	// OPTIMIZE: this will only return ONE item and will not show an error.  Even with UUID, should check for multiple items returning
+			return allSamplingEvents[eventID]
 		})
+
+		console.log("currentUserEvents", currentUserEvents);
 
 		
 		//build table data
@@ -114,12 +107,14 @@ class EventsManager extends React.Component {
 			 [
 				event.eventID, 
 				event.eventName, 
-				event.eventDate ? event.eventDate : "Event Date", //TODO: dig into question values
-				event.dateModified, //OPTIMIZE: shorter, human readable
-				event.stationName ? event.stationName : "Station Name",//TODO: dig into question values
+				event.eventDate ? event.eventDate : "N/A", //TODO: dig into question values
+				new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours()+":"+ (new Date(event.dateModified).getMinutes()+1),
+				event.stationName ? event.stationName : "N/A",//TODO: dig into question values
 				event.shippedStatus
 			 ]
 		); 
+
+		console.log("Data: ", data);
 			
 			
 		return <MUIDataTable

@@ -7,8 +7,8 @@ import {
 //TODO: NEXT: modify so it's an object with the eventID as each objects key
 //TOOD: NEXT: NEXT: actually forward to the next page upon load
 
-const initialState =  [ //MOCK //TODO:
-	{
+const initialState =  { //MOCK //TODO:
+	"695833f2-e483-4c34-a962-d14f79037920": {
 		eventID: "695833f2-e483-4c34-a962-d14f79037920",
 		eventName: "Event1-JoeAndTom",
 		dateModified: "Wed Jan 30 2019 12:44:59 GMT-0600 (Central Standard Time)",
@@ -18,7 +18,8 @@ const initialState =  [ //MOCK //TODO:
 			question2: "1value2",
 			question3: "1value3"
 		}
-	},{
+	},
+	"475c42c6-8642-4d0c-a98a-36d5374f00f4": {
 		eventID: "475c42c6-8642-4d0c-a98a-36d5374f00f4",
 		eventName: "Event2-TomOnly",
 		dateModified: "Wed Jan 31 2019 12:44:59 GMT-0600 (Central Standard Time)",
@@ -28,7 +29,8 @@ const initialState =  [ //MOCK //TODO:
 			question5: "2value5",
 			question6: "2value6"
 		}
-	},{
+	},
+	"dd8c3689-d8a8-42ef-bf9f-a52a52f611b8": {
 		eventID: "dd8c3689-d8a8-42ef-bf9f-a52a52f611b8",
 		eventName: "Event3-JoeOnly",
 		dateModified: "Wed Jan 29 2019 12:44:59 GMT-0600 (Central Standard Time)",
@@ -42,7 +44,7 @@ const initialState =  [ //MOCK //TODO:
 			question6: "3value6"
 		}
 	}
-]
+}
 
 
 
@@ -52,9 +54,9 @@ export function SamplingEvents(state = initialState, action) {
 		let newState = _.cloneDeep(state);
 switch (action.type) {
 	case CREATE_NEW_SAMPLING_EVENT:
-		newState.push(action.event); // push acceptable because newState is a already a clone
+		newState[action.event.eventID]=action.event; // push acceptable because newState is a already a clone
 		return newState;
 	default:
-		return state
+		return state;
 }
 }
