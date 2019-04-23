@@ -15,7 +15,7 @@ const initialSedFFState = {
 		? JSON.parse(localStorage.getItem('loggedInUser'))
 		// : null,
 		: "jfederer@usgs.gov",
-	currentSamplingEvent: null,
+	currentSamplingEventID: null,
 	isFetchingUserData: true
 };
 
@@ -27,7 +27,7 @@ export function SedFF(state = initialSedFFState, action) {
 			newState.currentUsername = action.username;
 			return newState;
 		case SET_CURRENT_SAMPLING_EVENT:
-			newState.currentSamplingEvent = action.eventID;
+			newState.currentSamplingEventID = action.eventID;
 			return newState;
 		case USER_DATA_REQUEST:
 			newState.isFetchingUserData = true;

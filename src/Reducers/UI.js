@@ -67,9 +67,9 @@ export function UI(state = initialUIState, action) {
 		case SET_APP_BAR_TEXT:
 			newState.appBarText = action.appBarText;
 			break;
-		case SHOW_NAVIGATION_TAB: {
-			newState.hiddenNavMenuItems = _.filter(state.hiddenNavMenuItems, (navMenuItem)=>navMenuItem.text!==action.tabName);
-		}
+		case SHOW_NAVIGATION_TAB: 
+			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.filter((navMenuItem)=>navMenuItem.replace(/\s+/g, '')!==action.tabName.replace(/\s+/g, ''));
+			break;
 		default:
 			return state
 	}

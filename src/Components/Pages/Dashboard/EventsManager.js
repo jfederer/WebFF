@@ -9,11 +9,11 @@ import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 import MUIDataTable from "mui-datatables";
 
 import { loadAndSetCurrentSamplingEvent } from "../../../Actions/SedFF";
+import { showNavigationTab } from "../../../Actions/UI";
 
 const columns = [
 	{
@@ -58,7 +58,9 @@ const columns = [
 class EventsManager extends React.Component {
 	constructor(props) {
 		super(props);
-
+		this.state = {
+			toFieldForm: false
+		}
 		this.options = {
 			filterType: 'checkbox',
 			print: false,
@@ -72,17 +74,25 @@ class EventsManager extends React.Component {
 
 
 	onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
-		console.log("----RowClick");
-		console.log("rowData: ", rowData);
-		console.log("rowMeta: ", rowMeta);
-		console.log("Load Event: ", rowData[0]);
-		this.props.loadAndSetCurrentSamplingEvent(rowData[0]);
+		// console.log("----RowClick");
+		// console.log("rowData: ", rowData);
+		// console.log("rowMeta: ", rowMeta);
+		// console.log("Load Event: ", rowData[0]);
+		this.props.loadAndSetCurrentSamplingEvent(rowData[0], ()=> {
+			this.props.history.push("/FieldForm");
+			this.props.showNavigationTab("FieldForm");
+			this.props.showNavigationTab("Data Entry");
+
+
+			
+		});
+
 	}
 
 	onRowsSelect = (curRowSelected, allRowsSelected) => {
-		console.log("---RowSelect")
-		console.log("Row Selected: ", curRowSelected);
-		console.log("All Selected: ", allRowsSelected);
+		// console.log("---RowSelect")
+		// console.log("Row Selected: ", curRowSelected);
+		// console.log("All Selected: ", allRowsSelected);
 		
 	}
 
@@ -99,8 +109,6 @@ class EventsManager extends React.Component {
 			return allSamplingEvents[eventID]
 		})
 
-		console.log("currentUserEvents", currentUserEvents);
-
 		
 		//build table data
 		let data = currentUserEvents.map((event)=>			
@@ -113,9 +121,7 @@ class EventsManager extends React.Component {
 				event.shippedStatus
 			 ]
 		); 
-
-		console.log("Data: ", data);
-			
+	
 			
 		return <MUIDataTable
 			title={"Events Manager"}
@@ -136,17 +142,13 @@ const mapStateToProps = function (state) {
 }
 
 const mapDispatchToProps = {
-	loadAndSetCurrentSamplingEvent
+	loadAndSetCurrentSamplingEvent,
+	showNavigationTab
 }
 
 EventsManager.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withRouter(
-	withStyles(styles, { withTheme: true })
-		(connect(mapStateToProps, mapDispatchToProps)
-			(EventsManager)
-		)
-);
+export default withRouter(withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(EventsManager)));
 

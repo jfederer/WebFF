@@ -4,8 +4,7 @@ import {
 	CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
 
 
-//TODO: NEXT: modify so it's an object with the eventID as each objects key
-//TOOD: NEXT: NEXT: actually forward to the next page upon load
+
 
 const initialState =  { //MOCK //TODO:
 	"695833f2-e483-4c34-a962-d14f79037920": {

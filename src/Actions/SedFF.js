@@ -96,13 +96,16 @@ function userDataLoadComplete() {
 
 
 
-export function loadAndSetCurrentSamplingEvent(eventID) { // safer way to set sampling event
+export function loadAndSetCurrentSamplingEvent(eventID, callback) { // safer way to set sampling event
 	return (dispatch) => {
 		dispatch(samplingEventRequest(eventID));
 		//TODO: verify it's loaded in memory, fetch as needed,
 		// (likely uneeded, as we'll never load an event that's not in memory... but just for safety sake)
 		dispatch(setCurrentSamplingEvent(eventID))
 		dispatch(samplingEventLoadComplete(eventID));
+		if(callback) {
+			callback();
+		}
 	}
 }
 
