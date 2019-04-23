@@ -27,8 +27,9 @@ class FieldForm extends React.Component {
 			return <Redirect to='/' />
 		}
 
+		//TODO: NEXT:   Render questions on Field Form Page
 		return (<div>
-			FieldForm Page!!
+			FieldForm Page!! 
 			</div>
 		);
 	}
@@ -41,6 +42,7 @@ const mapStateToProps = function (state) {
 		//sedff: state.SedFF, // loading / fetching data
 		// currentUser: state.Users[state.SedFF.currentUsername],
 		//samplingEvents: state.SamplingEvents,
+		questions: state.Questions,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
 	}
 }
