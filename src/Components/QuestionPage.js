@@ -1,99 +1,126 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+import { styles } from '../style';
 import { withStyles } from '@material-ui/core/styles';
-import {withRouter} from 'react-router-dom';
+
 import Divider from '@material-ui/core/Divider';
+
 import QuestionPanel from './QuestionPanel';
-import { createQuestionComponents, 
-	getLayoutGroupNames, getLayoutGroupQuestionsData } from '../Utils/QuestionUtilities';
+import {
+	createQuestionComponents, getTabQuestionsData, 
+	getLayoutGroupNames, getLayoutGroupQuestionsData
+} from '../Utils/QuestionUtilities';
+import { setAppBarText } from '../Actions/UI';
 
 
 // standardize (library?) the use of "questionsData" string to generalized variable
 
-const styles = theme => ({
-	root: {
-		display: 'flex',
-		flexWrap: 'wrap',
-	},
-	formControl: {
-		margin: theme.spacing.unit,
-		minWidth: 120,
-	},
-	selectEmpty: {
-		marginTop: theme.spacing.unit * 2,
-	},
-});
+// const styles = theme => ({
+// 	root: {
+// 		display: 'flex',
+// 		flexWrap: 'wrap',
+// 	},
+// 	formControl: {
+// 		margin: theme.spacing.unit,
+// 		minWidth: 120,
+// 	},
+// 	selectEmpty: {
+// 		marginTop: theme.spacing.unit * 2,
+// 	},
+// });
 
 
 
 class QuestionPage extends React.Component {
 
 	componentWillMount() {
-		this.props.appBarTextCB(this.props.tabName);
+		this.props.setAppBarText("SedFF → " + this.props.tabName);
 	}
 
-	componentWillUpdate(nextProps, nextState) { // gets called when moving between pages
-		this.props.appBarTextCB(nextProps.tabName);
-	}
+	// componentWillUpdate(nextProps, nextState) { // gets called when moving between pages
+	// 	this.props.appBarTextCB(nextProps.tabName);
+	// }
 
 	render() {
 		const DEBUG = false;
-		const { tabName, questionsData, systemCB, hiddenPanels} = this.props;
-		let tabQuestionData = [];
-		let layoutGroupNames = [];
+		const { tabName, currentEvent } = this.props;
+		const { hiddenPanels, questionsData } = this.props.questions;
+		// let tabQuestionData = [];
+		// let layoutGroupNames = [];
 		let questionPanels = [];
 		if (DEBUG) console.log("Question Page Render:  props:  ", this.props);
 		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 
-		if (questionsData.length > 0) {
+		//OPTIMIZE: filter whitespaces at a higher level
 
-			tabQuestionData = questionsData.filter((question) => {
-				if(question.tabName) {
-					return question.tabName.replace(/ /g,'') === tabName.replace(/ /g,'');  //regex removes whitespace... allowing a match regardless of whitespace in the url or the questions database
-				} else {
-					return false;
-				}
-			});
+		if (questionsData) {
+			let tabQuestionsData = getTabQuestionsData(questionsData, tabName);
+			console.log("TAB QUESTION DATA: ", tabQuestionsData);
+			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
 
-			layoutGroupNames = getLayoutGroupNames(tabQuestionData);
-	
-			layoutGroupNames = layoutGroupNames.filter((groupName) => {
-				return !hiddenPanels.includes(tabName.replace(/ /g,'')+":"+groupName.replace(/ /g,'')) && !hiddenPanels.includes(tabName+":"+groupName); 
+			console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
+
+			let filteredlayoutGroupNames = layoutGroupNames.filter((groupName) => {
+				let panelName = tabName.replace(/ /g, '') + ":" + groupName.replace(/ /g, '');
+				return !hiddenPanels.includes(panelName);
 			})
-				
-			for(let i = 0; layoutGroupNames !== null && i < layoutGroupNames.length; i++) {
-				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionData, layoutGroupNames[i]);
+
+			console.log("FILTERED LAYOUT GROUP NAMES: ", filteredlayoutGroupNames);
+
+			for(let i = 0; filteredlayoutGroupNames !== null && i < filteredlayoutGroupNames.length; i++) {
+				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredlayoutGroupNames[i]);
 
 				questionPanels.push(
-				<div key={tabName + layoutGroupNames[i] + '_div'}>
+				<div key={tabName + filteredlayoutGroupNames[i] + '_div'}>
 					<QuestionPanel 
-						questions={createQuestionComponents(layoutGroupQuestionsData, systemCB, this.props.globalState, this.props.questionsValues, this.props)} 
-						panelName={layoutGroupNames[i]}
-						key={tabName + layoutGroupNames[i]}
+						questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionValues)} 
+						panelName={filteredlayoutGroupNames[i]}
+						key={tabName + filteredlayoutGroupNames[i]}
 						grey={i%2===1} />
 						<Divider />
 						</div>
 						);
 			}
+
+
+			return (
+				<div>
+					QUESTION PAGE!
+				 {this.props.tabName}
+				{questionPanels} 
+				</div>
+			);
+		} else {
+			return <div>ERROR: Question Data Not Loaded</div>
 		}
 
-		return (
-			<div>
-				{this.props.tabName}
-				{questionPanels}
-			</div>
-		);
 	}
 }
 
 QuestionPage.propTypes = {
 	classes: PropTypes.object.isRequired,
-	appBarTextCB: PropTypes.func.isRequired,
 	tabName: PropTypes.string.isRequired,
-	questionsData: PropTypes.array.isRequired,
-	hiddenPanels: PropTypes.arrayOf(PropTypes.string).isRequired,
-	systemCB: PropTypes.func.isRequired
 };
 
-export default withRouter(withStyles(styles, { withTheme: true })(QuestionPage));
+const mapStateToProps = function (state) {
+	return {
+		// linkTables: state.LinkTables, // to get users event IDs
+		// allSamplingEvents: state.SamplingEvents,
+		//sedff: state.SedFF, // loading / fetching data
+		// currentUser: state.Users[state.SedFF.currentUsername],
+		//samplingEvents: state.SamplingEvents,
+		questions: state.Questions,
+		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
+	}
+}
+
+const mapDispatchToProps = {
+	setAppBarText
+}
+
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(QuestionPage));

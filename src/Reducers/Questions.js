@@ -1,15 +1,19 @@
 import _ from 'lodash';
 
-import { 
+import {
 	COMBINE_USER_QUESTIONS,
 	ADD_QUESTION,
 	RESET_QUESTIONS_DATA_TO_DEFAULT
- } from '../Constants/ActionTypes';
+} from '../Constants/ActionTypes';
 
 
 import { defaultQuestionsData } from './../Constants/DefaultObjects';
 
-const initialState = defaultQuestionsData;
+const initialState = {
+	questionsData: defaultQuestionsData,
+	hiddenPanels: ["FieldForm:Weather"],
+	hiddenQuestions: []
+};
 
 export function Questions(state = initialState, action) {
 	let newState = _.cloneDeep(state);

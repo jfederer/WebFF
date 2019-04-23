@@ -54,8 +54,9 @@ const styles = theme => ({
 
 class Question extends React.Component {
 	constructor(props) {
+		console.log("hi");
 		super(props);
-		//console.log(this.props.id + " value is " + this.props.value);
+		console.log(this.props.id + " value is " + this.props.value);
 		this.state = {
 			value: this.props.value?this.props.value:"", 
 		};
@@ -64,17 +65,19 @@ class Question extends React.Component {
 	buildQuestion() {
 		var theQ = {};
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
-
+		console.log("here");
 		switch (this.props.type) {
 			case 'ComputedValue': {
 				theQ = <ComputedValue {...this.props} />
 				break;
 			}
 			case 'DropDown': {
+				console.log("DD");
 				theQ = <DropDown {...this.props} />
 				break;
 			}
 			case 'Text': {
+				console.log("TXT");
 				theQ = <Text {...this.props} />
 				break;
 			}
@@ -123,6 +126,7 @@ class Question extends React.Component {
 
 
 	render() {
+		
 		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)

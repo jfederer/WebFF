@@ -2,9 +2,9 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 
 
-export const createQuestionComponents = (questionsData, changeHandler, _globalState, questionsValues, allProps) => {
+export const createQuestionComponents = (questionsData, questionsValues ) => {
     // creates one question component for every question in questionsData
-	// overwrites questionsData value with passed in value in questionsValues
+	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	let questionComponents = [];
 	// console.log("createQuestionComponents: questionsData", questionsData);
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
@@ -12,28 +12,62 @@ export const createQuestionComponents = (questionsData, changeHandler, _globalSt
 
 			let value = questionData.value;
 			//console.log("Value from questionData: ", value);
-			if(questionsValues) {
+			
+			if(questionsValues[questionData.id]) {
 			//	console.log("questionsData.id: ", questionData.id);
 				value = questionsValues[questionData.id]
 				//console.log("Value from questionVALUES: ", value);
-			}
+			} 
 	//		console.log(allProps);
-			let allPropFuncs = {};
-			Object.keys(allProps).map((propKey)=> {
-				if(typeof(allProps[propKey])=== "function") {
-					allPropFuncs[propKey]=allProps[propKey];
-				}
-				return null;
-			});
+			// let allPropFuncs = {};
+			// Object.keys(allProps).map((propKey)=> {
+			// 	if(typeof(allProps[propKey])=== "function") {
+			// 		allPropFuncs[propKey]=allProps[propKey];
+			// 	}
+			// 	return null;
+			// });
 
 	//		console.log(allPropFuncs);
-
-			return <Question {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} />
+			let retQ = <Question {...questionData} value={value} />;
+			// console.log(retQ);
+			return retQ;
 		});
     }
-
+	console.log("questionComponents.length: ", questionComponents.length);
     return questionComponents;
 }
+// export const createQuestionComponents = (questionsData, changeHandler, _globalState, questionsValues, allProps) => {
+//     // creates one question component for every question in questionsData
+// 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
+// 	let questionComponents = [];
+// 	// console.log("createQuestionComponents: questionsData", questionsData);
+//     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
+//         questionComponents = questionsData.map(questionData => {
+
+// 			let value = questionData.value;
+// 			//console.log("Value from questionData: ", value);
+// 			if(questionsValues) {
+// 			//	console.log("questionsData.id: ", questionData.id);
+// 				value = questionsValues[questionData.id]
+// 				//console.log("Value from questionVALUES: ", value);
+// 			}
+// 	//		console.log(allProps);
+// 			let allPropFuncs = {};
+// 			Object.keys(allProps).map((propKey)=> {
+// 				if(typeof(allProps[propKey])=== "function") {
+// 					allPropFuncs[propKey]=allProps[propKey];
+// 				}
+// 				return null;
+// 			});
+
+// 	//		console.log(allPropFuncs);
+
+// 			return <Question {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} />
+// 		});
+//     }
+
+//     return questionComponents;
+// }
 
 export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questionID) => {
 	let DEBUG = false;
@@ -65,8 +99,21 @@ export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questi
 	}
 }
 
+export const getTabQuestionsData = (questionsData, tabName) => {
+	//given OBJECT questionsData and STRING tabName... 
+	//... will return all questionsData objects where question.tabName matches tabName
+	let tabQuestionsData = [];
+	Object.keys(questionsData).forEach(key=> {
+		if (questionsData[key].tabName.replace(/ /g, '') === tabName.replace(/ /g, '') )
+		{
+			tabQuestionsData.push(questionsData[key]);
+		}
+	});
+	return tabQuestionsData;
+}
+
 export const getLayoutGroupNames = (questionsData) => {
-    // provided with questionData, will return array of layout group names (strings)
+    // provided with ARRAY questionData, will return array of layout group names (strings)
     let layoutGroupNames = [];
 
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
@@ -80,7 +127,7 @@ export const getLayoutGroupNames = (questionsData) => {
 }
 
 export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
-    // given questionData, will filter down to items that match the layoutgroup = layoutGroupName ....
+    // given ARRAY questionData, will filter down to items that match questionData.layoutgroup = layoutGroupName ....
     let layoutGroupQuestionsData = [];
 
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error

@@ -13,7 +13,7 @@ const initialState =  { //MOCK //TODO:
 		dateModified: "Wed Jan 30 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Not Shipped",
 		questionValues: {
-			question1: "1value1",
+			stationName: "station name from values",
 			question2: "1value2",
 			question3: "1value3"
 		}

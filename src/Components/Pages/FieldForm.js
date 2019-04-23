@@ -2,24 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import {
-	styles
-} from '../../style';
-import {
-	withStyles
-} from '@material-ui/core/styles';
+import { styles } from '../../style';
+import { withStyles } from '@material-ui/core/styles';
 
 import { setAppBarText } from '../../Actions/UI';
+
+import QuestionPage from './../QuestionPage';
 
 
 class FieldForm extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.props.setAppBarText("SedFF → Field Form");
-	}
-
 	render() {
+		
 		const { currentEvent } = this.props;
 
 		if (!currentEvent) {
@@ -28,10 +22,9 @@ class FieldForm extends React.Component {
 		}
 
 		//TODO: NEXT:   Render questions on Field Form Page
-		return (<div>
-			FieldForm Page!! 
-			</div>
-		);
+		
+		return <QuestionPage tabName="Field Form"/>
+
 	}
 }
 
