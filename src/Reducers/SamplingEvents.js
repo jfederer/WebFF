@@ -1,7 +1,9 @@
 import _ from 'lodash';
 
 import { 
-	CREATE_NEW_SAMPLING_EVENT } from '../Constants/ActionTypes';
+	CREATE_NEW_SAMPLING_EVENT,
+	SE_QUESTION_VALUE_CHANGE
+ } from '../Constants/ActionTypes';
 
 
 
@@ -14,7 +16,7 @@ const initialState =  { //MOCK //TODO:
 		shippedStatus: "Not Shipped",
 		questionValues: {
 			stationName: "station name from values",
-			question2: "1value2",
+			stationNumber: "1value2",
 			question3: "1value3"
 		}
 	},
@@ -53,7 +55,16 @@ export function SamplingEvents(state = initialState, action) {
 		let newState = _.cloneDeep(state);
 switch (action.type) {
 	case CREATE_NEW_SAMPLING_EVENT:
-		newState[action.event.eventID]=action.event; // push acceptable because newState is a already a clone
+		newState[action.event.eventID]=action.event; 
+		return newState;
+	case SE_QUESTION_VALUE_CHANGE:
+
+	console.log("action.eventID", action.eventID)
+	console.log("action.questionID", action.questionID)
+	console.log("action.newValue", action.newValue);
+	console.log(newState[action.eventID]);
+
+		newState[action.eventID].questionValues[action.questionID] = action.newValue
 		return newState;
 	default:
 		return state;

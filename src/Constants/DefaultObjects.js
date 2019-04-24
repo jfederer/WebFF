@@ -18,20 +18,20 @@ export const emptyUser = {
 }
 
 export const defaultQuestionsData = {
-	// stationName: {
-    //         "id": "stationName",
-    //         "label": "Station Name",
-    //         "type": "DropDown",
-    //         "includeBlank": true,
-    //         "tabName": "Field Form",
-    //         "layoutGroup": "Basic",
-    //         "helperText": "PCodes FTW!",
-    //         "width_xs": 6,
-    //         "width_lg": 3,
-    //         "options":
-    //             {},
-    //         "value": ""
-	// 	},
+	stationName: {
+            "id": "stationName",
+            "label": "Station Name",
+            "type": "DropDown",
+            "includeBlank": true,
+            "tabName": "Field Form",
+            "layoutGroup": "Basic",
+            "helperText": "PCodes FTW!",
+            "width_xs": 6,
+            "width_lg": 3,
+            "options":
+                {"Hi":"12334"},
+            "value": ""
+		},
 
         stationNumber: {
             "id": "stationNumber",

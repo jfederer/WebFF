@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 // import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -6,7 +7,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 //import Tooltip from '@material-ui/core/Tooltip';
 import FormControl from '@material-ui/core/FormControl';
-// import Fragment from '@material-ui/core/Fragment';
+
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents' 
+
 
 //TODO: generate minWidth based on content & label
 const styles = theme => ({
@@ -30,14 +33,8 @@ const styles = theme => ({
 
 class DropDown extends React.Component {
 
-	componentWillMount() {
-		this.setState({ value: this.props.value });
-	}
-
-	handleValueChange = name => event => {  
-		this.setState({ [name]: event.target.value },
-			() => this.props.stateChangeHandler(this)
-		);
+	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
 	};
 
 	render() {
@@ -75,7 +72,6 @@ class DropDown extends React.Component {
 DropDown.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	XMLTag: PropTypes.string,
@@ -89,4 +85,14 @@ DropDown.propTypes = {
 
 };
 
-export default withStyles(styles)(DropDown);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange,
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DropDown));

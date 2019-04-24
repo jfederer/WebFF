@@ -3,7 +3,8 @@ import _ from 'lodash';
 import {
 	COMBINE_USER_QUESTIONS,
 	ADD_QUESTION,
-	RESET_QUESTIONS_DATA_TO_DEFAULT
+	RESET_QUESTIONS_DATA_TO_DEFAULT,
+	SET_QUESTION_OPTIONS
 } from '../Constants/ActionTypes';
 
 
@@ -27,6 +28,11 @@ export function Questions(state = initialState, action) {
 		case RESET_QUESTIONS_DATA_TO_DEFAULT:
 			let resetState = initialState;
 			return resetState;
+		case SET_QUESTION_OPTIONS:
+		console.log(action.questionID);
+		console.log(newState.questionsData);
+			newState.questionsData[action.questionID].options = action.options;
+			return newState;
 		default:
 			return state;
 	}

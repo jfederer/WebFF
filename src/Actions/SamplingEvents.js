@@ -3,9 +3,20 @@ import uuidv4 from 'uuid';
 
 import {
 	CREATE_NEW_SAMPLING_EVENT,
-	REGISTER_EVENT_WITH_USERNAME
+	REGISTER_EVENT_WITH_USERNAME,
+	SE_QUESTION_VALUE_CHANGE
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
+
+
+export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events quetions (settings, etc)
+	
+	console.log("eventID", eventID)
+	console.log("questionID", questionID)
+	console.log("newValue", newValue);
+
+	return { type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue }
+  }
 
 
 export function createNewSamplingEvent(eventName) {

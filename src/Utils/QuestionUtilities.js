@@ -5,69 +5,24 @@ import Question from '../Components/Question';
 export const createQuestionComponents = (questionsData, questionsValues ) => {
     // creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
+	// returns array of question components
 	let questionComponents = [];
-	// console.log("createQuestionComponents: questionsData", questionsData);
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
         questionComponents = questionsData.map(questionData => {
 
 			let value = questionData.value;
-			//console.log("Value from questionData: ", value);
 			
 			if(questionsValues[questionData.id]) {
-			//	console.log("questionsData.id: ", questionData.id);
 				value = questionsValues[questionData.id]
-				//console.log("Value from questionVALUES: ", value);
 			} 
-	//		console.log(allProps);
-			// let allPropFuncs = {};
-			// Object.keys(allProps).map((propKey)=> {
-			// 	if(typeof(allProps[propKey])=== "function") {
-			// 		allPropFuncs[propKey]=allProps[propKey];
-			// 	}
-			// 	return null;
-			// });
 
-	//		console.log(allPropFuncs);
 			let retQ = <Question {...questionData} value={value} />;
-			// console.log(retQ);
 			return retQ;
 		});
     }
 	console.log("questionComponents.length: ", questionComponents.length);
     return questionComponents;
 }
-// export const createQuestionComponents = (questionsData, changeHandler, _globalState, questionsValues, allProps) => {
-//     // creates one question component for every question in questionsData
-// 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
-// 	let questionComponents = [];
-// 	// console.log("createQuestionComponents: questionsData", questionsData);
-//     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-//         questionComponents = questionsData.map(questionData => {
-
-// 			let value = questionData.value;
-// 			//console.log("Value from questionData: ", value);
-// 			if(questionsValues) {
-// 			//	console.log("questionsData.id: ", questionData.id);
-// 				value = questionsValues[questionData.id]
-// 				//console.log("Value from questionVALUES: ", value);
-// 			}
-// 	//		console.log(allProps);
-// 			let allPropFuncs = {};
-// 			Object.keys(allProps).map((propKey)=> {
-// 				if(typeof(allProps[propKey])=== "function") {
-// 					allPropFuncs[propKey]=allProps[propKey];
-// 				}
-// 				return null;
-// 			});
-
-// 	//		console.log(allPropFuncs);
-
-// 			return <Question {...allPropFuncs}  {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} />
-// 		});
-//     }
-
-//     return questionComponents;
-// }
 
 export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questionID) => {
 	let DEBUG = false;

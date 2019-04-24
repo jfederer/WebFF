@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+
 import TextField from '@material-ui/core/TextField';
 
-//this.state.value always contains the up-to-date question values/answers.
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 
 const styles = theme => ({
 	container: {
@@ -20,27 +22,14 @@ const styles = theme => ({
 class Text extends React.Component {
 	
 
-	// componentWillMount() {
-	// 	this.setState({ value: this.props.value?this.props.value:"" });
-	// }
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		let newVal = event.target.value.trim();
-		if(!isNaN(newVal)) {
-			newVal = Number(event.target.value)
-		}
-		this.setState({
-			[value]: event.target.value
-		}, () => {
-			this.props.stateChangeHandler(this)
-		}
-		);
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
 	};
 
 	render() {
 		const { classes } = this.props;
 
-		//console.log(this.props);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		let thisSize = this.props.size ? this.props.size : 1;
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
@@ -69,7 +58,6 @@ class Text extends React.Component {
 Text.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
@@ -85,4 +73,14 @@ Text.propTypes = {
 
 };
 
-export default withStyles(styles)(Text);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Text));

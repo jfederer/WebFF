@@ -54,11 +54,9 @@ const styles = theme => ({
 
 class Question extends React.Component {
 	constructor(props) {
-		console.log("hi");
 		super(props);
-		console.log(this.props.id + " value is " + this.props.value);
 		this.state = {
-			value: this.props.value?this.props.value:"", 
+			value: this.props.value?this.props.value:"",   //TODO: remove?
 		};
 	};
 
