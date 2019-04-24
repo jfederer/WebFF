@@ -12,7 +12,7 @@ import DateInput from './Questions/DateInput';
 import TimeInput from './Questions/TimeInput';
 import Hidden from '@material-ui/core/Hidden';
 import ComputedValue from './Questions/ComputedValue';
-import ButtonInput from './Questions/ButtonInput';
+// import ButtonInput from './Questions/ButtonInput';
 import ParametersTable from './Questions/ParametersTable';
 import QWDATATable from './Questions/QWDATATable';
 
@@ -99,10 +99,10 @@ class Question extends React.Component {
 				theQ = <TimeInput {...this.props} />;
 				break;
 			}
-			case 'ButtonInput' : {
-				theQ = <ButtonInput {...this.props} />;
-				break;
-			}
+			// case 'ButtonInput' : {
+			// 	theQ = <ButtonInput {...this.props} />;
+			// 	break;
+			// }
 			case 'ParametersTable' : {
 				theQ = <ParametersTable {...this.props} />;
 				break;

@@ -42,6 +42,44 @@ export const defaultQuestionsData = {
             "layoutGroup": "Basic",
             "width_xs": 6,
             "width_lg": 3
+		},
+		
+		edgeOfWater_Left: {
+            "id": "edgeOfWater_Left",
+            "label": "Left Edge Of Water",
+            "type": "Text",
+            "placeholder": "Feet from XYZ",
+            "value": "",
+            "tabName": "FieldForm",
+            "layoutGroup": "Waterway Info",
+            "width_xs": 6,
+            "width_lg": 2
+        },
+
+        edgeOfWater_Right :{
+            "id": "edgeOfWater_Right",
+            "label": "Right Edge Of Water",
+            "type": "Text",
+            "placeholder": "Feet from XYZ",
+            "value": "",
+            "tabName": "FieldForm",
+            "layoutGroup": "Waterway Info",
+            "width_xs": 5,
+            "width_lg": 2
+        },
+
+        streamWidth : {
+            "id": "streamWidth",
+            "label": "Stream Width",
+            "XMLTag": "P00004",
+            "type": "ComputedValue",
+            "computationString": "edgeOfWater_Right-edgeOfWater_Left",
+            "placeholder": "This will be calculated",
+            "value": "",
+            "tabName": "FieldForm",
+            "layoutGroup": "Waterway Info",
+            "width_xs": 2,
+            "width_lg": 2
         },
 
         // projectName: {

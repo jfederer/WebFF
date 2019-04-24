@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+
 import Button from '@material-ui/core/Button';
 
-//this.state.value always contains the up-to-date question values/answers.
 
 const styles = theme => ({
 	// container: {
@@ -66,4 +67,4 @@ ButtonInput.propTypes = {
 
 };
 
-export default withStyles(styles)(ButtonInput);
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ButtonInput));

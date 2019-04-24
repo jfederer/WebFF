@@ -1,11 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 
 const math = require('mathjs');
-
-//this.state.value always contains the up-to-date question values/answers.
 
 const styles = theme => ({
 	container: {
@@ -170,4 +170,14 @@ ComputedValue.propTypes = {
 
 };
 
-export default withStyles(styles)(ComputedValue);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ComputedValue));
