@@ -29,8 +29,8 @@ export function Questions(state = initialState, action) {
 			let resetState = initialState;
 			return resetState;
 		case SET_QUESTION_OPTIONS:
-		console.log(action.questionID);
-		console.log(newState.questionsData);
+		// console.log(action.questionID);
+		// console.log(newState.questionsData);
 			newState.questionsData[action.questionID].options = action.options;
 			return newState;
 		default:

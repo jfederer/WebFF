@@ -48,9 +48,6 @@ const initialState =  { //MOCK //TODO:
 }
 
 
-
-// const initialEventsState = {};
-
 export function SamplingEvents(state = initialState, action) {
 		let newState = _.cloneDeep(state);
 switch (action.type) {
@@ -58,12 +55,6 @@ switch (action.type) {
 		newState[action.event.eventID]=action.event; 
 		return newState;
 	case SE_QUESTION_VALUE_CHANGE:
-
-	console.log("action.eventID", action.eventID)
-	console.log("action.questionID", action.questionID)
-	console.log("action.newValue", action.newValue);
-	console.log(newState[action.eventID]);
-
 		newState[action.eventID].questionValues[action.questionID] = action.newValue
 		return newState;
 	default:

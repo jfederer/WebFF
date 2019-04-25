@@ -59,17 +59,17 @@ class QuestionPage extends React.Component {
 
 		if (questionsData) {
 			let tabQuestionsData = getTabQuestionsData(questionsData, tabName);
-			console.log("TAB QUESTION DATA: ", tabQuestionsData);
+			// console.log("TAB QUESTION DATA: ", tabQuestionsData);
 			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
 
-			console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
+			// console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
 
 			let filteredlayoutGroupNames = layoutGroupNames.filter((groupName) => {
 				let panelName = tabName.replace(/ /g, '') + ":" + groupName.replace(/ /g, '');
 				return !hiddenPanels.includes(panelName);
 			})
 
-			console.log("FILTERED LAYOUT GROUP NAMES: ", filteredlayoutGroupNames);
+			// console.log("FILTERED LAYOUT GROUP NAMES: ", filteredlayoutGroupNames);
 
 			for(let i = 0; filteredlayoutGroupNames !== null && i < filteredlayoutGroupNames.length; i++) {
 				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredlayoutGroupNames[i]);

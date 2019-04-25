@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
-
+import _ from 'lodash';
 const math = require('mathjs');
 
 const styles = theme => ({
@@ -22,48 +22,53 @@ class ComputedValue extends React.Component {
 	// TODO: probably better to pass state and/or use the call back somehow... but utility functions meet the need.
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			value: this.props.value,
-		};
 	};
-
-	componentWillMount() {
-		this.computeValue(true);
-	}
-
-	handleValueChange = value => event => {
-		this.setState({
-			value: event.target.value
-		}, () => {
-			this.props.stateChangeHandler(this)
+		
+	componentWillUpdate(nextProps, nextState) {
+		if (!_.isEqual(this.props.currentEventQuestionValues, nextProps.currentEventQuestionValues)) {  //OPTIMIZE: get list of questions from compute string, store in state, and only check those for changes.
+			// if props changed... recompute value
+			let computedValue = this.computeValue(nextProps);
+			if(nextProps.currentEventQuestionValues[this.props.id] != computedValue) {
+				// if newly computed value should result in value change, send off action
+				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, computedValue);
+			}
 		}
-		);
-	};
-
-	componentWillUpdate(nextProps, nextState) { 
-		 let curValue = this.computeValue(false) // this runs twice to avoid triggering 
-		 if (curValue !== nextState.value) {
-			this.computeValue(true);
-		 }
 	}
 
-	computeValue(updateState) {
+
+	computeValue(args) {
 		//computes value from computationString
-		let DEBUG = true;
-		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
-		if(this.props.questionsValues===null) {
-			return;
+		//@para: args is props (either next or current can be used) and must include currentEventID, defaultQuestionsData, currentEventQuestionValues, computationString
+		//@returns: computed value if all questions in computationString are valid and have values... otherwise, returns empty string.
+		const { currentEventID, defaultQuestionsData, currentEventQuestionValues, computationString } = args;
+
+		if (!currentEventID) {
+			//TODO: error
+			console.log("currentEventID not set in computeValue function in ComputedValue component");
 		}
+		if (!defaultQuestionsData) {
+			//TODO: error
+			console.log("defaultQuestionsData not set in computeValue function in ComputedValue component");
+		}
+		if (!currentEventQuestionValues) {
+			//TODO: error
+			console.log("currentEventQuestionValues not set in computeValue function in ComputedValue component");
+		}
+		if (!computationString) {
+			//TODO: error
+			console.log("computationString not set in computeValue function in ComputedValue component");
+		}
+
+		let DEBUG = false;
+		if (DEBUG) console.log("--------------------------------");
+		if (DEBUG) console.log("computeValue: computationString: ", computationString);
+
 		let computedValue = "";
 		let shouldCompute = true;
 
-		if (DEBUG) console.log("--------------------------------");
-	
-		// split the computation string into constituent components
-	
-		let splitCS = this.props.computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
-	
+		// remove whitespace and split the computation string into constituent components
+		let splitCS = computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
+
 		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
 
@@ -71,57 +76,61 @@ class ComputedValue extends React.Component {
 		// replace all instances of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
 			if (DEBUG) console.log("Working with item: ", splitCS[i]);
-			
+
 
 			// if (!(splitCS[i] === '+' || splitCS[i] === '-' || splitCS[i] === '*' || splitCS[i] === '/' ||
 			// 	splitCS[i] === '(' || splitCS[i] === ')' || splitCS[i] === '^' || splitCS[i] === "" ||
 			// 	splitCS[i] === null) && isNaN(splitCS[i])) {
-			if ((!['+','-','*','/','(',')','^'].indexOf(splitCS[i])>=0) && splitCS[i] && isNaN(splitCS)) {  //TODO: NEXT fix the logic here... currently seeing "-" as a question
+			if ((['+', "-", '*', '/', '(', ')', '^'].indexOf(splitCS[i]) < 0) && isNaN(splitCS[i])) {
 				if (DEBUG) console.log(splitCS[i] + " is a question!");
 				// splitCS[i] is a questionID
-				// let q_id = splitCS[i];
-				// let q_val = this.props.questionsValues[splitCS[i]];
-				// //let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]); //TODO: switch to get questionValue
-				// // if (DEBUG) console.log("subQuestion Q: ", Q);
+				let q_id = splitCS[i];
+				let q_val;
 
-				// // check that all values returned without fail
-				// if (q_val === null || q_val === "") {
-				// 	if (DEBUG) console.log(q_id + " question was not found");
-				// 	shouldCompute = false;
-				// } else { //TODO: Check if number?
-				// 	splitCS[i] = q_val;
-				// }
+				if (defaultQuestionsData[q_id]) {
+					if (DEBUG) console.log("question found in default");
+					q_val = defaultQuestionsData[q_id].value;
+
+					if (currentEventQuestionValues[q_id]) {
+						if (DEBUG) console.log("question found in current event values");
+						q_val = currentEventQuestionValues[q_id];
+					}
+				} else {
+					if (DEBUG) console.log(q_id + " question was not found");
+					//TODO: THROW ERROR for not finding in defaultQuestionsData
+					return "";
+				}
+
+
+
+				// check that value returned and that it was a number...
+				if (!q_val || isNaN(q_val)) {
+					if (DEBUG) console.log("question came back as null or NaN"); // all need to come back as valid or the computation fails
+					return "";
+				} else {
+					splitCS[i] = q_val;
+				}
 			}
 		}
+
 		if (DEBUG) console.log("SPLIT POST: ", splitCS);
 
 		//TODO: save old splitCS values so we know what was null for better error display
 
-		if (shouldCompute && splitCS.length===1) {
+		if (splitCS.length === 1) {   //TODO: test why this extra If level is needed.  what fails that reqiures this?
 			computedValue = splitCS[0];
-		} else if(shouldCompute) {
+		} else {
 			// rejoin string and send to math utility
 			let finalComputeString = splitCS.join('')
-			//console.log(finalComputeString);
 			computedValue = math.eval(finalComputeString);
 		}
-
-
-		// set result to this value if we are suppose dto.
-		if (updateState && this.state.value !== computedValue) {
-			this.setState({
-				value: computedValue
-			}, () => {
-				this.props.stateChangeHandler(this);
-			}
-			);
-		}
-
+		
 		return computedValue;
 	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes, currentEventQuestionValues, currentEventID, id } = this.props;
+		
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
 
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
@@ -130,8 +139,7 @@ class ComputedValue extends React.Component {
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.computationString;
 
 		return <TextField
-			value={this.state.value}
-			onChange={this.handleValueChange(this.props.id)}
+			value={this.props.value?this.props.value:""}
 			key={this.props.id}
 			id={this.props.id}
 			label={this.props.label}
@@ -167,7 +175,9 @@ ComputedValue.propTypes = {
 
 const mapStateToProps = function (state) {
 	return {
-		currentEventID: state.SedFF.currentSamplingEventID
+		currentEventID: state.SedFF.currentSamplingEventID,
+		currentEventQuestionValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues,
+		defaultQuestionsData: state.Questions.questionsData
 	}
 }
 

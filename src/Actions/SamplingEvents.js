@@ -10,11 +10,7 @@ import { emptySamplingEvent } from '../Constants/DefaultObjects';
 
 
 export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events quetions (settings, etc)
-	
-	console.log("eventID", eventID)
-	console.log("questionID", questionID)
-	console.log("newValue", newValue);
-
+	//console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 	return { type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue }
   }
 

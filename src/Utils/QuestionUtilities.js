@@ -20,7 +20,7 @@ export const createQuestionComponents = (questionsData, questionsValues ) => {
 			return retQ;
 		});
     }
-	console.log("questionComponents.length: ", questionComponents.length);
+	// console.log("questionComponents.length: ", questionComponents.length);
     return questionComponents;
 }
 

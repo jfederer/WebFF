@@ -63,19 +63,17 @@ class Question extends React.Component {
 	buildQuestion() {
 		var theQ = {};
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag;
-		console.log("here");
+		
 		switch (this.props.type) {
 			case 'ComputedValue': {
 				theQ = <ComputedValue {...this.props} />
 				break;
 			}
 			case 'DropDown': {
-				console.log("DD");
 				theQ = <DropDown {...this.props} />
 				break;
 			}
 			case 'Text': {
-				console.log("TXT");
 				theQ = <Text {...this.props} />
 				break;
 			}

@@ -73,7 +73,7 @@ export const defaultQuestionsData = {
             "label": "Stream Width",
             "XMLTag": "P00004",
             "type": "ComputedValue",
-            "computationString": "edgeOfWater_Right-edgeOfWater_Left",
+            "computationString": "3/4*(edgeOfWater_Right-edgeOfWater_Left+2)^2",
             "placeholder": "This will be calculated",
             "value": "",
             "tabName": "FieldForm",
