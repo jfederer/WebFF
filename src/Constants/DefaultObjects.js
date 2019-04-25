@@ -115,17 +115,17 @@ export const defaultQuestionsData = {
         //     "width_lg": 1
         // },
 
-        // sampleDate: {
-        //     "id": "sampleDate",
-        //     "label": "Sample Date",
-        //     "type": "DateInput",
-        //     "tabName": "Field Form",
-        //     "placeholder": "yyyymmdd",
-        //     "value": null,
-        //     "layoutGroup": "Basic",
-        //     "width_xs": 4,
-        //     "width_lg": 2
-        // },
+        sampleDate: {
+            "id": "sampleDate",
+            "label": "Sample Date",
+            "type": "DateInput",
+            "tabName": "Field Form",
+            "placeholder": "yyyymmdd",
+            "value": null,
+            "layoutGroup": "Basic",
+            "width_xs": 4,
+            "width_lg": 2
+        },
 
         // sedimentType: {
         //     "id": "sedimentType",

@@ -38,3 +38,15 @@ export const safeCopy = (obj) => {
 
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
+
+export const getDateStringFromDate = (date) => {
+	let d = date;
+	if(!d) {
+		d = new Date()
+	}
+	
+	return d.getUTCFullYear() + "-" +
+		("0" + (d.getUTCMonth() + 1)).slice(-2) + "-" +
+		("0" + d.getUTCDate()).slice(-2);
+}
+

@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-//this.state.value always contains the up-to-date question values/answers.
+import { getDateStringFromDate } from '../../Utils/Utilities';
+
+
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 
 const styles = theme => ({
 	container: {
@@ -17,53 +21,20 @@ const styles = theme => ({
 
 class DateInput extends React.Component {
 	constructor(props) {
-		let DEBUG = false;
 		super(props);
-		if (DEBUG) console.log("DateInput: CONSTRUCTOR: Props.value: ", props.value);
-		if (this.props.value != null) {
-			this.state = {
-				value: this.props.value
-			};
-		} else {
-			if (DEBUG) console.log("DateInput: CONSTRUCTOR: props.value was null, building 'now' datestring")
-			let d = new Date();
-			if (DEBUG) console.log("CONSTRUCTOR: Date: ", d)
-			let dateOfMonthString = ('0' + d.getDate()).slice(-2);
-			let monthString = ('0' + (d.getMonth() + 1)).slice(-2);
-			let dateString = d.getFullYear() + "-" + monthString + "-" + dateOfMonthString;
-			if (DEBUG) console.log("DateInput: CONSTRUCTOR: datestring: ", dateString);
-			this.state = {
-				value: dateString
-			}
+		if (!this.props.value) { // if incoming date was null or empty, generate current date
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, getDateStringFromDate());
 		}
 	};
 
-	componentWillMount() {
-		this.props.stateChangeHandler(this);
-		//this.setState({ value: this.props.value });
-	}
 
-	handleValueChange = value => event => {
-		this.setState({
-			value: event.target.value
-		}, () => {
-			//console.log(this.props.stateChangeHandler);
-			this.props.stateChangeHandler(this)
-		}
-		);
+	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		console.log("HVC");
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
 	};
-
-	getDateString(date) {
-		console.log(date);
-		
-		return date.getUTCFullYear() + "/" +
-			("0" + (date.getUTCMonth() + 1)).slice(-2) + "/" +
-			("0" + date.getUTCDate()).slice(-2);
-	}
-
+	
 	render() {
 		const { classes } = this.props;
-		//console.log("value: ", this.state.value);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
 		return <TextField
@@ -72,7 +43,7 @@ class DateInput extends React.Component {
 			label={this.props.label}
 			fullWidth
 			type="date"
-			value={this.state.value}
+			value={this.props.value?this.props.value:""}
 			className={classes.textField}
 			xmltag={this.props.XMLTag}
 			InputLabelProps={{
@@ -87,7 +58,6 @@ class DateInput extends React.Component {
 DateInput.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	XMLTag: PropTypes.string,
@@ -100,4 +70,14 @@ DateInput.propTypes = {
 
 };
 
-export default withStyles(styles)(DateInput);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DateInput));
