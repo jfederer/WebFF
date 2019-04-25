@@ -282,9 +282,10 @@ export const defaultQuestionsData = {
             "id": "setA_StartTime",
             "label": "Start Time",
             "type": "TimeInput",
-            "tabName": "Field Form",
+			"tabName": "Field Form",
+			"autofill": true,
             "layoutGroup": "Set A Information",
-            "value": "",
+            "value": "15:00",
             "width_xs": 5,
             "width_lg": 2
         },
