@@ -12,15 +12,16 @@ export const createQuestionComponents = (questionsData, questionsValues ) => {
 
 			let value = questionData.value;
 			
-			if(questionsValues[questionData.id]) {
-				value = questionsValues[questionData.id]
+			if(questionsValues[questionData.id]!==null) {
+				// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
+				value = questionsValues[questionData.id];
 			} 
 
 			let retQ = <Question {...questionData} value={value} />;
 			return retQ;
 		});
     }
-	// console.log("questionComponents.length: ", questionComponents.length);
+	
     return questionComponents;
 }
 

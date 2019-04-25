@@ -290,6 +290,19 @@ export const defaultQuestionsData = {
             "width_lg": 2
         },
 
+		setA_samplesComposited: {
+            "id": "setA_samplesComposited",
+            "label": "Samples Composited",
+            "XMLTag": "AnalyzeIndSamples",
+			"type": "Toggle",
+			// "checkbox": true,
+            "tabName": "Field Form",
+            "layoutGroup": "Set A Information",
+            "value": true,
+            "width_xs": 4,
+            "width_lg": 3
+        },
+
         // samplingTeam: {
         //     "id": "samplingTeam",
         //     "label": "Sampling Team",

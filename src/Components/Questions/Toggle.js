@@ -1,10 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Checkbox from '@material-ui/core/Checkbox';
 
+
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
 
@@ -14,13 +17,18 @@ const styles = theme => ({
 
 class Toggle extends React.Component {
 
-	componentWillMount() {
-		this.setState({ value: this.props.value });
-	}
+	// componentWillMount() {
+	// 	this.setState({ value: this.props.value });
+	// }
 
-	handleToggleChange = name => event => {
-		this.setState({ [name]: event.target.checked }, () => this.props.stateChangeHandler(this));
+
+	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.checked);
 	};
+
+	// handleToggleChange = name => event => {
+	// 	this.setState({ [name]: event.target.checked }, () => this.props.stateChangeHandler(this));
+	// };
 
 	render() {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
@@ -33,7 +41,7 @@ class Toggle extends React.Component {
 			key={this.props.id}
 			id={this.props.id}
 			checked={this.props.value}
-			onChange={this.handleToggleChange('value')}
+			onChange={this.handleValueChange('value')}
 			xmltag={this.props.XMLTag}
 		/>
 		} else {
@@ -41,7 +49,7 @@ class Toggle extends React.Component {
 			key={this.props.id}
 			id={this.props.id}
 			checked={this.props.value}
-			onChange={this.handleToggleChange('value')}
+			onChange={this.handleValueChange('value')}
 			xmltag={this.props.XMLTag}
 		/>
 		}
@@ -62,7 +70,7 @@ class Toggle extends React.Component {
 Toggle.propTypes = {
 	classes: PropTypes.object,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func.isRequired,
+	// stateChangeHandler: PropTypes.func.isRequired,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	XMLTag: PropTypes.string,
@@ -75,4 +83,14 @@ Toggle.propTypes = {
 
 };
 
-export default withStyles(styles)(Toggle);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Toggle));

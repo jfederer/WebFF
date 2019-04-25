@@ -30,45 +30,6 @@ class QuestionPanel extends React.Component {
 		const { classes } = this.props;
 		const { questions } = this.props;
 
-		let gridedQuestions = questions.map((question) => {
-			// console.log(question.props.label, " props.width_xs ", question.props.width_xs);
-			// console.log(question.props.label, "props.width_lg ", question.props.width_lg);
-			
-			if (!question.props.hidden)
-				if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
-					// neither lg or xs are set.
-					return <Grid item
-						key={question.props.id + '_grid'} xs lg>
-						{question}
-					</Grid>
-
-				} else if (question.props.width_xs === '' || question.props.width_xs == null) {
-					// xs is not set
-					return <Grid item
-						key={question.props.id + '_grid'} xs lg={question.props.width_lg}>
-						{question}
-					</Grid>
-
-				} else if (question.props.width_lg === '' || question.props.width_lg == null) {
-					// lg is not set
-					return <Grid item
-						key={question.props.id + '_grid'} xs={question.props.width_xs} lg>
-						{question}
-					</Grid>
-
-				} else {
-					// both lg and xs are set.
-					return <Grid item
-						key={question.props.id + '_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
-					>
-						{question}
-					</Grid>
-				}
-				//TOOD throw error, shouldn't get here.
-				return null;
-			}
-		);
-
 		return (
 			<Paper className={classNames(classes.root, this.props.grey ? classes.lightGrey : '')} elevation={2}>
 				{this.props.panelName}
@@ -80,17 +41,50 @@ class QuestionPanel extends React.Component {
 					// justify='space-around' 
 					justify="center"
 				>
-					{gridedQuestions}
+					{questions.map((question) => { // place all questions in grids of appropriate size
+						if (!question.props.hidden)
+							if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
+								// neither lg or xs are set.
+								return <Grid item
+									key={question.props.id + '_grid'} xs lg>
+									{question}
+								</Grid>
+
+							} else if (question.props.width_xs === '' || question.props.width_xs == null) {
+								// xs is not set
+								return <Grid item
+									key={question.props.id + '_grid'} xs lg={question.props.width_lg}>
+									{question}
+								</Grid>
+
+							} else if (question.props.width_lg === '' || question.props.width_lg == null) {
+								// lg is not set
+								return <Grid item
+									key={question.props.id + '_grid'} xs={question.props.width_xs} lg>
+									{question}
+								</Grid>
+
+							} else {
+								// both lg and xs are set.
+								return <Grid item
+									key={question.props.id + '_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
+								>
+									{question}
+								</Grid>
+							}
+						//TOOD throw error, shouldn't get here.
+						return null;
+					})}
 				</Grid>
 			</Paper>
-		);
-	}
-}
-
+				);
+			}
+		}
+		
 QuestionPanel.propTypes = {
-	classes: PropTypes.object.isRequired,
-	questions: PropTypes.array.isRequired,
-	grey: PropTypes.bool
-}
-
+					classes: PropTypes.object.isRequired,
+				questions: PropTypes.array.isRequired,
+				grey: PropTypes.bool
+			}
+			
 export default withStyles(styles)(QuestionPanel);

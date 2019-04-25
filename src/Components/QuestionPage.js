@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 
 import QuestionPanel from './QuestionPanel';
 import {
-	createQuestionComponents, getTabQuestionsData, 
+	createQuestionComponents, getTabQuestionsData,
 	getLayoutGroupNames, getLayoutGroupQuestionsData
 } from '../Utils/QuestionUtilities';
 import { setAppBarText } from '../Actions/UI';
@@ -69,21 +69,19 @@ class QuestionPage extends React.Component {
 				return !hiddenPanels.includes(panelName);
 			})
 
-			// console.log("FILTERED LAYOUT GROUP NAMES: ", filteredlayoutGroupNames);
-
-			for(let i = 0; filteredlayoutGroupNames !== null && i < filteredlayoutGroupNames.length; i++) {
+			for (let i = 0; filteredlayoutGroupNames !== null && i < filteredlayoutGroupNames.length; i++) {
 				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredlayoutGroupNames[i]);
 
 				questionPanels.push(
-				<div key={tabName + filteredlayoutGroupNames[i] + '_div'}>
-					<QuestionPanel 
-						questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionValues)} 
-						panelName={filteredlayoutGroupNames[i]}
-						key={tabName + filteredlayoutGroupNames[i]}
-						grey={i%2===1} />
+					<div key={tabName + filteredlayoutGroupNames[i] + '_div'}>
+						<QuestionPanel
+							questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionValues)}
+							panelName={filteredlayoutGroupNames[i]}
+							key={tabName + filteredlayoutGroupNames[i]}
+							grey={i % 2 === 1} />
 						<Divider />
-						</div>
-						);
+					</div>
+				);
 			}
 
 
@@ -91,7 +89,7 @@ class QuestionPage extends React.Component {
 				<div>
 					QUESTION PAGE!
 				 {this.props.tabName}
-				{questionPanels} 
+					{questionPanels}
 				</div>
 			);
 		} else {
