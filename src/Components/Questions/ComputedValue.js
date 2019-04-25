@@ -19,20 +19,16 @@ const styles = theme => ({
 });
 
 class ComputedValue extends React.Component {
-	// TODO: probably better to pass state and/or use the call back somehow... but utility functions meet the need.
-	constructor(props) {
-		super(props);
-	};
 
 	componentWillMount() {
 		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, this.computeValue(this.props));
 	}
-		
+
 	componentWillUpdate(nextProps, nextState) {
 		if (!_.isEqual(this.props.currentEventQuestionValues, nextProps.currentEventQuestionValues)) {  //OPTIMIZE: get list of questions from compute string, store in state, and only check those for changes.
 			// if props changed... recompute value
 			let computedValue = this.computeValue(nextProps);
-			if(nextProps.currentEventQuestionValues[this.props.id] != computedValue) {
+			if (nextProps.currentEventQuestionValues[this.props.id] != computedValue) {
 				// if newly computed value should result in value change, send off action
 				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, computedValue);
 			}
@@ -73,18 +69,11 @@ class ComputedValue extends React.Component {
 		// remove whitespace and split the computation string into constituent components
 		let splitCS = computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
 
-		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
-
-
 		if (DEBUG) console.log("SPLIT PRE:", splitCS);
 		// replace all instances of questionID's with their value
 		for (let i = 0; i < splitCS.length; i++) {
 			if (DEBUG) console.log("Working with item: ", splitCS[i]);
 
-
-			// if (!(splitCS[i] === '+' || splitCS[i] === '-' || splitCS[i] === '*' || splitCS[i] === '/' ||
-			// 	splitCS[i] === '(' || splitCS[i] === ')' || splitCS[i] === '^' || splitCS[i] === "" ||
-			// 	splitCS[i] === null) && isNaN(splitCS[i])) {
 			if ((['+', "-", '*', '/', '(', ')', '^'].indexOf(splitCS[i]) < 0) && isNaN(splitCS[i])) {
 				if (DEBUG) console.log(splitCS[i] + " is a question!");
 				// splitCS[i] is a questionID
@@ -128,13 +117,13 @@ class ComputedValue extends React.Component {
 			let finalComputeString = splitCS.join('')
 			computedValue = math.eval(finalComputeString);
 		}
-		
+
 		return computedValue;
 	}
 
 	render() {
 		const { classes, currentEventQuestionValues, currentEventID, id } = this.props;
-		
+
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
 
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
@@ -143,7 +132,7 @@ class ComputedValue extends React.Component {
 		let realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.computationString;
 
 		return <TextField
-			value={this.props.value?this.props.value:""}
+			value={this.props.value ? this.props.value : ""}
 			key={this.props.id}
 			id={this.props.id}
 			label={this.props.label}
