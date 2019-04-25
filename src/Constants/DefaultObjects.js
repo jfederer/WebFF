@@ -285,7 +285,8 @@ export const defaultQuestionsData = {
 			"tabName": "Field Form",
 			"autofill": true,
             "layoutGroup": "Set A Information",
-            "value": "15:00",
+			"value": "09:30",
+			// "startValue": "09:00",
             "width_xs": 5,
             "width_lg": 2
         },
@@ -295,7 +296,7 @@ export const defaultQuestionsData = {
             "label": "Samples Composited",
             "XMLTag": "AnalyzeIndSamples",
 			"type": "Toggle",
-			// "checkbox": true,
+			"checkbox": true,
             "tabName": "Field Form",
             "layoutGroup": "Set A Information",
             "value": true,

@@ -9,7 +9,7 @@ import MultipleChoice from './Questions/MultipleChoice';
 import Toggle from './Questions/Toggle';
 import TableInput from './Questions/TableInput';
 import DateInput from './Questions/DateInput';
-import TimeInput from './Questions/TimeInput';
+import TimePicker from './Questions/TimePicker';
 import Hidden from '@material-ui/core/Hidden';
 import ComputedValue from './Questions/ComputedValue';
 // import ButtonInput from './Questions/ButtonInput';
@@ -94,7 +94,7 @@ class Question extends React.Component {
 				break;
 			}
 			case 'TimeInput': {
-				theQ = <TimeInput {...this.props} />;
+				theQ = <TimePicker {...this.props} />;
 				break;
 			}
 			// case 'ButtonInput' : {
