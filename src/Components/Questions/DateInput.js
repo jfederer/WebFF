@@ -29,7 +29,6 @@ class DateInput extends React.Component {
 
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		console.log("HVC");
 		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
 	};
 	

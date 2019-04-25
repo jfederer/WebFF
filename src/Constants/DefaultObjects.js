@@ -248,35 +248,46 @@ export const defaultQuestionsData = {
         //     "width_lg": 2
         // },
 
-        // timeDatum: {
-        //     "id": "timeDatum",
-        //     "label": "Time Datum",
-        //     "XMLTag": "TimeDatum",
-        //     "type": "DropDown",
-        //     "tabName": "Field Form",
-        //     "options":
-        //     {
-        //         "SITEFILE Default": "SITEFILE",
-        //         "Atlantic Standard Time": "AST",
-        //         "Atlantic Daylight Time": "ADT",
-        //         "Eastern Standard Time": "EST",
-        //         "Eastern Daylight Time": "EDT",
-        //         "Central Standard Time": "CST",
-        //         "Central Daylight Time": "CDT",
-        //         "Mountain Standard Time": "MST",
-        //         "Mountain Daylight Time": "MDT",
-        //         "Pacific Standard Time": "PST",
-        //         "Pacific Daylight Time": "PDT",
-        //         "Alaska Standard Time": "AKST",
-        //         "Alaska Daylight Time": "AKDT",
-        //         "Hawaii–Aleutian Standard Time": "HST",
-        //         "Hawaii–Aleutian Daylight Time": "HDT"
-        //     },
-        //     "value": "SITEFILE",
-        //     "layoutGroup": "Basic",
-        //     "width_xs": 4,
-        //     "width_lg": 2
-        // },
+        timeDatum: {
+            "id": "timeDatum",
+            "label": "Time Datum",
+            "XMLTag": "TimeDatum",
+            "type": "DropDown",
+            "tabName": "Field Form",
+            "options":
+            {
+                "SITEFILE Default": "SITEFILE",
+                "Atlantic Standard Time": "AST",
+                "Atlantic Daylight Time": "ADT",
+                "Eastern Standard Time": "EST",
+                "Eastern Daylight Time": "EDT",
+                "Central Standard Time": "CST",
+                "Central Daylight Time": "CDT",
+                "Mountain Standard Time": "MST",
+                "Mountain Daylight Time": "MDT",
+                "Pacific Standard Time": "PST",
+                "Pacific Daylight Time": "PDT",
+                "Alaska Standard Time": "AKST",
+                "Alaska Daylight Time": "AKDT",
+                "Hawaii–Aleutian Standard Time": "HST",
+                "Hawaii–Aleutian Daylight Time": "HDT"
+            },
+            "value": "SITEFILE",
+            "layoutGroup": "Basic",
+            "width_xs": 4,
+            "width_lg": 2
+        },
+
+		setA_StartTime: {
+            "id": "setA_StartTime",
+            "label": "Start Time",
+            "type": "TimeInput",
+            "tabName": "Field Form",
+            "layoutGroup": "Set A Information",
+            "value": "",
+            "width_xs": 5,
+            "width_lg": 2
+        },
 
         // samplingTeam: {
         //     "id": "samplingTeam",
