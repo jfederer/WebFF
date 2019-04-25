@@ -23,6 +23,10 @@ class ComputedValue extends React.Component {
 	constructor(props) {
 		super(props);
 	};
+
+	componentWillMount() {
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, this.computeValue(this.props));
+	}
 		
 	componentWillUpdate(nextProps, nextState) {
 		if (!_.isEqual(this.props.currentEventQuestionValues, nextProps.currentEventQuestionValues)) {  //OPTIMIZE: get list of questions from compute string, store in state, and only check those for changes.
