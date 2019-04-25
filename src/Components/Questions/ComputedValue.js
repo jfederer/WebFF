@@ -49,9 +49,8 @@ class ComputedValue extends React.Component {
 	}
 
 	computeValue(updateState) {
-		//console.log("CV");
-		//computes value from computationString based on values in LS and optionally updates state and LS
-		let DEBUG = false;
+		//computes value from computationString
+		let DEBUG = true;
 		if (DEBUG) console.log("computeValue: computationString: ", this.props.computationString);
 		if(this.props.questionsValues===null) {
 			return;
@@ -60,16 +59,11 @@ class ComputedValue extends React.Component {
 		let shouldCompute = true;
 
 		if (DEBUG) console.log("--------------------------------");
-		//if(this.props.globalState);
-
-		// if(this.props.id === "samplingWidth") {
-		// 	DEBUG = true;
-		// }
-
+	
 		// split the computation string into constituent components
-		//TODO: remove spaces
+	
 		let splitCS = this.props.computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
-		//let splitCS = this.props.computationString.split(/([+,\-,*,/,(,),^])/g);
+	
 		if (DEBUG) console.log("computedValue: splitCS: ", splitCS);
 
 
@@ -79,23 +73,24 @@ class ComputedValue extends React.Component {
 			if (DEBUG) console.log("Working with item: ", splitCS[i]);
 			
 
-			if (!(splitCS[i] === '+' || splitCS[i] === '-' || splitCS[i] === '*' || splitCS[i] === '/' ||
-				splitCS[i] === '(' || splitCS[i] === ')' || splitCS[i] === '^' || splitCS[i] === "" ||
-				splitCS[i] === null) && isNaN(splitCS[i])) {
+			// if (!(splitCS[i] === '+' || splitCS[i] === '-' || splitCS[i] === '*' || splitCS[i] === '/' ||
+			// 	splitCS[i] === '(' || splitCS[i] === ')' || splitCS[i] === '^' || splitCS[i] === "" ||
+			// 	splitCS[i] === null) && isNaN(splitCS[i])) {
+			if ((!['+','-','*','/','(',')','^'].indexOf(splitCS[i])>=0) && splitCS[i] && isNaN(splitCS)) {  //TODO: NEXT fix the logic here... currently seeing "-" as a question
 				if (DEBUG) console.log(splitCS[i] + " is a question!");
 				// splitCS[i] is a questionID
-				let q_id = splitCS[i];
-				let q_val = this.props.questionsValues[splitCS[i]];
-				//let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]); //TODO: switch to get questionValue
-				// if (DEBUG) console.log("subQuestion Q: ", Q);
+				// let q_id = splitCS[i];
+				// let q_val = this.props.questionsValues[splitCS[i]];
+				// //let Q = getQuestionDataFromQuestionsDataByQuestionID(this.props.globalState.questionsData, splitCS[i]); //TODO: switch to get questionValue
+				// // if (DEBUG) console.log("subQuestion Q: ", Q);
 
-				// check that all values returned without fail
-				if (q_val === null || q_val === "") {
-					if (DEBUG) console.log(q_id + " question was not found");
-					shouldCompute = false;
-				} else { //TODO: Check if number?
-					splitCS[i] = q_val;
-				}
+				// // check that all values returned without fail
+				// if (q_val === null || q_val === "") {
+				// 	if (DEBUG) console.log(q_id + " question was not found");
+				// 	shouldCompute = false;
+				// } else { //TODO: Check if number?
+				// 	splitCS[i] = q_val;
+				// }
 			}
 		}
 		if (DEBUG) console.log("SPLIT POST: ", splitCS);
