@@ -53,12 +53,12 @@ const styles = theme => ({
 
 
 class Question extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: this.props.value?this.props.value:"",   //TODO: remove?
-		};
-	};
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		value: this.props.value?this.props.value:"",   //TODO: remove?
+	// 	};
+	// };
 
 	buildQuestion() {
 		var theQ = {};
@@ -78,6 +78,7 @@ class Question extends React.Component {
 				break;
 			}
 			case 'MultipleChoice': {
+				// console.log("Q PROPS: ", this.props);
 				theQ = <MultipleChoice {...this.props} />;
 				break;
 			}

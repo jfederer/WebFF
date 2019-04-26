@@ -7,6 +7,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import _ from 'lodash';
 
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 
@@ -15,71 +16,71 @@ const styles = theme => ({
 
 });
 
-//TODO: NEXT:  Redux Multiple Choice
-
 class MultipleChoice extends React.Component {
 
-    componentWillMount() {
-        this.setState({ value: this.props.value });
-    }
-
-    handleValueChange = choiceVal => event => { 
-        let tempValueArr = []
-        if(this.props.value!=="") {
-            tempValueArr = this.props.value.slice();
-        }
-        
-
-        if (event.target.checked) {
-            tempValueArr.push(choiceVal);
-        } else {
-			while(tempValueArr.includes(choiceVal)) { // removing all occurences
-				tempValueArr.splice(tempValueArr.indexOf(choiceVal), 1);
-			}
-        }
-
-        this.setState({ value: tempValueArr }, () => this.props.stateChangeHandler(this));
-    };
-
-    render() {
-        // console.log(this.state);
-        // console.log("this.state.value", this.state.value);
-        // let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
-        return <FormControl component="fieldset" key={this.props.id}>
-            <FormLabel component="legend">{this.props.label}</FormLabel>
-            <FormGroup>
-			{Object.keys(this.props.options).map((optionLabel)=> { 
-				return <FormControlLabel
-				key={optionLabel + ":" + this.props.options[optionLabel]}
-				control={
-					<Checkbox
-						checked={this.props.value && this.props.value.includes(this.props.options[optionLabel])}
-						onChange={this.handleValueChange(this.props.options[optionLabel])}
-						value={this.props.options[optionLabel]}
-					/>
+	componentWillMount() {
+		if (Object.keys(this.props.value).length !== Object.keys(this.props.options).length) {
+			// upon first loading, if the options and values aren't the same size, let's fill out the values
+			console.log("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct");
+			let initValue = _.cloneDeep(this.props.value);
+			Object.keys(this.props.options).map((option) => {
+				if (initValue[option] === null || typeof initValue[option] === 'undefined') {
+					initValue[option] = false;
 				}
-				label={optionLabel}
-			/>
-			})}
-            </FormGroup>
-        </FormControl>;
-    }
+			})
+
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
+		}
+	}
+
+	handleValueChange = choice => event => {
+		let newValue = _.cloneDeep(this.props.value);
+
+		newValue[choice] = event.target.checked;
+
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+	};
+
+	render() {
+		// console.log("this.state.value", this.state.value);
+		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
+		return <FormControl component="fieldset" key={this.props.id}>
+			<FormLabel component="legend">{this.props.label}</FormLabel>
+			<FormGroup>
+				{Object.keys(this.props.options).map((option) => {
+					let optionLabel = this.props.options[option];
+					return <FormControlLabel
+						key={optionLabel + ":" + this.props.options[optionLabel]}
+						control={
+							<Checkbox
+								checked={this.props.value[option]?this.props.value[option]:false}
+								onChange={this.handleValueChange(option)}
+								// value={this.props.value[this.props.options[optionLabel]]}
+								value={option}
+							/>
+						}
+						label={optionLabel}
+					/>
+				})}
+			</FormGroup>
+		</FormControl>;
+	}
 }
 
 MultipleChoice.propTypes = {
-    classes: PropTypes.object,
-    validator: PropTypes.func,
-    
-    key: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    XMLTag: PropTypes.string,
-    type: PropTypes.oneOf(['MultipleChoice']).isRequired, 
-    options: PropTypes.object.isRequired,
-    helperText: PropTypes.string
+	classes: PropTypes.object,
+	validator: PropTypes.func,
 
-    //TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
-    
+	key: PropTypes.string,
+	id: PropTypes.string.isRequired,
+	label: PropTypes.string,
+	XMLTag: PropTypes.string,
+	type: PropTypes.oneOf(['MultipleChoice']).isRequired,
+	options: PropTypes.object.isRequired,
+	helperText: PropTypes.string
+
+	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
+
 
 };
 

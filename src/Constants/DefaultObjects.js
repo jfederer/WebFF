@@ -89,13 +89,13 @@ export const defaultQuestionsData = {
             "type": "MultipleChoice",
             "options":
             {
-                "Sand-Fine break": "SF",
-                "Sand Analysis": "SA",
-                "Loss-on-ignition": "LOI",
-                "Full-size Fractions*": "Z",
-                "Fines Only": "FO"
+                "SF" : "Sand-Fine break",
+                "SA": "Sand Analysis",
+                "LOI": "Loss-on-ignition",
+                "Z": "Full-size Fractions*",
+                "FO": "Fines Only"
             },
-            "value": [],
+			"value": {"SF":true},
             "tabName": "FieldForm",
             "layoutGroup": "Set A Information",
             "width_xs": 2,

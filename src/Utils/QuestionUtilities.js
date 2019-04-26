@@ -10,14 +10,24 @@ export const createQuestionComponents = (questionsData, questionsValues ) => {
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
         questionComponents = questionsData.map(questionData => {
 
+			let debug=false;
+			// if(questionData.type==="MultipleChoice") {
+			// 	debug = true;
+			// }
+
 			let value = questionData.value;
-			
-			if(questionsValues[questionData.id]!==null) {
+			if(debug)console.log("CREATE: First Assigned: ", value);
+			if(debug)console.log("CREATE: questionsVallues: ", questionsValues);
+			if(debug)console.log("CREATE: questionData.id: ", questionData.id);
+			if(debug)console.log("CREATE: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
+			if(questionsValues[questionData.id]!==null && typeof questionsValues[questionData.id]!=='undefined') {
 				// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
 				value = questionsValues[questionData.id];
+				if(debug)console.log("CREATE: OVERWRITE WITH: ", value);
 			} 
 
 			let retQ = <Question {...questionData} value={value} />;
+			if(debug)console.log("CREATE: VALUE AT RETURN: ", value);
 			return retQ;
 		});
     }
