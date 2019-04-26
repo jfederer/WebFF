@@ -55,7 +55,13 @@ export const getTimeStringFromDate = (date) => {
 	if(!d) {
 		d = new Date()
 	}
-	
+
 	return ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2);
+}
+
+
+export const getDateObjectFromTime = (dateString) => {
+	let retDate = new Date("Jan 22, 1981 " + dateString);
+	return retDate;
 }
 

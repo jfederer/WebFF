@@ -80,6 +80,26 @@ export const defaultQuestionsData = {
             "layoutGroup": "Waterway Info",
             "width_xs": 2,
             "width_lg": 2
+		},
+		
+		setA_AnalysedFor_bedload: {
+            "id": "setA_AnalysedFor_bedload",
+            "label": "Analyze Set/Group A for:",
+            "XMLTag": "Analyses",
+            "type": "MultipleChoice",
+            "options":
+            {
+                "Sand-Fine break": "SF",
+                "Sand Analysis": "SA",
+                "Loss-on-ignition": "LOI",
+                "Full-size Fractions*": "Z",
+                "Fines Only": "FO"
+            },
+            "value": [],
+            "tabName": "FieldForm",
+            "layoutGroup": "Set A Information",
+            "width_xs": 2,
+            "width_lg": 2
         },
 
         // projectName: {

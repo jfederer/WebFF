@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import TimeInput from 'material-ui-time-picker'
 
+import { TextField} from '@material-ui/core';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
-import { getTimeStringFromDate } from '../../Utils/Utilities';
+import { getTimeStringFromDate, getDateObjectFromTime } from '../../Utils/Utilities';
 
 const styles = theme => ({
 	timeInput: {
@@ -21,10 +21,10 @@ class TimePicker extends React.Component {
 	constructor(props) {
 		let DEBUG = false;
 		super(props);
-		console.log(this.props);
-		if (!this.props.value && this.props.autofill) {
+
+		if (!this.props.value && this.props.autofill) { // no value and set to autofill... fill with current time
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, getTimeStringFromDate());
-		}
+		} 
 	};
 
 	componentWillMount() {
@@ -33,7 +33,7 @@ class TimePicker extends React.Component {
 
 	handleValueChange = value => event => {
 		// validate and format the input
-		console.log("Changed");
+
 		let newVal = event.target.value;
 		newVal = newVal.replace(':', '');
 		if (isNaN(newVal)) { // don't allow letters
@@ -58,37 +58,34 @@ class TimePicker extends React.Component {
 			if (newVal.slice(2) > 59) {
 				return;
 			}
+
 			newVal = newVal.slice(0, 2) + ":" + newVal.slice(2);
 		}
 
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newVal);
 	};
 
 	render() {
-		console.log(this.props.value);
 		const { classes } = this.props;
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
 
-		// return <TextField className={classes.timeInput}
-		// 	id={this.props.id}
-		// 	key={this.props.id}
-		// 	label={this.props.label}
-		// 	fullWidth
-		// 	margin="none"
-		// 	type="text"
-		// 	value={this.props.value}
-		// 	defaultValue={this.props.value}
-		// 	xmltag={this.props.XMLTag}
-		// 	placeholder={'HH:MM'}
-		// 	onChange={this.handleValueChange(this.props.id)}
-		// 	// style = {{width: 52, marginLeft:2}} //assign the width as your requirement
-		// />
-		return <TimeInput
-			mode='24h'
-			value={this.props.value}   https://github.com/TeamWertarbyte/material-ui-time-picker
-			onChange={(time) => this.handleValueChange(time)}
+	
+		
+		return <TextField className={classes.timeInput}
+			id={this.props.id}
+			key={this.props.id}
+			label={this.props.label}
+			fullWidth
+			margin="none"
+			type="text"
+			value={this.props.value?this.props.value:""}
+			xmltag={this.props.XMLTag}
+			placeholder={'HH:MM'}
+			onChange={this.handleValueChange(this.props.id)}
+			// style = {{width: 52, marginLeft:2}} //assign the width as your requirement
 		/>
+
 
 
 

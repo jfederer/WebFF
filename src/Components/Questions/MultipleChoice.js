@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -7,13 +8,14 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-//this.state.value always contains the up-to-date question values/answers.
-//all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
+
 
 const styles = theme => ({
 
 });
 
+//TODO: NEXT:  Redux Multiple Choice
 
 class MultipleChoice extends React.Component {
 
@@ -67,7 +69,7 @@ class MultipleChoice extends React.Component {
 MultipleChoice.propTypes = {
     classes: PropTypes.object,
     validator: PropTypes.func,
-    stateChangeHandler: PropTypes.func.isRequired,
+    
     key: PropTypes.string,
     id: PropTypes.string.isRequired,
     label: PropTypes.string,
@@ -81,4 +83,14 @@ MultipleChoice.propTypes = {
 
 };
 
-export default withStyles(styles)(MultipleChoice);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(MultipleChoice));
