@@ -16,41 +16,58 @@ import { emptySamplingEvent } from '../Constants/DefaultObjects';
 
 
 export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events quetions (settings, etc)
+	/* 
+	@desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
+	@param eventID {string} - the unique event ID.
+	@param questionID {string} - the question ID.  If this does not exist in the event, the key will be created and given a value in the questionValues.
+	@param newValue {any} - the value to assign to the question
+	@returns void
+	*/
+	// console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 
-	console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 	return (dispatch, getState) => {
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
-		//get action string
+		//get question and conditionally the action string
 		let question = getQuestionFromQuestionID(questionID, getState());
 		if (question) {
-			console.log("question " + questionID + " Found: ", question);
 			let actions = question.actions;
 			if (actions) {
 				// if action string exists...
-				console.log("actions exist!: ", actions);
-
 				let anyValueActionString = actions["anyValue"];
 				if (anyValueActionString) {
-					console.log("AnyValue exists: ", anyValueActionString);
-					//TODO: run anyValueActionString
+					// run 'anyValue' action strings first
 					dispatchAllActionsFromActionString(dispatch, anyValueActionString);
 				}
 
 				let thisValueActionString = actions[newValue];
 				if (thisValueActionString) {
-					console.log("Action for " + newValue + " exists: ", thisValueActionString);
-					//TODO: run thisValueActionString
+					// run this specific value's action string second
 					dispatchAllActionsFromActionString(dispatch, thisValueActionString);
 				}
 			}
-		} else {
-			//TODO: Error  (should always find a question)
-			console.log("Question not found... error!");
 		}
 	}
 }
 
+export function createNewSampingEventForUser(eventName, username) {
+	/* 
+	@desc creates a new sampling event from scratch and links it to a given user
+	@param eventName {string} - the event name.  If empty string, will be given date-based name
+	@param username {string} - the user name to link the event to.
+	@returns the eventID of the newly created event 
+	*/
+
+	if (!username) {
+		throw "No username passed to createNewSamplingEventForUser function";
+	}
+
+	return dispatch => {
+		let eventID = dispatch(createNewSamplingEvent(eventName));
+		dispatch({ type: REGISTER_EVENT_WITH_USERNAME, eventID, username });
+		return eventID;
+	}
+}
 
 export function createNewSamplingEvent(eventName) {
 	/* 
@@ -82,30 +99,21 @@ export function createNewSamplingEvent(eventName) {
 }
 
 
-export function createNewSampingEventForUser(eventName, username) {
-	return dispatch => {
-		let eventID = dispatch(createNewSamplingEvent(eventName));
-		dispatch({ type: REGISTER_EVENT_WITH_USERNAME, eventID, username });
-		return eventID;
-	}
-}
-
-// function getActionsFromActionString(actionsString) {   // returns array of arrays... action[0][0] is the name of the action, action[0][1...] are the action parameters
-// 	let actionsArr = actionsString.split('&');
-// 	let actions = actionsArr.map((actionString) => {
-// 		return actionString.split('::');
-// 	});
-// 	return actions;
-// }
 
 function getActionsFromActionString(actionsString) {
+	/* 
+	@desc splits an action string up in to constituent parts.  Combines all like-actions.
+	@param actionString {string} - string with actions delimited by ampersand (&) and actions split from action parameters by double-colon (::)
+	@returns actions {object}, where action[actionName] is an array of arrays of that action's parametes.
+	*/
+
 	let actionsArr = actionsString.split('&');
 	let actions = {};
-	actionsArr.map((actionString)=> {
+	actionsArr.map((actionString) => {
 		let actionParameters = actionString.split('::');
-		let actionName = actionParameters.splice(0,1);
-		
-		if(typeof actions[actionName] === 'undefined') {
+		let actionName = actionParameters.splice(0, 1);
+
+		if (typeof actions[actionName] === 'undefined') {
 			actions[actionName] = [actionParameters];
 		} else {
 			actions[actionName].push(actionParameters);
@@ -117,14 +125,26 @@ function getActionsFromActionString(actionsString) {
 
 
 function getQuestionFromQuestionID(questionID, store) {
+	/* 
+	@desc gets the question object from questionsData in the store based on the ID
+	@param questionID {string} - the question ID
+	@param store {object} - the redux store object (likley returned from 'getState()' function)
+	@returns question {object}.  If the object is not found, warns and returns null.
+	*/
 	if (store.Questions.questionsData[questionID])
 		return store.Questions.questionsData[questionID]
 	else
-		return null;
+		console.warn("Attempted to get question object for " + questionID + " but it does not exist in questionsData")
+	return null;
 }
 
-function translateActionStringActionNameToAction(actionName) {
-	switch (actionName) {
+function translateActionStringActionNameToAction(sedFFActionName) {
+	/* 
+	@desc translates between SedFF action names and redux action names. //FUTURE: switch sedFF action names to match redux action names?
+	@param sedFFActionName {string} the sedFF action name... found in 'actions' object as a part of each question object
+	@returns redux-equivalent action {string}.  If non found, warns and returns null.
+	*/
+	switch (sedFFActionName) {
 		case "ShowTab":
 			return SHOW_NAVIGATION_TABS;
 		case "HideTab":
@@ -144,15 +164,20 @@ function translateActionStringActionNameToAction(actionName) {
 		// 	console.log("SET VALUE: TODO"); //TODO:
 		// 	break;
 		default:
-			console.warn("Requested action '" + actionName + "' not recognized");
+			console.warn("Requested action '" + sedFFActionName + "' not recognized");
+			return null;
 	}
 }
 
 function dispatchAllActionsFromActionString(dispatch, actionString) {
+	/* 
+	@desc dispatches all actions included in the action string.
+	@param dispatch {function} the redux-thunk dispatch function
+	@param actionString {string} the sedFF action action string.  it will be split up and translated in order to dispatch.
+	@returns {void}
+	*/
 	let actionsToDispatch = getActionsFromActionString(actionString);
-	console.log(actionsToDispatch);
-	Object.keys(actionsToDispatch).forEach((sedFFActionName)=> {
-		console.log(sedFFActionName);
+	Object.keys(actionsToDispatch).forEach((sedFFActionName) => {
 		dispatch({ type: translateActionStringActionNameToAction(sedFFActionName), payload: actionsToDispatch[sedFFActionName] });
 	});
 }

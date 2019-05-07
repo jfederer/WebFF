@@ -52,7 +52,7 @@ export function Questions(state = initialState, action) {
 			let questionsToHide = action.payload.map((questionArr) => questionArr[0]);
 			questionsToHide.forEach(q_ID => {
 				try {
-					newState.questionsData[q_ID]['hidden'] = false;
+					newState.questionsData[q_ID]['hidden'] = true;
 				}
 				catch (err) {
 					console.warn("Attempted to hide non-existent question " + q_ID);
