@@ -24,12 +24,14 @@ class MultipleChoice extends React.Component {
 			console.warn("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct");
 			let initValue = _.cloneDeep(this.props.value);
 			Object.keys(this.props.options).map((option) => {
+				console.log("Mapped option: ", option);
 				if (initValue[option] === null || typeof initValue[option] === 'undefined') {
 					initValue[option] = false;
 				}
 				return null;
 			})
 			if (this.props.alternateChangeHandler) {
+				console.log("Constructor sending to alternate handler");
 				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, initValue);
 			} else {
 				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);

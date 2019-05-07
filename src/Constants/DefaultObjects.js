@@ -181,15 +181,20 @@ export const defaultSetInformationQuestionsData = {
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
-		"options":
-		{
+		"options": {
 			"Sand-Fine break": "SF",
 			"Sand Analysis": "SA",
 			"Loss-on-ignition": "LOI",
 			"Full-size Fractions*": "Z",
 			"Fines Only": "FO"
 		},
-		"value": [],
+		"value": {
+			"Sand-Fine break": false,
+			"Sand Analysis": false,
+			"Loss-on-ignition": false,
+			"Full-size Fractions*": false,
+			"Fines Only": false
+		},
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
 		"width_xs": 2,
@@ -210,7 +215,14 @@ export const defaultSetInformationQuestionsData = {
 			"Bulk Density": "BD",
 			"Full-size Fractions*": "Z"
 		},
-		"value": [],
+		"value": {
+			"Sand-Fine break*": false,
+			"Fines Only": false,
+			"Sand Analysis*": false,
+			"Loss-on-ignition*": false,
+			"Bulk Density": false,
+			"Full-size Fractions*": false
+		},
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
 		"width_xs": 2,
@@ -234,7 +246,16 @@ export const defaultSetInformationQuestionsData = {
 			"Specific Conductance": "SC",
 			"Full-size Fractions*": "Z"
 		},
-		"value": [],
+		"value": 		{
+			"Concentration": false,
+			"Sand-Fine break*": false,
+			"Sand Analysis*": false,
+			"Turbidity":  false,
+			"Loss-on-ignition*": false,
+			"Dissolved Solids":  false,
+			"Specific Conductance":  false,
+			"Full-size Fractions*":  false
+		},
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
 		"width_xs": 2,
@@ -1605,462 +1626,7 @@ export const defaultQuestionsData = {
 		"width_lg": 6
 	},
 
-	setB_StartTime: {
-		"id": "setB_StartTime",
-		"label": "Start Time",
-		"type": "TimeInput",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"value": "",
-		"width_xs": 5,
-		"width_lg": 2
-	},
 
-	setB_EndTime: {
-		"id": "setB_EndTime",
-		"label": "End Time",
-		"type": "TimeInput",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"value": "",
-		"width_xs": 5,
-		"width_lg": 2
-	},
-
-	setB_StartGageHeight: {
-		"id": "setB_StartGageHeight",
-		"label": "Start Gage Ht",
-		"placeholder": "feet",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"type": "Text",
-		"value": "",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	setB_EndGageHeight: {
-		"id": "setB_EndGageHeight",
-		"label": "End Gage Ht",
-		"placeholder": "feet",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"type": "Text",
-		"value": "",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	setB_AvgGageHeight: {
-		"id": "setB_AvgGageHeight",
-		"label": "Avg Gage Ht",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"type": "ComputedValue",
-		"value": "",
-		"computationString": "(setB_StartGageHeight+setB_EndGageHeight)/2",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	setB_numberOfSamplingPoints: {
-		"id": "setB_numberOfSamplingPoints",
-		"value": "",
-		"label": "Sampling Points",
-		"type": "Text",
-		"placeholder": "Number of Points",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"width_xs": 3,
-		"width_lg": 3,
-		"actions":
-			{ "anyValue": "ShowTab::QWDATA" }
-	},
-
-	setB_numberOfContainers: {
-		"id": "setB_numberOfContainers",
-		"label": "Number Of Containers",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"type": "Text",
-		"value": "",
-		"width_xs": 3,
-		"width_lg": 4
-	},
-
-	setB_samplesComposited: {
-		"id": "setB_samplesComposited",
-		"label": "Samples Composited",
-		"XMLTag": "AnalyzeIndSamples",
-		"type": "Toggle",
-		"checkbox": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"value": false,
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	setB_samplesTable_EDI: {
-		"id": "setB_samplesTable_EDI",
-		"label": "Samples Table",
-		"type": "TableInput",
-		"hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-
-		"value": [["DataEntry", "Distance from L bank, feet", " Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10,
-	},
-
-	setB_samplesTable_EWI: {
-		"id": "setB_samplesTable_EWI",
-		"label": "Samples Table",
-		"type": "TableInput",
-		"hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-		"value": [["Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10
-	},
-
-	setB_samplesTable_OTHER: {
-		"id": "setB_samplesTable_OTHER",
-		"label": "Samples Table",
-		"type": "TableInput",
-		"hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-		"value": [["Sample #",
-			"Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"], ["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10
-	},
-
-	setB_AnalysedFor_bedload: {
-		"id": "setB_AnalysedFor_bedload",
-		"label": "Analyze Set B for:",
-		"XMLTag": "Analyses",
-		"type": "MultipleChoice",
-		"options":
-		{
-			"Sand-Fine break": "SF",
-			"Sand Analysis": "SA",
-			"Loss-on-ignition": "LOI",
-			"Full-size Fractions*": "Z",
-			"Fines Only": "FO"
-		},
-		"value": [],
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"width_xs": 2,
-		"width_lg": 2
-	},
-
-	setB_AnalysedFor_bottom: {
-		"id": "setB_AnalysedFor_bottom",
-		"label": "Analyze Set B for:",
-		"XMLTag": "Analyses",
-		"type": "MultipleChoice",
-		"options":
-		{
-			"Sand-Fine break*": "SF",
-			"Sand Analysis*": "SA",
-			"Loss-on-ignition*": "LOI",
-			"Bulk Density": "BD",
-			"Full-size Fractions*": "Z",
-			"Fines Only": "FO"
-		},
-		"value": [],
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"width_xs": 2,
-		"width_lg": 2
-	},
-
-	setB_AnalysedFor_suspended: {
-		"id": "setB_AnalysedFor_suspended",
-		"label": "Analyze Set B for:",
-		"XMLTag": "Analyses",
-		"type": "MultipleChoice",
-		"options":
-		{
-			"Concentration": "C",
-			"Sand-Fine break*": "SF",
-			"Sand Analysis*": "SA",
-			"Turbidity": "T",
-			"Loss-on-ignition*": "LOI",
-			"Dissolved Solids": "DS",
-			"Specific Conductance": "SC",
-			"Full-size Fractions*": "Z"
-		},
-		"value": [],
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"width_xs": 2,
-		"width_lg": 2
-	},
-
-	showSetC: {
-		"id": "showSetC",
-		"label": "Show Set C",
-		"type": "Toggle",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set B Information",
-		"value": false,
-		"actions":
-		{
-			"true": "ShowPanel::DataEntry:Set C Information",
-			"false": "HidePanel::DataEntry:Set C Information"
-		},
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	setC_StartTime: {
-		"id": "setC_StartTime",
-		"label": "Start Time",
-		"type": "TimeInput",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"value": "",
-		"width_xs": 5,
-		"width_lg": 2
-	},
-
-	setC_EndTime: {
-		"id": "setC_EndTime",
-		"label": "End Time",
-		"type": "TimeInput",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"value": "",
-		"width_xs": 5,
-		"width_lg": 2
-	},
-
-	setC_StartGageHeight: {
-		"id": "setC_StartGageHeight",
-		"label": "Start Gage Ht",
-		"placeholder": "feet",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"type": "Text",
-		"value": "",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	setC_EndGageHeight: {
-		"id": "setC_EndGageHeight",
-		"label": "End Gage Ht",
-		"placeholder": "feet",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"type": "Text",
-		"value": "",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	setC_AvgGageHeight: {
-		"id": "setC_AvgGageHeight",
-		"label": "Avg Gage Ht",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"type": "ComputedValue",
-		"computationString": "(setC_StartGageHeight+setC_EndGageHeight)/2",
-		"value": "",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	setC_numberOfSamplingPoints: {
-		"id": "setC_numberOfSamplingPoints",
-		"value": "",
-		"label": "Sampling Points",
-		"type": "Text",
-		"placeholder": "Number of Points",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"width_xs": 3,
-		"width_lg": 3,
-		"actions":
-			{ "anyValue": "ShowTab::QWDATA" }
-	},
-
-	setC_numberOfContainers: {
-		"id": "setC_numberOfContainers",
-		"label": "Number Of Containers",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"type": "Text",
-		"value": "",
-		"width_xs": 3,
-		"width_lg": 4
-	},
-
-	setC_samplesComposited: {
-		"id": "setC_samplesComposited",
-		"label": "Samples Composited",
-		"XMLTag": "AnalyzeIndSamples",
-		"type": "Toggle",
-		"checkbox": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"value": false,
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	setC_samplesTable_EDI: {
-		"id": "setC_samplesTable_EDI",
-		"label": "Samples Table",
-		"type": "TableInput",
-		"hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-
-		"value": [["DataEntry", "Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10
-	},
-
-	setC_samplesTable_EWI: {
-		"id": "setC_samplesTable_EWI",
-		"label": "Samples Table",
-		"type": "TableInput",
-		"hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-		"value": [["Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10
-	},
-
-	setC_samplesTable_OTHER: {
-		"id": "setC_samplesTable_OTHER",
-		"label": "Samples Table",
-		"type": "TableInput",
-		"hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-		"value": [["Sample #",
-			"Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10
-	},
-
-	setC_AnalysedFor_bedload: {
-		"id": "setC_AnalysedFor_bedload",
-		"label": "Analyze Set C for:",
-		"XMLTag": "Analyses",
-		"type": "MultipleChoice",
-		"options":
-		{
-			"Sand-Fine break": "SF",
-			"Sand Analysis": "SA",
-			"Loss-on-ignition": "LOI",
-			"Full-size Fractions*": "Z",
-			"Fines Only": "FO"
-		},
-		"value": [],
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"width_xs": 2,
-		"width_lg": 2
-	},
-
-	setC_AnalysedFor_bottom: {
-		"id": "setC_AnalysedFor_bottom",
-		"label": "Analyze Set C for:",
-		"XMLTag": "Analyses",
-		"type": "MultipleChoice",
-		"options":
-		{
-			"Sand-Fine break*": "SF",
-			"Sand Analysis*": "SA",
-			"Loss-on-ignition*": "LOI",
-			"Bulk Density": "BD",
-			"Full-size Fractions*": "Z",
-			"Fines Only": "FO"
-		},
-		"value": [],
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"width_xs": 2,
-		"width_lg": 2
-	},
-
-	setC_AnalysedFor_suspended: {
-		"id": "setC_AnalysedFor_suspended",
-		"label": "Analyze Set C for:",
-		"XMLTag": "Analyses",
-		"type": "MultipleChoice",
-		"options":
-		{
-			"Concentration": "C",
-			"Sand-Fine break*": "SF",
-			"Sand Analysis*": "SA",
-			"Turbidity": "T",
-			"Loss-on-ignition*": "LOI",
-			"Dissolved Solids": "DS",
-			"Specific Conductance": "SC",
-			"Full-size Fractions*": "Z"
-		},
-		"value": [],
-		"tabName": "DataEntry",
-		"layoutGroup": "Set C Information",
-		"width_xs": 2,
-		"width_lg": 2
-	},
 
 	collectingAgency: {
 		"id": "collectingAgency",
@@ -2161,7 +1727,7 @@ export const defaultQuestionsData = {
 		"layoutGroup": "QWDATA Information",
 		"colHeaders": true,
 		"rowHeaders": true,
-		"value":null,
+		"value": null,
 		"width_xs": 12,
 		"width_lg": 12
 	},
@@ -2178,4 +1744,4 @@ export const defaultQuestionsData = {
 		"width_xs": 12,
 		"width_lg": 12
 	}
-	};
+};

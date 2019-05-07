@@ -139,6 +139,7 @@ class SetInformation extends React.Component {
 	}
 
 	myChangeHandler = (eventID, sub_q_id, value) => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		console.log(sub_q_id + " incoming value: ", value);
 			let newValue = _.cloneDeep(this.props.value);
 			newValue[sub_q_id] = value;
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
