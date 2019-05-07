@@ -47,7 +47,8 @@ class QuestionPage extends React.Component {
 	render() {
 		const DEBUG = false;
 		const { tabName, currentEvent } = this.props;
-		const { hiddenPanels, questionsData } = this.props.questions;
+		const { questionsData } = this.props.questions;
+		const { hiddenPanels } = this.props.UI.visibility;
 		// let tabQuestionData = [];
 		// let layoutGroupNames = [];
 		let questionPanels = [];
@@ -111,6 +112,7 @@ const mapStateToProps = function (state) {
 		//sedff: state.SedFF, // loading / fetching data
 		// currentUser: state.Users[state.SedFF.currentUsername],
 		//samplingEvents: state.SamplingEvents,
+		UI: state.UI,
 		questions: state.Questions,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
 	}

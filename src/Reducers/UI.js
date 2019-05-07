@@ -14,8 +14,6 @@ import {
 	HIDE_PANELS,
 	SHOW_NAVIGATION_TABS,
 	HIDE_NAVIGATION_TABS,
-	SHOW_QUESTIONS,
-	HIDE_QUESTIONS
 } from '../Constants/ActionTypes';
 
 import { defaultHiddenNavMenuItems } from '../Constants/NavMenu';
@@ -28,8 +26,7 @@ const initialUIState = {
 		expandedSysMenu: false,
 		loginDialogVisibility: false,
 		hiddenNavMenuItems: defaultHiddenNavMenuItems,
-		hiddenQuestions: [],
-		hiddenPanels: [],
+		hiddenPanels: ["FieldForm:Weather"],
 		exportDialogVisibility: false,
 		addRemoveStationDialogVisibility: false,
 		addRemoveQuestionDialogVisibility: false,
@@ -75,14 +72,12 @@ export function UI(state = initialUIState, action) {
 			newState.appBarText = action.appBarText;
 			break;
 		case SHOW_NAVIGATION_TABS:
-			//TODO: test
-			console.log("PAYLOAD: ", action.payload);
 			let tabsToShow = action.payload.map((tabsArr) => tabsArr[0]);
 			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.filter((tabName) => !tabsToShow.includes(tabName));
 			break;
 		case HIDE_NAVIGATION_TABS:
 			let tabsToHide = action.payload.map((tabsArr) => tabsArr[0]);
-			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.concat(panelsToHide);
+			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.concat(tabsToHide);
 			break;
 		case SHOW_PANELS:
 			let panelsToShow = action.payload.map((panelsArr) => panelsArr[0]);
@@ -91,15 +86,6 @@ export function UI(state = initialUIState, action) {
 		case HIDE_PANELS:
 			let panelsToHide = action.payload.map((panelsArr) => panelsArr[0]);
 			newState.visibility.hiddenPanels = newState.visibility.hiddenPanels.concat(panelsToHide);
-			break;
-		case SHOW_QUESTIONS: // action.payload is an array of 1-length arrays containing questionIDs
-			//FUTURE: should question show/hide belong in the sampling event? user?
-			let questionsToShow = action.payload.map((questionArr) => questionArr[0]);
-			newState.visibility.hiddenQuestions = newState.visibility.hiddenQuestions.filter((questionID) => !questionsToShow.includes(questionID));
-			break;
-		case HIDE_QUESTIONS:
-			let questionsToHide = action.payload.map((questionArr) => questionArr[0]);
-			newState.visibility.hiddenQuestions = newState.visibility.hiddenQuestions.concat(questionsToHide);
 			break;
 		default:
 			return state

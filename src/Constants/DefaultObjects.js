@@ -174,6 +174,7 @@ export const defaultQuestionsData = {
 		},
 		
 		testDate: {
+			"hidden": true,
             "id": "testDate",
             "label": "TEST Date",
             "type": "DateInput",
