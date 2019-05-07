@@ -7,6 +7,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { setAppBarText } from '../../Actions/UI';
 
+import QuestionPage from './../QuestionPage';
+
 class DataEntry extends React.Component {
 
 	constructor(props) {
@@ -15,20 +17,15 @@ class DataEntry extends React.Component {
 	}
 
     render() {
-		const {
-			currentEvent
-		} = this.props;
+		const { currentEvent } = this.props;
 
 		if (!currentEvent) {
-			console.log("No current event, redirecting to dashboard"); 
-			return <Redirect to = '/' />
+			console.log("No current event, redirecting to dashboard");
+			return <Redirect to='/' />
 		}
 
-        return (
-            <div>
-              DataEntry Page!!
-            </div>
-        );
+		
+		return <QuestionPage tabName="Data Entry"/>
     }
 }
 

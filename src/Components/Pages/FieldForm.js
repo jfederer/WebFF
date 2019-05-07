@@ -21,7 +21,6 @@ class FieldForm extends React.Component {
 			return <Redirect to='/' />
 		}
 
-		//TODO: NEXT:   Render questions on Field Form Page
 		
 		return <QuestionPage tabName="Field Form"/>
 

@@ -9,7 +9,7 @@ import {
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
 	SET_APP_BAR_TEXT,
-	SHOW_NAVIGATION_TAB
+	SHOW_NAVIGATION_TABS
 } from '../Constants/ActionTypes';
 
 
@@ -53,7 +53,10 @@ export function setAppBarText(appBarText) { //TODO:  (if visitibility... show...
 	return { type: SET_APP_BAR_TEXT, appBarText: appBarText }
 }
 
-export function showNavigationTab(tabName) { //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SHOW_NAVIGATION_TAB, tabName: tabName }
+export function showNavigationTab(tabName) { 
+	let pl = [];
+	pl.push([tabName]);
+	console.log("PL", pl);
+	return { type: SHOW_NAVIGATION_TABS, payload: pl }
 }
 
