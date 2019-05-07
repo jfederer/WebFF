@@ -72,19 +72,19 @@ export function UI(state = initialUIState, action) {
 			newState.appBarText = action.appBarText;
 			break;
 		case SHOW_NAVIGATION_TABS:
-			let tabsToShow = action.payload.map((tabsArr) => tabsArr[0]);
+			let tabsToShow = action.payload.map((tabsArr) => tabsArr[0].replace(/\s/g,''));
 			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.filter((tabName) => !tabsToShow.includes(tabName));
 			break;
 		case HIDE_NAVIGATION_TABS:
-			let tabsToHide = action.payload.map((tabsArr) => tabsArr[0]);
+			let tabsToHide = action.payload.map((tabsArr) => tabsArr[0].replace(/\s/g,''));
 			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.concat(tabsToHide);
 			break;
 		case SHOW_PANELS:
-			let panelsToShow = action.payload.map((panelsArr) => panelsArr[0]);
+			let panelsToShow = action.payload.map((panelsArr) => panelsArr[0].replace(/\s/g,''));
 			newState.visibility.hiddenPanels = newState.visibility.hiddenPanels.filter((panelName) => !panelsToShow.includes(panelName));
 			break;
 		case HIDE_PANELS:
-			let panelsToHide = action.payload.map((panelsArr) => panelsArr[0]);
+			let panelsToHide = action.payload.map((panelsArr) => panelsArr[0].replace(/\s/g,''));
 			newState.visibility.hiddenPanels = newState.visibility.hiddenPanels.concat(panelsToHide);
 			break;
 		default:

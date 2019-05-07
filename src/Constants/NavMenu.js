@@ -26,6 +26,6 @@ export const navMenuItems = [
 	}
 ];
 
-export const defaultHiddenNavMenuItems = ["Field Form", "Data Entry", "Parameters", "QWDATA"];
+export const defaultHiddenNavMenuItems = ["FieldForm", "DataEntry", "Parameters", "QWDATA"];
 //TODO: use hidden items
 // export const defaultHiddenNavMenuItems = [];
