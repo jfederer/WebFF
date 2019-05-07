@@ -1,26 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
+import _ from 'lodash';
+// import Table from '@material-ui/core/Table';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import TableHead from '@material-ui/core/TableHead';
+// import TableRow from '@material-ui/core/TableRow';
 // import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
-import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
-import { safeCopy } from '../../Utils/Utilities';
+// import Button from '@material-ui/core/Button';
+// import TextField from '@material-ui/core/TextField';
+// import Dialog from '@material-ui/core/Dialog';
+// import DialogActions from '@material-ui/core/DialogActions';
+// import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogTitle from '@material-ui/core/DialogTitle';
+// import Typography from '@material-ui/core/Typography';
+// import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
+// import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
+
+import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
 
 const styles = theme => ({
 	table: {
@@ -45,6 +50,11 @@ var preRequisiteInfo = {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
+		if (this.props.value === {}) {
+			console.log("Empty value");
+		} else {
+			console.log("Value was passed");
+		}
 		// let nowValue = [];
 		// // let startingPCodes = [];
 		// if (this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
@@ -117,7 +127,7 @@ class SetInformation extends React.Component {
 
 		// 		// ensure add-on analysis is an array
 		// 		console.log(newRow);
-				
+
 		// 		let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
 		// 		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
 		// 		if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
@@ -126,35 +136,82 @@ class SetInformation extends React.Component {
 
 		// 		nowValue.push(newRow);
 		// 	}
-		}
+	}
 
+	myChangeHandler = (eventID, sub_q_id, value) => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+			let newValue = _.cloneDeep(this.props.value);
+			newValue[sub_q_id] = value;
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+	};
 
 
 	render() {
+		const { setName } = this.props;
+		// const { }
 		// if (!this.props.globalState.curSamplingEventName) {
 		// 	return <React.Fragment></React.Fragment>;  //no event name event loaded, just return
 		// }
 
 		// const { classes } = this.props;
 		// console.log("QWDATA Render props: ", this.props);
+		console.log("Set Info Props: ", this.props);
 
 		// console.log("QWDATA Render state: ", this.state);
 		// let classlessProps = this.props;
 		// delete classlessProps[classes];
 
 		// let evtName = this.props.globalState.curSamplingEventName;
+		console.log("Rendering Set Information");
+		return <React.Fragment>
 
-		return <Question 							label="SET INFORMATION"
-													type="Text"
-													id="setinfo"
-													key="setinfo"
-													value={this.props.value}
-												/>
-											
+
+
+		
+				{Object.keys(defaultSetInformationQuestionsData).map(questionDataKey => {
+					let value = defaultSetInformationQuestionsData[questionDataKey].value;
+					// let readQID="Set_" + this.props.setName+"_"+defaultSetInformationQuestionsData[questionDataKey].id;
+					let readQID=defaultSetInformationQuestionsData[questionDataKey].id;
+					// console.log("questionData: ", defaultSetInformationQuestionsData[questionDataKey]);
+					// console.log("First Assigned: ", value);
+					// console.log("this.props.value: ", this.props.value);
+					
+					// console.log("questionData.id: ", defaultSetInformationQuestionsData[questionDataKey].id);
+					// console.log("this.props.value[questionData.id]: ", this.props.value[defaultSetInformationQuestionsData[questionDataKey].id]);
+					if (this.props.value[readQID] !== null && typeof this.props.value[readQID] !== 'undefined') {
+						// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
+						value = this.props.value[readQID];
+						// if (debug) console.log("CREATEQ: OVERWRITE WITH: ", value);
+					}
+
+					return <Question {...defaultSetInformationQuestionsData[questionDataKey]} 
+										id={readQID}
+										key={readQID}
+										value={value} 
+										alternateChangeHandler={this.myChangeHandler}/>;
+
+				})
+				}
+		
+		
+		
+			</React.Fragment>
+
 	}
 }
 
 
-export default withStyles(styles)(SetInformation);
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID,
+		currentEventQuestionValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues,
+		defaultQuestionsData: state.Questions.questionsData
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(SetInformation));
 
 

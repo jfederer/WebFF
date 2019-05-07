@@ -23,7 +23,11 @@ class Toggle extends React.Component {
 
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.checked);
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, event.target.checked);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.checked);
+		}
 	};
 
 	// handleToggleChange = name => event => {
@@ -32,39 +36,39 @@ class Toggle extends React.Component {
 
 	render() {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
-        // const { classes } = this.props;
+		// const { classes } = this.props;
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag; 
-		let controlElement; 
+		let controlElement;
 
-		if(this.props.checkbox===true) {
+		if (this.props.checkbox === true) {
 			controlElement = <Checkbox
-			key={this.props.id}
-			id={this.props.id}
-			checked={this.props.value}
-			onChange={this.handleValueChange('value')}
-			xmltag={this.props.XMLTag}
-		/>
+				key={this.props.id}
+				id={this.props.id}
+				checked={this.props.value}
+				onChange={this.handleValueChange('value')}
+				xmltag={this.props.XMLTag}
+			/>
 		} else {
 			controlElement = <Switch
-			key={this.props.id}
-			id={this.props.id}
-			checked={this.props.value}
-			onChange={this.handleValueChange('value')}
-			xmltag={this.props.XMLTag}
-		/>
+				key={this.props.id}
+				id={this.props.id}
+				checked={this.props.value}
+				onChange={this.handleValueChange('value')}
+				xmltag={this.props.XMLTag}
+			/>
 		}
 
-        if (this.props.label!=null) {
-            return <FormControlLabel
-            key={this.props.id + "_FormControlLabel"}
-            control={controlElement}
-            label={this.props.label}
-        />
-        } else {
-            return controlElement;
-        }
+		if (this.props.label != null) {
+			return <FormControlLabel
+				key={this.props.id + "_FormControlLabel"}
+				control={controlElement}
+				label={this.props.label}
+			/>
+		} else {
+			return controlElement;
+		}
 
-    }
+	}
 }
 
 Toggle.propTypes = {
@@ -74,8 +78,8 @@ Toggle.propTypes = {
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
 	XMLTag: PropTypes.string,
-    type: PropTypes.oneOf(['Toggle']).isRequired,
-    helperText: PropTypes.string
+	type: PropTypes.oneOf(['Toggle']).isRequired,
+	helperText: PropTypes.string
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
 	// (ie: "if dropDown... select_options prop(array or strings) is required")

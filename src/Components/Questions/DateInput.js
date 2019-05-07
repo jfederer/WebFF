@@ -23,13 +23,21 @@ class DateInput extends React.Component {
 	constructor(props) {
 		super(props);
 		if (!this.props.value) { // if incoming date was null or empty, generate current date
+			if(this.props.alternateChangeHandler) {
+				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, getDateStringFromDate());
+			} else {
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, getDateStringFromDate());
+			}
 		}
 	};
 
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		if(this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, event.target.value);
+		} else {
 		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
+		}
 	};
 	
 	render() {

@@ -166,7 +166,8 @@ class Question extends React.Component {
 		label: PropTypes.string,
 		placeholder: PropTypes.string,
 		XMLTag: PropTypes.string,
-		type: PropTypes.oneOf(['Text', "QWDATATable", "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", "DateInput", "TimeInput", "ComputedValue"]).isRequired,
+		type: PropTypes.oneOf(['Text', "QWDATATable", "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", 
+							"DateInput", "TimeInput", "ComputedValue", "SetInformation"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

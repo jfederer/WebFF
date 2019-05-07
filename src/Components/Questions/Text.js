@@ -24,7 +24,12 @@ class Text extends React.Component {
 
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
+		if(this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, event.target.value);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
+		}
+		
 	};
 
 	render() {

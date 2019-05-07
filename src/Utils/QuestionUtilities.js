@@ -2,32 +2,27 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 
 
-export const createQuestionComponents = (questionsData, questionsValues ) => {
+export const createQuestionComponents = (questionsData, questionsValues, debug ) => {
     // creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	// returns array of question components
+	
 	let questionComponents = [];
     if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
         questionComponents = questionsData.map(questionData => {
-
-			let debug=false;
-			// if(questionData.type==="MultipleChoice") {
-			// 	debug = true;
-			// }
-
 			let value = questionData.value;
-			if(debug)console.log("CREATE: First Assigned: ", value);
-			if(debug)console.log("CREATE: questionsVallues: ", questionsValues);
-			if(debug)console.log("CREATE: questionData.id: ", questionData.id);
-			if(debug)console.log("CREATE: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
+			if(debug)console.log("CREATEQ: First Assigned: ", value);
+			if(debug)console.log("CREATEQ: questionsVallues: ", questionsValues);
+			if(debug)console.log("CREATEQ: questionData.id: ", questionData.id);
+			if(debug)console.log("CREATEQ: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
 			if(questionsValues[questionData.id]!==null && typeof questionsValues[questionData.id]!=='undefined') {
 				// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
 				value = questionsValues[questionData.id];
-				if(debug)console.log("CREATE: OVERWRITE WITH: ", value);
+				if(debug)console.log("CREATEQ: OVERWRITE WITH: ", value);
 			} 
 
 			let retQ = <Question {...questionData} value={value} />;
-			if(debug)console.log("CREATE: VALUE AT RETURN: ", value);
+			if(debug)console.log("CREATEQ: VALUE AT RETURN: ", value);
 			return retQ;
 		});
     }

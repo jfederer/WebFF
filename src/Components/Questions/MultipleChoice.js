@@ -29,8 +29,11 @@ class MultipleChoice extends React.Component {
 				}
 				return null;
 			})
-
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
+			if (this.props.alternateChangeHandler) {
+				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, initValue);
+			} else {
+				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
+			}
 		}
 	}
 
@@ -38,8 +41,11 @@ class MultipleChoice extends React.Component {
 		let newValue = _.cloneDeep(this.props.value);
 
 		newValue[choice] = event.target.checked;
-
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+		}
 	};
 
 	render() {
@@ -54,7 +60,7 @@ class MultipleChoice extends React.Component {
 						key={optionLabel + ":" + this.props.options[optionLabel]}
 						control={
 							<Checkbox
-								checked={this.props.value[option]?this.props.value[option]:false}
+								checked={this.props.value[option] ? this.props.value[option] : false}
 								onChange={this.handleValueChange(option)}
 								// value={this.props.value[this.props.options[optionLabel]]}
 								value={option}

@@ -21,7 +21,11 @@ const styles = theme => ({
 class ComputedValue extends React.Component {
 
 	componentWillMount() {
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, this.computeValue(this.props));
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, this.computeValue(this.props));
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, this.computeValue(this.props));
+		}
 	}
 
 	componentWillUpdate(nextProps, nextState) {
@@ -30,7 +34,11 @@ class ComputedValue extends React.Component {
 			let computedValue = this.computeValue(nextProps);
 			if (nextProps.currentEventQuestionValues[this.props.id] !== computedValue) {
 				// if newly computed value should result in value change, send off action
-				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, computedValue);
+				if (this.props.alternateChangeHandler) {
+					this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, computedValue);
+				} else {
+					this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, computedValue);
+				}
 			}
 		}
 	}

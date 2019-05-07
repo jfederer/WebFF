@@ -22,7 +22,11 @@ class TimePicker extends React.Component {
 		super(props);
 
 		if (!this.props.value && this.props.autofill) { // no value and set to autofill... fill with current time
+			if(this.props.alternateChangeHandler) {
+				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, getTimeStringFromDate());
+			} else {
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, getTimeStringFromDate());
+			}
 		} 
 	};
 
@@ -61,7 +65,11 @@ class TimePicker extends React.Component {
 			newVal = newVal.slice(0, 2) + ":" + newVal.slice(2);
 		}
 
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newVal);
+		if(this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newVal);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newVal);
+		}
 	};
 
 	render() {
