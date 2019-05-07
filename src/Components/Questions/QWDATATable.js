@@ -112,7 +112,7 @@ class QWDATATable extends React.Component {
 				}
 
 				let newRow = [];
-				if (matchingOldRow != -1) {
+				if (matchingOldRow !== -1) {
 					newRow = safeCopy(this.props.value[matchingOldRow]);
 				} else {
 					newRow = new Array(this.props.value[0].length - 1).fill("");
@@ -403,7 +403,6 @@ class QWDATATable extends React.Component {
 
 	handleEstimateClick = (e) => {
 
-		var txt;
 		var r = window.confirm("Are you sure you want to overwrite current values in the Sample Time column with estimated values?");
 		if (r !== true) {
 			return;

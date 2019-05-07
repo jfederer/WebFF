@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { styles } from '../style';
@@ -56,8 +55,6 @@ class QuestionPage extends React.Component {
 		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 
-		//OPTIMIZE: filter whitespaces at a higher level
-
 		if (questionsData) {
 			let tabQuestionsData = getTabQuestionsData(questionsData, tabName);
 			// console.log("TAB QUESTION DATA: ", tabQuestionsData);
@@ -65,6 +62,9 @@ class QuestionPage extends React.Component {
 
 			// console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
 
+			
+			//OPTIMIZE: filter whitespaces at a higher level
+			//OPTIMIZE:  We can not generate question panels more clearly and efficiently than this.
 			let filteredlayoutGroupNames = layoutGroupNames.filter((groupName) => {
 				let panelName = tabName.replace(/ /g, '') + ":" + groupName.replace(/ /g, '');
 				return !hiddenPanels.includes(panelName);

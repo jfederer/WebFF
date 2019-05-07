@@ -28,7 +28,7 @@ class ComputedValue extends React.Component {
 		if (!_.isEqual(this.props.currentEventQuestionValues, nextProps.currentEventQuestionValues)) {  //OPTIMIZE: get list of questions from compute string, store in state, and only check those for changes.
 			// if props changed... recompute value
 			let computedValue = this.computeValue(nextProps);
-			if (nextProps.currentEventQuestionValues[this.props.id] != computedValue) {
+			if (nextProps.currentEventQuestionValues[this.props.id] !== computedValue) {
 				// if newly computed value should result in value change, send off action
 				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, computedValue);
 			}
@@ -64,7 +64,7 @@ class ComputedValue extends React.Component {
 		if (DEBUG) console.log("computeValue: computationString: ", computationString);
 
 		let computedValue = "";
-		let shouldCompute = true;
+		// let shouldCompute = true;
 
 		// remove whitespace and split the computation string into constituent components
 		let splitCS = computationString.replace(/ /g, '').split(/([+,\-,*,/,(,),^])/g);
@@ -122,7 +122,8 @@ class ComputedValue extends React.Component {
 	}
 
 	render() {
-		const { classes, currentEventQuestionValues, currentEventID, id } = this.props;
+		// const { classes, currentEventQuestionValues, currentEventID, id } = this.props;
+		const { classes } = this.props;
 
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
 

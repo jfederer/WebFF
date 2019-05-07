@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { TextField} from '@material-ui/core';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
-import { getTimeStringFromDate, getDateObjectFromTime } from '../../Utils/Utilities';
+import { getTimeStringFromDate } from '../../Utils/Utilities';
 
 const styles = theme => ({
 	timeInput: {
@@ -19,7 +19,6 @@ const styles = theme => ({
 
 class TimePicker extends React.Component {
 	constructor(props) {
-		let DEBUG = false;
 		super(props);
 
 		if (!this.props.value && this.props.autofill) { // no value and set to autofill... fill with current time

@@ -29,7 +29,7 @@ class AboutDialog extends React.Component {
 			>
 
 				<DialogContent>
-					<center><img src={SedFF_Logo} width="500" height="200" />
+					<center><img src={SedFF_Logo} width="500" height="200" alt="SedFF Logo" />
 						<br />
 						Sediment Field Forms version {PROGRAM_VERSION}, released on {RELEASE_DATE}.</center>
 					<br />

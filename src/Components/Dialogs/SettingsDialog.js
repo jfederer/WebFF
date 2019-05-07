@@ -66,9 +66,9 @@ class SettingsDialog extends React.Component {
 		const { classes } = this.props;
 		const { settingsDialogVisibility } = this.props.UI.visibility;
 		const { isFetchingUserData } = this.props.sedff;
-		if (!isFetchingUserData) {
-			const { outlineQuestions } = this.props.users[this.props.sedff.currentUsername].settings;
-		}
+		// if (!isFetchingUserData) {
+		// 	const { outlineQuestions } = this.props.users[this.props.sedff.currentUsername].settings;
+		// }
 
 
 		return (

@@ -14,7 +14,6 @@ import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
 //Action Creators
 import { syncToDB } from '../../Actions/DB';
-import { loadAndSetCurrentUser } from '../../Actions/SedFF';
 import {
 	setSysMenuExpand,
 	setExportDialogVisibility,
@@ -156,7 +155,7 @@ class SystemMenu extends React.Component {
 							<ListItemText primary="Add/Remove Question" />
 						</ListItem>
 
-						<a className={classes.noUnderline} href="https://docs.google.com/document/d/15rctoHyXupM6MiDQSHd9Hfb4nxkssAXY3lI7DThjYNc/edit?usp=sharing" target="_blank">
+						<a className={classes.noUnderline} href="https://docs.google.com/document/d/15rctoHyXupM6MiDQSHd9Hfb4nxkssAXY3lI7DThjYNc/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
 							<ListItem button onClick={this.closeHandler}>
 								<ListItemIcon>
 								{materialIconBuilder("ImportContactsIcon")}
@@ -207,9 +206,7 @@ const mapDispatchToProps = {
 	setAddRemoveQuestionDialogVisibility: ()=>setAddRemoveQuestionDialogVisibility(true),
 	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),
 	setAboutDialogVisibility: ()=>setAboutDialogVisibility(true),
-	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) //TODO: this was removed for testing, replace
-	// setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("nobdy@usgs.gov")
-	// setSwitchUserDialogVisibility: ()=>loadAndSetCurrentUser("tvanheel@usgs.gov")
+	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) 
 }
 
 SystemMenu.propTypes = {

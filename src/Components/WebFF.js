@@ -26,7 +26,7 @@ import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersi
 import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
-	QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
+	// QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Utils/Constants';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
 
@@ -37,7 +37,7 @@ import { loadAndSetCurrentUser } from '../Actions/SedFF';
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
 import SwitchUserDialog from './Dialogs/SwitchUserDialog';
-import SettingsDialog from './Dialogs/SettingsDialog';
+// import SettingsDialog from './Dialogs/SettingsDialog';
 import AboutDialog from './Dialogs/AboutDialog';
 import AddRemoveQuestionDialog from './Dialogs/AddRemoveQuestionDialog';
 import AddRemoveStationDialog from './Dialogs/AddRemoveStationDialog';
@@ -58,7 +58,7 @@ import ErrorPage from './Errors/ErrorPage';
 
 const FUNCDEBUG = false;
 
-var needToSyncStationDataToQuestionData = true;
+// var needToSyncStationDataToQuestionData = true;
 
 class WebFF extends React.Component {
 
@@ -154,8 +154,8 @@ class WebFF extends React.Component {
 		
 		return (
 			<React.Fragment>
-			{ isFetchingUserData==true 
-			? <img src={loading}></img>  //TODO:  better behavior
+			{ isFetchingUserData===true 
+			? <img src={loading} alt="LOADING"></img>  //TODO:  better behavior
 			: <React.Fragment>
 				<div className={classes.root} >
 					<AppBar

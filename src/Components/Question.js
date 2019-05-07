@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
+import Hidden from '@material-ui/core/Hidden';
+
 import Text from './Questions/Text';
 import DropDown from './Questions/DropDown';
 import MultipleChoice from './Questions/MultipleChoice';
@@ -10,11 +12,11 @@ import Toggle from './Questions/Toggle';
 import TableInput from './Questions/TableInput';
 import DateInput from './Questions/DateInput';
 import TimePicker from './Questions/TimePicker';
-import Hidden from '@material-ui/core/Hidden';
 import ComputedValue from './Questions/ComputedValue';
 // import ButtonInput from './Questions/ButtonInput';
 import ParametersTable from './Questions/ParametersTable';
 import QWDATATable from './Questions/QWDATATable';
+import SetInformation from './Questions/SetInformation';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -108,6 +110,10 @@ class Question extends React.Component {
 			}
 			case 'QWDATATable' : {
 				theQ = <QWDATATable {...this.props} />;
+				break;
+			}
+			case 'SetInformation' : {
+				theQ = <SetInformation {...this.props} />;
 				break;
 			}
 			default: {

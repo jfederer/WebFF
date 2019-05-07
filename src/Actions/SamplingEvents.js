@@ -59,7 +59,7 @@ export function createNewSampingEventForUser(eventName, username) {
 	*/
 
 	if (!username) {
-		throw "No username passed to createNewSamplingEventForUser function";
+		throw new Error("No username passed to createNewSamplingEventForUser function");
 	}
 
 	return dispatch => {
@@ -118,6 +118,7 @@ function getActionsFromActionString(actionsString) {
 		} else {
 			actions[actionName].push(actionParameters);
 		}
+		return null;
 	}
 	);
 	return actions;

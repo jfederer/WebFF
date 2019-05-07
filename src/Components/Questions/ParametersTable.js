@@ -113,7 +113,7 @@ class ParametersTable extends React.Component {
 				} 
 
 				let newRow = [];
-				if(matchingOldRow != -1) {
+				if(matchingOldRow !== -1) {
 					console.log(firstColumn[newRowNum] + " DID find a match");
 					newRow = safeCopy(this.props.value[matchingOldRow]);
 				} else {

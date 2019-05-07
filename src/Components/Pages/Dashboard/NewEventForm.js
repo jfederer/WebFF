@@ -6,7 +6,7 @@ import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
 
 import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import { TextField, Button, Paper } from '@material-ui/core';
 
@@ -63,7 +63,7 @@ class NewEventForm extends React.Component {
 	render() {
 		const { classes } = this.props;
 
-		const MyLink = props => <Link to="/FieldForm" {...props} />
+		// const MyLink = props => <Link to="/FieldForm" {...props} />
 
 		return (
 			<Paper className={classes.paper}>
@@ -122,9 +122,4 @@ NewEventForm.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(
-	withStyles(styles, { withTheme: true })
-		(connect(mapStateToProps, mapDispatchToProps)
-			(NewEventForm)
-		)
-);
+export default withRouter( withStyles(styles, { withTheme: true }) (connect(mapStateToProps, mapDispatchToProps)(NewEventForm)));

@@ -2,7 +2,7 @@ export const safeCopy = (obj) => {
     var copy;
 
     // Handle the 3 simple types, and null or undefined
-    if (null == obj || "object" != typeof obj) return obj;
+    if (null == obj || "object" !== typeof obj) return obj;
 
     // Handle boolean, number, and string
     if (typeof obj === "boolean" ||

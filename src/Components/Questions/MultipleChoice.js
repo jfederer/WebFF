@@ -21,12 +21,13 @@ class MultipleChoice extends React.Component {
 	componentWillMount() {
 		if (Object.keys(this.props.value).length !== Object.keys(this.props.options).length) {
 			// upon first loading, if the options and values aren't the same size, let's fill out the values
-			console.log("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct");
+			console.warn("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct");
 			let initValue = _.cloneDeep(this.props.value);
 			Object.keys(this.props.options).map((option) => {
 				if (initValue[option] === null || typeof initValue[option] === 'undefined') {
 					initValue[option] = false;
 				}
+				return null;
 			})
 
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);

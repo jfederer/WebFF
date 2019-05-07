@@ -5,16 +5,12 @@ import { connect } from 'react-redux';
 import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
 
-import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-
-import { TextField, Grid, Divider, Button, Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import { setAppBarText } from '../../../Actions/UI';
 
 import EventsManager from './EventsManager';
 import NewEventForm from './NewEventForm';
-import { classNames } from 'classnames';
 
 class Dashboard extends React.Component {
 	//FUTURE: Load most recent X events widget
@@ -57,7 +53,4 @@ Dashboard.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })
-	(connect(null, mapDispatchToProps)
-		(Dashboard)
-	);
+export default withStyles(styles, { withTheme: true })(connect(null, mapDispatchToProps)(Dashboard)	);
