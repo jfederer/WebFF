@@ -24,8 +24,9 @@ import Question from '../Question';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
-
+import { getGridedQuestions } from '../../Utils/QuestionUtilities';
 import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	table: {
@@ -50,8 +51,15 @@ var preRequisiteInfo = {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		if (this.props.value === {}) {
-			console.log("Empty value");
+		console.log("CONSTRUCTOR PROPS: ", this.props);
+		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
+			//load value with defaults
+			console.log("Empty Value");
+			// let initValue = {};
+			// Object.keys(defaultSetInformationQuestionsData).map(QID => {
+			// 	initValue[QID] = defaultSetInformationQuestionsData[QID].value;
+			// })
+			// this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
 		} else {
 			console.log("Value was passed");
 		}
@@ -140,35 +148,57 @@ class SetInformation extends React.Component {
 
 	myChangeHandler = (eventID, sub_q_id, value) => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 		console.log(sub_q_id + " incoming value: ", value);
-			let newValue = _.cloneDeep(this.props.value);
-			newValue[sub_q_id] = value;
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+		let newValue = _.cloneDeep(this.props.value);
+		newValue[sub_q_id] = value;
+		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
 	};
 
+	getRealQID = (sub_q_id) => {
+		return "Set_" + this.props.setName + "_" + sub_q_id;
+	}
 
 	render() {
 		const { setName } = this.props;
-		// const { }
-		// if (!this.props.globalState.curSamplingEventName) {
-		// 	return <React.Fragment></React.Fragment>;  //no event name event loaded, just return
-		// }
+		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited"]
 
-		// const { classes } = this.props;
-		// console.log("QWDATA Render props: ", this.props);
-		console.log("Set Info Props: ", this.props);
+		if (this.props.sedType === null || typeof this.props.sedType === "undefined")
+			return <Typography>Sediment Type not Set, please return to field form and set sediment type</Typography>
 
-		// console.log("QWDATA Render state: ", this.state);
-		// let classlessProps = this.props;
-		// delete classlessProps[classes];
+		console.log("Set Info Render Props: ", this.props);
 
-		// let evtName = this.props.globalState.curSamplingEventName;
-		console.log("Rendering Set Information");
+
+
+		let gridedQuestions = [];
+
+		questionIDsToGrid.forEach(sub_QID => { //FUTURE: should we strip whitespace from setName?
+			let realQID = this.getRealQID(sub_QID);
+			gridedQuestions.push(< Question {...defaultSetInformationQuestionsData[sub_QID]}
+				id={realQID}
+				key={realQID}
+				value={this.props.value[sub_QID] ? this.props.value[sub_QID] : ""}
+				alternateChangeHandler={this.myChangeHandler} />);
+		});
+
+
+
 		return <React.Fragment>
 
 
+			Set {setName}
 
-		
-				{Object.keys(defaultSetInformationQuestionsData).map(questionDataKey => {
+			{getGridedQuestions(gridedQuestions)}
+
+
+			<Question {...defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType]}
+				id={"analysedFor_" + this.props.sedType}
+				key={this.getRealQID("analysedFor_" + this.props.sedType)}
+				value={this.props.value["analysedFor_" + this.props.sedType]}
+				alternateChangeHandler={this.myChangeHandler} />
+
+
+
+
+			{/* {getGridedQuestions(Object.keys(defaultSetInformationQuestionsData).map(questionDataKey => {
 					let value = defaultSetInformationQuestionsData[questionDataKey].value;
 					// let readQID="Set_" + this.props.setName+"_"+defaultSetInformationQuestionsData[questionDataKey].id;
 					let readQID=defaultSetInformationQuestionsData[questionDataKey].id;
@@ -191,11 +221,11 @@ class SetInformation extends React.Component {
 										alternateChangeHandler={this.myChangeHandler}/>;
 
 				})
-				}
-		
-		
-		
-			</React.Fragment>
+				)} */}
+
+
+
+		</React.Fragment>
 
 	}
 }

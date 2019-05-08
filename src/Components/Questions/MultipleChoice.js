@@ -16,27 +16,41 @@ const styles = theme => ({
 
 });
 
-class MultipleChoice extends React.Component {
 
-	componentWillMount() {
-		if (Object.keys(this.props.value).length !== Object.keys(this.props.options).length) {
-			// upon first loading, if the options and values aren't the same size, let's fill out the values
+
+class MultipleChoice extends React.Component {
+	constructor(props) {
+		super(props);
+		
+		if (this.isInvalid()) {
+
+			// upon loading, if the options and values aren't the same size, let's fill out the values
 			console.warn("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct");
+
 			let initValue = _.cloneDeep(this.props.value);
+			if(typeof initValue === "undefined") {
+				initValue = {};
+			}
+		
 			Object.keys(this.props.options).map((option) => {
-				console.log("Mapped option: ", option);
 				if (initValue[option] === null || typeof initValue[option] === 'undefined') {
 					initValue[option] = false;
 				}
 				return null;
 			})
 			if (this.props.alternateChangeHandler) {
-				console.log("Constructor sending to alternate handler");
 				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, initValue);
 			} else {
 				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
 			}
 		}
+	  }
+
+
+	isInvalid = () => {
+		return _.isEmpty(this.props.value) || 
+			typeof this.props.value === "undefined" || 
+			Object.keys(this.props.value).length !== Object.keys(this.props.options).length;
 	}
 
 	handleValueChange = choice => event => {
@@ -51,8 +65,12 @@ class MultipleChoice extends React.Component {
 	};
 
 	render() {
-		// console.log("this.state.value", this.state.value);
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
+
+		if(this.isInvalid()) {
+			return null;
+		}
+		
 		return <FormControl component="fieldset" key={this.props.id}>
 			<FormLabel component="legend">{this.props.label}</FormLabel>
 			<FormGroup>
@@ -68,7 +86,7 @@ class MultipleChoice extends React.Component {
 								value={option}
 							/>
 						}
-						label={optionLabel}
+						label={option}
 					/>
 				})}
 			</FormGroup>

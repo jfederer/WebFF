@@ -1,5 +1,6 @@
 import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
+import { Grid } from '@material-ui/core';
 
 
 export const createQuestionComponents = (questionsData, questionsValues, debug ) => {
@@ -140,4 +141,49 @@ export const saveQuestionValueToLS = (Q) => {
 
 }
 
+export const getGridedQuestions= (questions) => {
+	return <Grid
+					container
+					spacing={8}
+					alignItems='baseline'
+					alignContent='center'
+					// justify='space-around' 
+					justify="center"
+				>
+					{questions.map((question) => { // place all questions in grids of appropriate size
+						if (!question.props.hidden)
+							if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
+								// neither lg or xs are set.
+								return <Grid item
+									key={question.props.id + '_grid'} xs lg>
+									{question}
+								</Grid>
+
+							} else if (question.props.width_xs === '' || question.props.width_xs == null) {
+								// xs is not set
+								return <Grid item
+									key={question.props.id + '_grid'} xs lg={question.props.width_lg}>
+									{question}
+								</Grid>
+
+							} else if (question.props.width_lg === '' || question.props.width_lg == null) {
+								// lg is not set
+								return <Grid item
+									key={question.props.id + '_grid'} xs={question.props.width_xs} lg>
+									{question}
+								</Grid>
+
+							} else {
+								// both lg and xs are set.
+								return <Grid item
+									key={question.props.id + '_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
+								>
+									{question}
+								</Grid>
+							}
+						//TOOD throw error, shouldn't get here.
+						return null;
+					})}
+				</Grid>
+}
 

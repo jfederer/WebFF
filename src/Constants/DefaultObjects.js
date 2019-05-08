@@ -182,7 +182,7 @@ export const defaultSetInformationQuestionsData = {
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
 		"options": {
-			"Sand-Fine break": "SF",
+			"BEDSand-Fine break": "SF",
 			"Sand Analysis": "SA",
 			"Loss-on-ignition": "LOI",
 			"Full-size Fractions*": "Z",
@@ -208,7 +208,7 @@ export const defaultSetInformationQuestionsData = {
 		"type": "MultipleChoice",
 		"options":
 		{
-			"Sand-Fine break*": "SF",
+			"BOTSand-Fine break*": "SF",
 			"Fines Only": "FO",
 			"Sand Analysis*": "SA",
 			"Loss-on-ignition*": "LOI",
@@ -271,8 +271,9 @@ export const defaultSetInformationQuestionsData = {
 export const defaultQuestionsData = {
 	setInfo: {
 		"id": "setInfo",
+		"sedType":"suspended",
 		"label": "Set Information",
-		"setName": "A",
+		"setName": "ABCDE",
 		"type": "SetInformation",
 		"includeBlank": true,
 		"tabName": "Data Entry",

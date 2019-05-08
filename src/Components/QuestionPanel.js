@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import classNames from 'classnames';
+import { getGridedQuestions } from './../Utils/QuestionUtilities';
 
 const styles = theme => ({
 	root: { // applies to entire QuestionPanel
@@ -33,49 +34,7 @@ class QuestionPanel extends React.Component {
 		return (
 			<Paper className={classNames(classes.root, this.props.grey ? classes.lightGrey : '')} elevation={2}>
 				{this.props.panelName}
-				<Grid
-					container
-					spacing={8}
-					alignItems='baseline'
-					alignContent='center'
-					// justify='space-around' 
-					justify="center"
-				>
-					{questions.map((question) => { // place all questions in grids of appropriate size
-						if (!question.props.hidden)
-							if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
-								// neither lg or xs are set.
-								return <Grid item
-									key={question.props.id + '_grid'} xs lg>
-									{question}
-								</Grid>
-
-							} else if (question.props.width_xs === '' || question.props.width_xs == null) {
-								// xs is not set
-								return <Grid item
-									key={question.props.id + '_grid'} xs lg={question.props.width_lg}>
-									{question}
-								</Grid>
-
-							} else if (question.props.width_lg === '' || question.props.width_lg == null) {
-								// lg is not set
-								return <Grid item
-									key={question.props.id + '_grid'} xs={question.props.width_xs} lg>
-									{question}
-								</Grid>
-
-							} else {
-								// both lg and xs are set.
-								return <Grid item
-									key={question.props.id + '_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
-								>
-									{question}
-								</Grid>
-							}
-						//TOOD throw error, shouldn't get here.
-						return null;
-					})}
-				</Grid>
+				{getGridedQuestions(questions)}
 			</Paper>
 				);
 			}
