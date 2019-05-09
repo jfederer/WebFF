@@ -192,7 +192,9 @@ class SetInformation extends React.Component {
 			<Question {...defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType]}
 				id={"analysedFor_" + this.props.sedType}
 				key={this.getRealQID("analysedFor_" + this.props.sedType)}
-				value={this.props.value["analysedFor_" + this.props.sedType]}
+				value={typeof this.props.value["analysedFor_" + this.props.sedType] === "undefined"
+					? defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType].value
+					: this.props.value["analysedFor_" + this.props.sedType] === "undefined"}
 				alternateChangeHandler={this.myChangeHandler} />
 
 
