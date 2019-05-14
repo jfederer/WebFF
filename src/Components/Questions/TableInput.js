@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
+import { Typography } from '@material-ui/core';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -15,20 +16,20 @@ import Question from '../Question';
 const styles = theme => ({
 	table: {
 		width: "100%",
-	//	backgroundColor: "#911"
+		//	backgroundColor: "#911"
 	},
 	tableCell: {
 		padding: 5,
 		flexShrink: 0,
 	},
-	
+
 });
 
 
 class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
 		let numRows = this.props.value.length;
 		let numCols = 1; // tables with less than 1 column are not allowed
 		this.props.value.forEach(function (row) {
@@ -67,7 +68,7 @@ class TableInput extends React.Component {
 	}
 
 	handleTableQuestionChange(textSubQuestion) {
-		
+
 		let DEBUG = false;
 		if (DEBUG) console.log("handleTableQuestionChange: textSubQuestion: ", textSubQuestion);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
@@ -82,7 +83,7 @@ class TableInput extends React.Component {
 		let tempTableValue = this.props.value;
 		tempTableValue[questionRow][questionCol] = questionVal;
 		//console.log(tempTableValue);
-		this.setState({ value: tempTableValue }, () => {this.props.stateChangeHandler(this)});
+		this.setState({ value: tempTableValue }, () => { this.props.stateChangeHandler(this) });
 	}
 
 	buildRow(curRow, row) { //FUTURE:  build even the text questions as sub questions... auto-generating them
@@ -100,9 +101,9 @@ class TableInput extends React.Component {
 				if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
 					let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
 					if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
-					let questionData = this.props.globalState.questionsData.filter((Q)=>Q.id===subQuestionID)[0];
+					let questionData = this.props.globalState.questionsData.filter((Q) => Q.id === subQuestionID)[0];
 					if (DEBUG) console.log("questionData", questionData);
-					adHocProps = { ...adHocProps, ...questionData, key:subQkey };
+					adHocProps = { ...adHocProps, ...questionData, key: subQkey };
 					if (DEBUG) console.log("adHocProps", adHocProps);
 					cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
 
@@ -133,8 +134,16 @@ class TableInput extends React.Component {
 
 
 	render() {
-				//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-				const { classes } = this.props;
+		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
+		const { classes, colHeaders, id, value, invalidMessage } = this.props;
+
+		let invalidValue = false;
+		if (!Array.isArray(value) || value.length < 1) {
+			invalidValue = true;
+		} else if (Array.isArray(colHeaders) && colHeaders.length !== value[0].length) {
+			invalidValue = true;
+		}
+
 
 		//let numRows = this.props.value.length;
 		// let numCols = 1; // tables with less than 1 column are not allowed
@@ -148,31 +157,40 @@ class TableInput extends React.Component {
 
 		//TODO: read-only columns list
 
-		let tableValues = this.props.value;
 
-		// build the JSX tableRows based on will-mount-calculated tableValues
+		// // build the JSX tableRows based on will-mount-calculated tableValues
 		let tableRows = [];
 		let tableHeaderRow;
 
-		tableValues.forEach((curRow, row) => {
-			let thisRow = this.buildRow(curRow, row);
-			if (this.props.colHeaders && row === 0) {
-				tableHeaderRow = thisRow;
-			} else {
-				tableRows.push(thisRow);
-			}
-		});
 
-		let tableHeader = tableHeaderRow ?
-			<TableHead key={this.props.id + "_tableHead"}>{tableHeaderRow}</TableHead> :
-			null;
+		try {
+			value.forEach((curRow, row) => {
+				tableRows.push(this.buildRow(curRow, row));
+			});
+		} catch (err) {
+			invalidValue = true;
+		}
 
-		let tableBody = <TableBody>{tableRows}</TableBody>;
+		let tableBody = { tableRows }
 
 		return <Table key={this.props.id + "_table"} className={classes.table}>
 			{/* {colGroup} */}
-			{tableHeader}
-			{tableBody}
+			{colHeaders ?
+				<TableHead key={id + "_tableHead"}><TableRow>
+					{colHeaders.map(headerString => <TableCell key={id + "_headerCell_" + headerString}>{headerString}</TableCell>)}
+				</TableRow></TableHead>
+				: null}
+			<TableBody>
+				{invalidValue ?
+					<TableRow>
+						<TableCell colSpan={colHeaders ? colHeaders.length : ""} align="center">
+							<Typography>{invalidMessage ? invalidMessage : "Table Data Currently Invalid"}</Typography>
+						</TableCell>
+					</TableRow>
+
+					: { tableBody }
+				}
+			</TableBody>
 		</Table>
 	}
 }

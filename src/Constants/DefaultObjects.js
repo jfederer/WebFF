@@ -118,18 +118,19 @@ export const defaultSetInformationQuestionsData = {
 		"id": "samplesTable_EDI",
 		"label": "Samples Table",
 		"type": "TableInput",
-		"hidden": true,
+		// "hidden": true,
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
-		"colHeaders": true,
-		"rowHeaders": true,
-		"value": [["DataEntry",
+		"colHeaders": //array of stings that would be read-only right-side headers for each row
+			["DataEntry",
 			"Distance from L bank, feet",
 			"Sampling Depth, feet",
 			"Transit Rate, ft / sec",
 			"Rest time on Bed for Bedload sample,seconds",
 			"Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples", "", "", "", "", ""]],
+		"rowHeaders": [],  //array of stings that would be read-only right-side headers for each row
+		"invalidMessage": "Must input number of samples before table will display",
+		"value": [[]],
 		"width_xs": 10,
 		"width_lg": 10
 	},
@@ -138,7 +139,7 @@ export const defaultSetInformationQuestionsData = {
 		"id": "samplesTable_EWI",
 		"label": "Samples Table",
 		"type": "TableInput",
-		"hidden": true,
+		// "hidden": true,
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
 		"colHeaders": true,
@@ -158,7 +159,7 @@ export const defaultSetInformationQuestionsData = {
 		"id": "samplesTable_OTHER",
 		"label": "Samples Table",
 		"type": "TableInput",
-		"hidden": true,
+		// "hidden": true,
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
 		"colHeaders": true,
@@ -246,15 +247,15 @@ export const defaultSetInformationQuestionsData = {
 			"Specific Conductance": "SC",
 			"Full-size Fractions*": "Z"
 		},
-		"value": 		{
+		"value": {
 			"Concentration": false,
 			"Sand-Fine break*": false,
 			"Sand Analysis*": false,
-			"Turbidity":  false,
+			"Turbidity": false,
 			"Loss-on-ignition*": false,
-			"Dissolved Solids":  false,
-			"Specific Conductance":  false,
-			"Full-size Fractions*":  false
+			"Dissolved Solids": false,
+			"Specific Conductance": false,
+			"Full-size Fractions*": false
 		},
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
@@ -271,7 +272,7 @@ export const defaultSetInformationQuestionsData = {
 export const defaultQuestionsData = {
 	setInfo: {
 		"id": "setInfo",
-		"sedType":"suspended",
+		"sedType": "suspended",
 		"label": "Set Information",
 		"setName": "ABCDE",
 		"type": "SetInformation",

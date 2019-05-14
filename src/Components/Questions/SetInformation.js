@@ -189,7 +189,16 @@ class SetInformation extends React.Component {
 			{getGridedQuestions(gridedQuestions)}
 
 			{/* Data table  //TODO: */}
+		<Question {...defaultSetInformationQuestionsData["samplesTable_EDI"]}
+				id={this.getRealQID("samplesTable_EDI")}
+				key={this.getRealQID("samplesTable_EDI")}
+				value={typeof this.props.value[this.getRealQID("samplesTable_EDI")] === "undefined"
+					? defaultSetInformationQuestionsData["samplesTable_EDI"].value
+					: this.props.value[this.getRealQID("samplesTable_EDI")]}
+				alternateChangeHandler={this.myChangeHandler} />
 
+
+			
 			{/* analyzedFor multiple choice */}
 			<Question {...defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType]}
 				id={this.getRealQID("analysedFor_" + this.props.sedType)}
