@@ -175,7 +175,7 @@ class SetInformation extends React.Component {
 			gridedQuestions.push(< Question {...defaultSetInformationQuestionsData[sub_QID]}
 				id={realQID}
 				key={realQID}
-				value={this.props.value[sub_QID] ? this.props.value[sub_QID] : ""}
+				value={this.props.value[realQID] ? this.props.value[realQID] : ""}
 				alternateChangeHandler={this.myChangeHandler} />);
 		});
 
@@ -188,44 +188,16 @@ class SetInformation extends React.Component {
 
 			{getGridedQuestions(gridedQuestions)}
 
+			{/* Data table  //TODO: */}
 
+			{/* analyzedFor multiple choice */}
 			<Question {...defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType]}
-				id={"analysedFor_" + this.props.sedType}
+				id={this.getRealQID("analysedFor_" + this.props.sedType)}
 				key={this.getRealQID("analysedFor_" + this.props.sedType)}
-				value={typeof this.props.value["analysedFor_" + this.props.sedType] === "undefined"
+				value={typeof this.props.value[this.getRealQID("analysedFor_" + this.props.sedType)] === "undefined"
 					? defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType].value
-					: this.props.value["analysedFor_" + this.props.sedType] === "undefined"}
+					: this.props.value[this.getRealQID("analysedFor_" + this.props.sedType)]}
 				alternateChangeHandler={this.myChangeHandler} />
-
-
-
-
-			{/* {getGridedQuestions(Object.keys(defaultSetInformationQuestionsData).map(questionDataKey => {
-					let value = defaultSetInformationQuestionsData[questionDataKey].value;
-					// let readQID="Set_" + this.props.setName+"_"+defaultSetInformationQuestionsData[questionDataKey].id;
-					let readQID=defaultSetInformationQuestionsData[questionDataKey].id;
-					// console.log("questionData: ", defaultSetInformationQuestionsData[questionDataKey]);
-					// console.log("First Assigned: ", value);
-					// console.log("this.props.value: ", this.props.value);
-					
-					// console.log("questionData.id: ", defaultSetInformationQuestionsData[questionDataKey].id);
-					// console.log("this.props.value[questionData.id]: ", this.props.value[defaultSetInformationQuestionsData[questionDataKey].id]);
-					if (this.props.value[readQID] !== null && typeof this.props.value[readQID] !== 'undefined') {
-						// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
-						value = this.props.value[readQID];
-						// if (debug) console.log("CREATEQ: OVERWRITE WITH: ", value);
-					}
-
-					return <Question {...defaultSetInformationQuestionsData[questionDataKey]} 
-										id={readQID}
-										key={readQID}
-										value={value} 
-										alternateChangeHandler={this.myChangeHandler}/>;
-
-				})
-				)} */}
-
-
 
 		</React.Fragment>
 
