@@ -3,7 +3,7 @@ import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 
 
-export const createQuestionComponents = (questionsData, questionsValues, debug ) => {
+export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug ) => {
     // creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	// returns array of question components
@@ -22,7 +22,7 @@ export const createQuestionComponents = (questionsData, questionsValues, debug )
 				if(debug)console.log("CREATEQ: OVERWRITE WITH: ", value);
 			} 
 
-			let retQ = <Question {...questionData} value={value} />;
+			let retQ = <Question {...questionData} value={value} alternateChangeHandler={alternateChangeHandler}/>;
 			if(debug)console.log("CREATEQ: VALUE AT RETURN: ", value);
 			return retQ;
 		});

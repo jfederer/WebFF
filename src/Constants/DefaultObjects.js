@@ -121,16 +121,18 @@ export const defaultSetInformationQuestionsData = {
 		// "hidden": true,
 		"tabName": "DataEntry",
 		"layoutGroup": "Set A Information",
-		"colHeaders": //array of stings that would be read-only right-side headers for each row
+		"colHeaders": true,
+		"rowHeaders": true,  
+		"invalidMessage": "Must input number of samples before table will display",
+		"value": [
 			["DataEntry",
 			"Distance from L bank, feet",
 			"Sampling Depth, feet",
 			"Transit Rate, ft / sec",
 			"Rest time on Bed for Bedload sample,seconds",
-			"Horizontal width of Vertical, feet"],
-		"rowHeaders": [],  //array of stings that would be read-only right-side headers for each row
-		"invalidMessage": "Must input number of samples before table will display",
-		"value": [[]],
+			"Horizontal width of Vertical, feet"], 
+			["Merp", "SubQuestion::stationNumber", "", "", "", ""]
+		],
 		"width_xs": 10,
 		"width_lg": 10
 	},
