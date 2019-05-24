@@ -146,7 +146,7 @@ class SetInformation extends React.Component {
 		// 	}
 	}
 
-	myChangeHandler = (eventID, sub_q_id, value) => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+	setInfoChangeHandler = (eventID, sub_q_id, value) => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 		console.log(sub_q_id + " incoming value: ", value);
 		let newValue = _.cloneDeep(this.props.value);
 		newValue[sub_q_id] = value;
@@ -171,16 +171,24 @@ class SetInformation extends React.Component {
 		let gridedQuestions = [];
 
 		questionIDsToGrid.forEach(sub_QID => { //FUTURE: should we strip whitespace from setName?
+			if(!defaultSetInformationQuestionsData[sub_QID]) {
+				console.warn("Set Information question, " + sub_QID + " attempting to be made that does not exist in defaultSetInformationQuestionsData");
+				return;
+			}
 			let realQID = this.getRealQID(sub_QID);
+			// console.log("DSIQD[" + sub_QID + "]: ", defaultSetInformationQuestionsData[sub_QID]);
 			gridedQuestions.push(< Question {...defaultSetInformationQuestionsData[sub_QID]}
 				id={realQID}
 				key={realQID}
 				value={this.props.value[realQID] ? this.props.value[realQID] : ""}
-				alternateChangeHandler={this.myChangeHandler} />);
+				alternateChangeHandler={this.setInfoChangeHandler} />);
 		});
 
 
-
+		let tableName = "samplesTable_" + this.props.method;
+		let realTableName = this.getRealQID(tableName);
+		let analysedForName = "analysedFor_" + this.props.sedType;
+		let realAnalysedForName = this.getRealQID(analysedForName);
 		return <React.Fragment>
 
 
@@ -189,24 +197,26 @@ class SetInformation extends React.Component {
 			{getGridedQuestions(gridedQuestions)}
 
 			{/* Data table  //TODO: */}
-		<Question {...defaultSetInformationQuestionsData["samplesTable_EDI"]}
-				id={this.getRealQID("samplesTable_EDI")}
-				key={this.getRealQID("samplesTable_EDI")}
-				value={typeof this.props.value[this.getRealQID("samplesTable_EDI")] === "undefined"
-					? defaultSetInformationQuestionsData["samplesTable_EDI"].value
-					: this.props.value[this.getRealQID("samplesTable_EDI")]}
-				alternateChangeHandler={this.myChangeHandler} />
+			
+		<Question {...defaultSetInformationQuestionsData[tableName]}
+				id={realTableName}
+				key={realTableName}
+				value={typeof this.props.value[realTableName] === "undefined"
+					? defaultSetInformationQuestionsData[tableName].value
+					: this.props.value[realTableName]}
+				alternateChangeHandler={this.setInfoChangeHandler} />
 
 
 			
 			{/* analyzedFor multiple choice */}
-			<Question {...defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType]}
-				id={this.getRealQID("analysedFor_" + this.props.sedType)}
-				key={this.getRealQID("analysedFor_" + this.props.sedType)}
-				value={typeof this.props.value[this.getRealQID("analysedFor_" + this.props.sedType)] === "undefined"
-					? defaultSetInformationQuestionsData["analysedFor_" + this.props.sedType].value
-					: this.props.value[this.getRealQID("analysedFor_" + this.props.sedType)]}
-				alternateChangeHandler={this.myChangeHandler} />
+			
+			<Question {...defaultSetInformationQuestionsData[analysedForName]}
+				id={realAnalysedForName}
+				key={realAnalysedForName}
+				value={typeof this.props.value[realAnalysedForName] === "undefined"
+					? defaultSetInformationQuestionsData[analysedForName].value
+					: this.props.value[realAnalysedForName]}
+				alternateChangeHandler={this.setInfoChangeHandler} />
 
 		</React.Fragment>
 

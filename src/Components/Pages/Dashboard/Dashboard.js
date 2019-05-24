@@ -31,7 +31,7 @@ class Dashboard extends React.Component {
 					direction="column"
 					justify="center"
 					alignItems="center"
-					spacing={16}
+					spacing={10}
 				>
 					<Grid item xs className={classes.hundredWidth}>
 						<NewEventForm  />

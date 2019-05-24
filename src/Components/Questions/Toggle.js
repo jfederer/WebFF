@@ -44,7 +44,7 @@ class Toggle extends React.Component {
 			controlElement = <Checkbox
 				key={this.props.id}
 				id={this.props.id}
-				checked={this.props.value}
+				checked={this.props.value?true:false}
 				onChange={this.handleValueChange('value')}
 				xmltag={this.props.XMLTag}
 			/>
@@ -52,7 +52,7 @@ class Toggle extends React.Component {
 			controlElement = <Switch
 				key={this.props.id}
 				id={this.props.id}
-				checked={this.props.value}
+				checked={this.props.value?true:false}
 				onChange={this.handleValueChange('value')}
 				xmltag={this.props.XMLTag}
 			/>

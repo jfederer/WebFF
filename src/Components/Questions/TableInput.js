@@ -70,7 +70,7 @@ class TableInput extends React.Component {
 	}
 
 	handleTableQuestionChange(eventID, textSubQuestionID, q_value) {
-		let DEBUG = true;
+		let DEBUG = false;
 		if (DEBUG) console.log("handleTableQuestionChange: textSubQuestion: ", textSubQuestionID);
 		//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
 		// const { id } = textSubQuestion.props;
@@ -83,39 +83,20 @@ class TableInput extends React.Component {
 		tempTableValue[questionRow][questionCol] = q_value;
 		//console.log(tempTableValue);
 		if(this.props.alternateChangeHandler) {
-			console.log("table change: Using alt");
 			this.props.alternateChangeHandler(eventID, this.props.id, tempTableValue);
 		} else {
-			console.log("table change: Using standard");
 			this.props.SEQuestionValueChange(eventID, this.props.id, tempTableValue);
 		}
-		// this.setState({ value: tempTableValue }, () => { this.props.stateChangeHandler(this) });
+		
 	}
 
-	// handleTableQuestionChange(eventID, textSubQuestionID, q_value) {
-	// 	let DEBUG = true;
-	// 	if (DEBUG) console.log("handleTableQuestionChange: textSubQuestion: ", textSubQuestion);
-	// 	//TODO: textSubQuestion.state.value is correct at this point... it's row and col is correct as well.  use row/col to edit the double-array on this.state.value and then send back to the this.props.stateChangeHandler to write it to LS
-	// 	const { id } = textSubQuestion.props;
-	// 	// console.log("textSubQuestion", textSubQuestion);
-	// 	let questionRow = id.substring(id.indexOf("row:") + 4, id.indexOf("_col:"));
-	// 	let questionCol = id.substring(id.indexOf("col:") + 4);
-	// 	let questionVal = textSubQuestion.state.value;
-	// 	if (DEBUG) console.log("questionVal: ", questionVal);
-	// 	if (DEBUG) console.log("questionRow: ", questionRow);
-	// 	if (DEBUG) console.log("questionCol: ", questionCol);
-	// 	let tempTableValue = this.props.value;
-	// 	tempTableValue[questionRow][questionCol] = questionVal;
-	// 	//console.log(tempTableValue);
-	// 	this.setState({ value: tempTableValue }, () => { this.props.stateChangeHandler(this) });
-	// }
-
+	
 	buildRow(curRow, row) { 
 		const { classes, questionsData } = this.props;
 		return <TableRow key={this.props.id + "_row_" + row}>
 			{curRow.map((cellContent, col) => {
 				
-				let DEBUG = true;
+				let DEBUG = false;
 				if(DEBUG)console.log("CurRow: ", cellContent);
 				let subQkey = this.props.id + "_row:" + row + "_col:" + col;
 				if(DEBUG)console.log("subQkey: ", subQkey);
@@ -126,6 +107,7 @@ class TableInput extends React.Component {
 
 				// check if this is a subQuestion
 				if (typeof (cellContent) === "string" && cellContent.startsWith("SubQuestion::")) {
+					// it is a subQuestion
 					let subQuestionID = cellContent.substring(cellContent.indexOf("SubQuestion::") + 13);
 					if (DEBUG) console.log("Found a subQuestion: ", subQuestionID);
 					let questionData = questionsData[subQuestionID];

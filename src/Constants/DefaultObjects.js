@@ -275,6 +275,7 @@ export const defaultQuestionsData = {
 	setInfo: {
 		"id": "setInfo",
 		"sedType": "suspended",
+		"method": "EDI",
 		"label": "Set Information",
 		"setName": "ABCDE",
 		"type": "SetInformation",

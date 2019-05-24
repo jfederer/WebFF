@@ -3,58 +3,61 @@ import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 
 
-export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug ) => {
-    // creates one question component for every question in questionsData
+export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
+	// creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	// returns array of question components
-	
+
 	let questionComponents = [];
-    if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-        questionComponents = questionsData.map(questionData => {
+	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
+		questionComponents = questionsData.map(questionData => {
 			let value = questionData.value;
-			if(debug)console.log("CREATEQ: First Assigned: ", value);
-			if(debug)console.log("CREATEQ: questionsVallues: ", questionsValues);
-			if(debug)console.log("CREATEQ: questionData.id: ", questionData.id);
-			if(debug)console.log("CREATEQ: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
-			if(questionsValues[questionData.id]!==null && typeof questionsValues[questionData.id]!=='undefined') {
+			if (debug) console.log("CREATEQ: First Assigned: ", value);
+			if (debug) console.log("CREATEQ: questionsVallues: ", questionsValues);
+			if (debug) console.log("CREATEQ: questionData.id: ", questionData.id);
+			if (debug) console.log("CREATEQ: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
+			if (questionsValues[questionData.id] !== null && typeof questionsValues[questionData.id] !== 'undefined') {
 				// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
 				value = questionsValues[questionData.id];
-				if(debug)console.log("CREATEQ: OVERWRITE WITH: ", value);
-			} 
+				if (debug) console.log("CREATEQ: OVERWRITE WITH: ", value);
+			}
 
-			let retQ = <Question {...questionData} value={value} alternateChangeHandler={alternateChangeHandler}/>;
-			if(debug)console.log("CREATEQ: VALUE AT RETURN: ", value);
+			let retQ = <Question {...questionData}
+				value={value}
+				key={questionData.id["key"] ? questionData.id["key"] : questionData.id}
+				alternateChangeHandler={alternateChangeHandler} />;
+			if (debug) console.log("CREATEQ: VALUE AT RETURN: ", value);
 			return retQ;
 		});
-    }
-	
-    return questionComponents;
+	}
+
+	return questionComponents;
 }
 
-export const getQuestionDataFromQuestionsDataByQuestionID=(questionsData, questionID) => {
+export const getQuestionDataFromQuestionsDataByQuestionID = (questionsData, questionID) => {
 	let DEBUG = false;
-	
-	if(DEBUG)console.log("--------------");
-	if(DEBUG)console.log(questionsData);
-	if(DEBUG)console.log("looking for questionID: ", questionID);
-	
+
+	if (DEBUG) console.log("--------------");
+	if (DEBUG) console.log(questionsData);
+	if (DEBUG) console.log("looking for questionID: ", questionID);
+
 	let questionData = questionsData.filter(questionData => {
-		
+
 		// var areEqual = questionData.id.toUpperCase() === questionID.toUpperCase();
 		// console.log(questionData.id + " " + areEqual);
-		
+
 		if (questionData.id === questionID) {
-			if(DEBUG)console.log("Found");
+			if (DEBUG) console.log("Found");
 			return questionData;
 		}
 		return null;
 	}
 	);
-	
-	if(DEBUG)console.log(questionData);
 
-	if(questionData != null && questionData.length===1) {
-		
+	if (DEBUG) console.log(questionData);
+
+	if (questionData != null && questionData.length === 1) {
+
 		return questionData[0];
 	} else {
 		return null; //TODO: throw errors
@@ -65,9 +68,8 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 	//given OBJECT questionsData and STRING tabName... 
 	//... will return all questionsData objects where question.tabName matches tabName
 	let tabQuestionsData = [];
-	Object.keys(questionsData).forEach(key=> {
-		if (questionsData[key].tabName.replace(/ /g, '') === tabName.replace(/ /g, '') )
-		{
+	Object.keys(questionsData).forEach(key => {
+		if (questionsData[key].tabName.replace(/ /g, '') === tabName.replace(/ /g, '')) {
 			tabQuestionsData.push(questionsData[key]);
 		}
 	});
@@ -75,29 +77,29 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 }
 
 export const getLayoutGroupNames = (questionsData) => {
-    // provided with ARRAY questionData, will return array of layout group names (strings)
-    let layoutGroupNames = [];
+	// provided with ARRAY questionData, will return array of layout group names (strings)
+	let layoutGroupNames = [];
 
-    if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-        for (let i = 0; i < questionsData.length; i++) {
-            if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
-                layoutGroupNames.push(questionsData[i].layoutGroup);
-            }
-        }
-    }
-    return layoutGroupNames;
+	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
+		for (let i = 0; i < questionsData.length; i++) {
+			if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
+				layoutGroupNames.push(questionsData[i].layoutGroup);
+			}
+		}
+	}
+	return layoutGroupNames;
 }
 
 export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
-    // given ARRAY questionData, will filter down to items that match questionData.layoutgroup = layoutGroupName ....
-    let layoutGroupQuestionsData = [];
+	// given ARRAY questionData, will filter down to items that match questionData.layoutgroup = layoutGroupName ....
+	let layoutGroupQuestionsData = [];
 
-    if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-        layoutGroupQuestionsData = questionsData.filter((questionData) => {
-            return questionData.layoutGroup === layoutGroupName;
-        });
-    }
-    return layoutGroupQuestionsData;
+	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
+		layoutGroupQuestionsData = questionsData.filter((questionData) => {
+			return questionData.layoutGroup === layoutGroupName;
+		});
+	}
+	return layoutGroupQuestionsData;
 
 }
 
@@ -141,49 +143,49 @@ export const saveQuestionValueToLS = (Q) => {
 
 }
 
-export const getGridedQuestions= (questions) => {
+export const getGridedQuestions = (questions) => {
 	return <Grid
-					container
-					spacing={8}
-					alignItems='baseline'
-					alignContent='center'
-					// justify='space-around' 
-					justify="center"
-				>
-					{questions.map((question) => { // place all questions in grids of appropriate size
-						if (!question.props.hidden)
-							if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
-								// neither lg or xs are set.
-								return <Grid item
-									key={question.props.id + '_grid'} xs lg>
-									{question}
-								</Grid>
+		container
+		spacing={10}
+		alignItems='baseline'
+		alignContent='center'
+		// justify='space-around' 
+		justify="center"
+	>
+		{questions.map((question) => { // place all questions in grids of appropriate size
+			if (!question.props.hidden)
+				if ((question.props.width_xs === '' || question.props.width_xs == null) && (question.props.width_lg === '' || question.props.width_lg == null)) {
+					// neither lg or xs are set.
+					return <Grid item
+						key={question.props.id + '_grid'} xs lg>
+						{question}
+					</Grid>
 
-							} else if (question.props.width_xs === '' || question.props.width_xs == null) {
-								// xs is not set
-								return <Grid item
-									key={question.props.id + '_grid'} xs lg={question.props.width_lg}>
-									{question}
-								</Grid>
+				} else if (question.props.width_xs === '' || question.props.width_xs == null) {
+					// xs is not set
+					return <Grid item
+						key={question.props.id + '_grid'} xs lg={question.props.width_lg}>
+						{question}
+					</Grid>
 
-							} else if (question.props.width_lg === '' || question.props.width_lg == null) {
-								// lg is not set
-								return <Grid item
-									key={question.props.id + '_grid'} xs={question.props.width_xs} lg>
-									{question}
-								</Grid>
+				} else if (question.props.width_lg === '' || question.props.width_lg == null) {
+					// lg is not set
+					return <Grid item
+						key={question.props.id + '_grid'} xs={question.props.width_xs} lg>
+						{question}
+					</Grid>
 
-							} else {
-								// both lg and xs are set.
-								return <Grid item
-									key={question.props.id + '_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
-								>
-									{question}
-								</Grid>
-							}
-						//TOOD throw error, shouldn't get here.
-						return null;
-					})}
-				</Grid>
+				} else {
+					// both lg and xs are set.
+					return <Grid item
+						key={question.props.id + '_grid'} xs={question.props.width_xs} lg={question.props.width_lg}
+					>
+						{question}
+					</Grid>
+				}
+			//TOOD throw error, shouldn't get here.
+			return null;
+		})}
+	</Grid>
 }
 

@@ -172,7 +172,7 @@ class WebFF extends React.Component {
 								<ChevronRightIcon />
 							</IconButton>
 
-							<Typography variant="title" color="inherit" noWrap>
+							<Typography variant="h4" color="inherit" noWrap>
 								{UI.appBarText}
 							</Typography>
 
