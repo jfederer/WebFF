@@ -9,19 +9,8 @@ import {
 } from 'react-router-dom';
 import thunk from 'redux-thunk';
 
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware, compose } from 'redux';
-import RootReducer from './Reducers/RootReducer';
-
-const initialState = {};
-
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-const store = createStore(
-	RootReducer, 
-	initialState, 
-	composeEnhancer(applyMiddleware(thunk))
-);
+import { Provider } from 'react-redux';
+import store from './Store';
 
 class App extends React.Component {
 

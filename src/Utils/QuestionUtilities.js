@@ -1,6 +1,7 @@
 import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
+import store from '../Store';
 
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
@@ -33,6 +34,93 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
 
 	return questionComponents;
 }
+
+
+export const getQuestionValue = (eventID, questionID) =>  { //****  //TODO: error reasonably when  curSamplingEvent is undefined
+	// eventID: string eventID to look for the value in.
+	// questionID: string question ID associated with a question
+	// returns VALUE associated with the q_id... first searching dialogQuestions, then searching the currentSamplingEvent, then, finally, questionsData.  //TODO: still true?
+	// note, given currentSamplingEvent is built from questionsData, the instances where a value would be in questionsData and NOT in current sampling event are very exotic
+	// throws error if no question is found
+
+	console.log("Get value("+eventID+", "+questionID+")");
+
+	let event = store.getState().SamplingEvents[eventID];
+	let questionsData = store.getState().Questions.questionsData;
+	let value = null;
+
+	console.log("EVENT: ", event);
+	console.log("QD: ", questionsData);
+	console.log("QD: QI: ", questionsData[questionID]);
+
+	//defined?
+	if(typeof event.questionValues[questionID] === 'undefined') {
+		// not defined in event, check question data
+		if(typeof questionsData[questionID].value === 'undefined') {
+			console.warm("returning undefined value from question " + questionID);
+			return undefined;
+		} else {
+			value = questionsData[questionID].value;
+		}
+	} else {
+		value = event.questionsValues[questionID];
+	}
+
+	// //if simple question
+	if(typeof value !== 'object') {
+		return value;
+	} else {
+		return "VALUE IS OBJECT";
+	}
+	// console.log("Event: ", event);
+
+	// console.log("Value: ", value);
+
+	// if table question
+
+	// if complex question
+	
+
+	//note: searched first because if we search for a dialog question before loading a current sampling event, it would throw an error
+	// for (let i = 0; this.state.dialogQuestions && i < this.state.dialogQuestions.length; i++) {
+	// 	for (let k = 0; this.state.dialogQuestions[i] && k < this.state.dialogQuestions[i].questions.length; k++) {
+	// 		if (this.state.dialogQuestions[i].questions[k].id === q_id) {
+	// 			let ret = this.state.dialogQuestions[i].questions[k].value;
+	// 			if (Array.isArray(ret)) {
+	// 				return ret.slice();
+	// 			}
+	// 			return ret;
+	// 		}
+	// 	}
+	// }
+
+	// let curSE = this.isCurrentSamplingEventReady("getQuestionValue(" + q_id + ")");
+
+	// if (questionID in curSE.questionsValues) {
+	// 	let ret = curSE.questionsValues[q_id];
+	// 	if (Array.isArray(ret)) {
+	// 		return ret.slice();
+	// 	}
+	// 	return ret;
+	// }
+
+	// for (let i = 0; i < this.state.questionsData.length; i++) {
+	// 	if (this.state.questionsData[i].id === q_id) {
+	// 		let ret = this.state.questionsData[i].value;
+	// 		if (Array.isArray(ret)) {
+	// 			return ret.slice();
+	// 		}
+	// 		return ret;
+	// 	}
+	// }
+
+	// throw new Error("Question not found in current sampling event, dialog questions, or default config questions.  WebFF.getQuestionValue(" + q_id + ")");
+	
+	
+}
+
+
+
 
 export const getQuestionDataFromQuestionsDataByQuestionID = (questionsData, questionID) => {
 	let DEBUG = false;

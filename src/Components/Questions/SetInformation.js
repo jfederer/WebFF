@@ -2,8 +2,11 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 import _ from 'lodash';
+
+
 // import Table from '@material-ui/core/Table';
 // import TableBody from '@material-ui/core/TableBody';
 // import TableCell from '@material-ui/core/TableCell';
@@ -24,9 +27,9 @@ import Question from '../Question';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
-import { getGridedQuestions } from '../../Utils/QuestionUtilities';
+import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
 import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
-import { Typography } from '@material-ui/core';
+import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
 	table: {
@@ -158,20 +161,22 @@ class SetInformation extends React.Component {
 	}
 
 	render() {
-		const { setName } = this.props;
+		const { setName, sedimentType, samplingMethod, value } = this.props;
 		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited"]
 
-		if (this.props.sedType === null || typeof this.props.sedType === "undefined")
-			return <Typography>Sediment Type not Set, please return to field form and set sediment type</Typography>
+		if (sedimentType === null || typeof sedimentType === "undefined")
+			return <Typography>Sediment Type not set, please return to field form and set Sediment Type</Typography>
+
+		if (samplingMethod === null || typeof samplingMethod === "undefined")
+			return <Typography>Sampling Method not set, please return to field form and set Sampling Method</Typography>
 
 		console.log("Set Info Render Props: ", this.props);
-
 
 
 		let gridedQuestions = [];
 
 		questionIDsToGrid.forEach(sub_QID => { //FUTURE: should we strip whitespace from setName?
-			if(!defaultSetInformationQuestionsData[sub_QID]) {
+			if (!defaultSetInformationQuestionsData[sub_QID]) {
 				console.warn("Set Information question, " + sub_QID + " attempting to be made that does not exist in defaultSetInformationQuestionsData");
 				return;
 			}
@@ -185,38 +190,41 @@ class SetInformation extends React.Component {
 		});
 
 
-		let tableName = "samplesTable_" + this.props.method;
+		let tableName = "samplesTable_" + samplingMethod;
 		let realTableName = this.getRealQID(tableName);
-		let analysedForName = "analysedFor_" + this.props.sedType;
+
+		let analysedForName = "analysedFor_" + sedimentType;
 		let realAnalysedForName = this.getRealQID(analysedForName);
+
 		return <React.Fragment>
-
-
 			Set {setName}
 
 			{getGridedQuestions(gridedQuestions)}
 
-			{/* Data table  //TODO: */}
-			
-		<Question {...defaultSetInformationQuestionsData[tableName]}
-				id={realTableName}
-				key={realTableName}
-				value={typeof this.props.value[realTableName] === "undefined"
-					? defaultSetInformationQuestionsData[tableName].value
-					: this.props.value[realTableName]}
-				alternateChangeHandler={this.setInfoChangeHandler} />
+			{/* Data table  */}
+			{samplingMethod  //redundant check
+				? <Question {...defaultSetInformationQuestionsData[tableName]}
+					id={realTableName}
+					key={realTableName}
+					value={typeof value[realTableName] === "undefined"
+						? defaultSetInformationQuestionsData[tableName].value
+						: value[realTableName]}
+					alternateChangeHandler={this.setInfoChangeHandler} />
+				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected</Typography></Paper>
+			}
 
 
-			
 			{/* analyzedFor multiple choice */}
-			
-			<Question {...defaultSetInformationQuestionsData[analysedForName]}
-				id={realAnalysedForName}
-				key={realAnalysedForName}
-				value={typeof this.props.value[realAnalysedForName] === "undefined"
-					? defaultSetInformationQuestionsData[analysedForName].value
-					: this.props.value[realAnalysedForName]}
-				alternateChangeHandler={this.setInfoChangeHandler} />
+			{sedimentType  //redundant check
+				? <Question {...defaultSetInformationQuestionsData[analysedForName]}
+					id={realAnalysedForName}
+					key={realAnalysedForName}
+					value={typeof value[realAnalysedForName] === "undefined"
+						? defaultSetInformationQuestionsData[analysedForName].value
+						: value[realAnalysedForName]}
+					alternateChangeHandler={this.setInfoChangeHandler} />
+				: <Paper><Typography align='center'>'Analysed For' options unavailable when sediment type not selected</Typography></Paper>
+			}
 
 		</React.Fragment>
 
@@ -228,7 +236,7 @@ const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
 		currentEventQuestionValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues,
-		defaultQuestionsData: state.Questions.questionsData
+		defaultQuestionsData: state.Questions.questionsData,
 	}
 }
 
