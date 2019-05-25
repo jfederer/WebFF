@@ -22,8 +22,6 @@ export const defaultSetInformationQuestionsData = {
 		"id": "startTime",
 		"label": "Start Time",
 		"type": "TimeInput",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"value": "",
 		"width_xs": 5,
 		"width_lg": 2
@@ -33,8 +31,6 @@ export const defaultSetInformationQuestionsData = {
 		"id": "endTime",
 		"label": "End Time",
 		"type": "TimeInput",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"value": "",
 		"width_xs": 5,
 		"width_lg": 2
@@ -44,8 +40,6 @@ export const defaultSetInformationQuestionsData = {
 		"id": "startGageHeight",
 		"label": "Start Gage Ht",
 		"placeholder": "feet",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"type": "Text",
 		"value": "",
 		"width_xs": 3,
@@ -56,8 +50,6 @@ export const defaultSetInformationQuestionsData = {
 		"id": "endGageHeight",
 		"label": "End Gage Ht",
 		"placeholder": "feet",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"type": "Text",
 		"value": "",
 		"width_xs": 3,
@@ -82,8 +74,6 @@ export const defaultSetInformationQuestionsData = {
 		"label": "Sampling Points",
 		"type": "Text",
 		"placeholder": "Number of Points",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"width_xs": 3,
 		"width_lg": 3,
 		"actions":
@@ -93,8 +83,6 @@ export const defaultSetInformationQuestionsData = {
 	numberOfContainers: {
 		"id": "numberOfContainers",
 		"label": "Number Of Containers",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"type": "Text",
 		"value": "",
 		"width_xs": 3,
@@ -107,11 +95,24 @@ export const defaultSetInformationQuestionsData = {
 		"XMLTag": "AnalyzeIndSamples",
 		"type": "Toggle",
 		"checkbox": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"value": false,
 		"width_xs": 4,
 		"width_lg": 3
+	},
+
+	groupOfSamples: {
+		"id": "groupOfSamples",
+		"label": "This is a group of samples",
+		"type": "Toggle",
+		"checkbox": true,
+		"value": false,
+		"width_xs": 4,
+		"width_lg": 3,
+		"actions":
+		{
+			"true": "HideQuestion::showSetB&SetValue::setA_samplesComposited:false",
+			"false": "ShowQuestion::showSetB"
+		}
 	},
 
 	samplesTable_EDI: {
@@ -119,8 +120,6 @@ export const defaultSetInformationQuestionsData = {
 		"label": "Samples Table",
 		"type": "TableInput",
 		// "hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"colHeaders": true,
 		"rowHeaders": true,  
 		"invalidMessage": "Must input number of samples before table will display",
@@ -142,8 +141,6 @@ export const defaultSetInformationQuestionsData = {
 		"label": "Samples Table",
 		"type": "TableInput",
 		// "hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"colHeaders": true,
 		"rowHeaders": true,
 
@@ -162,8 +159,6 @@ export const defaultSetInformationQuestionsData = {
 		"label": "Samples Table",
 		"type": "TableInput",
 		// "hidden": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"colHeaders": true,
 		"rowHeaders": true,
 
@@ -198,8 +193,6 @@ export const defaultSetInformationQuestionsData = {
 			"Full-size Fractions*": false,
 			"Fines Only": false
 		},
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"width_xs": 2,
 		"width_lg": 2
 	},
@@ -226,8 +219,6 @@ export const defaultSetInformationQuestionsData = {
 			"Bulk Density": false,
 			"Full-size Fractions*": false
 		},
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"width_xs": 2,
 		"width_lg": 2
 	},
@@ -259,8 +250,6 @@ export const defaultSetInformationQuestionsData = {
 			"Specific Conductance": false,
 			"Full-size Fractions*": false
 		},
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
 		"width_xs": 2,
 		"width_lg": 2
 	}
@@ -1568,22 +1557,7 @@ export const defaultQuestionsData = {
 		"width_lg": 3
 	},
 
-	groupOfSamples: {
-		"id": "groupOfSamples",
-		"label": "This is a group of samples",
-		"type": "Toggle",
-		"checkbox": true,
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
-		"value": false,
-		"width_xs": 12,
-		"width_lg": 12,
-		"actions":
-		{
-			"true": "HideQuestion::showSetB&SetValue::setA_samplesComposited:false",
-			"false": "ShowQuestion::showSetB"
-		}
-	},
+	
 
 	avgRepMeasures: {
 		"id": "avgRepMeasures",

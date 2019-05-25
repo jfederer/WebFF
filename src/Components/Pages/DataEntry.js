@@ -96,10 +96,6 @@ class DataEntry extends React.Component {
 			return <Redirect to='/' />
 		}
 
-		console.log("DATA ENTRY: disabled", this.state.addNewSetButtonDisabled);
-		console.log("DATA ENTRY: setsAdded", this.state.setsAdded);
-		console.log("DATA ENTRY: numSets", this.getNumberOfSets());
-
 		return (<React.Fragment>
 			<QuestionPage tabName="Data Entry" />
 
@@ -124,6 +120,11 @@ class DataEntry extends React.Component {
 					>
 						Add Set
 					</Button>
+					{/* TODO: NEXT: Add set with duplicated stationing */}
+					{/* TODO: NEXT: NEXT: react upon sampling points... no table until then */}
+					{/* TODO: NEXT: NEXT: NEXT: questions with default values need to go into sampling event */}
+					{/* TODO: NEXT: NEXT: NEXT: NEXT: Hide options until samp method and sed type selected */}
+					
 				</div>
 			</Paper>
 

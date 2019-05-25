@@ -26,7 +26,7 @@ const initialUIState = {
 		expandedSysMenu: false,
 		loginDialogVisibility: false,
 		hiddenNavMenuItems: defaultHiddenNavMenuItems,
-		hiddenPanels: ["FieldForm:Weather"],
+		hiddenPanels: ["FieldForm:Weather", "DataEntry:IntakeEfficiencyTest", "DataEntry:AverageRepresentationalMeasures"],
 		exportDialogVisibility: false,
 		addRemoveStationDialogVisibility: false,
 		addRemoveQuestionDialogVisibility: false,

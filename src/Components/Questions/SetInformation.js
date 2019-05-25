@@ -162,7 +162,7 @@ class SetInformation extends React.Component {
 
 	render() {
 		const { setName, sedimentType, samplingMethod, value } = this.props;
-		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited"]
+		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited", "groupOfSamples"]
 
 		if (sedimentType === null || typeof sedimentType === "undefined")
 			return <Typography>Sediment Type not set, please return to field form and set Sediment Type</Typography>
@@ -197,7 +197,8 @@ class SetInformation extends React.Component {
 		let realAnalysedForName = this.getRealQID(analysedForName);
 
 		return <React.Fragment>
-			Set {setName}
+			{/* Set {setName} */}
+			{/* TODO: 'options' button on set information that brings up dialog providing things like "overwrite stationing from X set", "overwrite all data from X set", "rename set", "delete set" } */}
 
 			{getGridedQuestions(gridedQuestions)}
 
