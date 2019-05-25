@@ -21,8 +21,8 @@ export function Questions(state = initialState, action) {
 		case COMBINE_USER_QUESTIONS:
 			//TODO:  combine action.currentUserQuestions with initialState
 			return newState;
-		case ADD_QUESTION:
-			//TODO: add action.question to state
+		case ADD_QUESTION: //TODO: FIXME: verify no duplicate
+			newState.questionsData[action.question.id]=action.question;
 			return newState;
 		case RESET_QUESTIONS_DATA_TO_DEFAULT:
 			let resetState = initialState;

@@ -272,23 +272,7 @@ export const defaultSetInformationQuestionsData = {
 
 
 export const defaultQuestionsData = {
-	setInfo: {
-		"id": "setInfo",
-		"sedimentType": "suspended",
-		"samplingMethod": "EDI",
-		"label": "Set Information",
-		"setName": "ABCDE",
-		"type": "SetInformation",
-		"includeBlank": true,
-		"tabName": "Data Entry",
-		"layoutGroup": "Set Inferm",
-		"helperText": "PCodes FTW!",
-		"width_xs": 12,
-		"width_lg": 12,
-		"options":
-			{},
-		"value": {}
-	},
+
 
 	stationName: {
 		"id": "stationName",
@@ -1601,24 +1585,6 @@ export const defaultQuestionsData = {
 		}
 	},
 
-
-
-	showSetB: {
-		"id": "showSetB",
-		"label": "Show Set B",
-		"type": "Toggle",
-		"tabName": "DataEntry",
-		"layoutGroup": "Set A Information",
-		"value": false,
-		"actions":
-		{
-			"true": "ShowPanel::DataEntry:Set B Information&ShowPanel::DataEntry:Average Representational Measures",
-			"false": "HidePanel::DataEntry:Set B Information&HidePanel::DataEntry:Average Representational Measures"
-		},
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
 	avgRepMeasures: {
 		"id": "avgRepMeasures",
 		"label": "Average Representational Measures of these sets",
@@ -1630,7 +1596,6 @@ export const defaultQuestionsData = {
 		"width_xs": 8,
 		"width_lg": 6
 	},
-
 
 
 	collectingAgency: {
