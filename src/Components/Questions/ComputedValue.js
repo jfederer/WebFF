@@ -29,10 +29,10 @@ class ComputedValue extends React.Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) {
-		if (!_.isEqual(this.props.currentEventQuestionValues, nextProps.currentEventQuestionValues)) {  //OPTIMIZE: get list of questions from compute string, store in state, and only check those for changes.
+		if (!_.isEqual(this.props.currentEventQuestionsValues, nextProps.currentEventQuestionsValues)) {  //OPTIMIZE: get list of questions from compute string, store in state, and only check those for changes.
 			// if props changed... recompute value
 			let computedValue = this.computeValue(nextProps);
-			if (nextProps.currentEventQuestionValues[this.props.id] !== computedValue) {
+			if (nextProps.currentEventQuestionsValues[this.props.id] !== computedValue) {
 				// if newly computed value should result in value change, send off action
 				if (this.props.alternateChangeHandler) {
 					this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, computedValue);
@@ -46,9 +46,9 @@ class ComputedValue extends React.Component {
 
 	computeValue(args) {
 		//computes value from computationString
-		//@para: args is props (either next or current can be used) and must include currentEventID, defaultQuestionsData, currentEventQuestionValues, computationString
+		//@para: args is props (either next or current can be used) and must include currentEventID, defaultQuestionsData, currentEventQuestionsValues, computationString
 		//@returns: computed value if all questions in computationString are valid and have values... otherwise, returns empty string.
-		const { currentEventID, defaultQuestionsData, currentEventQuestionValues, computationString } = args;
+		const { currentEventID, defaultQuestionsData, currentEventQuestionsValues, computationString } = args;
 
 		if (!currentEventID) {
 			//TODO: error
@@ -58,9 +58,9 @@ class ComputedValue extends React.Component {
 			//TODO: error
 			console.log("defaultQuestionsData not set in computeValue function in ComputedValue component");
 		}
-		if (!currentEventQuestionValues) {
+		if (!currentEventQuestionsValues) {
 			//TODO: error
-			console.log("currentEventQuestionValues not set in computeValue function in ComputedValue component");
+			console.log("currentEventQuestionsValues not set in computeValue function in ComputedValue component");
 		}
 		if (!computationString) {
 			//TODO: error
@@ -92,9 +92,9 @@ class ComputedValue extends React.Component {
 					if (DEBUG) console.log("question found in default");
 					q_val = defaultQuestionsData[q_id].value;
 
-					if (currentEventQuestionValues[q_id]) {
+					if (currentEventQuestionsValues[q_id]) {
 						if (DEBUG) console.log("question found in current event values");
-						q_val = currentEventQuestionValues[q_id];
+						q_val = currentEventQuestionsValues[q_id];
 					}
 				} else {
 					if (DEBUG) console.log(q_id + " question was not found");
@@ -130,7 +130,7 @@ class ComputedValue extends React.Component {
 	}
 
 	render() {
-		// const { classes, currentEventQuestionValues, currentEventID, id } = this.props;
+		// const { classes, currentEventQuestionsValues, currentEventID, id } = this.props;
 		const { classes } = this.props;
 
 		//TODO: performance should probably make it so this doesn't run unless questionData updates
@@ -178,7 +178,7 @@ ComputedValue.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
-		currentEventQuestionValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues,
+		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		defaultQuestionsData: state.Questions.questionsData
 	}
 }

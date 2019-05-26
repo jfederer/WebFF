@@ -19,7 +19,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 	/* 
 	@desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
 	@param eventID {string} - the unique event ID.
-	@param questionID {string} - the question ID.  If this does not exist in the event, the key will be created and given a value in the questionValues.
+	@param questionID {string} - the question ID.  If this does not exist in the event, the key will be created and given a value in the questionsValues.
 	@param newValue {any} - the value to assign to the question
 	@returns void
 	*/

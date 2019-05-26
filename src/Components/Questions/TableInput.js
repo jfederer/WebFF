@@ -115,7 +115,7 @@ class TableInput extends React.Component {
 					adHocProps = { ...adHocProps, ...questionData, key: subQkey };
 					if (DEBUG) console.log("adHocProps", adHocProps);
 					// cellQuestion = createQuestionComponents([adHocProps], this.props.stateChangeHandler, this.props.globalState, this.props.questionsValues);
-					cellQuestion = createQuestionComponents([adHocProps], this.props.currentEventQuestionValues);
+					cellQuestion = createQuestionComponents([adHocProps], this.props.currentEventQuestionsValues);
 
 					// if this question is in a header location, wrap it in the header div
 					if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
@@ -250,7 +250,7 @@ TableInput.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
-		currentEventQuestionValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues,
+		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		questionsData: state.Questions.questionsData
 	}
 }

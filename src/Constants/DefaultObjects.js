@@ -3,7 +3,7 @@ export const emptySamplingEvent = {
 	eventName: "",
 	dateModified: "",
 	shippedStatus: "Not Shipped",
-	questionValues: {
+	questionsValues: {
 	}
 }
 
@@ -130,7 +130,7 @@ export const defaultSetInformationQuestionsData = {
 			"Transit Rate, ft / sec",
 			"Rest time on Bed for Bedload sample,seconds",
 			"Horizontal width of Vertical, feet"], 
-			["Merp", "SubQuestion::stationNumber", "", "", "", ""]
+			["Merp", "", "", "", "", ""]
 		],
 		"width_xs": 10,
 		"width_lg": 10

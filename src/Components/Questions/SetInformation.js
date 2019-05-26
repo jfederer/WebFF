@@ -26,7 +26,7 @@ import Question from '../Question';
 // import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
-
+import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
 import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
 import { Typography, Paper } from '@material-ui/core';
@@ -50,14 +50,17 @@ var preRequisiteInfo = {
 
 }
 
+export const getRealQID = (setName, sub_q_id) => {
+	return SET_INFORMATION_IDENTIFIER + setName + ":" + sub_q_id;
+}
 
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log("CONSTRUCTOR PROPS: ", this.props);
+		// console.log("CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			//load value with defaults
-			console.log("Empty Value");
+			// console.log("Empty Value");
 			// let initValue = {};
 			// Object.keys(defaultSetInformationQuestionsData).map(QID => {
 			// 	initValue[QID] = defaultSetInformationQuestionsData[QID].value;
@@ -156,9 +159,7 @@ class SetInformation extends React.Component {
 		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
 	};
 
-	getRealQID = (sub_q_id) => {
-		return "Set_" + this.props.setName + "_" + sub_q_id;
-	}
+	
 
 	render() {
 		const { setName, sedimentType, samplingMethod, value } = this.props;
@@ -170,7 +171,7 @@ class SetInformation extends React.Component {
 		if (samplingMethod === null || typeof samplingMethod === "undefined")
 			return <Typography>Sampling Method not set, please return to field form and set Sampling Method</Typography>
 
-		console.log("Set Info Render Props: ", this.props);
+		// console.log("Set Info Render Props: ", this.props);
 
 
 		let gridedQuestions = [];
@@ -180,7 +181,7 @@ class SetInformation extends React.Component {
 				console.warn("Set Information question, " + sub_QID + " attempting to be made that does not exist in defaultSetInformationQuestionsData");
 				return;
 			}
-			let realQID = this.getRealQID(sub_QID);
+			let realQID = getRealQID(this.props.setName, sub_QID);
 			// console.log("DSIQD[" + sub_QID + "]: ", defaultSetInformationQuestionsData[sub_QID]);
 			gridedQuestions.push(< Question {...defaultSetInformationQuestionsData[sub_QID]}
 				id={realQID}
@@ -191,13 +192,13 @@ class SetInformation extends React.Component {
 
 
 		let tableName = "samplesTable_" + samplingMethod;
-		let realTableName = this.getRealQID(tableName);
+		let realTableName = getRealQID(this.props.setName, tableName);
 
 		let analysedForName = "analysedFor_" + sedimentType;
-		let realAnalysedForName = this.getRealQID(analysedForName);
+		let realAnalysedForName = getRealQID(this.props.setName, analysedForName);
 
 		return <React.Fragment>
-			{/* Set {setName} */}
+			Set {setName}
 			{/* TODO: 'options' button on set information that brings up dialog providing things like "overwrite stationing from X set", "overwrite all data from X set", "rename set", "delete set" } */}
 
 			{getGridedQuestions(gridedQuestions)}
@@ -236,7 +237,7 @@ class SetInformation extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
-		currentEventQuestionValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues,
+		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		defaultQuestionsData: state.Questions.questionsData,
 	}
 }

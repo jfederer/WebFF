@@ -14,7 +14,7 @@ const initialState =  { //MOCK //TODO:
 		eventName: "Event1-JoeAndTom",
 		dateModified: "Wed Jan 30 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Not Shipped",
-		questionValues: {
+		questionsValues: {
 			stationName: "station name from values",
 			stationNumber: "1value2",
 			question3: "1value3"
@@ -25,7 +25,7 @@ const initialState =  { //MOCK //TODO:
 		eventName: "Event2-TomOnly",
 		dateModified: "Wed Jan 31 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Not Shipped",
-		questionValues: {
+		questionsValues: {
 			question4: "2value4",
 			question5: "2value5",
 			question6: "2value6"
@@ -36,7 +36,7 @@ const initialState =  { //MOCK //TODO:
 		eventName: "Event3-JoeOnly",
 		dateModified: "Wed Jan 29 2019 12:44:59 GMT-0600 (Central Standard Time)",
 		shippedStatus: "Shipped",
-		questionValues: {
+		questionsValues: {
 			question1: "3value1",
 			question2: "3value2",
 			question3: "3value3",
@@ -55,7 +55,7 @@ switch (action.type) {
 		newState[action.event.eventID]=action.event; 
 		return newState;
 	case SE_QUESTION_VALUE_CHANGE:
-		newState[action.eventID].questionValues[action.questionID] = action.newValue
+		newState[action.eventID].questionsValues[action.questionID] = action.newValue
 		return newState;
 	default:
 		return state;

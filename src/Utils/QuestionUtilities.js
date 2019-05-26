@@ -2,6 +2,7 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 import store from '../Store';
+import _ from 'lodash';
 
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
@@ -18,7 +19,7 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
 			if (debug) console.log("CREATEQ: questionData.id: ", questionData.id);
 			if (debug) console.log("CREATEQ: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
 			if (questionsValues[questionData.id] !== null && typeof questionsValues[questionData.id] !== 'undefined') {
-				// question exists in questionValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
+				// question exists in questionsValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
 				value = questionsValues[questionData.id];
 				if (debug) console.log("CREATEQ: OVERWRITE WITH: ", value);
 			}
@@ -49,12 +50,12 @@ export const getQuestionValue = (eventID, questionID) =>  { //****  //TODO: erro
 	let questionsData = store.getState().Questions.questionsData;
 	let value = null;
 
-	console.log("EVENT: ", event);
-	console.log("QD: ", questionsData);
-	console.log("QD: QI: ", questionsData[questionID]);
+	// console.log("GQV: EVENT: ", event);
+	// console.log("GQV: QD: ", questionsData);
+	// console.log("GQV: QD[QI]: ", questionsData[questionID]);
 
 	//defined?
-	if(typeof event.questionValues[questionID] === 'undefined') {
+	if(typeof event.questionsValues[questionID] === 'undefined') {
 		// not defined in event, check question data
 		if(typeof questionsData[questionID].value === 'undefined') {
 			console.warm("returning undefined value from question " + questionID);
@@ -66,12 +67,14 @@ export const getQuestionValue = (eventID, questionID) =>  { //****  //TODO: erro
 		value = event.questionsValues[questionID];
 	}
 
+	//TODO: split up simple, table, complex, etc.  Optional 'sub value array' passed to GQV... going deeper the deeper into the array
+
 	// //if simple question
-	if(typeof value !== 'object') {
-		return value;
-	} else {
-		return "VALUE IS OBJECT";
-	}
+	// if(typeof value !== 'object') {
+	 	return _.cloneDeep(value);
+	// } else {
+	// 	return "VALUE IS OBJECT";
+	// }
 	// console.log("Event: ", event);
 
 	// console.log("Value: ", value);
