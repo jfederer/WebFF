@@ -1,101 +1,77 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { styles } from '../../style';
+import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
 
-import { setAppBarText } from '../../Actions/UI';
-import { TextField, Button, Paper, Checkbox, FormControl, Select, Typography } from '@material-ui/core';
-import FormGroup from '@material-ui/core/FormGroup';
+import { setAppBarText } from '../../../Actions/UI';
+import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from '@material-ui/core';
 
-import QuestionPage from './../QuestionPage';
-import { DeviceBluetoothSearching } from 'material-ui/svg-icons';
+import { SET_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
 
-import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
-
-import { addQuestion } from '../../Actions/Questions';
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
-import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { addQuestion } from '../../../Actions/Questions';
+import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
+import { getQuestionValue } from '../../../Utils/QuestionUtilities';
+import { getNumberOfSets, getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
 
 
 
-class DataEntry extends React.Component {
+class AddSetForm extends React.Component {
 
 
 	constructor(props) {
 		super(props);
-		this.props.setAppBarText("SedFF → Data Entry");
 		this.state = {
 			newSetName: "",
 			addNewSetButtonDisabled: false,
-			setsAdded: 0,  //TODO: probably shouldn't be zero... should look at event
-			duplicateStationing: false,
+			addNewSetDisabledReason: "",
+			copyStationing: false,
 			duplicateFromSet: ""
 		}
 
 	}
 
-	handleAddSetNameChange = (e) => {
-		this.setState({ newSetName: e.target.value });
 
-		//TODO:
-		// if (Object.keys(this.props.events).includes(e.target.value)) {
-		// 	// WARNING, this will overwrite a deleted event
-		// 	let matchedEvent = this.props.events[e.target.value];
-		// 	if (!matchedEvent.deleted) {
-		// 		this.setState({ newEventButtonDisabled: true });
-		// 	}
-		// } else {
-		// 	this.setState({ newEventButtonDisabled: false });
-		// }
+	handleAddSetNameChange = (e) => {
+		const { currentSamplingEventID } = this.props;
+
+		// underscores are not allowed due to it being a delinator
+		if (e.target.value.includes('_')) {
+			return;
+		}
+
+		// fitler out duplicate setnames and disable add set button if it's a duplicate
+		if (getSetListAsArray(currentSamplingEventID).filter((existingSetName) => {
+			return existingSetName.toUpperCase() === SET_INFORMATION_IDENTIFIER.toUpperCase() + e.target.value.toUpperCase()
+		}).length > 0) {
+			this.setState({
+				addNewSetButtonDisabled: true,
+				addNewSetDisabledReason: "Set name must be unique",
+				newSetName: e.target.value
+			})
+			return;
+		} else {
+			this.setState({
+				addNewSetButtonDisabled: false,
+				newSetName: e.target.value
+			})
+		}
 	}
 
 	handleDuplicateFromValueChange = (e) => {
 		this.setState({ duplicateFromSet: e.target.value })
 	}
 
-	getNumberOfSets = () => { //TODO: move to util
-		let num = Object.keys(this.props.currentEvent.questionsValues).filter((key) => {  //TODO: change these to getQuestionValues
-			return key.startsWith(SET_INFORMATION_IDENTIFIER);
-		}).length;
-		return num;
-	}
-
-	getSetListAsArray = () => { //TODO: move to util
-		let setListArr = [];
-		setListArr = Object.keys(this.props.currentEvent.questionsValues).filter((key) => { //TODO: change these to getQuestionValues
-			return key.startsWith(SET_INFORMATION_IDENTIFIER);
-		})
-		return setListArr;
-	}
-
-	getSetListAsObject = () => { //TODO: move to util
-		let setListObj = {};
-		this.getSetListAsArray().forEach(qid => {
-			setListObj[qid.split(SET_INFORMATION_IDENTIFIER)[1]] = qid;
-		});
-		return setListObj;
-	}
-
-
-	getDistanceColumn = (values) => { //TODO: move to util
-		for (let i = 0; i < values[0].length; i++) {
-			if (values[0][i].startsWith('Distance from ')) {
-				return i;
-			}
-		}
-	}
-
 	addSet = () => {
 		const { currentSamplingEventID } = this.props;
 		let newSetName = this.state.newSetName;  //FIXME: underscores not allowed
 		if (!newSetName) {
-			newSetName = String.fromCharCode(65 + this.getNumberOfSets())
+			newSetName = String.fromCharCode(65 + getNumberOfSets(currentSamplingEventID))
 		}
 
 		let newSetValue = {};
 
-		if (this.state.duplicateStationing) {
+		if (this.state.copyStationing) {
 			// duplicating stationing from state.duplicateFromSet set
 
 			// find selected set
@@ -128,9 +104,9 @@ class DataEntry extends React.Component {
 			Object.keys(copyFromValue).map((origKey) => {
 				// origSetName = this.state.duplicateFromSet;
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
-				Object.assign(newSetValue, copyFromValue, {[newKey]: copyFromValue[origKey]});
+				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
 			})
-			
+
 
 		}
 
@@ -162,7 +138,6 @@ class DataEntry extends React.Component {
 		this.setState({
 			newSetName: "",
 			setsAdded: this.state.setsAdded + 1,
-			addNewSetButtonDisabled: true,
 			duplicateFromSet: this.state.duplicateFromSet ? this.state.duplicateFromSet : SET_INFORMATION_IDENTIFIER + newSetName
 		})
 	}
@@ -170,7 +145,7 @@ class DataEntry extends React.Component {
 
 
 	render() {
-		const { currentEvent, classes } = this.props;
+		const { currentEvent, currentSamplingEventID, classes } = this.props;
 		// console.log("DATA ENTRY RENDER STATE: ", this.state);
 
 		if (!currentEvent) {
@@ -178,15 +153,10 @@ class DataEntry extends React.Component {
 			return <Redirect to='/' />
 		}
 
-
-
-		let setList = this.getSetListAsObject();
+		let setList = getSetListAsObject(currentSamplingEventID);
 
 		return (<React.Fragment>
-			<QuestionPage tabName="Data Entry" />
-
-
-			<Paper> {/*Add set area  FUTURE: split out as separate component?*/}
+			<Paper> {/*Add Set Form  FUTURE: split out as separate component?*/}
 				<div className={classes.horzCenterText}>
 					<TextField
 						id="addSetNameField"
@@ -197,15 +167,17 @@ class DataEntry extends React.Component {
 						value={this.state.newSetName}
 					/>
 					{/* <Button variant="contained" color="default" className={classes.button}> */}
-
-					<Button
-						variant="outlined"
-						margin="dense"
-						onClick={() => this.addSet()}
-					// disabled={this.state.addNewSetButtonDisabled && this.state.setsAdded !== this.getNumberOfSets()} //TODO: doesn't work correctly... never 
-					>
-						Add Set
+					<Tooltip title={this.state.addNewSetButtonDisabled ? this.state.addNewSetDisabledReason : ""}>
+						<div><Button
+							variant="outlined"
+							margin="dense"
+							onClick={() => this.addSet()}
+							disabled={this.state.addNewSetButtonDisabled}
+						>
+							Add Set
 					</Button>
+						</div>
+					</Tooltip>
 
 					{Object.keys(setList).length > 0
 						// {typeof this.state.setSelectOptions !== "undefined" &&  Object.keys(this.state.setSelectOptions).length > 0
@@ -213,8 +185,8 @@ class DataEntry extends React.Component {
 						<React.Fragment>
 
 							<Checkbox
-								checked={this.state.duplicateStationing}
-								onChange={() => this.setState({ 'duplicateStationing': !this.state.duplicateStationing })}
+								checked={this.state.copyStationing}
+								onChange={() => this.setState({ copyStationing: !this.state.copyStationing })}
 
 							/>
 							<Typography>Duplicate Stationing From Set:"</Typography>
@@ -267,4 +239,4 @@ const mapDispatchToProps = {
 	SEQuestionValueChange
 }
 
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntry));
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(AddSetForm));

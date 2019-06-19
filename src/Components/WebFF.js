@@ -49,7 +49,7 @@ import NavMenu from './Menus/NavMenu.js';
 // pages
 import Dashboard from './Pages/Dashboard/Dashboard';
 import FieldForm from './Pages/FieldForm';
-import DataEntry from './Pages/DataEntry';
+import DataEntry from './Pages/DataEntry/DataEntry';
 import Parameters from './Pages/Parameters';
 import QWDATA from './Pages/QWDATA';
 import ErrorPage from './Errors/ErrorPage';
