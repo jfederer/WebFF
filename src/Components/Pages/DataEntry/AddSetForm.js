@@ -102,8 +102,6 @@ class AddSetForm extends React.Component {
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
 				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
 			})
-
-
 		}
 
 
@@ -124,10 +122,7 @@ class AddSetForm extends React.Component {
 			"value": newSetValue
 		}
 
-		console.log("NEWSETQUESTION: ", newSetQuestion);
-
 		this.props.addQuestion(newSetQuestion);
-
 
 		this.props.SEQuestionValueChange(currentSamplingEventID, SET_INFORMATION_IDENTIFIER + newSetName, newSetValue);
 

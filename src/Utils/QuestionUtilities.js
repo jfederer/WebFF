@@ -1,8 +1,8 @@
 import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
-import store from '../Store';
 import _ from 'lodash';
+import { getEventFromID, getQuestionsData } from './StoreUtilities';
 
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
@@ -46,8 +46,8 @@ export const getQuestionValue = (eventID, questionID) =>  { //****  //TODO: erro
 
 	console.log("Get value("+eventID+", "+questionID+")");
 
-	let event = store.getState().SamplingEvents[eventID];
-	let questionsData = store.getState().Questions.questionsData;
+	let event = getEventFromID(eventID);
+	let questionsData = getQuestionsData();
 	let value = null;
 
 	// console.log("GQV: EVENT: ", event);

@@ -8,7 +8,7 @@ import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 export function getNumberOfSets(eventID) { 
 
-	let event = store.getState().SamplingEvents[eventID]; //TODO: change to "getEvent"
+	let event = getEventFromID(eventID); //TODO: change to "getEvent"
 
 	let num = Object.keys(event.questionsValues).filter((key) => {  //TODO: change these to getQuestionValues
 		return key.startsWith(SET_INFORMATION_IDENTIFIER);
@@ -18,7 +18,7 @@ export function getNumberOfSets(eventID) {
 
 
 export function getSetListAsArray(eventID) { 
-	let event = store.getState().SamplingEvents[eventID];  //TODO: change to "getEvent"
+	let event = getEventFromID(eventID);  //TODO: change to "getEvent"
 
 	let setListArr = [];
 	setListArr = Object.keys(event.questionsValues).filter((key) => { //TODO: change these to getQuestionValues
@@ -35,5 +35,11 @@ export function getSetListAsObject(eventID) {
 	return setListObj;
 }
 
+export function getEventFromID(eventID) {
+	return store.getState().SamplingEvents[eventID];
+}
 
+export function getQuestionsData() {  //FUTURE: flesh out to allow getting full combined question data from other users
+	return store.getState().Questions.questionsData;
+}
 

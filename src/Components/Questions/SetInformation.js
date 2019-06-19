@@ -28,6 +28,7 @@ import Question from '../Question';
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
+import { handleNumberOfSamplingPointsChanged } from '../../Utils/GlobalHandlers';
 import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
 import { Typography, Paper } from '@material-ui/core';
 
@@ -57,107 +58,21 @@ class SetInformation extends React.Component {
 		super(props);
 		// console.log("CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
-			//load value with defaults
-			console.log("Creating Empty Value Set Information Component");
-			// console.log("defaultSetInformationQuestionsData: PRE: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
-			let initValue = {};
-			// Object.keys(defaultSetInformationQuestionsData).map(QID => {
-			// 	initValue[QID] = _.cloneDeep(defaultSetInformationQuestionsData[QID].value);
-			// })
-			// // console.log("defaultSetInformationQuestionsData: POST: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
-			// console.log("InitValue:", initValue);
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
-			// this.setInfoChangeHandler(this.props.currentEventID, this.props.id, initValue);
-		} else {
+				let initValue = {}; //load value with defaults
+				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue); // save it to the store
+			} else {
 			console.log("Creating Passed Value Set Information Component");
 		}
-		// let nowValue = [];
-		// // let startingPCodes = [];
-		// if (this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
-		// 	console.log("Handed null value, building blank QWDATA Table");
-
-		// 	// build header from scratch
-		// 	let headerRow = [];
-		// 	Object.keys(allQWDATAOptionalHeaders).forEach((header) => {
-		// 		headerRow.push(header);
-		// 	});
-		// 	nowValue.push(headerRow);
-
-		// 	// build default values (blanks)
-		// 	preRequisiteInfo.descriptiveColumn = this.props.getDescriptiveColumnForTable(); // this gives us number of rows too
-
-		// 	//console.log("QWDATA descriptiveColumn: ", preRequisiteInfo.descriptiveColumn);
-		// 	for (let i = 1; i < preRequisiteInfo.descriptiveColumn.length; i++) {
-		// 		let emptyRow = new Array(headerRow.length - 1).fill("");
-		// 		emptyRow.unshift(preRequisiteInfo.descriptiveColumn[i]);
-		// 		nowValue.push(emptyRow);
-		// 	}
-
-		// 	console.log(nowValue);
-
-		// 	// make the Add-on analysis values arrays
-		// 	let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-		// 	if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
-		// 	for (let row = 1; row < nowValue.length; row++) { // skip header row
-		// 		if (!Array.isArray(nowValue[row][AddOnAnalysesIndex])) {
-		// 			nowValue[row][AddOnAnalysesIndex] = [];
-		// 		}
-		// 	}
-
-		// 	// fill out the estimated time, if possible
-		// 	this.insertEstimatedTime(nowValue);
-
-		// }
-		// else { // if a value was sent
-		// 	// need to ensure the value has the right number of rows
-		// 	console.log("Handed existing value: ", this.props.value);
-
-		// 	nowValue = [];
-		// 	// build new header row, note, the header row should still be correct.
-		// 	nowValue.push(safeCopy(this.props.value[0])); // 
-
-		// 	// build rows based on existing values
-		// 	preRequisiteInfo.descriptiveColumn = this.props.getDescriptiveColumnForTable(); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
-		// 	// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
-		// 	for (let newRowNum = 1; newRowNum < preRequisiteInfo.descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
-		// 		// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
-		// 		//look in props.value for existing matching row
-		// 		let matchingOldRow = -1;
-		// 		for (let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
-		// 			// console.log("against..." + this.props.value[oldRow][0]);
-		// 			if (preRequisiteInfo.descriptiveColumn[newRowNum] === this.props.value[oldRow][0]) {
-		// 				// console.log("MATCH!");
-
-		// 				matchingOldRow = oldRow;
-		// 				break;
-		// 			}
-		// 		}
-
-		// 		let newRow = [];
-		// 		if (matchingOldRow != -1) {
-		// 			newRow = safeCopy(this.props.value[matchingOldRow]);
-		// 		} else {
-		// 			newRow = new Array(this.props.value[0].length - 1).fill("");
-		// 			newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
-		// 		}
-
-		// 		// ensure add-on analysis is an array
-		// 		console.log(newRow);
-
-		// 		let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-		// 		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
-		// 		if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
-		// 			newRow[AddOnAnalysesIndex] = [];
-		// 		}
-
-		// 		nowValue.push(newRow);
-		// 	}
 	}
 
 	setInfoChangeHandler = (eventID, sub_q_id, value) => {
-		console.log(sub_q_id + " incoming value: ", value);
+		if(sub_q_id==="numberOfSamplingPoints") {
+			handleNumberOfSamplingPointsChanged(eventID, this.props.setName, value);
+		}
+
+
 		let newValue = _.cloneDeep(this.props.value);
-		newValue[sub_q_id] = value;
+		newValue[sub_q_id] = _.cloneDeep(value);
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
 		} else {
@@ -165,6 +80,7 @@ class SetInformation extends React.Component {
 		}
 	};
 
+	
 
 
 	render() {
