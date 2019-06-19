@@ -75,28 +75,24 @@ class AddSetForm extends React.Component {
 			// duplicating stationing from state.duplicateFromSet set
 
 			// find selected set
-			alert("duplicate statioing from " + this.state.duplicateFromSet);
 
 			// get value
 			let copyFromValue;
 			try {
 				copyFromValue = getQuestionValue(currentSamplingEventID, this.state.duplicateFromSet);
-				console.log("COPYFROMVALUE: ", copyFromValue);
 			}
 			catch (err) {
 				if (err.name === "TypeError") {
-					alert("Cannot duplicate empty set.  Try unchecking duplicate box or try entering data-to-duplicate first.");
+					alert("Cannot duplicate empty or non-existent set.  Try unchecking duplicate box or try entering data-to-duplicate first.");
 					return;
 				} else {
 					throw Error("Error occurred when trying to get value to duplicate set: ", err);
 				}
 			}
 
-			console.log("Copy From: ", copyFromValue);
-
 			// pass to getDistanceCol
 
-			// use distance col to generate new value
+			// use distance col to generate new value //ASK KEN
 
 			// duplicate # sampling points
 
@@ -137,7 +133,6 @@ class AddSetForm extends React.Component {
 
 		this.setState({
 			newSetName: "",
-			setsAdded: this.state.setsAdded + 1,
 			duplicateFromSet: this.state.duplicateFromSet ? this.state.duplicateFromSet : SET_INFORMATION_IDENTIFIER + newSetName
 		})
 	}

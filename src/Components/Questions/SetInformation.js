@@ -58,17 +58,18 @@ class SetInformation extends React.Component {
 		// console.log("CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			//load value with defaults
-			// console.log("Empty Value");
+			console.log("Creating Empty Value Set Information Component");
 			// console.log("defaultSetInformationQuestionsData: PRE: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
 			let initValue = {};
-			Object.keys(defaultSetInformationQuestionsData).map(QID => {
-				initValue[QID] = _.cloneDeep(defaultSetInformationQuestionsData[QID].value);
-			})
-			// console.log("defaultSetInformationQuestionsData: POST: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
+			// Object.keys(defaultSetInformationQuestionsData).map(QID => {
+			// 	initValue[QID] = _.cloneDeep(defaultSetInformationQuestionsData[QID].value);
+			// })
+			// // console.log("defaultSetInformationQuestionsData: POST: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
 			// console.log("InitValue:", initValue);
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
+			// this.setInfoChangeHandler(this.props.currentEventID, this.props.id, initValue);
 		} else {
-			console.log("Value was passed");
+			console.log("Creating Passed Value Set Information Component");
 		}
 		// let nowValue = [];
 		// // let startingPCodes = [];
@@ -153,14 +154,18 @@ class SetInformation extends React.Component {
 		// 	}
 	}
 
-	setInfoChangeHandler = (eventID, sub_q_id, value) => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+	setInfoChangeHandler = (eventID, sub_q_id, value) => {
 		console.log(sub_q_id + " incoming value: ", value);
 		let newValue = _.cloneDeep(this.props.value);
 		newValue[sub_q_id] = value;
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+		}
 	};
 
-	
+
 
 	render() {
 		const { setName, sedimentType, samplingMethod, value } = this.props;
@@ -185,9 +190,10 @@ class SetInformation extends React.Component {
 			let realQID = getRealQID(this.props.setName, sub_QID);
 			// console.log("DSIQD[" + sub_QID + "]: ", defaultSetInformationQuestionsData[sub_QID]);
 			gridedQuestions.push(< Question {...defaultSetInformationQuestionsData[sub_QID]}
-				id={realQID}
+				id={sub_QID}
 				key={realQID}
-				value={this.props.value[realQID] ? this.props.value[realQID] : ""}
+				// value={this.props.value[realQID] ? this.props.value[realQID] : ""}
+				value={this.props.value[sub_QID] ? this.props.value[sub_QID] : ""}
 				alternateChangeHandler={this.setInfoChangeHandler} />);
 		});
 
@@ -204,14 +210,16 @@ class SetInformation extends React.Component {
 
 			{getGridedQuestions(gridedQuestions)}
 
+
+
 			{/* Data table  */}
 			{samplingMethod  //redundant check
 				? <Question {...defaultSetInformationQuestionsData[tableName]}
-					id={realTableName}
+					id={tableName}
 					key={realTableName}
-					value={typeof value[realTableName] === "undefined"
+					value={typeof value[tableName] === "undefined"
 						? defaultSetInformationQuestionsData[tableName].value //Must clone or it modified the default object (this is a problem with )
-						: value[realTableName]}
+						: value[tableName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected</Typography></Paper>
 			}
@@ -220,11 +228,11 @@ class SetInformation extends React.Component {
 			{/* analyzedFor multiple choice */}
 			{sedimentType  //redundant check
 				? <Question {...defaultSetInformationQuestionsData[analysedForName]}
-					id={realAnalysedForName}
+					id={analysedForName}
 					key={realAnalysedForName}
-					value={typeof value[realAnalysedForName] === "undefined"
+					value={typeof value[analysedForName] === "undefined"
 						? defaultSetInformationQuestionsData[analysedForName].value
-						: value[realAnalysedForName]}
+						: value[analysedForName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>'Analysed For' options unavailable when sediment type not selected</Typography></Paper>
 			}
