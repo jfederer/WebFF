@@ -46,8 +46,6 @@ const styles = theme => ({
 
 var preRequisiteInfo = {
 	descriptiveColumn: null
-
-
 }
 
 export const getRealQID = (setName, sub_q_id) => {
@@ -61,11 +59,14 @@ class SetInformation extends React.Component {
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			//load value with defaults
 			// console.log("Empty Value");
-			// let initValue = {};
-			// Object.keys(defaultSetInformationQuestionsData).map(QID => {
-			// 	initValue[QID] = defaultSetInformationQuestionsData[QID].value;
-			// })
-			// this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
+			// console.log("defaultSetInformationQuestionsData: PRE: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
+			let initValue = {};
+			Object.keys(defaultSetInformationQuestionsData).map(QID => {
+				initValue[QID] = _.cloneDeep(defaultSetInformationQuestionsData[QID].value);
+			})
+			// console.log("defaultSetInformationQuestionsData: POST: ", JSON.stringify(defaultSetInformationQuestionsData.samplesTable_EDI.value));
+			// console.log("InitValue:", initValue);
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue);
 		} else {
 			console.log("Value was passed");
 		}
@@ -209,7 +210,7 @@ class SetInformation extends React.Component {
 					id={realTableName}
 					key={realTableName}
 					value={typeof value[realTableName] === "undefined"
-						? defaultSetInformationQuestionsData[tableName].value
+						? defaultSetInformationQuestionsData[tableName].value //Must clone or it modified the default object (this is a problem with )
 						: value[realTableName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected</Typography></Paper>

@@ -24,12 +24,9 @@ class Text extends React.Component {
 
 
 	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		console.log("Text props: ", this.props);
 		if(this.props.alternateChangeHandler) {
-			console.log("text using alt");
 			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, event.target.value);
 		} else {
-			console.log("text using standard");
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
 		}
 		

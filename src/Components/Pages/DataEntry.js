@@ -105,6 +105,7 @@ class DataEntry extends React.Component {
 			let copyFromValue;
 			try {
 				copyFromValue = getQuestionValue(currentSamplingEventID, this.state.duplicateFromSet);
+				console.log("COPYFROMVALUE: ", copyFromValue);
 			}
 			catch (err) {
 				if (err.name === "TypeError") {
@@ -150,6 +151,7 @@ class DataEntry extends React.Component {
 				{},
 			"value": newSetValue
 		}
+
 		console.log("NEWSETQUESTION: ", newSetQuestion);
 
 		this.props.addQuestion(newSetQuestion);
@@ -169,7 +171,7 @@ class DataEntry extends React.Component {
 
 	render() {
 		const { currentEvent, classes } = this.props;
-		console.log("DATA ENTRY RENDER STATE: ", this.state);
+		// console.log("DATA ENTRY RENDER STATE: ", this.state);
 
 		if (!currentEvent) {
 			console.log("No current event, redirecting to dashboard");
@@ -184,7 +186,7 @@ class DataEntry extends React.Component {
 			<QuestionPage tabName="Data Entry" />
 
 
-			<Paper>
+			<Paper> {/*Add set area  FUTURE: split out as separate component?*/}
 				<div className={classes.horzCenterText}>
 					<TextField
 						id="addSetNameField"
@@ -229,6 +231,7 @@ class DataEntry extends React.Component {
 							// }}
 							>
 								{Object.keys(setList).map((optionLabel, index) => <option key={optionLabel} value={setList[optionLabel]}>{optionLabel}</option>)}
+								{/* TODO: filter list to only sets that HAVE stationing */}
 
 							</Select>
 						</React.Fragment>
@@ -242,7 +245,7 @@ class DataEntry extends React.Component {
 					{/* TODO: NEXT:  react upon sampling points... no table until then */}
 					{/* TODO: NEXT: NEXT:  questions with default values need to go into sampling event */}
 					{/* TODO: NEXT: NEXT: NEXT:  Hide options until samp method and sed type selected */}
-					{/* TODO: NEXT: NEXT: NEXT: NEXT: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages /*}
+					{/* TODO: NEXT: NEXT: NEXT: NEXT: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages */}
 
 				</div>
 			</Paper>

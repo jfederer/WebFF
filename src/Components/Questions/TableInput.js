@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 import Question from '../Question';
 import { Typography } from '@material-ui/core';
+import _ from 'lodash';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -32,6 +33,8 @@ class TableInput extends React.Component {
 	constructor(props) {
 		super(props);
 
+		// console.log("MAKING TABLE incoming value: ", props.value);
+
 		let numRows = this.props.value.length;
 		let numCols = 1; // tables with less than 1 column are not allowed
 		this.props.value.forEach(function (row) {
@@ -39,7 +42,7 @@ class TableInput extends React.Component {
 				numCols = row.length;
 			}
 		});
-		//console.log("table mad: rows: ", numRows, " cols: ", numCols);
+		
 
 		let emptyTable = [];
 		for (var i = 0; i < numRows; i++) {
@@ -49,7 +52,7 @@ class TableInput extends React.Component {
 		if (this.props.value != null) {
 			this.props.value.map((row, rowNum) => {
 				row.map((element, colNum) => {
-					emptyTable[rowNum][colNum] = element;
+					emptyTable[rowNum][colNum] = _.cloneDeep(element);
 					return null;
 				});
 				return null;
@@ -79,7 +82,7 @@ class TableInput extends React.Component {
 		let questionCol = textSubQuestionID.substring(textSubQuestionID.indexOf("col:") + 4);
 		if (DEBUG) console.log("questionRow: ", questionRow);
 		if (DEBUG) console.log("questionCol: ", questionCol);
-		let tempTableValue = this.props.value;
+		let tempTableValue = _.cloneDeep(this.props.value);
 		tempTableValue[questionRow][questionCol] = q_value;
 		//console.log(tempTableValue);
 		if(this.props.alternateChangeHandler) {
@@ -157,7 +160,7 @@ class TableInput extends React.Component {
 			invalidValue = true;
 		}
 
-		let tableValues = this.props.value;
+		let tableValues = _.cloneDeep(this.props.value);
 
 		// build the JSX tableRows based on will-mount-calculated tableValues
 		let tableRows = [];
