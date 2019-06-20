@@ -65,14 +65,14 @@ class SetInformation extends React.Component {
 		}
 	}
 
-	setInfoChangeHandler = (eventID, sub_q_id, value) => {
-		if(sub_q_id==="numberOfSamplingPoints") {
-			handleNumberOfSamplingPointsChanged(eventID, this.props.setName, value);
+	setInfoChangeHandler = (eventID, sub_QID, value) => {
+		if(sub_QID==="numberOfSamplingPoints") {
+			handleNumberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, value);
 		}
 
 
 		let newValue = _.cloneDeep(this.props.value);
-		newValue[sub_q_id] = _.cloneDeep(value);
+		newValue[sub_QID] = _.cloneDeep(value);
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
 		} else {
