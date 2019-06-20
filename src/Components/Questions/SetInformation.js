@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
+import { SEQuestionValueChange, numberOfSamplingPointsChanged } from '../../Actions/SamplingEvents'
 import _ from 'lodash';
 
 
@@ -28,7 +28,6 @@ import Question from '../Question';
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
-import { handleNumberOfSamplingPointsChanged } from '../../Utils/GlobalHandlers';
 import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
 import { Typography, Paper } from '@material-ui/core';
 
@@ -67,7 +66,7 @@ class SetInformation extends React.Component {
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
 		if(sub_QID==="numberOfSamplingPoints") {
-			handleNumberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, value);
+			this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, value);
 		}
 
 
@@ -168,7 +167,8 @@ const mapStateToProps = function (state) {
 }
 
 const mapDispatchToProps = {
-	SEQuestionValueChange
+	SEQuestionValueChange,
+	numberOfSamplingPointsChanged
 }
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(SetInformation));

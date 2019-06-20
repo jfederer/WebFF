@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 
+
 import {
 	CREATE_NEW_SAMPLING_EVENT,
 	REGISTER_EVENT_WITH_USERNAME,
@@ -13,9 +14,12 @@ import {
 	HIDE_QUESTIONS
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
+import {getEventFromID} from '../Utils/StoreUtilities';
+import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
+import { getQuestionValue } from '../Utils/QuestionUtilities';
 
 
-export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events quetions (settings, etc)
+export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events questions (settings, etc)
 	/* 
 	@desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
 	@param eventID {string} - the unique event ID.
@@ -29,7 +33,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
 		//get question and conditionally the action string
-		let question = getQuestionFromQuestionID(questionID, getState());
+		let question = getQuestionFromQuestionID(questionID, getState()); //TODO: need getState?
 		if (question) {
 			let actions = question.actions;
 			if (actions) {
@@ -98,6 +102,42 @@ export function createNewSamplingEvent(eventName) {
 	}
 }
 
+export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, value) {
+	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, value, ")");
+
+	let event = getEventFromID(eventID);
+	////// modify setInfo table //////
+	// make it the correct size (confirm with user if shrinking)
+	let setInfo = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER+setName, "samplesTable_" + samplingMethod);
+	if (typeof setInfo === 'undefined' || setInfo === null) {
+		throw new Error("getQuestionValue("+eventID+", "+ SET_INFORMATION_IDENTIFIER+setName+") returned undefined or null");
+	} 
+	
+	
+
+	// if(Object.entries(setInfo).length === 0 && obj.constructor === Object) {
+	// 	//setInfo exists, but has no values... find default table and build off that...
+	// 	console.log("SetInfo has values... find table and work with it.");
+	// } else {
+	// 	//setInfo  blank... build table from empty
+	// }
+	// ["samplesTable_" + samplingMethod]
+	// 							? event.questionsValues[SET_INFORMATION_IDENTIFIER+setName]["samplesTable_" + samplingMethod]
+	// 							: 
+	console.log("setInfoSampleTable: ", setInfo);
+
+	return { type: "CREATE_NEW_SAMPLING_EVENT_TEST" };
+
+	// dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });)
+
+	
+
+	// re-do any distance data (confirm with user)
+
+	////// modify QWDATA table //////TODO:
+
+	////// modify Parameters table //////TODO:
+}
 
 
 function getActionsFromActionString(actionsString) {
