@@ -108,9 +108,9 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 	let event = getEventFromID(eventID);
 	////// modify setInfo table //////
 	// make it the correct size (confirm with user if shrinking)
-	let setInfo = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER+setName, "samplesTable_" + samplingMethod);
-	if (typeof setInfo === 'undefined' || setInfo === null) {
-		throw new Error("getQuestionValue("+eventID+", "+ SET_INFORMATION_IDENTIFIER+setName+") returned undefined or null");
+	let setInfoSampleTable = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER+setName, "samplesTable_" + samplingMethod);
+	if (typeof setInfoSampleTable === 'undefined' || setInfoSampleTable === null) {
+		throw new Error("getQuestionValue("+eventID+", "+ SET_INFORMATION_IDENTIFIER+setName+", " + "samplesTable_" + samplingMethod +") returned undefined or null");
 	} 
 	
 	
@@ -124,7 +124,7 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 	// ["samplesTable_" + samplingMethod]
 	// 							? event.questionsValues[SET_INFORMATION_IDENTIFIER+setName]["samplesTable_" + samplingMethod]
 	// 							: 
-	console.log("setInfoSampleTable: ", setInfo);
+	console.log("setInfoSampleTable: ", setInfoSampleTable);
 
 	return { type: "CREATE_NEW_SAMPLING_EVENT_TEST" };
 

@@ -28,7 +28,7 @@ import Question from '../Question';
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
-import { defaultSetInformationQuestionsData } from '../../Constants/DefaultObjects';
+import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
@@ -57,7 +57,7 @@ class SetInformation extends React.Component {
 		super(props);
 		// console.log("CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
-				let initValue = {}; //load value with defaults
+				let initValue = {}; //load value with default table?
 				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue); // save it to the store
 			} else {
 			console.log("Creating Passed Value Set Information Component");
@@ -85,7 +85,7 @@ class SetInformation extends React.Component {
 	render() {
 		const { setName, sedimentType, samplingMethod, value } = this.props;
 		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited", "groupOfSamples"]
-
+		const setInfoQuestionsData = getSetInformationQuestionsData();
 		if (sedimentType === null || typeof sedimentType === "undefined")
 			return <Typography>Sediment Type not set, please return to field form and set Sediment Type</Typography>
 
@@ -98,13 +98,13 @@ class SetInformation extends React.Component {
 		let gridedQuestions = [];
 
 		questionIDsToGrid.forEach(sub_QID => { //FUTURE: should we strip whitespace from setName?
-			if (!defaultSetInformationQuestionsData[sub_QID]) {
-				console.warn("Set Information question, " + sub_QID + " attempting to be made that does not exist in defaultSetInformationQuestionsData");
+			if (!setInfoQuestionsData[sub_QID]) {
+				console.warn("Set Information question, " + sub_QID + " attempting to be made that does not exist in setInfoQuestionsData");
 				return;
 			}
 			let realQID = getRealQID(this.props.setName, sub_QID);
-			// console.log("DSIQD[" + sub_QID + "]: ", defaultSetInformationQuestionsData[sub_QID]);
-			gridedQuestions.push(< Question {...defaultSetInformationQuestionsData[sub_QID]}
+			// console.log("DSIQD[" + sub_QID + "]: ", setInfoQuestionsData[sub_QID]);
+			gridedQuestions.push(< Question {...setInfoQuestionsData[sub_QID]}
 				id={sub_QID}
 				key={realQID}
 				// value={this.props.value[realQID] ? this.props.value[realQID] : ""}
@@ -129,11 +129,11 @@ class SetInformation extends React.Component {
 
 			{/* Data table  */}
 			{samplingMethod  //redundant check
-				? <Question {...defaultSetInformationQuestionsData[tableName]}
+				? <Question {...setInfoQuestionsData[tableName]}
 					id={tableName}
 					key={realTableName}
 					value={typeof value[tableName] === "undefined"
-						? defaultSetInformationQuestionsData[tableName].value //Must clone or it modified the default object (this is a problem with )
+						? setInfoQuestionsData[tableName].value //Must clone or it modified the default object (this is a problem with )
 						: value[tableName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected</Typography></Paper>
@@ -142,11 +142,11 @@ class SetInformation extends React.Component {
 
 			{/* analyzedFor multiple choice */}
 			{sedimentType  //redundant check
-				? <Question {...defaultSetInformationQuestionsData[analysedForName]}
+				? <Question {...setInfoQuestionsData[analysedForName]}
 					id={analysedForName}
 					key={realAnalysedForName}
 					value={typeof value[analysedForName] === "undefined"
-						? defaultSetInformationQuestionsData[analysedForName].value
+						? setInfoQuestionsData[analysedForName].value
 						: value[analysedForName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>'Analysed For' options unavailable when sediment type not selected</Typography></Paper>

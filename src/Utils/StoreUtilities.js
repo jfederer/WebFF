@@ -3,11 +3,11 @@ import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 import store from '../Store';
 import _ from 'lodash';
+import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 export function getNumberOfSets(eventID) { 
-
 	let event = getEventFromID(eventID); //TODO: change to "getEvent"
 
 	let num = Object.keys(event.questionsValues).filter((key) => {  //TODO: change these to getQuestionValues
@@ -15,7 +15,6 @@ export function getNumberOfSets(eventID) {
 	}).length;
 	return num;
 }
-
 
 export function getSetListAsArray(eventID) { 
 	let event = getEventFromID(eventID);  //TODO: change to "getEvent"
@@ -41,5 +40,9 @@ export function getEventFromID(eventID) {
 
 export function getQuestionsData() {  //FUTURE: flesh out to allow getting full combined question data from other users
 	return store.getState().Questions.questionsData;
+}
+
+export function getSetInformationQuestionsData() {
+	return defaultSetInformationQuestionsData;
 }
 

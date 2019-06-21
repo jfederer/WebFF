@@ -70,6 +70,7 @@ class AddSetForm extends React.Component {
 		}
 
 		let newSetValue = {};
+		
 
 		if (this.state.copyStationing) {
 			// duplicating stationing from state.duplicateFromSet set
@@ -102,13 +103,16 @@ class AddSetForm extends React.Component {
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
 				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
 			})
+		} else { // not copying stationing
+			// insert the default samplesTable value
+			//newSetValue['samplesTable_EDI'] = //TODO: pull from FF
 		}
 
 
 		let newSetQuestion = {
 			"id": SET_INFORMATION_IDENTIFIER + newSetName,
-			"sedimentType": "suspended",
-			"samplingMethod": "EDI",
+			"sedimentType": "suspended",  //TODO: pull from FF
+			"samplingMethod": "EDI", //TODO: pull from FF
 			"label": "Set Information",
 			"setName": newSetName,
 			"type": "SetInformation",
