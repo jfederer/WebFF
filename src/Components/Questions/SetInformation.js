@@ -63,10 +63,14 @@ class SetInformation extends React.Component {
 			} else {
 			console.log("Creating Passed Value Set Information Component");
 		}
+		this.state = {
+			showDataTable: false
+		}
 	}
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
 		if(sub_QID==="numberOfSamplingPoints") {
+			this.setState({showDataTable:true});
 			this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
 		}
 
@@ -83,7 +87,7 @@ class SetInformation extends React.Component {
 
 
 	render() {
-		const { setName, sedimentType, samplingMethod, value } = this.props;
+		const { setName, sedimentType, samplingMethod, value, currentEventID } = this.props;
 		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited", "groupOfSamples"]
 		const setInfoQuestionsData = getSetInformationQuestionsData();
 		if (sedimentType === null || typeof sedimentType === "undefined")
@@ -128,7 +132,7 @@ class SetInformation extends React.Component {
 
 
 			{/* Data table  */}
-			{samplingMethod  //redundant check
+			{samplingMethod &&  this.state.showDataTable 
 				? <Question {...setInfoQuestionsData[tableName]}
 					id={tableName}
 					key={realTableName}
@@ -136,7 +140,7 @@ class SetInformation extends React.Component {
 						? setInfoQuestionsData[tableName].value 
 						: value[tableName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
-				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected</Typography></Paper>
+				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected or the number of sampling points has not been filled out</Typography></Paper>
 			}
 
 
