@@ -30,6 +30,7 @@ import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
 import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
+import exitToApp from 'material-ui/svg-icons/action/exit-to-app';
 
 const styles = theme => ({
 	table: {
@@ -66,11 +67,10 @@ class SetInformation extends React.Component {
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
 		if(sub_QID==="numberOfSamplingPoints") {
-			this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, value);
+			this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
 		}
 
-
-		let newValue = _.cloneDeep(this.props.value);
+		let newValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + this.props.setName);
 		newValue[sub_QID] = _.cloneDeep(value);
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
@@ -133,7 +133,7 @@ class SetInformation extends React.Component {
 					id={tableName}
 					key={realTableName}
 					value={typeof value[tableName] === "undefined"
-						? setInfoQuestionsData[tableName].value //Must clone or it modified the default object (this is a problem with )
+						? setInfoQuestionsData[tableName].value 
 						: value[tableName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected</Typography></Paper>

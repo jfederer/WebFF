@@ -14,19 +14,20 @@ import {
 	HIDE_QUESTIONS
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
-import {getEventFromID} from '../Utils/StoreUtilities';
+import { getEventFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
+import { AlertError } from 'material-ui/svg-icons';
 
-
+/**
+* @desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
+* @param eventID {string} - the unique event ID.
+* @param questionID {string} - the question ID.  If this does not exist in the event, the key will be created and given a value in the questionsValues.
+* @param newValue {any} - the value to assign to the question
+* @returns void
+*/
 export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events questions (settings, etc)
-	/* 
-	@desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
-	@param eventID {string} - the unique event ID.
-	@param questionID {string} - the question ID.  If this does not exist in the event, the key will be created and given a value in the questionsValues.
-	@param newValue {any} - the value to assign to the question
-	@returns void
-	*/
+
 	// console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 
 	return (dispatch, getState) => {
@@ -54,14 +55,14 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 	}
 }
 
-export function createNewSampingEventForUser(eventName, username) {
-	/* 
-	@desc creates a new sampling event from scratch and links it to a given user
-	@param eventName {string} - the event name.  If empty string, will be given date-based name
-	@param username {string} - the user name to link the event to.
-	@returns the eventID of the newly created event 
-	*/
 
+/**
+* @desc creates a new sampling event from scratch and links it to a given user
+* @param {string} eventName  - the event name.  If empty string, will be given date-based name
+* @param {string} username  - the user name to link the event to.
+* @returns the eventID of the newly created event 
+*/
+export function createNewSampingEventForUser(eventName, username) {
 	if (!username) {
 		throw new Error("No username passed to createNewSamplingEventForUser function");
 	}
@@ -73,12 +74,12 @@ export function createNewSampingEventForUser(eventName, username) {
 	}
 }
 
+/**
+* @desc syncronous function creates new, blank event based on template
+* @param eventName {string} - the new event name.  If empty string, will be given date-based name
+* @returns the eventID of the newly created event  (note, up to the reciever to link user and event in eventLinkTable)
+*/
 export function createNewSamplingEvent(eventName) {
-	/* 
-	@desc syncronous function creates new, blank event based on template
-	@param eventName {string} - the new event name.  If empty string, will be given date-based name
-	@returns the eventID of the newly created event  (note, up to the reciever to link user and event in eventLinkTable)
-	*/
 	return dispatch => {
 		let newEvent = _.cloneDeep(emptySamplingEvent);
 		newEvent.eventID = uuidv4();
@@ -102,41 +103,64 @@ export function createNewSamplingEvent(eventName) {
 	}
 }
 
-export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, value) {
-	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, value, ")");
-
-	let event = getEventFromID(eventID);
-	////// modify setInfo table //////
-	// make it the correct size (confirm with user if shrinking)
-	let setInfoSampleTable = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER+setName, "samplesTable_" + samplingMethod);
-	if (typeof setInfoSampleTable === 'undefined' || setInfoSampleTable === null) {
-		throw new Error("getQuestionValue("+eventID+", "+ SET_INFORMATION_IDENTIFIER+setName+", " + "samplesTable_" + samplingMethod +") returned undefined or null");
-	} 
+export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
+	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
+	if(numPoints===null || numPoints==="" || Number.isNaN(numPoints)) {
+		return {type:'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed'};
+	}
 	
+	return dispatch => {
+		let event = getEventFromID(eventID);
+		////// modify setInfo table //////
+		// make it the correct size (confirm with user if shrinking)
+		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + samplingMethod);
 	
+		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
+			throw new Error("getQuestionValue(" + eventID + ", " + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + samplingMethod + ") returned undefined or null");
+		}
 
-	// if(Object.entries(setInfo).length === 0 && obj.constructor === Object) {
-	// 	//setInfo exists, but has no values... find default table and build off that...
-	// 	console.log("SetInfo has values... find table and work with it.");
-	// } else {
-	// 	//setInfo  blank... build table from empty
-	// }
-	// ["samplesTable_" + samplingMethod]
-	// 							? event.questionsValues[SET_INFORMATION_IDENTIFIER+setName]["samplesTable_" + samplingMethod]
-	// 							: 
-	console.log("setInfoSampleTable: ", setInfoSampleTable);
+//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
 
-	return { type: "CREATE_NEW_SAMPLING_EVENT_TEST" };
+		if (setInfoSampleTableValue.length > numPoints) {
+			// table must shrink
 
-	// dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });)
+			// if the removed tables are empty... no worries, just do it.
+			//TODO:
 
-	
+			// otherwise, confirm before proceeding...
+			let deletionconfirmed = window.confirm("This will result in removing rows containing data from the Data Entry Set Information Data Table, QWDATA table, and Parameters Table... \n\n Do you want to continue?");
 
-	// re-do any distance data (confirm with user)
+			if( deletionconfirmed === true ) {
+				while(setInfoSampleTableValue.length > numPoints) {
+					setInfoSampleTableValue.pop();
+				}
+			} else {
+				alert("Table modifications cancelled! Note that Sampling Points and the table sizes are now out of sync");
+				return {type:'CANCEL numberOfSamplingPointsChanged due to user confirmation failure'};
+			}
+		}
 
-	////// modify QWDATA table //////TODO:
 
-	////// modify Parameters table //////TODO:
+		if (setInfoSampleTableValue.length <= numPoints) {
+			//table must expand
+			//TODO: warn stationing could change...
+			while(setInfoSampleTableValue.length <= numPoints) {
+				let newRow = new Array(setInfoSampleTableValue[0].length).fill("");
+				setInfoSampleTableValue.push(newRow);
+			}
+			setInfoChangeHandler(eventID,"samplesTable_" + samplingMethod, setInfoSampleTableValue);
+		}
+
+
+		
+
+
+		// re-do any distance data (confirm with user)
+
+		////// modify QWDATA table //////TODO:
+
+		////// modify Parameters table //////TODO:
+	}
 }
 
 
