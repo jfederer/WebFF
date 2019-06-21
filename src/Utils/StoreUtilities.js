@@ -46,3 +46,6 @@ export function getSetInformationQuestionsData() {
 	return defaultSetInformationQuestionsData;
 }
 
+export function getAllUsersEventIDs(username) {
+	return store.getState().LinkTables.userEvents[username];
+}

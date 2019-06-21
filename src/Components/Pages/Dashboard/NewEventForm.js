@@ -13,6 +13,7 @@ import { TextField, Button, Paper } from '@material-ui/core';
 import { createNewSampingEventForUser } from '../../../Actions/SamplingEvents';
 import { showNavigationTab } from '../../../Actions/UI';
 import { loadAndSetCurrentSamplingEvent } from '../../../Actions/SedFF';
+import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
 
 
 class NewEventForm extends React.Component {
@@ -26,18 +27,15 @@ class NewEventForm extends React.Component {
 	}
 
 	handleSamplingEventNameChange = (e) => {
-		this.setState({ newSamplingEventName: e.target.value });
-
-		//TODO: rebuild to redux... perhaps not needed
-		// if (Object.keys(this.props.events).includes(e.target.value)) {
-		// 	// WARNING, this will overwrite a deleted event
-		// 	let matchedEvent = this.props.events[e.target.value];
-		// 	if (!matchedEvent.deleted) {
-		// 		this.setState({ newEventButtonDisabled: true });
-		// 	}
-		// } else {
-		// 	this.setState({ newEventButtonDisabled: false });
-		// }
+		let allEventsIDs = getAllUsersEventIDs(this.props.currentUser.username);
+		let isDuplicate = false;
+		allEventsIDs.map((eventID)=> {
+			if(e.target.value.toUpperCase() === this.props.samplingEvents[eventID].eventName.toUpperCase()) {
+				isDuplicate = true;
+			}
+		})
+		
+		this.setState({ newEventButtonDisabled: isDuplicate, newSamplingEventName: e.target.value });
 	}
 
 	handleBrandNewButtonClick = () => {

@@ -14,6 +14,7 @@ import MUIDataTable from "mui-datatables";
 
 import { loadAndSetCurrentSamplingEvent } from "../../../Actions/SedFF";
 import { showNavigationTab } from "../../../Actions/UI";
+import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
 
 const columns = [
 	{
@@ -97,13 +98,13 @@ class EventsManager extends React.Component {
 	}
 
 	render() {
-		const { currentUser, sedff, linkTables, allSamplingEvents } = this.props;
+		const { currentUser, sedff, allSamplingEvents } = this.props;
 		
 		if(sedff.isFetchingUserData) {
 			return <p>BLAH!</p> //TODO:
 		}
 
-		let currentUserEventIDs = linkTables.userEvents[currentUser.username];
+		let currentUserEventIDs = getAllUsersEventIDs(currentUser.username);
 
 		let currentUserEvents = currentUserEventIDs.map( (eventID) => {
 			return allSamplingEvents[eventID]
@@ -134,7 +135,6 @@ class EventsManager extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		linkTables: state.LinkTables, // to get users event IDs
 		allSamplingEvents: state.SamplingEvents,
 		sedff: state.SedFF, // loading / fetching data
 		currentUser: state.Users[state.SedFF.currentUsername]
