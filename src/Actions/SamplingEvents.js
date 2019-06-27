@@ -17,6 +17,7 @@ import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
+import { getQuestionsData } from '../Utils/StoreUtilities';
 import { AlertError } from 'material-ui/svg-icons';
 
 /**
@@ -75,12 +76,13 @@ export function createNewSampingEventForUser(eventName, username) {
 }
 
 /**
-* @desc syncronous function creates new, blank event based on template
+* @desc syncronus function creates new, blank event based on template
 * @param eventName {string} - the new event name.  If empty string, will be given date-based name
 * @returns the eventID of the newly created event  (note, up to the reciever to link user and event in eventLinkTable)
 */
 export function createNewSamplingEvent(eventName) {
 	return dispatch => {
+		// get blank event and fill with initial data
 		let newEvent = _.cloneDeep(emptySamplingEvent);
 		newEvent.eventID = uuidv4();
 		if (!eventName) { // if no event name give, the event name will be the date //FUTURE: build a setting for the default event name
@@ -91,11 +93,24 @@ export function createNewSamplingEvent(eventName) {
 
 			eventName = "Sampling Event on " + yyyy + " " + monthName + " " + dd;
 		}
-
 		newEvent.eventName = eventName;  //OPTIMIZE: should be calling setEventName action instead?
 
-		newEvent.dateModified = new Date().toString(); //OPTIMIZE: should be calling eventModified action instead?
+		newEvent.dateModified = new Date().toString(); //TODO: NEXT: NEXT: NEXT: should be calling eventModified action instead?
 
+		// find all questions with actual default 'values' in questionsData and include those in the new event
+		let filtered = _.filter(getQuestionsData(), (QD) =>
+			typeof QD.value !== 'undefined' && // undefined gets filtered out
+			(QD.value || QD.value === 0 || typeof QD.value === 'boolean') && // truthy value, zero, and booleans make it through filter
+			(typeof QD.value !== 'object' || Object.keys(QD).length < 1)
+			);
+			console.log(filtered)
+		Object.keys(filtered).map((key) => {
+			newEvent['questionsValues'][filtered[key].id]=filtered[key].value;
+			console.log(key);
+		}
+			);
+
+		console.log("-------FILTERED-----------\n", filtered);
 		//OPTIMIZE: call an optional callback 
 
 		dispatch({ type: CREATE_NEW_SAMPLING_EVENT, event: newEvent });
@@ -105,38 +120,38 @@ export function createNewSamplingEvent(eventName) {
 
 export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
 	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
-	if(numPoints===null || numPoints==="" || Number.isNaN(numPoints)) {
-		return {type:'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed'};
+	if (numPoints === null || numPoints === "" || Number.isNaN(numPoints)) {
+		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}
-	
+
 	return dispatch => {
 		let event = getEventFromID(eventID);
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
 		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + samplingMethod);
-	
+
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
 			throw new Error("getQuestionValue(" + eventID + ", " + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + samplingMethod + ") returned undefined or null");
 		}
 
-//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
+		//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
 
 		if (setInfoSampleTableValue.length > numPoints) {
 			// table must shrink
 
 			// if the removed tables are empty... no worries, just do it.
-			//TODO:
+			//TODO:4
 
 			// otherwise, confirm before proceeding...
 			let deletionconfirmed = window.confirm("This will result in removing rows containing data from the Data Entry Set Information Data Table, QWDATA table, and Parameters Table... \n\n Do you want to continue?");
 
-			if( deletionconfirmed === true ) {
-				while(setInfoSampleTableValue.length > numPoints) {
+			if (deletionconfirmed === true) {
+				while (setInfoSampleTableValue.length > numPoints) {
 					setInfoSampleTableValue.pop();
 				}
 			} else {
 				alert("Table modifications cancelled! Note that Sampling Points and the table sizes are now out of sync");
-				return {type:'CANCEL numberOfSamplingPointsChanged due to user confirmation failure'};
+				return { type: 'CANCEL numberOfSamplingPointsChanged due to user confirmation failure' };
 			}
 		}
 
@@ -144,15 +159,15 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 		if (setInfoSampleTableValue.length <= numPoints) {
 			//table must expand
 			//TODO: warn stationing could change...
-			while(setInfoSampleTableValue.length <= numPoints) {
+			while (setInfoSampleTableValue.length <= numPoints) {
 				let newRow = new Array(setInfoSampleTableValue[0].length).fill("");
 				setInfoSampleTableValue.push(newRow);
 			}
-			setInfoChangeHandler(eventID,"samplesTable_" + samplingMethod, setInfoSampleTableValue);
+			setInfoChangeHandler(eventID, "samplesTable_" + samplingMethod, setInfoSampleTableValue);
 		}
 
 
-		
+
 
 
 		// re-do any distance data (confirm with user)

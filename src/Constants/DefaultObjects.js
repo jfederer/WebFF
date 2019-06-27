@@ -275,7 +275,8 @@ export const defaultQuestionsData = {
 		"width_lg": 3,
 		"options":
 			{},
-		"value": ""
+		"value": {}
+		
 	},
 
 	stationNumber: {

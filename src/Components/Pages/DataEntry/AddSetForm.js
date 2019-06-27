@@ -208,7 +208,6 @@ class AddSetForm extends React.Component {
 
 
 
-					{/* TODO: NEXT: NEXT:  questions with default values need to go into sampling event */}
 					{/* TODO: NEXT: NEXT: NEXT:  Hide options until samp method and sed type selected */}
 					{/* TODO: NEXT: NEXT: NEXT: NEXT: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages */}
 
