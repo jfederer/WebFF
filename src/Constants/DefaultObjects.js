@@ -110,7 +110,7 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 3,
 		"actions":
 		{
-			"true": "HideQuestion::showSetB&SetValue::setA_samplesComposited:false",
+			"true": "HideQuestion::showSetB&SetValue::setA_samplesComposited:false",  //TODO: likely doesn't do what needs to be done here (set value likels works, but science side?)
 			"false": "ShowQuestion::showSetB"
 		}
 	},
@@ -349,12 +349,12 @@ export const defaultQuestionsData = {
 		},
 		"actions":
 		{
-			"anyValue": "HideQuestion::samplerType_bedload&HideQuestion::samplerType_bottom&HideQuestion::samplerType_suspended&HideQuestion::verticalsInComposite&HideQuestion::compositeSamplesInCrossSection&HideQuestion::tetherLine&HideQuestion::bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV&HideQuestion::setA_AnalysedFor_bedload&HideQuestion::setA_AnalysedFor_bottom&HideQuestion::setA_AnalysedFor_suspended&HideQuestion::setB_AnalysedFor_bedload&HideQuestion::setB_AnalysedFor_bottom&HideQuestion::setB_AnalysedFor_suspended&HideQuestion::setC_AnalysedFor_bedload&HideQuestion::setC_AnalysedFor_bottom&HideQuestion::setC_AnalysedFor_suspended",
-			"bedload": "ShowQuestion::samplerType_bedload&ShowQuestion::verticalsInComposite&ShowQuestion::compositeSamplesInCrossSection&ShowQuestion::tetherLine&ShowQuestion::bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV&ShowQuestion::setA_AnalysedFor_bedload&ShowQuestion::setB_AnalysedFor_bedload&ShowQuestion::setC_AnalysedFor_bedload",
-			"bottom": "ShowQuestion::samplerType_bottom&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV&ShowQuestion::setA_AnalysedFor_bottom&ShowQuestion::setB_AnalysedFor_bottom&ShowQuestion::setC_AnalysedFor_bottom",
-			"suspended": "ShowQuestion::samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV&ShowQuestion::setA_AnalysedFor_suspended&ShowQuestion::setB_AnalysedFor_suspended&ShowQuestion::setC_AnalysedFor_suspended"
+			"anyValue": "HideQuestion::samplerType_bedload&HideQuestion::samplerType_bottom&HideQuestion::samplerType_suspended&HideQuestion::verticalsInComposite&HideQuestion::compositeSamplesInCrossSection&HideQuestion::tetherLine&HideQuestion::bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV",
+			"bedload": "ShowQuestion::samplerType_bedload&ShowQuestion::verticalsInComposite&ShowQuestion::compositeSamplesInCrossSection&ShowQuestion::tetherLine&ShowQuestion::bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV",
+			"bottom": "ShowQuestion::samplerType_bottom&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV",
+			"suspended": "ShowQuestion::samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV"
 		},
-		"value": "suspended",
+		"value": "suspended", //TODO: include blank = false with no passed value should show.... what?
 		"tabName": "Field Form",
 		"layoutGroup": "Basic",
 		"width_xs": 4,
@@ -376,7 +376,7 @@ export const defaultQuestionsData = {
 			"OTHER": "8010"
 		},
 		"actions":
-			{ "anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI&ShowQuestion::setA_samplesTable_OTHER&ShowQuestion::setB_samplesTable_OTHER&ShowQuestion::setC_samplesTable_OTHER" },
+			{ "anyValue": "ShowTab::DataEntry" },
 		"value": "",
 		"layoutGroup": "Basic",
 		"width_xs": 4,
@@ -400,7 +400,7 @@ export const defaultQuestionsData = {
 			"OTHER": "8010"
 		},
 		"actions":
-			{ "anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI&ShowQuestion::setA_samplesTable_OTHER&ShowQuestion::setB_samplesTable_OTHER&ShowQuestion::setC_samplesTable_OTHER" },
+			{ "anyValue": "ShowTab::DataEntry" },
 		"value": "",
 		"layoutGroup": "Basic",
 		"width_xs": 4,
@@ -446,9 +446,7 @@ export const defaultQuestionsData = {
 		},
 		"actions":
 		{
-			"10": "ShowQuestion::setA_samplesTable_EWI&ShowQuestion::setB_samplesTable_EWI&ShowQuestion::setC_samplesTable_EWI&HideQuestion::setA_samplesTable_OTHER&HideQuestion::setB_samplesTable_OTHER&HideQuestion::setC_samplesTable_OTHER",
-			"20": "ShowQuestion::setA_samplesTable_EDI&ShowQuestion::setB_samplesTable_EDI&ShowQuestion::setC_samplesTable_EDI&HideQuestion::setA_samplesTable_OTHER&HideQuestion::setB_samplesTable_OTHER&HideQuestion::setC_samplesTable_OTHER",
-			"anyValue": "ShowTab::DataEntry&HideQuestion::setA_samplesTable_EWI&HideQuestion::setA_samplesTable_EDI&HideQuestion::setB_samplesTable_EWI&HideQuestion::setB_samplesTable_EDI&HideQuestion::setC_samplesTable_EWI&HideQuestion::setC_samplesTable_EDI&ShowQuestion::setA_samplesTable_OTHER&ShowQuestion::setB_samplesTable_OTHER&ShowQuestion::setC_samplesTable_OTHER"
+			"anyValue": "ShowTab::DataEntry"
 		},
 		"value": "",
 		"layoutGroup": "Basic",

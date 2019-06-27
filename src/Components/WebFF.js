@@ -62,6 +62,15 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
+		//TODO: Tables as objects instead of array (compatible with get question value)
+		//TODO: Param and QWDATA pages
+		//TODO: numberOfSamplingPointsChanged incorporate param and qwdata
+		//TODO: system menu rebuild
+		//TODO: user/site settings (station names, etc)
+		//TODO: validators (numSampPoints not allowing alpha might be good test case)
+		//TODO: webserver, network loads
+		//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
+
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
 

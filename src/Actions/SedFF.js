@@ -3,12 +3,15 @@ import {
 	SET_CURRENT_SAMPLING_EVENT,
 	USER_DATA_REQUEST,
 	USER_DATA_LOAD_COMPLETE,
-
+	RUN_ALL_SEDFF_QUESTION_ACTIONS,
 	SAMPLING_EVENT_REQUEST,
 	SAMPLING_EVENT_LOAD_COMPLETE
 } from '../Constants/ActionTypes';
 
+import { runAllSamplingEventActionStrings } from './SamplingEvents';
+
 import { makeNewUser } from './User';
+
 
 // ****** Terminology ***********
 //LOAD = triggered overall event
@@ -97,11 +100,14 @@ export function loadAndSetCurrentSamplingEvent(eventID, callback) { // safer way
 		// (likely uneeded, as we'll never load an event that's not in memory... but just for safety sake)
 		dispatch(setCurrentSamplingEvent(eventID))
 		dispatch(samplingEventLoadComplete(eventID));
+
+		dispatch(runAllSamplingEventActionStrings(eventID));
 		if(callback) {
 			callback();
 		}
 	}
 }
+
 
 function samplingEventRequest(eventID) {
 	return { type: SAMPLING_EVENT_REQUEST, eventID: eventID }

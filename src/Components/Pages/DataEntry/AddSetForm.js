@@ -202,15 +202,8 @@ class AddSetForm extends React.Component {
 							</Select>
 						</React.Fragment>
 						: <React.Fragment>
-							{console.log("Not rendering duplicate set form \n:::setList: ", setList, "\n:::currentEventValues: ", JSON.stringify(currentEvent.questionsValues))}
 							{null}
 						</React.Fragment>}
-
-
-
-					{/* TODO: NEXT: NEXT: NEXT:  Hide options until samp method and sed type selected */}
-					{/* TODO: NEXT: NEXT: NEXT: NEXT: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages */}
-
 				</div>
 			</Paper>
 		</React.Fragment>

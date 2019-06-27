@@ -11,10 +11,11 @@ import {
 	SHOW_NAVIGATION_TABS,
 	HIDE_NAVIGATION_TABS,
 	SHOW_QUESTIONS,
-	HIDE_QUESTIONS
+	HIDE_QUESTIONS,
+	RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
-import { getEventFromID } from '../Utils/StoreUtilities';
+import { getEventFromID, getQuestionDataFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
@@ -35,7 +36,15 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
 		//get question and conditionally the action string
-		let question = getQuestionFromQuestionID(questionID, getState()); //TODO: need getState?
+		dispatch(conditionallyRunActionString(eventID, getQuestionFromQuestionID(questionID, getState()))); //TODO: need getState?
+	}
+}
+
+function conditionallyRunActionString(eventID, question) {
+	//console.log("conditionallyRunActionString(", eventID, question, ")");
+	let value = getQuestionValue(eventID, question.id);
+
+	return (dispatch, getState) => {
 		if (question) {
 			let actions = question.actions;
 			if (actions) {
@@ -46,13 +55,35 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 					dispatchAllActionsFromActionString(dispatch, anyValueActionString);
 				}
 
-				let thisValueActionString = actions[newValue];
+				let thisValueActionString = actions[value];
 				if (thisValueActionString) {
 					// run this specific value's action string second
 					dispatchAllActionsFromActionString(dispatch, thisValueActionString);
 				}
 			}
-		}
+		} else {
+			console.warn("Attempted to conditionally run action string on falsey question object");	
+		}//TODO: do I need to include somethign if this conditional is false...?
+	}
+}
+
+export function runAllSamplingEventActionStrings(eventID) { // TODO: recursive to allow sub ID's to have actions
+	//console.log("runAllSamplingEventActionStrings(", eventID, ")");
+
+	return (dispatch, getState) => {
+		dispatch({type:RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS}); // basically just for redux logging purposes - FUTURE: use this to block view changes until complete
+		let event = getEventFromID(eventID);
+		Object.keys(event.questionsValues).map((key) => {
+			try {
+				let questionData = getQuestionDataFromID(key);
+				if (questionData) {
+					dispatch(conditionallyRunActionString(eventID, questionData));
+				}
+			}
+			catch (e) {
+				console.warn("Unable to get questionsValues or questionData for event: ", eventID, e.name, e.message);
+			}
+		})
 	}
 }
 
@@ -103,11 +134,11 @@ export function createNewSamplingEvent(eventName) {
 			typeof QD.value !== 'undefined' && // undefined gets filtered out
 			(QD.value || QD.value === 0 || typeof QD.value === 'boolean') && // truthy value, zero, and booleans make it through filter
 			(typeof QD.value !== 'object' || Object.keys(QD).length < 1)
-			);
+		);
 		Object.keys(filtered).map((key) => {
-			newEvent['questionsValues'][filtered[key].id]=filtered[key].value;
+			newEvent['questionsValues'][filtered[key].id] = filtered[key].value;
 		}
-			);
+		);
 
 		//OPTIMIZE: call an optional callback 
 
@@ -118,7 +149,7 @@ export function createNewSamplingEvent(eventName) {
 
 export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
 	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
-	if (numPoints === null || numPoints === "" || Number.isNaN(numPoints)) {
+	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}
 
@@ -134,13 +165,15 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 
 		//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
 
-		if (setInfoSampleTableValue.length > numPoints) {
+		if (setInfoSampleTableValue.length >= parseInt(numPoints)+1) {
 			// table must shrink
+			console.log("Table must shrink");
 
 			// if the removed tables are empty... no worries, just do it.
 			//TODO:4
 
 			// otherwise, confirm before proceeding...
+
 			let deletionconfirmed = window.confirm("This will result in removing rows containing data from the Data Entry Set Information Data Table, QWDATA table, and Parameters Table... \n\n Do you want to continue?");
 
 			if (deletionconfirmed === true) {
@@ -247,13 +280,15 @@ function translateActionStringActionNameToAction(sedFFActionName) {
 	}
 }
 
+/** 
+@desc dispatches all actions included in the action string.
+@param dispatch {function} the redux-thunk dispatch function
+@param actionString {string} the sedFF action action string.  it will be split up and translated in order to dispatch.
+@returns {void}
+*/
 function dispatchAllActionsFromActionString(dispatch, actionString) {
-	/* 
-	@desc dispatches all actions included in the action string.
-	@param dispatch {function} the redux-thunk dispatch function
-	@param actionString {string} the sedFF action action string.  it will be split up and translated in order to dispatch.
-	@returns {void}
-	*/
+	//console.log("dispatchAllActionsFromActionString(", actionString, ")");
+
 	let actionsToDispatch = getActionsFromActionString(actionString);
 	Object.keys(actionsToDispatch).forEach((sedFFActionName) => {
 		dispatch({ type: translateActionStringActionNameToAction(sedFFActionName), payload: actionsToDispatch[sedFFActionName] });
