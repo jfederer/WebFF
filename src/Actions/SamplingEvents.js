@@ -97,20 +97,18 @@ export function createNewSamplingEvent(eventName) {
 
 		newEvent.dateModified = new Date().toString(); //TODO: NEXT: NEXT: NEXT: should be calling eventModified action instead?
 
+
 		// find all questions with actual default 'values' in questionsData and include those in the new event
 		let filtered = _.filter(getQuestionsData(), (QD) =>
 			typeof QD.value !== 'undefined' && // undefined gets filtered out
 			(QD.value || QD.value === 0 || typeof QD.value === 'boolean') && // truthy value, zero, and booleans make it through filter
 			(typeof QD.value !== 'object' || Object.keys(QD).length < 1)
 			);
-			console.log(filtered)
 		Object.keys(filtered).map((key) => {
 			newEvent['questionsValues'][filtered[key].id]=filtered[key].value;
-			console.log(key);
 		}
 			);
 
-		console.log("-------FILTERED-----------\n", filtered);
 		//OPTIMIZE: call an optional callback 
 
 		dispatch({ type: CREATE_NEW_SAMPLING_EVENT, event: newEvent });
