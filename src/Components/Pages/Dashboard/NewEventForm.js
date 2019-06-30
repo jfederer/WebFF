@@ -33,6 +33,7 @@ class NewEventForm extends React.Component {
 			if(e.target.value.toUpperCase() === this.props.samplingEvents[eventID].eventName.toUpperCase()) {
 				isDuplicate = true;
 			}
+			return null; //satisfy linter
 		})
 		
 		this.setState({ newEventButtonDisabled: isDuplicate, newSamplingEventName: e.target.value });

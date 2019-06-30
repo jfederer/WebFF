@@ -1,8 +1,4 @@
-import React from 'react'; //lets me use JSX
-import Question from '../Components/Question';
-import { Grid } from '@material-ui/core';
 import store from '../Store';
-import _ from 'lodash';
 import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';

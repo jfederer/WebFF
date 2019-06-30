@@ -9,8 +9,6 @@ import TableRow from '@material-ui/core/TableRow';
 import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import { connect } from 'react-redux';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
-import Question from '../Question';
-import { Typography } from '@material-ui/core';
 import _ from 'lodash';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
@@ -151,14 +149,15 @@ class TableInput extends React.Component {
 
 	render() {
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
-		const { classes, colHeaders, id, value, invalidMessage } = this.props;
+		const { classes } = this.props;
 
-		let invalidValue = false;
-		if (!Array.isArray(value) || value.length <= 0) {
-			invalidValue = true;
-		} else if (!Array.isArray(value[0]) || value[0].length <= 0) {
-			invalidValue = true;
-		}
+		// TODO: don't display/create table if the value is invalid
+		// let invalidValue = false;
+		// if (!Array.isArray(value) || value.length <= 0) {
+		// 	invalidValue = true;
+		// } else if (!Array.isArray(value[0]) || value[0].length <= 0) {
+		// 	invalidValue = true;
+		// }
 
 		let tableValues = _.cloneDeep(this.props.value);
 

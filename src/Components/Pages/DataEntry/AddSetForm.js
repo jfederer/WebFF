@@ -91,17 +91,18 @@ class AddSetForm extends React.Component {
 				}
 			}
 
-			// pass to getDistanceCol
+			// pass to getDistanceCol //TODO:
 
 			// use distance col to generate new value //TODO:
 
-			// duplicate # sampling points
+			// duplicate # sampling points //TODO:
 
 			// set value
 			Object.keys(copyFromValue).map((origKey) => {
 				// origSetName = this.state.duplicateFromSet;
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
 				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
+				return null; //returning to satisfy linter
 			})
 		} else { // not copying stationing
 			// insert the default samplesTable value

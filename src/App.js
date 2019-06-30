@@ -7,7 +7,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {
 	BrowserRouter
 } from 'react-router-dom';
-import thunk from 'redux-thunk';
 
 import { Provider } from 'react-redux';
 import store from './Store';

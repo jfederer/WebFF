@@ -19,7 +19,6 @@ import { getEventFromID, getQuestionDataFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
-import { AlertError } from 'material-ui/svg-icons';
 
 /**
 * @desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
@@ -83,6 +82,7 @@ export function runAllSamplingEventActionStrings(eventID) { // TODO: recursive t
 			catch (e) {
 				console.warn("Unable to get questionsValues or questionData for event: ", eventID, e.name, e.message);
 			}
+			return null; //satsify linter
 		})
 	}
 }
@@ -137,6 +137,7 @@ export function createNewSamplingEvent(eventName) {
 		);
 		Object.keys(filtered).map((key) => {
 			newEvent['questionsValues'][filtered[key].id] = filtered[key].value;
+			return null // safisfy linter
 		}
 		);
 
@@ -154,12 +155,12 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 	}
 
 	return dispatch => {
-		let event = getEventFromID(eventID);
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
 		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + samplingMethod);
 
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
+			// eslint-disable-next-line no-useless-concat
 			throw new Error("getQuestionValue(" + eventID + ", " + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + samplingMethod + ") returned undefined or null");
 		}
 

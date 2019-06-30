@@ -30,7 +30,6 @@ import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
 import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
-import exitToApp from 'material-ui/svg-icons/action/exit-to-app';
 
 const styles = theme => ({
 	table: {
@@ -44,10 +43,6 @@ const styles = theme => ({
 
 });
 
-
-var preRequisiteInfo = {
-	descriptiveColumn: null
-}
 
 export const getRealQID = (setName, sub_q_id) => {
 	return SET_INFORMATION_IDENTIFIER + setName + ":" + sub_q_id;
@@ -87,7 +82,7 @@ class SetInformation extends React.Component {
 
 
 	render() {
-		const { setName, sedimentType, samplingMethod, value, currentEventID } = this.props;
+		const { setName, sedimentType, samplingMethod, value } = this.props;
 		const questionIDsToGrid = ["startTime", "endTime", "startGageHeight", "endGageHeight", "numberOfSamplingPoints", "numberOfContainers", "samplesComposited", "groupOfSamples"]
 		const setInfoQuestionsData = getSetInformationQuestionsData();
 		if (sedimentType === null || typeof sedimentType === "undefined")
