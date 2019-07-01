@@ -33,6 +33,8 @@ import {
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
 import { loadAndSetCurrentUser } from '../Actions/SedFF';
 
+//utils
+import { getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
 
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
@@ -53,6 +55,7 @@ import DataEntry from './Pages/DataEntry/DataEntry';
 import Parameters from './Pages/Parameters';
 import QWDATA from './Pages/QWDATA';
 import ErrorPage from './Errors/ErrorPage';
+import { getQuestionValue } from '../Utils/QuestionUtilities';
 
 
 
@@ -62,7 +65,6 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-		//TODO: Tables as objects instead of array (compatible with get question value)
 		//TODO: Param and QWDATA pages
 		//TODO: numberOfSamplingPointsChanged incorporate param and qwdata
 		//TODO: system menu rebuild
@@ -70,6 +72,11 @@ class WebFF extends React.Component {
 		//TODO: validators (numSampPoints not allowing alpha might be good test case)
 		//TODO: webserver, network loads
 		//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
+
+		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
+		//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
+
+
 
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
@@ -260,9 +267,13 @@ class WebFF extends React.Component {
 
 					</main>
 				</div >
-				<button onClick={() => console.log(this.props)}>Print Props</button><br />
+				<button onClick={() => console.log(
+					getQuestionValue(sedff.currentSamplingEventID, "SetInfo::A", "samplesTable_EDI", 1)
+				)}>Print Table Value</button><br />
+				<button onClick={() => console.log(
+					getDescriptiveColumnForTable(sedff.currentSamplingEventID)
+				)}>getDescriptiveColumnForTable</button><br />
 				{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
-				{JSON.stringify(currentUser)}
 				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
 				{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 				</React.Fragment>

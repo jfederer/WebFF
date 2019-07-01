@@ -112,8 +112,8 @@ class AddSetForm extends React.Component {
 
 		let newSetQuestion = {
 			"id": SET_INFORMATION_IDENTIFIER + newSetName,
-			"sedimentType": "suspended",  //TODO: pull from FF
-			"samplingMethod": "EDI", //TODO: pull from FF
+			"sedimentType": "suspended",  //TODO: NOW: pull from FF
+			"samplingMethod": "EDI", //TODO: NOW: pull from FF
 			"label": "Set Information",
 			"setName": newSetName,
 			"type": "SetInformation",

@@ -19,6 +19,8 @@ import { getEventFromID, getQuestionDataFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
+import { showNavigationTab } from './UI';
+
 
 /**
 * @desc changes value of a question in a given event to a new value.  Then runs any actions associated with that question ('anyValue' first, then the given value). 
@@ -150,11 +152,16 @@ export function createNewSamplingEvent(eventName) {
 
 export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
 	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
+
+
+
 	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}
 
 	return dispatch => {
+		dispatch(showNavigationTab("QWDATA"));
+		dispatch(showNavigationTab("Parameters"));
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
 		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + samplingMethod);
@@ -198,7 +205,7 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 			setInfoChangeHandler(eventID, "samplesTable_" + samplingMethod, setInfoSampleTableValue);
 		}
 
-
+		
 
 
 

@@ -2,7 +2,7 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 import _ from 'lodash';
-import { getEventFromID, getQuestionsData, getSetInformationQuestionsData } from './StoreUtilities';
+import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, getSetInformationQuestionsData } from './StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE } from '../Constants/Config';
 
 
@@ -75,12 +75,22 @@ function recursiveGetValue(haystack, haystackType, sub_QIDs) {
  * @returns returns VALUE associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
+	console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs,")");
 	//TODO: look for dialog questions, system questions, handle tables
 
 	let event = getEventFromID(eventID);
 	let questionsData = getQuestionsData();
 
-	let Qvalue = recursiveGetValue(questionsData[questionID].value, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));
+	let Qvalue;
+	try {
+		Qvalue = recursiveGetValue(questionsData[questionID].value, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));
+	}
+	catch (e) {
+		if (e.name==="TypeError") {
+			console.error("Attempted to get questionID '", questionID, "' that doesn't exist in questionsData.  All questionIDs should exist in questionsData.\n", e);
+		}
+		
+	}
 
 	
 	if ((typeof Qvalue === 'undefined' || Qvalue === null) && questionID.startsWith(SET_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo...
@@ -102,6 +112,79 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	
 	return _.cloneDeep(retVal);
 }
+
+/**
+ * @desc Get the stationing-descriptive column for various combined tables
+ * @param {string} eventID eventID to look in (does not check if loaded, nor does it error nicely)
+ * @return {Array} Array of strings that describes each set/sample row in the event
+ */
+	export const getDescriptiveColumnForTable = (eventID) => {
+		let sampleEventLocations = [];
+		let setList = getSetListAsArray(eventID);
+		console.log(setList);
+	
+		// let setType = getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+
+		setList.forEach((setName) => {
+			let shortSetName = setName.replace(SET_INFORMATION_IDENTIFIER, "");
+			console.log("realSetName: ", shortSetName);
+			let numSamps = getNumberOfSamplesInSet(eventID, shortSetName);
+			console.log("Set " , shortSetName, " has ", numSamps, " samples");
+
+			let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
+			console.log(samplesComposited);
+			let setLocations = [];
+			if (!samplesComposited) { // samples will be analysized individually (and thus each sample needs it's own line)
+				// console.log("Set " + shortSetName + " SAMPLES ARE NOT COMPOSITED");
+				// let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
+				for (let i = 1; i <= numSamps; i++) {
+					let location = 0;
+					// if (setType === "EWI") { //TODO: this is probably a useless conditional now that the headers are the same
+					// 	location = this.getTableQuestionValue(table_q_id, 0, k);
+					// } else {
+						let bigLoc = getQuestionValue(eventID, setName, "samplesTable_EWI", i);
+						console.log("Big Loc: ", bigLoc);
+						location = getQuestionValue(eventID, setName, "samplesTable_EWI", i, 0);
+						console.log("LOCATION for " + shortSetName + "[" + i + "]: ", location);
+					// }
+
+					setLocations.push(location);
+				}
+			} else {
+				// console.log("Set " + shortSetName + " SAMPLES ARE COMPOSITED");
+				setLocations.push("Comp"); // for a composite, there isn't really a 'location'
+			}
+			sampleEventLocations.push(setLocations);
+		});
+	
+		return sampleEventLocations;
+
+		// let firstColumn = [];
+
+		// // fill out the firstColumn based on the sampleEventLoations generated above
+		// for (let i = 0; i < sampleEventLocations.length; i++) {
+		// 	let setName = String.fromCharCode(65 + i)
+		// 	for (let k = 0; k < sampleEventLocations[i].length; k++) {
+
+		// 		switch (sampleEventLocations[i][k]) {
+		// 			case '':
+		// 				firstColumn.push(setName + "-" + (k + 1));
+		// 				break;
+		// 			case "Comp":
+		// 				firstColumn.push(setName + " Comp");
+		// 				break;
+		// 			default:
+		// 				firstColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
+		// 		}
+		// 	}
+		// }
+		// // push below the header
+		// firstColumn.unshift("Set-Sample @ Dist");
+
+		// // console.log("FIRST COLUMN: ", firstColumn);
+		// return firstColumn;
+
+	}
 
 
 

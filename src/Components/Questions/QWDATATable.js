@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import _ from 'lodash';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,7 +18,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
-import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 
@@ -92,7 +92,7 @@ class QWDATATable extends React.Component {
 
 			nowValue = [];
 			// build new header row, note, the header row should still be correct.
-			nowValue.push(safeCopy(this.props.value[0])); // 
+			nowValue.push(_.cloneDeep(this.props.value[0])); // 
 
 			// build rows based on existing values
 			preRequisiteInfo.descriptiveColumn = this.props.getDescriptiveColumnForTable(); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
@@ -113,7 +113,7 @@ class QWDATATable extends React.Component {
 
 				let newRow = [];
 				if (matchingOldRow !== -1) {
-					newRow = safeCopy(this.props.value[matchingOldRow]);
+					newRow = _.cloneDeep(this.props.value[matchingOldRow]);
 				} else {
 					newRow = new Array(this.props.value[0].length - 1).fill("");
 					newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
@@ -384,7 +384,7 @@ class QWDATATable extends React.Component {
 		//  console.log("row: ", row, "col: ", col);
 		//  console.log("e", e);
 		//  console.log("e.state.value", e.state.value);
-		let newVal = safeCopy(this.state.value); //.slice();
+		let newVal = _.cloneDeep(this.state.value); //.slice();
 		//  console.log("newVal: ", newVal);
 		newVal[row][col] = e.state.value;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });

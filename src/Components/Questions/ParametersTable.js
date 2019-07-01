@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,7 +20,12 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Question from '../Question';
 import { pCodes, nq_options, nq_options_meanings, rmk_options, mth_options, types, defaultPCodesToShow } from '../../Utils/QuestionOptions';
-import { safeCopy } from '../../Utils/Utilities';
+// import { getKeyFromValue} from '../../Utils/Utilities';
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
+
+
+import _ from 'lodash';
 
 const styles = theme => ({
 	root: {
@@ -49,12 +56,13 @@ const styles = theme => ({
 class ParametersTable extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log(this.props);
 
 		console.log("PARAMETERS TABLE CONSTRUCTOR");
 		// sampleEventLocations is a double array whereby each 'row' of the array is teh set and each col is the sample location.
 		let nowValue = [];
 		let startingPCodes = [];
-		if (this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
+		if (typeof this.props.value === "undefined" || this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
 			console.log("Handed null value");
 
 			// build header from scratch
@@ -76,7 +84,7 @@ class ParametersTable extends React.Component {
 				nowValue.push(emptyRow);
 			}
 
-			startingPCodes = safeCopy(defaultPCodesToShow);
+			startingPCodes = _.cloneDeep(defaultPCodesToShow);
 
 		} else { // if a value was sent
 			// need to ensure the value has the right number of rows
@@ -93,7 +101,7 @@ class ParametersTable extends React.Component {
 
 			nowValue = [];
 			// build new header row, note, the header row should still be correct.
-			nowValue.push(safeCopy(this.props.value[0])); // 
+			nowValue.push(_.cloneDeep(this.props.value[0])); // 
 
 			// build rows based on existing values  //TODO: FIXME:
 			let firstColumn = this.props.getDescriptiveColumnForTable(); // firstColumn will now be the authoritative new [0] element in each row
@@ -115,7 +123,7 @@ class ParametersTable extends React.Component {
 				let newRow = [];
 				if(matchingOldRow !== -1) {
 					console.log(firstColumn[newRowNum] + " DID find a match");
-					newRow = safeCopy(this.props.value[matchingOldRow]);
+					newRow = _.cloneDeep(this.props.value[matchingOldRow]);
 				} else {
 					console.log(firstColumn[newRowNum] + " never found a match");
 					
@@ -126,7 +134,7 @@ class ParametersTable extends React.Component {
 			}
 
 
-			startingPCodes = safeCopy(pCodesInHeader);
+			startingPCodes = _.cloneDeep(pCodesInHeader);
 		}
 
 		this.state = {
@@ -153,15 +161,7 @@ class ParametersTable extends React.Component {
 		this.props.stateChangeHandler(this);
 	}
 
-	getKeyFromValue(obj, value) {
-		let retKey = null;
-		Object.keys(obj).forEach((key) => {
-			if (obj[key] === value) {
-				retKey = key;
-			}
-		});
-		return retKey;
-	}
+
 
 
 	handleValueChange = (row, col) => e => {
@@ -522,4 +522,18 @@ ParametersTable.propTypes = {
 	selectOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default withStyles(styles)(ParametersTable);
+
+
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID,
+		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
+		defaultQuestionsData: state.Questions.questionsData,
+	}
+}
+
+const mapDispatchToProps = {
+	SEQuestionValueChange
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ParametersTable));

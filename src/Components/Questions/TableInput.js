@@ -33,33 +33,33 @@ class TableInput extends React.Component {
 
 		// console.log("MAKING TABLE incoming value: ", props.value);
 
-		let numRows = this.props.value.length;
-		let numCols = 1; // tables with less than 1 column are not allowed
-		this.props.value.forEach(function (row) {
-			if (row.length > numCols) {
-				numCols = row.length;
-			}
-		});
+		// let numRows = this.props.value.length;
+		// let numCols = 1; // tables with less than 1 column are not allowed
+		// this.props.value.forEach(function (row) {
+		// 	if (row.length > numCols) {
+		// 		numCols = row.length;
+		// 	}
+		// });
 		
 
-		let emptyTable = [];
-		for (var i = 0; i < numRows; i++) {
-			emptyTable.push(Array(numCols).fill("Def"));
-		}
+		// let emptyTable = [];
+		// for (var i = 0; i < numRows; i++) {
+		// 	emptyTable.push(Array(numCols).fill("Def"));
+		// }
 
-		if (this.props.value != null) {
-			this.props.value.map((row, rowNum) => {
-				row.map((element, colNum) => {
-					emptyTable[rowNum][colNum] = _.cloneDeep(element);
-					return null;
-				});
-				return null;
-			});
-		}
+		// if (this.props.value != null) {
+		// 	this.props.value.map((row, rowNum) => {
+		// 		row.map((element, colNum) => {
+		// 			emptyTable[rowNum][colNum] = _.cloneDeep(element);
+		// 			return null;
+		// 		});
+		// 		return null;
+		// 	});
+		// }
 
-		this.state = {
-			value: emptyTable
-		};
+		// this.state = {
+		// 	value: emptyTable
+		// };
 
 		this.handleTableQuestionChange = this.handleTableQuestionChange.bind(this);
 	};
