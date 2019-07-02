@@ -27,7 +27,7 @@ import Question from '../Question';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
-import { getGridedQuestions, getQuestionValue } from '../../Utils/QuestionUtilities';
+import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
 import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
 
@@ -112,7 +112,7 @@ class SetInformation extends React.Component {
 		});
 
 
-		let tableName = "samplesTable_" + samplingMethod;
+		let tableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethod)
 		let realTableName = getRealQID(this.props.setName, tableName);
 
 		let analysedForName = "analysedFor_" + sedimentType;

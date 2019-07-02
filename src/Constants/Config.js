@@ -14,3 +14,7 @@ export const MAX_NUM_OF_SETS = 3;
 
 export const QIDS_LINKED_TO_STATION_NAME = ["stationNumber", "projectName", "projectID", "agencyCode"];
 
+export const EDI_METHOD_CATEGORY = "EDI";
+export const EWI_METHOD_CATEGORY = "EWI";
+export const OTHER_METHOD_CATEGORY = "OTHER";
+

@@ -3,7 +3,10 @@ import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, getSetInformationQuestionsData } from './StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE } from '../Constants/Config';
+import {
+	SET_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
+	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY
+} from '../Constants/Config';
 
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
@@ -75,7 +78,7 @@ function recursiveGetValue(haystack, haystackType, sub_QIDs) {
  * @returns returns VALUE associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
-	console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs,")");
+	console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	//TODO: look for dialog questions, system questions, handle tables
 
 	let event = getEventFromID(eventID);
@@ -86,13 +89,13 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 		Qvalue = recursiveGetValue(questionsData[questionID].value, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));
 	}
 	catch (e) {
-		if (e.name==="TypeError") {
+		if (e.name === "TypeError") {
 			console.error("Attempted to get questionID '", questionID, "' that doesn't exist in questionsData.  All questionIDs should exist in questionsData.\n", e);
 		}
-		
+
 	}
 
-	
+
 	if ((typeof Qvalue === 'undefined' || Qvalue === null) && questionID.startsWith(SET_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo...
 		Qvalue = recursiveGetValue(getSetInformationQuestionsData(), QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
 	}
@@ -109,8 +112,28 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	} else {
 		retVal = Evalue;
 	}
-	
+
 	return _.cloneDeep(retVal);
+}
+
+/**
+ * @desc Converts sampling method values to one of three sampling method categories (EDI, EWI, OTHER)
+ * @param {String or Int} methodValue that sampling method raw value
+ * @return {String} appropriate enum string for the method category (EWI, EDI, or OTHER) 
+ */
+export const getMethodCategoryFromValue = (methodValue) => {
+
+	switch (Number.parseInt(methodValue)) {
+		case 10:
+		case 15:
+		case 1000:
+		case 1010:
+			return EWI_METHOD_CATEGORY;
+		case 20:
+			return EDI_METHOD_CATEGORY;
+		default:
+			return OTHER_METHOD_CATEGORY;
+	}
 }
 
 /**
@@ -118,73 +141,74 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
  * @param {string} eventID eventID to look in (does not check if loaded, nor does it error nicely)
  * @return {Array} Array of strings that describes each set/sample row in the event
  */
-	export const getDescriptiveColumnForTable = (eventID) => {
-		let sampleEventLocations = [];
-		let setList = getSetListAsArray(eventID);
-		console.log(setList);
-	
-		// let setType = getCurrentSampleEventMethod(); //EDI, EWI, or OTHER
+export const getDescriptiveColumnForTable = (eventID) => {
+	let sampleEventLocations = [];
+	let setList = getSetListAsArray(eventID);
+	console.log(setList);
 
-		setList.forEach((setName) => {
-			let shortSetName = setName.replace(SET_INFORMATION_IDENTIFIER, "");
-			console.log("realSetName: ", shortSetName);
-			let numSamps = getNumberOfSamplesInSet(eventID, shortSetName);
-			console.log("Set " , shortSetName, " has ", numSamps, " samples");
+	// let samplingMethod
+	// let setType = getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod")); //EDI, EWI, or OTHER
 
-			let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
-			console.log(samplesComposited);
-			let setLocations = [];
-			if (!samplesComposited) { // samples will be analysized individually (and thus each sample needs it's own line)
-				// console.log("Set " + shortSetName + " SAMPLES ARE NOT COMPOSITED");
-				// let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
-				for (let i = 1; i <= numSamps; i++) {
-					let location = 0;
-					// if (setType === "EWI") { //TODO: this is probably a useless conditional now that the headers are the same
-					// 	location = this.getTableQuestionValue(table_q_id, 0, k);
-					// } else {
-						let bigLoc = getQuestionValue(eventID, setName, "samplesTable_EWI", i);
-						console.log("Big Loc: ", bigLoc);
-						location = getQuestionValue(eventID, setName, "samplesTable_EWI", i, 0);
-						console.log("LOCATION for " + shortSetName + "[" + i + "]: ", location);
-					// }
+	setList.forEach((setName) => {
+		let shortSetName = setName.replace(SET_INFORMATION_IDENTIFIER, "");
+		console.log("realSetName: ", shortSetName);
+		let numSamps = getNumberOfSamplesInSet(eventID, shortSetName);
+		console.log("Set ", shortSetName, " has ", numSamps, " samples");
 
-					setLocations.push(location);
-				}
-			} else {
-				// console.log("Set " + shortSetName + " SAMPLES ARE COMPOSITED");
-				setLocations.push("Comp"); // for a composite, there isn't really a 'location'
+		let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
+		console.log(samplesComposited);
+		let setLocations = [];
+		if (!samplesComposited) { // samples will be analysized individually (and thus each sample needs it's own line)
+			// console.log("Set " + shortSetName + " SAMPLES ARE NOT COMPOSITED");
+			// let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
+			for (let i = 1; i <= numSamps; i++) {
+				let location = 0;
+				// if (setType === "EWI") { //TODO: this is probably a useless conditional now that the headers are the same
+				// 	location = this.getTableQuestionValue(table_q_id, 0, k);
+				// } else {
+				let bigLoc = getQuestionValue(eventID, setName, "samplesTable_EWI", i);
+				console.log("Big Loc: ", bigLoc);
+				location = getQuestionValue(eventID, setName, "samplesTable_EWI", i, 0);
+				console.log("LOCATION for " + shortSetName + "[" + i + "]: ", location);
+				// }
+
+				setLocations.push(location);
 			}
-			sampleEventLocations.push(setLocations);
-		});
-	
-		return sampleEventLocations;
+		} else {
+			// console.log("Set " + shortSetName + " SAMPLES ARE COMPOSITED");
+			setLocations.push("Comp"); // for a composite, there isn't really a 'location'
+		}
+		sampleEventLocations.push(setLocations);
+	});
 
-		// let firstColumn = [];
+	return sampleEventLocations;
 
-		// // fill out the firstColumn based on the sampleEventLoations generated above
-		// for (let i = 0; i < sampleEventLocations.length; i++) {
-		// 	let setName = String.fromCharCode(65 + i)
-		// 	for (let k = 0; k < sampleEventLocations[i].length; k++) {
+	// let firstColumn = [];
 
-		// 		switch (sampleEventLocations[i][k]) {
-		// 			case '':
-		// 				firstColumn.push(setName + "-" + (k + 1));
-		// 				break;
-		// 			case "Comp":
-		// 				firstColumn.push(setName + " Comp");
-		// 				break;
-		// 			default:
-		// 				firstColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
-		// 		}
-		// 	}
-		// }
-		// // push below the header
-		// firstColumn.unshift("Set-Sample @ Dist");
+	// // fill out the firstColumn based on the sampleEventLoations generated above
+	// for (let i = 0; i < sampleEventLocations.length; i++) {
+	// 	let setName = String.fromCharCode(65 + i)
+	// 	for (let k = 0; k < sampleEventLocations[i].length; k++) {
 
-		// // console.log("FIRST COLUMN: ", firstColumn);
-		// return firstColumn;
+	// 		switch (sampleEventLocations[i][k]) {
+	// 			case '':
+	// 				firstColumn.push(setName + "-" + (k + 1));
+	// 				break;
+	// 			case "Comp":
+	// 				firstColumn.push(setName + " Comp");
+	// 				break;
+	// 			default:
+	// 				firstColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
+	// 		}
+	// 	}
+	// }
+	// // push below the header
+	// firstColumn.unshift("Set-Sample @ Dist");
 
-	}
+	// // console.log("FIRST COLUMN: ", firstColumn);
+	// return firstColumn;
+
+}
 
 
 

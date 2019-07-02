@@ -17,7 +17,7 @@ import {
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionDataFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
-import { getQuestionValue } from '../Utils/QuestionUtilities';
+import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
 import { showNavigationTab } from './UI';
 
@@ -164,11 +164,11 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 		dispatch(showNavigationTab("Parameters"));
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
-		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + samplingMethod);
+		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + getMethodCategoryFromValue(samplingMethod));
 
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
 			// eslint-disable-next-line no-useless-concat
-			throw new Error("getQuestionValue(" + eventID + ", " + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + samplingMethod + ") returned undefined or null");
+			throw new Error("getQuestionValue(" + eventID + ", " + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + ") returned undefined or null");
 		}
 
 		//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
@@ -202,7 +202,7 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 				let newRow = new Array(setInfoSampleTableValue[0].length).fill("");
 				setInfoSampleTableValue.push(newRow);
 			}
-			setInfoChangeHandler(eventID, "samplesTable_" + samplingMethod, setInfoSampleTableValue);
+			setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod), setInfoSampleTableValue);
 		}
 
 		

@@ -23,18 +23,17 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import { questionsData, dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
+import { dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
 	// QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Constants/Config';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
-
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
 import { loadAndSetCurrentUser } from '../Actions/SedFF';
 
 //utils
-import { getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
+import { getDescriptiveColumnForTable, getQuestionValue } from '../Utils/QuestionUtilities';
 
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
@@ -55,7 +54,7 @@ import DataEntry from './Pages/DataEntry/DataEntry';
 import Parameters from './Pages/Parameters';
 import QWDATA from './Pages/QWDATA';
 import ErrorPage from './Errors/ErrorPage';
-import { getQuestionValue } from '../Utils/QuestionUtilities';
+
 
 
 
@@ -89,7 +88,7 @@ class WebFF extends React.Component {
 		this.state = {
 
 			// system config
-			questionsData: questionsData,
+			// questionsData: questionsData,
 			dialogQuestions: dialogQuestions,
 
 			itemsToSyncToLS: allItemsToSyncToLS,
@@ -107,8 +106,6 @@ class WebFF extends React.Component {
 			curDialogDescription: "",
 			curDialogName: "",
 			curDialogQuestions: [],
-
-			defaultQuestionsData: questionsData.slice(),
 
 			hiddenTabs: defaultHiddenTabs,
 			hiddenPanels: defaultHiddenPanels,

@@ -11,7 +11,7 @@ import { SET_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
 
 import { addQuestion } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
-import { getQuestionValue } from '../../../Utils/QuestionUtilities';
+import { getQuestionValue, getMethodCategoryFromValue } from '../../../Utils/QuestionUtilities';
 import { getNumberOfSets, getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
 
 
@@ -109,11 +109,19 @@ class AddSetForm extends React.Component {
 			//newSetValue['samplesTable_EDI'] = //TODO: pull from FF
 		}
 
+		let sedimentType = getQuestionValue(currentSamplingEventID, "sedimentType");
+		let samplingMethod = getQuestionValue(currentSamplingEventID, "samplingMethod_" + sedimentType); 
+		console.log("SedType: ", sedimentType);
+		console.log("SampMethod: ", samplingMethod); 
+		if (!sedimentType || !samplingMethod) {
+			alert("Must have both Sediment Type and Sampling Method filled out on Field Form sheet before you can add a set");
+			return;
+		}
 
 		let newSetQuestion = {
 			"id": SET_INFORMATION_IDENTIFIER + newSetName,
-			"sedimentType": "suspended",  //TODO: NOW: pull from FF
-			"samplingMethod": "EDI", //TODO: NOW: pull from FF
+			"sedimentType": sedimentType,  
+			"samplingMethod": samplingMethod, 
 			"label": "Set Information",
 			"setName": newSetName,
 			"type": "SetInformation",
