@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,9 +18,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Question from '../Question';
 import { pCodes, nq_options, nq_options_meanings, rmk_options, mth_options, types, defaultPCodesToShow } from '../../Utils/QuestionOptions';
-// import { getKeyFromValue} from '../../Utils/Utilities';
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
-import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { getKeyFromValue} from '../../Utils/Utilities';
+
 
 
 import _ from 'lodash';
@@ -56,14 +53,14 @@ const styles = theme => ({
 class ParametersTable extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log(this.props);
+		// console.log(this.props);
 
-		console.log("PARAMETERS TABLE CONSTRUCTOR");
+		// console.log("PARAMETERS TABLE CONSTRUCTOR");
 		// sampleEventLocations is a double array whereby each 'row' of the array is teh set and each col is the sample location.
 		let nowValue = [];
 		let startingPCodes = [];
 		if (typeof this.props.value === "undefined" || this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
-			console.log("Handed null value");
+			// console.log("Handed null value");
 
 			// build header from scratch
 			let headerRow = [];
@@ -77,7 +74,7 @@ class ParametersTable extends React.Component {
 
 			// build default values (blanks)
 			let firstColumn = this.props.getDescriptiveColumnForTable();
-			console.log("FIRST COLUMN: ", firstColumn);
+			// console.log("FIRST COLUMN: ", firstColumn);
 			for (let i = 1; i < firstColumn.length; i++) {
 				let emptyRow = new Array(headerRow.length-1).fill("");
 				emptyRow.unshift(firstColumn[i]);
@@ -88,7 +85,7 @@ class ParametersTable extends React.Component {
 
 		} else { // if a value was sent
 			// need to ensure the value has the right number of rows
-			console.log("Handed existing value: ", this.props.value);
+			// console.log("Handed existing value: ", this.props.value);
 
 			// find all pCodes in header
 			let pCodesInHeader = [];
@@ -105,15 +102,15 @@ class ParametersTable extends React.Component {
 
 			// build rows based on existing values  //TODO: FIXME:
 			let firstColumn = this.props.getDescriptiveColumnForTable(); // firstColumn will now be the authoritative new [0] element in each row
-			console.log("NEW FIRST COLUMN: ", firstColumn);
+			// console.log("NEW FIRST COLUMN: ", firstColumn);
 			for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
-				console.log("Looking for...", firstColumn[newRowNum]);
+				// console.log("Looking for...", firstColumn[newRowNum]);
 				//look in props.value for existing matching row
 				let matchingOldRow = -1;
 				for(let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
-					console.log("against..." + this.props.value[oldRow][0]);
+					// console.log("against..." + this.props.value[oldRow][0]);
 					if(firstColumn[newRowNum] === this.props.value[oldRow][0]) {
-						console.log("MATCH!");
+						// console.log("MATCH!");
 						
 						matchingOldRow = oldRow;
 						break;
@@ -122,10 +119,10 @@ class ParametersTable extends React.Component {
 
 				let newRow = [];
 				if(matchingOldRow !== -1) {
-					console.log(firstColumn[newRowNum] + " DID find a match");
+					// console.log(firstColumn[newRowNum] + " DID find a match");
 					newRow = _.cloneDeep(this.props.value[matchingOldRow]);
 				} else {
-					console.log(firstColumn[newRowNum] + " never found a match");
+					// console.log(firstColumn[newRowNum] + " never found a match");
 					
 					newRow = new Array(this.props.value[0].length-1).fill("");
 					newRow.unshift(firstColumn[newRowNum]);
@@ -158,20 +155,22 @@ class ParametersTable extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.stateChangeHandler(this);
+		// this.props.stateChangeHandler(this);
+		this.props.stateChangeHandler(this.state.value);
 	}
 
 
 
 
 	handleValueChange = (row, col) => e => {
+		console.log("HVC");
 		// console.log("this.state.value: ", this.state.value);
 		// console.log("row: ", row, "col: ", col);
 		// console.log("e.target.value", e.target.value);
 		let newVal = this.state.value.slice();
 		// console.log("newVal: ", newVal);
 		newVal[row][col] = e.target.value;
-		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this) });
+		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.state.value) });
 	}
 
 
@@ -196,8 +195,14 @@ class ParametersTable extends React.Component {
 				}, 250));
 	}
 
-	handleSetDefaultValueDialogChange = (Q) => {
-		this.setState({ [Q.props.id]: Q.state.value })
+	handleSetDefaultValueDialogChange = (eventID, QID, value) => { //eventID is here to match call pattern of alternateChangeHandler, but unused.
+		// console.log("handleSetDefaultVAlueDialogChange(", QID, value, ")");
+	
+		// this.props.currentEventID, this.props.id, event.target.value);
+		// 					alternateStateChangeHandler={}
+
+		// this.setState({ [Q.props.id]: Q.state.value })
+		this.setState({ [QID]: value })
 	}
 
 	handleSetDefaultValueForColumn = () => {
@@ -230,7 +235,8 @@ class ParametersTable extends React.Component {
 			}
 		}
 
-		this.setState({ value: newVal }, () => this.props.stateChangeHandler(this));
+		this.setState({ value: newVal }, () => this.props.stateChangeHandler(this.state.value));
+
 		this.handleSetDefaultValueDialogClose();
 	}
 
@@ -270,10 +276,10 @@ class ParametersTable extends React.Component {
 			newValue[i].push("");
 			// }
 		}
-		console.log("POST PCODES TO SHOW: ", newPCodesToShow);
-		console.log("POST VALUE: ", newValue);
+		// console.log("POST PCODES TO SHOW: ", newPCodesToShow);
+		// console.log("POST VALUE: ", newValue);
 
-		this.setState({ pCodesToShow: newPCodesToShow, value: newValue }, this.props.stateChangeHandler(this));
+		this.setState({ pCodesToShow: newPCodesToShow, value: newValue }, this.props.stateChangeHandler(this.state.value));
 		this.handleAddColumnDialogClose();
 	}
 
@@ -298,9 +304,6 @@ class ParametersTable extends React.Component {
 		// let setType = this.props.getCurrentSampleEventMethod();
 		let firstColumn = this.props.getDescriptiveColumnForTable();
 
-		console.log("PCODES TO SHOW: ", this.state.pCodesToShow);
-
-		
 
 		return (
 			<React.Fragment>
@@ -315,7 +318,7 @@ class ParametersTable extends React.Component {
 							{this.state.pCodesToShow.map((header) => {
 								return (
 									<TableCell className={classes.tableCell} key={"Param_" + header}>
-										{this.getKeyFromValue(pCodes, header)}
+										{getKeyFromValue(pCodes, header)}
 										<br />
 										({header})
 									<br />
@@ -442,7 +445,7 @@ class ParametersTable extends React.Component {
 							id="parameterDefaultValue_val"
 							key="parameterDefaultValue_val"
 							type="Text"
-							stateChangeHandler={this.handleSetDefaultValueDialogChange}
+							alternateChangeHandler={this.handleSetDefaultValueDialogChange}
 							value={this.state.parameterDefaultValue_val}
 						/>
 						<Question
@@ -458,7 +461,7 @@ class ParametersTable extends React.Component {
 								: {}}
 							type="DropDown"
 							includeBlank={true}
-							stateChangeHandler={this.handleSetDefaultValueDialogChange}
+							alternateChangeHandler={this.handleSetDefaultValueDialogChange}
 							value={this.state.parameterDefaultValue_mth}
 						/>
 						<Question
@@ -468,7 +471,7 @@ class ParametersTable extends React.Component {
 							options={this.deleteItemFromObject(Object.assign({}, rmk_options), 'rmk')}
 							type="DropDown"
 							includeBlank={true}
-							stateChangeHandler={this.handleSetDefaultValueDialogChange}
+							alternateChangeHandler={this.handleSetDefaultValueDialogChange}
 							value={this.state.parameterDefaultValue_rmk}
 						/>
 						<Question
@@ -478,7 +481,7 @@ class ParametersTable extends React.Component {
 							options={this.deleteItemFromObject(Object.assign({}, nq_options), 'nQ')}
 							type="DropDown"
 							includeBlank={true}
-							stateChangeHandler={this.handleSetDefaultValueDialogChange}
+							alternateChangeHandler={this.handleSetDefaultValueDialogChange}
 							value={this.state.parameterDefaultValue_nq}
 						/>
 						<Question
@@ -487,7 +490,7 @@ class ParametersTable extends React.Component {
 							key="parameterDefaultOverwiteExistingValues"
 							checkbox={true}
 							type="Toggle"
-							stateChangeHandler={this.handleSetDefaultValueDialogChange}
+							alternateChangeHandler={this.handleSetDefaultValueDialogChange}
 							value={this.state.parameterDefaultOverwiteExistingValues}
 						/>
 
@@ -523,17 +526,4 @@ ParametersTable.propTypes = {
 };
 
 
-
-const mapStateToProps = function (state) {
-	return {
-		currentEventID: state.SedFF.currentSamplingEventID,
-		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
-		defaultQuestionsData: state.Questions.questionsData,
-	}
-}
-
-const mapDispatchToProps = {
-	SEQuestionValueChange
-}
-
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ParametersTable));
+export default withStyles(styles, { withTheme: true })(ParametersTable);

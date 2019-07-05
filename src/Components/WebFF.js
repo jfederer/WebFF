@@ -74,6 +74,8 @@ class WebFF extends React.Component {
 
 		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 		//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
+		
+		//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 
 
 

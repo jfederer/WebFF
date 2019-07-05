@@ -151,7 +151,7 @@ export function createNewSamplingEvent(eventName) {
 }
 
 export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
-	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
+	// console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
 
 
 
@@ -175,7 +175,7 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 
 		if (setInfoSampleTableValue.length >= parseInt(numPoints)+1) {
 			// table must shrink
-			console.log("Table must shrink");
+			// console.log("Table must shrink");
 
 			// if the removed tables are empty... no worries, just do it.
 			//TODO:4

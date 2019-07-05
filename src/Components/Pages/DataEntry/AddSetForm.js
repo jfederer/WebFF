@@ -111,8 +111,8 @@ class AddSetForm extends React.Component {
 
 		let sedimentType = getQuestionValue(currentSamplingEventID, "sedimentType");
 		let samplingMethod = getQuestionValue(currentSamplingEventID, "samplingMethod_" + sedimentType); 
-		console.log("SedType: ", sedimentType);
-		console.log("SampMethod: ", samplingMethod); 
+		// console.log("SedType: ", sedimentType);
+		// console.log("SampMethod: ", samplingMethod); 
 		if (!sedimentType || !samplingMethod) {
 			alert("Must have both Sediment Type and Sampling Method filled out on Field Form sheet before you can add a set");
 			return;

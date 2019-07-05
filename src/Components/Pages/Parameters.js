@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { setAppBarText } from '../../Actions/UI';
 
 import ParametersTable from '../Questions/ParametersTable';
-import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 
 class Parameters extends React.Component {
@@ -29,18 +29,21 @@ class Parameters extends React.Component {
 			return <Redirect to='/' />
 		}
 
+		let table_QID = "parametersTable";
+
 		return (
 			<div>
 				Parameters Page!!
 							<ParametersTable
-					stateChangeHandler={this.props.SEQuestionValueChange}
-					value={getQuestionValue(currentEventID, "ParametersTable")}
-					key="ParametersTable"
-					id="ParametersTable"
-					label="ParametersTable LABEL"
-					placeholder="ParametersTable PLACEHOLDER"
-					XMLTag="ParametersTable XMLTAG"
+					stateChangeHandler={(val) => this.props.SEQuestionValueChange(currentEventID, table_QID, val)} //TODO: NEXT:  This isn't called with appropraite information
+					value={getQuestionValue(currentEventID, table_QID)}
+					key="parametersTable"
+					id={table_QID}
+					label="parametersTable LABEL"
+					placeholder="parametersTable PLACEHOLDER"
+					XMLTag="parametersTable XMLTAG"
 					type="ParametersTable"
+					getDescriptiveColumnForTable={()=>getDescriptiveColumnForTable(currentEventID)}
 				/>
 			</div>
 		);
