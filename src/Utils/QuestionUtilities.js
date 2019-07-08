@@ -214,35 +214,35 @@ export const getDescriptiveColumnForTable = (eventID) => {
 
 
 
-export const getQuestionDataFromQuestionsDataByQuestionID = (questionsData, questionID) => {
-	let DEBUG = false;
+// export const getQuestionDataFromQuestionsDataByQuestionID = (questionsData, questionID) => {
+// 	let DEBUG = false;
 
-	if (DEBUG) console.log("--------------");
-	if (DEBUG) console.log(questionsData);
-	if (DEBUG) console.log("looking for questionID: ", questionID);
+// 	if (DEBUG) console.log("--------------");
+// 	if (DEBUG) console.log(questionsData);
+// 	if (DEBUG) console.log("looking for questionID: ", questionID);
 
-	let questionData = questionsData.filter(questionData => {
+// 	let questionData = questionsData.filter(questionData => {
 
-		// var areEqual = questionData.id.toUpperCase() === questionID.toUpperCase();
-		// console.log(questionData.id + " " + areEqual);
+// 		// var areEqual = questionData.id.toUpperCase() === questionID.toUpperCase();
+// 		// console.log(questionData.id + " " + areEqual);
 
-		if (questionData.id === questionID) {
-			if (DEBUG) console.log("Found");
-			return questionData;
-		}
-		return null;
-	}
-	);
+// 		if (questionData.id === questionID) {
+// 			if (DEBUG) console.log("Found");
+// 			return questionData;
+// 		}
+// 		return null;
+// 	}
+// 	);
 
-	if (DEBUG) console.log(questionData);
+// 	if (DEBUG) console.log(questionData);
 
-	if (questionData != null && questionData.length === 1) {
+// 	if (questionData != null && questionData.length === 1) {
 
-		return questionData[0];
-	} else {
-		return null; //TODO: throw errors
-	}
-}
+// 		return questionData[0];
+// 	} else {
+// 		return null; //TODO: throw errors
+// 	}
+// }
 
 export const getTabQuestionsData = (questionsData, tabName) => {
 	//given OBJECT questionsData and STRING tabName... 

@@ -37,7 +37,7 @@ class Parameters extends React.Component {
 							<ParametersTable
 					stateChangeHandler={(val) => this.props.SEQuestionValueChange(currentEventID, table_QID, val)} //TODO: NEXT:  This isn't called with appropraite information
 					value={getQuestionValue(currentEventID, table_QID)}
-					key="parametersTable"
+					key={table_QID}
 					id={table_QID}
 					label="parametersTable LABEL"
 					placeholder="parametersTable PLACEHOLDER"

@@ -6,6 +6,9 @@ import { styles } from '../../style';
 import { withStyles } from '@material-ui/core/styles';
 
 import { setAppBarText } from '../../Actions/UI';
+import QWDATATable from '../Questions/QWDATATable';
+import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 
 class QWDATA extends React.Component {
 
@@ -14,32 +17,52 @@ class QWDATA extends React.Component {
 		this.props.setAppBarText("SedFF → QWDATA");
 	}
 
-    render() {
+	render() {
+
 		const {
-			currentEvent
+			currentEvent,
+			currentEventID,
+			defaultQuestionsData
 		} = this.props;
 
 		if (!currentEvent) {
-			console.log("No current event, redirecting to dashboard"); 
-			return <Redirect to = '/' />
+			console.log("No current event, redirecting to dashboard");
+			return <Redirect to='/' />
 		}
 
-        return (
-            <div>
-              QWDATA Page!!
-            </div>
-        );
-    }
-}
+		let table_QID = "QWDATATable";
 
-const mapStateToProps = function (state) {
-	return {
-		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
+		return (
+			<div>
+				QWDATA Page!!
+							<QWDATATable
+					stateChangeHandler={(val) => this.props.SEQuestionValueChange(currentEventID, table_QID, val)}
+					value={getQuestionValue(currentEventID, table_QID)}
+					key={table_QID}
+					id={table_QID}
+					label="QWDATATable LABEL"
+					placeholder="QWDATATable PLACEHOLDER"
+					XMLTag="QWDATATable XMLTAG"
+					type="QWDATATable"
+				/>
+			</div>
+		);
 	}
 }
 
+
+const mapStateToProps = function (state) {
+	return {
+		currentEventID: state.SedFF.currentSamplingEventID,
+		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
+		defaultQuestionsData: state.Questions.questionsData,
+	}
+}
+
+
 const mapDispatchToProps = {
-	setAppBarText
+	setAppBarText,
+	SEQuestionValueChange
 }
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(QWDATA));

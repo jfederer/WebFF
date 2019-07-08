@@ -43,10 +43,11 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 
 function conditionallyRunActionString(eventID, question) {
 	//console.log("conditionallyRunActionString(", eventID, question, ")");
-	let value = getQuestionValue(eventID, question.id);
+	
 
 	return (dispatch, getState) => {
 		if (question) {
+			let value = getQuestionValue(eventID, question.id);
 			let actions = question.actions;
 			if (actions) {
 				// if action string exists...
