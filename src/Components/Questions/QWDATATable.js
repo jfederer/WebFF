@@ -46,101 +46,37 @@ var preRequisiteInfo = {
 // getQuestionData={(QID)=>{return defaultQuestionsData[QID]}}
 
 class QWDATATable extends React.Component {
+	
 	constructor(props) {
 		super(props);
 		let { currentEventID } = this.props;
+		
 
 		console.log("QWDATA TABLE CONSTRUCTOR");
 
 		let nowValue = [];
 		// let startingPCodes = [];
-		if (this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
-			console.log("Handed null value, building blank QWDATA Table");
+		if (typeof this.props.value === 'undefined' || this.props.value === null) {// if no value handed
+			console.log("Handed null/undefined value, building blank QWDATA Table");
 
-			// build header from scratch
-			let headerRow = [];
-			Object.keys(allQWDATAOptionalHeaders).forEach((header) => {
-				headerRow.push(header);
-			});
-			nowValue.push(headerRow);
-
-			// build default values (blanks)
-			preRequisiteInfo.descriptiveColumn = getDescriptiveColumnForTable(currentEventID); // this gives us number of rows too
-
-			for (let i = 1; i < preRequisiteInfo.descriptiveColumn.length; i++) {
-				let emptyRow = new Array(headerRow.length - 1).fill("");
-				emptyRow.unshift(preRequisiteInfo.descriptiveColumn[i]);
-				nowValue.push(emptyRow);
-			}
-
-			// make the Add-on analysis values arrays
-			let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-			if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
-			for (let row = 1; row < nowValue.length; row++) { // skip header row
-				if (!Array.isArray(nowValue[row][AddOnAnalysesIndex])) {
-					nowValue[row][AddOnAnalysesIndex] = [];
-				}
-			}
-
-			// fill out the estimated time, if possible  // TODO: FIXME: 
-
-			// this.insertEstimatedTime(nowValue); //TODO: estimate time
+			nowValue = this.createInitialValueFromScratch();
 
 		}
 		else { // if a value was sent
 			// need to ensure the value has the right number of rows
 			console.log("Handed existing value: ", this.props.value);
-
-			nowValue = [];
-			// build new header row, note, the header row should still be correct.
-			nowValue.push(_.cloneDeep(this.props.value[0])); // 
-
-			// build rows based on existing values
-			preRequisiteInfo.descriptiveColumn = getDescriptiveColumnForTable(currentEventID); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
-			// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
-			for (let newRowNum = 1; newRowNum < preRequisiteInfo.descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
-				// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
-				//look in props.value for existing matching row
-				let matchingOldRow = -1;
-				for (let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
-					// console.log("against..." + this.props.value[oldRow][0]);
-					if (preRequisiteInfo.descriptiveColumn[newRowNum] === this.props.value[oldRow][0]) {
-						// console.log("MATCH!");
-
-						matchingOldRow = oldRow;
-						break;
-					}
-				}
-
-				let newRow = [];
-				if (matchingOldRow !== -1) {
-					newRow = _.cloneDeep(this.props.value[matchingOldRow]);
-				} else {
-					newRow = new Array(this.props.value[0].length - 1).fill("");
-					newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
-				}
-
-				// ensure add-on analysis is an array
-				let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-				if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
-				if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
-					newRow[AddOnAnalysesIndex] = [];
-				}
-
-				nowValue.push(newRow);
-			}
+			nowValue = this.verifyPassedValue();
 		}
 
+		console.log("QWDATA now value post : ", nowValue);
 
-		console.log(nowValue);
-
-
-		let rdy = true;
-		Object.keys(preRequisiteInfo).forEach((key) => {
+		let rdy = true;  
+		Object.keys(preRequisiteInfo).forEach((key) => {  //TODO: unsure the purpose of prerequiste
 			if (preRequisiteInfo[key] === null) {
 				rdy = false;
 			}
 		})
+
 
 		this.state = {
 			dialogM2LOpen: false,
@@ -156,8 +92,82 @@ class QWDATATable extends React.Component {
 	};
 
 
-	//TOOD: NEXT:  Continue going through file and remove state.value 
+	createInitialValueFromScratch = () => {
+		let nowValue = [];
 
+		// build header from scratch
+		let headerRow = [];
+		Object.keys(allQWDATAOptionalHeaders).forEach((header) => {
+			headerRow.push(header);
+		});
+		nowValue.push(headerRow);
+
+		// build default values (blanks)
+		preRequisiteInfo.descriptiveColumn = getDescriptiveColumnForTable(this.props.currentEventID); // this gives us number of rows too
+
+		for (let i = 1; i < preRequisiteInfo.descriptiveColumn.length; i++) {
+			let emptyRow = new Array(headerRow.length - 1).fill("");
+			emptyRow.unshift(preRequisiteInfo.descriptiveColumn[i]);
+			nowValue.push(emptyRow);
+		}
+
+		// make the Add-on analysis values arrays
+		let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
+		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+		for (let row = 1; row < nowValue.length; row++) { // skip header row
+			if (!Array.isArray(nowValue[row][AddOnAnalysesIndex])) {
+				nowValue[row][AddOnAnalysesIndex] = [];
+			}
+		}
+
+		// fill out the estimated time, if possible  // TODO: FIXME: 
+
+		// this.insertEstimatedTime(nowValue); //TODO: estimate time
+
+		return nowValue;
+	}
+
+	verifyPassedValue = () => {
+		nowValue = [];
+		// build new header row, note, the header row should still be correct.
+		nowValue.push(_.cloneDeep(this.props.value[0])); // 
+
+		// build rows based on existing values
+		preRequisiteInfo.descriptiveColumn = getDescriptiveColumnForTable(currentEventID); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
+		// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
+		for (let newRowNum = 1; newRowNum < preRequisiteInfo.descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
+			// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
+			//look in props.value for existing matching row
+			let matchingOldRow = -1;
+			for (let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
+				// console.log("against..." + this.props.value[oldRow][0]);
+				if (preRequisiteInfo.descriptiveColumn[newRowNum] === this.props.value[oldRow][0]) {
+					// console.log("MATCH!");
+
+					matchingOldRow = oldRow;
+					break;
+				}
+			}
+
+			let newRow = [];
+			if (matchingOldRow !== -1) {
+				newRow = _.cloneDeep(this.props.value[matchingOldRow]);
+			} else {
+				newRow = new Array(this.props.value[0].length - 1).fill("");
+				newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
+			}
+
+			// ensure add-on analysis is an array
+			let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
+			if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+			if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
+				newRow[AddOnAnalysesIndex] = [];
+			}
+
+			nowValue.push(newRow);
+		}
+		return nowValue;
+	}
 
 	// componentWillMount() {
 	// 	console.log("QDWATAA CWM");
@@ -218,7 +228,7 @@ class QWDATATable extends React.Component {
 
 
 	handleM2LClickOpen = (row, col) => {
-		this.setState({ dialogM2LOpen: true, dialogM2LValue: this.state.value[row][col], curRow: row, curCol: col });
+		this.setState({ dialogM2LOpen: true, dialogM2LValue: this.props.value[row][col], curRow: row, curCol: col });
 	};
 
 	handleAddOnClickOpen = (row, col) => {
@@ -237,7 +247,7 @@ class QWDATATable extends React.Component {
 		// console.log("addOnOpts (base):", addOnOpts);
 
 		// get what set name we are in from the front of the row
-		let setName = this.state.value[row][0].split("-")[0];
+		let setName = this.props.value[row][0].split("-")[0];
 		// console.log("setName:", setName);
 
 		// combined with the sediment type
@@ -259,23 +269,23 @@ class QWDATATable extends React.Component {
 		}
 		// console.log("addOnOpts (filtered):", addOnOpts);
 
-		this.setState({ dialogAddOnOpen: true, rowAddOnOptions: addOnOpts, dialogAddOnValue: this.state.value[row][col], curRow: row, curCol: col });
+		this.setState({ dialogAddOnOpen: true, rowAddOnOptions: addOnOpts, dialogAddOnValue: this.props.value[row][col], curRow: row, curCol: col });
 	};
 
 
 	handleM2LSave = () => { //TOOD: combine all handlers just 'getting' the value separately
-		let newVal = this.state.value.slice();
+		let newVal = this.props.value.slice();
 		newVal[this.state.curRow][this.state.curCol] = this.state.dialogM2LValue;
-		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.state.value) });
+		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
 		this.handleClose();
 	}
 
 	handleAddOnSave = () => {
 		// console.log(this.state.curRow, " x ", this.state.curCol);
 		// console.log(this.state.value);
-		let newVal = this.state.value.slice();
+		let newVal = this.props.value.slice();
 		newVal[this.state.curRow][this.state.curCol] = this.state.dialogAddOnValue;
-		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.state.value) });
+		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
 		this.handleClose();
 	}
 
@@ -284,21 +294,21 @@ class QWDATATable extends React.Component {
 	};
 
 	dialogM2LTextChangeHandler = (e) => {
-		this.setState({ dialogM2LValue: e.target.value }, () => { this.props.stateChangeHandler(this.state.value) });
+		this.setState({ dialogM2LValue: e.target.value }, () => { this.props.stateChangeHandler(this.props.value) });
 	}
 
 	addOnChangeHandler = (mcq) => {
-		this.setState({ dialogAddOnValue: mcq.state.value });
+		this.setState({ dialogAddOnValue: mcq.props.value });
 	}
 
 	handleValueChange = (row, col) => (eventID, QID, value) => {
 		console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
 
-		console.log("QWDATA: handleValueChange: this.state.value: ", this.state.value);
+		console.log("QWDATA: handleValueChange: this.state.value: ", this.props.value);
 		//  console.log("row: ", row, "col: ", col);
 		//  console.log("e", e);
 		//  console.log("e.state.value", e.state.value);
-		let newVal = _.cloneDeep(this.state.value); //.slice();
+		let newVal = _.cloneDeep(this.props.value); //.slice();
 		//  console.log("newVal: ", newVal);
 		newVal[row][col] = value;
 
@@ -317,7 +327,7 @@ class QWDATATable extends React.Component {
 			return;
 		}
 
-		let newVal = this.insertEstimatedTime(this.state.value);
+		let newVal = this.insertEstimatedTime(this.props.value);
 		let SampleTimeIndex = newVal[0].indexOf("Sample Time");
 		if (SampleTimeIndex < 0) { throw new Error("Sample Time not found in header of QWDATA table") }
 		let etc = this.getEstimatedTimeColumn();
@@ -326,9 +336,12 @@ class QWDATATable extends React.Component {
 			newVal[row][SampleTimeIndex] = etc[row];
 		}
 		this.setState({ value: newVal }, () => {
-			this.props.stateChangeHandler(this.state.value);
+			this.props.stateChangeHandler(this.props.value);
 		});
 	}
+
+
+
 
 	render() {
 		const { classes } = this.props;
@@ -338,15 +351,20 @@ class QWDATATable extends React.Component {
 		let classlessProps = this.props;
 		delete classlessProps[classes];
 
+		if (typeof this.props.value === 'undefined' || this.props.value === null) {
+			console.log("Null render");
+			return null;
+		} 
+
 		return (
-			this.state.readyToDisplay
+			 this.state.readyToDisplay 
 				? <React.Fragment>
 					<br></br>
 					<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
 					<Table className={classes.table}>
 						<TableHead>
 							<TableRow>
-								{this.state.value[0].map((headerKey) => {
+								{this.props.value[0].map((headerKey) => {
 									let headerValue = allQWDATAOptionalHeaders[headerKey];
 									// console.log(headerKey +"="+headerValue);
 
@@ -384,14 +402,14 @@ class QWDATATable extends React.Component {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{this.state.value.map((row, rowNum) => {
+							{this.props.value.map((row, rowNum) => {
 								if (rowNum === 0) {
 									return null;
 								}
 								let realRowNum = rowNum + 1;
 								return (
 									<TableRow key={"ROW:" + realRowNum}>
-										{this.state.value[0].map((headerKey, colNum) => {
+										{this.props.value[0].map((headerKey, colNum) => {
 											let Q;
 											let keyText = "QWDATA_row:" + rowNum + "_col:" + colNum;   //TODO: this is getting passed as the raw QID for some reason
 											// console.log("this.state.value[0]", this.state.value[0]);
@@ -401,18 +419,18 @@ class QWDATATable extends React.Component {
 											if (allQWDATAOptionalHeaders[headerKey] === null) {
 												switch (headerKey) {
 													case "Set-Sample @ Dist":
-														Q = this.state.value[rowNum][colNum];
+														Q = this.props.value[rowNum][colNum];
 														break;
 													case "Add-on Analyses":
 														Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
-															this.state.value[rowNum][colNum] === "" || this.state.value[rowNum][colNum].length === 0
+															this.props.value[rowNum][colNum] === "" || this.props.value[rowNum][colNum].length === 0
 																? "Add"
-																: this.state.value[rowNum][colNum].join(",")}
+																: this.props.value[rowNum][colNum].join(",")}
 														</Button>
 														break;
 													case "M2Lab":
 														Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
-															this.state.value[rowNum][colNum] === ""
+															this.props.value[rowNum][colNum] === ""
 																? "Add"
 																: "Edit"}
 														</Button>;
@@ -424,7 +442,7 @@ class QWDATATable extends React.Component {
 															key={keyText}
 															type="TimeInput"
 															alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
-															value={this.state.value[rowNum][colNum]}
+															value={this.props.value[rowNum][colNum]}
 														/>
 														break;
 													case "Sample Date":
@@ -434,7 +452,7 @@ class QWDATATable extends React.Component {
 															key={keyText}
 															type="DateInput"
 															alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
-															value={this.state.value[rowNum][colNum]}
+															value={this.props.value[rowNum][colNum]}
 														/>
 														break;
 													default: throw new Error(headerKey + " case not handled in QWDATA table");
@@ -450,7 +468,7 @@ class QWDATATable extends React.Component {
 													options={motherQuestion.options}
 													includeBlank={true}
 													alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
-													value={this.state.value[rowNum][colNum]}
+													value={this.props.value[rowNum][colNum]}
 												/>
 											}
 											return (
