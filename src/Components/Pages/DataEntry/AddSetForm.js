@@ -21,12 +21,19 @@ class AddSetForm extends React.Component {
 
 	constructor(props) {
 		super(props);
+
+
+
 		this.state = {
 			newSetName: "",
 			addNewSetButtonDisabled: false,
 			addNewSetDisabledReason: "",
 			copyStationing: false,
 			duplicateFromSet: ""
+		}
+
+		if(getNumberOfSets(this.props.currentSamplingEventID)===0) {
+			this.addSet();
 		}
 
 	}

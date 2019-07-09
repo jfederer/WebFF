@@ -3,12 +3,12 @@ import {
  ANALYSE_TEXT_SA,
  ANALYSE_TEXT_LOI ,
  ANALYSE_TEXT_Z,
-//  ANALYSE_TEXT_FO,
-//  ANALYSE_TEXT_BD ,
-//  ANALYSE_TEXT_C ,
-//  ANALYSE_TEXT_T ,
-//  ANALYSE_TEXT_DS,
-//  ANALYSE_TEXT_SC ,
+ ANALYSE_TEXT_FO,
+ ANALYSE_TEXT_BD ,
+ ANALYSE_TEXT_C ,
+ ANALYSE_TEXT_T ,
+ ANALYSE_TEXT_DS,
+ ANALYSE_TEXT_SC ,
 
  TURB_TEXT_LOI,
  TURB_TEXT_SA,
@@ -29,6 +29,19 @@ export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID
 	"ASTAT Code": "analysisStatus",
 	"Add-on Analyses": null,
 	"M2Lab": null
+}
+
+export const allOpts = {
+	[ANALYSE_TEXT_SF]:"SF",
+	[ANALYSE_TEXT_SA]:"SA",
+	[ANALYSE_TEXT_LOI]:"LOI",
+	[ANALYSE_TEXT_Z]:"Z",
+    [ANALYSE_TEXT_FO]:"FO",
+    [ANALYSE_TEXT_BD]:"BD",
+    [ANALYSE_TEXT_C]:"C",
+    [ANALYSE_TEXT_T]:"T",
+    [ANALYSE_TEXT_DS]:"DS",
+    [ANALYSE_TEXT_SC]:"SC"
 }
 
 export const allAddOnOpts_bedload = {
@@ -53,6 +66,8 @@ export const allTubidityOpts = {
 	[TURB_TEXT_SA]: "63676",
 	[TURB_TEXT_LOI]: "63680"
 }
+
+
 
 export const pCodes = {
 	"Water Temp C": "P00010",

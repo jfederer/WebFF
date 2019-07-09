@@ -18,7 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
-import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
+import { allQWDATAOptionalHeaders, allOpts, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
 import { getKeyFromValue } from '../../Utils/Utilities';
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
@@ -257,8 +257,10 @@ class QWDATATable extends React.Component {
 
 	addOnChangeHandler = (eventID, QID, addOnValue) => {
 		console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
-		
-		this.setState({ dialogAddOnValue: addOnValue }, ()=>console.log("dialog add on value set!: ", this.state.addOnValue));
+		let asArr = Object.keys(addOnValue).map((key)=>{
+			return addOnValue[key]?allOpts[key]:null;
+		})
+		this.setState({ dialogAddOnValue: asArr }, () => console.log("dialog add on value set!: ", this.state.dialogAddOnValue));
 	}
 
 	handleValueChange = (row, col) => (eventID, QID, value) => {
@@ -385,6 +387,7 @@ class QWDATATable extends React.Component {
 														this.props.value[rowNum][colNum] === "" || this.props.value[rowNum][colNum].length === 0
 															? "Add"
 															: this.props.value[rowNum][colNum].join(",")}
+																
 													</Button>
 													break;
 												case "M2Lab":
@@ -491,8 +494,8 @@ class QWDATATable extends React.Component {
 							{Object.keys(this.state.rowAddOnOptions).length === 0 ? //&& this.state.rowAddOnOptions.constructor === Object
 								<Typography>There are no available add-on analyses for this sample</Typography> :
 								<React.Fragment>
-									{console.log("Options: ", this.state.rowAddOnOptions)}
-									{console.log("Value: ", this.state.dialogAddOnValue)}
+									{console.log("QWDATA RENDER: rowAddOnOptions: ", this.state.rowAddOnOptions)}
+									{console.log("QWDATA RENDER: dialogAddOnValue: ", this.state.dialogAddOnValue)}
 									<Question
 										id="AddOnAnalyses"
 										type="MultipleChoice"
