@@ -1,3 +1,16 @@
+import {
+	ANALYSE_TEXT_SF,
+	ANALYSE_TEXT_SA,
+	ANALYSE_TEXT_LOI,
+	ANALYSE_TEXT_Z,
+	ANALYSE_TEXT_FO,
+	ANALYSE_TEXT_BD,
+	ANALYSE_TEXT_C,
+	ANALYSE_TEXT_T,
+	ANALYSE_TEXT_DS,
+	ANALYSE_TEXT_SC
+} from './Dictionary';
+
 export const emptySamplingEvent = {
 	eventID: "",
 	eventName: "",
@@ -121,14 +134,14 @@ export const defaultSetInformationQuestionsData = {
 		"type": "TableInput",
 		// "hidden": true,
 		"colHeaders": true,
-		"rowHeaders": false,  
+		"rowHeaders": false,
 		"invalidMessage": "Must input number of samples before table will display",
 		"value": [
 			["Distance from L bank, feet",
-			"Sampling Depth, feet",
-			"Transit Rate, ft / sec",
-			"Rest time on Bed for Bedload sample,seconds",
-			"Horizontal width of Vertical, feet"], 
+				"Sampling Depth, feet",
+				"Transit Rate, ft / sec",
+				"Rest time on Bed for Bedload sample,seconds",
+				"Horizontal width of Vertical, feet"],
 			["", "", "", "", ""]
 		],
 		"width_xs": 10,
@@ -162,7 +175,7 @@ export const defaultSetInformationQuestionsData = {
 		"rowHeaders": false,
 
 		"value": [["Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
-		[	"",
+		["",
 			"",
 			"",
 			"",
@@ -177,18 +190,18 @@ export const defaultSetInformationQuestionsData = {
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
 		"options": {
-			"BEDSand-Fine break": "SF",
-			"Sand Analysis": "SA",
-			"Loss-on-ignition": "LOI",
-			"Full-size Fractions*": "Z",
-			"Fines Only": "FO"
+			[ANALYSE_TEXT_SF]: "SF",
+			[ANALYSE_TEXT_SA]: "SA",
+			[ANALYSE_TEXT_LOI]: "LOI",
+			[ANALYSE_TEXT_Z + '*']: "Z",
+			[ANALYSE_TEXT_FO]: "FO"
 		},
 		"value": {
-			"Sand-Fine break": false,
-			"Sand Analysis": false,
-			"Loss-on-ignition": false,
-			"Full-size Fractions*": false,
-			"Fines Only": false
+			[ANALYSE_TEXT_SF]: false,
+			[ANALYSE_TEXT_SA]: false,
+			[ANALYSE_TEXT_LOI]: false,
+			[ANALYSE_TEXT_Z]: false,
+			[ANALYSE_TEXT_FO]: false
 		},
 		"width_xs": 2,
 		"width_lg": 2
@@ -201,20 +214,20 @@ export const defaultSetInformationQuestionsData = {
 		"type": "MultipleChoice",
 		"options":
 		{
-			"BOTSand-Fine break*": "SF",
-			"Fines Only": "FO",
-			"Sand Analysis*": "SA",
-			"Loss-on-ignition*": "LOI",
-			"Bulk Density": "BD",
-			"Full-size Fractions*": "Z"
+			[ANALYSE_TEXT_SF + "*"]: "SF",
+			[ANALYSE_TEXT_FO]: "FO",
+			[ANALYSE_TEXT_SA + "*"]: "SA",
+			[ANALYSE_TEXT_LOI + "*"]: "LOI",
+			[ANALYSE_TEXT_BD]: "BD",
+			[ANALYSE_TEXT_Z + "*"]: "Z"
 		},
 		"value": {
-			"Sand-Fine break*": false,
-			"Fines Only": false,
-			"Sand Analysis*": false,
-			"Loss-on-ignition*": false,
-			"Bulk Density": false,
-			"Full-size Fractions*": false
+			[ANALYSE_TEXT_SF]: false,
+			[ANALYSE_TEXT_FO]: false,
+			[ANALYSE_TEXT_SA]: false,
+			[ANALYSE_TEXT_LOI]: false,
+			[ANALYSE_TEXT_BD]: false,
+			[ANALYSE_TEXT_Z]: false
 		},
 		"width_xs": 2,
 		"width_lg": 2
@@ -228,24 +241,24 @@ export const defaultSetInformationQuestionsData = {
 		"helperText": "* possible add-on analysis for individual samples.",
 		"options":
 		{
-			"Concentration": "C",
-			"Sand-Fine break*": "SF",
-			"Sand Analysis*": "SA",
-			"Turbidity": "T",
-			"Loss-on-ignition*": "LOI",
-			"Dissolved Solids": "DS",
-			"Specific Conductance": "SC",
-			"Full-size Fractions*": "Z"
+			[ANALYSE_TEXT_C]: "C",
+			[ANALYSE_TEXT_SF + "*"]: "SF",
+			[ANALYSE_TEXT_SA + "*"]: "SA",
+			[ANALYSE_TEXT_T]: "T",
+			[ANALYSE_TEXT_LOI + "*"]: "LOI",
+			[ANALYSE_TEXT_DS]: "DS",
+			[ANALYSE_TEXT_SC]: "SC",
+			[ANALYSE_TEXT_Z + "*"]: "Z"
 		},
 		"value": {
-			"Concentration": false,
-			"Sand-Fine break*": false,
-			"Sand Analysis*": false,
-			"Turbidity": false,
-			"Loss-on-ignition*": false,
-			"Dissolved Solids": false,
-			"Specific Conductance": false,
-			"Full-size Fractions*": false
+			[ANALYSE_TEXT_C]: false,
+			[ANALYSE_TEXT_SF + "*"]: false,
+			[ANALYSE_TEXT_SA + "*"]: false,
+			[ANALYSE_TEXT_T]: false,
+			[ANALYSE_TEXT_LOI + "*"]: false,
+			[ANALYSE_TEXT_DS]: false,
+			[ANALYSE_TEXT_SC]: false,
+			[ANALYSE_TEXT_Z + "*"]: false
 		},
 		"width_xs": 2,
 		"width_lg": 2
@@ -273,7 +286,7 @@ export const defaultQuestionsData = {
 		"options":
 			{},
 		"value": {}
-		
+
 	},
 
 	stationNumber: {
@@ -445,7 +458,7 @@ export const defaultQuestionsData = {
 		{
 			"anyValue": "ShowTab::DataEntry"
 		},
-		"value": "",
+		"value": "10",
 		"layoutGroup": "Basic",
 		"width_xs": 4,
 		"width_lg": 2
@@ -1553,7 +1566,7 @@ export const defaultQuestionsData = {
 		"width_lg": 3
 	},
 
-	
+
 
 	avgRepMeasures: {
 		"id": "avgRepMeasures",

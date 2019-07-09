@@ -21,23 +21,27 @@ const styles = theme => ({
 class MultipleChoice extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log("MC PROPS: ", props);
 		
 		if (this.isInvalid()) {
 
 			// upon loading, if the options and values aren't the same size, let's fill out the values
-			console.warn("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct");
+			console.warn("Options and Values starting states are not in sync for " + this.props.id + ", attempting to correct by utilizing values in from the options.  If multiple choice question fails to appear, the correction may have failed.");
 
 			let initValue = _.cloneDeep(this.props.value);
-			if(typeof initValue === "undefined") {
+			if(typeof initValue === "undefined" || Array.isArray(initValue)) {  // if it's an array, we know it's already the wrong size becaue it was checked in isInvalid()
 				initValue = {};
 			}
 		
-			Object.keys(this.props.options).map((option) => {
+			Object.keys(this.props.options).forEach((option) => {
 				if (initValue[option] === null || typeof initValue[option] === 'undefined') {
 					initValue[option] = false;
 				}
-				return null;
 			})
+
+			console.log('initValue :', initValue);
+
+			console.warn("Correction attempted - initial value: ", initValue);
 			if (this.props.alternateChangeHandler) {
 				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, initValue);
 			} else {

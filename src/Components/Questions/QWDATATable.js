@@ -22,7 +22,8 @@ import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, al
 import { getKeyFromValue } from '../../Utils/Utilities';
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
-
+import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
+import { dialogQuestions } from './../../Utils/DefaultConfig';
 
 
 const styles = theme => ({
@@ -118,7 +119,7 @@ export const verifyPassedQWDATAValue = (eventID, value) => {
 
 
 class QWDATATable extends React.Component {
-	
+
 	constructor(props) {
 		super(props);
 
@@ -131,8 +132,6 @@ class QWDATATable extends React.Component {
 		};
 
 	};
-
-
 
 	insertEstimatedTime(value) {
 		let etc = this.getEstimatedTimeColumn();
@@ -187,7 +186,7 @@ class QWDATATable extends React.Component {
 	};
 
 	handleAddOnClickOpen = (row, col) => {
-		// console.log(row, " x ", col);
+		console.log("handleAddOnClickOpen: (", row, " x ", col);
 		let addOnOpts = {};
 		//load up addOnOpts 
 		let sedType = this.props.getQuestionValue("sedimentType");
@@ -195,9 +194,6 @@ class QWDATATable extends React.Component {
 			case "bedload": Object.assign(addOnOpts, allAddOnOpts_bedload); break;
 			case "bottom": Object.assign(addOnOpts, allAddOnOpts_bottom); break;
 			default: Object.assign(addOnOpts, allAddOnOpts_suspended);
-			// case "bedload": addOnOpts = allAddOnOpts_bedload; break;
-			// case "bottom": addOnOpts = allAddOnOpts_bottom; break;
-			// default:  addOnOpts = allAddOnOpts_suspended;
 		}
 		// console.log("addOnOpts (base):", addOnOpts);
 
@@ -206,25 +202,32 @@ class QWDATATable extends React.Component {
 		// console.log("setName:", setName);
 
 		// combined with the sediment type
-		let analysesQ_id = "set" + setName + "_AnalysedFor_" + sedType;
-		// console.log("analysesQ_id:", analysesQ_id);
+		let analysesQID = "analysedFor_" + sedType;
+		// console.log("analysesQ_id:", analysesQID);
 
-		// will get us the question we need ....
-		let alreadyDoing = this.props.getQuestionValue(analysesQ_id);
+		// will get us the question that tells us what's already been added to the entire set ....
+		let alreadyDoing = getQuestionValue(this.props.currentEventID, SET_INFORMATION_IDENTIFIER + setName, analysesQID);
 		// console.log("alreadyDoing:", alreadyDoing);
 
 		// ...to 'subtract' from the list of options
-		for (let i = 0; i < alreadyDoing.length; i++) {
-			Object.keys(addOnOpts).map((key) => {
-				if (addOnOpts[key] === alreadyDoing[i]) {
-					delete addOnOpts[key];
-				}
-				return null;
-			})
-		}
+		Object.keys(addOnOpts).forEach((key) => {
+			if (alreadyDoing[key + "*"] === true) {  //TODO: adding the asterisk is a kludge, should be adding it more elegantly in the multi-choice question somehow using the questionOptions constants
+				delete addOnOpts[key];
+			}
+		})
+
 		// console.log("addOnOpts (filtered):", addOnOpts);
 
-		this.setState({ dialogAddOnOpen: true, rowAddOnOptions: addOnOpts, dialogAddOnValue: this.props.value[row][col], curRow: row, curCol: col });
+		this.setState({
+			dialogAddOnOpen: true,
+			rowAddOnOptions: addOnOpts,
+			dialogAddOnValue: this.props.value[row][col],
+			curRow: row,
+			curCol: col
+		},
+			() => console.log("Done setting state:\n" +
+				"rowAddOnOptions: ", addOnOpts,
+				"\ndialogAddOnValue: ", this.props.value[row][col]));
 	};
 
 
@@ -252,14 +255,16 @@ class QWDATATable extends React.Component {
 		this.setState({ dialogM2LValue: e.target.value }, () => { this.props.stateChangeHandler(this.props.value) });
 	}
 
-	addOnChangeHandler = (mcq) => {
-		this.setState({ dialogAddOnValue: mcq.props.value });
+	addOnChangeHandler = (eventID, QID, addOnValue) => {
+		console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
+		
+		this.setState({ dialogAddOnValue: addOnValue }, ()=>console.log("dialog add on value set!: ", this.state.addOnValue));
 	}
 
 	handleValueChange = (row, col) => (eventID, QID, value) => {
 		console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
 
-		console.log("QWDATA: handleValueChange: this.state.value: ", this.props.value);
+		// console.log("QWDATA: handleValueChange: this.state.value: ", this.props.value);
 		//  console.log("row: ", row, "col: ", col);
 		//  console.log("e", e);
 		//  console.log("e.state.value", e.state.value);
@@ -267,7 +272,7 @@ class QWDATATable extends React.Component {
 		//  console.log("newVal: ", newVal);
 		newVal[row][col] = value;
 
-		console.log("QWDATA: setting State (newVal): ", newVal);
+		// console.log("QWDATA: setting State (newVal): ", newVal);
 		// this.setState({ value: newVal }, () => {
 		// console.log("QWDATA: handleValueChange setState Callback: ", newVal);
 		this.props.stateChangeHandler(newVal)
@@ -309,204 +314,209 @@ class QWDATATable extends React.Component {
 		if (typeof this.props.value === 'undefined' || this.props.value === null) {
 			console.log("Null render");
 			return null;
-		} 
+		}
 
 		return (
- <React.Fragment>
-					<br></br>
-					<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
-					<Table className={classes.table}>
-						<TableHead>
-							<TableRow>
-								{this.props.value[0].map((headerKey) => {
-									let headerValue = allQWDATAOptionalHeaders[headerKey];
-									// console.log(headerKey +"="+headerValue);
+			<React.Fragment>
+				<br></br>
+				<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
+				<Table className={classes.table}>
+					<TableHead>
+						<TableRow>
+							{this.props.value[0].map((headerKey) => {
+								let headerValue = allQWDATAOptionalHeaders[headerKey];
+								// console.log(headerKey +"="+headerValue);
 
-									let defaultValue = null;
-									let displayValue = null;
-									if (headerValue) {
-										let qidForDefaultValue = headerValue;
-										console.log("qidForDefaultValue: ", qidForDefaultValue);
-										defaultValue = this.props.getQuestionValue(qidForDefaultValue);
-										console.log("Default Value: ", defaultValue);
-										if (defaultValue) {
-											let QD = this.props.getQuestionData(qidForDefaultValue);
-											displayValue = getKeyFromValue(QD.options, defaultValue);
-										}
+								let defaultValue = null;
+								let displayValue = null;
+								if (headerValue) {
+									let qidForDefaultValue = headerValue;
+									// console.log("qidForDefaultValue: ", qidForDefaultValue);
+									defaultValue = this.props.getQuestionValue(qidForDefaultValue);
+									// console.log("Default Value: ", defaultValue);
+									if (defaultValue) {
+										let QD = this.props.getQuestionData(qidForDefaultValue);
+										displayValue = getKeyFromValue(QD.options, defaultValue);
 									}
-
-									if (headerKey === "Sample Date") {
-										let sdArr = this.props.getQuestionValue("sampleDate").split("-");
-										displayValue = sdArr[1] + "/" + sdArr[2] + "/" + sdArr[0];
-									}
-									if (headerKey === "Sample Time") {
-										displayValue = <button onClick={this.handleEstimateClick}>Estimate</button>;
-									}
-
-									return (
-										<TableCell className={classes.tableCell} key={"QWDATA_" + headerKey} >
-											{headerKey}
-											{displayValue ? <br /> : null}
-											{displayValue
-												? <React.Fragment>({displayValue})</React.Fragment>
-												: null}
-										</TableCell>
-									);
-								})}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{this.props.value.map((row, rowNum) => {
-								if (rowNum === 0) {
-									return null;
 								}
-								let realRowNum = rowNum + 1;
+
+								if (headerKey === "Sample Date") {
+									let sdArr = this.props.getQuestionValue("sampleDate").split("-");
+									displayValue = sdArr[1] + "/" + sdArr[2] + "/" + sdArr[0];
+								}
+								if (headerKey === "Sample Time") {
+									displayValue = <button onClick={this.handleEstimateClick}>Estimate</button>;
+								}
+
 								return (
-									<TableRow key={"ROW:" + realRowNum}>
-										{this.props.value[0].map((headerKey, colNum) => {
-											let Q;
-											let keyText = "QWDATA_row:" + rowNum + "_col:" + colNum;   //TODO: this is getting passed as the raw QID for some reason
-											// console.log("this.state.value[0]", this.state.value[0]);
-											// console.log("headerKey", headerKey);
-
-
-											if (allQWDATAOptionalHeaders[headerKey] === null) {
-												switch (headerKey) {
-													case "Set-Sample @ Dist":
-														Q = this.props.value[rowNum][colNum];
-														break;
-													case "Add-on Analyses":
-														Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
-															this.props.value[rowNum][colNum] === "" || this.props.value[rowNum][colNum].length === 0
-																? "Add"
-																: this.props.value[rowNum][colNum].join(",")}
-														</Button>
-														break;
-													case "M2Lab":
-														Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
-															this.props.value[rowNum][colNum] === ""
-																? "Add"
-																: "Edit"}
-														</Button>;
-														break;
-													case "Sample Time":
-														Q = <Question {...this.classlessProps}
-															label=""
-															id={keyText}
-															key={keyText}
-															type="TimeInput"
-															alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
-															value={this.props.value[rowNum][colNum]}
-														/>
-														break;
-													case "Sample Date":
-														Q = <Question {...this.classlessProps}
-															label=""
-															id={keyText}
-															key={keyText}
-															type="DateInput"
-															alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
-															value={this.props.value[rowNum][colNum]}
-														/>
-														break;
-													default: throw new Error(headerKey + " case not handled in QWDATA table");
-												}
-											} else {
-												let motherQuestion = this.props.getQuestionData(allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
-
-												Q = <Question {...this.classlessProps}
-													label={null}
-													type="DropDown"
-													id={keyText}
-													key={keyText}
-													options={motherQuestion.options}
-													includeBlank={true}
-													alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
-													value={this.props.value[rowNum][colNum]}
-												/>
-											}
-											return (
-												<TableCell key={"row:" + realRowNum + "_col:" + colNum} className={classes.tableCell}>{Q}</TableCell>
-											);
-										})}
-									</TableRow>
+									<TableCell className={classes.tableCell} key={"QWDATA_" + headerKey} >
+										{headerKey}
+										{displayValue ? <br /> : null}
+										{displayValue
+											? <React.Fragment>({displayValue})</React.Fragment>
+											: null}
+									</TableCell>
 								);
 							})}
-						</TableBody>
-					</Table>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{this.props.value.map((row, rowNum) => {
+							if (rowNum === 0) {
+								return null;
+							}
+							let realRowNum = rowNum + 1;
+							return (
+								<TableRow key={"ROW:" + realRowNum}>
+									{this.props.value[0].map((headerKey, colNum) => {
+										let Q;
+										let keyText = "QWDATA_row:" + rowNum + "_col:" + colNum;   //TODO: this is getting passed as the raw QID for some reason
+										// console.log("this.state.value[0]", this.state.value[0]);
+										// console.log("headerKey", headerKey);
+
+
+										if (allQWDATAOptionalHeaders[headerKey] === null) {
+											switch (headerKey) {
+												case "Set-Sample @ Dist":
+													Q = this.props.value[rowNum][colNum];
+													break;
+												case "Add-on Analyses":
+													Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
+														this.props.value[rowNum][colNum] === "" || this.props.value[rowNum][colNum].length === 0
+															? "Add"
+															: this.props.value[rowNum][colNum].join(",")}
+													</Button>
+													break;
+												case "M2Lab":
+													Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
+														this.props.value[rowNum][colNum] === ""
+															? "Add"
+															: "Edit"}
+													</Button>;
+													break;
+												case "Sample Time":
+													Q = <Question {...this.classlessProps}
+														label=""
+														id={keyText}
+														key={keyText}
+														type="TimeInput"
+														alternateChangeHandler={() => this.handleValueChange(rowNum, colNum)}
+														value={this.props.value[rowNum][colNum]}
+													/>
+													break;
+												case "Sample Date":
+													Q = <Question {...this.classlessProps}
+														label=""
+														id={keyText}
+														key={keyText}
+														type="DateInput"
+														alternateChangeHandler={() => this.handleValueChange(rowNum, colNum)}
+														value={this.props.value[rowNum][colNum]}
+													/>
+													break;
+												default: throw new Error(headerKey + " case not handled in QWDATA table");
+											}
+										} else {
+											let motherQuestion = this.props.getQuestionData(allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
+
+											Q = <Question {...this.classlessProps}
+												label={null}
+												type="DropDown"
+												id={keyText}
+												key={keyText}
+												options={motherQuestion.options}
+												includeBlank={true}
+												alternateChangeHandler={() => this.handleValueChange(rowNum, colNum)}
+												value={this.props.value[rowNum][colNum]}
+											/>
+										}
+										return (
+											<TableCell key={"row:" + realRowNum + "_col:" + colNum} className={classes.tableCell}>{Q}</TableCell>
+										);
+									})}
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
 
 
 
 
 
 
-					<Dialog
-						open={this.state.dialogM2LOpen}
-						onClose={this.handleClose}
-						aria-labelledby="form-dialog-title"
-					><form className="commentForm" onSubmit={this.handleM2LSave}>
-							<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
-							<DialogContent>
-								<DialogContentText>
-									Enter the message you'd like to send to the lab about this particular sample
+				<Dialog
+					open={this.state.dialogM2LOpen}
+					onClose={this.handleClose}
+					aria-labelledby="form-dialog-title"
+				><form className="commentForm" onSubmit={this.handleM2LSave}>
+						<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
+						<DialogContent>
+							<DialogContentText>
+								Enter the message you'd like to send to the lab about this particular sample
 				  </DialogContentText>
-								<TextField
-									autoFocus
-									value={this.state.dialogM2LValue}
-									onChange={this.dialogM2LTextChangeHandler}
-									margin="dense"
-									id="M2L_Dialog"
-									label="Message To Lab"
-									rows={5}
-									fullWidth
-									multiline
-								/>
-							</DialogContent>
-							<DialogActions>
-								<Button onClick={this.handleClose} color="primary">
-									Cancel
+							<TextField
+								autoFocus
+								value={this.state.dialogM2LValue}
+								onChange={this.dialogM2LTextChangeHandler}
+								margin="dense"
+								id="M2L_Dialog"
+								label="Message To Lab"
+								rows={5}
+								fullWidth
+								multiline
+							/>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={this.handleClose} color="primary">
+								Cancel
 				  </Button>
-								<Button onClick={this.handleM2LSave} color="primary">
-									Save
+							<Button onClick={this.handleM2LSave} color="primary">
+								Save
 				  </Button>
-							</DialogActions>
-						</form>
-					</Dialog>
+						</DialogActions>
+					</form>
+				</Dialog>
 
-					<Dialog
-						open={this.state.dialogAddOnOpen}
-						onClose={this.handleClose}
-						aria-labelledby="form-dialog-title"
-					><form className="commentForm" onSubmit={this.handleAddOnSave}>
-							<DialogTitle id="form-dialog-title">Add on Analyses</DialogTitle>
-							<DialogContent>
-								<DialogContentText>
-									Select the available add-on analyses you'd like to have done on this sample
-				  </DialogContentText>
-								{Object.keys(this.state.rowAddOnOptions).length === 0 && this.state.rowAddOnOptions.constructor === Object ?
-									<Typography>There are no available add-on analyses for this sample</Typography> :
+				<Dialog
+					open={this.state.dialogAddOnOpen}
+					onClose={this.handleClose}
+					aria-labelledby="form-dialog-title"
+				><form className="commentForm" onSubmit={this.handleAddOnSave}>
+						<DialogTitle id="form-dialog-title">Add on Analyses</DialogTitle>
+						<DialogContent>
+							<DialogContentText>
+								Select the available add-on analyses you'd like to have done on this sample
+				  			</DialogContentText>
+							{Object.keys(this.state.rowAddOnOptions).length === 0 ? //&& this.state.rowAddOnOptions.constructor === Object
+								<Typography>There are no available add-on analyses for this sample</Typography> :
+								<React.Fragment>
+									{console.log("Options: ", this.state.rowAddOnOptions)}
+									{console.log("Value: ", this.state.dialogAddOnValue)}
 									<Question
 										id="AddOnAnalyses"
 										type="MultipleChoice"
 										options={this.state.rowAddOnOptions}
 										value={this.state.dialogAddOnValue}
 										alternateChangeHandler={this.addOnChangeHandler}
-									/>}
+									/>
+									<Typography>HERE!</Typography>
+								</React.Fragment>}
 
 
-							</DialogContent>
-							<DialogActions>
-								<Button onClick={this.handleClose} color="primary">
-									Cancel
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={this.handleClose} color="primary">
+								Cancel
 				  </Button>
-								<Button onClick={this.handleAddOnSave} color="primary">
-									Save
+							<Button onClick={this.handleAddOnSave} color="primary">
+								Save
 				  </Button>
-							</DialogActions>
-						</form>
-					</Dialog>
+						</DialogActions>
+					</form>
+				</Dialog>
 
-				</React.Fragment>
+			</React.Fragment>
 		);
 	}
 }
@@ -545,47 +555,3 @@ const mapDispatchToProps = {
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(QWDATATable));
 
-
-	// buildRow(curRow, row) { //FUTURE:  build even the text questions as sub questions... auto-generating them
-	// 	const { classes } = this.props;
-	// 	console.log("QWDATA PROPS: ", this.props);
-	// 	return <TableRow key={this.props.id + "_row_" + row}>
-	// 		{curRow.map((cellContent, col) => {
-	// 			let DEBUG = false;
-	// 			let subQkey = this.props.id + "_row:" + row + "_col:" + col;
-	// 			let classlessProps = delete this.props[classes]; // need to delete classes so they don't get passed to children
-	// 			let adHocProps = { ...classlessProps, id: subQkey, type: "Text", label: "", value: cellContent }
-	// 			// let adHocProps = { id: subQkey, type: "Text", label: "", value: cellContent }
-	// 			let cellQuestion = null;
-
-	// 			if (this.props.value[0][col] === "M2Lab" && row !== 0) {
-	// 				cellQuestion = <Button onClick={() => this.handleM2LClickOpen(row, col)}>{this.props.value[row][col] === "" ? "Add" : "Edit"}</Button>
-	// 			} else if (this.props.value[0][col] === "Add-on Analyses" && row !== 0) {
-	// 				cellQuestion = <Button onClick={() => this.handleAddOnClickOpen(row, col)}>{this.props.value[row][col] === "" || this.props.value[row][col].length === 0 ? "Add" : this.props.value[row][col].join(",")}</Button>
-	// 			} else {
-	// 				// just text could either be a header (whereby it should NOT become a question)
-	// 				// or it needs to be a text question in the table
-	// 				if ((col === 0 && this.props.rowHeaders) || (row === 0 && this.props.colHeaders)) {
-	// 					cellQuestion = <div className={classes.header}>{cellContent}</div>
-	// 				} else {
-
-	// 					// pull data from other pages and build this as a drop down question
-
-
-
-
-
-	// 					cellQuestion = <Question {...adHocProps} size={this.props.colSizes[col]} globalState={this.props.globalState} stateChangeHandler={this.handleTableQuestionChange} value="BLah" />
-	// 				}
-	// 				// }
-	// 			}
-	// 			return (
-	// 				<TableCell className={classes.tableCell} key={this.props.id + "_row:" + row + "_col:" + col}>
-	// 					{cellQuestion}
-	// 				</TableCell>
-	// 			)
-	// 		})}
-
-
-	// 	</TableRow>
-	// }

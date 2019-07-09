@@ -1,3 +1,24 @@
+import {
+	 ANALYSE_TEXT_SF,
+ ANALYSE_TEXT_SA,
+ ANALYSE_TEXT_LOI ,
+ ANALYSE_TEXT_Z,
+//  ANALYSE_TEXT_FO,
+//  ANALYSE_TEXT_BD ,
+//  ANALYSE_TEXT_C ,
+//  ANALYSE_TEXT_T ,
+//  ANALYSE_TEXT_DS,
+//  ANALYSE_TEXT_SC ,
+
+ TURB_TEXT_LOI,
+ TURB_TEXT_SA,
+ TURB_TEXT_NTU,
+
+ PCODE_TEXT_NTU,
+ PCODE_TEXT_NTRU,
+ PCODE_TEXT_FNU,
+} from '../Constants/Dictionary';
+
 export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID"   (null Q_id means this is a special case)
 	"Set-Sample @ Dist": null,
 	"Sample Date": null,
@@ -11,26 +32,26 @@ export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID
 }
 
 export const allAddOnOpts_bedload = {
-	"Full size fractions": "Z"
+	[ANALYSE_TEXT_Z]: "Z"
 }
 
 export const allAddOnOpts_bottom = {
-	"Sand-fine break": "SF",
-	"Loss-on-ignition": "LOI",
-	"Sand Analysis": "SA",
-	"Full size fractions": "Z"
+	[ANALYSE_TEXT_SF]: "SF",
+	[ANALYSE_TEXT_LOI]: "LOI",
+	[ANALYSE_TEXT_SA]: "SA",
+	[ANALYSE_TEXT_Z]: "Z"
 }
 
 export const allAddOnOpts_suspended = {
-	"Sand-fine break": "SF",
-	"Sand Analysis": "SA",
-	"Loss-on-ignition": "LOI",
-	"Full size fractions": "Z"
+	[ANALYSE_TEXT_SF]: "SF",
+	[ANALYSE_TEXT_SA]: "SA",
+	[ANALYSE_TEXT_LOI]: "LOI",
+	[ANALYSE_TEXT_Z]: "Z"
 }
 export const allTubidityOpts = {
-	"Turbidity, NTU, 400-600nm, 90 30degs": "63675",
-	"Sand Analysis": "63676",
-	"Loss-on-ignition": "63680"
+	[TURB_TEXT_NTU]: "63675",
+	[TURB_TEXT_SA]: "63676",
+	[TURB_TEXT_LOI]: "63680"
 }
 
 export const pCodes = {
@@ -41,9 +62,9 @@ export const pCodes = {
 	"Inst Disch": "P00061",
 	"Gage Height": "P00065",
 	"Specific Cond": "P00095",
-	"Turb NTU, 400-600nm, 90  30 degs": "P63675",
-	"Turb, NTRU, 400-600nm, multiple angles": "P63676",
-	"Turb, FNU, 780-900nm, 90  2.5 degs": "P63680",
+	[PCODE_TEXT_NTU]: "P63675",
+	[PCODE_TEXT_NTRU]: "P63676",
+	[PCODE_TEXT_FNU]: "P63680",
 	"Transparency": "P65225",
 	"Velocity to compute isokinetic transit rate, feet per second": "P72196"
 };
@@ -62,7 +83,7 @@ export const nq_options_meanings = {
 	"b": "sample broken/spilled in shipment",
 	"e": "required equipment not functional or available",
 	"f": "sample discarded: improper filter used",
-	"x": "result failed quality assurence review"
+	"x": "result failed quality assurance review"
 }
 
 export const rmk_options = {
