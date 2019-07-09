@@ -38,6 +38,7 @@ const initialUIState = {
 	appBarText: "Sediment Field Forms"
 };
 
+
 export function UI(state = initialUIState, action) {
 	let newState = _.cloneDeep(state);
 	switch (action.type) {

@@ -17,9 +17,11 @@ import {
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionDataFromID } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
-import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
+import { getQuestionValue, getMethodCategoryFromValue, getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
 import { showNavigationTab } from './UI';
+import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
+
 
 
 /**
@@ -152,10 +154,7 @@ export function createNewSamplingEvent(eventName) {
 }
 
 export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
-	// console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
-
-
-
+	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
 	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}
@@ -163,6 +162,7 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 	return dispatch => {
 		dispatch(showNavigationTab("QWDATA"));
 		dispatch(showNavigationTab("Parameters"));
+		
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
 		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + getMethodCategoryFromValue(samplingMethod));
@@ -203,16 +203,27 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 				let newRow = new Array(setInfoSampleTableValue[0].length).fill("");
 				setInfoSampleTableValue.push(newRow);
 			}
+
 			setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod), setInfoSampleTableValue);
 		}
 
 		
-
-
-
-		// re-do any distance data (confirm with user)
+		// re-do any distance data  if EWI (confirm with user)
 
 		////// modify QWDATA table //////TODO:
+		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable");
+		let QWDATAValue;
+		if(!origQWDATAValue) {
+			QWDATAValue = createInitialQWDATAValue(eventID);
+		} else {
+			QWDATAValue = verifyPassedQWDATAValue(eventID, origQWDATAValue);
+		}
+
+		console.log(QWDATAValue);
+
+		if (!_.isEqual(origQWDATAValue, QWDATAValue)) {
+			dispatch(SEQuestionValueChange(eventID, "QWDATATable", QWDATAValue));
+		}
 
 		////// modify Parameters table //////TODO:
 	}

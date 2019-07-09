@@ -53,9 +53,9 @@ class SetInformation extends React.Component {
 		super(props);
 		// console.log("CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
-				let initValue = {}; //load value with default table?
-				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue); // save it to the store
-			} else {
+			let initValue = {}; //load value with default table?
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue); // save it to the store
+		} else {
 			console.log("Creating Passed Value Set Information Component");
 		}
 		this.state = {
@@ -64,21 +64,33 @@ class SetInformation extends React.Component {
 	}
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
-		if(sub_QID==="numberOfSamplingPoints") {
-			this.setState({showDataTable:true});
+		if (sub_QID === "numberOfSamplingPoints") {
+			this.doChange(eventID, sub_QID, value)
+			this.setState({ showDataTable: true });
 			this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
+			return;
 		}
 
+		this.doChange(eventID, sub_QID, value);
+	};
+
+	/**
+	 * @description doChange exists as separate function so the 'save' and the 'special questions' can be handled more easily. If the 'save' is done in the wrong order, some of the additional changes might not propagate appropriately. DRY
+	 */
+	doChange = (eventID, sub_QID, value) => {
 		let newValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + this.props.setName);
 		newValue[sub_QID] = _.cloneDeep(value);
+
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
 		} else {
+
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
 		}
 	};
 
-	
+
+
 
 
 	render() {
@@ -127,12 +139,12 @@ class SetInformation extends React.Component {
 
 
 			{/* Data table  */}
-			{samplingMethod &&  this.state.showDataTable 
+			{samplingMethod && this.state.showDataTable
 				? <Question {...setInfoQuestionsData[tableName]}
 					id={tableName}
 					key={realTableName}
 					value={typeof value[tableName] === "undefined"
-						? setInfoQuestionsData[tableName].value 
+						? setInfoQuestionsData[tableName].value
 						: value[tableName]}
 					alternateChangeHandler={this.setInfoChangeHandler} />
 				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected or the number of sampling points has not been filled out</Typography></Paper>

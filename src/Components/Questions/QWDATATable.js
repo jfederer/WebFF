@@ -24,6 +24,7 @@ import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/Ques
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 
 
+
 const styles = theme => ({
 	table: {
 		width: "100%",
@@ -37,147 +38,101 @@ const styles = theme => ({
 });
 
 
-var preRequisiteInfo = {
-	descriptiveColumn: null
+
+
+export const createInitialQWDATAValue = (eventID) => {
+	let initValue = [];
+
+	// build header from scratch
+	let headerRow = [];
+	Object.keys(allQWDATAOptionalHeaders).forEach((header) => {
+		headerRow.push(header);
+	});
+	initValue.push(headerRow);
+
+	let descriptiveColumn = getDescriptiveColumnForTable(eventID); // this gives us number of rows too
+
+	for (let i = 1; i < descriptiveColumn.length; i++) {
+		let emptyRow = new Array(headerRow.length - 1).fill("");
+		emptyRow.unshift(descriptiveColumn[i]);
+		initValue.push(emptyRow);
+	}
+
+	// make the Add-on analysis values arrays
+	let AddOnAnalysesIndex = initValue[0].indexOf("Add-on Analyses");
+	if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+	for (let row = 1; row < initValue.length; row++) { // skip header row
+		if (!Array.isArray(initValue[row][AddOnAnalysesIndex])) {
+			initValue[row][AddOnAnalysesIndex] = [];
+		}
+	}
+
+	// fill out the estimated time, if possible  // TODO: FIXME: 
+
+	// this.insertEstimatedTime(initValue); //TODO: estimate time
+
+	return initValue;
 }
 
-// getDescriptiveColumnForTable={() => getDescriptiveColumnForTable(currentEventID)}
-// getQuestionValue={(QID)=>getQuestionValue(currentEventID, QID)}
-// getQuestionData={(QID)=>{return defaultQuestionsData[QID]}}
+export const verifyPassedQWDATAValue = (eventID, value) => {
+	let nowValue = [];
+	// build new header row, note, the header row should still be correct.
+	nowValue.push(_.cloneDeep(value[0])); // 
+
+	// build rows based on existing values
+	let descriptiveColumn = getDescriptiveColumnForTable(eventID); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
+	// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
+	for (let newRowNum = 1; newRowNum < descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
+		// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
+		//look in props.value for existing matching row
+		let matchingOldRow = -1;
+		for (let oldRow = 1; oldRow < value.length; oldRow++) {
+			// console.log("against..." + this.props.value[oldRow][0]);
+			if (descriptiveColumn[newRowNum] === value[oldRow][0]) {
+				// console.log("MATCH!");
+
+				matchingOldRow = oldRow;
+				break;
+			}
+		}
+
+		let newRow = [];
+		if (matchingOldRow !== -1) {
+			newRow = _.cloneDeep(value[matchingOldRow]);
+		} else {
+			newRow = new Array(value[0].length - 1).fill("");
+			newRow.unshift(descriptiveColumn[newRowNum]);
+		}
+
+		// ensure add-on analysis is an array
+		let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
+		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+		if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
+			newRow[AddOnAnalysesIndex] = [];
+		}
+
+		nowValue.push(newRow);
+	}
+	return nowValue;
+}
+
 
 class QWDATATable extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		let { currentEventID } = this.props;
-		
-
-		console.log("QWDATA TABLE CONSTRUCTOR");
-
-		let nowValue = [];
-		// let startingPCodes = [];
-		if (typeof this.props.value === 'undefined' || this.props.value === null) {// if no value handed
-			console.log("Handed null/undefined value, building blank QWDATA Table");
-
-			nowValue = this.createInitialValueFromScratch();
-
-		}
-		else { // if a value was sent
-			// need to ensure the value has the right number of rows
-			console.log("Handed existing value: ", this.props.value);
-			nowValue = this.verifyPassedValue();
-		}
-
-		console.log("QWDATA now value post : ", nowValue);
-
-		let rdy = true;  
-		Object.keys(preRequisiteInfo).forEach((key) => {  //TODO: unsure the purpose of prerequiste
-			if (preRequisiteInfo[key] === null) {
-				rdy = false;
-			}
-		})
-
 
 		this.state = {
 			dialogM2LOpen: false,
 			dialogM2LValue: "",
 			dialogAddOnOpen: false,
 			dialogAddOnValue: [],
-			rowAddOnOptions: {},
-			readyToDisplay: rdy
+			rowAddOnOptions: {}
 		};
 
-		console.log("Done with QWDATA TABLE constructor")
-		this.props.stateChangeHandler(currentEventID, this.props.id, nowValue);
 	};
 
 
-	createInitialValueFromScratch = () => {
-		let nowValue = [];
-
-		// build header from scratch
-		let headerRow = [];
-		Object.keys(allQWDATAOptionalHeaders).forEach((header) => {
-			headerRow.push(header);
-		});
-		nowValue.push(headerRow);
-
-		// build default values (blanks)
-		preRequisiteInfo.descriptiveColumn = getDescriptiveColumnForTable(this.props.currentEventID); // this gives us number of rows too
-
-		for (let i = 1; i < preRequisiteInfo.descriptiveColumn.length; i++) {
-			let emptyRow = new Array(headerRow.length - 1).fill("");
-			emptyRow.unshift(preRequisiteInfo.descriptiveColumn[i]);
-			nowValue.push(emptyRow);
-		}
-
-		// make the Add-on analysis values arrays
-		let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
-		for (let row = 1; row < nowValue.length; row++) { // skip header row
-			if (!Array.isArray(nowValue[row][AddOnAnalysesIndex])) {
-				nowValue[row][AddOnAnalysesIndex] = [];
-			}
-		}
-
-		// fill out the estimated time, if possible  // TODO: FIXME: 
-
-		// this.insertEstimatedTime(nowValue); //TODO: estimate time
-
-		return nowValue;
-	}
-
-	verifyPassedValue = () => {
-		nowValue = [];
-		// build new header row, note, the header row should still be correct.
-		nowValue.push(_.cloneDeep(this.props.value[0])); // 
-
-		// build rows based on existing values
-		preRequisiteInfo.descriptiveColumn = getDescriptiveColumnForTable(currentEventID); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
-		// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
-		for (let newRowNum = 1; newRowNum < preRequisiteInfo.descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
-			// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
-			//look in props.value for existing matching row
-			let matchingOldRow = -1;
-			for (let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
-				// console.log("against..." + this.props.value[oldRow][0]);
-				if (preRequisiteInfo.descriptiveColumn[newRowNum] === this.props.value[oldRow][0]) {
-					// console.log("MATCH!");
-
-					matchingOldRow = oldRow;
-					break;
-				}
-			}
-
-			let newRow = [];
-			if (matchingOldRow !== -1) {
-				newRow = _.cloneDeep(this.props.value[matchingOldRow]);
-			} else {
-				newRow = new Array(this.props.value[0].length - 1).fill("");
-				newRow.unshift(preRequisiteInfo.descriptiveColumn[newRowNum]);
-			}
-
-			// ensure add-on analysis is an array
-			let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-			if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
-			if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
-				newRow[AddOnAnalysesIndex] = [];
-			}
-
-			nowValue.push(newRow);
-		}
-		return nowValue;
-	}
-
-	// componentWillMount() {
-	// 	console.log("QDWATAA CWM");
-	// }
-
-	// componentDidMount() {
-	// 	console.log("QWDATA: CDM");
-	// 	console.log("CDM: SCH: ", this.state.value);
-	// 	this.props.stateChangeHandler(this.state.value);
-	// }
 
 	insertEstimatedTime(value) {
 		let etc = this.getEstimatedTimeColumn();
@@ -357,8 +312,7 @@ class QWDATATable extends React.Component {
 		} 
 
 		return (
-			 this.state.readyToDisplay 
-				? <React.Fragment>
+ <React.Fragment>
 					<br></br>
 					<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
 					<Table className={classes.table}>
@@ -553,7 +507,6 @@ class QWDATATable extends React.Component {
 					</Dialog>
 
 				</React.Fragment>
-				: <Typography>You have not yet set the required items to render this table.</Typography>
 		);
 	}
 }

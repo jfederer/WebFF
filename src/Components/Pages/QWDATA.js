@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { setAppBarText } from '../../Actions/UI';
 import QWDATATable from '../Questions/QWDATATable';
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
+import { getQuestionDataFromID } from '../../Utils/StoreUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 
 class QWDATA extends React.Component {
@@ -38,6 +39,8 @@ class QWDATA extends React.Component {
 							<QWDATATable
 					stateChangeHandler={(val) => this.props.SEQuestionValueChange(currentEventID, table_QID, val)}
 					value={getQuestionValue(currentEventID, table_QID)}
+					getQuestionValue={(QID) => getQuestionValue(currentEventID, QID)}
+					getQuestionData={(QID) => getQuestionDataFromID(QID)}
 					key={table_QID}
 					id={table_QID}
 					label="QWDATATable LABEL"

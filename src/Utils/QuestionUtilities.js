@@ -144,7 +144,6 @@ export const getMethodCategoryFromValue = (methodValue) => {
 export const getDescriptiveColumnForTable = (eventID) => {
 	let sampleEventLocations = [];
 	let setList = getSetListAsArray(eventID);
-	// console.log(setList);
 
 	// let samplingMethod
 	// let setType = getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod")); //EDI, EWI, or OTHER
@@ -154,7 +153,6 @@ export const getDescriptiveColumnForTable = (eventID) => {
 		let shortSetName = setName.replace(SET_INFORMATION_IDENTIFIER, "");
 		// console.log("realSetName: ", shortSetName);
 		let numSamps = getNumberOfSamplesInSet(eventID, shortSetName);
-		// console.log("Set ", shortSetName, " has ", numSamps, " samples");
 
 		let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
 		// console.log(samplesComposited);

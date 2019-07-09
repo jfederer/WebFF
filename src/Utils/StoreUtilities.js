@@ -15,8 +15,6 @@ export function getNumberOfSets(eventID) {
 
 export function getNumberOfSamplesInSet(eventID, setID) {
 	let event = getEventFromID(eventID);
-	// console.log("getNumberOfSamplesInSet(", eventID, setID,")");
-
 	return event.questionsValues[SET_INFORMATION_IDENTIFIER + setID]["numberOfSamplingPoints"]
 }
 
