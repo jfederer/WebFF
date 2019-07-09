@@ -21,7 +21,6 @@ const styles = theme => ({
 class MultipleChoice extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log("MC PROPS: ", props);
 		
 		if (this.isInvalid()) {
 
@@ -38,8 +37,6 @@ class MultipleChoice extends React.Component {
 					initValue[option] = false;
 				}
 			})
-
-			console.log('initValue :', initValue);
 
 			console.warn("Correction attempted - initial value: ", initValue);
 			if (this.props.alternateChangeHandler) {

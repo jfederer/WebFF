@@ -38,7 +38,7 @@ const styles = theme => ({
 
 });
 
-
+// NOTE: dialogAddOnValue is an object... but is converted to an array to display and save properly
 
 
 export const createInitialQWDATAValue = (eventID) => {
@@ -63,9 +63,7 @@ export const createInitialQWDATAValue = (eventID) => {
 	let AddOnAnalysesIndex = initValue[0].indexOf("Add-on Analyses");
 	if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
 	for (let row = 1; row < initValue.length; row++) { // skip header row
-		if (!Array.isArray(initValue[row][AddOnAnalysesIndex])) {
-			initValue[row][AddOnAnalysesIndex] = [];
-		}
+		initValue[row][AddOnAnalysesIndex] = {};
 	}
 
 	// fill out the estimated time, if possible  // TODO: FIXME: 
@@ -127,7 +125,7 @@ class QWDATATable extends React.Component {
 			dialogM2LOpen: false,
 			dialogM2LValue: "",
 			dialogAddOnOpen: false,
-			dialogAddOnValue: [],
+			dialogAddOnValue: {},
 			rowAddOnOptions: {}
 		};
 
@@ -218,16 +216,18 @@ class QWDATATable extends React.Component {
 
 		// console.log("addOnOpts (filtered):", addOnOpts);
 
+		// we also need to convert incoming props.value[row][col] to an appropriate object.
+
+		//
+
+
 		this.setState({
 			dialogAddOnOpen: true,
 			rowAddOnOptions: addOnOpts,
 			dialogAddOnValue: this.props.value[row][col],
 			curRow: row,
 			curCol: col
-		},
-			() => console.log("Done setting state:\n" +
-				"rowAddOnOptions: ", addOnOpts,
-				"\ndialogAddOnValue: ", this.props.value[row][col]));
+		});
 	};
 
 
@@ -239,8 +239,6 @@ class QWDATATable extends React.Component {
 	}
 
 	handleAddOnSave = () => {
-		// console.log(this.state.curRow, " x ", this.state.curCol);
-		// console.log(this.state.value);
 		let newVal = this.props.value.slice();
 		newVal[this.state.curRow][this.state.curCol] = this.state.dialogAddOnValue;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
@@ -256,11 +254,8 @@ class QWDATATable extends React.Component {
 	}
 
 	addOnChangeHandler = (eventID, QID, addOnValue) => {
-		console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
-		let asArr = Object.keys(addOnValue).map((key)=>{
-			return addOnValue[key]?allOpts[key]:null;
-		})
-		this.setState({ dialogAddOnValue: asArr }, () => console.log("dialog add on value set!: ", this.state.dialogAddOnValue));
+		// console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
+		this.setState({ dialogAddOnValue: addOnValue });
 	}
 
 	handleValueChange = (row, col) => (eventID, QID, value) => {
@@ -307,14 +302,11 @@ class QWDATATable extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		console.log("QWDATA Render props: ", this.props);
 
-		// console.log("QWDATA Render state: ", this.state);
 		let classlessProps = this.props;
 		delete classlessProps[classes];
 
 		if (typeof this.props.value === 'undefined' || this.props.value === null) {
-			console.log("Null render");
 			return null;
 		}
 
@@ -384,11 +376,14 @@ class QWDATATable extends React.Component {
 													break;
 												case "Add-on Analyses":
 													Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
-														this.props.value[rowNum][colNum] === "" || this.props.value[rowNum][colNum].length === 0
+														(!this.props.value[rowNum][colNum] || Object.keys(this.props.value[rowNum][colNum]).filter((key) => this.props.value[rowNum][colNum][key]).length === 0)
 															? "Add"
-															: this.props.value[rowNum][colNum].join(",")}
-																
+															: Object.keys(this.props.value[rowNum][colNum])
+																.filter((key) => this.props.value[rowNum][colNum][key])
+																.map((key) => allOpts[key])
+																.join(",")}
 													</Button>
+
 													break;
 												case "M2Lab":
 													Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
@@ -493,18 +488,14 @@ class QWDATATable extends React.Component {
 				  			</DialogContentText>
 							{Object.keys(this.state.rowAddOnOptions).length === 0 ? //&& this.state.rowAddOnOptions.constructor === Object
 								<Typography>There are no available add-on analyses for this sample</Typography> :
-								<React.Fragment>
-									{console.log("QWDATA RENDER: rowAddOnOptions: ", this.state.rowAddOnOptions)}
-									{console.log("QWDATA RENDER: dialogAddOnValue: ", this.state.dialogAddOnValue)}
-									<Question
-										id="AddOnAnalyses"
-										type="MultipleChoice"
-										options={this.state.rowAddOnOptions}
-										value={this.state.dialogAddOnValue}
-										alternateChangeHandler={this.addOnChangeHandler}
-									/>
-									<Typography>HERE!</Typography>
-								</React.Fragment>}
+								<Question
+									id="AddOnAnalyses"
+									type="MultipleChoice"
+									options={this.state.rowAddOnOptions}
+									value={this.state.dialogAddOnValue}
+									alternateChangeHandler={this.addOnChangeHandler}
+								/>}
+
 
 
 						</DialogContent>
