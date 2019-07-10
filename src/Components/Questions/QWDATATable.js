@@ -177,11 +177,15 @@ class QWDATATable extends React.Component {
 
 
 	handleM2LClickOpen = (row, col) => {
-		this.setState({ dialogM2LOpen: true, dialogM2LValue: this.props.value[row][col], curRow: row, curCol: col });
+		this.setState({ 
+			dialogM2LOpen: true, 
+			dialogM2LValue: this.props.value[row][col], 
+			curRow: row, 
+			curCol: col });
 	};
 
 	handleAddOnClickOpen = (row, col) => {
-		console.log("handleAddOnClickOpen: (", row, ", ", col, ")");
+		// console.log("handleAddOnClickOpen: (", row, ", ", col, ")");
 		let addOnOpts = {};
 		//load up addOnOpts 
 		let sedType = this.props.getQuestionValue("sedimentType");
@@ -219,7 +223,7 @@ class QWDATATable extends React.Component {
 			dialogAddOnValue: _.cloneDeep(this.props.value[row][col]),
 			curRow: row,
 			curCol: col
-		}, ()=>console.log("AFTER SET STATE: ", this.state.dialogAddOnValue));
+		});
 	};
 
 
@@ -227,44 +231,21 @@ class QWDATATable extends React.Component {
 		let newVal = this.props.value.slice();
 		newVal[this.state.curRow][this.state.curCol] = cellValue;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
-		this.handleClose();
+		this.handleDialogsClose();
 	}
 
-
-	// handleAddOnSave = () => {
-	// 	let newVal = this.props.value.slice();
-	// 	newVal[this.state.curRow][this.state.curCol] = this.state.dialogAddOnValue;
-	// 	this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
-	// 	this.handleClose();
-	// }
-
-	handleClose = () => {
+	handleDialogsClose = () => {
 		this.setState({ dialogM2LOpen: false, dialogAddOnOpen: false });
 	};
 
 
-
-	// addOnChangeHandler = (eventID, QID, addOnValue) => {
-	// 	// console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
-	// 	this.setState({ dialogAddOnValue: addOnValue });
-	// }
-
 	handleValueChange = (row, col) => (eventID, QID, value) => {
 		console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
 
-		// console.log("QWDATA: handleValueChange: this.state.value: ", this.props.value);
-		//  console.log("row: ", row, "col: ", col);
-		//  console.log("e", e);
-		//  console.log("e.state.value", e.state.value);
-		let newVal = _.cloneDeep(this.props.value); //.slice();
-		//  console.log("newVal: ", newVal);
+		let newVal = _.cloneDeep(this.props.value); 
 		newVal[row][col] = value;
 
-		// console.log("QWDATA: setting State (newVal): ", newVal);
-		// this.setState({ value: newVal }, () => {
-		// console.log("QWDATA: handleValueChange setState Callback: ", newVal);
 		this.props.stateChangeHandler(newVal)
-		//  });
 	}
 
 	handleEstimateClick = (e) => {
@@ -389,7 +370,7 @@ class QWDATATable extends React.Component {
 														id={keyText}
 														key={keyText}
 														type="TimeInput"
-														alternateChangeHandler={() => this.handleValueChange(rowNum, colNum)}
+														alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
 														value={this.props.value[rowNum][colNum]}
 													/>
 													break;
@@ -399,7 +380,7 @@ class QWDATATable extends React.Component {
 														id={keyText}
 														key={keyText}
 														type="DateInput"
-														alternateChangeHandler={() => this.handleValueChange(rowNum, colNum)}
+														alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
 														value={this.props.value[rowNum][colNum]}
 													/>
 													break;
@@ -415,7 +396,7 @@ class QWDATATable extends React.Component {
 												key={keyText}
 												options={motherQuestion.options}
 												includeBlank={true}
-												alternateChangeHandler={() => this.handleValueChange(rowNum, colNum)}
+												alternateChangeHandler={this.handleValueChange(rowNum, colNum)}
 												value={this.props.value[rowNum][colNum]}
 											/>
 										}
@@ -439,7 +420,7 @@ class QWDATATable extends React.Component {
 						id="M2L_Dialog"
 						open={this.state.dialogM2LOpen}
 						onSave={this.handleCellValueSave}
-						onClose={this.handleClose}
+						onClose={this.handleDialogsClose}
 						dialogTitle="Message To Lab"
 						dialogText="Enter the message you'd like to send to the lab about this particular sample"
 						rows={5}
@@ -453,7 +434,7 @@ class QWDATATable extends React.Component {
 					id="AddOnAnalyses"
 					open={this.state.dialogAddOnOpen}
 					onSave={this.handleCellValueSave}
-					onClose={this.handleClose}
+					onClose={this.handleDialogsClose}
 					dialogTitle="Add on Analyses"
 					dialogText="Select the available add-on analyses you'd like to have done on this sample"
 					noOptionsMessage="There are no available add-on analyses for this sample"
