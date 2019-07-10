@@ -23,7 +23,8 @@ import { getKeyFromValue } from '../../Utils/Utilities';
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
-import TextMessageDialog from '../Dialogs/TextMessageDialog';
+import TextFieldDialog from '../Dialogs/TextFieldDialog'; 
+import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog'; 
 
 
 const styles = theme => ({
@@ -180,7 +181,7 @@ class QWDATATable extends React.Component {
 	};
 
 	handleAddOnClickOpen = (row, col) => {
-		console.log("handleAddOnClickOpen: (", row, " x ", col);
+		console.log("handleAddOnClickOpen: (", row, ", ", col, ")");
 		let addOnOpts = {};
 		//load up addOnOpts 
 		let sedType = this.props.getQuestionValue("sedimentType");
@@ -215,32 +216,27 @@ class QWDATATable extends React.Component {
 		this.setState({
 			dialogAddOnOpen: true,
 			rowAddOnOptions: addOnOpts,
-			dialogAddOnValue: this.props.value[row][col],
+			dialogAddOnValue: _.cloneDeep(this.props.value[row][col]),
 			curRow: row,
 			curCol: col
-		});
+		}, ()=>console.log("AFTER SET STATE: ", this.state.dialogAddOnValue));
 	};
 
 
 	handleCellValueSave = (cellValue) => {
-		console.log("HCVS: ", cellValue);
 		let newVal = this.props.value.slice();
 		newVal[this.state.curRow][this.state.curCol] = cellValue;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
 		this.handleClose();
 	}
 
-	handleM2LSave = () => { //TOOD: combine all handlers just 'getting' the value separately
-		
-		
-	}
 
-	handleAddOnSave = () => {
-		let newVal = this.props.value.slice();
-		newVal[this.state.curRow][this.state.curCol] = this.state.dialogAddOnValue;
-		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
-		this.handleClose();
-	}
+	// handleAddOnSave = () => {
+	// 	let newVal = this.props.value.slice();
+	// 	newVal[this.state.curRow][this.state.curCol] = this.state.dialogAddOnValue;
+	// 	this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
+	// 	this.handleClose();
+	// }
 
 	handleClose = () => {
 		this.setState({ dialogM2LOpen: false, dialogAddOnOpen: false });
@@ -248,10 +244,10 @@ class QWDATATable extends React.Component {
 
 
 
-	addOnChangeHandler = (eventID, QID, addOnValue) => {
-		// console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
-		this.setState({ dialogAddOnValue: addOnValue });
-	}
+	// addOnChangeHandler = (eventID, QID, addOnValue) => {
+	// 	// console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
+	// 	this.setState({ dialogAddOnValue: addOnValue });
+	// }
 
 	handleValueChange = (row, col) => (eventID, QID, value) => {
 		console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
@@ -437,9 +433,9 @@ class QWDATATable extends React.Component {
 
 
 
-				{/* {this.state.dialogM2LOpen
-					? */}
-					 <TextMessageDialog
+				{this.state.dialogM2LOpen
+					?
+					 <TextFieldDialog
 						id="M2L_Dialog"
 						open={this.state.dialogM2LOpen}
 						onSave={this.handleCellValueSave}
@@ -449,46 +445,24 @@ class QWDATATable extends React.Component {
 						rows={5}
 						initialValue={this.state.dialogM2LValue}
 					/>
-					{/* : null
-				} */}
+					: null }
 
-
-
-
-
-				<Dialog
+				{this.state.dialogAddOnOpen 
+				// must conditionally render to re-trigger constructor //FUTURE: that can't be the best way to do this  memoization?
+				? <MultipleChoiceDialog
+					id="AddOnAnalyses"
 					open={this.state.dialogAddOnOpen}
+					onSave={this.handleCellValueSave}
 					onClose={this.handleClose}
-					aria-labelledby="form-dialog-title"
-				><form className="commentForm" onSubmit={this.handleAddOnSave}>
-						<DialogTitle id="form-dialog-title">Add on Analyses</DialogTitle>
-						<DialogContent>
-							<DialogContentText>
-								Select the available add-on analyses you'd like to have done on this sample
-				  			</DialogContentText>
-							{Object.keys(this.state.rowAddOnOptions).length === 0 ? //&& this.state.rowAddOnOptions.constructor === Object
-								<Typography>There are no available add-on analyses for this sample</Typography> :
-								<Question
-									id="AddOnAnalyses"
-									type="MultipleChoice"
-									options={this.state.rowAddOnOptions}
-									value={this.state.dialogAddOnValue}
-									alternateChangeHandler={this.addOnChangeHandler}
-								/>}
+					dialogTitle="Add on Analyses"
+					dialogText="Select the available add-on analyses you'd like to have done on this sample"
+					noOptionsMessage="There are no available add-on analyses for this sample"
+					options={this.state.rowAddOnOptions}
+					initialValue={this.state.dialogAddOnValue}
+				/>
+				: null }
 
 
-
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={this.handleClose} color="primary">
-								Cancel
-				  </Button>
-							<Button onClick={this.handleAddOnSave} color="primary">
-								Save
-				  </Button>
-						</DialogActions>
-					</form>
-				</Dialog>
 
 			</React.Fragment>
 		);
