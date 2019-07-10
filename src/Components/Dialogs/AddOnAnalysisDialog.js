@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { styles } from '../../style';
+import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
 
-import { setAppBarText } from '../../Actions/UI';
-import QWDATATable from '../Questions/QWDATATable';
-import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
-import { getQuestionDataFromID } from '../../Utils/StoreUtilities';
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
+import { setAppBarText } from '../../../Actions/UI';
+import QWDATATable from '../../Questions/QWDATATable';
+import { getQuestionValue, getDescriptiveColumnForTable } from '../../../Utils/QuestionUtilities';
+import { getQuestionDataFromID } from '../../../Utils/StoreUtilities';
+import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 
 class QWDATA extends React.Component {
 

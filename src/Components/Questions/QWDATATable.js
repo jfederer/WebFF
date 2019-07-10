@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 // import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import Question from '../Question';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -23,13 +23,13 @@ import { getKeyFromValue } from '../../Utils/Utilities';
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
-import { dialogQuestions } from './../../Utils/DefaultConfig';
+import TextMessageDialog from '../Dialogs/TextMessageDialog';
 
 
 const styles = theme => ({
 	table: {
 		width: "100%",
-		//	backgroundColor: "#911"
+		//	backgroundColor: "#911" 
 	},
 	tableCell: {
 		padding: 5,
@@ -37,9 +37,6 @@ const styles = theme => ({
 	},
 
 });
-
-// NOTE: dialogAddOnValue is an object... but is converted to an array to display and save properly
-
 
 export const createInitialQWDATAValue = (eventID) => {
 	let initValue = [];
@@ -123,7 +120,6 @@ class QWDATATable extends React.Component {
 
 		this.state = {
 			dialogM2LOpen: false,
-			dialogM2LValue: "",
 			dialogAddOnOpen: false,
 			dialogAddOnValue: {},
 			rowAddOnOptions: {}
@@ -216,11 +212,6 @@ class QWDATATable extends React.Component {
 
 		// console.log("addOnOpts (filtered):", addOnOpts);
 
-		// we also need to convert incoming props.value[row][col] to an appropriate object.
-
-		//
-
-
 		this.setState({
 			dialogAddOnOpen: true,
 			rowAddOnOptions: addOnOpts,
@@ -231,11 +222,17 @@ class QWDATATable extends React.Component {
 	};
 
 
-	handleM2LSave = () => { //TOOD: combine all handlers just 'getting' the value separately
+	handleCellValueSave = (cellValue) => {
+		console.log("HCVS: ", cellValue);
 		let newVal = this.props.value.slice();
-		newVal[this.state.curRow][this.state.curCol] = this.state.dialogM2LValue;
+		newVal[this.state.curRow][this.state.curCol] = cellValue;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
 		this.handleClose();
+	}
+
+	handleM2LSave = () => { //TOOD: combine all handlers just 'getting' the value separately
+		
+		
 	}
 
 	handleAddOnSave = () => {
@@ -249,9 +246,7 @@ class QWDATATable extends React.Component {
 		this.setState({ dialogM2LOpen: false, dialogAddOnOpen: false });
 	};
 
-	dialogM2LTextChangeHandler = (e) => {
-		this.setState({ dialogM2LValue: e.target.value }, () => { this.props.stateChangeHandler(this.props.value) });
-	}
+
 
 	addOnChangeHandler = (eventID, QID, addOnValue) => {
 		// console.log("addOnChangeHandler: ", eventID, QID, addOnValue);
@@ -442,39 +437,24 @@ class QWDATATable extends React.Component {
 
 
 
+				{/* {this.state.dialogM2LOpen
+					? */}
+					 <TextMessageDialog
+						id="M2L_Dialog"
+						open={this.state.dialogM2LOpen}
+						onSave={this.handleCellValueSave}
+						onClose={this.handleClose}
+						dialogTitle="Message To Lab"
+						dialogText="Enter the message you'd like to send to the lab about this particular sample"
+						rows={5}
+						initialValue={this.state.dialogM2LValue}
+					/>
+					{/* : null
+				} */}
 
-				<Dialog
-					open={this.state.dialogM2LOpen}
-					onClose={this.handleClose}
-					aria-labelledby="form-dialog-title"
-				><form className="commentForm" onSubmit={this.handleM2LSave}>
-						<DialogTitle id="form-dialog-title">Message To Lab</DialogTitle>
-						<DialogContent>
-							<DialogContentText>
-								Enter the message you'd like to send to the lab about this particular sample
-				  </DialogContentText>
-							<TextField
-								autoFocus
-								value={this.state.dialogM2LValue}
-								onChange={this.dialogM2LTextChangeHandler}
-								margin="dense"
-								id="M2L_Dialog"
-								label="Message To Lab"
-								rows={5}
-								fullWidth
-								multiline
-							/>
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={this.handleClose} color="primary">
-								Cancel
-				  </Button>
-							<Button onClick={this.handleM2LSave} color="primary">
-								Save
-				  </Button>
-						</DialogActions>
-					</form>
-				</Dialog>
+
+
+
 
 				<Dialog
 					open={this.state.dialogAddOnOpen}
