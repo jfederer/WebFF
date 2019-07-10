@@ -22,7 +22,7 @@ import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import TextFieldDialog from '../Dialogs/TextFieldDialog';
 import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
 import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER } from '../../Constants/Dictionary';
-import { insertEstimatedTime, getEstimatedTimeColumn } from '../../Utils/CalculationUtilities';
+import { insertEstimatedTime } from '../../Utils/CalculationUtilities';
 
 const styles = theme => ({
 	table: {
@@ -37,6 +37,7 @@ const styles = theme => ({
 });
 
 export const createInitialQWDATAValue = (eventID) => {
+	console.log("create initial");
 	let initValue = [];
 
 	// build header from scratch
@@ -69,42 +70,46 @@ export const createInitialQWDATAValue = (eventID) => {
 }
 
 export const verifyPassedQWDATAValue = (eventID, value) => {
+	console.log("verify existing");
 	let nowValue = [];
 	// build new header row, note, the header row should still be correct.
 	nowValue.push(_.cloneDeep(value[0])); // 
 
 	// build rows based on existing values
-	let descriptiveColumn = getDescriptiveColumnForTable(eventID); // preRequisiteInfo.descriptiveColumn will now be the authoritative new [0] element in each row
-	// console.log("NEW FIRST COLUMN: ", preRequisiteInfo.descriptiveColumn);
+	let descriptiveColumn = getDescriptiveColumnForTable(eventID); // descriptiveColumn will now be the authoritative new [0] element in each row
+	// console.log("NEW FIRST COLUMN: ", descriptiveColumn);
 	for (let newRowNum = 1; newRowNum < descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
-		// console.log("Looking for...", preRequisiteInfo.descriptiveColumn[newRowNum]);
+		// console.log("Looking for...", descriptiveColumn[newRowNum]);
 		//look in props.value for existing matching row
-		let matchingOldRow = -1;
+		let matchingOldRowNum = -1;
 		for (let oldRow = 1; oldRow < value.length; oldRow++) {
-			// console.log("against..." + this.props.value[oldRow][0]);
+			// console.log("against..." + value[oldRow][0]);
 			if (descriptiveColumn[newRowNum] === value[oldRow][0]) {
 				// console.log("MATCH!");
 
-				matchingOldRow = oldRow;
+				matchingOldRowNum = oldRow;
 				break;
 			}
 		}
 
 		let newRow = [];
-		if (matchingOldRow !== -1) {
-			newRow = _.cloneDeep(value[matchingOldRow]);
+		if (matchingOldRowNum !== -1) {
+			// console.log("Cloneing old row: ", value[matchingOldRowNum])
+			newRow = _.cloneDeep(value[matchingOldRowNum]);
 		} else {
 			newRow = new Array(value[0].length - 1).fill("");
 			newRow.unshift(descriptiveColumn[newRowNum]);
+			// console.log("Making new empty row: ", newRow)
 		}
 
 		// ensure add-on analysis is an array
-		let AddOnAnalysesIndex = nowValue[0].indexOf(ADD_ON_HEADER);
-		if (AddOnAnalysesIndex < 0) { throw new Error(ADD_ON_HEADER + " not found in header of QWDATA table") }
-		if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
-			newRow[AddOnAnalysesIndex] = [];
-		}
+		// let AddOnAnalysesIndex = nowValue[0].indexOf(ADD_ON_HEADER);
+		// if (AddOnAnalysesIndex < 0) { throw new Error(ADD_ON_HEADER + " not found in header of QWDATA table") }
+		// if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
+		// 	newRow[AddOnAnalysesIndex] = [];
+		// }
 
+		// console.log("pushing new row: ", newRow);
 		nowValue.push(newRow);
 	}
 	return nowValue;
@@ -115,6 +120,14 @@ class QWDATATable extends React.Component {
 
 	constructor(props) {
 		super(props);
+
+		console.log("QWDATA: Props: ", this.props);
+
+		if(this.props.value) {
+			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, verifyPassedQWDATAValue(this.props.currentSamplingEventID, this.props.value));
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, createInitialQWDATAValue(this.props.currentSamplingEventID));
+		}
 
 		this.state = {
 			dialogM2LOpen: false,
@@ -156,7 +169,7 @@ class QWDATATable extends React.Component {
 		// console.log("analysesQ_id:", analysesQID);
 
 		// will get us the question that tells us what's already been added to the entire set ....
-		let alreadyDoing = getQuestionValue(this.props.currentEventID, SET_INFORMATION_IDENTIFIER + setName, analysesQID);
+		let alreadyDoing = getQuestionValue(this.props.currentSamplingEventID, SET_INFORMATION_IDENTIFIER + setName, analysesQID);
 		// console.log("alreadyDoing:", alreadyDoing);
 
 		// ...to 'subtract' from the list of options
@@ -205,7 +218,7 @@ class QWDATATable extends React.Component {
 			return;
 		}
 
-		let newVal = insertEstimatedTime(this.props.currentEventID, this.props.value);
+		let newVal = insertEstimatedTime(this.props.currentSamplingEventID, this.props.value);
 
 		this.props.stateChangeHandler(newVal);
 	}
@@ -412,7 +425,7 @@ class QWDATATable extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		currentEventID: state.SedFF.currentSamplingEventID,
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
 		defaultQuestionsData: state.Questions.questionsData,
 	}

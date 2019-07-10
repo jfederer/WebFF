@@ -55,7 +55,7 @@ class ParametersTable extends React.Component {
 		super(props);
 		// console.log(this.props);
 
-		// console.log("PARAMETERS TABLE CONSTRUCTOR");
+		console.log("PARAMETERS TABLE CONSTRUCTOR");
 		// sampleEventLocations is a double array whereby each 'row' of the array is teh set and each col is the sample location.
 		let nowValue = [];
 		let startingPCodes = [];

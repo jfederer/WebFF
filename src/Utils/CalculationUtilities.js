@@ -48,25 +48,7 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
         samplingLocations[i] = Math.round( samplingLocations[i] * 10 ) / 10;
     }
 
-
-
-    
-   
-    // for(let i = 0; i<pierLocations.length; i++) {
-    //     console.log("pier located from " + pierLocations[i] + "-" + (pierLocations[i]+pierWidths[i]));
-    // }
-    // console.log("samplingZoneWidth: ", samplingZoneWidth)
-    // console.log("samplingWidth: ", samplingWidth)
-    // console.log(provideEWISamplingLocations(20, 500, 
-    //     [30, 180, 210, 410], 
-    //     [120,20,12,45],
-    //     5));
-
-
-
 return samplingLocations;
-    
-
 }
 
 export const provideEDISamplingPercentages = (numberOfSamples) => {

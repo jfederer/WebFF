@@ -64,7 +64,6 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-		//TODO: Param and QWDATA pages  NEXT: verify compositing works correctly (with times and values)... (composite doesn't appear to work with QWDATA... behind by one iteration...grr...)
 		//TODO: numberOfSamplingPointsChanged incorporate param and qwdata
 		//TODO: system menu rebuild
 		//TODO: user/site settings (station names, etc)
@@ -75,7 +74,7 @@ class WebFF extends React.Component {
 		//TODO: QWDATA page, time estimate -> optionally overwrite
 		//TODO: QWDATA page, duplicate date for remaining...
 		//TODO: automatically generate estimated times as setting
-		
+		//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 
 		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 		//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
