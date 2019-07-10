@@ -15,7 +15,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { allQWDATAOptionalHeaders, allOpts, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
 import { getKeyFromValue } from '../../Utils/Utilities';
-import { getSetListAsArray, getNumberOfSamplesInSet } from '../../Utils/StoreUtilities';
 
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
@@ -23,7 +22,7 @@ import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import TextFieldDialog from '../Dialogs/TextFieldDialog';
 import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
 import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER } from '../../Constants/Dictionary';
-
+import { insertEstimatedTime, getEstimatedTimeColumn } from '../../Utils/CalculationUtilities';
 
 const styles = theme => ({
 	table: {
@@ -64,7 +63,7 @@ export const createInitialQWDATAValue = (eventID) => {
 
 	// fill out the estimated time, if possible  // TODO: FIXME: 
 
-	// this.insertEstimatedTime(initValue); //TODO: estimate time
+	 insertEstimatedTime(eventID, initValue); //TODO: estimate time
 
 	return initValue;
 }
@@ -125,50 +124,6 @@ class QWDATATable extends React.Component {
 		};
 
 	};
-
-	insertEstimatedTime(value) {
-		let etc = this.getEstimatedTimeColumn();
-		let SampleTimeIndex = value[0].indexOf(SAMPLE_TIME_HEADER);
-		if (SampleTimeIndex < 0) { throw new Error(SAMPLE_TIME_HEADER + " not found in header of QWDATA table") }
-		for (let row = 1; row < value.length; row++) { // skip header row
-			if (!Array.isArray(value[row][SampleTimeIndex])) {
-				value[row][SampleTimeIndex] = etc[row];
-			}
-		}
-		return value;
-	}
-
-
-	getEstimatedTimeColumn() {
-		let { currentEventID } = this.props;
-		let descColumn = getDescriptiveColumnForTable(currentEventID);
-		let estimatedTimeColumn = new Array(descColumn.length).fill("");
-		let setList = getSetListAsArray(currentEventID);
-
-		let totalNumberOfSamplesInPreviousSets = 0;
-		setList.forEach((setName) => {
-			let numberOfSamplesInSet = getNumberOfSamplesInSet(currentEventID, setName);
-			let startTime = getQuestionValue(currentEventID, setName, "startTime");
-			let endTime = getQuestionValue(currentEventID, setName, "endTime");
-			let ai = !getQuestionValue(currentEventID, setName, "samplesComposited");
-			let startDateTime = new Date("January 1, 2000 " + startTime)
-			let endDateTime = new Date("January 1, 2000 " + endTime)
-			let msElapsed = Math.abs(endDateTime - startDateTime);
-			let msBetweenSamples = msElapsed / (numberOfSamplesInSet - 1);
-
-			for (let sampNum = 0; sampNum < (ai ? numberOfSamplesInSet : 1); sampNum++) {
-				let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
-				let timeSinceStart = (sampNum * msBetweenSamples);
-				let d = new Date(startDateTime.getTime() + timeSinceStart);
-				estimatedTimeColumn[QWDATARowNum] = startTime && endTime
-					? ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2)
-					: "";
-			}
-			totalNumberOfSamplesInPreviousSets += ai ? eval(numberOfSamplesInSet) : eval(1); // if this set was a composite, it was only one line in the QWDATA Table
-		});
-
-		return estimatedTimeColumn;
-	}
 
 
 	handleM2LClickOpen = (row, col) => {
@@ -250,10 +205,9 @@ class QWDATATable extends React.Component {
 			return;
 		}
 
-		let newVal = this.insertEstimatedTime(this.props.value);
+		let newVal = insertEstimatedTime(this.props.currentEventID, this.props.value);
 
 		this.props.stateChangeHandler(newVal);
-
 	}
 
 

@@ -64,7 +64,7 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-		//TODO: Param and QWDATA pages  NEXT: estimate time automatically... verify compositing works correctly (with times and values)... (composite doesn't appear to work with QWDATA... behind by one iteration...grr...)
+		//TODO: Param and QWDATA pages  NEXT: verify compositing works correctly (with times and values)... (composite doesn't appear to work with QWDATA... behind by one iteration...grr...)
 		//TODO: numberOfSamplingPointsChanged incorporate param and qwdata
 		//TODO: system menu rebuild
 		//TODO: user/site settings (station names, etc)
@@ -74,6 +74,7 @@ class WebFF extends React.Component {
 
 		//TODO: QWDATA page, time estimate -> optionally overwrite
 		//TODO: QWDATA page, duplicate date for remaining...
+		//TODO: automatically generate estimated times as setting
 		
 
 		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)

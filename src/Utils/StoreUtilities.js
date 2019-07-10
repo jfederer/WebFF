@@ -4,17 +4,14 @@ import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects'
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 export function getNumberOfSets(eventID) {
-	// let event = getEventFromID(eventID); //TODO: change to "getEvent"
-
 	return getSetListAsArray(eventID).length;
-	// let num = Object.keys(event.questionsValues).filter((key) => {  //TODO: change these to getQuestionValues
-	// 	return key.startsWith(SET_INFORMATION_IDENTIFIER);
-	// }).length;
-	// return num;
 }
 
 export function getNumberOfSamplesInSet(eventID, setID) {
 	let event = getEventFromID(eventID);
+	if(!event) {
+		throw new Error("eventID (", eventID, ") failed to return a valid event in getNumberOfSamplesInSet");
+	}
 	if (setID.startsWith(SET_INFORMATION_IDENTIFIER)) {
 		return event.questionsValues[setID]["numberOfSamplingPoints"]
 	} else {
@@ -24,6 +21,10 @@ export function getNumberOfSamplesInSet(eventID, setID) {
 
 export function getSetListAsArray(eventID) {
 	let event = getEventFromID(eventID);
+
+	if(!event) {
+		throw new Error("eventID (", eventID, ") failed to return a valid event in getSetListAsArray");
+	}
 
 	let setListArr = [];
 	setListArr = Object.keys(event.questionsValues).filter((key) => { //TODO: change these to getQuestionValues

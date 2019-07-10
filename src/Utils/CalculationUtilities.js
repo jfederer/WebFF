@@ -1,3 +1,6 @@
+import { SAMPLE_TIME_HEADER } from '../Constants/Dictionary';
+import { getQuestionValue, getDescriptiveColumnForTable } from './QuestionUtilities';
+import { getSetListAsArray, getNumberOfSamplesInSet } from './StoreUtilities';
 
 export const provideEWISamplingLocations = (samplingZone_left, samplingZone_right, pierLocations, pierWidths, numberOfSamples) => {
     
@@ -73,4 +76,48 @@ export const provideEDISamplingPercentages = (numberOfSamples) => {
 	results.push((Math.round((((i)*width)-(width/2))* 10 ) / 10)+'%');
   }
 return results;
+}
+
+
+export const insertEstimatedTime = (eventID, value) => {
+	let etc = getEstimatedTimeColumn(eventID);
+	let SampleTimeIndex = value[0].indexOf(SAMPLE_TIME_HEADER);
+	if (SampleTimeIndex < 0) { throw new Error(SAMPLE_TIME_HEADER + " not found in header of QWDATA table") }
+	for (let row = 1; row < value.length; row++) { // skip header row
+		if (!Array.isArray(value[row][SampleTimeIndex])) {
+			value[row][SampleTimeIndex] = etc[row];
+		}
+	}
+	return value;
+}
+
+
+export const getEstimatedTimeColumn = (eventID) => {
+	let descColumn = getDescriptiveColumnForTable(eventID);
+	let estimatedTimeColumn = new Array(descColumn.length).fill("");
+	let setList = getSetListAsArray(eventID);
+
+	let totalNumberOfSamplesInPreviousSets = 0;
+	setList.forEach((setName) => {
+		let numberOfSamplesInSet = getNumberOfSamplesInSet(eventID, setName);
+		let startTime = getQuestionValue(eventID, setName, "startTime");
+		let endTime = getQuestionValue(eventID, setName, "endTime");
+		let ai = !getQuestionValue(eventID, setName, "samplesComposited");
+		let startDateTime = new Date("January 1, 2000 " + startTime)
+		let endDateTime = new Date("January 1, 2000 " + endTime)
+		let msElapsed = Math.abs(endDateTime - startDateTime);
+		let msBetweenSamples = msElapsed / (numberOfSamplesInSet - 1);
+
+		for (let sampNum = 0; sampNum < (ai ? numberOfSamplesInSet : 1); sampNum++) {
+			let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
+			let timeSinceStart = (sampNum * msBetweenSamples);
+			let d = new Date(startDateTime.getTime() + timeSinceStart);
+			estimatedTimeColumn[QWDATARowNum] = startTime && endTime
+				? ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2)
+				: "";
+		}
+		totalNumberOfSamplesInPreviousSets += ai ? eval(numberOfSamplesInSet) : eval(1); // if this set was a composite, it was only one line in the QWDATA Table
+	});
+
+	return estimatedTimeColumn;
 }
