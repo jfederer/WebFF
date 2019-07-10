@@ -44,7 +44,7 @@ export const defaultSetInformationQuestionsData = {
 		"id": "endTime",
 		"label": "End Time",
 		"type": "TimeInput",
-		"value": "",
+		"value": "13:00",
 		"width_xs": 5,
 		"width_lg": 2
 	},

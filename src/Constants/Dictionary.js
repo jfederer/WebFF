@@ -16,3 +16,9 @@ export const TURB_TEXT_NTU = 'Turbidity, NTU, 400-600nm, 90 30degs';
 export const PCODE_TEXT_NTU = 'Turbidity, NTU, 400-600nm, 90 30degs';
 export const PCODE_TEXT_NTRU = "Turb, NTRU, 400-600nm, multiple angles";
 export const PCODE_TEXT_FNU = "Turb, FNU, 780-900nm, 90  2.5 degs";
+
+export const SAMPLE_TIME_HEADER = "Sample Time";
+export const SAMPLE_DATE_HEADER = "Sample Date";
+export const M2LAB_HEADER = "M2Lab";
+export const ADD_ON_HEADER = "Add-on Analyses";
+export const DESCRIPTION_HEADER = "Set-Sample @ Dist";

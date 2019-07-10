@@ -19,7 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Question from '../Question';
 import { pCodes, nq_options, nq_options_meanings, rmk_options, mth_options, types, defaultPCodesToShow } from '../../Utils/QuestionOptions';
 import { getKeyFromValue} from '../../Utils/Utilities';
-
+import { DESCRIPTION_HEADER } from '../../Constants/Dictionary';
 
 
 import _ from 'lodash';
@@ -69,7 +69,7 @@ class ParametersTable extends React.Component {
 					headerRow.push(defaultPCodesToShow[pCode] + types[type]);
 				}
 			}
-			headerRow.unshift("Set-Sample @ Dist");
+			headerRow.unshift(DESCRIPTION_HEADER);
 			nowValue.push(headerRow);
 
 			// build default values (blanks)
@@ -89,7 +89,7 @@ class ParametersTable extends React.Component {
 
 			// find all pCodes in header
 			let pCodesInHeader = [];
-			for (let i = 1; i < this.props.value[0].length; i++) { // start at 1 to skip the set-sample @ dist
+			for (let i = 1; i < this.props.value[0].length; i++) { // start at 1 to skip the DESCRIPTION_HEADER
 				let pCode = this.props.value[0][i].split("_")[0];
 				if (!pCodesInHeader.includes(pCode)) {
 					pCodesInHeader.push(pCode);

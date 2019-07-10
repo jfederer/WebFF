@@ -12,19 +12,17 @@ import TableRow from '@material-ui/core/TableRow';
 import Question from '../Question';
 import Button from '@material-ui/core/Button';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { allQWDATAOptionalHeaders, allOpts, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
 import { getKeyFromValue } from '../../Utils/Utilities';
+import { getSetListAsArray, getNumberOfSamplesInSet } from '../../Utils/StoreUtilities';
+
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
-import TextFieldDialog from '../Dialogs/TextFieldDialog'; 
-import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog'; 
+import TextFieldDialog from '../Dialogs/TextFieldDialog';
+import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
+import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER } from '../../Constants/Dictionary';
 
 
 const styles = theme => ({
@@ -58,8 +56,8 @@ export const createInitialQWDATAValue = (eventID) => {
 	}
 
 	// make the Add-on analysis values arrays
-	let AddOnAnalysesIndex = initValue[0].indexOf("Add-on Analyses");
-	if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+	let AddOnAnalysesIndex = initValue[0].indexOf(ADD_ON_HEADER);
+	if (AddOnAnalysesIndex < 0) { throw new Error(ADD_ON_HEADER + " not found in header of QWDATA table") }
 	for (let row = 1; row < initValue.length; row++) { // skip header row
 		initValue[row][AddOnAnalysesIndex] = {};
 	}
@@ -102,8 +100,8 @@ export const verifyPassedQWDATAValue = (eventID, value) => {
 		}
 
 		// ensure add-on analysis is an array
-		let AddOnAnalysesIndex = nowValue[0].indexOf("Add-on Analyses");
-		if (AddOnAnalysesIndex < 0) { throw new Error("Add-on Analyses not found in header of QWDATA table") }
+		let AddOnAnalysesIndex = nowValue[0].indexOf(ADD_ON_HEADER);
+		if (AddOnAnalysesIndex < 0) { throw new Error(ADD_ON_HEADER + " not found in header of QWDATA table") }
 		if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
 			newRow[AddOnAnalysesIndex] = [];
 		}
@@ -130,8 +128,8 @@ class QWDATATable extends React.Component {
 
 	insertEstimatedTime(value) {
 		let etc = this.getEstimatedTimeColumn();
-		let SampleTimeIndex = value[0].indexOf("Sample Time");
-		if (SampleTimeIndex < 0) { throw new Error("Sample Time not found in header of QWDATA table") }
+		let SampleTimeIndex = value[0].indexOf(SAMPLE_TIME_HEADER);
+		if (SampleTimeIndex < 0) { throw new Error(SAMPLE_TIME_HEADER + " not found in header of QWDATA table") }
 		for (let row = 1; row < value.length; row++) { // skip header row
 			if (!Array.isArray(value[row][SampleTimeIndex])) {
 				value[row][SampleTimeIndex] = etc[row];
@@ -140,28 +138,23 @@ class QWDATATable extends React.Component {
 		return value;
 	}
 
-	getEstimatedTimeColumn() {
-		let estimatedTimeColumn = new Array(this.props.getDescriptiveColumnForTable().length).fill("");
-		let numberOfSets = this.props.getNumberOfSetsInCurrentSamplingEvent();
 
-		for (let setNum = 0; setNum < numberOfSets; setNum++) {
-			let thisSetName = String.fromCharCode(65 + setNum);
-			let numberOfSamplesInSet = this.props.getNumberOfSamplesInSet(thisSetName);
-			let startTime = this.props.getQuestionValue("set" + thisSetName + "_StartTime");
-			let endTime = this.props.getQuestionValue("set" + thisSetName + "_EndTime");
-			let ai = !this.props.getQuestionValue("set" + thisSetName + "_samplesComposited");
+	getEstimatedTimeColumn() {
+		let { currentEventID } = this.props;
+		let descColumn = getDescriptiveColumnForTable(currentEventID);
+		let estimatedTimeColumn = new Array(descColumn.length).fill("");
+		let setList = getSetListAsArray(currentEventID);
+
+		let totalNumberOfSamplesInPreviousSets = 0;
+		setList.forEach((setName) => {
+			let numberOfSamplesInSet = getNumberOfSamplesInSet(currentEventID, setName);
+			let startTime = getQuestionValue(currentEventID, setName, "startTime");
+			let endTime = getQuestionValue(currentEventID, setName, "endTime");
+			let ai = !getQuestionValue(currentEventID, setName, "samplesComposited");
 			let startDateTime = new Date("January 1, 2000 " + startTime)
 			let endDateTime = new Date("January 1, 2000 " + endTime)
 			let msElapsed = Math.abs(endDateTime - startDateTime);
 			let msBetweenSamples = msElapsed / (numberOfSamplesInSet - 1);
-
-			let totalNumberOfSamplesInPreviousSets = 0;
-			for (let i = setNum; i > 0; i--) {
-				// if this set was a composite, it was only one line in the QWDATA Table
-				let previousSetName = String.fromCharCode(i + 64);
-				let previousSetAI = !this.props.getQuestionValue("set" + previousSetName + "_samplesComposited");
-				totalNumberOfSamplesInPreviousSets += previousSetAI ? this.props.getNumberOfSamplesInSet(previousSetName) : 1;
-			}
 
 			for (let sampNum = 0; sampNum < (ai ? numberOfSamplesInSet : 1); sampNum++) {
 				let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
@@ -171,17 +164,20 @@ class QWDATATable extends React.Component {
 					? ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2)
 					: "";
 			}
-		}
+			totalNumberOfSamplesInPreviousSets += ai ? eval(numberOfSamplesInSet) : eval(1); // if this set was a composite, it was only one line in the QWDATA Table
+		});
+
 		return estimatedTimeColumn;
 	}
 
 
 	handleM2LClickOpen = (row, col) => {
-		this.setState({ 
-			dialogM2LOpen: true, 
-			dialogM2LValue: this.props.value[row][col], 
-			curRow: row, 
-			curCol: col });
+		this.setState({
+			dialogM2LOpen: true,
+			dialogM2LValue: this.props.value[row][col],
+			curRow: row,
+			curCol: col
+		});
 	};
 
 	handleAddOnClickOpen = (row, col) => {
@@ -242,31 +238,22 @@ class QWDATATable extends React.Component {
 	handleValueChange = (row, col) => (eventID, QID, value) => {
 		console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
 
-		let newVal = _.cloneDeep(this.props.value); 
+		let newVal = _.cloneDeep(this.props.value);
 		newVal[row][col] = value;
 
 		this.props.stateChangeHandler(newVal)
 	}
 
-	handleEstimateClick = (e) => {
-		console.log("QWDATA: handleEstimateClick");
-
-		var r = window.confirm("Are you sure you want to overwrite current values in the Sample Time column with estimated values?");
+	handleEstimateClick = (e) => {  //TODO: allow overwrites vs no overwrites
+		var r = window.confirm("Are you sure you want to overwrite current values in the " + SAMPLE_TIME_HEADER + " column with estimated values whever possible?");
 		if (r !== true) {
 			return;
 		}
 
 		let newVal = this.insertEstimatedTime(this.props.value);
-		let SampleTimeIndex = newVal[0].indexOf("Sample Time");
-		if (SampleTimeIndex < 0) { throw new Error("Sample Time not found in header of QWDATA table") }
-		let etc = this.getEstimatedTimeColumn();
 
-		for (let row = 1; row < newVal.length; row++) { // skip header row
-			newVal[row][SampleTimeIndex] = etc[row];
-		}
-		this.setState({ value: newVal }, () => {
-			this.props.stateChangeHandler(this.props.value);
-		});
+		this.props.stateChangeHandler(newVal);
+
 	}
 
 
@@ -306,11 +293,11 @@ class QWDATATable extends React.Component {
 									}
 								}
 
-								if (headerKey === "Sample Date") {
+								if (headerKey === SAMPLE_DATE_HEADER) {
 									let sdArr = this.props.getQuestionValue("sampleDate").split("-");
 									displayValue = sdArr[1] + "/" + sdArr[2] + "/" + sdArr[0];
 								}
-								if (headerKey === "Sample Time") {
+								if (headerKey === SAMPLE_TIME_HEADER) {
 									displayValue = <button onClick={this.handleEstimateClick}>Estimate</button>;
 								}
 
@@ -343,10 +330,10 @@ class QWDATATable extends React.Component {
 
 										if (allQWDATAOptionalHeaders[headerKey] === null) {
 											switch (headerKey) {
-												case "Set-Sample @ Dist":
+												case DESCRIPTION_HEADER:
 													Q = this.props.value[rowNum][colNum];
 													break;
-												case "Add-on Analyses":
+												case ADD_ON_HEADER:
 													Q = <Button key={keyText} onClick={() => this.handleAddOnClickOpen(rowNum, colNum)}>{
 														(!this.props.value[rowNum][colNum] || Object.keys(this.props.value[rowNum][colNum]).filter((key) => this.props.value[rowNum][colNum][key]).length === 0)
 															? "Add"
@@ -357,14 +344,14 @@ class QWDATATable extends React.Component {
 													</Button>
 
 													break;
-												case "M2Lab":
+												case M2LAB_HEADER:
 													Q = <Button key={keyText} onClick={() => this.handleM2LClickOpen(rowNum, colNum)}>{
 														this.props.value[rowNum][colNum] === ""
 															? "Add"
 															: "Edit"}
 													</Button>;
 													break;
-												case "Sample Time":
+												case SAMPLE_TIME_HEADER:
 													Q = <Question {...this.classlessProps}
 														label=""
 														id={keyText}
@@ -374,7 +361,7 @@ class QWDATATable extends React.Component {
 														value={this.props.value[rowNum][colNum]}
 													/>
 													break;
-												case "Sample Date":
+												case SAMPLE_DATE_HEADER:
 													Q = <Question {...this.classlessProps}
 														label=""
 														id={keyText}
@@ -416,7 +403,7 @@ class QWDATATable extends React.Component {
 
 				{this.state.dialogM2LOpen
 					?
-					 <TextFieldDialog
+					<TextFieldDialog
 						id="M2L_Dialog"
 						open={this.state.dialogM2LOpen}
 						onSave={this.handleCellValueSave}
@@ -426,22 +413,22 @@ class QWDATATable extends React.Component {
 						rows={5}
 						initialValue={this.state.dialogM2LValue}
 					/>
-					: null }
+					: null}
 
-				{this.state.dialogAddOnOpen 
-				// must conditionally render to re-trigger constructor //FUTURE: that can't be the best way to do this  memoization?
-				? <MultipleChoiceDialog
-					id="AddOnAnalyses"
-					open={this.state.dialogAddOnOpen}
-					onSave={this.handleCellValueSave}
-					onClose={this.handleDialogsClose}
-					dialogTitle="Add on Analyses"
-					dialogText="Select the available add-on analyses you'd like to have done on this sample"
-					noOptionsMessage="There are no available add-on analyses for this sample"
-					options={this.state.rowAddOnOptions}
-					initialValue={this.state.dialogAddOnValue}
-				/>
-				: null }
+				{this.state.dialogAddOnOpen
+					// must conditionally render to re-trigger constructor //FUTURE: that can't be the best way to do this  memoization?
+					? <MultipleChoiceDialog
+						id="AddOnAnalyses"
+						open={this.state.dialogAddOnOpen}
+						onSave={this.handleCellValueSave}
+						onClose={this.handleDialogsClose}
+						dialogTitle="Add on Analyses"
+						dialogText="Select the available add-on analyses you'd like to have done on this sample"
+						noOptionsMessage="There are no available add-on analyses for this sample"
+						options={this.state.rowAddOnOptions}
+						initialValue={this.state.dialogAddOnValue}
+					/>
+					: null}
 
 
 

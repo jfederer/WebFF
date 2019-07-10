@@ -17,18 +17,24 @@ import {
  PCODE_TEXT_NTU,
  PCODE_TEXT_NTRU,
  PCODE_TEXT_FNU,
+
+ SAMPLE_TIME_HEADER,
+ SAMPLE_DATE_HEADER,
+ M2LAB_HEADER,
+ DESCRIPTION_HEADER,
+ ADD_ON_HEADER
 } from '../Constants/Dictionary';
 
 export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID"   (null Q_id means this is a special case)
-	"Set-Sample @ Dist": null,
-	"Sample Date": null,
-	"Sample Time": null,
+	[DESCRIPTION_HEADER]: null,
+	[SAMPLE_DATE_HEADER]: null,
+	[SAMPLE_TIME_HEADER]: null,
 	"Hydrologic Event": "hydrologicEvent",
 	"Hydrologic Cond": "hydrologicCondition",
 	"Sample Type": "sampleType",
 	"ASTAT Code": "analysisStatus",
-	"Add-on Analyses": null,
-	"M2Lab": null
+	[ADD_ON_HEADER]: null,
+	[M2LAB_HEADER]: null
 }
 
 export const allOpts = {

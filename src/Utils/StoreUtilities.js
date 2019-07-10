@@ -15,11 +15,15 @@ export function getNumberOfSets(eventID) {
 
 export function getNumberOfSamplesInSet(eventID, setID) {
 	let event = getEventFromID(eventID);
-	return event.questionsValues[SET_INFORMATION_IDENTIFIER + setID]["numberOfSamplingPoints"]
+	if (setID.startsWith(SET_INFORMATION_IDENTIFIER)) {
+		return event.questionsValues[setID]["numberOfSamplingPoints"]
+	} else {
+		return event.questionsValues[SET_INFORMATION_IDENTIFIER + setID]["numberOfSamplingPoints"]
+	}
 }
 
 export function getSetListAsArray(eventID) {
-	let event = getEventFromID(eventID); 
+	let event = getEventFromID(eventID);
 
 	let setListArr = [];
 	setListArr = Object.keys(event.questionsValues).filter((key) => { //TODO: change these to getQuestionValues

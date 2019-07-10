@@ -7,7 +7,7 @@ import {
 	SET_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
 	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY
 } from '../Constants/Config';
-
+import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
 	// creates one question component for every question in questionsData
@@ -202,7 +202,7 @@ export const getDescriptiveColumnForTable = (eventID) => {
 		}
 	}
 	// push below the header
-	descColumn.unshift("Set-Sample @ Dist");
+	descColumn.unshift(DESCRIPTION_HEADER);
 
 	// console.log("FIRST COLUMN: ", firstColumn);
 	return descColumn;

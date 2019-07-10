@@ -28,6 +28,7 @@ class TimePicker extends React.Component {
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, getTimeStringFromDate());
 			}
 		} 
+
 	};
 
 	componentWillMount() {
@@ -77,8 +78,6 @@ class TimePicker extends React.Component {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
 
-	
-		
 		return <TextField className={classes.timeInput}
 			id={this.props.id}
 			key={this.props.id}
