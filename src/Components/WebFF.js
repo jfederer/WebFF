@@ -71,11 +71,13 @@ class WebFF extends React.Component {
 		//TODO: validators (numSampPoints not allowing alpha might be good test case)
 		//TODO: webserver, network loads
 		//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
+		
 
 		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 		//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
 		//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)
 		//BUG: New Event -> DE page -> Add Set -> enter numbe of sampling points -> leave page -> return (bug: table is missing)
+		//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
 
 		//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 

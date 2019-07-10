@@ -19,38 +19,45 @@ const styles = theme => ({
 	},
 });
 
+
+/**
+ * @description Date input will immediately generate 'todays' date if handed a null 'value'.  Will leave blank if handed a blank ("") value.  Otherwise, will use date passed in YYYY-MM-DD format and display it in MM/DD/YYYY formate.  This is a limitation of material-ui's date textfield.  //TODO: look into https://material-ui-pickers.dev/getting-started/installation
+ */
 class DateInput extends React.Component {
-	constructor(props) {
-		super(props);
-		if (!this.props.value) { // if incoming date was null or empty, generate current date
-			if(this.props.alternateChangeHandler) {
-				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, getDateStringFromDate());
-			} else {
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, getDateStringFromDate());
-			}
-		}
-	};
-
-
-	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
-		if(this.props.alternateChangeHandler) {
-			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, event.target.value);
-		} else {
-		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
-		}
-	};
 	
+	handleValueChange = value => e => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, e.target.value);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, e.target.value);
+		}
+	};
+
 	render() {
 		const { classes } = this.props;
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 		// let thisSize = this.props.size ? this.props.size : 1;
+
+		let dateValue = this.props.value;
+		if (dateValue === null) {
+			// null creates new 'today' date
+			let dateValue = getDateStringFromDate();
+			if (this.props.alternateChangeHandler) {
+				this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, dateValue);
+			} else {
+				this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, dateValue);
+			}
+			return null;
+		}
+
 		return <TextField
 			key={this.props.id}
 			id={this.props.id}
 			label={this.props.label}
 			fullWidth
 			type="date"
-			value={this.props.value?this.props.value:""}
+			// value={this.props.value?this.props.value:""}
+			value={dateValue}
 			className={classes.textField}
 			xmltag={this.props.XMLTag}
 			InputLabelProps={{
