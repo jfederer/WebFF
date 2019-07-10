@@ -64,13 +64,16 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-		//TODO: Param and QWDATA pages
+		//TODO: Param and QWDATA pages  NEXT: estimate time automatically... verify compositing works correctly (with times and values)... (composite doesn't appear to work with QWDATA... behind by one iteration...grr...)
 		//TODO: numberOfSamplingPointsChanged incorporate param and qwdata
 		//TODO: system menu rebuild
 		//TODO: user/site settings (station names, etc)
 		//TODO: validators (numSampPoints not allowing alpha might be good test case)
 		//TODO: webserver, network loads
 		//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
+
+		//TODO: QWDATA page, time estimate -> optionally overwrite
+		//TODO: QWDATA page, duplicate date for remaining...
 		
 
 		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
