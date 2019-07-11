@@ -15,6 +15,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import {getSedLOGINcompatibleXML} from '../../Utils/XMLUtilities';
+import {getEventFromID} from '../../Utils/StoreUtilities';
 
 import { saveFile } from '../../Utils/FileHandling';
 
@@ -71,27 +73,28 @@ class ExportDialog extends React.Component {
 	saveXML() {
 		let d = new Date();
 		//TODO: get the eventName
-		saveFile("SedFF_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + "_SedLOGINCompatible.xml", this.props.getSedLOGINcompatibleXML());
+		saveFile("SedFF_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + "_SedLOGINCompatible.xml", getSedLOGINcompatibleXML(this.props.eventID));
 		return;
 	}
 
 
 	saveAllXML() {
 		let d = new Date();
-		//TODO: get the eventName
-		let allData = this.props.getSedLOGINcompatibleXML();
-		let curEvt = this.props.globalState[this.props.globalState.curSamplingEventName];
-		Object.keys(curEvt).map((key) => {
-			if (key === 'questionsValues') {
-				Object.keys(curEvt[key]).map((QVkey) => {
-					allData += "\n<" + QVkey + ">" + curEvt[key][QVkey] + "</" + QVkey + ">";
-					return null;
-				});
-			} else {
-				allData += "\n<" + key + ">" + curEvt[key] + "</" + key + ">";
-			}
-			return null;
-		})
+		
+		let allData = getSedLOGINcompatibleXML(this.props.eventID);
+
+		// let curEvt = getEventFromID(this.props.eventID)
+		// Object.keys(curEvt).map((key) => {
+		// 	if (key === 'questionsValues') {
+		// 		Object.keys(curEvt[key]).map((QVkey) => {
+		// 			allData += "\n<" + QVkey + ">" + curEvt[key][QVkey] + "</" + QVkey + ">";
+		// 			return null;
+		// 		});
+		// 	} else {
+		// 		allData += "\n<" + key + ">" + curEvt[key] + "</" + key + ">";
+		// 	}
+		// 	return null;
+		// })
 		saveFile("SedFF_" + d.getFullYear() + (d.getMonth() + 1) + d.getDate() + d.getHours() + d.getMinutes() + "_AllData.xml", allData);
 		return;
 	}
@@ -100,7 +103,7 @@ class ExportDialog extends React.Component {
 
 		this.updateStatus("Attempting to push to SedLOGIN... this may take a minute\n");
 
-		const SLCXML = this.props.getSedLOGINcompatibleXML();
+		const SLCXML = getSedLOGINcompatibleXML(this.props.eventID);
 		const DEBUG = true;
 		const API = PHP_FILE_LOCATION + 'sedLOGINPush.php';
 		// let username = this.props.username.split('@')[0];
@@ -194,7 +197,7 @@ class ExportDialog extends React.Component {
 				<DialogTitle id="form-dialog-title">Save SedLOGIN-compatible XML</DialogTitle>
 				<DialogContent>
 
-					<Grid justify="space-around" container spacing={24}>
+					<Grid justify="space-around" container spacing={10}>
 						<Grid item xs={12}>
 							<DialogContentText>
 								Save the current event to your computer, or directly upload it to SedLOGIN

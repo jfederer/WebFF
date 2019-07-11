@@ -18,3 +18,5 @@ export const EDI_METHOD_CATEGORY = "EDI";
 export const EWI_METHOD_CATEGORY = "EWI";
 export const OTHER_METHOD_CATEGORY = "OTHER";
 
+export const PROGRAM_VERSION = "0.5.0";
+

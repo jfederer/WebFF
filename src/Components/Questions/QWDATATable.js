@@ -109,7 +109,7 @@ class QWDATATable extends React.Component {
 	constructor(props) {
 		super(props);
 
-		console.log("QWDATA: Props: ", this.props);
+		// console.log("QWDATA: Props: ", this.props);
 
 		if(this.props.value) {
 			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, verifyPassedQWDATAValue(this.props.currentSamplingEventID, this.props.value));

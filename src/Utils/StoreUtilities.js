@@ -1,6 +1,7 @@
 import store from '../Store';
 import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 
+
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 export function getNumberOfSets(eventID) {
@@ -9,7 +10,7 @@ export function getNumberOfSets(eventID) {
 
 export function getNumberOfSamplesInSet(eventID, setID) {
 	let event = getEventFromID(eventID);
-	if(!event) {
+	if (!event) {
 		throw new Error("eventID (", eventID, ") failed to return a valid event in getNumberOfSamplesInSet");
 	}
 	if (setID.startsWith(SET_INFORMATION_IDENTIFIER)) {
@@ -22,7 +23,7 @@ export function getNumberOfSamplesInSet(eventID, setID) {
 export function getSetListAsArray(eventID) {
 	let event = getEventFromID(eventID);
 
-	if(!event) {
+	if (!event) {
 		throw new Error("eventID (", eventID, ") failed to return a valid event in getSetListAsArray");
 	}
 

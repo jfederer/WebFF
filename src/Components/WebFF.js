@@ -64,26 +64,34 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-		//TODO: numberOfSamplingPointsChanged incorporate param and qwdata
-		//TODO: system menu rebuild
-		//TODO: user/site settings (station names, etc)
-		//TODO: validators (numSampPoints not allowing alpha might be good test case)
-		//TODO: webserver, network loads
-		//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
+	//TODO: system menu rebuild
+	//TODO: save sedlogin compat xml
+	//TODO: push event to sedlong
+	//TODO: add/remove station
+	//TODO: add/remove question (saved to user / saved to event / saved to site)
+	//TODO: user/site settings (station names, etc)
+	//TODO: save entire event as xml
+	//TODO: single-page view 
+	//TODO: single-page view saveable as pdf (ingest pdf??)
+	//TODO: validators (numSampPoints not allowing alpha might be good test case)
+	//TODO: webserver, network loads
+	//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
+	//TODO: templates
 
-		//TODO: QWDATA page, time estimate -> optionally overwrite
-		//TODO: QWDATA page, duplicate date for remaining...
-		//TODO: automatically generate estimated times as setting
-		//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
+	//TODO: QWDATA page, time estimate -> optionally overwrite
+	//TODO: QWDATA page, duplicate date for remaining...
+	//TODO: automatically generate estimated times as setting
+	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 
-		//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
-		//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
-		//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)
-		//BUG: New Event -> DE page -> Add Set -> enter numbe of sampling points -> leave page -> return (bug: table is missing)
-		//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
-		//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
+	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
+	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
+	//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)
+	//BUG: New Event -> DE page -> Add Set -> enter numbe of sampling points -> leave page -> return (bug: table is missing)
+	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
+	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
+	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
 
-		//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
+	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 
 
 
@@ -91,7 +99,8 @@ class WebFF extends React.Component {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
 
 		super(props);
-		var allItemsToSyncToLS = USER_DB_NODES.slice();
+
+				var allItemsToSyncToLS = USER_DB_NODES.slice();
 
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
@@ -165,75 +174,77 @@ class WebFF extends React.Component {
 	}
 
 
+
+
 	render() {
 		const { classes, sedff, UI, currentUser } = this.props;
-		const { isFetchingUserData} = sedff;
+		const { isFetchingUserData } = sedff;
 
 		if (currentUser === undefined && this.props.location.pathname !== '/') {
 			console.log("There is no currentuser...going to login page");
 			return <Redirect to='/' />;
 		}
-		
-		
+
+
 		return (
 			<React.Fragment>
-			{ isFetchingUserData===true 
-			? <img src={loading} alt="LOADING"></img>  //TODO:  better behavior
-			: <React.Fragment>
-				<div className={classes.root} >
-					<AppBar
-						position="absolute"
-						className={classNames(classes.appBar, UI.visibility.expandedNavMenu && classes.appBarShift)}
-					>
-						<Toolbar disableGutters={!UI.visibility.expandedNavMenu}>
-							<IconButton
-								color="inherit"
-								aria-label="expand drawer"
-								onClick={() => this.props.setNavMenuExpand(true)}
-								className={classNames(classes.menuButton, UI.visibility.expandedNavMenu && classes.hide)}
+				{isFetchingUserData === true
+					? <img src={loading} alt="LOADING"></img>  //TODO:  better behavior
+					: <React.Fragment>
+						<div className={classes.root} >
+							<AppBar
+								position="absolute"
+								className={classNames(classes.appBar, UI.visibility.expandedNavMenu && classes.appBarShift)}
 							>
-								<ChevronRightIcon />
-							</IconButton>
+								<Toolbar disableGutters={!UI.visibility.expandedNavMenu}>
+									<IconButton
+										color="inherit"
+										aria-label="expand drawer"
+										onClick={() => this.props.setNavMenuExpand(true)}
+										className={classNames(classes.menuButton, UI.visibility.expandedNavMenu && classes.hide)}
+									>
+										<ChevronRightIcon />
+									</IconButton>
 
-							<Typography variant="h4" color="inherit" noWrap>
-								{UI.appBarText}
-							</Typography>
+									<Typography variant="h4" color="inherit" noWrap>
+										{UI.appBarText}
+									</Typography>
 
-							<IconButton
-								color="inherit"
-								aria-label="System Menu"
-								onClick={() => this.props.setSysMenuExpand(true)}
-								className={classNames(classes.menuButton, classes.rightJustify, UI.visibility.expandedSysMenu && classes.hide)}
-							>
-								<MenuIcon />
-							</IconButton>
-						</Toolbar>
-					</AppBar>
+									<IconButton
+										color="inherit"
+										aria-label="System Menu"
+										onClick={() => this.props.setSysMenuExpand(true)}
+										className={classNames(classes.menuButton, classes.rightJustify, UI.visibility.expandedSysMenu && classes.hide)}
+									>
+										<MenuIcon />
+									</IconButton>
+								</Toolbar>
+							</AppBar>
 
-					<NavMenu />
+							<NavMenu />
 
-					<SystemMenu />
-					<ExportDialog
-						//TODO: REDUX
-						setShippedStatus={this.setShippedStatus}
-						getSedLOGINcompatibleXML={this.getSedLOGINcompatibleXML}
-						username={this.state.loggedInUser}
-						globalState={this.state}
-					/>
-					{/* <SyncDataDialog /> */}
-					<AddRemoveQuestionDialog
-						//TODO: REDUX
-						handleQuestionDialogClose={this.handleQuestionDialogClose}
-						customQuestionAdder={this.customQuestionAdder}
-						customQuestionDeleter={this.customQuestionDeleter} />
-					<AddRemoveStationDialog />
-					{/* <SettingsDialog /> */}
-					<AboutDialog />
-					<SwitchUserDialog />
+							<SystemMenu />
+							<ExportDialog
+								//TODO: REDUX
+								eventID={this.props.currentSamplingEventID}
+								setShippedStatus={this.setShippedStatus}
+								username={this.state.loggedInUser}
+								globalState={this.state}
+							/>
+							{/* <SyncDataDialog /> */}
+							<AddRemoveQuestionDialog
+								//TODO: REDUX
+								handleQuestionDialogClose={this.handleQuestionDialogClose}
+								customQuestionAdder={this.customQuestionAdder}
+								customQuestionDeleter={this.customQuestionDeleter} />
+							<AddRemoveStationDialog />
+							{/* <SettingsDialog /> */}
+							<AboutDialog />
+							<SwitchUserDialog />
 
 
 
-					{/* <SystemDialog isOpen={this.state.dialogOpen}
+							{/* <SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
 						dialogName={this.state.curDialogName}
@@ -249,44 +260,44 @@ class WebFF extends React.Component {
 
 
 
-					{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
+							{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
 						
 					/> */}
 
-					<main className={classes.content} >
-						<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
+							<main className={classes.content} >
+								<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
-						{/* {this.state.routesAndPages} */}
-						<Switch>
-							<Route exact path="/" component={Dashboard} />
-							<Route path="/Dashboard" component={Dashboard} />
-							<Route path="/FieldForm" component={FieldForm} />
-							<Route path="/DataEntry" component={DataEntry} />
-							<Route path="/Parameters" component={Parameters} />
-							<Route path="/QWDATA" component={QWDATA} />
-							<Route path="/error" component={ErrorPage} />
-						</Switch>
+								{/* {this.state.routesAndPages} */}
+								<Switch>
+									<Route exact path="/" component={Dashboard} />
+									<Route path="/Dashboard" component={Dashboard} />
+									<Route path="/FieldForm" component={FieldForm} />
+									<Route path="/DataEntry" component={DataEntry} />
+									<Route path="/Parameters" component={Parameters} />
+									<Route path="/QWDATA" component={QWDATA} />
+									<Route path="/error" component={ErrorPage} />
+								</Switch>
 
 
-						{/* {!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
+								{/* {!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
 							? <Redirect to='/' />
 							: null} */}
 
-					</main>
-				</div >
-				<button onClick={() => console.log(
-					getQuestionValue(sedff.currentSamplingEventID, "SetInfo::A", "samplesTable_EDI", 1)
-				)}>Print Table Value</button><br />
-				<button onClick={() => console.log(
-					getDescriptiveColumnForTable(sedff.currentSamplingEventID)
-				)}>getDescriptiveColumnForTable</button><br />
-				{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
-				{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
-				{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
-				</React.Fragment>
-			}
+							</main>
+						</div >
+						<button onClick={() => console.log(
+							getQuestionValue(sedff.currentSamplingEventID, "SetInfo::A", "samplesTable_EDI", 1)
+						)}>Print Table Value</button><br />
+						<button onClick={() => console.log(
+							getDescriptiveColumnForTable(sedff.currentSamplingEventID)
+						)}>getDescriptiveColumnForTable</button><br />
+						{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
+						{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
+						{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
+					</React.Fragment>
+				}
 			</React.Fragment>
-						
+
 		);
 	}
 }
@@ -301,7 +312,8 @@ const mapStateToProps = function (state) {
 		users: state.Users,
 		sedff: state.SedFF,
 		events: state.Events,
-		currentUser: state.Users[state.SedFF.currentUsername]
+		currentUser: state.Users[state.SedFF.currentUsername],
+		currentSamplingEventID: state.SedFF.currentSamplingEventID
 	}
 }
 
