@@ -18,8 +18,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Question from '../Question';
 import { pCodes, nq_options, nq_options_meanings, rmk_options, mth_options, types, defaultPCodesToShow } from '../../Utils/QuestionOptions';
-import { getKeyFromValue} from '../../Utils/Utilities';
+import { getKeyFromValue } from '../../Utils/Utilities';
 import { DESCRIPTION_HEADER } from '../../Constants/Dictionary';
+import { getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 
 
 import _ from 'lodash';
@@ -48,89 +49,85 @@ const styles = theme => ({
 });
 
 
+export const createInitialParametersTableValue = (eventID) => {
+	// build header from scratch
+	let value = []
+	let headerRow = [];
+	for (let pCode in defaultPCodesToShow) {
+		for (let type in types) {
+			headerRow.push(defaultPCodesToShow[pCode] + types[type]);
+		}
+	}
+	headerRow.unshift(DESCRIPTION_HEADER);
+	value.push(headerRow);
 
+	// build default values (blanks)
+	let firstColumn = getDescriptiveColumnForTable(eventID);
+	for (let i = 1; i < firstColumn.length; i++) {
+		let emptyRow = new Array(headerRow.length - 1).fill("");
+		emptyRow.unshift(firstColumn[i]);
+		value.push(emptyRow);
+	}
+
+	return value;
+}
+
+export const verifyPassedParametersTableValue = (eventID, value) => {
+	// need to ensure the value has the right number of rows
+
+	let nowValue = [];
+	// build new header row, note, the header row should still be correct.
+	nowValue.push(_.cloneDeep(value[0])); // 
+
+	// build rows based on existing values  
+	let firstColumn = getDescriptiveColumnForTable(eventID); // firstColumn will now be the authoritative new [0] element in each row
+	// console.log("NEW FIRST COLUMN: ", firstColumn);
+	for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
+		// console.log("Looking for...", firstColumn[newRowNum]);
+		//look in props.value for existing matching row
+		let matchingOldRowNum = -1;
+		for (let oldRowNum = 1; oldRowNum < value.length; oldRowNum++) {
+			// console.log("against..." + value[oldRowNum][0]);
+			if (firstColumn[newRowNum] === value[oldRowNum][0]) {
+				matchingOldRowNum = oldRowNum;
+				break;
+			}
+		}
+
+		let newRow = [];
+		if (matchingOldRowNum !== -1) {
+			// console.log(firstColumn[newRowNum] + " DID find a match");
+			newRow = _.cloneDeep(value[matchingOldRowNum]);
+		} else {
+			// console.log(firstColumn[newRowNum] + " never found a match");
+
+			newRow = new Array(value[0].length - 1).fill("");
+			newRow.unshift(firstColumn[newRowNum]);
+		}
+		nowValue.push(newRow);
+	}
+	return nowValue;
+}
 
 class ParametersTable extends React.Component {
 	constructor(props) {
 		super(props);
-		// console.log(this.props);
 
-		console.log("PARAMETERS TABLE CONSTRUCTOR");
-		// sampleEventLocations is a double array whereby each 'row' of the array is teh set and each col is the sample location.
 		let nowValue = [];
 		let startingPCodes = [];
 		if (typeof this.props.value === "undefined" || this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
-			// console.log("Handed null value");
-
-			// build header from scratch
-			let headerRow = [];
-			for (let pCode in defaultPCodesToShow) {
-				for (let type in types) {
-					headerRow.push(defaultPCodesToShow[pCode] + types[type]);
-				}
-			}
-			headerRow.unshift(DESCRIPTION_HEADER);
-			nowValue.push(headerRow);
-
-			// build default values (blanks)
-			let firstColumn = this.props.getDescriptiveColumnForTable();
-			// console.log("FIRST COLUMN: ", firstColumn);
-			for (let i = 1; i < firstColumn.length; i++) {
-				let emptyRow = new Array(headerRow.length-1).fill("");
-				emptyRow.unshift(firstColumn[i]);
-				nowValue.push(emptyRow);
-			}
-
+			nowValue = createInitialParametersTableValue(this.props.eventID);
 			startingPCodes = _.cloneDeep(defaultPCodesToShow);
-
 		} else { // if a value was sent
-			// need to ensure the value has the right number of rows
-			// console.log("Handed existing value: ", this.props.value);
-
+			nowValue = verifyPassedParametersTableValue(this.props.eventID, this.props.value);
 			// find all pCodes in header
 			let pCodesInHeader = [];
-			for (let i = 1; i < this.props.value[0].length; i++) { // start at 1 to skip the DESCRIPTION_HEADER
-				let pCode = this.props.value[0][i].split("_")[0];
+			for (let i = 1; i < nowValue[0].length; i++) { // start at 1 to skip the DESCRIPTION_HEADER
+				let pCode = nowValue[0][i].split("_")[0];
 				if (!pCodesInHeader.includes(pCode)) {
 					pCodesInHeader.push(pCode);
 				}
 			}
-
-			nowValue = [];
-			// build new header row, note, the header row should still be correct.
-			nowValue.push(_.cloneDeep(this.props.value[0])); // 
-
-			// build rows based on existing values  //TODO: FIXME:
-			let firstColumn = this.props.getDescriptiveColumnForTable(); // firstColumn will now be the authoritative new [0] element in each row
-			// console.log("NEW FIRST COLUMN: ", firstColumn);
-			for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
-				// console.log("Looking for...", firstColumn[newRowNum]);
-				//look in props.value for existing matching row
-				let matchingOldRow = -1;
-				for(let oldRow = 1; oldRow < this.props.value.length; oldRow++) {
-					// console.log("against..." + this.props.value[oldRow][0]);
-					if(firstColumn[newRowNum] === this.props.value[oldRow][0]) {
-						// console.log("MATCH!");
-						
-						matchingOldRow = oldRow;
-						break;
-					}
-				} 
-
-				let newRow = [];
-				if(matchingOldRow !== -1) {
-					// console.log(firstColumn[newRowNum] + " DID find a match");
-					newRow = _.cloneDeep(this.props.value[matchingOldRow]);
-				} else {
-					// console.log(firstColumn[newRowNum] + " never found a match");
-					
-					newRow = new Array(this.props.value[0].length-1).fill("");
-					newRow.unshift(firstColumn[newRowNum]);
-				}
-			 	nowValue.push(newRow);
-			}
-
-
 			startingPCodes = _.cloneDeep(pCodesInHeader);
 		}
 
@@ -154,21 +151,16 @@ class ParametersTable extends React.Component {
 		this.handleValueChange = this.handleValueChange.bind(this);
 	}
 
-	componentDidMount() {
-		// this.props.stateChangeHandler(this);
-		this.props.stateChangeHandler(this.state.value);
-	}
+	// componentDidMount() {
+	// 	// this.props.stateChangeHandler(this);
+	// 	this.props.stateChangeHandler(this.state.value);
+	// }
 
 
 
 
 	handleValueChange = (row, col) => e => {
-		console.log("HVC");
-		// console.log("this.state.value: ", this.state.value);
-		// console.log("row: ", row, "col: ", col);
-		// console.log("e.target.value", e.target.value);
 		let newVal = this.state.value.slice();
-		// console.log("newVal: ", newVal);
 		newVal[row][col] = e.target.value;
 		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.state.value) });
 	}
@@ -197,7 +189,7 @@ class ParametersTable extends React.Component {
 
 	handleSetDefaultValueDialogChange = (eventID, QID, value) => { //eventID is here to match call pattern of alternateChangeHandler, but unused.
 		// console.log("handleSetDefaultVAlueDialogChange(", QID, value, ")");
-	
+
 		// this.props.currentEventID, this.props.id, event.target.value);
 		// 					alternateStateChangeHandler={}
 
@@ -248,8 +240,9 @@ class ParametersTable extends React.Component {
 		this.setState({ showAddColumnDialog: false });
 	}
 
-	handleAddColumnDialogDropDownChange = (dd) => {
-		this.setState({ pCodeToAdd: dd.state.value })
+	handleAddColumnDialogDropDownChange = (eventID, QID, value) => {
+		// console.log("handleAddColumnDialogDropDownChange(", dd, args, ")");
+		this.setState({ pCodeToAdd: value })
 	}
 
 	handleAddColumn = () => {
@@ -411,7 +404,7 @@ class ParametersTable extends React.Component {
 								options={this.getPCodesAvailableForAdding()}
 								type="DropDown"
 								includeBlank={true}
-								stateChangeHandler={this.handleAddColumnDialogDropDownChange}
+								alternateChangeHandler={this.handleAddColumnDialogDropDownChange}
 								value={this.state.pCodeToAdd}
 								fullWidth
 							/>

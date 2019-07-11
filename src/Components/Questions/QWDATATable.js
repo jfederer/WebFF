@@ -36,8 +36,7 @@ const styles = theme => ({
 
 });
 
-export const createInitialQWDATAValue = (eventID) => {
-	console.log("create initial");
+export const createInitialQWDATAValue = (eventID) => {  //separated out from the class so the value gets updated when the numberOfsamples get updated
 	let initValue = [];
 
 	// build header from scratch
@@ -69,8 +68,7 @@ export const createInitialQWDATAValue = (eventID) => {
 	return initValue;
 }
 
-export const verifyPassedQWDATAValue = (eventID, value) => {
-	console.log("verify existing");
+export const verifyPassedQWDATAValue = (eventID, value) => {    //separated out from the class so the value gets updated when the numberOfsamples get updated
 	let nowValue = [];
 	// build new header row, note, the header row should still be correct.
 	nowValue.push(_.cloneDeep(value[0])); // 
@@ -85,8 +83,6 @@ export const verifyPassedQWDATAValue = (eventID, value) => {
 		for (let oldRow = 1; oldRow < value.length; oldRow++) {
 			// console.log("against..." + value[oldRow][0]);
 			if (descriptiveColumn[newRowNum] === value[oldRow][0]) {
-				// console.log("MATCH!");
-
 				matchingOldRowNum = oldRow;
 				break;
 			}
@@ -102,14 +98,6 @@ export const verifyPassedQWDATAValue = (eventID, value) => {
 			// console.log("Making new empty row: ", newRow)
 		}
 
-		// ensure add-on analysis is an array
-		// let AddOnAnalysesIndex = nowValue[0].indexOf(ADD_ON_HEADER);
-		// if (AddOnAnalysesIndex < 0) { throw new Error(ADD_ON_HEADER + " not found in header of QWDATA table") }
-		// if (!Array.isArray(newRow[AddOnAnalysesIndex])) {
-		// 	newRow[AddOnAnalysesIndex] = [];
-		// }
-
-		// console.log("pushing new row: ", newRow);
 		nowValue.push(newRow);
 	}
 	return nowValue;

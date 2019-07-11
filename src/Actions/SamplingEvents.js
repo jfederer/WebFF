@@ -21,6 +21,7 @@ import { getQuestionValue, getMethodCategoryFromValue, getDescriptiveColumnForTa
 import { getQuestionsData } from '../Utils/StoreUtilities';
 import { showNavigationTab } from './UI';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
+import { createInitialParametersTableValue, verifyPassedParametersTableValue} from '../Components/Questions/ParametersTable';
 
 
 
@@ -219,13 +220,27 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 			QWDATAValue = verifyPassedQWDATAValue(eventID, origQWDATAValue);
 		}
 
-		console.log(QWDATAValue);
+		console.log("QWDATATABLEValue: ", QWDATAValue);
 
 		if (!_.isEqual(origQWDATAValue, QWDATAValue)) {
 			dispatch(SEQuestionValueChange(eventID, "QWDATATable", QWDATAValue));
 		}
 
 		////// modify Parameters table //////TODO:
+		let origParameterValue = getQuestionValue(eventID, "parametersTable");
+		console.log("ORIG PARAMTER TABLE VALUE: ", origParameterValue);
+		let parameterValue;
+		if(!origParameterValue) {
+			parameterValue = createInitialParametersTableValue(eventID);
+		} else {
+			parameterValue = verifyPassedParametersTableValue(eventID, origParameterValue);
+		}
+
+		console.log("PARAMETER TABLE VALUE: ", parameterValue);
+
+		if (!_.isEqual(origParameterValue, parameterValue)) {
+			dispatch(SEQuestionValueChange(eventID, "parametersTable", parameterValue));
+		}
 	}
 }
 

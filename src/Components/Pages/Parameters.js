@@ -44,6 +44,7 @@ class Parameters extends React.Component {
 					XMLTag="parametersTable XMLTAG"
 					type="ParametersTable"
 					getDescriptiveColumnForTable={()=>getDescriptiveColumnForTable(currentEventID)}
+					eventID={this.props.currentEventID}
 				/>
 			</div>
 		);

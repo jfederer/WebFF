@@ -1693,7 +1693,7 @@ export const defaultQuestionsData = {
 		"layoutGroup": "Parameters",
 		"colHeaders": true,
 		"rowHeaders": true,
-		"value": [[]],
+		"value": null,
 		"width_xs": 12,
 		"width_lg": 12
 	}
