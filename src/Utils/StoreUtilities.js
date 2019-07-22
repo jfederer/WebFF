@@ -62,6 +62,14 @@ export function getSetInformationQuestionsData() {
 	return defaultSetInformationQuestionsData;
 }
 
-export function getAllUsersEventIDs(username) {
+export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
 	return store.getState().LinkTables.userEvents[username];
+}
+
+export function getUsersStationIDs(username) {
+	return store.getState().LinkTables.userStations[username];
+}
+
+export function getStationFromID(stationID) {
+	return store.getState().Stations[stationID];
 }

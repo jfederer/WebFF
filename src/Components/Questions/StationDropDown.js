@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
 import { ADD_STATION } from '../../Constants/Dictionary';
+import { getStationFromID, getUsersStationIDs } from '../../Utils/StoreUtilities';
 
 
 //TODO: generate minWidth based on content & label
@@ -49,7 +50,18 @@ class StationDropDown extends React.Component {
 	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, currentUsername } = this.props;
+
+		let options = {};
+		let stationIDs = getUsersStationIDs(currentUsername);
+		if(stationIDs) {  // they might have zero stationIDs
+			stationIDs.forEach(stationID => {
+				let station = getStationFromID(stationID);
+				options[station.displayName] = station.name;
+			});
+		}
+		
+		
 		//TODO: let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
 		// console.log("StationDropDown.props: ", this.props);
@@ -57,7 +69,7 @@ class StationDropDown extends React.Component {
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
 
-		if (Object.keys(this.props.options).length < 1) {
+		if (Object.keys(options).length < 1) {
 			// if there are no stations, display the addStation dialog
 			this.props.setAddRemoveStationDialogVisibility(true);
 		}
@@ -79,11 +91,11 @@ class StationDropDown extends React.Component {
 					id: this.props.id,
 				}}
 			>
-				{Object.keys(this.props.options).length < 1
+				{Object.keys(options).length < 1
 					? <option key="nada" value="nothing"></option> // just a blank so the user can select 'Add Station' and trigger value change event handler
 					: null}
 
-				{Object.keys(this.props.options).map((optionLabel, index) => <option key={optionLabel} value={this.props.options[optionLabel]}>{optionLabel}</option>)}
+				{Object.keys(options).map((optionLabel, index) => <option key={optionLabel} value={options[optionLabel]}>{optionLabel}</option>)}
 				<option key="addStationKey" value={ADD_STATION}>Add Station</option>
 			</Select>
 		</FormControl>
@@ -108,7 +120,8 @@ StationDropDown.propTypes = {
 
 const mapStateToProps = function (state) {
 	return {
-		currentEventID: state.SedFF.currentSamplingEventID
+		currentEventID: state.SedFF.currentSamplingEventID,
+		currentUsername: state.SedFF.currentUsername
 	}
 }
 

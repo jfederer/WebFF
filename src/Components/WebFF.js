@@ -64,6 +64,7 @@ const FUNCDEBUG = false;
 class WebFF extends React.Component {
 
 	//TODO: add/remove station
+		//FIXME: link tables fall appart if entry doesn't already exist
 	//TODO: system menu rebuild
 	//TODO: save sedlogin compat xml
 	//TODO: push event to sedlong
@@ -83,6 +84,7 @@ class WebFF extends React.Component {
 	//TODO: QWDATA page, duplicate date for remaining...
 	//TODO: automatically generate estimated times as setting
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
+	//TODO: station editor
 
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
