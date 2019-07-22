@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import uuidv4 from 'uuid';
 
 import {
 	SET_STATION_VALUES,
@@ -20,7 +21,7 @@ export function createNewStationForUser(newStationObject, username) {
 	}
 
 	return dispatch => {
-		let stationID = dispatch(createNewSamplingEvent(newStationObject));
+		let stationID = dispatch(createNewStation(newStationObject));
 		dispatch({ type: REGISTER_STATION_WITH_USERNAME, stationID, username });
 		return stationID;
 	}
@@ -42,28 +43,28 @@ export function createNewStation(newStationObject) {
 		throw new Error("No Station object sent to createNewStation action");
 	}
 
-	if (!newStation.name) { // if no station name given, fail
+	if (!newStationObject.name) { // if no station name given, fail
 		throw new Error("No Station name included in new station object sent to createNewStation action", newStationObject);
 	}
 
-	if (!newStation.number) { // if no station number given, fail
+	if (!newStationObject.number) { // if no station number given, fail
 		throw new Error("No Station number included in new station object sent to createNewStation action", newStationObject);
 	}
 
 
 	return dispatch => {
-		let newStation = _.cloneDeep(newStationObject);
+		let stationObject = _.cloneDeep(newStationObject);
 
-		if (!newStation.stationID) {
-			newStation.stationID = uuidv4();
+		if (!stationObject.stationID) {
+			stationObject.stationID = uuidv4();
 		}
 
-		if (!newStation.displayName) {
-			newStation.displayName = newStation.name;
+		if (!stationObject.displayName) {
+			stationObject.displayName = stationObject.name;
 		}
 
-		dispatch({ type: SET_STATION_VALUES, station: newStation });
-		return (newStation.stationID);
+		dispatch({ type: SET_STATION_VALUES, station: stationObject });
+		return (stationObject.stationID);
 	}
 }
 
