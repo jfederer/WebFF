@@ -64,7 +64,10 @@ class StationDropDown extends React.Component {
 		
 		//TODO: let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
-		// console.log("StationDropDown.props: ", this.props);
+		console.log("StationDropDown.props: ", this.props);
+		if (this.props.includeAddStation===false) {
+			console.log("Do NOT include addStation");
+		}
 
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
@@ -96,7 +99,7 @@ class StationDropDown extends React.Component {
 					: null}
 
 				{Object.keys(options).map((optionLabel, index) => <option key={optionLabel} value={options[optionLabel]}>{optionLabel}</option>)}
-				<option key="addStationKey" value={ADD_STATION}>Add Station</option>
+				{this.props.includeAddStation===false  ? null : <option key="addStationKey" value={ADD_STATION}>Add Station</option> }
 			</Select>
 		</FormControl>
 	}
@@ -109,7 +112,6 @@ StationDropDown.propTypes = {
 	label: PropTypes.string,
 	XMLTag: PropTypes.string,
 	type: PropTypes.oneOf(['StationDropDown']).isRequired,
-	options: PropTypes.object.isRequired,
 	helperText: PropTypes.string
 
 	//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html

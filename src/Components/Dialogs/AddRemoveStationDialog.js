@@ -21,10 +21,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
+import Question from '../Question';
+import { getUsersStationIDs } from '../../Utils/StoreUtilities';
 
+const ADD = "ADD";
+const REMOVE = "REMOVE";
 
 const initialState = {
-
+	addOrRemove: ""
 }
 
 class AddRemoveStationDialog extends React.Component {
@@ -34,8 +38,14 @@ class AddRemoveStationDialog extends React.Component {
 		this.state = _.cloneDeep(initialState);
 	}
 
+	handleValueChange = value => event => {  //FUTURE: combine the handlers  (or split out question types to sub-components)
 
-
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, event.target.value);
+		} else {
+			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, event.target.value);
+		}
+	};
 
 	closeHandler = () => {
 		this.props.setAddRemoveStationDialogVisibility(false);
@@ -47,8 +57,11 @@ class AddRemoveStationDialog extends React.Component {
 	//TODO: go through some global prop types for questions to get all avaiable options
 	//TODO: there might not be existing custom questions -- hide the delete button and dialog info if there isn't
 	render() {
-		const { classes } = this.props;
+		const { classes, currentUsername } = this.props;
 		const { addRemoveStationDialogVisibility } = this.props.UI.visibility;
+
+		let removeAllowed = getUsersStationIDs(currentUsername).length > 0;
+//TODO: NEXT ALTERNATE CHANGE HANDLER
 
 		return (
 			<Dialog
@@ -58,10 +71,80 @@ class AddRemoveStationDialog extends React.Component {
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
-				<DialogTitle id="form-dialog-title">Add or Remove Station</DialogTitle>
+				<DialogTitle id="form-dialog-title">
+					Station Manager
+					{this.state.addOrRemove === ADD || !removeAllowed ? " (Adding)" : null}
+					{this.state.addOrRemove === REMOVE ? " (Removing)" : null}
+				</DialogTitle>
+
 				<DialogContent>
-					Add/Remove Station!!!
+					{this.state.addOrRemove === "" && removeAllowed
+						? <React.Fragment>
+							Add a new station to, or remove an existing station from, your personalized station list?
+							<br></br>
+							<Button onClick={() => this.setState({ addOrRemove: ADD })}>Add Station</Button>
+							<Button onClick={() => this.setState({ addOrRemove: REMOVE })}>Remove Station</Button>
+							{/* //TODO: check stations exist */}
+						</React.Fragment>
+						: null}
+
+					{this.state.addOrRemove === ADD || !removeAllowed
+						? <React.Fragment>
+							<Question
+								id="newStation_stationName"
+								label="Station Name"
+								type="Text"
+								value=""
+							/>
+							<Question id="newStation_stationNumber"
+								label="Station Number"
+								type="Text"
+								tabName="Add Station"
+								value=""
+							/>
+							<Question id="newStation_projectName"
+								label="Project Name"
+								type="Text"
+								tabName="Add Station"
+								value=""
+							/>
+							<Question id="newStation_projectID"
+								label="Project ID"
+								type="Text"
+								tabName="Add Station"
+								value=""
+							/>
+							<Question id="newStation_agencyCode"
+								label="Agency Code"
+								type="Text"
+								tabName="Add Station"
+								value=""
+							/>
+						</React.Fragment>
+						: null}
+
+
+					{this.state.addOrRemove === REMOVE && removeAllowed
+						? <React.Fragment>
+							<Question
+								id="removeStation_stationName"
+								label="Station To Remove"
+								type="StationDropDown"
+								includeAddStation={false}
+								value=""
+							/>
+						</React.Fragment>
+						: null }
+
+
+
+
+
 				</DialogContent>
+
+
+
+
 				<DialogActions>
 					<Button onClick={this.closeHandler} color="primary">
 						Done
@@ -79,7 +162,7 @@ const mapStateToProps = function (state) {
 	return {
 		UI: state.UI, // to get dialog visibility
 		users: state.Users,
-		sedff: state.SedFF
+		currentUsername: state.SedFF.currentUsername
 	}
 }
 

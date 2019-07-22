@@ -10,7 +10,8 @@ const initialEventLinkTableState = {
 		"tvanheel@usgs.gov": ["475c42c6-8642-4d0c-a98a-36d5374f00f4", "695833f2-e483-4c34-a962-d14f79037920"]
 	},
 	"userStations": {
-		"jfederer@usgs.gov": ["0c4ef4d8-6041-414b-9456-f8f2dd6c2575", "d4e95192-00a4-4ef7-baa1-7827f50c7c67"]
+		// "jfederer@usgs.gov": ["0c4ef4d8-6041-414b-9456-f8f2dd6c2575", "d4e95192-00a4-4ef7-baa1-7827f50c7c67"]
+		"jfederer@usgs.gov": [] //TODO: generate blank when new user made?
 	}
 };
 
