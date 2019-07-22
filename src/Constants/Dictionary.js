@@ -22,3 +22,5 @@ export const SAMPLE_DATE_HEADER = "Sample Date";
 export const M2LAB_HEADER = "M2Lab";
 export const ADD_ON_HEADER = "Add-on Analyses";
 export const DESCRIPTION_HEADER = "Set-Sample @ Dist";
+
+export const ADD_STATION = "Add Station";

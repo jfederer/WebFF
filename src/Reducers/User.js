@@ -12,19 +12,21 @@ const initialUserState = {
 		username: "jfederer@usgs.gov",
 		sedLoginUsername: "jfederer@usgs.gov",
 		settings: {
-			backupInterval: 300,
+			backupInterval: 310,
 			outlineQuestions: true,
 			customQuestions: []
-		}
+		},
+		stations: ["0c4ef4d8-6041-414b-9456-f8f2dd6c2575", "d4e95192-00a4-4ef7-baa1-7827f50c7c67"]
 	},
-	"tvanheel@usgs.gov": {
-		username: "tvanheel@usgs.gov",
+	"test@usgs.gov": {
+		username: "test@usgs.gov",
 		sedLoginUsername: "tvan@usgs.gov",
 		settings: {
 			backupInterval: 200,
 			outlineQuestions: false,
 			customQuestions: []
-		}
+		},
+		stations: ["0c4ef4d8-6041-414b-9456-f8f2dd6c2575"]
 	}
 };
 

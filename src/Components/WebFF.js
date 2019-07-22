@@ -60,14 +60,13 @@ import ErrorPage from './Errors/ErrorPage';
 
 const FUNCDEBUG = false;
 
-// var needToSyncStationDataToQuestionData = true;
 
 class WebFF extends React.Component {
 
+	//TODO: add/remove station
 	//TODO: system menu rebuild
 	//TODO: save sedlogin compat xml
 	//TODO: push event to sedlong
-	//TODO: add/remove station
 	//TODO: add/remove question (saved to user / saved to event / saved to site)
 	//TODO: user/site settings (station names, etc)
 	//TODO: save entire event as xml
@@ -77,6 +76,8 @@ class WebFF extends React.Component {
 	//TODO: webserver, network loads
 	//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
 	//TODO: templates
+
+	//BUG: Does not check for updated data outside localstorage
 
 	//TODO: QWDATA page, time estimate -> optionally overwrite
 	//TODO: QWDATA page, duplicate date for remaining...
@@ -90,6 +91,7 @@ class WebFF extends React.Component {
 	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
 	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
 	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
+	
 
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 

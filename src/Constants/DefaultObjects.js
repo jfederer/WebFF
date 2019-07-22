@@ -276,8 +276,7 @@ export const defaultQuestionsData = {
 	stationName: {
 		"id": "stationName",
 		"label": "Station Name",
-		"type": "DropDown",
-		"includeBlank": true,
+		"type": "StationDropDown",
 		"tabName": "Field Form",
 		"layoutGroup": "Basic",
 		"helperText": "PCodes FTW!",

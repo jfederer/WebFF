@@ -17,6 +17,7 @@ import ComputedValue from './Questions/ComputedValue';
 import ParametersTable from './Questions/ParametersTable';
 import QWDATATable from './Questions/QWDATATable';
 import SetInformation from './Questions/SetInformation';
+import StationDropDown from './Questions/StationDropDown';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -73,6 +74,10 @@ class Question extends React.Component {
 			}
 			case 'DropDown': {
 				theQ = <DropDown {...this.props} />
+				break;
+			}
+			case 'StationDropDown': {
+				theQ = <StationDropDown {...this.props} />
 				break;
 			}
 			case 'Text': {
@@ -167,7 +172,7 @@ class Question extends React.Component {
 		placeholder: PropTypes.string,
 		XMLTag: PropTypes.string,
 		type: PropTypes.oneOf(['Text', "QWDATATable", "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", 
-							"DateInput", "TimeInput", "ComputedValue", "SetInformation"]).isRequired,
+							"DateInput", "TimeInput", "ComputedValue", "SetInformation", "StationDropDown"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
