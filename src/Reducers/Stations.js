@@ -39,7 +39,7 @@ export function Stations(state = initialStations, action) {
 	switch (action.type) {
 		case SET_STATION_VALUES:
 			newState[action.station.stationID] = action.station; 
-		  	return newState;
+			  return newState;
 		default:
 			return state
 	}

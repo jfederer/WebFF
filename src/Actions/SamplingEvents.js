@@ -40,7 +40,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
 		//get question and conditionally the action string
-		dispatch(conditionallyRunActionString(eventID, getQuestionFromQuestionID(questionID, getState()))); //TODO: need getState?
+		dispatch(conditionallyRunActionString(eventID, getQuestionFromQuestionID(questionID, getState()))); //TODO: need getState?  Call a store util instead?
 	}
 }
 

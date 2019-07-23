@@ -66,10 +66,6 @@ export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramati
 	return store.getState().LinkTables.userEvents[username];
 }
 
-export function getUsersStationIDs(username) {
-	return store.getState().LinkTables.userStations[username];
-}
-
 export function getStationFromID(stationID) {
 	return store.getState().Stations[stationID];
 }

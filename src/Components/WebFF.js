@@ -65,7 +65,11 @@ class WebFF extends React.Component {
 
 	//TODO: add/remove station
 		//FIXME: link tables fall appart if entry doesn't already exist
+		//TODO: NEXT: load additional items, triggered by stationName value change (ala: sampling points)
+		//TODO: NEXT: Do not allow duplicate station names
 	//TODO: system menu rebuild
+		// add/remove custom questions
+		// settings dialog
 	//TODO: save sedlogin compat xml
 	//TODO: push event to sedlong
 	//TODO: add/remove question (saved to user / saved to event / saved to site)
@@ -85,6 +89,7 @@ class WebFF extends React.Component {
 	//TODO: automatically generate estimated times as setting
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 	//TODO: station editor
+	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)

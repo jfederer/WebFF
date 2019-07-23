@@ -21,15 +21,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
-import { createNewStationForUser } from '../../Actions/Stations';
+import { createNewStationForUser, removeStationFromUser } from '../../Actions/Stations';
 import Question from '../Question';
 import { getUsersStationIDs, getStationFromID } from '../../Utils/StoreUtilities';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { Typography } from '@material-ui/core';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
 
 const initialState = {
-	
+
 }
 
 class AddRemoveStationDialog extends React.Component {
@@ -37,72 +39,89 @@ class AddRemoveStationDialog extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			addOrRemove: getUsersStationIDs(this.props.currentUsername).length > 0 
-						? ""
-						: ADD,
-			newStation_agencyCode: "USGS"   //TODO: set this default in settings
-		}
-		
+		this.state = this.getInitialState();
+
 	}
 
-	handleValueChange = (eventID, QID, value) => { 
+	getInitialState = () => {
+		return _.cloneDeep({
+			addOrRemove: this.props.stationIDs.length > 0
+				? ""
+				: ADD,
+			newStation_agencyCode: "USGS",   //TODO: set this default in settings
+			newStation_changeCurrent: true,
+			newStation_stationName: "",
+			newStation_displayName: "",
+			newStation_stationNumber: "",
+			newStation_projectName: "",
+			newStation_projectID: ""
+		})
+	}
+
+	handleValueChange = (eventID, QID, value) => {
 		this.setState({ [QID]: value });
 	};
 
 
 	addButtonClickHandler = () => {
 		//verify inputs
-		if(typeof this.state.newStation_stationName === 'undefined' || this.state.newStation_stationName.length < 3 ) { // length shouldnt' be less than 3
+		if (typeof this.state.newStation_stationName === 'undefined' || this.state.newStation_stationName.length < 3) { // length shouldnt' be less than 3
 			alert("New station requires a name before it can be added.");
 			return;
 		}
-
-		if(typeof this.state.newStation_stationNumber === 'undefined' || this.state.newStation_stationNumber === "") {
+		if (typeof this.state.newStation_stationNumber === 'undefined' || this.state.newStation_stationNumber === "") {
 			alert("New station requires a station number before it can be added.");
 			return;
 		}
 
-		
 		//create station object
-			let newStation = {
-				displayName: this.state.newStation_displayName,
-				name: this.state.newStation_stationName,
-				number: this.state.newStation_stationNumber,
-				defaultProject: this.state.newStation_projectName,
-				defaultProjectID: this.state.newStation_projectID,
-				defaultAgencyCode: this.state.newStation_agencyCode,
-			}	
+		let newStation = {
+			displayName: this.state.newStation_displayName,
+			name: this.state.newStation_stationName,
+			number: this.state.newStation_stationNumber,
+			defaultProject: this.state.newStation_projectName,
+			defaultProjectID: this.state.newStation_projectID,
+			defaultAgencyCode: this.state.newStation_agencyCode,
+		}
 
 		//add station
 		let newStationID = this.props.createNewStationForUser(newStation, this.props.currentUsername);
 
-		// console.log();
-		try {
+		// conditionally set current station to newly-created one
+		if (this.state.newStation_changeCurrent && this.props.currentSamplingEventID) {
 			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, "stationName", getStationFromID(newStationID).name)
-		} catch (e) {
-			if (e.name === "TypeError") {
-				//do nothing  //TODO: deeper check.  This happens when the current sampling event ID isn't set
-			} else {
-				throw e;
-			}
-
 		}
-		
+
 		this.closeHandler();
 	}
+
 
 	removeButtonClickHandler = () => {
+		let removalConfirmed = window.confirm("You are about to remove station '" + this.state.removeStation_stationName + "' from your personal station list.  Are you sure?");
+
+		if (removalConfirmed === true) {
+			// check if station name is current in use in the sampling event
+			let doubleCheckPassed = true;
+			if (this.props.currentSamplingEventID && getQuestionValue(this.props.currentSamplingEventID, "stationName") === this.state.removeStation_stationName) {
+				doubleCheckPassed = window.confirm("Station '" + this.state.removeStation_stationName + "' is set as your current event's station.  Removal will change this to the next available station in your personal station list.  Are you sure you want to continue?");
+			}
+
+			if (doubleCheckPassed) {
+				this.props.removeStationFromUser(this.props.currentUsername, this.state.removeStation_stationName);
+			}
+		} else {
+			alert("Removal of site '", this.state.removeStation_stationName, "' from your personal station list cancelled");
+		}
 		this.closeHandler();
 	}
 
-	
+
 
 
 	closeHandler = () => {
 		this.props.setAddRemoveStationDialogVisibility(false);
 		setTimeout(() => {
-			this.setState(initialState);
+			this.setState(this.getInitialState());
 		}, 250);
 	}
 
@@ -112,10 +131,6 @@ class AddRemoveStationDialog extends React.Component {
 		const { classes } = this.props;
 		const { addRemoveStationDialogVisibility } = this.props.UI.visibility;
 
-
-//TODO: NEXT:  Checkbox for loading (default checked)
-//TODO NEXT: load additional items, triggered by stationName value change (ala: sampling points)
-//TODO NEXT: React it up so removal refreshes/shows ... verify it deletes (confirm)... clear station name from current if currently loaded (double confirm)
 
 		return (
 			<Dialog
@@ -132,7 +147,7 @@ class AddRemoveStationDialog extends React.Component {
 				</DialogTitle>
 
 				<DialogContent>
-					{this.state.addOrRemove === "" 
+					{this.state.addOrRemove === ""
 						? <React.Fragment>
 							Add a new station to, or remove an existing station from, your personalized station list?
 							<br></br>
@@ -141,7 +156,7 @@ class AddRemoveStationDialog extends React.Component {
 						</React.Fragment>
 						: null}
 
-					{this.state.addOrRemove === ADD 
+					{this.state.addOrRemove === ADD
 						? <React.Fragment>
 							<Question
 								id="newStation_stationName"
@@ -163,7 +178,6 @@ class AddRemoveStationDialog extends React.Component {
 							<Question id="newStation_stationNumber"
 								label="Station Number"
 								type="Text"
-								tabName="Add Station"
 								required
 								value={this.state.newStation_stationNumber}
 								alternateChangeHandler={this.handleValueChange}
@@ -171,22 +185,26 @@ class AddRemoveStationDialog extends React.Component {
 							<Question id="newStation_projectName"
 								label="Project Name"
 								type="Text"
-								tabName="Add Station"
 								value={this.state.newStation_projectName}
 								alternateChangeHandler={this.handleValueChange}
 							/>
 							<Question id="newStation_projectID"
 								label="Project ID"
 								type="Text"
-								tabName="Add Station"
 								value={this.state.newStation_projectID}
 								alternateChangeHandler={this.handleValueChange}
 							/>
 							<Question id="newStation_agencyCode"
 								label="Agency Code"
 								type="Text"
-								tabName="Add Station"
 								value={this.state.newStation_agencyCode}
+								alternateChangeHandler={this.handleValueChange}
+							/>
+							<Question id="newStation_changeCurrent"
+								label="Set current event to this station"
+								type="Toggle"
+								checkbox={true}
+								value={this.state.newStation_changeCurrent}
 								alternateChangeHandler={this.handleValueChange}
 							/>
 
@@ -196,12 +214,14 @@ class AddRemoveStationDialog extends React.Component {
 
 					{this.state.addOrRemove === REMOVE
 						? <React.Fragment>
+							<Typography>Select the station to remove from your personal station list:</Typography>
 							<Question
 								id="removeStation_stationName"
 								label="Station To Remove"
 								type="StationDropDown"
 								includeAddStation={false}
-								value=""
+								includeBlank={true}
+								alternateChangeHandler={this.handleValueChange}
 							/>
 						</React.Fragment>
 						: null}
@@ -236,13 +256,15 @@ const mapStateToProps = function (state) {
 		users: state.Users,
 		currentUsername: state.SedFF.currentUsername,
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername]
 	}
 }
 
 const mapDispatchToProps = {
 	setAddRemoveStationDialogVisibility,
 	createNewStationForUser,
-	SEQuestionValueChange
+	SEQuestionValueChange,
+	removeStationFromUser
 }
 
 AddRemoveStationDialog.propTypes = {

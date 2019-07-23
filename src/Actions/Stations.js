@@ -4,9 +4,11 @@ import uuidv4 from 'uuid';
 import {
 	SET_STATION_VALUES,
 	REGISTER_STATION_WITH_USERNAME,
+	REMOVE_STATION_FROM_USERNAME
 } from '../Constants/ActionTypes';
 
 import { emptyUser } from '../Constants/DefaultObjects';
+import { getStationIDFromNameAndNumber } from '../Utils/StoreUtilities';
 
 
 /**
@@ -28,7 +30,7 @@ export function createNewStationForUser(newStationObject, username) {
 }
 
 /**
-* @desc syncronus function creates new, blank event based on template
+* @desc sets station values based on handed object
 * @param {Object} newStationObject  - the new station, represented as an object with the following keys (asterisk denotes requied):
 *				displayName: "Station Display Name", // if missing, will generate from name
 *				*name: "Station full name at whatever river", 
@@ -67,4 +69,25 @@ export function createNewStation(newStationObject) {
 		return (stationObject.stationID);
 	}
 }
+
+export function removeStationFromUser(username, stationName) {
+	return (dispatch, getState) => {
+		//find station number
+		let stationIDList = (getState().LinkTables.userStations[username]);
+		let matchingIDs = stationIDList.filter((stationID) => {
+			return getState().Stations[stationID].name === stationName
+		})
+
+		if(matchingIDs.length > 1) {
+			console.warn("Multiple ID's ", matchingIDs ," matched that station name.  This could represent a bug, please contact jfederer@usgs.gov and include this message");
+		}
+
+		matchingIDs.forEach((stationIDToRemove) => {
+			dispatch({ type: REMOVE_STATION_FROM_USERNAME, username, stationIDToRemove })
+		});
+
+	}
+}
+
+
 

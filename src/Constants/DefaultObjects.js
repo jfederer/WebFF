@@ -282,10 +282,6 @@ export const defaultQuestionsData = {
 		"helperText": "PCodes FTW!",
 		"width_xs": 6,
 		"width_lg": 3,
-		"options":
-			{},
-		"value": {}
-
 	},
 
 	stationNumber: {
