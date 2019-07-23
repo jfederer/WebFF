@@ -71,9 +71,8 @@ export function getStationFromID(stationID) {
 }
 
 export function getStationIDsFromName(username, stationName) {	//find station number
-	console.log("getStationIDsFromName(", username, ",", stationName, ")");
+	// console.log("getStationIDsFromName(", username, ",", stationName, ")");
 	let stationIDList = store.getState().LinkTables.userStations[username];
-	console.log('stationIDList :', stationIDList);
 	let matchingIDs = stationIDList.filter((stationID) => {
 		return store.getState().Stations[stationID].name === stationName
 	})

@@ -19,7 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 // import Typography from '@material-ui/core/Typography';
 // import Divider from '@material-ui/core/Divider';
 
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
+import { SEQuestionValueChange, stationNameChanged } from '../../Actions/SamplingEvents';
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
 import { createNewStationForUser, removeStationFromUser } from '../../Actions/Stations';
 import Question from '../Question';
@@ -75,11 +75,12 @@ class AddRemoveStationDialog extends React.Component {
 		}
 
 		//create station object
+		// remember to make any changes here reflect in stationNameChanged function
 		let newStation = {
 			displayName: this.state.newStation_displayName,
 			name: this.state.newStation_stationName,
 			number: this.state.newStation_stationNumber,
-			defaultProject: this.state.newStation_projectName,
+			defaultProjectName: this.state.newStation_projectName,
 			defaultProjectID: this.state.newStation_projectID,
 			defaultAgencyCode: this.state.newStation_agencyCode,
 		}
@@ -90,6 +91,7 @@ class AddRemoveStationDialog extends React.Component {
 		// conditionally set current station to newly-created one
 		if (this.state.newStation_changeCurrent && this.props.currentSamplingEventID) {
 			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, "stationName", getStationFromID(newStationID).name)
+			this.props.stationNameChanged(this.props.currentSamplingEventID, getStationFromID(newStationID).name);
 		}
 
 		this.closeHandler();
@@ -264,7 +266,8 @@ const mapDispatchToProps = {
 	setAddRemoveStationDialogVisibility,
 	createNewStationForUser,
 	SEQuestionValueChange,
-	removeStationFromUser
+	removeStationFromUser,
+	stationNameChanged
 }
 
 AddRemoveStationDialog.propTypes = {

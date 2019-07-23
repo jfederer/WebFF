@@ -119,7 +119,7 @@ class StationDropDown extends React.Component {
 					? <option key="nada2" value="nothing"></option> // just a blank so the user can select 'Add Station' and trigger value change event handler
 					: Object.keys(options).map((optionLabel, index) => <option key={optionLabel} value={options[optionLabel]}>{optionLabel}</option>)}
 
-				{this.props.includeAddStation===false  ? null : <option key="addStationKey" value={ADD_STATION}>Add Station</option> }
+				{this.props.includeAddStation===false  ? null : <option key="addStationKey" value={ADD_STATION}>Add/Remove Station</option> }
 			</Select>
 		</FormControl>
 	}

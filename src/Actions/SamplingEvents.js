@@ -157,16 +157,15 @@ export function createNewSamplingEvent(eventName) {
 
 
 export function stationNameChanged(eventID, newStationName) {
-	console.log("stationNameChanged(", eventID,", ", newStationName,")");
+	// remember to make any changes here reflect in addButtonClickHandler for the AddRemoveStationDialog function
+	// console.log("stationNameChanged(", eventID,", ", newStationName,")");
 
 	//TODO: verify station is acceptable
 	
 	//note: displayName is already changed.
 	return (dispatch, getState) => {
 		let stationID = getStationIDsFromName(getState().SedFF.currentUsername, newStationName)[0];
-		console.log('stationID :', stationID);
 		let station = getStationFromID(stationID);
-	
 
 		dispatch(SEQuestionValueChange(eventID, "stationNumber", station.number)); //station.number is a required station attribute
 
