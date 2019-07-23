@@ -54,11 +54,13 @@ class AddRemoveStationDialog extends React.Component {
 			newStation_displayName: "",
 			newStation_stationNumber: "",
 			newStation_projectName: "",
-			newStation_projectID: ""
+			newStation_projectID: "",
+			// allStationIDs: this.props.getUsersStationIDs(this.props.currentUsername);
 		})
 	}
 
 	handleValueChange = (eventID, QID, value) => {
+
 		this.setState({ [QID]: value });
 	};
 

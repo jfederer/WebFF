@@ -63,10 +63,7 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-	//TODO: add/remove station
-		//FIXME: link tables fall appart if entry doesn't already exist
-		//TODO: NEXT: load additional items, triggered by stationName value change (ala: sampling points)
-		//TODO: NEXT: Do not allow duplicate station names
+
 	//TODO: system menu rebuild
 		// add/remove custom questions
 		// settings dialog
@@ -82,6 +79,10 @@ class WebFF extends React.Component {
 	//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
 	//TODO: templates
 
+	//TODO: add/remove station
+	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
+
+
 	//BUG: Does not check for updated data outside localstorage
 
 	//TODO: QWDATA page, time estimate -> optionally overwrite
@@ -91,6 +92,7 @@ class WebFF extends React.Component {
 	//TODO: station editor
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 	//TODO: settings -> auto fill out avaialble station information from station values
+	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
 
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
@@ -99,7 +101,7 @@ class WebFF extends React.Component {
 	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
 	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
 	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
-	
+
 
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 
@@ -110,7 +112,7 @@ class WebFF extends React.Component {
 
 		super(props);
 
-				var allItemsToSyncToLS = USER_DB_NODES.slice();
+		var allItemsToSyncToLS = USER_DB_NODES.slice();
 
 		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
