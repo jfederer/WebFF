@@ -9,7 +9,7 @@ const initialStations = {
 				displayName: "Station Display Name",
 				name: "Station full name at whatever river",
 				number: "1234",
-				defaultProject: "Default Project",
+				defaultProjectName: "Default Project",
 				defaultProjectID: "Default ID",
 				defaultAgencyCode: "DefAg"
 			},
@@ -18,7 +18,7 @@ const initialStations = {
 				displayName: "Station 2 Display Name",
 				name: "Station 2 full name at whatever river",
 				number: "9999",
-				defaultProject: "Default 2 Project",
+				defaultProjectName: "Default 2 Project",
 				defaultProjectID: "Default 2 ID",
 				defaultAgencyCode: "Def2Ag"
 			},
@@ -27,7 +27,7 @@ const initialStations = {
 				displayName: "NEVER SEE",
 				name: "Station 2 full name at whatever river",
 				number: "9999",
-				defaultProject: "Default Project",
+				defaultProjectName: "Default Project",
 				defaultProjectID: "Default ID",
 				defaultAgencyCode: "DefAg"
 			}

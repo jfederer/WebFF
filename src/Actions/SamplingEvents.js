@@ -15,7 +15,7 @@ import {
 	RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
-import { getEventFromID, getQuestionDataFromID } from '../Utils/StoreUtilities';
+import { getEventFromID, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue, getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
@@ -154,8 +154,37 @@ export function createNewSamplingEvent(eventName) {
 	}
 }
 
+
+
+export function stationNameChanged(eventID, newStationName) {
+	console.log("stationNameChanged(", eventID,", ", newStationName,")");
+
+	//TODO: verify station is acceptable
+	
+	//note: displayName is already changed.
+	return (dispatch, getState) => {
+		let stationID = getStationIDsFromName(getState().SedFF.currentUsername, newStationName)[0];
+		console.log('stationID :', stationID);
+		let station = getStationFromID(stationID);
+	
+
+		dispatch(SEQuestionValueChange(eventID, "stationNumber", station.number)); //station.number is a required station attribute
+
+		if(station.defaultProjectName) {
+			dispatch(SEQuestionValueChange(eventID, "projectName", station.defaultProjectName));
+		}
+		if(station.defaultProjectID) {
+			dispatch(SEQuestionValueChange(eventID, "projectID", station.defaultProjectID));
+		}
+		if(station.defaultAgencyCode) {
+			dispatch(SEQuestionValueChange(eventID, "agencyCode", station.defaultAgencyCode));
+		}
+
+	}
+}
+
 export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
-	console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
+	// console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
 	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}

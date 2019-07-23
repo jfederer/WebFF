@@ -69,3 +69,16 @@ export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramati
 export function getStationFromID(stationID) {
 	return store.getState().Stations[stationID];
 }
+
+export function getStationIDsFromName(username, stationName) {	//find station number
+	console.log("getStationIDsFromName(", username, ",", stationName, ")");
+	let stationIDList = store.getState().LinkTables.userStations[username];
+	console.log('stationIDList :', stationIDList);
+	let matchingIDs = stationIDList.filter((stationID) => {
+		return store.getState().Stations[stationID].name === stationName
+	})
+	if (matchingIDs.length > 1) {
+		console.warn("Multiple ID's ", matchingIDs, " matched that station name.  This could represent a bug, please contact jfederer@usgs.gov and include this message");
+	}
+	return matchingIDs;
+}

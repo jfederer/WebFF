@@ -8,7 +8,7 @@ import {
 } from '../Constants/ActionTypes';
 
 import { emptyUser } from '../Constants/DefaultObjects';
-import { getStationIDFromNameAndNumber } from '../Utils/StoreUtilities';
+import { getStationIDsFromName } from '../Utils/StoreUtilities';
 
 
 /**
@@ -72,15 +72,7 @@ export function createNewStation(newStationObject) {
 
 export function removeStationFromUser(username, stationName) {
 	return (dispatch, getState) => {
-		//find station number
-		let stationIDList = (getState().LinkTables.userStations[username]);
-		let matchingIDs = stationIDList.filter((stationID) => {
-			return getState().Stations[stationID].name === stationName
-		})
-
-		if(matchingIDs.length > 1) {
-			console.warn("Multiple ID's ", matchingIDs ," matched that station name.  This could represent a bug, please contact jfederer@usgs.gov and include this message");
-		}
+		let matchingIDs = getStationIDsFromName(username, stationName);
 
 		matchingIDs.forEach((stationIDToRemove) => {
 			dispatch({ type: REMOVE_STATION_FROM_USERNAME, username, stationIDToRemove })

@@ -7,7 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 //import Tooltip from '@material-ui/core/Tooltip';
 import FormControl from '@material-ui/core/FormControl';
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
+import { SEQuestionValueChange, stationNameChanged } from '../../Actions/SamplingEvents';
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
 import { ADD_STATION } from '../../Constants/Dictionary';
 import { getStationFromID, getUsersStationIDs } from '../../Utils/StoreUtilities';
@@ -59,6 +59,10 @@ class StationDropDown extends React.Component {
 			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, value);
 		} else {
 			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, value);
+		}
+
+		if(!this.props.inDialog) { // if we are not in a dialog version of this question, we need to propage these changes to other questions
+			this.props.stationNameChanged(this.props.currentEventID, value);
 		}
 	};
 
@@ -140,13 +144,15 @@ const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
 		currentUsername: state.SedFF.currentUsername,
-		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername]
+		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername],
+		inDialog: state.UI.visibility.addRemoveStationDialogVisibility
 	}
 }
 
 const mapDispatchToProps = {
 	SEQuestionValueChange,
-	setAddRemoveStationDialogVisibility
+	setAddRemoveStationDialogVisibility,
+	stationNameChanged
 }
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(StationDropDown));
