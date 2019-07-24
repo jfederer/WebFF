@@ -27,7 +27,7 @@ export const emptyUser = {
 	settings: {
 		backupInterval: 300,
 		outlineQuestions: true,
-		customQuestions: []
+		questionsData: {}
 	}
 }
 

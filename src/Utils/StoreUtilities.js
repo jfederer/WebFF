@@ -47,38 +47,48 @@ export function getEventFromID(eventID) {
 	return store.getState().SamplingEvents[eventID];
 }
 
-export function getQuestionsData() {  //FUTURE: flesh out to allow getting full combined question data from other users
-	let currentEventQD = {};
-	let currentEventID = store.getState().SedFF.currentSamplingEventID;
-	if(currentEventID) {
-		currentEventQD = store.getState().SamplingEvents[currentEventID].questionsData;
-	}
-	
-	let questionsData = store.getState().Questions.questionsData;
+/** 
+@desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's and the default questionsData
+@returns {object} combined questionsData object.
+*/
+export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT!
+	let state = store.getState();
 
-	return _.merge({}, questionsData, currentEventQD);
+	let currentUserQD = {};
+	let username = state.SedFF.currentUsername;
+	if (username) {
+		currentUserQD = state.Users[username].settings.questionsData;
+	}
+
+	let currentEventQD = {};
+	let currentStationQD = {};
+	let currentEventID = state.SedFF.currentSamplingEventID;
+	let currentEvent = state.SamplingEvents[currentEventID]; //note, currentEvent is used below to get stationName
+	if (currentEvent) {
+		currentEventQD = currentEvent.questionsData;
+		let stationNameValue = currentEvent.questionsValues['stationName'];
+		if (stationNameValue && username) {
+			let currentStation = getStationFromID(getStationIDsFromName(username, stationNameValue)[0]);
+			currentStationQD = currentStation.questionsData;
+		}
+	}
+
+	let defaultQD = store.getState().Questions.questionsData;
+
+	return _.merge({}, defaultQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 }
 
 
-// function getQuestionFromQuestionID(questionID, store) {
-
-// 	if (store.Questions.questionsData[questionID])
-// 		return store.Questions.questionsData[questionID]
-// 	else
-// 		console.warn("Attempted to get question object for " + questionID + " but it does not exist in questionsData")
-// 	return null;
-// }
-	/* 
-	@desc gets the question object from questionsData in the store based on the ID
-	@param questionID {string} - the question ID
-	@param store {object} - the redux store object (likley returned from 'getState()' function)
-	@returns question {object}.  If the object is not found, warns and returns null.
-	*/
-export function getQuestionDataFromID(QID) {  //FUTURE: flesh out to allow getting full combined question data from other users
+/** 
+@desc gets the question object from questionsData in the store based on the ID
+@param {string} questionID  - the question ID
+@returns {object} question .  If the object is not found, warns and returns null.
+*/
+export function getQuestionDataFromID(QID) {
 	//TODO: build this recursively, like getQuestionValue, to work with nested questions?
 	let questionsData = getQuestionsData();
 	if (!questionsData[QID]) {
-		console.warn("Attempted to get question Data on falsey question ID: ", QID);
+		console.warn("Attempted to get question Data on falsey question ID: ", QID, "QuestionsData: ", questionsData);
 	}
 	return questionsData[QID];
 }
@@ -89,6 +99,18 @@ export function getSetInformationQuestionsData() {
 
 export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
 	return store.getState().LinkTables.userEvents[username];
+}
+
+export function getCurrentStationID() {
+	let state = store.getState();
+	try {
+		let username = state.SedFF.currentUsername;
+		let currentEvent = state.SamplingEvents[state.SedFF.currentSamplingEventID];
+		let stationNameValue = currentEvent.questionsValues['stationName'];
+		return getStationIDsFromName(username, stationNameValue)[0];
+	} catch {
+		return null;
+	}
 }
 
 export function getStationFromID(stationID) {

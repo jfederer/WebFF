@@ -85,6 +85,7 @@ class AddRemoveStationDialog extends React.Component {
 			defaultProjectName: this.state.newStation_projectName,
 			defaultProjectID: this.state.newStation_projectID,
 			defaultAgencyCode: this.state.newStation_agencyCode,
+			questionsData: {}
 		}
 
 		//add station

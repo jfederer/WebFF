@@ -15,7 +15,7 @@ const initialUserState = {
 		settings: {
 			backupInterval: 310,
 			outlineQuestions: true,
-			customQuestions: []
+			questionsData: {}
 		}
 	},
 	"test@usgs.gov": {
@@ -24,7 +24,7 @@ const initialUserState = {
 		settings: {
 			backupInterval: 200,
 			outlineQuestions: false,
-			customQuestions: []
+			questionsData: {}
 		}
 	}
 };
@@ -43,7 +43,10 @@ export function Users(state = initialUserState, action) {
 			return newState;
 		case SET_USER_DATA:
 			newState[action.user.username] = action.user;
-			return newState
+			return newState;
+		case ADD_QUESTION_TO_USER:	//FIXME: will bomb if user doesn't exist
+			newState[action.username].settings.questionsData[action.question.id] = action.question;
+			return newState;
 		default:
 			return state
 	}

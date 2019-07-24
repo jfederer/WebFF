@@ -59,7 +59,6 @@ switch (action.type) {
 		newState[action.eventID].questionsValues[action.questionID] = action.newValue;
 		return newState;
 	case ADD_QUESTION_TO_EVENT:
-		console.log("here1");
 		newState[action.eventID].questionsData[action.question.id] = action.question;
 		return newState;
 	default:

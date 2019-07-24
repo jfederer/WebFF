@@ -20,7 +20,8 @@ import Question from '../Question';
 
 
 import { setAddRemoveQuestionDialogVisibility } from '../../Actions/UI';
-
+import { addQuestionToUser, addQuestionToStation, addQuestionToEvent } from '../../Actions/Questions';
+import { getCurrentStationID } from '../../Utils/StoreUtilities';
 
 const implementedQuestions = {
 	Text: "Text",
@@ -122,7 +123,7 @@ class AddRemoveQuestionDialog extends React.Component {
 	addSubmitHandler = () => {
 		//build q_id dynamically
 		let QID = "#Type=" + this.state.addQuestion_Qtype + "#Label=" + this.state.addQuestion_label + "#Location=" + this.state.addQuestion_tab + ":" + this.state.addQuestion_panel;
-		console.log(QID);
+	
 		//TODO: verify unique
 
 		let Q_obj;
@@ -156,9 +157,12 @@ class AddRemoveQuestionDialog extends React.Component {
 				throw new Error("Attempted to add question that was not implemented: " + this.state.addQuestion_Qtype);
 		}
 
-		this.props.customQuestionAdder(Q_obj, this.handleDialogClose);
+
+		this.props.addQuestionToStation(getCurrentStationID(), Q_obj);
+		// this.props.addQuestionToUser(this.props.currentUsername, Q_obj);
+		this.handleDialogClose()
 	}
-	
+
 
 	deleteSubmitHandler = () => {
 		this.props.customQuestionDeleter(this.state.deleteQuestion_qid, this.handleDialogClose);
@@ -166,7 +170,7 @@ class AddRemoveQuestionDialog extends React.Component {
 
 
 
-	closeHandler = () => {
+	handleDialogClose = () => {
 		this.props.setAddRemoveQuestionDialogVisibility(false);
 		setTimeout(() => {
 			this.setState(initialState);
@@ -181,7 +185,7 @@ class AddRemoveQuestionDialog extends React.Component {
 		return (
 			<Dialog
 				open={addRemoveQuestionDialogVisibility}
-				onClose={this.closeHandler}
+				onClose={this.handleDialogClose}
 				aria-labelledby="form-dialog-title"
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
@@ -311,8 +315,8 @@ class AddRemoveQuestionDialog extends React.Component {
               </Button>
 					}
 
-					<Button onClick={this.closeHandler} color="primary">
-						Done
+					<Button onClick={this.handleDialogClose} color="primary">
+						Cancel
             		</Button>
 
 				</DialogActions>
@@ -326,13 +330,16 @@ class AddRemoveQuestionDialog extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI, // to get dialog visibility
-		users: state.Users,
-		sedff: state.SedFF
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
+		currentUsername: state.SedFF.currentUsername,
 	}
 }
 
 const mapDispatchToProps = {
-	setAddRemoveQuestionDialogVisibility: setAddRemoveQuestionDialogVisibility,
+	setAddRemoveQuestionDialogVisibility,
+	addQuestionToUser,
+	addQuestionToStation
 }
 
 AddRemoveQuestionDialog.propTypes = {
