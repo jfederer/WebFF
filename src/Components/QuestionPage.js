@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { styles } from '../style';
@@ -12,6 +13,7 @@ import {
 	createQuestionComponents, getTabQuestionsData,
 	getLayoutGroupNames, getLayoutGroupQuestionsData
 } from '../Utils/QuestionUtilities';
+import { getQuestionsData} from '../Utils/StoreUtilities';
 import { setAppBarText } from '../Actions/UI';
 
 
@@ -46,7 +48,9 @@ class QuestionPage extends React.Component {
 	render() {
 		const DEBUG = false;
 		const { tabName, currentEvent } = this.props;
-		const { questionsData } = this.props.questions;
+
+		let questionsData = getQuestionsData();
+
 		const { hiddenPanels } = this.props.UI.visibility;
 		// let tabQuestionData = [];
 		// let layoutGroupNames = [];
@@ -113,8 +117,9 @@ const mapStateToProps = function (state) {
 		// currentUser: state.Users[state.SedFF.currentUsername],
 		//samplingEvents: state.SamplingEvents,
 		UI: state.UI,
-		questions: state.Questions,
+		questionsData: state.Questions.questionsData,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
+		// currentUser: state.User[state.SedFF.currentUsername]
 	}
 }
 

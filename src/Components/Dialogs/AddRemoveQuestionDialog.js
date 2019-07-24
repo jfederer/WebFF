@@ -109,9 +109,10 @@ class AddRemoveQuestionDialog extends React.Component {
 		this.setState({ creatingQ: false });
 	}
 
-	QChangeHandler = (Q) => {
-		this.setState({ [Q.props.id]: Q.state.value }, this.updateDisabledButtons);
-	}
+	handleValueChange = (eventID, QID, value) => {
+		this.setState({ [QID]: value }, this.updateDisabledButtons);
+	};
+
 
 	createQButtonHandler = () => {
 		this.setState({ creatingQ: true });
@@ -120,7 +121,8 @@ class AddRemoveQuestionDialog extends React.Component {
 
 	addSubmitHandler = () => {
 		//build q_id dynamically
-		let q_id = "#Type=" + this.state.addQuestion_Qtype + "#Label=" + this.state.addQuestion_label + "#Location=" + this.state.addQuestion_tab + ":" + this.state.addQuestion_panel;
+		let QID = "#Type=" + this.state.addQuestion_Qtype + "#Label=" + this.state.addQuestion_label + "#Location=" + this.state.addQuestion_tab + ":" + this.state.addQuestion_panel;
+		console.log(QID);
 		//TODO: verify unique
 
 		let Q_obj;
@@ -128,7 +130,7 @@ class AddRemoveQuestionDialog extends React.Component {
 			case "Text":
 				Q_obj = {
 					type: "Text",
-					id: q_id,
+					id: QID,
 					label: this.state.addQuestion_label,
 					value: "",  //TODO: add question  
 					tabName: this.state.addQuestion_tab,
@@ -141,7 +143,7 @@ class AddRemoveQuestionDialog extends React.Component {
 				Q_obj = {
 					type: "Toggle",
 					checkbox: true,
-					id: q_id,
+					id: QID,
 					label: this.state.addQuestion_label,
 					value: "",  //TODO: add question  
 					tabName: this.state.addQuestion_tab,
@@ -156,6 +158,7 @@ class AddRemoveQuestionDialog extends React.Component {
 
 		this.props.customQuestionAdder(Q_obj, this.handleDialogClose);
 	}
+	
 
 	deleteSubmitHandler = () => {
 		this.props.customQuestionDeleter(this.state.deleteQuestion_qid, this.handleDialogClose);
@@ -192,8 +195,8 @@ class AddRemoveQuestionDialog extends React.Component {
 					Custom Questions
         </DialogTitle>
 				<DialogContent>
-					<Grid justify="space-around" container spacing={24}>
-						<Grid item xs={12}>
+					<Grid justify="space-around" container >
+						<Grid item xs={10}>
 							<DialogContentText>
 								{this.state.creatingQ === ""
 									? "Create or Delete a custom question in your user configuration."
@@ -204,10 +207,10 @@ class AddRemoveQuestionDialog extends React.Component {
 						</Grid>
 						{this.state.creatingQ === ""
 							? <React.Fragment>
-								<Grid item xs={6}>
+								<Grid item xs={4}>
 									<Paper className={classes.paper}><Button onClick={this.createQButtonHandler}>Create a New Question</Button></Paper>
 								</Grid>
-								<Grid item xs={6}>
+								<Grid item xs={4}>
 									<Paper className={classes.paper}><Button onClick={this.deleteButtonHandler}>Delete existing Question</Button></Paper>
 								</Grid>
 							</React.Fragment>
@@ -219,7 +222,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											required
 											id="addQuestion_label"
 											label="Question Label"
-											stateChangeHandler={this.QChangeHandler}
+											alternateChangeHandler={this.handleValueChange}
 											value={this.state.addQuestion_label}
 										/>
 									</Grid>
@@ -231,7 +234,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											id="addQuestion_tab"
 											label="Question location: Tab name"
 											placeholder="What 'page' should this be on"
-											stateChangeHandler={this.QChangeHandler}
+											alternateChangeHandler={this.handleValueChange}
 											value={this.state.addQuestion_tab}
 										/>
 									</Grid>
@@ -241,7 +244,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											required
 											id="addQuestion_panel"
 											label="Question location: Panel name"
-											stateChangeHandler={this.QChangeHandler}
+											alternateChangeHandler={this.handleValueChange}
 											value={this.state.addQuestion_panel}
 										/>
 									</Grid>
@@ -251,7 +254,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											id="addQuestion_sizexs"
 											label="Size (when screen small)"
 											placeholder="1-12 (optional)"
-											stateChangeHandler={this.QChangeHandler}
+											alternateChangeHandler={this.handleValueChange}
 											value={this.state.addQuestion_sizexs}
 										/>
 									</Grid>
@@ -261,7 +264,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											id="addQuestion_sizelg"
 											label="Size (when screen large)"
 											placeholder="1-12 (optional)"
-											stateChangeHandler={this.QChangeHandler}
+											alternateChangeHandler={this.handleValueChange}
 											value={this.state.addQuestion_sizelg}
 										/>
 									</Grid>
@@ -272,7 +275,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											id="addQuestion_Qtype"
 											includeBlank={true}
 											value={this.state.addQuestion_Qtype}
-											stateChangeHandler={this.QChangeHandler}
+											alternateChangeHandler={this.handleValueChange}
 											options={implementedQuestions}
 											type="DropDown"
 										/>

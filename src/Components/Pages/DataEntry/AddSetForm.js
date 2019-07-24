@@ -9,7 +9,7 @@ import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from 
 
 import { SET_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
 
-import { addQuestion } from '../../../Actions/Questions';
+import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue, getMethodCategoryFromValue } from '../../../Utils/QuestionUtilities';
 import { getNumberOfSets, getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
@@ -142,7 +142,7 @@ class AddSetForm extends React.Component {
 			"value": newSetValue
 		}
 
-		this.props.addQuestion(newSetQuestion);
+		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);
 
 		this.props.SEQuestionValueChange(currentSamplingEventID, SET_INFORMATION_IDENTIFIER + newSetName, newSetValue);
 
@@ -236,7 +236,7 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	setAppBarText,
-	addQuestion,
+	addQuestionToEvent,
 	SEQuestionValueChange
 }
 

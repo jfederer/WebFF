@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 import { 
 	CREATE_NEW_SAMPLING_EVENT,
-	SE_QUESTION_VALUE_CHANGE
+	SE_QUESTION_VALUE_CHANGE,
+	ADD_QUESTION_TO_EVENT
  } from '../Constants/ActionTypes';
 
 
@@ -55,7 +56,11 @@ switch (action.type) {
 		newState[action.event.eventID]=action.event; 
 		return newState;
 	case SE_QUESTION_VALUE_CHANGE:
-		newState[action.eventID].questionsValues[action.questionID] = action.newValue
+		newState[action.eventID].questionsValues[action.questionID] = action.newValue;
+		return newState;
+	case ADD_QUESTION_TO_EVENT:
+		console.log("here1");
+		newState[action.eventID].questionsData[action.question.id] = action.question;
 		return newState;
 	default:
 		return state;

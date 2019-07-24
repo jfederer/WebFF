@@ -80,8 +80,9 @@ class WebFF extends React.Component {
 	//TODO: templates
 
 	//TODO: add/remove station
-	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
+		//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 
+	//TODO: remove set
 
 	//BUG: Does not check for updated data outside localstorage
 
@@ -93,6 +94,7 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 	//TODO: settings -> auto fill out avaialble station information from station values
 	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
+	//TODO: Nozzle material and diameter show 'value' rather than display value... niceity.
 
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
@@ -247,7 +249,6 @@ class WebFF extends React.Component {
 							<AddRemoveQuestionDialog
 								//TODO: REDUX
 								handleQuestionDialogClose={this.handleQuestionDialogClose}
-								customQuestionAdder={this.customQuestionAdder}
 								customQuestionDeleter={this.customQuestionDeleter} />
 							<AddRemoveStationDialog />
 							{/* <SettingsDialog /> */}

@@ -17,7 +17,8 @@ export const emptySamplingEvent = {
 	dateModified: "",
 	shippedStatus: "Not Shipped",
 	questionsValues: {
-	}
+	},
+	questionsData: {}
 }
 
 export const emptyUser = {

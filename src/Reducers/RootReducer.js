@@ -12,8 +12,9 @@ const RootReducer = combineReducers({
 	Users,
 	SedFF,
 	SamplingEvents,
+	Questions,  
 	LinkTables, 
-	Questions,
+	
 	Stations
   });
   

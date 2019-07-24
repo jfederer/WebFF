@@ -15,10 +15,9 @@ import {
 	RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
-import { getEventFromID, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
+import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue, getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
-import { getQuestionsData } from '../Utils/StoreUtilities';
 import { showNavigationTab } from './UI';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue} from '../Components/Questions/ParametersTable';
@@ -40,7 +39,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
 		//get question and conditionally the action string
-		dispatch(conditionallyRunActionString(eventID, getQuestionFromQuestionID(questionID, getState()))); //TODO: need getState?  Call a store util instead?
+		dispatch(conditionallyRunActionString(eventID, getQuestionDataFromID(questionID))); //TODO: need getState?  Call a store util instead?
 	}
 }
 
@@ -293,19 +292,6 @@ function getActionsFromActionString(actionsString) {
 }
 
 
-function getQuestionFromQuestionID(questionID, store) {
-	/* 
-	@desc gets the question object from questionsData in the store based on the ID
-	@param questionID {string} - the question ID
-	@param store {object} - the redux store object (likley returned from 'getState()' function)
-	@returns question {object}.  If the object is not found, warns and returns null.
-	*/
-	if (store.Questions.questionsData[questionID])
-		return store.Questions.questionsData[questionID]
-	else
-		console.warn("Attempted to get question object for " + questionID + " but it does not exist in questionsData")
-	return null;
-}
 
 function translateActionStringActionNameToAction(sedFFActionName) {
 	/* 

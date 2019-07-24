@@ -1,4 +1,5 @@
 import store from '../Store';
+import _ from 'lodash';
 import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 
 
@@ -47,15 +48,39 @@ export function getEventFromID(eventID) {
 }
 
 export function getQuestionsData() {  //FUTURE: flesh out to allow getting full combined question data from other users
-	return store.getState().Questions.questionsData;
+	let currentEventQD = {};
+	let currentEventID = store.getState().SedFF.currentSamplingEventID;
+	if(currentEventID) {
+		currentEventQD = store.getState().SamplingEvents[currentEventID].questionsData;
+	}
+	
+	let questionsData = store.getState().Questions.questionsData;
+
+	return _.merge({}, questionsData, currentEventQD);
 }
 
+
+// function getQuestionFromQuestionID(questionID, store) {
+
+// 	if (store.Questions.questionsData[questionID])
+// 		return store.Questions.questionsData[questionID]
+// 	else
+// 		console.warn("Attempted to get question object for " + questionID + " but it does not exist in questionsData")
+// 	return null;
+// }
+	/* 
+	@desc gets the question object from questionsData in the store based on the ID
+	@param questionID {string} - the question ID
+	@param store {object} - the redux store object (likley returned from 'getState()' function)
+	@returns question {object}.  If the object is not found, warns and returns null.
+	*/
 export function getQuestionDataFromID(QID) {  //FUTURE: flesh out to allow getting full combined question data from other users
 	//TODO: build this recursively, like getQuestionValue, to work with nested questions?
-	if (!store.getState().Questions.questionsData[QID]) {
+	let questionsData = getQuestionsData();
+	if (!questionsData[QID]) {
 		console.warn("Attempted to get question Data on falsey question ID: ", QID);
 	}
-	return store.getState().Questions.questionsData[QID];
+	return questionsData[QID];
 }
 
 export function getSetInformationQuestionsData() {
