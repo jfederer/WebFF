@@ -95,7 +95,7 @@ class WebFF extends React.Component {
 	//TODO: settings -> auto fill out avaialble station information from station values
 	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
 	//TODO: Nozzle material and diameter show 'value' rather than display value... niceity.
-
+	//TODO: Drop down for 'tabname' on add question. include blank/type option too.
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
 	//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)

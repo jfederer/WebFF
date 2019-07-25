@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { styles } from '../../style';
-
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -18,7 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import Question from '../Question';
 
-
+import { navMenuItems } from '../../Constants/NavMenu';
 import { setAddRemoveQuestionDialogVisibility } from '../../Actions/UI';
 import { addQuestionToUser, addQuestionToStation, addQuestionToEvent } from '../../Actions/Questions';
 import { getCurrentStationID } from '../../Utils/StoreUtilities';
@@ -49,6 +49,7 @@ class AddRemoveQuestionDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = _.cloneDeep(initialState);
+
 	}
 
 	customQuestionsList() {
@@ -123,7 +124,7 @@ class AddRemoveQuestionDialog extends React.Component {
 	addSubmitHandler = () => {
 		//build q_id dynamically
 		let QID = "#Type=" + this.state.addQuestion_Qtype + "#Label=" + this.state.addQuestion_label + "#Location=" + this.state.addQuestion_tab + ":" + this.state.addQuestion_panel;
-	
+
 		//TODO: verify unique
 
 		let Q_obj;
@@ -182,6 +183,22 @@ class AddRemoveQuestionDialog extends React.Component {
 		const { classes } = this.props;
 		const { addRemoveQuestionDialogVisibility } = this.props.UI.visibility;
 
+		let pageOptions = {}
+		let currentPage = "";
+		if (addRemoveQuestionDialogVisibility) {
+			navMenuItems.forEach((navMenuItem) => {
+				if (navMenuItem.text !== "Dashboard") {
+					pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
+				}
+			})
+
+			currentPage = this.props.location.pathname.substring(1);
+			if (currentPage === "") {
+				currentPage = "FieldForm";
+			}
+
+		}
+
 		return (
 			<Dialog
 				open={addRemoveQuestionDialogVisibility}
@@ -233,13 +250,14 @@ class AddRemoveQuestionDialog extends React.Component {
 									<Grid item xs={6}>
 										{/* TODO: these should be drop downs with existing options as well as a 'new' option */}
 										<Question
-											type="Text"
+											type="DropDown"
 											required
 											id="addQuestion_tab"
 											label="Question location: Tab name"
 											placeholder="What 'page' should this be on"
+											options={pageOptions}
 											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_tab}
+											value={this.state.addQuestion_tab !== "" ? this.state.addQuestion_tab : currentPage}
 										/>
 									</Grid>
 									<Grid item xs={6}>
@@ -346,4 +364,4 @@ AddRemoveQuestionDialog.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(AddRemoveQuestionDialog));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles, { withTheme: true })(AddRemoveQuestionDialog)));
