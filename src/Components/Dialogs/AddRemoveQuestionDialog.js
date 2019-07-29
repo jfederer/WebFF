@@ -23,13 +23,31 @@ import { setAddRemoveQuestionDialogVisibility } from '../../Actions/UI';
 import { addQuestionToUser, addQuestionToStation, addQuestionToEvent } from '../../Actions/Questions';
 import { getCurrentStationID } from '../../Utils/StoreUtilities';
 
+const USER_CONFIGURATION = "USER CONFIGURATION";
+
 const implementedQuestions = {
 	Text: "Text",
 	Checkbox: "Checkbox"
 }
 
+const saveLocations = {
+	["User Configuration"]: "User",
+	["Station Setup"]: "Station",
+	["This specific Event"]: "Event"
+}
+
+//TODO: station setup and specific event not options when unavilable.
+// 
+https://material-ui.com/api/dialog/
+
+Look into "on enter" stuff for building the initial ... yay.
+
+
+//TODO: fill in state on init for location (So it doesn't need to be selected)
+
 const initialState = {
 	creatingQ: "",
+	Q_save_loc: saveLocations["User Configuration"],
 	addQuestion_id: "",
 	addQuestion_label: "",
 	addQuestion_Qtype: "",
@@ -73,10 +91,10 @@ class AddRemoveQuestionDialog extends React.Component {
 		if (this.state.addQuestion_Qtype === null || this.state.addQuestion_Qtype === "" ||
 			this.state.addQuestion_label === null || this.state.addQuestion_label === "" ||
 			this.state.addQuestion_panel === null || this.state.addQuestion_panel === "" ||
-			this.state.addQuestion_tab === null || this.state.addQuestion_tab === "") {
+			this.state.addQuestion_tab === null || this.state.addQuestion_tab === "" ||
+			this.state.Q_save_loc === null || this.state.Q_save_loc === "") {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -158,9 +176,20 @@ class AddRemoveQuestionDialog extends React.Component {
 				throw new Error("Attempted to add question that was not implemented: " + this.state.addQuestion_Qtype);
 		}
 
+		switch (this.state.Q_save_loc) {
+			case "User":
+				this.props.addQuestionToUser(this.props.currentUsername, Q_obj);
+				break;
+			case "Station":
+				this.props.addQuestionToStation(getCurrentStationID(), Q_obj);
+				break;
+			case "Event":
+				this.props.addQuestionToEvent(this.props.currentSamplingEventID, Q_obj);
+				break;
+			default: 
+				throw new Error("Attempting to add question to location for ", this.state.Q_save_loc, " which is not implemented");
+		}
 
-		this.props.addQuestionToStation(getCurrentStationID(), Q_obj);
-		// this.props.addQuestionToUser(this.props.currentUsername, Q_obj);
 		this.handleDialogClose()
 	}
 
@@ -182,6 +211,8 @@ class AddRemoveQuestionDialog extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { addRemoveQuestionDialogVisibility } = this.props.UI.visibility;
+
+		// value={this.state.addQuestion_tab !== "" ? this.state.addQuestion_tab : currentPage}
 
 		let pageOptions = {}
 		let currentPage = "";
@@ -222,8 +253,8 @@ class AddRemoveQuestionDialog extends React.Component {
 								{this.state.creatingQ === ""
 									? "Create or Delete a custom question in your user configuration."
 									: this.state.creatingQ === true
-										? "Create a new custom question, to be saved to your user configuration."
-										: "Delete an existing custom question from your user configuration."}
+										? "Create a new custom question:"
+										: "Delete an existing custom question:"}
 							</DialogContentText>
 						</Grid>
 						{this.state.creatingQ === ""
@@ -302,6 +333,19 @@ class AddRemoveQuestionDialog extends React.Component {
 											type="DropDown"
 										/>
 									</Grid>
+									<Grid item xs={12}>
+										<InputLabel>Save Question to:</InputLabel>
+										<Question
+											required
+											id="Q_save_loc"
+											includeBlank={false}
+											value={this.state.Q_save_loc}
+											alternateChangeHandler={this.handleValueChange}
+											options={saveLocations}
+											type="DropDown"
+										/>
+									</Grid>
+
 								</React.Fragment>
 								// creatingQ===false
 								: <Grid item xs={12}>
@@ -357,7 +401,8 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setAddRemoveQuestionDialogVisibility,
 	addQuestionToUser,
-	addQuestionToStation
+	addQuestionToStation,
+	addQuestionToEvent
 }
 
 AddRemoveQuestionDialog.propTypes = {
