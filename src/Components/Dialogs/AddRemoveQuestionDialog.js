@@ -23,31 +23,20 @@ import { setAddRemoveQuestionDialogVisibility } from '../../Actions/UI';
 import { addQuestionToUser, addQuestionToStation, addQuestionToEvent } from '../../Actions/Questions';
 import { getCurrentStationID } from '../../Utils/StoreUtilities';
 
-const USER_CONFIGURATION = "USER CONFIGURATION";
-
 const implementedQuestions = {
 	Text: "Text",
 	Checkbox: "Checkbox"
 }
 
-const saveLocations = {
-	["User Configuration"]: "User",
-	["Station Setup"]: "Station",
-	["This specific Event"]: "Event"
-}
+const EVENT_SAVE_LOCATION_TEXT = "This specific Event";
+const STATION_SAVE_LOCATION_TEXT = "Station Setup";
+const USER_SAVE_LOCATION_TEXT = "User Configuration";
 
-//TODO: station setup and specific event not options when unavilable.
-// 
-https://material-ui.com/api/dialog/
-
-Look into "on enter" stuff for building the initial ... yay.
-
-
-//TODO: fill in state on init for location (So it doesn't need to be selected)
+//TODO: these keys can reflect current situation --- "JFEDERER's Configuration" ..."Rum River station"..."Current event Sediment on Jordan"...etc.
 
 const initialState = {
 	creatingQ: "",
-	Q_save_loc: saveLocations["User Configuration"],
+	Q_save_loc: "",
 	addQuestion_id: "",
 	addQuestion_label: "",
 	addQuestion_Qtype: "",
@@ -57,7 +46,9 @@ const initialState = {
 	addQuestion_sizelg: "",
 	deleteQuestion_qid: "",
 	addSubmitButtonDisabled: true,
-	deleteSubmitButtonDisabled: true
+	deleteSubmitButtonDisabled: true,
+	pageOptions: {},
+	saveLocations: {}
 }
 
 
@@ -138,6 +129,46 @@ class AddRemoveQuestionDialog extends React.Component {
 		this.setState({ creatingQ: true });
 	}
 
+	onEnter = () => {
+
+		let pageOptions = {};
+		let saveLocations = {};
+		let currentPage = "";
+			navMenuItems.forEach((navMenuItem) => {
+				if (navMenuItem.text !== "Dashboard") {
+					pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
+				}
+			})
+
+			currentPage = this.props.location.pathname.substring(1);
+
+			if (currentPage === "") {
+				currentPage = "FieldForm";
+			}
+
+
+		if(this.props.currentSamplingEventID) {
+			saveLocations[EVENT_SAVE_LOCATION_TEXT]="Event";
+		}
+		if(this.props.currentUsername) {
+			saveLocations[USER_SAVE_LOCATION_TEXT]="User";
+		}
+		if(getCurrentStationID()) {
+			saveLocations[STATION_SAVE_LOCATION_TEXT]="Station";
+		}
+
+
+		this.setState({
+			saveLocations: saveLocations,
+			addQuestion_tab:currentPage, 
+			pageOptions: pageOptions, 
+			Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT]}
+		);
+
+		
+
+	}
+
 
 	addSubmitHandler = () => {
 		//build q_id dynamically
@@ -212,27 +243,12 @@ class AddRemoveQuestionDialog extends React.Component {
 		const { classes } = this.props;
 		const { addRemoveQuestionDialogVisibility } = this.props.UI.visibility;
 
-		// value={this.state.addQuestion_tab !== "" ? this.state.addQuestion_tab : currentPage}
-
-		let pageOptions = {}
-		let currentPage = "";
-		if (addRemoveQuestionDialogVisibility) {
-			navMenuItems.forEach((navMenuItem) => {
-				if (navMenuItem.text !== "Dashboard") {
-					pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
-				}
-			})
-
-			currentPage = this.props.location.pathname.substring(1);
-			if (currentPage === "") {
-				currentPage = "FieldForm";
-			}
-
-		}
+		console.log('this.state2 render :', this.state);
 
 		return (
 			<Dialog
 				open={addRemoveQuestionDialogVisibility}
+				onEnter={this.onEnter}
 				onClose={this.handleDialogClose}
 				aria-labelledby="form-dialog-title"
 				fullWidth
@@ -286,9 +302,9 @@ class AddRemoveQuestionDialog extends React.Component {
 											id="addQuestion_tab"
 											label="Question location: Tab name"
 											placeholder="What 'page' should this be on"
-											options={pageOptions}
+											options={this.state.pageOptions}
 											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_tab !== "" ? this.state.addQuestion_tab : currentPage}
+											value={this.state.addQuestion_tab}
 										/>
 									</Grid>
 									<Grid item xs={6}>
@@ -341,7 +357,7 @@ class AddRemoveQuestionDialog extends React.Component {
 											includeBlank={false}
 											value={this.state.Q_save_loc}
 											alternateChangeHandler={this.handleValueChange}
-											options={saveLocations}
+											options={this.state.saveLocations}
 											type="DropDown"
 										/>
 									</Grid>

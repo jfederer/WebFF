@@ -246,10 +246,7 @@ class WebFF extends React.Component {
 								globalState={this.state}
 							/>
 							{/* <SyncDataDialog /> */}
-							<AddRemoveQuestionDialog
-								//TODO: REDUX
-								handleQuestionDialogClose={this.handleQuestionDialogClose}
-								customQuestionDeleter={this.customQuestionDeleter} />
+							<AddRemoveQuestionDialog />
 							<AddRemoveStationDialog />
 							{/* <SettingsDialog /> */}
 							<AboutDialog />
