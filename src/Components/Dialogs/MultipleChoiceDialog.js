@@ -26,7 +26,6 @@ class MultipleChoiceDialog extends React.Component {
 	}
 
 	render() {
-		console.log('MCD props :', this.props);
 		return (
 			<Dialog
 				open={this.props.open}
