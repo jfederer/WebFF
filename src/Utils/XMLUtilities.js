@@ -4,6 +4,7 @@ import xmljs from 'xml-js';
 import { PROGRAM_VERSION } from '../Constants/Config';
 import { getQuestionValue } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
+import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 
 
@@ -199,8 +200,9 @@ export function getSedLOGINcompatibleXML(eventID) {
 // }
 
 
+
+
 const stringFromMultipleChoice = (MCObj) => {
-	console.log(MCObj);
 	if(MCObj) {
 		return Object.keys(MCObj).filter((key)=>MCObj[key]).join(",");
 	} else {
@@ -211,17 +213,27 @@ const stringFromMultipleChoice = (MCObj) => {
 
 const buildSetObj = (eventID, setName) => {
 	console.log("buildSetOb(", eventID, ",", setName, ")");
+
+
 	let setObj = {
-		"Name": getQuestionValue(eventID, setName, 'groupOfSamples') ? "Sngl" : setName,
+		"Name": getQuestionValue(eventID, setName, 'groupOfSamples') ? "Sngl" : setName.replace(SET_INFORMATION_IDENTIFIER, ""),
 		"NumberOfSamples": getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
 		"AnalyzeIndSamples": getQuestionValue(eventID, setName, "samplesComposited") ? 'N' : 'Y',
-		"Analyses":stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType")))
-		// "SetType": getCurrentSampleEventMethod()
+		"Analyses":stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType"))),
 	}
 
+	switch (getQuestionValue(eventID, setName, 'samplingMethod')) { 
+		case '10':
+			setObj["SetType"] = "EWI";
+			break;
+		case '20':
+			setObj["SetType"] = "EDI";
+			break;
+		default:
+			setObj["SetType"] = "OTHER";
+			break;
+	}
 
-	
-	
 	// let ai = !getQuestionValue("set" + setName + "_samplesComposited");
 	// let numOfSampleBlocks = ai ? getQuestionValue("set" + setName + "_numberOfSamplingPoints") : 1;
 
