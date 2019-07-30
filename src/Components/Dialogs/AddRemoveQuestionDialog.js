@@ -48,7 +48,8 @@ const initialState = {
 	addSubmitButtonDisabled: true,
 	deleteSubmitButtonDisabled: true,
 	pageOptions: {},
-	saveLocations: {}
+	saveLocations: {},
+	// deleteOptions
 }
 
 
@@ -61,21 +62,21 @@ class AddRemoveQuestionDialog extends React.Component {
 
 	}
 
-	customQuestionsList() {
-		if (this.state.creatingQ === false) { // if this is a delete question
-			let options = {};
-			let CQ = localStorage.getItem("customQuestions");
-			if (CQ) {
-				CQ = JSON.parse(CQ);
-				for (let i = 0; i < CQ.length; i++) {
-					options[CQ[i].id] = CQ[i].id;
-				}
-			}
-			return options;
-		} else {
-			return null;
-		}
-	}
+	// customQuestionsList() {
+	// 	if (this.state.creatingQ === false) { // if this is a delete question
+	// 		let options = {};
+	// 		let CQ = localStorage.getItem("customQuestions");
+	// 		if (CQ) {
+	// 			CQ = JSON.parse(CQ);
+	// 			for (let i = 0; i < CQ.length; i++) {
+	// 				options[CQ[i].id] = CQ[i].id;
+	// 			}
+	// 		}
+	// 		return options;
+	// 	} else {
+	// 		return null;
+	// 	}
+	// }
 
 
 	shouldEnableAddSubmitButton() {
@@ -164,9 +165,6 @@ class AddRemoveQuestionDialog extends React.Component {
 			pageOptions: pageOptions, 
 			Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT]}
 		);
-
-		
-
 	}
 
 

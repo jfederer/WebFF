@@ -4,6 +4,7 @@ import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects'
 
 
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
+// import { eventNames } from 'cluster';
 
 export function getNumberOfSets(eventID) {
 	return getSetListAsArray(eventID).length;
@@ -57,7 +58,7 @@ export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT!
 	let currentUserQD = {};
 	let username = state.SedFF.currentUsername;
 	if (username) {
-		currentUserQD = state.Users[username].settings.questionsData;
+		currentUserQD = getUserQuestionData(username);
 	}
 
 	let currentEventQD = {};
@@ -65,11 +66,11 @@ export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT!
 	let currentEventID = state.SedFF.currentSamplingEventID;
 	let currentEvent = state.SamplingEvents[currentEventID]; //note, currentEvent is used below to get stationName
 	if (currentEvent) {
-		currentEventQD = currentEvent.questionsData;
+		currentEventQD = getEventQuestionData(currentEvent);
+		
 		let stationNameValue = currentEvent.questionsValues['stationName'];
 		if (stationNameValue && username) {
-			let currentStation = getStationFromID(getStationIDsFromName(username, stationNameValue)[0]);
-			currentStationQD = currentStation.questionsData;
+			currentStationQD = getStationNameQuestionData(username, stationNameValue);
 		}
 	}
 
@@ -77,6 +78,57 @@ export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT!
 
 	return _.merge({}, defaultQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 }
+
+/**
+ * @param {string} username - username (email)
+ * @returns {Object} the questionsData (custom questions) for a given user
+ */
+export function getUserQuestionData(username) {
+	return store.getState().Users[username].settings.questionsData;;
+}
+
+/**
+ * @param {string} eventID - event ID for a given event
+ * @returns {Object} the questionsData (custom questions) for a given event associated with the eventID
+ */
+export function getEventIDQuestionData(eventID) {
+	return getEventQuestionData(store.getState().SamplingEvents[eventID]);
+}
+
+/**
+ * @param {Object} event - sampling event object
+ * @returns {Object} the questionsData (custom questions) for a given event
+ */
+export function getEventQuestionData(event) {
+	return event.questionsData;
+}
+
+
+/**
+ * @param {string} username - the name of a user (email) associated with the station
+ * @param {string} stationName - the name of the station (this is the full station name (ie: the station name 'value', not the key), not the display name)
+ * @returns {Object} the questionsData (custom questions) for a given stationName
+ */
+export function getStationNameQuestionData(username, stationName) {
+	return getStationIDQuestionData(getStationIDsFromName(username, stationName)[0]);
+}
+
+/**
+ * @param {string} stationID - the name of the station
+ * @returns {Object} the questionsData (custom questions) for a given stationID
+ */
+export function getStationIDQuestionData(stationID) {
+	return getStationQuestionData(getStationFromID(stationID));
+}
+
+/**
+ * @param {string} station - station object
+ * @returns {Object} the questionsData (custom questions) for a given station
+ */
+export function getStationQuestionData(station) {
+	return station.questionsData;
+}
+
 
 
 /** 
