@@ -20,10 +20,12 @@ import Question from '../Question';
 
 import { navMenuItems } from '../../Constants/NavMenu';
 import { setAddRemoveQuestionDialogVisibility } from '../../Actions/UI';
-import { addQuestionToUser, addQuestionToStation, addQuestionToEvent,
-	deleteQuestionFromUser, deleteQuestionFromEvent, deleteQuestionFromStation  } from '../../Actions/Questions';
+import {
+	addQuestionToUser, addQuestionToStation, addQuestionToEvent,
+	deleteQuestionFromUser, deleteQuestionFromEvent, deleteQuestionFromStation
+} from '../../Actions/Questions';
 import { getCurrentStationID, getEventIDQuestionData, getUserQuestionData, getStationIDQuestionData } from '../../Utils/StoreUtilities';
-import { Divider } from '@material-ui/core';
+import { Divider, Typography } from '@material-ui/core';
 
 const implementedQuestions = {
 	Text: "Text",
@@ -60,7 +62,7 @@ const initialState = {
 	deleteQuestion_user_qid: "",
 	deleteQuestion_station_qid: "",
 	deleteQuestion_event_qid: "",
-	numDeleteSelected:0
+	numDeleteSelected: 0
 }
 
 
@@ -104,19 +106,19 @@ class AddRemoveQuestionDialog extends React.Component {
 	shouldEnableDeleteSubmitButton() {
 
 		let numToDeleteSelected = 0;
-		if (this.state.deleteQuestion_user_qid!=="") {
+		if (this.state.deleteQuestion_user_qid !== "") {
 			numToDeleteSelected++;
-		} 
-		if (this.state.deleteQuestion_station_qid!=="") {
+		}
+		if (this.state.deleteQuestion_station_qid !== "") {
 			numToDeleteSelected++;
-		} 
-		if (this.state.deleteQuestion_event_qid!=="") {
+		}
+		if (this.state.deleteQuestion_event_qid !== "") {
 			numToDeleteSelected++;
-		} 
+		}
 
-		this.setState({numDeleteSelected:numToDeleteSelected});
-		
-		return numToDeleteSelected===1;
+		this.setState({ numDeleteSelected: numToDeleteSelected });
+
+		return numToDeleteSelected === 1;
 	}
 
 	updateDisabledButtons = () => {
@@ -193,9 +195,9 @@ class AddRemoveQuestionDialog extends React.Component {
 			}
 		}
 
-
-
-
+		if (Object.keys(userDeleteOpts).length === 0 && Object.keys(stationDeleteOpts).length === 0 && Object.keys(eventDeleteOpts).length === 0) {
+			this.setState({ creatingQ: true });  // if there are no custom questions, just assume they are here to create
+		}
 
 		this.setState({
 			saveLocations: saveLocations,
@@ -204,7 +206,7 @@ class AddRemoveQuestionDialog extends React.Component {
 			Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT],
 			stationDeleteOptions: stationDeleteOpts,
 			eventDeleteOptions: eventDeleteOpts,
-			userDeleteOptions: userDeleteOpts
+			userDeleteOptions: userDeleteOpts,
 		}
 		);
 	}
@@ -266,13 +268,13 @@ class AddRemoveQuestionDialog extends React.Component {
 
 
 	deleteSubmitHandler = () => {
-		if(this.state.deleteQuestion_user_qid!=="") {
-			this.props.deleteQuestionFromUser(this.props.currentUsername, this.state.deleteQuestion_user_qid );
+		if (this.state.deleteQuestion_user_qid !== "") {
+			this.props.deleteQuestionFromUser(this.props.currentUsername, this.state.deleteQuestion_user_qid);
 		}
-		if(this.state.deleteQuestion_event_qid!=="") {
+		if (this.state.deleteQuestion_event_qid !== "") {
 			this.props.deleteQuestionFromEvent(this.props.currentSamplingEventID, this.state.deleteQuestion_event_qid);
 		}
-		if(this.state.deleteQuestion_station_qid!=="") {
+		if (this.state.deleteQuestion_station_qid !== "") {
 			this.props.deleteQuestionFromStation(getCurrentStationID(), this.state.deleteQuestion_station_qid);
 		}
 		this.handleDialogClose();
@@ -426,27 +428,31 @@ class AddRemoveQuestionDialog extends React.Component {
 									<br />
 									<Divider variant='fullWidth' />
 									<br />
-									Current STATION Questions:
+									{getCurrentStationID()
+										? <React.Fragment><Typography>Current STATION Questions</Typography>:
 									<Question
-										id="deleteQuestion_station_qid"
-										includeBlank={true}
-										value={this.state.deleteQuestion_station_qid}
-										alternateChangeHandler={this.handleValueChange}
-										options={this.state.stationDeleteOptions}
-										type="DropDown"
-									/>
+												id="deleteQuestion_station_qid"
+												includeBlank={true}
+												value={this.state.deleteQuestion_station_qid}
+												alternateChangeHandler={this.handleValueChange}
+												options={this.state.stationDeleteOptions}
+												type="DropDown"
+											/></React.Fragment>
+										: null}
 									<br />
 									<Divider />
 									<br />
-									Current EVENT questions:
-									<Question
-										id="deleteQuestion_event_qid"
-										includeBlank={true}
-										value={this.state.deleteQuestion_event_qid}
-										alternateChangeHandler={this.handleValueChange}
-										options={this.state.eventDeleteOptions}
-										type="DropDown"
-									/>
+									{this.props.currentSamplingEventID
+										? <React.Fragment><Typography>Current EVENT questions:</Typography>
+											<Question
+												id="deleteQuestion_event_qid"
+												includeBlank={true}
+												value={this.state.deleteQuestion_event_qid}
+												alternateChangeHandler={this.handleValueChange}
+												options={this.state.eventDeleteOptions}
+												type="DropDown"
+											/></React.Fragment>
+										: null}
 								</Grid>
 						}
 
@@ -464,7 +470,7 @@ class AddRemoveQuestionDialog extends React.Component {
 								{this.state.numDeleteSelected === 0 ? 'Must Select Question' : null}
 								{this.state.numDeleteSelected === 1 ? 'Delete Question' : null}
 								{this.state.numDeleteSelected > 1 ? 'Can only select one question at a time' : null}
-              </Button>
+							</Button>
 					}
 
 					<Button onClick={this.handleDialogClose} color="primary">
@@ -493,8 +499,8 @@ const mapDispatchToProps = {
 	addQuestionToUser,
 	addQuestionToStation,
 	addQuestionToEvent,
-	deleteQuestionFromUser, 
-	deleteQuestionFromEvent, 
+	deleteQuestionFromUser,
+	deleteQuestionFromEvent,
 	deleteQuestionFromStation
 }
 
