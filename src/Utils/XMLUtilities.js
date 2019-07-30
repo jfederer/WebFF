@@ -4,7 +4,7 @@ import xmljs from 'xml-js';
 import { PROGRAM_VERSION } from '../Constants/Config';
 import { getQuestionValue } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, BEGIN_DATE_COLUMN_NUM } from '../Constants/Config';
 
 
 
@@ -56,150 +56,168 @@ export function getSedLOGINcompatibleXML(eventID) {
 // 	return paramObj;
 // }
 
-
-// buildSampleObj(setName, sampNum) {
-// 	// get total number of samples before this one to know what row we are looking at in QWDATA table
-// 	let setNum = setName.charCodeAt() - 65;
-// 	let totalNumberOfSamplesInPreviousSets = 0;
-// 	for (let i = setNum; i > 0; i--) {
-// 		let previousSetName = String.fromCharCode(i + 64);
-// 		let previousAI = !this.getQuestionValue("set" + previousSetName + "_samplesComposited");
-// 		totalNumberOfSamplesInPreviousSets += previousAI ? this.getNumberOfSamplesInSet(previousSetName) : 1;
-// 	}
-// 	let QWDATARowNum = sampNum + 1 + totalNumberOfSamplesInPreviousSets;
-
-// 	// build sample object
-// 	let sampleObj = {
-// 		"SampleNumber": sampNum + 1,
-// 		"BeginDate": this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum) !== ""
-// 			? this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum)
-// 			: this.getQuestionValue("sampleDate"),
-// 		"BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
-// 		"TimeDatum": this.getQuestionValue("timeDatum"),
-// 		"AddOnAnalyses": this.getTableQuestionValue("QWDATATable", "Add-on Analyses", QWDATARowNum).join(','),
-// 		"CollecAgency": this.getQuestionValue("collectingAgency"),
-// 		"colllectorInitials": this.getQuestionValue("compiledBy"),
-// 		"Hstat": (this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum) !== "")
-// 			? this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum)
-// 			: this.getQuestionValue("hydrologicCondition"),
-// 		"HydEvent": (this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum) !== "")
-// 			? this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum)
-// 			: this.getQuestionValue("hydrologicEvent"),
-// 		"Stype": (this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum) !== "")
-// 			? this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum)
-// 			: this.getQuestionValue("sampleType"),
-// 		"Astat": (this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum) !== "")
-// 			? this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum)
-// 			: this.getQuestionValue("analysisStatus"),
-// 		"P71999": this.getQuestionValue("samplePurpose"),
-// 		"P82398": this.getQuestionValue(this.getSamplingMethodQuestionIDString()),
-// 		"P84164": this.getQuestionValue(this.getSamplerTypeQuestionIDString()),
-// 		"M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum)
-// 	}
-
-// 	// build param part of sample object from the parameters table headers
-// 	let parametersTableHeaders = this.getQuestionValue("parametersTable")[0];
-// 	if (parametersTableHeaders === null | parametersTableHeaders.length < 4) { // there was no parameters table info or headers
-// 		return sampleObj;  //FIXME: This should either alert or not return... there are other params now.
-// 	}
-
-// 	let activePCodes = {};
-// 	for (let i = 0; i < parametersTableHeaders.length; i++) {
-// 		activePCodes[parametersTableHeaders[i].split("_")[0]] = true;
-// 	}
-// 	let activePCodesArr = Object.keys(activePCodes).filter((el) => el !== "Set-Sample @ Dist");
-
-// 	for (let i = 0; i < activePCodesArr.length; i++) {
-// 		sampleObj["Param" + i] = this.buildParamTableParamObj(QWDATARowNum, activePCodesArr[i]);
-// 	}
+	// get total number of samples before this one to know what row we are looking at in QWDATA table
+const getQWDATARowNum = (eventID, setName, sampNum) => {  //note, this is also the parameters table row num
+	let setList = getSetListAsArray(eventID);  // FIXME: will this always return the right order?
+	let totalNumberOfSamplesInPreviousSets = 0;
+	for(let i = 0; i < setList.length; i++) {
+		if(setList[i]===setName) {
+			totalNumberOfSamplesInPreviousSets += parseInt(sampNum);
+			break;
+		}
+		totalNumberOfSamplesInPreviousSets += parseInt(getNumberRowsForSampleBlock(eventID, setList[i])) ;
+	}
+	return totalNumberOfSamplesInPreviousSets+1; //plus one to move past header
+}
 
 
+const buildSampleObj = (eventID, setName, sampNum) => {
+	console.log("buildSampleObj(",eventID,"," ,setName,",", sampNum,")");
 
-// 	//build the param part of the sample object from the pCodes not in the parameters page
-// 	let curParamNum = activePCodesArr.length;
+	let QWDATARowNum = getQWDATARowNum(eventID, setName, sampNum);
 
-// 	// REMOVED per KASKACH request that this be a param block instead of a sample-level item.
-// 	//  "Average Gage Height", if calculated, should be written to P00065.
-// 	//  If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
-// 	// QWDATA can also accept this if left blank.
-// 	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
+	console.log('QWDATARowNum :', QWDATARowNum);
+	console.log("Begin Date: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, BEGIN_DATE_COLUMN_NUM));
 
-// 	//  - the "Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
-// 	if (!this.getQuestionValue("groupOfSamples")) {
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00063", this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"));
-// 	}
+	// build sample object
+	let sampleObj = {
+		"SampleNumber": sampNum + 1,
+		// "BeginDate": this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum) !== ""
+		// 	? this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum)
+		// 	: this.getQuestionValue("sampleDate"),
+		"BeginDate":  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, BEGIN_DATE_COLUMN_NUM) !== ""
+			?  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, BEGIN_DATE_COLUMN_NUM)
+			: getQuestionValue(eventID, "sampleDate"),
 
-// 	//  - the Distance from L Bank should be written to P00009.
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P00009", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Distance from L bank, feet", sampNum + 1));
+		// "BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
+		// "TimeDatum": this.getQuestionValue("timeDatum"),
+		// "AddOnAnalyses": this.getTableQuestionValue("QWDATATable", "Add-on Analyses", QWDATARowNum).join(','),
+		// "CollecAgency": this.getQuestionValue("collectingAgency"),
+		// "colllectorInitials": this.getQuestionValue("compiledBy"),
+		// "Hstat": (this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum) !== "")
+		// 	? this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum)
+		// 	: this.getQuestionValue("hydrologicCondition"),
+		// "HydEvent": (this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum) !== "")
+		// 	? this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum)
+		// 	: this.getQuestionValue("hydrologicEvent"),
+		// "Stype": (this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum) !== "")
+		// 	? this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum)
+		// 	: this.getQuestionValue("sampleType"),
+		// "Astat": (this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum) !== "")
+		// 	? this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum)
+		// 	: this.getQuestionValue("analysisStatus"),
+		// "P71999": this.getQuestionValue("samplePurpose"),
+		// "P82398": this.getQuestionValue(this.getSamplingMethodQuestionIDString()),
+		// "P84164": this.getQuestionValue(this.getSamplerTypeQuestionIDString()),
+		// "M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum)
+	}
 
-// 	//  - Transit rate, sampler, feet per second  should be written to P50015.
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum + 1));
+	// // build param part of sample object from the parameters table headers
+	// let parametersTableHeaders = this.getQuestionValue("parametersTable")[0];
+	// if (parametersTableHeaders === null | parametersTableHeaders.length < 4) { // there was no parameters table info or headers
+	// 	return sampleObj;  //FIXME: This should either alert or not return... there are other params now.
+	// }
 
-// 	//  - Start Time should be written to P82073, 
-// 	//  - End Time should be written to P82074.  
-// 	//  These should be written in 24-hour military time, with NO colon between the hour & minutes.
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P82073", this.getQuestionValue("set" + setName + "_StartTime").replace(":", ""));
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P82074", this.getQuestionValue("set" + setName + "_EndTime").replace(":", ""));
+	// let activePCodes = {};
+	// for (let i = 0; i < parametersTableHeaders.length; i++) {
+	// 	activePCodes[parametersTableHeaders[i].split("_")[0]] = true;
+	// }
+	// let activePCodesArr = Object.keys(activePCodes).filter((el) => el !== "Set-Sample @ Dist");
 
-// 	// - the "Stream Width", if calculated, should be written to P00004.  
-// 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
-// 	//	try {
-// 	let streamWidth = Math.abs(this.getQuestionValue("streamWidth"));
-// 	if (streamWidth !== 0) {
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth);
-// 	}
-
-// 	// } catch (e) {
-// 	// 	console.warn("Stream Width not added to XML");
-// 	// }
-
-
-// 	// - - Mean Depth of Stream (00064), 
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P00064", this.getQuestionValue("meanStreamDepth"));
-
-// 	// - - Stream Velocity (00055)
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P00055", this.getQuestionValue("streamVelocity"));
-
-
-// 	// IET testing
-// 	// - - Stream Velocity (ft) - - should be written to P72196
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P72196", this.getQuestionValue("streamVelocity_IET")); //TODO: stream velocity question name collision 
-// 	// - - Seconds Sampler collected water - - should be written to P72217
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P72217", this.getQuestionValue("duration_IET"));
-// 	// - - Sample Volume for Test (mL) - - should be written to P72218
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P72218", this.getQuestionValue("sampleVolume_IET"));
-// 	// - - Nozzle Material - - should be written to P72219
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P72219", this.getQuestionValue("nozzleMaterial_IET"));
-// 	// - - Nozzle Diameter - - should be written to P72220
-// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P72220", this.getQuestionValue("nozzleDiameter_IET"));
+	// for (let i = 0; i < activePCodesArr.length; i++) {
+	// 	sampleObj["Param" + i] = this.buildParamTableParamObj(QWDATARowNum, activePCodesArr[i]);
+	// }
 
 
 
-// 	// for Bedload samples only:  
-// 	if (this.getQuestionValue("sedimentType") === "bedload") {
-// 		//  - - Bag Mesh Size, in mm - - should be P30333.
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P30333", this.getQuestionValue("bagMesh"));
+	// //build the param part of the sample object from the pCodes not in the parameters page
+	// let curParamNum = activePCodesArr.length;
 
-// 		//  - - Tether Line Used - -  should be P04117.
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P04117", this.getQuestionValue("tetherLine") ? 1 : 0);
+	// // REMOVED per KASKACH request that this be a param block instead of a sample-level item.
+	// //  "Average Gage Height", if calculated, should be written to P00065.
+	// //  If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
+	// // QWDATA can also accept this if left blank.
+	// // sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
 
-// 		//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P04118", this.getQuestionValue("compositeSamplesInCrossSection"));
+	// //  - the "Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
+	// if (!this.getQuestionValue("groupOfSamples")) {
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P00063", this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"));
+	// }
 
-// 		//  - - Verticals in composite sample, a number - - should be P04119. 
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P04119", this.getQuestionValue("verticalsInComposite"));
+	// //  - the Distance from L Bank should be written to P00009.
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00009", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Distance from L bank, feet", sampNum + 1));
 
-// 		//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P04120", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Rest time on Bed for Bed load sample, seconds", sampNum + 1));//TODO: test
+	// //  - Transit rate, sampler, feet per second  should be written to P50015.
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum + 1));
 
-// 		//  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
-// 		sampleObj["Param" + curParamNum++] = this.buildParamObj("P04121", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Horizontal width of Vertical, feet", sampNum + 1)); //TODO: test
-// 	}
+	// //  - Start Time should be written to P82073, 
+	// //  - End Time should be written to P82074.  
+	// //  These should be written in 24-hour military time, with NO colon between the hour & minutes.
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P82073", this.getQuestionValue("set" + setName + "_StartTime").replace(":", ""));
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P82074", this.getQuestionValue("set" + setName + "_EndTime").replace(":", ""));
 
-// 	return sampleObj;
-// }
+	// // - the "Stream Width", if calculated, should be written to P00004.  
+	// // TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
+	// //	try {
+	// let streamWidth = Math.abs(this.getQuestionValue("streamWidth"));
+	// if (streamWidth !== 0) {
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth);
+	// }
+
+	// // } catch (e) {
+	// // 	console.warn("Stream Width not added to XML");
+	// // }
 
 
+	// // - - Mean Depth of Stream (00064), 
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00064", this.getQuestionValue("meanStreamDepth"));
+
+	// // - - Stream Velocity (00055)
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00055", this.getQuestionValue("streamVelocity"));
+
+
+	// // IET testing
+	// // - - Stream Velocity (ft) - - should be written to P72196
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72196", this.getQuestionValue("streamVelocity_IET")); //TODO: stream velocity question name collision 
+	// // - - Seconds Sampler collected water - - should be written to P72217
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72217", this.getQuestionValue("duration_IET"));
+	// // - - Sample Volume for Test (mL) - - should be written to P72218
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72218", this.getQuestionValue("sampleVolume_IET"));
+	// // - - Nozzle Material - - should be written to P72219
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72219", this.getQuestionValue("nozzleMaterial_IET"));
+	// // - - Nozzle Diameter - - should be written to P72220
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72220", this.getQuestionValue("nozzleDiameter_IET"));
+
+
+
+	// // for Bedload samples only:  
+	// if (this.getQuestionValue("sedimentType") === "bedload") {
+	// 	//  - - Bag Mesh Size, in mm - - should be P30333.
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P30333", this.getQuestionValue("bagMesh"));
+
+	// 	//  - - Tether Line Used - -  should be P04117.
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04117", this.getQuestionValue("tetherLine") ? 1 : 0);
+
+	// 	//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04118", this.getQuestionValue("compositeSamplesInCrossSection"));
+
+	// 	//  - - Verticals in composite sample, a number - - should be P04119. 
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04119", this.getQuestionValue("verticalsInComposite"));
+
+	// 	//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04120", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Rest time on Bed for Bed load sample, seconds", sampNum + 1));//TODO: test
+
+	// 	//  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
+	// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04121", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Horizontal width of Vertical, feet", sampNum + 1)); //TODO: test
+	// }
+
+	return sampleObj;
+}
+
+const getNumberRowsForSampleBlock = (eventID, setName) => {
+	let ai = !getQuestionValue(eventID, setName, "samplesComposited");
+	return ai ? getQuestionValue(eventID, setName, "numberOfSamplingPoints") : 1;  // if analyize individually, then we'll check each sample... otherwise, just the one
+}
 
 
 const stringFromMultipleChoice = (MCObj) => {
@@ -234,12 +252,11 @@ const buildSetObj = (eventID, setName) => {
 			break;
 	}
 
-	// let ai = !getQuestionValue("set" + setName + "_samplesComposited");
-	// let numOfSampleBlocks = ai ? getQuestionValue("set" + setName + "_numberOfSamplingPoints") : 1;
+	let numOfSampleBlocks = getNumberRowsForSampleBlock(eventID, setName);
 
-	// for (let i = 0; i < numOfSampleBlocks; i++) {
-	// 	setObj["Sample" + i] = this.buildSampleObj(setName, i);
-	// }
+	for (let i = 0; i < numOfSampleBlocks; i++) {
+		setObj["Sample" + i] = buildSampleObj(eventID, setName, i);
+	}
 
 	return setObj;
 }

@@ -192,7 +192,7 @@ class QWDATATable extends React.Component {
 
 
 	handleValueChange = (row, col) => (eventID, QID, value) => {
-		console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
+		// console.log("QWDATA: handleValueChange (", row, ", ", col, ")", eventID, QID, value, ")");
 
 		let newVal = _.cloneDeep(this.props.value);
 		newVal[row][col] = value;
