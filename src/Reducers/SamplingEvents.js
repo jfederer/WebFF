@@ -3,7 +3,8 @@ import _ from 'lodash';
 import { 
 	CREATE_NEW_SAMPLING_EVENT,
 	SE_QUESTION_VALUE_CHANGE,
-	ADD_QUESTION_TO_EVENT
+	ADD_QUESTION_TO_EVENT,
+	DELETE_QUESTION_FROM_EVENT
  } from '../Constants/ActionTypes';
 
 
@@ -60,6 +61,9 @@ switch (action.type) {
 		return newState;
 	case ADD_QUESTION_TO_EVENT:
 		newState[action.eventID].questionsData[action.question.id] = action.question;
+		return newState;
+	case DELETE_QUESTION_FROM_EVENT:
+		delete newState[action.eventID].questionsData[action.QID];
 		return newState;
 	default:
 		return state;

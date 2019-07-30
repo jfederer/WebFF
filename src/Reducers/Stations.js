@@ -1,6 +1,7 @@
 import {
 	SET_STATION_VALUES,
-	ADD_QUESTION_TO_STATION
+	ADD_QUESTION_TO_STATION,
+	DELETE_QUESTION_FROM_STATION
 } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
@@ -46,6 +47,9 @@ export function Stations(state = initialStations, action) {
 			return newState;
 		case ADD_QUESTION_TO_STATION:
 			newState[action.stationID].questionsData[action.question.id] = action.question;
+			return newState;
+		case DELETE_QUESTION_FROM_STATION:
+			delete newState[action.stationID].questionsData[action.QID];
 			return newState;
 		default:
 			return state

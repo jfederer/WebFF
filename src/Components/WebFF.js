@@ -82,7 +82,8 @@ class WebFF extends React.Component {
 	//TODO: add/remove station
 		//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 
-	//TODO: remove set
+	//TODO: remove set (delete question does this... but make it easier)
+	//TODO: optionsally show 'delete custom question' button
 
 	//BUG: Does not check for updated data outside localstorage
 

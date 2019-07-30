@@ -20,13 +20,18 @@ import Question from '../Question';
 
 import { navMenuItems } from '../../Constants/NavMenu';
 import { setAddRemoveQuestionDialogVisibility } from '../../Actions/UI';
-import { addQuestionToUser, addQuestionToStation, addQuestionToEvent } from '../../Actions/Questions';
-import { getCurrentStationID } from '../../Utils/StoreUtilities';
+import { addQuestionToUser, addQuestionToStation, addQuestionToEvent,
+	deleteQuestionFromUser, deleteQuestionFromEvent, deleteQuestionFromStation  } from '../../Actions/Questions';
+import { getCurrentStationID, getEventIDQuestionData, getUserQuestionData, getStationIDQuestionData } from '../../Utils/StoreUtilities';
+import { Divider } from '@material-ui/core';
 
 const implementedQuestions = {
 	Text: "Text",
 	Checkbox: "Checkbox"
 }
+
+const DELETE_QUESTION = "Delete Question";
+const ONLY_ONE_CAN_BE_SELECTED = "Only one question can be selected at a time";
 
 const EVENT_SAVE_LOCATION_TEXT = "This specific Event";
 const STATION_SAVE_LOCATION_TEXT = "Station Setup";
@@ -49,7 +54,13 @@ const initialState = {
 	deleteSubmitButtonDisabled: true,
 	pageOptions: {},
 	saveLocations: {},
-	// deleteOptions
+	stationDeleteOptions: {},
+	eventDeleteOptions: {},
+	userDeleteOptions: {},
+	deleteQuestion_user_qid: "",
+	deleteQuestion_station_qid: "",
+	deleteQuestion_event_qid: "",
+	numDeleteSelected:0
 }
 
 
@@ -91,10 +102,21 @@ class AddRemoveQuestionDialog extends React.Component {
 	}
 
 	shouldEnableDeleteSubmitButton() {
-		if (this.state.deleteQuestion_qid === null || this.state.deleteQuestion_qid === "") {
-			return false;
-		}
-		return true;
+
+		let numToDeleteSelected = 0;
+		if (this.state.deleteQuestion_user_qid!=="") {
+			numToDeleteSelected++;
+		} 
+		if (this.state.deleteQuestion_station_qid!=="") {
+			numToDeleteSelected++;
+		} 
+		if (this.state.deleteQuestion_event_qid!=="") {
+			numToDeleteSelected++;
+		} 
+
+		this.setState({numDeleteSelected:numToDeleteSelected});
+		
+		return numToDeleteSelected===1;
 	}
 
 	updateDisabledButtons = () => {
@@ -135,35 +157,55 @@ class AddRemoveQuestionDialog extends React.Component {
 		let pageOptions = {};
 		let saveLocations = {};
 		let currentPage = "";
-			navMenuItems.forEach((navMenuItem) => {
-				if (navMenuItem.text !== "Dashboard") {
-					pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
-				}
-			})
-
-			currentPage = this.props.location.pathname.substring(1);
-
-			if (currentPage === "") {
-				currentPage = "FieldForm";
+		navMenuItems.forEach((navMenuItem) => {
+			if (navMenuItem.text !== "Dashboard") {
+				pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
 			}
+		})
+
+		currentPage = this.props.location.pathname.substring(1);
+
+		if (currentPage === "") {
+			currentPage = "FieldForm";
+		}
+
+		let eventQD = {}, userQD = {}, stationQD = {};
+		let eventDeleteOpts = {}, userDeleteOpts = {}, stationDeleteOpts = {};
+		if (this.props.currentSamplingEventID) {
+			saveLocations[EVENT_SAVE_LOCATION_TEXT] = "Event";
+			eventQD = getEventIDQuestionData(this.props.currentSamplingEventID);
+			if (eventQD) {
+				Object.keys(eventQD).forEach(id => eventDeleteOpts[id] = id);
+			}
+		}
+		if (this.props.currentUsername) {
+			saveLocations[USER_SAVE_LOCATION_TEXT] = "User";
+			userQD = getUserQuestionData(this.props.currentUsername);
+			if (userQD) {
+				Object.keys(userQD).forEach(id => userDeleteOpts[id] = id);
+			}
+		}
+		if (getCurrentStationID()) {
+			saveLocations[STATION_SAVE_LOCATION_TEXT] = "Station";
+			stationQD = getStationIDQuestionData(getCurrentStationID());
+			if (stationQD) {
+				Object.keys(stationQD).forEach(id => stationDeleteOpts[id] = id);
+			}
+		}
 
 
-		if(this.props.currentSamplingEventID) {
-			saveLocations[EVENT_SAVE_LOCATION_TEXT]="Event";
-		}
-		if(this.props.currentUsername) {
-			saveLocations[USER_SAVE_LOCATION_TEXT]="User";
-		}
-		if(getCurrentStationID()) {
-			saveLocations[STATION_SAVE_LOCATION_TEXT]="Station";
-		}
+
 
 
 		this.setState({
 			saveLocations: saveLocations,
-			addQuestion_tab:currentPage, 
-			pageOptions: pageOptions, 
-			Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT]}
+			addQuestion_tab: currentPage,
+			pageOptions: pageOptions,
+			Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT],
+			stationDeleteOptions: stationDeleteOpts,
+			eventDeleteOptions: eventDeleteOpts,
+			userDeleteOptions: userDeleteOpts
+		}
 		);
 	}
 
@@ -215,7 +257,7 @@ class AddRemoveQuestionDialog extends React.Component {
 			case "Event":
 				this.props.addQuestionToEvent(this.props.currentSamplingEventID, Q_obj);
 				break;
-			default: 
+			default:
 				throw new Error("Attempting to add question to location for ", this.state.Q_save_loc, " which is not implemented");
 		}
 
@@ -224,7 +266,16 @@ class AddRemoveQuestionDialog extends React.Component {
 
 
 	deleteSubmitHandler = () => {
-		this.props.customQuestionDeleter(this.state.deleteQuestion_qid, this.handleDialogClose);
+		if(this.state.deleteQuestion_user_qid!=="") {
+			this.props.deleteQuestionFromUser(this.props.currentUsername, this.state.deleteQuestion_user_qid );
+		}
+		if(this.state.deleteQuestion_event_qid!=="") {
+			this.props.deleteQuestionFromEvent(this.props.currentSamplingEventID, this.state.deleteQuestion_event_qid);
+		}
+		if(this.state.deleteQuestion_station_qid!=="") {
+			this.props.deleteQuestionFromStation(getCurrentStationID(), this.state.deleteQuestion_station_qid);
+		}
+		this.handleDialogClose();
 	}
 
 
@@ -240,8 +291,6 @@ class AddRemoveQuestionDialog extends React.Component {
 	render() {
 		const { classes } = this.props;
 		const { addRemoveQuestionDialogVisibility } = this.props.UI.visibility;
-
-		console.log('this.state2 render :', this.state);
 
 		return (
 			<Dialog
@@ -268,7 +317,7 @@ class AddRemoveQuestionDialog extends React.Component {
 									? "Create or Delete a custom question in your user configuration."
 									: this.state.creatingQ === true
 										? "Create a new custom question:"
-										: "Delete an existing custom question:"}
+										: "Select custom question to delete:"}
 							</DialogContentText>
 						</Grid>
 						{this.state.creatingQ === ""
@@ -363,14 +412,39 @@ class AddRemoveQuestionDialog extends React.Component {
 								</React.Fragment>
 								// creatingQ===false
 								: <Grid item xs={12}>
-									<InputLabel>Select custom question to delete</InputLabel>
+									<br />
+									<br />
+									{this.props.currentUsername}'s Questions:
 									<Question
-										required
-										id="deleteQuestion_qid"
+										id="deleteQuestion_user_qid"
 										includeBlank={true}
-										value={this.state.deleteQuestion_qid}
-										stateChangeHandler={this.QChangeHandler}
-										options={this.customQuestionsList}
+										value={this.state.deleteQuestion_user_qid}
+										alternateChangeHandler={this.handleValueChange}
+										options={this.state.userDeleteOptions}
+										type="DropDown"
+									/>
+									<br />
+									<Divider variant='fullWidth' />
+									<br />
+									Current STATION Questions:
+									<Question
+										id="deleteQuestion_station_qid"
+										includeBlank={true}
+										value={this.state.deleteQuestion_station_qid}
+										alternateChangeHandler={this.handleValueChange}
+										options={this.state.stationDeleteOptions}
+										type="DropDown"
+									/>
+									<br />
+									<Divider />
+									<br />
+									Current EVENT questions:
+									<Question
+										id="deleteQuestion_event_qid"
+										includeBlank={true}
+										value={this.state.deleteQuestion_event_qid}
+										alternateChangeHandler={this.handleValueChange}
+										options={this.state.eventDeleteOptions}
 										type="DropDown"
 									/>
 								</Grid>
@@ -387,7 +461,9 @@ class AddRemoveQuestionDialog extends React.Component {
 								Add Question
               </Button>
 							: <Button disabled={this.state.deleteSubmitButtonDisabled} onClick={this.deleteSubmitHandler} color="primary">
-								Delete Question
+								{this.state.numDeleteSelected === 0 ? 'Must Select Question' : null}
+								{this.state.numDeleteSelected === 1 ? 'Delete Question' : null}
+								{this.state.numDeleteSelected > 1 ? 'Can only select one question at a time' : null}
               </Button>
 					}
 
@@ -416,7 +492,10 @@ const mapDispatchToProps = {
 	setAddRemoveQuestionDialogVisibility,
 	addQuestionToUser,
 	addQuestionToStation,
-	addQuestionToEvent
+	addQuestionToEvent,
+	deleteQuestionFromUser, 
+	deleteQuestionFromEvent, 
+	deleteQuestionFromStation
 }
 
 AddRemoveQuestionDialog.propTypes = {
