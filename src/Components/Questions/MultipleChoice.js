@@ -72,8 +72,6 @@ class MultipleChoice extends React.Component {
 		if(this.isInvalid()) {
 			return null;
 		}
-
-		console.log('MC Props :', this.props);
 		
 		return <FormControl component="fieldset" key={this.props.id}>
 			<FormLabel component="legend">{this.props.label}</FormLabel>
