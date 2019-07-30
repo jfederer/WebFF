@@ -13,7 +13,7 @@ import Question from '../Question';
 import Button from '@material-ui/core/Button';
 
 import Typography from '@material-ui/core/Typography';
-import { allQWDATAOptionalHeaders, allOpts, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
+import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
 import { getKeyFromValue } from '../../Utils/Utilities';
 
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
@@ -294,7 +294,6 @@ class QWDATATable extends React.Component {
 															? "Add"
 															: Object.keys(this.props.value[rowNum][colNum])
 																.filter((key) => this.props.value[rowNum][colNum][key])
-																.map((key) => allOpts[key])
 																.join(",")}
 													</Button>
 

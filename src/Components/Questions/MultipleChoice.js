@@ -32,9 +32,10 @@ class MultipleChoice extends React.Component {
 				initValue = {};
 			}
 		
-			Object.keys(this.props.options).forEach((option) => {
-				if (initValue[option] === null || typeof initValue[option] === 'undefined') {
-					initValue[option] = false;
+			Object.keys(this.props.options).forEach((optionLabel) => {
+				let optionValue = this.props.options[optionLabel]
+				if (typeof initValue[optionLabel] === 'undefined' || initValue[optionLabel] === null) {
+					initValue[optionValue] = false;
 				}
 			})
 
@@ -71,23 +72,23 @@ class MultipleChoice extends React.Component {
 		if(this.isInvalid()) {
 			return null;
 		}
+
+		console.log('MC Props :', this.props);
 		
 		return <FormControl component="fieldset" key={this.props.id}>
 			<FormLabel component="legend">{this.props.label}</FormLabel>
 			<FormGroup>
-				{Object.keys(this.props.options).map((option) => {
-					let optionLabel = this.props.options[option];
+				{Object.keys(this.props.options).map((optionLabel) => {
+					let optionValue = this.props.options[optionLabel];
 					return <FormControlLabel
 						key={optionLabel + ":" + this.props.options[optionLabel]}
 						control={
 							<Checkbox
-								checked={this.props.value[option] ? this.props.value[option] : false}
-								onChange={this.handleValueChange(option)}
-								// value={this.props.value[this.props.options[optionLabel]]}
-								value={option}
+								checked={this.props.value[optionValue] ? this.props.value[optionValue] : false}
+								onChange={this.handleValueChange(this.props.options[optionLabel])}
 							/>
 						}
-						label={option}
+						label={optionLabel}
 					/>
 				})}
 			</FormGroup>

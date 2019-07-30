@@ -3,10 +3,11 @@ import Question from '../Components/Question';
 import xmljs from 'xml-js';
 import { PROGRAM_VERSION } from '../Constants/Config';
 import { getQuestionValue } from './QuestionUtilities';
+import { getSetListAsArray } from './StoreUtilities';
 
 
 
-export function getSedLOGINcompatibleXML(eventID){
+export function getSedLOGINcompatibleXML(eventID) {
 	let SLCXML = {
 		"SedWE_data": buildSampleEventtObj(eventID)
 	}
@@ -22,7 +23,7 @@ export function getSedLOGINcompatibleXML(eventID){
 
 	// remove numbers from "sample"
 	reg = /<Sample\d+/g;
-	cleanXML = cleanXML.replace(reg, "<Sample") 
+	cleanXML = cleanXML.replace(reg, "<Sample")
 	reg = /<\/Sample\d+/g;
 	cleanXML = cleanXML.replace(reg, "</Sample")
 
@@ -198,25 +199,38 @@ export function getSedLOGINcompatibleXML(eventID){
 // }
 
 
+const stringFromMultipleChoice = (MCObj) => {
+	console.log(MCObj);
+	if(MCObj) {
+		return Object.keys(MCObj).filter((key)=>MCObj[key]).join(",");
+	} else {
+		return "";
+	}
+}
 
-// buildSetObj(setName) {
-// 	let setObj = {
-// 		"Name": this.getQuestionValue('groupOfSamples') ? "Sngl" : setName,
-// 		"NumberOfSamples": this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"),
-// 		"AnalyzeIndSamples": this.getQuestionValue("set" + setName + "_samplesComposited") ? 'N' : 'Y',
-// 		"Analyses": this.getQuestionValue("set" + setName + "_AnalysedFor_" + this.getQuestionValue("sedimentType")).join(","),
-// 		"SetType": this.getCurrentSampleEventMethod()
-// 	}
 
-// 	let ai = !this.getQuestionValue("set" + setName + "_samplesComposited");
-// 	let numOfSampleBlocks = ai ? this.getQuestionValue("set" + setName + "_numberOfSamplingPoints") : 1;
+const buildSetObj = (eventID, setName) => {
+	console.log("buildSetOb(", eventID, ",", setName, ")");
+	let setObj = {
+		"Name": getQuestionValue(eventID, setName, 'groupOfSamples') ? "Sngl" : setName,
+		"NumberOfSamples": getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
+		"AnalyzeIndSamples": getQuestionValue(eventID, setName, "samplesComposited") ? 'N' : 'Y',
+		"Analyses":stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType")))
+		// "SetType": getCurrentSampleEventMethod()
+	}
 
-// 	for (let i = 0; i < numOfSampleBlocks; i++) {
-// 		setObj["Sample" + i] = this.buildSampleObj(setName, i);
-// 	}
 
-// 	return setObj;
-// }
+	
+	
+	// let ai = !getQuestionValue("set" + setName + "_samplesComposited");
+	// let numOfSampleBlocks = ai ? getQuestionValue("set" + setName + "_numberOfSamplingPoints") : 1;
+
+	// for (let i = 0; i < numOfSampleBlocks; i++) {
+	// 	setObj["Sample" + i] = this.buildSampleObj(setName, i);
+	// }
+
+	return setObj;
+}
 
 const buildSampleEventtObj = (eventID) => {
 	let SEObj = {
@@ -231,34 +245,34 @@ const buildSampleEventtObj = (eventID) => {
 		}
 	}
 
-	// let numberOfSets = getNumberOfSets(eventID);
+	let setNamesList = getSetListAsArray(eventID);
 
-	// for (let i = 0; i < numberOfSets; i++) {
-	// 	let setName = String.fromCharCode(65 + i);
-	// 	SEObj.Event["Set" + i] = this.buildSetObj(eventID, setName);
-	// }
+	setNamesList.forEach((setName) => {
+		SEObj.Event[setName] = buildSetObj(eventID, setName);
+	});
+
 	return SEObj;
 }
 
 export const insertNode = (questionsData, changeHandler, _globalState, questionsValues) => {
-    // creates one question component for every question in questionsData
+	// creates one question component for every question in questionsData
 	// overwrites questionsData value with passed in value in questionsValues
 	let questionComponents = [];
 	//console.log(questionsValues);
-    if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-        questionComponents = questionsData.map(questionData => {
+	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
+		questionComponents = questionsData.map(questionData => {
 
 			let value = questionData.value;
 			//console.log("Value from questionData: ", value);
-			if(questionsValues) {
-			//	console.log("questionsData.id: ", questionData.id);
+			if (questionsValues) {
+				//	console.log("questionsData.id: ", questionData.id);
 				value = questionsValues[questionData.id]
 				//console.log("Value from questionVALUES: ", value);
 			}
 
-			return <Question {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState}/>
+			return <Question {...questionData} value={value} questionsValues={questionsValues} stateChangeHandler={changeHandler} globalState={_globalState} />
 		});
-    }
+	}
 
-    return questionComponents;
+	return questionComponents;
 }

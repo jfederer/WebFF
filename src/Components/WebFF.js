@@ -65,8 +65,7 @@ class WebFF extends React.Component {
 
 
 	//TODO: system menu rebuild
-		// add/remove custom questions
-		// settings dialog
+
 	//TODO: save sedlogin compat xml
 	//TODO: push event to sedlong
 	//TODO: add/remove question (saved to user / saved to event / saved to site)
@@ -78,12 +77,15 @@ class WebFF extends React.Component {
 	//TODO: webserver, network loads
 	//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
 	//TODO: templates
+	//TODO: setname cannot be Sngl
 
 	//TODO: add/remove station
 		//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 
-	//TODO: remove set (delete question does this... but make it easier)
-	//TODO: optionsally show 'delete custom question' button
+	//TODO: remove set (delete question does this... but make it easier with button from DE page)
+		//TODO: settings dialog
+		//TODO: rename sets
+
 
 	//BUG: Does not check for updated data outside localstorage
 

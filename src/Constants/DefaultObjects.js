@@ -252,14 +252,22 @@ export const defaultSetInformationQuestionsData = {
 			[ANALYSE_TEXT_Z + "*"]: "Z"
 		},
 		"value": {
-			[ANALYSE_TEXT_C]: false,
-			[ANALYSE_TEXT_SF + "*"]: false,
-			[ANALYSE_TEXT_SA + "*"]: false,
-			[ANALYSE_TEXT_T]: false,
-			[ANALYSE_TEXT_LOI + "*"]: false,
-			[ANALYSE_TEXT_DS]: false,
-			[ANALYSE_TEXT_SC]: false,
-			[ANALYSE_TEXT_Z + "*"]: false
+			['C']: false,
+			['SF']: false,
+			['SA']: false,
+			['T']: false,
+			['LOI']: false,
+			['DS']: false,
+			['SC']: false,
+			['Z']: false
+			// [ANALYSE_TEXT_C]: false,
+			// [ANALYSE_TEXT_SF + "*"]: false,
+			// [ANALYSE_TEXT_SA + "*"]: false,
+			// [ANALYSE_TEXT_T]: false,
+			// [ANALYSE_TEXT_LOI + "*"]: false,
+			// [ANALYSE_TEXT_DS]: false,
+			// [ANALYSE_TEXT_SC]: false,
+			// [ANALYSE_TEXT_Z + "*"]: false
 		},
 		"width_xs": 2,
 		"width_lg": 2
