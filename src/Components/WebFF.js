@@ -86,7 +86,8 @@ class WebFF extends React.Component {
 		//TODO: settings dialog
 		//TODO: rename sets
 
-
+	//TODO: Multiple Sampling evnts at same time...
+	
 	//BUG: Does not check for updated data outside localstorage
 
 	//TODO: QWDATA page, time estimate -> optionally overwrite

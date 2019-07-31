@@ -90,7 +90,7 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 			: getQuestionValue(eventID, "sampleDate"),
 
 		// "BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
-		// "TimeDatum": this.getQuestionValue("timeDatum"),
+		"TimeDatum": getQuestionValue(eventID, "timeDatum"),
 		// "AddOnAnalyses": this.getTableQuestionValue("QWDATATable", "Add-on Analyses", QWDATARowNum).join(','),
 		// "CollecAgency": this.getQuestionValue("collectingAgency"),
 		// "colllectorInitials": this.getQuestionValue("compiledBy"),
@@ -238,6 +238,7 @@ const buildSetObj = (eventID, setName) => {
 		"NumberOfSamples": getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
 		"AnalyzeIndSamples": getQuestionValue(eventID, setName, "samplesComposited") ? 'N' : 'Y',
 		"Analyses":stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType"))),
+		// "NumberOfContainers" : getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
 	}
 
 	switch (getQuestionValue(eventID, setName, 'samplingMethod')) { 
