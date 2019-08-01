@@ -4,8 +4,12 @@ import xmljs from 'xml-js';
 import { PROGRAM_VERSION } from '../Constants/Config';
 import { getQuestionValue } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER, BEGIN_DATE_COLUMN_NUM } from '../Constants/Config';
+import { 
+	SET_INFORMATION_IDENTIFIER, 
+} from '../Constants/Config';
 
+ import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER,
+ SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER } from '../Constants/Dictionary';
 
 
 export function getSedLOGINcompatibleXML(eventID) {
@@ -35,6 +39,18 @@ export function getSedLOGINcompatibleXML(eventID) {
 	cleanXML = cleanXML.replace(reg, "</Param")
 
 	return cleanXML;
+}
+
+
+const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {
+	// console.log('getColNum :', tableValue, headerToSearchFor);
+	let ret = -1;
+	tableValue[0].forEach((header, index) => {
+		if (headerToSearchFor === header) {
+			 ret = index;
+		}
+	});
+	return ret;
 }
 
 // buildParamTableParamObj(QWDATARowNum, pCode) {
@@ -77,7 +93,11 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 	let QWDATARowNum = getQWDATARowNum(eventID, setName, sampNum);
 
 	console.log('QWDATARowNum :', QWDATARowNum);
-	console.log("Begin Date: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, BEGIN_DATE_COLUMN_NUM));
+	// console.log("Begin Date: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)));
+
+	console.log("QWDATA Value: ", getQuestionValue(eventID, "QWDATATable"));
+	console.log("SAMPLE DATE Index: ", getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER));
+	console.log("QWDATA cell value: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)));
 
 	// build sample object
 	let sampleObj = {
@@ -85,15 +105,15 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 		// "BeginDate": this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum) !== ""
 		// 	? this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum)
 		// 	: this.getQuestionValue("sampleDate"),
-		"BeginDate":  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, BEGIN_DATE_COLUMN_NUM) !== ""
-			?  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, BEGIN_DATE_COLUMN_NUM)
+		"BeginDate":  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)) !== ""
+			?  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER))
 			: getQuestionValue(eventID, "sampleDate"),
 
-		// "BeginTime": this.getTableQuestionValue("QWDATATable", "Sample Time", QWDATARowNum),
+		// "BeginTime": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, SAMPLE_TIME_COLUMN_NUM, ),
 		"TimeDatum": getQuestionValue(eventID, "timeDatum"),
 		// "AddOnAnalyses": this.getTableQuestionValue("QWDATATable", "Add-on Analyses", QWDATARowNum).join(','),
-		// "CollecAgency": this.getQuestionValue("collectingAgency"),
-		// "colllectorInitials": this.getQuestionValue("compiledBy"),
+		"CollecAgency": getQuestionValue(eventID, "collectingAgency"),
+		"colllectorInitials": getQuestionValue(eventID, "compiledBy"),
 		// "Hstat": (this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum) !== "")
 		// 	? this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum)
 		// 	: this.getQuestionValue("hydrologicCondition"),
@@ -106,10 +126,10 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 		// "Astat": (this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum) !== "")
 		// 	? this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum)
 		// 	: this.getQuestionValue("analysisStatus"),
-		// "P71999": this.getQuestionValue("samplePurpose"),
-		// "P82398": this.getQuestionValue(this.getSamplingMethodQuestionIDString()),
-		// "P84164": this.getQuestionValue(this.getSamplerTypeQuestionIDString()),
-		// "M2Lab": this.getTableQuestionValue("QWDATATable", "M2Lab", QWDATARowNum)
+		// "P71999": getQuestionValue("samplePurpose"),
+		// "P82398": getQuestionValue(this.getSamplingMethodQuestionIDString()),
+		// "P84164": getQuestionValue(this.getSamplerTypeQuestionIDString()),
+		// "M2Lab": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, M2LAB_COLUMN_NUM)
 	}
 
 	// // build param part of sample object from the parameters table headers

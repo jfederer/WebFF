@@ -22,17 +22,21 @@ import {
  SAMPLE_DATE_HEADER,
  M2LAB_HEADER,
  DESCRIPTION_HEADER,
- ADD_ON_HEADER
+ ADD_ON_HEADER,
+ HYDROLOGIC_EVENT_HEADER,
+ HYDROLOGIC_COND_HEADER,
+ SAMPLE_TYPE_HEADER,
+ ASTAT_CODE_HEADER
 } from '../Constants/Dictionary';
 
 export const allQWDATAOptionalHeaders = {  //formatted: "DISPLAY HEADER" : "Q_ID"   (null Q_id means this is a special case)
 	[DESCRIPTION_HEADER]: null,
 	[SAMPLE_DATE_HEADER]: null,
 	[SAMPLE_TIME_HEADER]: null,
-	"Hydrologic Event": "hydrologicEvent",
-	"Hydrologic Cond": "hydrologicCondition",
-	"Sample Type": "sampleType",
-	"ASTAT Code": "analysisStatus",
+	[HYDROLOGIC_EVENT_HEADER]: "hydrologicEvent",
+	[HYDROLOGIC_COND_HEADER]: "hydrologicCondition",
+	[SAMPLE_TYPE_HEADER]: "sampleType",
+	[ASTAT_CODE_HEADER]: "analysisStatus",
 	[ADD_ON_HEADER]: null,
 	[M2LAB_HEADER]: null
 }

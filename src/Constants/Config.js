@@ -11,8 +11,13 @@ export const QUESTIONS_VALUES_OBJECT_TYPE = "questionsValuesObjectType";
 // export const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TODO: need to ensure no custom questions include these 
 
 export const QIDS_LINKED_TO_STATION_NAME = ["stationNumber", "projectName", "projectID", "agencyCode"];
+
 export const BEGIN_DATE_COLUMN_NUM = 1;
 export const SAMPLE_TIME_COLUMN_NUM = 2;
+
+export const M2LAB_COLUMN_NUM = 8;
+
+
 
 export const EDI_METHOD_CATEGORY = "EDI";
 export const EWI_METHOD_CATEGORY = "EWI";

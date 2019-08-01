@@ -21,7 +21,9 @@ import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import TextFieldDialog from '../Dialogs/TextFieldDialog';
 import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
-import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER } from '../../Constants/Dictionary';
+import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER, HYDROLOGIC_EVENT_HEADER,HYDROLOGIC_COND_HEADER,SAMPLE_TYPE_HEADER,ASTAT_CODE_HEADER } from '../../Constants/Dictionary';
+
+
 import { insertEstimatedTime } from '../../Utils/CalculationUtilities';
 
 const styles = theme => ({

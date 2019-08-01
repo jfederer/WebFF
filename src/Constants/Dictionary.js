@@ -19,6 +19,10 @@ export const PCODE_TEXT_FNU = "Turb, FNU, 780-900nm, 90  2.5 degs";
 
 export const SAMPLE_TIME_HEADER = "Sample Time";
 export const SAMPLE_DATE_HEADER = "Sample Date";
+export const HYDROLOGIC_EVENT_HEADER = "Hydrologic Event";
+export const HYDROLOGIC_COND_HEADER = "Hydrologic Cond";
+export const SAMPLE_TYPE_HEADER = "Sample Type";
+export const ASTAT_CODE_HEADER = "ASTAT Code";
 export const M2LAB_HEADER = "M2Lab";
 export const ADD_ON_HEADER = "Add-on Analyses";
 export const DESCRIPTION_HEADER = "Set-Sample @ Dist";
