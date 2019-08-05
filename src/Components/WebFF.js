@@ -107,7 +107,7 @@ class WebFF extends React.Component {
 	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
 	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
 	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
-
+	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
 
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 
