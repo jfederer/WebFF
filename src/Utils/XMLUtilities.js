@@ -4,12 +4,14 @@ import xmljs from 'xml-js';
 import { PROGRAM_VERSION } from '../Constants/Config';
 import { getQuestionValue } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
-import { 
-	SET_INFORMATION_IDENTIFIER, 
+import {
+	SET_INFORMATION_IDENTIFIER,
 } from '../Constants/Config';
 
- import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER,
- SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER } from '../Constants/Dictionary';
+import {
+	SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER,
+	SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER
+} from '../Constants/Dictionary';
 
 
 export function getSedLOGINcompatibleXML(eventID) {
@@ -47,7 +49,7 @@ const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {
 	let ret = -1;
 	tableValue[0].forEach((header, index) => {
 		if (headerToSearchFor === header) {
-			 ret = index;
+			ret = index;
 		}
 	});
 	return ret;
@@ -72,23 +74,23 @@ const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {
 // 	return paramObj;
 // }
 
-	// get total number of samples before this one to know what row we are looking at in QWDATA table
+// get total number of samples before this one to know what row we are looking at in QWDATA table
 const getQWDATARowNum = (eventID, setName, sampNum) => {  //note, this is also the parameters table row num
 	let setList = getSetListAsArray(eventID);  // FIXME: will this always return the right order?
 	let totalNumberOfSamplesInPreviousSets = 0;
-	for(let i = 0; i < setList.length; i++) {
-		if(setList[i]===setName) {
+	for (let i = 0; i < setList.length; i++) {
+		if (setList[i] === setName) {
 			totalNumberOfSamplesInPreviousSets += parseInt(sampNum);
 			break;
 		}
-		totalNumberOfSamplesInPreviousSets += parseInt(getNumberRowsForSampleBlock(eventID, setList[i])) ;
+		totalNumberOfSamplesInPreviousSets += parseInt(getNumberRowsForSampleBlock(eventID, setList[i]));
 	}
-	return totalNumberOfSamplesInPreviousSets+1; //plus one to move past header
+	return totalNumberOfSamplesInPreviousSets + 1; //plus one to move past header
 }
 
 
 const buildSampleObj = (eventID, setName, sampNum) => {
-	console.log("buildSampleObj(",eventID,"," ,setName,",", sampNum,")");
+	console.log("buildSampleObj(", eventID, ",", setName, ",", sampNum, ")");
 
 	let QWDATARowNum = getQWDATARowNum(eventID, setName, sampNum);
 
@@ -96,36 +98,33 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 	// console.log("Begin Date: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)));
 
 	console.log("QWDATA Value: ", getQuestionValue(eventID, "QWDATATable"));
-	console.log("SAMPLE DATE Index: ", getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER));
-	console.log("QWDATA cell value: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)));
+	console.log("QWDATA: ADD ON: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), ADD_ON_HEADER)));
 
 	// build sample object
 	let sampleObj = {
 		"SampleNumber": sampNum + 1,
-		// "BeginDate": this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum) !== ""
-		// 	? this.getTableQuestionValue("QWDATATable", "Sample Date", QWDATARowNum)
-		// 	: this.getQuestionValue("sampleDate"),
-		"BeginDate":  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)) !== ""
-			?  getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER))
+		"BeginDate": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)) !== ""
+			? getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER))
 			: getQuestionValue(eventID, "sampleDate"),
-
-		// "BeginTime": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, SAMPLE_TIME_COLUMN_NUM, ),
+		"BeginTime": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_TIME_HEADER)),
 		"TimeDatum": getQuestionValue(eventID, "timeDatum"),
-		// "AddOnAnalyses": this.getTableQuestionValue("QWDATATable", "Add-on Analyses", QWDATARowNum).join(','),
+		"AddOnAnalyses": stringFromMultipleChoice(getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), ADD_ON_HEADER))),
 		"CollecAgency": getQuestionValue(eventID, "collectingAgency"),
 		"colllectorInitials": getQuestionValue(eventID, "compiledBy"),
-		// "Hstat": (this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum) !== "")
-		// 	? this.getTableQuestionValue("QWDATATable", "Hydrologic Cond", QWDATARowNum)
-		// 	: this.getQuestionValue("hydrologicCondition"),
-		// "HydEvent": (this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum) !== "")
-		// 	? this.getTableQuestionValue("QWDATATable", "Hydrologic Event", QWDATARowNum)
-		// 	: this.getQuestionValue("hydrologicEvent"),
-		// "Stype": (this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum) !== "")
-		// 	? this.getTableQuestionValue("QWDATATable", "Sample Type", QWDATARowNum)
-		// 	: this.getQuestionValue("sampleType"),
-		// "Astat": (this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum) !== "")
-		// 	? this.getTableQuestionValue("QWDATATable", "ASTAT Code", QWDATARowNum)
-		// 	: this.getQuestionValue("analysisStatus"),
+
+		"Hstat": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), HYDROLOGIC_COND_HEADER)) !== ""
+			? getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), HYDROLOGIC_COND_HEADER))
+			: getQuestionValue(eventID, "hydrologicCondition"),
+		"HydEvent": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), HYDROLOGIC_EVENT_HEADER)) !== ""
+			? getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), HYDROLOGIC_EVENT_HEADER))
+			: getQuestionValue(eventID, "hydrologicEvent"),
+		"Stype": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_TYPE_HEADER)) !== ""
+			? getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_TYPE_HEADER))
+			: getQuestionValue(eventID, "sampleType"),
+		"Astat": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), ASTAT_CODE_HEADER)) !== ""
+			? getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), ASTAT_CODE_HEADER))
+			: getQuestionValue(eventID, "analysisStatus"),
+
 		// "P71999": getQuestionValue("samplePurpose"),
 		// "P82398": getQuestionValue(this.getSamplingMethodQuestionIDString()),
 		// "P84164": getQuestionValue(this.getSamplerTypeQuestionIDString()),
@@ -241,8 +240,8 @@ const getNumberRowsForSampleBlock = (eventID, setName) => {
 
 
 const stringFromMultipleChoice = (MCObj) => {
-	if(MCObj) {
-		return Object.keys(MCObj).filter((key)=>MCObj[key]).join(",");
+	if (MCObj) {
+		return Object.keys(MCObj).filter((key) => MCObj[key]).join(",");
 	} else {
 		return "";
 	}
@@ -257,11 +256,11 @@ const buildSetObj = (eventID, setName) => {
 		"Name": getQuestionValue(eventID, setName, 'groupOfSamples') ? "Sngl" : setName.replace(SET_INFORMATION_IDENTIFIER, ""),
 		"NumberOfSamples": getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
 		"AnalyzeIndSamples": getQuestionValue(eventID, setName, "samplesComposited") ? 'N' : 'Y',
-		"Analyses":stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType"))),
+		"Analyses": stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType"))),
 		// "NumberOfContainers" : getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
 	}
 
-	switch (getQuestionValue(eventID, setName, 'samplingMethod')) { 
+	switch (getQuestionValue(eventID, setName, 'samplingMethod')) {
 		case '10':
 			setObj["SetType"] = "EWI";
 			break;
