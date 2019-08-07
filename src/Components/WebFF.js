@@ -23,7 +23,7 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import { dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
+import { dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Constants/DefaultConfig';
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
 	// QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
@@ -67,6 +67,11 @@ class WebFF extends React.Component {
 	//TODO: system menu rebuild
 
 	//TODO: save sedlogin compat xml
+
+	//TODO: NEXT:  rebuild setInfo to write sedimentType and SamplingMethod to DE and copied into sets...?  build DE as question that gets sedType andSamp and bunch of setInformations?
+	//TODO: ASK KEN:  "Suspended/Bottom Material/Bedload Sampling Method" drop down with 'none' value?
+	
+
 	//TODO: push event to sedlong
 	//TODO: add/remove question (saved to user / saved to event / saved to site)
 	//TODO: user/site settings (station names, etc)
