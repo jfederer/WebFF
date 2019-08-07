@@ -192,13 +192,13 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 		// QWDATA can also accept this if left blank.
 		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
 
-		//  - the "Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
-		if (!getQuestionValue("groupOfSamples")) {
-			sampleObj["Param" + index] = buildParamObj("P00063", this.getQuestionValue("set" + setName + "_numberOfSamplingPoints"));
+		//  - the "number of Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
+		if (!getQuestionValue(eventID, setName, "groupOfSamples")) {
+			sampleObj["Param" + index] = buildParamObj("P00063", getQuestionValue(eventID, setName, "numberOfSamplingPoints"));
 		}
 
-		// //  - the Distance from L Bank should be written to P00009.
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00009", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Distance from L bank, feet", sampNum + 1));
+		//  - the Distance from L Bank should be written to P00009.
+		// sampleObj["Param" + index] = buildParamObj("P00009", getQuestionValue(eventID, setName + "_samplesTable_" + getCurrentSampleEventMethod(), "Distance from L bank, feet", sampNum + 1));
 
 		// //  - Transit rate, sampler, feet per second  should be written to P50015.
 		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum + 1));
