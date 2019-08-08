@@ -82,10 +82,10 @@ class SetInformation extends React.Component {
 		newValue[sub_QID] = _.cloneDeep(value);
 
 		if (this.props.alternateChangeHandler) {
-			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
+			this.props.alternateChangeHandler(eventID, this.props.id, newValue);
 		} else {
 
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+			this.props.SEQuestionValueChange(eventID, this.props.id, newValue);
 		}
 	};
 

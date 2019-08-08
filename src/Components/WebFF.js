@@ -23,9 +23,9 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import { dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Utils/DefaultConfig';
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
+	dialogQuestions, defaultHiddenTabs, defaultHiddenPanels
 	// QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Constants/Config';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
@@ -87,6 +87,7 @@ class WebFF extends React.Component {
 		//TODO: rename sets
 
 	//TODO: Multiple Sampling evnts at same time...
+	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
 	
 	//BUG: Does not check for updated data outside localstorage
 
@@ -108,7 +109,7 @@ class WebFF extends React.Component {
 	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
 	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
 	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
-
+	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 
 
@@ -299,12 +300,6 @@ class WebFF extends React.Component {
 
 							</main>
 						</div >
-						<button onClick={() => console.log(
-							getQuestionValue(sedff.currentSamplingEventID, "SetInfo::A", "samplesTable_EDI", 1)
-						)}>Print Table Value</button><br />
-						<button onClick={() => console.log(
-							getDescriptiveColumnForTable(sedff.currentSamplingEventID)
-						)}>getDescriptiveColumnForTable</button><br />
 						{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
 						{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
 						{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}

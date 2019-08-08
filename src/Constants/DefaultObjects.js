@@ -8,7 +8,8 @@ import {
 	ANALYSE_TEXT_C,
 	ANALYSE_TEXT_T,
 	ANALYSE_TEXT_DS,
-	ANALYSE_TEXT_SC
+	ANALYSE_TEXT_SC,
+	NOT_SAMPLED
 } from './Dictionary';
 
 export const emptySamplingEvent = {
@@ -349,87 +350,47 @@ export const defaultQuestionsData = {
 		"width_lg": 2
 	},
 
-	sedimentType: {
-		"id": "sedimentType",
-		"label": "Sediment Type",
-		"XMLTag": "SedTranspMode",
+
+	// sedimentType: {
+	// 	"id": "sedimentType",
+	// 	"label": "Sediment Type",
+	// 	"XMLTag": "SedTranspMode",
+	// 	"type": "DropDown",
+	// 	"includeBlank": false,
+	// 	"options":
+	// 	{
+	// 		"Bedload": "bedload",
+	// 		"Bottom Material": "bottom",
+	// 		"Suspended": "suspended"
+	// 	},
+	// 	"actions":
+	// 	{
+	// 		"anyValue": "HideQuestion::samplerType_bedload&HideQuestion::samplerType_bottom&HideQuestion::samplerType_suspended&HideQuestion::verticalsInComposite&HideQuestion::compositeSamplesInCrossSection&HideQuestion::tetherLine&HideQuestion::bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV",
+	// 		"bedload": "ShowQuestion::samplerType_bedload&ShowQuestion::verticalsInComposite&ShowQuestion::compositeSamplesInCrossSection&ShowQuestion::tetherLine&ShowQuestion::bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV",
+	// 		"bottom": "ShowQuestion::samplerType_bottom&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV",
+	// 		"suspended": "ShowQuestion::samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV"
+	// 	},
+	// 	"value": "suspended", //TODO: include blank = false with no passed value should show.... what?
+	// 	"tabName": "Field Form",
+	// 	"layoutGroup": "Basic",
+	// 	"width_xs": 4,
+	// 	"width_lg": 2
+	// },
+
+
+
+
+
+	samplingMethod_Suspended: {
+		"id": "samplingMethod_Suspended",
+		"label": "Suspended Sediment Method",
+		"XMLTag": "P82398",
 		"type": "DropDown",
+		"tabName": "Field Form",
 		"includeBlank": false,
 		"options":
 		{
-			"Bedload": "bedload",
-			"Bottom Material": "bottom",
-			"Suspended": "suspended"
-		},
-		"actions":
-		{
-			"anyValue": "HideQuestion::samplerType_bedload&HideQuestion::samplerType_bottom&HideQuestion::samplerType_suspended&HideQuestion::verticalsInComposite&HideQuestion::compositeSamplesInCrossSection&HideQuestion::tetherLine&HideQuestion::bagMesh&HideQuestion::samplingMethod_suspended&HideQuestion::samplingMethod_bedload&HideQuestion::samplingMethod_bottom&HideQuestion::samplingMethod_bottom_QWDATA_CV&HideQuestion::samplingMethod_bedload_QWDATA_CV&HideQuestion::samplingMethod_suspended_QWDATA_CV",
-			"bedload": "ShowQuestion::samplerType_bedload&ShowQuestion::verticalsInComposite&ShowQuestion::compositeSamplesInCrossSection&ShowQuestion::tetherLine&ShowQuestion::bagMesh&ShowQuestion::samplingMethod_bedload&ShowQuestion::samplingMethod_bedload_QWDATA_CV",
-			"bottom": "ShowQuestion::samplerType_bottom&ShowQuestion::samplingMethod_bottom&ShowQuestion::samplingMethod_bottom_QWDATA_CV",
-			"suspended": "ShowQuestion::samplerType_suspended&ShowQuestion::samplingMethod_suspended&ShowQuestion::samplingMethod_suspended_QWDATA_CV"
-		},
-		"value": "suspended", //TODO: include blank = false with no passed value should show.... what?
-		"tabName": "Field Form",
-		"layoutGroup": "Basic",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	samplingMethod_bottom: {
-		"id": "samplingMethod_bottom",
-		"label": "Sampling Method",
-		"XMLTag": "P82398",
-		"type": "DropDown",
-		"tabName": "Field Form",
-		"includeBlank": true,
-		"options":
-		{
-			"POINT SAMPLE": "50",
-			"COMPOSITE - MULTIPLE POINT SAMPLES": "55",
-			"SEDIMENT CORE": "5010",
-			"OTHER": "8010"
-		},
-		"actions":
-			{ "anyValue": "ShowTab::DataEntry" },
-		"value": "",
-		"layoutGroup": "Basic",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	samplingMethod_bedload: {
-		"id": "samplingMethod_bedload",
-		"label": "Sampling Method",
-		"XMLTag": "P82398",
-		"type": "DropDown",
-		"tabName": "Field Form",
-		"includeBlank": true,
-		"options":
-		{
-			"POINT SAMPLE": "50",
-			"COMPOSITE - MULTIPLE POINT SAMPLES": "55",
-			"BEDLOAD, SINGLE EQUAL WIDTH INCREMENT(SEWI)": "1000",
-			"BEDLOAD, MULTIPLE EQUAL WIDTH INCREMENT(MEWI)": "1010",
-			"BEDLOAD, UNEQUAL WIDTH INCREMENT(UWI)": "1020",
-			"OTHER": "8010"
-		},
-		"actions":
-			{ "anyValue": "ShowTab::DataEntry" },
-		"value": "",
-		"layoutGroup": "Basic",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	samplingMethod_suspended: {
-		"id": "samplingMethod_suspended",
-		"label": "Sampling Method",
-		"XMLTag": "P82398",
-		"type": "DropDown",
-		"tabName": "Field Form",
-		"includeBlank": true,
-		"options":
-		{
+			[NOT_SAMPLED]: NOT_SAMPLED,
 			"EQUAL WIDTH INCREMENT (EWI)": "10",
 			"EQUAL WIDTH INCREMENT, NON - ISOKINETIC": "15",
 			"EQUAL DISCHARGE INCREMENT (EDI)": "20",
@@ -460,12 +421,63 @@ export const defaultQuestionsData = {
 		},
 		"actions":
 		{
-			"anyValue": "ShowTab::DataEntry"
-		},
-		"value": "10",
-		"layoutGroup": "Basic",
+			"anyValue": "ShowTab::DataEntry",
+			[NOT_SAMPLED]: "HideTab::DataEntry"
+			 },
+		"value": NOT_SAMPLED,
+		"layoutGroup": "Sampling Method",
 		"width_xs": 4,
-		"width_lg": 2
+		"width_lg": 4
+	},
+
+	samplingMethod_Bedload: {
+		"id": "samplingMethod_Bedload",
+		"label": "Bedload Sampling Method",
+		"XMLTag": "P82398",
+		"type": "DropDown",
+		"tabName": "Field Form",
+		"includeBlank": false,
+		"options":
+		{
+			[NOT_SAMPLED]: NOT_SAMPLED,
+			"POINT SAMPLE": "50",
+			"COMPOSITE - MULTIPLE POINT SAMPLES": "55",
+			"BEDLOAD, SINGLE EQUAL WIDTH INCREMENT(SEWI)": "1000",
+			"BEDLOAD, MULTIPLE EQUAL WIDTH INCREMENT(MEWI)": "1010",
+			"BEDLOAD, UNEQUAL WIDTH INCREMENT(UWI)": "1020",
+			"OTHER": "8010"
+		},
+		"actions":
+			{ "anyValue": "ShowTab::DataEntry",
+			[NOT_SAMPLED]: "HideTab::DataEntry" },
+		"value": NOT_SAMPLED,
+		"layoutGroup": "Sampling Method",
+		"width_xs": 4,
+		"width_lg": 4
+	},
+
+	samplingMethod_Bottom: {
+		"id": "samplingMethod_Bottom",
+		"label": "Bottom Material Sampling Method",
+		"XMLTag": "P82398",
+		"type": "DropDown",
+		"tabName": "Field Form",
+		"includeBlank": false,
+		"options":
+		{
+			[NOT_SAMPLED]: NOT_SAMPLED,
+			"POINT SAMPLE": "50",
+			"COMPOSITE - MULTIPLE POINT SAMPLES": "55",
+			"SEDIMENT CORE": "5010",
+			"OTHER": "8010"
+		},
+		"actions":
+			{ "anyValue": "ShowTab::DataEntry", 
+			[NOT_SAMPLED]: "HideTab::DataEntry" },
+		"value": NOT_SAMPLED,
+		"layoutGroup": "Sampling Method",
+		"width_xs": 4,
+		"width_lg": 4
 	},
 
 	timeDatum: {
@@ -1063,7 +1075,7 @@ export const defaultQuestionsData = {
 	},
 
 	samplerType_suspended: {
-		"id": "samplerType_suspended",
+		"id": "samplerType_Suspended",
 		"label": "Sampler Type",
 		"XMLTag": "P84164",
 		"type": "DropDown",
@@ -1208,18 +1220,18 @@ export const defaultQuestionsData = {
 			"8010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
 		},
 		"value": "",
-		"tabName": "DataEntry",
+		"tabName": "DataEntrySuspended",
 		"layoutGroup": "Sampler Info",
 		"width_xs": 4,
 		"width_lg": 3
 	},
 
 	samplerType_bottom: {
-		"id": "samplerType_bottom",
+		"id": "samplerType_Bottom",
 		"label": "Sampler Type",
 		"XMLTag": "P84164",
 		"type": "DropDown",
-		"hidden": true,
+		"hidden": false,
 		"includeBlank": true,
 		"options":
 		{
@@ -1253,18 +1265,18 @@ export const defaultQuestionsData = {
 			"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
 		},
 		"value": "",
-		"tabName": "DataEntry",
+		"tabName": "DataEntryBottom",
 		"layoutGroup": "Sampler Info",
 		"width_xs": 4,
 		"width_lg": 3
 	},
 
 	samplerType_bedload: {
-		"id": "samplerType_bedload",
+		"id": "samplerType_Bedload",
 		"label": "Sampler Type",
 		"XMLTag": "P84164",
 		"type": "DropDown",
-		"hidden": true,
+		"hidden": false,
 		"includeBlank": true,
 		"options":
 		{
@@ -1288,12 +1300,30 @@ export const defaultQuestionsData = {
 			"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
 		},
 		"value": "",
-		"tabName": "DataEntry",
+		"tabName": "DataEntryBedload",
 		"layoutGroup": "Sampler Info",
 		"width_xs": 4,
 		"width_lg": 3
 	},
 
+	bottleMaterial: {
+		"id": "bottleMaterial",
+		"hidden": true,
+		"label": "Bottle Material",
+		"type": "DropDown",
+		"includeBlank": true,
+		"options":
+		{
+			"Plastic": "Plastic",
+			"Glass": "Glass",
+			"Other": "Other"
+		},
+		"value": "",
+		"tabName": "DataEntry",
+		"layoutGroup": "Sampler Info",
+		"width_xs": 4,
+		"width_lg": 3
+	},
 	bottleMaterial: {
 		"id": "bottleMaterial",
 		"hidden": true,

@@ -37,12 +37,13 @@ import { setAppBarText } from '../Actions/UI';
 
 class QuestionPage extends React.Component {
 
-	componentWillMount() {
-		this.props.setAppBarText("SedFF → " + this.props.tabName);
-	}
+	// componentWillMount() {
+	// 	this.props.setAppBarText("SedFF → " + this.props.tabName);
+	// }
 
 	// componentWillUpdate(nextProps, nextState) { // gets called when moving between pages
-	// 	this.props.appBarTextCB(nextProps.tabName);
+	// 	console.log("eh?");
+	// 	// this.props.appBarTextCB(nextProps.tabName);
 	// }
 
 	render() {
@@ -68,21 +69,21 @@ class QuestionPage extends React.Component {
 
 			
 			//OPTIMIZE: filter whitespaces at a higher level
-			//OPTIMIZE:  We can not generate question panels more clearly and efficiently than this.
-			let filteredlayoutGroupNames = layoutGroupNames.filter((groupName) => {
+			//OPTIMIZE:  can we not generate question panels more clearly and efficiently than this.
+			let filteredLayoutGroupNames = layoutGroupNames.filter((groupName) => {
 				let panelName = tabName.replace(/ /g, '') + ":" + groupName.replace(/ /g, '');
 				return !hiddenPanels.includes(panelName);
 			})
 
-			for (let i = 0; filteredlayoutGroupNames !== null && i < filteredlayoutGroupNames.length; i++) {
-				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredlayoutGroupNames[i]);
+			for (let i = 0; filteredLayoutGroupNames !== null && i < filteredLayoutGroupNames.length; i++) {
+				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredLayoutGroupNames[i]);
 
 				questionPanels.push(
-					<div key={tabName + filteredlayoutGroupNames[i] + '_div'}>
+					<div key={tabName + filteredLayoutGroupNames[i] + '_div'}>
 						<QuestionPanel
-							questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionsValues)}
-							panelName={filteredlayoutGroupNames[i]}
-							key={tabName + filteredlayoutGroupNames[i]}
+							questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionsValues, this.props.alternateChangeHandler)}
+							panelName={filteredLayoutGroupNames[i]}
+							key={tabName + filteredLayoutGroupNames[i]}
 							grey={i % 2 === 1} />
 						<Divider />
 					</div>

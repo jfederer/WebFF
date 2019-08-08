@@ -247,7 +247,7 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 	//... will return all questionsData objects where question.tabName matches tabName
 	let tabQuestionsData = [];
 	Object.keys(questionsData).forEach(key => {
-		if (questionsData[key].tabName.replace(/ /g, '') === tabName.replace(/ /g, '')) {
+		if (questionsData[key].tabName.replace(/ /g, '').toUpperCase() === tabName.replace(/ /g, '').toUpperCase()) {
 			tabQuestionsData.push(questionsData[key]);
 		}
 	});
