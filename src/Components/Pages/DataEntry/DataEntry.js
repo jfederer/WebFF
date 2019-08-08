@@ -13,10 +13,11 @@ import Box from '@material-ui/core/Box';
 import { setAppBarText } from '../../../Actions/UI';
 import QuestionPage from '../../QuestionPage';
 import AddSetForm from './AddSetForm';
-import DataEntryPanel from '../../Questions/DataEntryPanel';
+import DataEntrySheet from '../../Questions/DataEntrySheet'; 
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { NOT_SAMPLED } from '../../../Constants/Dictionary';
-import { METHOD_QIDS } from '../../../Constants/Config';
+import { METHOD_QIDS, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
+// import {  } from '../../Constants/Config';
 
 
 function TabPanel(props) {
@@ -66,12 +67,12 @@ class DataEntry extends React.Component {
 		Object.keys(METHOD_QIDS).forEach((methodQID, index) => {
 			if (getQuestionValue(this.props.currentEventID, methodQID) !== NOT_SAMPLED) {
 				if (!singleDataEntryPanel) {
-					singleDataEntryPanel = <React.Fragment><QuestionPage tabName={"Data Entry " + METHOD_QIDS[methodQID]} /><AddSetForm type={METHOD_QIDS[methodQID]} /></React.Fragment>
+					singleDataEntryPanel = <DataEntrySheet samplingMethod={METHOD_QIDS[methodQID]} id={DATA_ENTRY_INFORMATION_IDENTIFIER+methodQID.split('_')[1]} sedimentType={methodQID.split('_')[1]} />
 				}
 				tabsList[methodQID] = <Tab key={methodQID} label={METHOD_QIDS[methodQID]} />;
 				tabsPanelList[methodQID] =
 					<TabPanel value={this.state.tabValue} key={methodQID} index={Object.keys(tabsPanelList).length}>
-						<DataEntryPanel samplingMethod={METHOD_QIDS[methodQID]} sedimentType={methodQID.split('_')[1]} />
+						<DataEntrySheet id={DATA_ENTRY_INFORMATION_IDENTIFIER+methodQID.split('_')[1]} samplingMethod={METHOD_QIDS[methodQID]} sedimentType={methodQID.split('_')[1]} />
 					</TabPanel>
 			}
 		})

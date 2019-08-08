@@ -258,13 +258,13 @@ export const getLayoutGroupNames = (questionsData) => {
 	// provided with ARRAY questionData, will return array of layout group names (strings)
 	let layoutGroupNames = [];
 
-	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-		for (let i = 0; i < questionsData.length; i++) {
-			if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
-				layoutGroupNames.push(questionsData[i].layoutGroup);
+		if (!_.isEmpty(questionsData) && questionsData.length > 0) {  //TODO: add error
+			for (let i = 0; i < questionsData.length; i++) {
+				if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
+					layoutGroupNames.push(questionsData[i].layoutGroup);
+				}
 			}
 		}
-	}
 	return layoutGroupNames;
 }
 

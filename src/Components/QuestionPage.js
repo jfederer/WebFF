@@ -13,7 +13,7 @@ import {
 	createQuestionComponents, getTabQuestionsData,
 	getLayoutGroupNames, getLayoutGroupQuestionsData
 } from '../Utils/QuestionUtilities';
-import { getQuestionsData} from '../Utils/StoreUtilities';
+import { getQuestionsData } from '../Utils/StoreUtilities';
 import { setAppBarText } from '../Actions/UI';
 
 
@@ -50,7 +50,12 @@ class QuestionPage extends React.Component {
 		const DEBUG = false;
 		const { tabName, currentEvent } = this.props;
 
-		let questionsData = getQuestionsData();
+		let questionsData;   //if questionsData is passed, use that and don't filter on tabName
+		if (this.props.questionsData) {
+			questionsData = Object.values(this.props.questionsData);
+		} else {
+			questionsData = getQuestionsData();
+		}
 
 		const { hiddenPanels } = this.props.UI.visibility;
 		// let tabQuestionData = [];
@@ -61,13 +66,19 @@ class QuestionPage extends React.Component {
 
 
 		if (questionsData) {
-			let tabQuestionsData = getTabQuestionsData(questionsData, tabName);
+			let tabQuestionsData;
+			if (this.props.questionsData) { //if questionsData is passed, use that and don't filter on tabName
+				tabQuestionsData = Object.values(this.props.questionsData);
+			} else {
+				tabQuestionsData = getTabQuestionsData(questionsData, tabName);
+			}
+			
 			// console.log("TAB QUESTION DATA: ", tabQuestionsData);
 			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
 
-			// console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
+			if (DEBUG) console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
 
-			
+
 			//OPTIMIZE: filter whitespaces at a higher level
 			//OPTIMIZE:  can we not generate question panels more clearly and efficiently than this.
 			let filteredLayoutGroupNames = layoutGroupNames.filter((groupName) => {
@@ -93,7 +104,6 @@ class QuestionPage extends React.Component {
 
 			return (
 				<div>
-					QUESTION PAGE!
 				 {this.props.tabName}
 					{questionPanels}
 				</div>
@@ -118,7 +128,7 @@ const mapStateToProps = function (state) {
 		// currentUser: state.Users[state.SedFF.currentUsername],
 		//samplingEvents: state.SamplingEvents,
 		UI: state.UI,
-		questionsData: state.Questions.questionsData,
+		// questionsData: state.Questions.questionsData,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
 		// currentUser: state.User[state.SedFF.currentUsername]
 	}

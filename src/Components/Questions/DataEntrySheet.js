@@ -14,7 +14,7 @@ import _ from 'lodash';
 // import TableRow from '@material-ui/core/TableRow';
 // import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import QuestionPage from '../QuestionPage';
-import AddSetForm from '../Pages/DataEntry/AddSetForm';
+import AddSetForm from '../Pages/DataEntry/AddSetForm'; 
 // import Button from '@material-ui/core/Button';
 // import TextField from '@material-ui/core/TextField';
 // import Dialog from '@material-ui/core/Dialog';
@@ -29,7 +29,7 @@ import AddSetForm from '../Pages/DataEntry/AddSetForm';
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
-import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
+import { getDataEntrySheetQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
@@ -45,17 +45,21 @@ const styles = theme => ({
 });
 
 
-// export const getRealQID = (setName, sub_q_id) => {
-// 	return SET_INFORMATION_IDENTIFIER + setName + ":" + sub_q_id;
-// }
+export const getRealQID = (sedimentType, sub_q_id) => {
+	return DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ":" + sub_q_id;
+}
 
-class DataEntryPanel extends React.Component {
+class DataEntrySheet extends React.Component {
 	constructor(props) {
 		super(props);
-		// console.log("CONSTRUCTOR PROPS: ", this.props);
-		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
+
+		if (_.isEmpty(this.props.value)) {
 			let initValue = {}; //load value with default table?
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue); // save it to the store
+			if (this.props.alternateChangeHandler) {
+				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
+			} else {
+				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
+			}
 		} else {
 			console.log("Creating Passed Value Data Entry Information Component");
 		}
@@ -73,7 +77,7 @@ class DataEntryPanel extends React.Component {
 	 * @description doChange exists as separate function so the 'save' and the 'special questions' can be handled more easily. If the 'save' is done in the wrong order, some of the additional changes might not propagate appropriately. DRY
 	 */
 	doChange = (eventID, sub_QID, value) => {
-		let newValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.samplingMethod);
+		let newValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType);
 		newValue[sub_QID] = _.cloneDeep(value);
 
 		if (this.props.alternateChangeHandler) {
@@ -85,12 +89,21 @@ class DataEntryPanel extends React.Component {
 
 
 	render() {
+
+		const dataEntrySheetQuestionsData = getDataEntrySheetQuestionsData();
+		console.log('Data Entry Panel props :', this.props);
+
 		const { samplingMethod, sedimentType } = this.props;
-		console.log(this.props);
-		
+
+
 		return <React.Fragment>
-			<QuestionPage tabName={"Data Entry " + this.props.sedimentType} alternateChangeHandler={this.DEChangeHandler} />
-			<AddSetForm samplingMethod={this.props.samplingMethod} /> 
+			<QuestionPage
+				questionsData={dataEntrySheetQuestionsData}
+				tabName={"Data Entry " + this.props.sedimentType}
+				alternateChangeHandler={this.DEChangeHandler} />
+			<AddSetForm
+				samplingMethod={samplingMethod}
+				sedimentType={sedimentType} />
 		</React.Fragment>
 
 	}
@@ -99,8 +112,8 @@ class DataEntryPanel extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		currentEventID: state.SedFF.currentSamplingEventID,
-		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		// currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		defaultQuestionsData: state.Questions.questionsData,
 	}
 }
@@ -109,6 +122,6 @@ const mapDispatchToProps = {
 	SEQuestionValueChange
 }
 
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntryPanel));
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntrySheet));
 
 

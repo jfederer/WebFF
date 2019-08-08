@@ -91,6 +91,7 @@ class WebFF extends React.Component {
 	
 	//BUG: Does not check for updated data outside localstorage
 
+	//TODO: remove DataEntry question when selecting 'not sampled' non-linearly.
 	//TODO: QWDATA page, time estimate -> optionally overwrite
 	//TODO: QWDATA page, duplicate date for remaining...
 	//TODO: automatically generate estimated times as setting

@@ -1,6 +1,6 @@
 import store from '../Store';
 import _ from 'lodash';
-import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
+import { defaultSetInformationQuestionsData, defaultDateEntrySheetQuestionsData } from '../Constants/DefaultObjects';
 
 
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
@@ -147,6 +147,10 @@ export function getQuestionDataFromID(QID) {
 
 export function getSetInformationQuestionsData() {
 	return defaultSetInformationQuestionsData;
+}
+
+export function getDataEntrySheetQuestionsData() {
+	return defaultDateEntrySheetQuestionsData;
 }
 
 export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
