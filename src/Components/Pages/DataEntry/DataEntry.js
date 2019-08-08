@@ -50,36 +50,6 @@ class DataEntry extends React.Component {
 		this.setState({ tabValue: newValue })
 	}
 
-	// DEChangeHandler = (eventID, sub_QID, value) => {
-	// 	// if (sub_QID === "numberOfSamplingPoints") {
-	// 	// 	this.doChange(eventID, sub_QID, value)
-	// 	// 	this.setState({ showDataTable: true });
-	// 	// 	this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
-	// 	// 	return;
-	// 	// }
-
-	// 	console.log("DEChangeHandler(", eventID, ",", sub_QID, ",", value, ")");
-	// 	// this.doChange(eventID, sub_QID, value);
-	// 	this.props.SEQuestionValueChange(eventID, this.props.id, value);
-	// };
-
-	// /**
-	//  * @description doChange exists as separate function so the 'save' and the 'special questions' can be handled more easily. If the 'save' is done in the wrong order, some of the additional changes might not propagate appropriately. DRY
-	//  */
-	// doChange = (eventID, sub_QID, value) => {
-	// 	const DE_INFORMATION_IDENTIFIER = "DataEntry::"
-	// 	let newValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + this.props.setName);
-	// 	newValue[sub_QID] = _.cloneDeep(value);
-
-	// 	if (this.props.alternateChangeHandler) {
-	// 		this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
-	// 	} else {
-
-	// 		this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
-	// 	}
-	// };
-
-
 	render() {
 		const { currentEvent } = this.props;
 
@@ -91,12 +61,12 @@ class DataEntry extends React.Component {
 
 		let tabsList = {};
 		let tabsPanelList = {};
-		let singleDataEntryPage = null;
+		let singleDataEntryPanel = null;
 
 		Object.keys(METHOD_QIDS).forEach((methodQID, index) => {
 			if (getQuestionValue(this.props.currentEventID, methodQID) !== NOT_SAMPLED) {
-				if (!singleDataEntryPage) {
-					singleDataEntryPage = <React.Fragment><QuestionPage tabName={"Data Entry " + METHOD_QIDS[methodQID]} /><AddSetForm type={METHOD_QIDS[methodQID]} /></React.Fragment>
+				if (!singleDataEntryPanel) {
+					singleDataEntryPanel = <React.Fragment><QuestionPage tabName={"Data Entry " + METHOD_QIDS[methodQID]} /><AddSetForm type={METHOD_QIDS[methodQID]} /></React.Fragment>
 				}
 				tabsList[methodQID] = <Tab key={methodQID} label={METHOD_QIDS[methodQID]} />;
 				tabsPanelList[methodQID] =
@@ -112,10 +82,8 @@ class DataEntry extends React.Component {
 		}
 
 		return (<React.Fragment>
-
-
 			{Object.keys(tabsList).length === 1
-				? singleDataEntryPage
+				? singleDataEntryPanel
 				: <React.Fragment><AppBar position="static" color="default">
 					<Tabs
 						value={this.state.tabValue}
@@ -129,7 +97,6 @@ class DataEntry extends React.Component {
 						{Object.keys(tabsList).map(tab => tabsList[tab])}
 					</Tabs>
 				</AppBar>
-
 
 					{Object.keys(tabsPanelList).map(tabPanel => tabsPanelList[tabPanel])}
 
@@ -151,7 +118,6 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	setAppBarText
-	// SEQuestionValueChange
 }
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntry));
