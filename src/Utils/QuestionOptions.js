@@ -141,4 +141,3 @@ export const mth_options = {
 
 export const types = ["_val", "_mth", "_rmk", "_nq"];
 
-export const defaultPCodesToShow = ["P00010", "P00020", "P00061", "P00065", "P00095", "P00300", "P00400"];

@@ -20,7 +20,7 @@ import {getEventFromID} from '../../Utils/StoreUtilities';
 
 import { saveFile } from '../../Utils/FileHandling';
 
-import { SEDLOGIN_SUCCESS_MESSAGE } from '../../Constants/Config';
+import { SEDLOGIN_SUCCESS_MESSAGE } from '../../Constants/Dictionary';
 import { PHP_FILE_LOCATION } from '../../Constants/Version';
 
 import { setExportDialogVisibility } from '../../Actions/UI';

@@ -54,7 +54,11 @@ class SetInformation extends React.Component {
 		// console.log("CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			let initValue = {}; //load value with default table?
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, initValue); // save it to the store
+			if (this.props.alternateChangeHandler) {
+				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
+			} else {
+				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
+			}
 		} else {
 			console.log("Creating Passed Value Set Information Component");
 		}
@@ -82,10 +86,10 @@ class SetInformation extends React.Component {
 		newValue[sub_QID] = _.cloneDeep(value);
 
 		if (this.props.alternateChangeHandler) {
-			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, newValue);
+			this.props.alternateChangeHandler(eventID, this.props.id, newValue);
 		} else {
 
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, newValue);
+			this.props.SEQuestionValueChange(eventID, this.props.id, newValue);
 		}
 	};
 

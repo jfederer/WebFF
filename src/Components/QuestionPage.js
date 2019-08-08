@@ -13,7 +13,7 @@ import {
 	createQuestionComponents, getTabQuestionsData,
 	getLayoutGroupNames, getLayoutGroupQuestionsData
 } from '../Utils/QuestionUtilities';
-import { getQuestionsData} from '../Utils/StoreUtilities';
+import { getQuestionsData } from '../Utils/StoreUtilities';
 import { setAppBarText } from '../Actions/UI';
 
 
@@ -37,19 +37,25 @@ import { setAppBarText } from '../Actions/UI';
 
 class QuestionPage extends React.Component {
 
-	componentWillMount() {
-		this.props.setAppBarText("SedFF → " + this.props.tabName);
-	}
+	// componentWillMount() {
+	// 	this.props.setAppBarText("SedFF → " + this.props.tabName);
+	// }
 
 	// componentWillUpdate(nextProps, nextState) { // gets called when moving between pages
-	// 	this.props.appBarTextCB(nextProps.tabName);
+	// 	console.log("eh?");
+	// 	// this.props.appBarTextCB(nextProps.tabName);
 	// }
 
 	render() {
 		const DEBUG = false;
 		const { tabName, currentEvent } = this.props;
 
-		let questionsData = getQuestionsData();
+		let questionsData;   //if questionsData is passed, use that and don't filter on tabName
+		if (this.props.questionsData) {
+			questionsData = Object.values(this.props.questionsData);
+		} else {
+			questionsData = getQuestionsData();
+		}
 
 		const { hiddenPanels } = this.props.UI.visibility;
 		// let tabQuestionData = [];
@@ -60,29 +66,35 @@ class QuestionPage extends React.Component {
 
 
 		if (questionsData) {
-			let tabQuestionsData = getTabQuestionsData(questionsData, tabName);
+			let tabQuestionsData;
+			if (this.props.questionsData) { //if questionsData is passed, use that and don't filter on tabName
+				tabQuestionsData = Object.values(this.props.questionsData);
+			} else {
+				tabQuestionsData = getTabQuestionsData(questionsData, tabName);
+			}
+			
 			// console.log("TAB QUESTION DATA: ", tabQuestionsData);
 			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
 
-			// console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
+			if (DEBUG) console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
 
-			
+
 			//OPTIMIZE: filter whitespaces at a higher level
-			//OPTIMIZE:  We can not generate question panels more clearly and efficiently than this.
-			let filteredlayoutGroupNames = layoutGroupNames.filter((groupName) => {
+			//OPTIMIZE:  can we not generate question panels more clearly and efficiently than this.
+			let filteredLayoutGroupNames = layoutGroupNames.filter((groupName) => {
 				let panelName = tabName.replace(/ /g, '') + ":" + groupName.replace(/ /g, '');
 				return !hiddenPanels.includes(panelName);
 			})
 
-			for (let i = 0; filteredlayoutGroupNames !== null && i < filteredlayoutGroupNames.length; i++) {
-				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredlayoutGroupNames[i]);
+			for (let i = 0; filteredLayoutGroupNames !== null && i < filteredLayoutGroupNames.length; i++) {
+				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredLayoutGroupNames[i]);
 
 				questionPanels.push(
-					<div key={tabName + filteredlayoutGroupNames[i] + '_div'}>
+					<div key={tabName + filteredLayoutGroupNames[i] + '_div'}>
 						<QuestionPanel
-							questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionsValues)}
-							panelName={filteredlayoutGroupNames[i]}
-							key={tabName + filteredlayoutGroupNames[i]}
+							questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionsValues, this.props.alternateChangeHandler)}
+							panelName={filteredLayoutGroupNames[i]}
+							key={tabName + filteredLayoutGroupNames[i]}
 							grey={i % 2 === 1} />
 						<Divider />
 					</div>
@@ -92,7 +104,6 @@ class QuestionPage extends React.Component {
 
 			return (
 				<div>
-					QUESTION PAGE!
 				 {this.props.tabName}
 					{questionPanels}
 				</div>
@@ -117,7 +128,7 @@ const mapStateToProps = function (state) {
 		// currentUser: state.Users[state.SedFF.currentUsername],
 		//samplingEvents: state.SamplingEvents,
 		UI: state.UI,
-		questionsData: state.Questions.questionsData,
+		// questionsData: state.Questions.questionsData,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
 		// currentUser: state.User[state.SedFF.currentUsername]
 	}

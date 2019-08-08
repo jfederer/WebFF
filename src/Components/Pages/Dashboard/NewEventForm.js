@@ -48,7 +48,7 @@ class NewEventForm extends React.Component {
 		this.props.loadAndSetCurrentSamplingEvent(newEventID, ()=> {
 			this.props.history.push("/FieldForm");
 			this.props.showNavigationTab("FieldForm");
-			this.props.showNavigationTab("Data Entry")
+			// this.props.showNavigationTab("Data Entry")
 		});
 	}
 

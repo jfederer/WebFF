@@ -247,7 +247,7 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 	//... will return all questionsData objects where question.tabName matches tabName
 	let tabQuestionsData = [];
 	Object.keys(questionsData).forEach(key => {
-		if (questionsData[key].tabName.replace(/ /g, '') === tabName.replace(/ /g, '')) {
+		if (questionsData[key].tabName.replace(/ /g, '').toUpperCase() === tabName.replace(/ /g, '').toUpperCase()) {
 			tabQuestionsData.push(questionsData[key]);
 		}
 	});
@@ -258,13 +258,13 @@ export const getLayoutGroupNames = (questionsData) => {
 	// provided with ARRAY questionData, will return array of layout group names (strings)
 	let layoutGroupNames = [];
 
-	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
-		for (let i = 0; i < questionsData.length; i++) {
-			if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
-				layoutGroupNames.push(questionsData[i].layoutGroup);
+		if (!_.isEmpty(questionsData) && questionsData.length > 0) {  //TODO: add error
+			for (let i = 0; i < questionsData.length; i++) {
+				if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
+					layoutGroupNames.push(questionsData[i].layoutGroup);
+				}
 			}
 		}
-	}
 	return layoutGroupNames;
 }
 

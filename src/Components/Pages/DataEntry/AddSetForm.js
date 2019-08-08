@@ -116,8 +116,8 @@ class AddSetForm extends React.Component {
 			//newSetValue['samplesTable_EDI'] = //TODO: pull from FF
 		}
 
-		let sedimentType = getQuestionValue(currentSamplingEventID, "sedimentType");
-		let samplingMethod = getQuestionValue(currentSamplingEventID, "samplingMethod_" + sedimentType); 
+		let sedimentType = this.props.sedimentType; //getQuestionValue(currentSamplingEventID, "sedimentType");
+		let samplingMethod = this.props.samplingMethod;//getQuestionValue(currentSamplingEventID, "samplingMethod_" + sedimentType); 
 		// console.log("SedType: ", sedimentType);
 		// console.log("SampMethod: ", samplingMethod); 
 		if (!sedimentType || !samplingMethod) {
