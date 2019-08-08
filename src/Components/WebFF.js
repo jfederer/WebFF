@@ -23,7 +23,6 @@ import {
 
 import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import { dialogQuestions, defaultHiddenTabs, defaultHiddenPanels } from '../Constants/DefaultConfig';
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
 	dialogQuestions, defaultHiddenTabs, defaultHiddenPanels
