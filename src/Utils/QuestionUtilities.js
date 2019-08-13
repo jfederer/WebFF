@@ -4,12 +4,14 @@ import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, getSetInformationQuestionsData } from './StoreUtilities';
 import {
-	SET_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
+	SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
 	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY
 } from '../Constants/Config';
 import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
+
+	console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, ")");
 	// creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	// returns array of question components
@@ -50,6 +52,8 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
  * @returns returns value associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 function recursiveGetValue(haystack, haystackType, sub_QIDs) {
+	// console.log("recursiveGetValue(", haystack, haystackType, sub_QIDs,")");
+
 	if (haystack === null) {
 		return null;
 	}
@@ -78,15 +82,20 @@ function recursiveGetValue(haystack, haystackType, sub_QIDs) {
  * @returns returns VALUE associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
-	// console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
+	let DEBUG = false;
+	console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
+	if (DEBUG) console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	//TODO: look for dialog questions, system questions, handle tables
 
 	let event = getEventFromID(eventID);
 	let questionsData = getQuestionsData();
 
-	let Qvalue;
+	if (DEBUG) console.log('getQuestionValue: questionsData (GQV) :', questionsData);
+
+	// Try to get value from questionsData (global)
+	let QDvalue;
 	try {
-		Qvalue = recursiveGetValue(questionsData[questionID].value, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));
+		QDvalue = recursiveGetValue(questionsData[questionID].value, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));  //TODO: should this be QUESTIONS_VALUES_OBJECT_TYPE?
 	}
 	catch (e) {
 		if (e.name === "TypeError") {
@@ -95,24 +104,43 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 
 	}
 
+	if (DEBUG) console.log('getQuestionValue: QDvalue pre special:', QDvalue);
 
-	if ((typeof Qvalue === 'undefined' || Qvalue === null) && questionID.startsWith(SET_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo...
-		Qvalue = recursiveGetValue(getSetInformationQuestionsData(), QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
-	}
+	// try {
+		if ((typeof QDvalue === 'undefined' || QDvalue === null) && questionID.startsWith(SET_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo... //FIXME: likely not right anymore
+			// console.log("Looking at set entry information... QD: ", questionsData);
+			QDvalue = recursiveGetValue(getSetInformationQuestionsData(), QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
+		}
+
+		if ((typeof QDvalue === 'undefined' || QDvalue === null) && questionID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for data entry.  Data entry->sets are in the event custom questions list ...
+			// if (questionID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo...
+			// console.log("Looking at data entry information... QD: ", questionsData);
+			QDvalue = recursiveGetValue(questionsData, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
+		}
+	// } catch (e) {
+	// 	console.err("Error came from: getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
+	// 	throw e;
+	// }
+
+	if (DEBUG) console.log('getQuestionValue: QDvalue Post special:', QDvalue);
 
 	let Evalue = recursiveGetValue(event.questionsValues, QUESTIONS_VALUES_OBJECT_TYPE, [questionID, ..._.cloneDeep(sub_QIDs)]);
 
+	if (DEBUG) console.log('getQuestionValue: Evalue :', Evalue);
+
+
 	let retVal;
-	if (typeof Qvalue === 'undefined') {
+	if (typeof QDvalue === 'undefined') {
 		retVal = Evalue;
 	} else if (typeof Evalue === 'undefined') {
-		retVal = Qvalue;
-	} else if (Evalue === null && Qvalue !== null) {
-		retVal = Qvalue;
+		retVal = QDvalue;
+	} else if (Evalue === null && QDvalue !== null) {
+		retVal = QDvalue;
 	} else {
 		retVal = Evalue;
 	}
 
+	if (DEBUG) console.log('getQuestionValue: retVal :', retVal);
 	return _.cloneDeep(retVal);
 }
 
@@ -191,13 +219,13 @@ export const getDescriptiveColumnForTable = (eventID) => {
 
 			switch (sampleEventLocations[i][k]) {
 				case '':
-				descColumn.push(setName + "-" + (k + 1));
+					descColumn.push(setName + "-" + (k + 1));
 					break;
 				case "Comp":
-				descColumn.push(setName + " Comp");
+					descColumn.push(setName + " Comp");
 					break;
 				default:
-				descColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
+					descColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
 			}
 		}
 	}
@@ -247,8 +275,16 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 	//... will return all questionsData objects where question.tabName matches tabName
 	let tabQuestionsData = [];
 	Object.keys(questionsData).forEach(key => {
-		if (questionsData[key].tabName.replace(/ /g, '').toUpperCase() === tabName.replace(/ /g, '').toUpperCase()) {
-			tabQuestionsData.push(questionsData[key]);
+		try {
+			if (questionsData[key].tabName.replace(/ /g, '').toUpperCase() === tabName.replace(/ /g, '').toUpperCase()) {
+				tabQuestionsData.push(questionsData[key]);
+			}
+		}
+		catch (e) {
+			if (e instanceof TypeError) {
+				console.warn("tabName did not exist for questionsData[", key, "]: ", questionsData[key]);
+			}
+
 		}
 	});
 	return tabQuestionsData;
@@ -258,13 +294,13 @@ export const getLayoutGroupNames = (questionsData) => {
 	// provided with ARRAY questionData, will return array of layout group names (strings)
 	let layoutGroupNames = [];
 
-		if (!_.isEmpty(questionsData) && questionsData.length > 0) {  //TODO: add error
-			for (let i = 0; i < questionsData.length; i++) {
-				if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
-					layoutGroupNames.push(questionsData[i].layoutGroup);
-				}
+	if (!_.isEmpty(questionsData) && questionsData.length > 0) {  //TODO: add error
+		for (let i = 0; i < questionsData.length; i++) {
+			if (!layoutGroupNames.includes(questionsData[i].layoutGroup)) {
+				layoutGroupNames.push(questionsData[i].layoutGroup);
 			}
 		}
+	}
 	return layoutGroupNames;
 }
 

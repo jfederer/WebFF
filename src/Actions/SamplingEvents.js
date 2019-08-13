@@ -33,7 +33,7 @@ import { createInitialParametersTableValue, verifyPassedParametersTableValue} fr
 */
 export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events questions (settings, etc)
 
-	console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
+	// console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 
 	return (dispatch, getState) => {
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
@@ -44,8 +44,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 }
 
 function conditionallyRunActionString(eventID, question) {
-	//console.log("conditionallyRunActionString(", eventID, question, ")");
-	
+	// console.log("conditionallyRunActionString(", eventID, question, ")");
 
 	return (dispatch, getState) => {
 		if (question) {

@@ -1,6 +1,6 @@
 import store from '../Store';
 import _ from 'lodash';
-import { defaultSetInformationQuestionsData, defaultDateEntrySheetQuestionsData } from '../Constants/DefaultObjects';
+import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 
 
 import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
@@ -52,7 +52,7 @@ export function getEventFromID(eventID) {
 @desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's and the default questionsData
 @returns {object} combined questionsData object.
 */
-export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT!
+export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add eventID
 	let state = store.getState();
 
 	let currentUserQD = {};
@@ -136,9 +136,11 @@ export function getStationQuestionData(station) {
 @param {string} questionID  - the question ID
 @returns {object} question .  If the object is not found, warns and returns null.
 */
-export function getQuestionDataFromID(QID) {
+export function getQuestionDataFromID(QID) { //TODO: add eventID
 	//TODO: build this recursively, like getQuestionValue, to work with nested questions?
+	
 	let questionsData = getQuestionsData();
+
 	if (!questionsData[QID]) {
 		console.warn("Attempted to get question Data on falsey question ID: ", QID, "QuestionsData: ", questionsData);
 	}
@@ -149,9 +151,19 @@ export function getSetInformationQuestionsData() {
 	return defaultSetInformationQuestionsData;
 }
 
-export function getDataEntrySheetQuestionsData() {
-	return defaultDateEntrySheetQuestionsData;
-}
+// export function getDataEntrySheetQuestionsData(sedimentType) {
+// 	let DES_QD = _.cloneDeep(defaultDateEntrySheetQuestionsData);
+// 	let retQD = DES_QD.Common;
+// 	Object.keys(DES_QD[sedimentType]).forEach(key=>{
+// 		retQD[key]=DES_QD[sedimentType][key];
+// 	})
+	
+
+// 	console.log('retQD :', retQD);
+// 	//tood check we are getting appropriate sediment type input
+	
+// 	return retQD;
+// }
 
 export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
 	return store.getState().LinkTables.userEvents[username];

@@ -13,7 +13,7 @@ import Box from '@material-ui/core/Box';
 import { setAppBarText } from '../../../Actions/UI';
 import QuestionPage from '../../QuestionPage';
 import AddSetForm from './AddSetForm';
-import DataEntrySheet from '../../Questions/DataEntrySheet'; 
+import DataEntrySheet from '../../Questions/DataEntrySheet';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { NOT_SAMPLED } from '../../../Constants/Dictionary';
 import { METHOD_QIDS, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
@@ -59,7 +59,6 @@ class DataEntry extends React.Component {
 			return <Redirect to='/' />
 		}
 
-
 		let tabsList = {};
 		let tabsPanelList = {};
 		let singleDataEntryPanel = null;
@@ -67,12 +66,20 @@ class DataEntry extends React.Component {
 		Object.keys(METHOD_QIDS).forEach((methodQID, index) => {
 			if (getQuestionValue(this.props.currentEventID, methodQID) !== NOT_SAMPLED) {
 				if (!singleDataEntryPanel) {
-					singleDataEntryPanel = <DataEntrySheet samplingMethod={METHOD_QIDS[methodQID]} id={DATA_ENTRY_INFORMATION_IDENTIFIER+methodQID.split('_')[1]} sedimentType={methodQID.split('_')[1]} />
+					singleDataEntryPanel = <DataEntrySheet
+						samplingMethod={METHOD_QIDS[methodQID]}
+						id={DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]}
+						sedimentType={methodQID.split('_')[1]} 
+						value={getQuestionValue(this.props.currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1])} />
 				}
 				tabsList[methodQID] = <Tab key={methodQID} label={METHOD_QIDS[methodQID]} />;
 				tabsPanelList[methodQID] =
 					<TabPanel value={this.state.tabValue} key={methodQID} index={Object.keys(tabsPanelList).length}>
-						<DataEntrySheet id={DATA_ENTRY_INFORMATION_IDENTIFIER+methodQID.split('_')[1]} samplingMethod={METHOD_QIDS[methodQID]} sedimentType={methodQID.split('_')[1]} />
+						<DataEntrySheet
+							id={DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]}
+							samplingMethod={METHOD_QIDS[methodQID]}
+							sedimentType={methodQID.split('_')[1]} 
+							value={getQuestionValue(this.props.currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1])} />
 					</TabPanel>
 			}
 		})
@@ -85,19 +92,20 @@ class DataEntry extends React.Component {
 		return (<React.Fragment>
 			{Object.keys(tabsList).length === 1
 				? singleDataEntryPanel
-				: <React.Fragment><AppBar position="static" color="default">
-					<Tabs
-						value={this.state.tabValue}
-						onChange={this.handleTabClick}
-						indicatorColor="primary"
-						textColor="primary"
-						variant="scrollable"
-						scrollButtons="auto"
-						aria-label="scrollable auto tabs example"
-					>
-						{Object.keys(tabsList).map(tab => tabsList[tab])}
-					</Tabs>
-				</AppBar>
+				: <React.Fragment>
+					<AppBar position="static" color="default">
+						<Tabs
+							value={this.state.tabValue}
+							onChange={this.handleTabClick}
+							indicatorColor="primary"
+							textColor="primary"
+							variant="scrollable"
+							scrollButtons="auto"
+							aria-label="scrollable auto tabs example"
+						>
+							{Object.keys(tabsList).map(tab => tabsList[tab])}
+						</Tabs>
+					</AppBar>
 
 					{Object.keys(tabsPanelList).map(tabPanel => tabsPanelList[tabPanel])}
 

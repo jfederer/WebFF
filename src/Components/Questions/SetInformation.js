@@ -26,7 +26,7 @@ import Question from '../Question';
 // import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
-import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER} from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
 import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
@@ -51,12 +51,14 @@ export const getRealQID = (setName, sub_q_id) => {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		// console.log("CONSTRUCTOR PROPS: ", this.props);
+		console.log("SI CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			let initValue = {}; //load value with default table?
 			if (this.props.alternateChangeHandler) {
+				console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, alt change handler with initValue");
 				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
 			} else {
+				console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, standard change handler with initValue");
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
 		} else {
@@ -68,6 +70,7 @@ class SetInformation extends React.Component {
 	}
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
+		// console.log("setInfoChangeHandler(", eventID, sub_QID, value, ")");
 		if (sub_QID === "numberOfSamplingPoints") {
 			this.doChange(eventID, sub_QID, value)
 			this.setState({ showDataTable: true });
@@ -82,13 +85,17 @@ class SetInformation extends React.Component {
 	 * @description doChange exists as separate function so the 'save' and the 'special questions' can be handled more easily. If the 'save' is done in the wrong order, some of the additional changes might not propagate appropriately. DRY
 	 */
 	doChange = (eventID, sub_QID, value) => {
-		let newValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + this.props.setName);
-		newValue[sub_QID] = _.cloneDeep(value);
+		//console.log("Set Info: doChange(", eventID, sub_QID, value, ")");
 
+		let splitID = this.props.id.split(IDENTIFIER_SPLITTER);
+		// console.log(splitID);
+
+		let newValue = getQuestionValue(eventID, splitID.shift(), this.props.id); // have to look a the split ID in order to get the VALUE out of questionValues
+		newValue[sub_QID] = _.cloneDeep(value);
+		
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(eventID, this.props.id, newValue);
 		} else {
-
 			this.props.SEQuestionValueChange(eventID, this.props.id, newValue);
 		}
 	};
@@ -107,7 +114,7 @@ class SetInformation extends React.Component {
 		if (samplingMethod === null || typeof samplingMethod === "undefined")
 			return <Typography>Sampling Method not set, please return to field form and set Sampling Method</Typography>
 
-		// console.log("Set Info Render Props: ", this.props);
+		console.log("Set Info Render Props: ", this.props);
 
 
 		let gridedQuestions = [];
@@ -175,7 +182,7 @@ class SetInformation extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		currentEventID: state.SedFF.currentSamplingEventID,
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 		currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		defaultQuestionsData: state.Questions.questionsData,
 	}

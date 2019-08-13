@@ -30,8 +30,6 @@ export function addQuestionToUser(username, question) {
 export function addQuestionToEvent(eventID, question) {
 	return (dispatch) => {
 		dispatch({ type: ADD_QUESTION_TO_EVENT, eventID, question });
-
-		// dispatch({ type: COMBINE_QUESTIONS_DATA }); //TODO: need getState?  Call a store util instead?
 	}
 }
 

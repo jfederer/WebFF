@@ -12,14 +12,20 @@ import {
 	NOT_SAMPLED
 } from './Dictionary';
 
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from './Config';
+
 export const emptySamplingEvent = {
 	eventID: "",
 	eventName: "",
 	dateModified: "",
 	shippedStatus: "Not Shipped",
 	questionsValues: {
+		// [DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended"]: {},
+		// [DATA_ENTRY_INFORMATION_IDENTIFIER + "Bedload"]: {},
+		// [DATA_ENTRY_INFORMATION_IDENTIFIER + "Bottom"]: {}
 	},
-	questionsData: {}
+	questionsData: {
+	}
 }
 
 export const emptyUser = {
@@ -33,546 +39,8 @@ export const emptyUser = {
 }
 
 
-export const defaultDateEntrySheetQuestionsData = {
-	
-	samplerType_suspended: {
-		"id": "samplerType_Suspended",
-		"label": "Sampler Type",
-		"XMLTag": "P84164",
-		"type": "DropDown",
-		"hidden": false,
-		"includeBlank": true,
-		"options":
-		{
-			"100  VAN DORN SAMPLER": "100",
-			"110  SEWAGE SAMPLE": "110",
-			"120  VELOCITY INTEGRATED SAMPLE": "120",
-			"125  KEMMERER BOTTLE": "125",
-			"3001  SAMPLER, US DH-48": "3001",
-			"3002  SAMPLER, US DH - 59": "3002",
-			"3003  SAMPLER, US DH - 75P": "3003",
-			"3004  SAMPLER, US DH-75Q": "3004",
-			"3005  SAMPLER, US DH-76": "3005",
-			"3006  SAMPLER, US D - 43": "3006",
-			"3007  SAMPLER, US D - 49": "3007",
-			"3008  SAMPLER, US D - 49AL": "3008",
-			"3009  SAMPLER, US D-74": "3009",
-			"3010  SAMPLER, US D - 74AL": "3010",
-			"3011  SAMPLER, US D-77": "3011",
-			"3012  SAMPLER, US P - 46": "3012",
-			"3013  SAMPLER, US P - 50": "3013",
-			"3014  SAMPLER, US P - 61 - A1": "3014",
-			"3015  SAMPLER, US P - 63": "3015",
-			"3016  SAMPLER, US P - 72": "3016",
-			"3017  SAMPLER, US U - 59": "3017",
-			"3018  SAMPLER, US U - 73": "3018",
-			"3019  SAMPLER, US PS - 69": "3019",
-			"3020  SAMPLER, US PS - 69TM": "3020",
-			"3021  SAMPLER, US CS-77": "3021",
-			"3022  SAMPLER, US PS - 82": "3022",
-			"3030  US DH-48 TM": "3030",
-			"3031  US DH-48 TM WITH TEFLON GASKET AND NOZZLE": "3031",
-			"3032  US DH-59 TM": "3032",
-			"3033  US DH-59 TM WITH TEFLON GASKET AND NOZZLE": "3033",
-			"3034  US DH-76 TM": "3034",
-			"3035  US DH-76 TM WITH TEFLON GASKET AND NOZZLE": "3035",
-			"3036  US D-74 TM": "3036",
-			"3037  US D-74 AL-TM": "3037",
-			"3038  US D-74 AL-TM WITH TEFLON GASKET AND NOZZLE": "3038",
-			"3039  US D-77 TM": "3039",
-			"3040  US D-77 TM MODIFIED TEFLON BAG SAMPLER": "3040",
-			"3041  US P-61 AL-TM": "3041",
-			"3042  US P-61": "3042",
-			"3043  US P-61 TM": "3043",
-			"3044  US DH-81": "3044",
-			"3045  US DH-81 WITH TEFLON CAP AND NOZZLE": "3045",
-			"3046  SAMPLER,  D - 77 TM, WITH REYNOLDS OVEN COLLAPSIBLE BAG": "3046",
-			"3047  SAMPLER, FRAME - TYPE, PLASTIC BOTTLE WITH REYNOLDS OVEN BAG": "3047",
-			"3048  SAMPLER, FRAME-TYPE, TEFLON BOTTLE": "3048",
-			"3049  SAMPLER, FRAME-TYPE, PLASTIC BOTTLE": "3049",
-			"3050  SAMPLER, FRAME-TYPE, PLASTIC BOTTLE W/TEFLON COLLAPS. BAG": "3050",
-			"3051  US DH-95 TEFLON BOTTLE": "3051",
-			"3052  US DH-95 PLASTIC BOTTLE": "3052",
-			"3053  US D-95 TEFLON BOTTLE": "3053",
-			"3054  US D-95 PLASTIC BOTTLE": "3054",
-			"3055  US D-96 BAG SAMPLER": "3055",
-			"3056  US D-96-A1 BAG SAMPLER": "3056",
-			"3057  US D-99 BAG SAMPLER": "3057",
-			"3058  US DH-2 BAG SAMPLER": "3058",
-			"3060  WEIGHTED-BOTTLE SAMPLER": "3060",
-			"3061  US WBH-96 WEIGHTED-BOTTLE SAMPLER": "3061",
-			"3062  US P-6,  100 lb.POINT - INTEGRATING SAMPLER, replaces P - 61 - A1": "3062",
-			"3063  US P-6, 200 lb.POINT - INTEGRATING SAMPLER, replaces P - 63": "3063",
-			"3070  GRAB SAMPLE": "3070",
-			"3071  OPEN-MOUTH BOTTLE": "3071",
-			"3080  VOC HAND SAMPLER": "3080",
-			"4010  THIEF SAMPLER": "4010",
-			"4020  OPEN-TOP BAILER": "4020",
-			"4115  SAMPLER, POINT, AUTOMATIC": "4115",
-			"8010  OTHER": "8010"
-		},
-		"actions":
-		{
-			"100": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"120": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"125": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3001": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3002": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3003": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3004": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3005": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3006": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3007": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3008": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3009": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3011": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3012": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3013": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3014": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3015": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3016": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3017": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3018": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3019": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3020": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3021": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3022": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3030": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3031": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3032": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3033": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3034": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3035": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3036": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3037": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3038": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3039": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3040": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3041": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3042": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3043": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3044": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3045": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3046": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3047": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3048": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3049": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3050": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3051": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3052": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3053": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3054": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3055": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
-			"3056": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
-			"3057": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
-			"3058": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
-			"3060": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3061": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3062": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3063": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3070": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3071": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"3080": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"4010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"4020": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"4115": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzleMaterial&HideQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"8010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
-		},
-		"value": "",
-		"tabName": "DataEntrySuspended",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
+// export const defaultDateEntrySheetQuestionsData = {
 
-	samplerType_bottom: {
-		"id": "samplerType_Bottom",
-		"label": "Sampler Type",
-		"XMLTag": "P84164",
-		"type": "DropDown",
-		"hidden": false,
-		"includeBlank": true,
-		"options":
-		{
-			"3023  SAMPLER, US BMH-53 ": "3023",
-			"3024  SAMPLER, US BMH - 53TM": "3024",
-			"3025  SAMPLER, US BM-54 ": "3025",
-			"3026  SAMPLER, US BM - 54TM": "3026",
-			"3027  SAMPLER, US BMH-60 ": "3027",
-			"3028  SAMPLER, US BMH - 60TM": "3028",
-			"3029  SAMPLER, US RBM-80 ": "3029",
-			"5010  BOX CORE, LONG ": "5010",
-			"5020  BOX CORE, SHORT ": "5020",
-			"5030  GRAVITY CORE ": "5030",
-			"5040  PISTON CORE ": "5040",
-			"5050  PUSH CORE ": "5050",
-			"6000  Bed Material -- Scoop Shovel": "6000",
-			"6010  Bed Material -- Scoop TM (Epoxy coated metal sampler)": "6010",
-			"6020  Bed Material -- Scoop Teflon": "6020",
-			"6030  Bed Material -- Pipe Dredge": "6030",
-			"6040  Bed Material -- Dredge-Cooper Scooper": "6040",
-			"6050  Bed Material -- Ponar Grab": "6050",
-			"6060  Bed Material -- Ekman Grab": "6060",
-			"6070  Bed Material -- Box Core Grab": "6070",
-			"6080  Bed Material -- Peterson Grab": "6080",
-			"6090  Bed Material -- Van Veen Grab": "6090",
-			"8010  OTHER ": "8010"
-		},
-		"actions":
-		{
-			"100": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
-		},
-		"value": "",
-		"tabName": "DataEntryBottom",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	samplerType_bedload: {
-		"id": "samplerType_Bedload",
-		"label": "Sampler Type",
-		"XMLTag": "P84164",
-		"type": "DropDown",
-		"hidden": false,
-		"includeBlank": true,
-		"options":
-		{
-			"1050  BL-6X12 in, Toutle R.Type 2, Exp.Ratio 1.40, Cable Susp": "1050",
-			"1055  BL-6X12 in, Toutle R.Type 2, Exp.Ratio 1.40, Wading": "1055",
-			"1060  BL-3X3 in, BL - 84, Exp.Ratio 1.40, Cable Susp": "1060",
-			"1100  BL-3X3 in, H-S, 50-100 lb, Exp.Ratio 3.22, Cable Susp": "1100",
-			"1110  BL-3X3 in, H-S, 100-200 lb, Exp.Ratio 3.22, Cable Susp": "1110",
-			"1120  BL-3X3 in, H-S, 1/4-in thick nozzle, Exp.Ratio 3.22, Wading": "1120",
-			"1150  BL-3X3 in, BLH - 84, 1/4-in thick nozzle, Exp.Ratio 1.4, Wading": "1150",
-			"1170  BL-6X6 in H-S, 1 / 4 -in nozzle, 150-200 lb, Exp.Ratio 3.22, Cable Susp": "1170",
-			"1180  BL-4X8 in, Elwha R., Exp.Ratio 1.40, Wading": "1180",
-			"1190  BL-4X8 in, Elwha R., Exp.Ratio 1.40, Cable Susp": "1190",
-			"1200  BL-Net-Frame Trap": "1200",
-			"8010  Other": "8010",
-			"8020  Mulitple samplers used": "8020"
-		},
-		"actions":
-		{
-			"100": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
-			"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
-		},
-		"value": "",
-		"tabName": "DataEntryBedload",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	bottleMaterial: {
-		"id": "bottleMaterial",
-		"hidden": true,
-		"label": "Bottle Material",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"Plastic": "Plastic",
-			"Glass": "Glass",
-			"Other": "Other"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-	bottleMaterial: {
-		"id": "bottleMaterial",
-		"hidden": true,
-		"label": "Bottle Material",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"Plastic": "Plastic",
-			"Glass": "Glass",
-			"Other": "Other"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	bagMaterial: {
-		"id": "bagMaterial",
-		"label": "Bag Material",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"Plastic": "Plastic",
-			"Glass": "Glass",
-			"Other": "Other"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	sizeOfBottle: {
-		"id": "sizeOfBottle",
-		"hidden": true,
-		"label": "Size of Bottle",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"Pint": "Pint",
-			"Liter": "Liter",
-			"Quart": "Quart"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	sizeOfBag: {
-		"id": "sizeOfBag",
-		"label": "Size of Bag",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"1 Liter": "1 Liter",
-			"3 Liter": "3 Liter"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	bagMesh: {
-		"id": "bagMesh",
-		"hidden": true,
-		"label": "Bag Mesh Size (mm)",
-		"XMLTag": "P30333",
-		"type": "Text",
-		"value": "",
-		"placeholder": "mm",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	nozzleMaterial: {
-		"id": "nozzleMaterial",
-		"label": "Nozzle Material",
-		"XMLTag": "P72219",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"Brass": "1",
-			"Plastic": "2",
-			"TFE": "3"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	nozzleDiameter: {
-		"id": "nozzleDiameter",
-		"label": "Nozzle Diameter",
-		"XMLTag": "P72220",
-		"type": "DropDown",
-		"includeBlank": true,
-		"options":
-		{
-			"3/16": "3",
-			"1/4": "4",
-			"5/16": "5"
-		},
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	tetherLine: {
-		"id": "tetherLine",
-		"hidden": true,
-		"label": "Tether Line Used",
-		"XMLTag": "P04117",
-		"type": "Toggle",
-		"value": false,
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"checkbox": true,
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	compositeSamplesInCrossSection: {
-		"id": "compositeSamplesInCrossSection",
-		"hidden": true,
-		"label": "Composite Samples in Cross Sectional",
-		"XMLTag": "P04118",
-		"type": "Text",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	verticalsInComposite: {
-		"id": "verticalsInComposite",
-		"hidden": true,
-		"label": "Verticals In Composite",
-		"XMLTag": "P04119",
-		"type": "Text",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Sampler Info",
-		"width_xs": 4,
-		"width_lg": 2
-	},
-
-	streamDepth_IET: {
-		"id": "streamDepth_IET",
-		"label": "Stream Depth for Test",
-		"type": "Text",
-		"placeholder": "feet",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	transitRate: {
-		"id": "transitRate",
-		"label": "Transit Rate for Test",
-		"type": "Text",
-		"placeholder": "feet / second",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	streamVelocity_IET: {
-		"id": "streamVelocity_IET",
-		"label": "IET Stream Velocity (ft/s)",
-		"XMLTag": "P72196",
-		"type": "Text",
-		"placeholder": "P72196",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 2
-	},
-
-	sampleVolume_IET: {
-		"id": "sampleVolume_IET",
-		"label": "Sample Volume for Test (mL)",
-		"XMLTag": "P72218",
-		"type": "Text",
-		"placeholder": "P72218",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	duration_IET: {
-		"id": "duration_IET",
-		"label": "Seconds sampler collected water",
-		"XMLTag": "P72217",
-		"type": "Text",
-		"placeholder": "P72217",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 4,
-		"width_lg": 3
-	},
-
-	nozzleMaterial_IET: {
-		"id": "nozzleMaterial_IET",
-		"label": "Nozzle Material",
-		"type": "ComputedValue",
-		"placeholder": "Enter value in sampler info panel",
-		"computationString": "nozzleMaterial",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 3
-	},
-
-	nozzleDiameter_IET: {
-		"id": "nozzleDiameter_IET",
-		"label": "Nozzle Diameter",
-		"type": "ComputedValue",
-		"placeholder": "Enter value in sampler info panel",
-		"computationString": "nozzleDiameter",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 3
-	},
-
-	ratioOfVertical: {
-		"id": "ratioOfVertical",
-		"label": "Ratio of Vertical",
-		"type": "Text",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 3
-	},
-
-	intakeEfficiency: {
-		"id": "intakeEfficiency",
-		"label": "Intake Efficiency",
-		"type": "Text",
-		"value": "",
-		"tabName": "DataEntry",
-		"layoutGroup": "Intake Efficiency Test",
-		"width_xs": 3,
-		"width_lg": 3
-	},
-
-	avgRepMeasures: {
-		"id": "avgRepMeasures",
-		"label": "Average Representational Measures of these sets",
-		"type": "Toggle",
-		"tabName": "DataEntry",
-		"layoutGroup": "Average Representational Measures",
-		"checkbox": true,
-		"value": false,
-		"width_xs": 8,
-		"width_lg": 6
-	}
-}
 
 
 export const defaultSetInformationQuestionsData = {
@@ -729,7 +197,7 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 10
 	},
 
-	analysedFor_bedload: {
+	analysedFor_Bedload: {
 		"id": "analysedFor_bedload",
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
@@ -752,7 +220,7 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 2
 	},
 
-	analysedFor_bottom: {
+	analysedFor_Bottom: {
 		"id": "analysedFor_bottom",
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
@@ -778,7 +246,7 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 2
 	},
 
-	analysedFor_suspended: {
+	analysedFor_Suspended: {
 		"id": "analysedFor_suspended",
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
@@ -966,7 +434,7 @@ export const defaultQuestionsData = {
 		{
 			"anyValue": "ShowTab::DataEntry",
 			[NOT_SAMPLED]: "HideTab::DataEntry"
-			 },
+		},
 		"value": NOT_SAMPLED,
 		"layoutGroup": "Sampling Method",
 		"width_xs": 4,
@@ -991,8 +459,10 @@ export const defaultQuestionsData = {
 			"OTHER": "8010"
 		},
 		"actions":
-			{ "anyValue": "ShowTab::DataEntry",
-			[NOT_SAMPLED]: "HideTab::DataEntry" },
+		{
+			"anyValue": "ShowTab::DataEntry",
+			[NOT_SAMPLED]: "HideTab::DataEntry"
+		},
 		"value": NOT_SAMPLED,
 		"layoutGroup": "Sampling Method",
 		"width_xs": 4,
@@ -1015,8 +485,10 @@ export const defaultQuestionsData = {
 			"OTHER": "8010"
 		},
 		"actions":
-			{ "anyValue": "ShowTab::DataEntry", 
-			[NOT_SAMPLED]: "HideTab::DataEntry" },
+		{
+			"anyValue": "ShowTab::DataEntry",
+			[NOT_SAMPLED]: "HideTab::DataEntry"
+		},
 		"value": NOT_SAMPLED,
 		"layoutGroup": "Sampling Method",
 		"width_xs": 4,
@@ -1709,6 +1181,1114 @@ export const defaultQuestionsData = {
 		"width_xs": 4,
 		"width_lg": 2
 	},
+
+
+	[DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended"]: {
+		id: DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended",
+		samplerType_suspended: {
+			"id": "samplerType_Suspended",
+			"label": "Sampler Type",
+			"XMLTag": "P84164",
+			"type": "DropDown",
+			"hidden": false,
+			"includeBlank": true,
+			"options":
+			{
+				"100  VAN DORN SAMPLER": "100",
+				"110  SEWAGE SAMPLE": "110",
+				"120  VELOCITY INTEGRATED SAMPLE": "120",
+				"125  KEMMERER BOTTLE": "125",
+				"3001  SAMPLER, US DH-48": "3001",
+				"3002  SAMPLER, US DH - 59": "3002",
+				"3003  SAMPLER, US DH - 75P": "3003",
+				"3004  SAMPLER, US DH-75Q": "3004",
+				"3005  SAMPLER, US DH-76": "3005",
+				"3006  SAMPLER, US D - 43": "3006",
+				"3007  SAMPLER, US D - 49": "3007",
+				"3008  SAMPLER, US D - 49AL": "3008",
+				"3009  SAMPLER, US D-74": "3009",
+				"3010  SAMPLER, US D - 74AL": "3010",
+				"3011  SAMPLER, US D-77": "3011",
+				"3012  SAMPLER, US P - 46": "3012",
+				"3013  SAMPLER, US P - 50": "3013",
+				"3014  SAMPLER, US P - 61 - A1": "3014",
+				"3015  SAMPLER, US P - 63": "3015",
+				"3016  SAMPLER, US P - 72": "3016",
+				"3017  SAMPLER, US U - 59": "3017",
+				"3018  SAMPLER, US U - 73": "3018",
+				"3019  SAMPLER, US PS - 69": "3019",
+				"3020  SAMPLER, US PS - 69TM": "3020",
+				"3021  SAMPLER, US CS-77": "3021",
+				"3022  SAMPLER, US PS - 82": "3022",
+				"3030  US DH-48 TM": "3030",
+				"3031  US DH-48 TM WITH TEFLON GASKET AND NOZZLE": "3031",
+				"3032  US DH-59 TM": "3032",
+				"3033  US DH-59 TM WITH TEFLON GASKET AND NOZZLE": "3033",
+				"3034  US DH-76 TM": "3034",
+				"3035  US DH-76 TM WITH TEFLON GASKET AND NOZZLE": "3035",
+				"3036  US D-74 TM": "3036",
+				"3037  US D-74 AL-TM": "3037",
+				"3038  US D-74 AL-TM WITH TEFLON GASKET AND NOZZLE": "3038",
+				"3039  US D-77 TM": "3039",
+				"3040  US D-77 TM MODIFIED TEFLON BAG SAMPLER": "3040",
+				"3041  US P-61 AL-TM": "3041",
+				"3042  US P-61": "3042",
+				"3043  US P-61 TM": "3043",
+				"3044  US DH-81": "3044",
+				"3045  US DH-81 WITH TEFLON CAP AND NOZZLE": "3045",
+				"3046  SAMPLER,  D - 77 TM, WITH REYNOLDS OVEN COLLAPSIBLE BAG": "3046",
+				"3047  SAMPLER, FRAME - TYPE, PLASTIC BOTTLE WITH REYNOLDS OVEN BAG": "3047",
+				"3048  SAMPLER, FRAME-TYPE, TEFLON BOTTLE": "3048",
+				"3049  SAMPLER, FRAME-TYPE, PLASTIC BOTTLE": "3049",
+				"3050  SAMPLER, FRAME-TYPE, PLASTIC BOTTLE W/TEFLON COLLAPS. BAG": "3050",
+				"3051  US DH-95 TEFLON BOTTLE": "3051",
+				"3052  US DH-95 PLASTIC BOTTLE": "3052",
+				"3053  US D-95 TEFLON BOTTLE": "3053",
+				"3054  US D-95 PLASTIC BOTTLE": "3054",
+				"3055  US D-96 BAG SAMPLER": "3055",
+				"3056  US D-96-A1 BAG SAMPLER": "3056",
+				"3057  US D-99 BAG SAMPLER": "3057",
+				"3058  US DH-2 BAG SAMPLER": "3058",
+				"3060  WEIGHTED-BOTTLE SAMPLER": "3060",
+				"3061  US WBH-96 WEIGHTED-BOTTLE SAMPLER": "3061",
+				"3062  US P-6,  100 lb.POINT - INTEGRATING SAMPLER, replaces P - 61 - A1": "3062",
+				"3063  US P-6, 200 lb.POINT - INTEGRATING SAMPLER, replaces P - 63": "3063",
+				"3070  GRAB SAMPLE": "3070",
+				"3071  OPEN-MOUTH BOTTLE": "3071",
+				"3080  VOC HAND SAMPLER": "3080",
+				"4010  THIEF SAMPLER": "4010",
+				"4020  OPEN-TOP BAILER": "4020",
+				"4115  SAMPLER, POINT, AUTOMATIC": "4115",
+				"8010  OTHER": "8010"
+			},
+			"actions":
+			{
+				"100": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"120": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"125": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3001": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3002": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3003": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3004": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3005": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3006": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3007": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3008": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3009": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3011": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3012": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3013": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3014": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3015": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3016": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3017": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3018": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3019": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3020": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3021": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3022": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3030": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3031": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3032": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3033": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3034": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3035": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3036": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3037": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3038": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3039": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3040": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3041": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3042": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3043": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3044": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3045": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3046": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3047": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3048": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3049": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3050": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3051": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3052": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3053": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3054": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3055": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
+				"3056": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
+				"3057": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
+				"3058": "ShowQuestion::sizeOfBag&HideQuestion::sizeOfBottle&ShowQuestion::bagMaterial&HideQuestion::bottleMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&ShowPanel::DataEntry:Intake Efficiency Test",
+				"3060": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3061": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3062": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3063": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3070": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3071": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"3080": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"4010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"4020": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"4115": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&HideQuestion::nozzleMaterial&HideQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"8010": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+		bottleMaterial: {
+			"id": "bottleMaterial",
+			"hidden": true,
+			"label": "Bottle Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		bagMaterial: {
+			"id": "bagMaterial",
+			"label": "Bag Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		sizeOfBottle: {
+			"id": "sizeOfBottle",
+			"hidden": true,
+			"label": "Size of Bottle",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Pint": "Pint",
+				"Liter": "Liter",
+				"Quart": "Quart"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		sizeOfBag: {
+			"id": "sizeOfBag",
+			"label": "Size of Bag",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"1 Liter": "1 Liter",
+				"3 Liter": "3 Liter"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		bagMesh: {
+			"id": "bagMesh",
+			"hidden": true,
+			"label": "Bag Mesh Size (mm)",
+			"XMLTag": "P30333",
+			"type": "Text",
+			"value": "",
+			"placeholder": "mm",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		nozzleMaterial: {
+			"id": "nozzleMaterial",
+			"label": "Nozzle Material",
+			"XMLTag": "P72219",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Brass": "1",
+				"Plastic": "2",
+				"TFE": "3"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		nozzleDiameter: {
+			"id": "nozzleDiameter",
+			"label": "Nozzle Diameter",
+			"XMLTag": "P72220",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"3/16": "3",
+				"1/4": "4",
+				"5/16": "5"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		tetherLine: {
+			"id": "tetherLine",
+			"hidden": true,
+			"label": "Tether Line Used",
+			"XMLTag": "P04117",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"checkbox": true,
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		compositeSamplesInCrossSection: {
+			"id": "compositeSamplesInCrossSection",
+			"hidden": true,
+			"label": "Composite Samples in Cross Sectional",
+			"XMLTag": "P04118",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		verticalsInComposite: {
+			"id": "verticalsInComposite",
+			"hidden": true,
+			"label": "Verticals In Composite",
+			"XMLTag": "P04119",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		streamDepth_IET: {
+			"id": "streamDepth_IET",
+			"label": "Stream Depth for Test",
+			"type": "Text",
+			"placeholder": "feet",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		transitRate: {
+			"id": "transitRate",
+			"label": "Transit Rate for Test",
+			"type": "Text",
+			"placeholder": "feet / second",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		streamVelocity_IET: {
+			"id": "streamVelocity_IET",
+			"label": "IET Stream Velocity (ft/s)",
+			"XMLTag": "P72196",
+			"type": "Text",
+			"placeholder": "P72196",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		sampleVolume_IET: {
+			"id": "sampleVolume_IET",
+			"label": "Sample Volume for Test (mL)",
+			"XMLTag": "P72218",
+			"type": "Text",
+			"placeholder": "P72218",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		duration_IET: {
+			"id": "duration_IET",
+			"label": "Seconds sampler collected water",
+			"XMLTag": "P72217",
+			"type": "Text",
+			"placeholder": "P72217",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		nozzleMaterial_IET: {
+			"id": "nozzleMaterial_IET",
+			"label": "Nozzle Material",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "nozzleMaterial",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		nozzleDiameter_IET: {
+			"id": "nozzleDiameter_IET",
+			"label": "Nozzle Diameter",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "nozzleDiameter",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		ratioOfVertical: {
+			"id": "ratioOfVertical",
+			"label": "Ratio of Vertical",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		intakeEfficiency: {
+			"id": "intakeEfficiency",
+			"label": "Intake Efficiency",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		avgRepMeasures: {
+			"id": "avgRepMeasures",
+			"label": "Average Representational Measures of these sets",
+			"type": "Toggle",
+			"tabName": "DataEntry",
+			"layoutGroup": "Average Representational Measures",
+			"checkbox": true,
+			"value": false,
+			"width_xs": 8,
+			"width_lg": 6
+		}
+	},
+
+
+
+	[DATA_ENTRY_INFORMATION_IDENTIFIER + "Bottom"]: {
+		id: DATA_ENTRY_INFORMATION_IDENTIFIER + "Bottom",
+		samplerType_bottom: {
+			"id": "samplerType_Bottom",
+			"label": "Sampler Type",
+			"XMLTag": "P84164",
+			"type": "DropDown",
+			"hidden": false,
+			"includeBlank": true,
+			"options":
+			{
+				"3023  SAMPLER, US BMH-53 ": "3023",
+				"3024  SAMPLER, US BMH - 53TM": "3024",
+				"3025  SAMPLER, US BM-54 ": "3025",
+				"3026  SAMPLER, US BM - 54TM": "3026",
+				"3027  SAMPLER, US BMH-60 ": "3027",
+				"3028  SAMPLER, US BMH - 60TM": "3028",
+				"3029  SAMPLER, US RBM-80 ": "3029",
+				"5010  BOX CORE, LONG ": "5010",
+				"5020  BOX CORE, SHORT ": "5020",
+				"5030  GRAVITY CORE ": "5030",
+				"5040  PISTON CORE ": "5040",
+				"5050  PUSH CORE ": "5050",
+				"6000  Bed Material -- Scoop Shovel": "6000",
+				"6010  Bed Material -- Scoop TM (Epoxy coated metal sampler)": "6010",
+				"6020  Bed Material -- Scoop Teflon": "6020",
+				"6030  Bed Material -- Pipe Dredge": "6030",
+				"6040  Bed Material -- Dredge-Cooper Scooper": "6040",
+				"6050  Bed Material -- Ponar Grab": "6050",
+				"6060  Bed Material -- Ekman Grab": "6060",
+				"6070  Bed Material -- Box Core Grab": "6070",
+				"6080  Bed Material -- Peterson Grab": "6080",
+				"6090  Bed Material -- Van Veen Grab": "6090",
+				"8010  OTHER ": "8010"
+			},
+			"actions":
+			{
+				"100": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+		bottleMaterial: {
+			"id": "bottleMaterial",
+			"hidden": true,
+			"label": "Bottle Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		bagMaterial: {
+			"id": "bagMaterial",
+			"label": "Bag Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		sizeOfBottle: {
+			"id": "sizeOfBottle",
+			"hidden": true,
+			"label": "Size of Bottle",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Pint": "Pint",
+				"Liter": "Liter",
+				"Quart": "Quart"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		sizeOfBag: {
+			"id": "sizeOfBag",
+			"label": "Size of Bag",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"1 Liter": "1 Liter",
+				"3 Liter": "3 Liter"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		bagMesh: {
+			"id": "bagMesh",
+			"hidden": true,
+			"label": "Bag Mesh Size (mm)",
+			"XMLTag": "P30333",
+			"type": "Text",
+			"value": "",
+			"placeholder": "mm",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		nozzleMaterial: {
+			"id": "nozzleMaterial",
+			"label": "Nozzle Material",
+			"XMLTag": "P72219",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Brass": "1",
+				"Plastic": "2",
+				"TFE": "3"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		nozzleDiameter: {
+			"id": "nozzleDiameter",
+			"label": "Nozzle Diameter",
+			"XMLTag": "P72220",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"3/16": "3",
+				"1/4": "4",
+				"5/16": "5"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		tetherLine: {
+			"id": "tetherLine",
+			"hidden": true,
+			"label": "Tether Line Used",
+			"XMLTag": "P04117",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"checkbox": true,
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		compositeSamplesInCrossSection: {
+			"id": "compositeSamplesInCrossSection",
+			"hidden": true,
+			"label": "Composite Samples in Cross Sectional",
+			"XMLTag": "P04118",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		verticalsInComposite: {
+			"id": "verticalsInComposite",
+			"hidden": true,
+			"label": "Verticals In Composite",
+			"XMLTag": "P04119",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		streamDepth_IET: {
+			"id": "streamDepth_IET",
+			"label": "Stream Depth for Test",
+			"type": "Text",
+			"placeholder": "feet",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		transitRate: {
+			"id": "transitRate",
+			"label": "Transit Rate for Test",
+			"type": "Text",
+			"placeholder": "feet / second",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		streamVelocity_IET: {
+			"id": "streamVelocity_IET",
+			"label": "IET Stream Velocity (ft/s)",
+			"XMLTag": "P72196",
+			"type": "Text",
+			"placeholder": "P72196",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		sampleVolume_IET: {
+			"id": "sampleVolume_IET",
+			"label": "Sample Volume for Test (mL)",
+			"XMLTag": "P72218",
+			"type": "Text",
+			"placeholder": "P72218",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		duration_IET: {
+			"id": "duration_IET",
+			"label": "Seconds sampler collected water",
+			"XMLTag": "P72217",
+			"type": "Text",
+			"placeholder": "P72217",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		nozzleMaterial_IET: {
+			"id": "nozzleMaterial_IET",
+			"label": "Nozzle Material",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "nozzleMaterial",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		nozzleDiameter_IET: {
+			"id": "nozzleDiameter_IET",
+			"label": "Nozzle Diameter",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "nozzleDiameter",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		ratioOfVertical: {
+			"id": "ratioOfVertical",
+			"label": "Ratio of Vertical",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		intakeEfficiency: {
+			"id": "intakeEfficiency",
+			"label": "Intake Efficiency",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		avgRepMeasures: {
+			"id": "avgRepMeasures",
+			"label": "Average Representational Measures of these sets",
+			"type": "Toggle",
+			"tabName": "DataEntry",
+			"layoutGroup": "Average Representational Measures",
+			"checkbox": true,
+			"value": false,
+			"width_xs": 8,
+			"width_lg": 6
+		}
+	},
+
+	[DATA_ENTRY_INFORMATION_IDENTIFIER + "Bedload"]: {
+		id: DATA_ENTRY_INFORMATION_IDENTIFIER + "Bedload",
+		samplerType_bedload: {
+			"id": "samplerType_Bedload",
+			"label": "Sampler Type",
+			"XMLTag": "P84164",
+			"type": "DropDown",
+			"hidden": false,
+			"includeBlank": true,
+			"options":
+			{
+				"1050  BL-6X12 in, Toutle R.Type 2, Exp.Ratio 1.40, Cable Susp": "1050",
+				"1055  BL-6X12 in, Toutle R.Type 2, Exp.Ratio 1.40, Wading": "1055",
+				"1060  BL-3X3 in, BL - 84, Exp.Ratio 1.40, Cable Susp": "1060",
+				"1100  BL-3X3 in, H-S, 50-100 lb, Exp.Ratio 3.22, Cable Susp": "1100",
+				"1110  BL-3X3 in, H-S, 100-200 lb, Exp.Ratio 3.22, Cable Susp": "1110",
+				"1120  BL-3X3 in, H-S, 1/4-in thick nozzle, Exp.Ratio 3.22, Wading": "1120",
+				"1150  BL-3X3 in, BLH - 84, 1/4-in thick nozzle, Exp.Ratio 1.4, Wading": "1150",
+				"1170  BL-6X6 in H-S, 1 / 4 -in nozzle, 150-200 lb, Exp.Ratio 3.22, Cable Susp": "1170",
+				"1180  BL-4X8 in, Elwha R., Exp.Ratio 1.40, Wading": "1180",
+				"1190  BL-4X8 in, Elwha R., Exp.Ratio 1.40, Cable Susp": "1190",
+				"1200  BL-Net-Frame Trap": "1200",
+				"8010  Other": "8010",
+				"8020  Mulitple samplers used": "8020"
+			},
+			"actions":
+			{
+				"100": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test",
+				"110": "ShowQuestion::sizeOfBottle&HideQuestion::sizeOfBag&ShowQuestion::bottleMaterial&HideQuestion::bagMaterial&ShowQuestion::nozzleMaterial&ShowQuestion::nozzleDiameter&HidePanel::DataEntry:Intake Efficiency Test"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+		bottleMaterial: {
+			"id": "bottleMaterial",
+			"hidden": true,
+			"label": "Bottle Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		bagMaterial: {
+			"id": "bagMaterial",
+			"label": "Bag Material",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Plastic": "Plastic",
+				"Glass": "Glass",
+				"Other": "Other"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		sizeOfBottle: {
+			"id": "sizeOfBottle",
+			"hidden": true,
+			"label": "Size of Bottle",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Pint": "Pint",
+				"Liter": "Liter",
+				"Quart": "Quart"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		sizeOfBag: {
+			"id": "sizeOfBag",
+			"label": "Size of Bag",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"1 Liter": "1 Liter",
+				"3 Liter": "3 Liter"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		bagMesh: {
+			"id": "bagMesh",
+			"hidden": true,
+			"label": "Bag Mesh Size (mm)",
+			"XMLTag": "P30333",
+			"type": "Text",
+			"value": "",
+			"placeholder": "mm",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		nozzleMaterial: {
+			"id": "nozzleMaterial",
+			"label": "Nozzle Material",
+			"XMLTag": "P72219",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"Brass": "1",
+				"Plastic": "2",
+				"TFE": "3"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		nozzleDiameter: {
+			"id": "nozzleDiameter",
+			"label": "Nozzle Diameter",
+			"XMLTag": "P72220",
+			"type": "DropDown",
+			"includeBlank": true,
+			"options":
+			{
+				"3/16": "3",
+				"1/4": "4",
+				"5/16": "5"
+			},
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		tetherLine: {
+			"id": "tetherLine",
+			"hidden": true,
+			"label": "Tether Line Used",
+			"XMLTag": "P04117",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"checkbox": true,
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		compositeSamplesInCrossSection: {
+			"id": "compositeSamplesInCrossSection",
+			"hidden": true,
+			"label": "Composite Samples in Cross Sectional",
+			"XMLTag": "P04118",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		verticalsInComposite: {
+			"id": "verticalsInComposite",
+			"hidden": true,
+			"label": "Verticals In Composite",
+			"XMLTag": "P04119",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		streamDepth_IET: {
+			"id": "streamDepth_IET",
+			"label": "Stream Depth for Test",
+			"type": "Text",
+			"placeholder": "feet",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		transitRate: {
+			"id": "transitRate",
+			"label": "Transit Rate for Test",
+			"type": "Text",
+			"placeholder": "feet / second",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		streamVelocity_IET: {
+			"id": "streamVelocity_IET",
+			"label": "IET Stream Velocity (ft/s)",
+			"XMLTag": "P72196",
+			"type": "Text",
+			"placeholder": "P72196",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 2
+		},
+
+		sampleVolume_IET: {
+			"id": "sampleVolume_IET",
+			"label": "Sample Volume for Test (mL)",
+			"XMLTag": "P72218",
+			"type": "Text",
+			"placeholder": "P72218",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		duration_IET: {
+			"id": "duration_IET",
+			"label": "Seconds sampler collected water",
+			"XMLTag": "P72217",
+			"type": "Text",
+			"placeholder": "P72217",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 4,
+			"width_lg": 3
+		},
+
+		nozzleMaterial_IET: {
+			"id": "nozzleMaterial_IET",
+			"label": "Nozzle Material",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "nozzleMaterial",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		nozzleDiameter_IET: {
+			"id": "nozzleDiameter_IET",
+			"label": "Nozzle Diameter",
+			"type": "ComputedValue",
+			"placeholder": "Enter value in sampler info panel",
+			"computationString": "nozzleDiameter",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		ratioOfVertical: {
+			"id": "ratioOfVertical",
+			"label": "Ratio of Vertical",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		intakeEfficiency: {
+			"id": "intakeEfficiency",
+			"label": "Intake Efficiency",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Intake Efficiency Test",
+			"width_xs": 3,
+			"width_lg": 3
+		},
+
+		avgRepMeasures: {
+			"id": "avgRepMeasures",
+			"label": "Average Representational Measures of these sets",
+			"type": "Toggle",
+			"tabName": "DataEntry",
+			"layoutGroup": "Average Representational Measures",
+			"checkbox": true,
+			"value": false,
+			"width_xs": 8,
+			"width_lg": 6
+		}
+	},
+
+
+
 
 	QWDATATable: {
 		"id": "QWDATATable",

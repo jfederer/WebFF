@@ -15,6 +15,7 @@ import {
 } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
 import { setAppBarText } from '../Actions/UI';
+import { QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION } from './../Constants/Config';
 
 
 // standardize (library?) the use of "questionsData" string to generalized variable
@@ -46,9 +47,23 @@ class QuestionPage extends React.Component {
 	// 	// this.props.appBarTextCB(nextProps.tabName);
 	// }
 
+	
+
 	render() {
 		const DEBUG = false;
 		const { tabName, currentEvent } = this.props;
+		const { hiddenPanels } = this.props.UI.visibility;
+
+		console.log("Question Page Render:  props:  ", this.props);
+		console.log("Question Page Render:  props.currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
+
+		let questionsValues = currentEvent.questionsValues
+		console.log("QP: init QV: ", questionsValues);
+		if(this.props.parentComponentNames) {
+			questionsValues = questionsValues[this.props.parentComponentNames]; //TODO: make parentComponentNames an array
+		}
+		console.log("QP: parent? QV: ", questionsValues);
+
 
 		let questionsData;   //if questionsData is passed, use that and don't filter on tabName
 		if (this.props.questionsData) {
@@ -57,15 +72,18 @@ class QuestionPage extends React.Component {
 			questionsData = getQuestionsData();
 		}
 
-		const { hiddenPanels } = this.props.UI.visibility;
+		
 		// let tabQuestionData = [];
 		// let layoutGroupNames = [];
 		let questionPanels = [];
-		if (DEBUG) console.log("Question Page Render:  props:  ", this.props);
+		
 		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 
 		if (questionsData) {
+
+			Object.keys(questionsData).filter(key=> typeof key === "object");  // OPTIMIZE: (could likely remove, as items without tabName are filtered out elsewhere)
+
 			let tabQuestionsData;
 			if (this.props.questionsData) { //if questionsData is passed, use that and don't filter on tabName
 				tabQuestionsData = Object.values(this.props.questionsData);
@@ -73,7 +91,7 @@ class QuestionPage extends React.Component {
 				tabQuestionsData = getTabQuestionsData(questionsData, tabName);
 			}
 			
-			// console.log("TAB QUESTION DATA: ", tabQuestionsData);
+			if (DEBUG) console.log("TAB QUESTION DATA: ", tabQuestionsData);
 			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
 
 			if (DEBUG) console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
@@ -82,6 +100,9 @@ class QuestionPage extends React.Component {
 			//OPTIMIZE: filter whitespaces at a higher level
 			//OPTIMIZE:  can we not generate question panels more clearly and efficiently than this.
 			let filteredLayoutGroupNames = layoutGroupNames.filter((groupName) => {
+				if (!groupName) {
+					return false;
+				}
 				let panelName = tabName.replace(/ /g, '') + ":" + groupName.replace(/ /g, '');
 				return !hiddenPanels.includes(panelName);
 			})
@@ -92,7 +113,7 @@ class QuestionPage extends React.Component {
 				questionPanels.push(
 					<div key={tabName + filteredLayoutGroupNames[i] + '_div'}>
 						<QuestionPanel
-							questions={createQuestionComponents(layoutGroupQuestionsData, currentEvent.questionsValues, this.props.alternateChangeHandler)}
+							questions={createQuestionComponents(layoutGroupQuestionsData, questionsValues, this.props.alternateChangeHandler)}
 							panelName={filteredLayoutGroupNames[i]}
 							key={tabName + filteredLayoutGroupNames[i]}
 							grey={i % 2 === 1} />

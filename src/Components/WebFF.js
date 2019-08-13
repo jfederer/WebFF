@@ -96,6 +96,8 @@ class WebFF extends React.Component {
 	
 	//BUG: Does not check for updated data outside localstorage
 
+	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
+
 	//TODO: remove DataEntry question when selecting 'not sampled' non-linearly.
 	//TODO: QWDATA page, time estimate -> optionally overwrite
 	//TODO: QWDATA page, duplicate date for remaining...
@@ -117,7 +119,7 @@ class WebFF extends React.Component {
 	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
 	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
-
+	//TODO: add 'options' argument to createComponents so we can add parentComponentNames (and other items) to it rather than assuming parent of a set is a data entry sheet (which is is, but still)...
 
 
 	constructor(props) {

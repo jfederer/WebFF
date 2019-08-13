@@ -3,16 +3,17 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
+import _ from 'lodash';
 
 import { setAppBarText } from '../../../Actions/UI';
 import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from '@material-ui/core';
 
-import { SET_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER} from '../../../Constants/Config';
 
 import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue, getMethodCategoryFromValue } from '../../../Utils/QuestionUtilities';
-import { getNumberOfSets, getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
+import { getNumberOfSets, getSetListAsArray, getSetListAsObject, getQuestionDataFromID } from '../../../Utils/StoreUtilities';
 
 
 
@@ -32,9 +33,9 @@ class AddSetForm extends React.Component {
 			duplicateFromSet: ""
 		}
 
-		if(getNumberOfSets(this.props.currentSamplingEventID)===0) {
-			this.addSet();
-		}
+		// if(getNumberOfSets(this.props.currentSamplingEventID)===0) {  //FIXME: uncomment this out
+		// 	this.addSet();
+		// }
 
 	}
 
@@ -70,6 +71,8 @@ class AddSetForm extends React.Component {
 	}
 
 	addSet = () => {
+		console.log("Add Set button clicked props: ", this.props);
+
 		const { currentSamplingEventID } = this.props;
 		let newSetName = this.state.newSetName;  //FIXME: underscores not allowed
 		if (!newSetName) {
@@ -126,7 +129,7 @@ class AddSetForm extends React.Component {
 		}
 
 		let newSetQuestion = {
-			"id": SET_INFORMATION_IDENTIFIER + newSetName,
+			"id": DATA_ENTRY_INFORMATION_IDENTIFIER+this.props.sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + newSetName,  //this sets the name of the question in custom questions
 			"sedimentType": sedimentType,  
 			"samplingMethod": samplingMethod, 
 			"label": "Set Information",
@@ -142,9 +145,25 @@ class AddSetForm extends React.Component {
 			"value": newSetValue
 		}
 
+		// let existingDataEntrySheetQD = getQuestionDataFromID(DATA_ENTRY_INFORMATION_IDENTIFIER+this.props.sedimentType);
+		// let DES = existingDataEntrySheetQD;
+		// if(existingDataEntrySheetQD) {
+		// 	DES = _.cloneDeep(existingDataEntrySheetQD)
+		// 	DES[SET_INFORMATION_IDENTIFIER + newSetName]=newSetQuestion;
+		// }
+
+		// console.log('DES :', JSON.stringify(DES));  // Set is part of DES at this point
+
+		// save the sets QuestionsData to custom question area
 		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);
 
-		this.props.SEQuestionValueChange(currentSamplingEventID, SET_INFORMATION_IDENTIFIER + newSetName, newSetValue);
+		// save the VALUES...
+		if(this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(currentSamplingEventID, newSetQuestion.id, newSetValue); 
+		} else {
+			this.props.SEQuestionValueChange(currentSamplingEventID, newSetQuestion.id, newSetValue); 
+		}
+		
 
 		this.setState({
 			newSetName: "",

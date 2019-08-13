@@ -14,7 +14,7 @@ import _ from 'lodash';
 // import TableRow from '@material-ui/core/TableRow';
 // import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import QuestionPage from '../QuestionPage';
-import AddSetForm from '../Pages/DataEntry/AddSetForm'; 
+import AddSetForm from '../Pages/DataEntry/AddSetForm';
 // import Button from '@material-ui/core/Button';
 // import TextField from '@material-ui/core/TextField';
 // import Dialog from '@material-ui/core/Dialog';
@@ -29,7 +29,8 @@ import AddSetForm from '../Pages/DataEntry/AddSetForm';
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
-import { getDataEntrySheetQuestionsData } from '../../Utils/StoreUtilities';
+import { getDataEntrySheetQuestionsData, getQuestionsData } from '../../Utils/StoreUtilities';
+import { addQuestionToEvent } from '../../Actions/Questions';
 import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
@@ -52,24 +53,37 @@ export const getRealQID = (sedimentType, sub_q_id) => {
 class DataEntrySheet extends React.Component {
 	constructor(props) {
 		super(props);
-
+		console.log("DES: CONSTRUCTOR: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
+		console.log("DES: CONSTRUCTOR: this.props.value: ", this.props.value);
 		if (_.isEmpty(this.props.value)) {
-			let initValue = {}; //load value with default table?
+			let initValue = {}; //load value with default?
 			if (this.props.alternateChangeHandler) {
+				console.log("DES init alt");
 				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
 			} else {
+				console.log("DES init stand");
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
 		} else {
 			console.log("Creating Passed Value Data Entry Information Component");
 		}
+
+		//check if custom question has been added, if not, add custom Data Entry question// TODO: ?
+
+		// if (!getQuestionDataFromID(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType)) {
+		// 	let thisDataEntryCustomQuestion = getDataEntrySheetQuestionsData(this.props.sedimentType);
+		// 	thisDataEntryCustomQuestion.id = DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType;
+		// 	this.props.addQuestionToEvent(this.props.currentSamplingEventID, thisDataEntryCustomQuestion);
+		// }
+
 		this.state = {
-			// showDataTable: false
+			show: false
 		}
 	}
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
-
+		console.log("DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		this.setState({ show: !this.state.show });  // triggers new render of component
 		this.doChange(eventID, sub_QID, value);
 	};
 
@@ -90,20 +104,44 @@ class DataEntrySheet extends React.Component {
 
 	render() {
 
-		const dataEntrySheetQuestionsData = getDataEntrySheetQuestionsData();
-		console.log('Data Entry Panel props :', this.props);
+		let QD = getQuestionsData(this.props.currentSamplingEventID);
+
+		// let dataEntrySheetQuestionsData = Object.keys(QD).filter(key => {
+		// 	console.log("key: ", key);
+		// 	return key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType)
+		// 	}
+		// );
+
+		const dataEntrySheetQuestionsData = Object.keys(QD)
+		.filter(key =>  key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType))
+		.reduce((obj, key) => {
+		  obj[key] = QD[key];
+		  return obj;
+		}, {});
+	  
+
+		// const dataEntrySheetQuestionsData = getQuestionDataFromID(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType);
+
+		//Add in applicable custom questions (generally set information questions)
+		// getQuestionsData()
+
+		console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
+		console.log("DES: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
+
+
 
 		const { samplingMethod, sedimentType } = this.props;
-
 
 		return <React.Fragment>
 			<QuestionPage
 				questionsData={dataEntrySheetQuestionsData}
-				tabName={"Data Entry " + this.props.sedimentType}
+				parentComponentNames={[DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType]}
+				tabName={"DataEntry"}
 				alternateChangeHandler={this.DEChangeHandler} />
 			<AddSetForm
 				samplingMethod={samplingMethod}
-				sedimentType={sedimentType} />
+				sedimentType={sedimentType}
+				alternateChangeHandler={this.DEChangeHandler} />
 		</React.Fragment>
 
 	}
@@ -113,13 +151,15 @@ class DataEntrySheet extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
 		// currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		defaultQuestionsData: state.Questions.questionsData,
 	}
 }
 
 const mapDispatchToProps = {
-	SEQuestionValueChange
+	SEQuestionValueChange,
+	addQuestionToEvent
 }
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntrySheet));

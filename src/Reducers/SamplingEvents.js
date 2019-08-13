@@ -1,16 +1,16 @@
 import _ from 'lodash';
 
-import { 
+import {
 	CREATE_NEW_SAMPLING_EVENT,
 	SE_QUESTION_VALUE_CHANGE,
 	ADD_QUESTION_TO_EVENT,
 	DELETE_QUESTION_FROM_EVENT
- } from '../Constants/ActionTypes';
+} from '../Constants/ActionTypes';
 
 
 
 
-const initialState =  { //MOCK //TODO:
+const initialState = { //MOCK //TODO:
 	"695833f2-e483-4c34-a962-d14f79037920": {
 		eventID: "695833f2-e483-4c34-a962-d14f79037920",
 		eventName: "Event1-JoeAndTom",
@@ -51,21 +51,21 @@ const initialState =  { //MOCK //TODO:
 
 
 export function SamplingEvents(state = initialState, action) {
-		let newState = _.cloneDeep(state);
-switch (action.type) {
-	case CREATE_NEW_SAMPLING_EVENT:
-		newState[action.event.eventID]=action.event; 
-		return newState;
-	case SE_QUESTION_VALUE_CHANGE:
-		newState[action.eventID].questionsValues[action.questionID] = action.newValue;
-		return newState;
-	case ADD_QUESTION_TO_EVENT:
-		newState[action.eventID].questionsData[action.question.id] = action.question;
-		return newState;
-	case DELETE_QUESTION_FROM_EVENT:
-		delete newState[action.eventID].questionsData[action.QID];
-		return newState;
-	default:
-		return state;
-}
+	let newState = _.cloneDeep(state);
+	switch (action.type) {
+		case CREATE_NEW_SAMPLING_EVENT:
+			newState[action.event.eventID] = action.event;
+			return newState;
+		case SE_QUESTION_VALUE_CHANGE:
+			newState[action.eventID].questionsValues[action.questionID] = action.newValue;
+			return newState;
+		case ADD_QUESTION_TO_EVENT:
+			newState[action.eventID].questionsData[action.question.id] = action.question;
+			return newState;
+		case DELETE_QUESTION_FROM_EVENT:
+			delete newState[action.eventID].questionsData[action.QID];
+			return newState;
+		default:
+			return state;
+	}
 }

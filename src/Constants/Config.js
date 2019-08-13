@@ -5,6 +5,7 @@ export const USER_DB_NODES = ['stations', 'customQuestions'];   //TODO: create a
 export const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent::";
 export const DATA_ENTRY_INFORMATION_IDENTIFIER = "DataEntry::";
 export const SET_INFORMATION_IDENTIFIER = "SetInfo::";
+export const IDENTIFIER_SPLITTER = "&&";
 
 export const QUESTIONS_DATA_OBJECT_TYPE = "questionsDataObjectType";
 export const QUESTIONS_VALUES_OBJECT_TYPE = "questionsValuesObjectType";
