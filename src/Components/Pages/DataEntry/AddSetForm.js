@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
@@ -8,7 +9,7 @@ import _ from 'lodash';
 import { setAppBarText } from '../../../Actions/UI';
 import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from '@material-ui/core';
 
-import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER} from '../../../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DISALLOWED_CHARACTERS_IN_SETNAME_REGEX } from '../../../Constants/Config';
 
 import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
@@ -19,11 +20,8 @@ import { getNumberOfSets, getSetListAsArray, getSetListAsObject, getQuestionData
 
 class AddSetForm extends React.Component {
 
-
 	constructor(props) {
 		super(props);
-
-
 
 		this.state = {
 			newSetName: "",
@@ -33,36 +31,46 @@ class AddSetForm extends React.Component {
 			duplicateFromSet: ""
 		}
 
-		// if(getNumberOfSets(this.props.currentSamplingEventID)===0) {  //FIXME: uncomment this out
-		// 	this.addSet();
-		// }
-
 	}
 
+	fullSetName = (setName) => {
+		return DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName;
+	}
+
+	/**
+	 * is setName unique within all the sets of this given sediment type
+	 */
+	isSetNameUnique = (setName) => {
+		
+
+		let filteredSetList = getSetListAsArray(this.props.currentSamplingEventID, this.props.sedimentType).filter((existingSetName) => {
+			return existingSetName.toUpperCase() === this.fullSetName(setName).toUpperCase();
+		})
+
+		return filteredSetList.length === 0;
+	}
 
 	handleAddSetNameChange = (e) => {
 		const { currentSamplingEventID } = this.props;
 
-		// underscores are not allowed due to it being a delinator
-		if (e.target.value.includes('_')) {
+		// various characters are not allowed due to being special delinators
+		if (e.target.value.match(DISALLOWED_CHARACTERS_IN_SETNAME_REGEX)) {
 			return;
 		}
 
-		// fitler out duplicate setnames and disable add set button if it's a duplicate
-		if (getSetListAsArray(currentSamplingEventID).filter((existingSetName) => {
-			return existingSetName.toUpperCase() === SET_INFORMATION_IDENTIFIER.toUpperCase() + e.target.value.toUpperCase()
-		}).length > 0) {
+		// filter out duplicate setnames and disable add set button if it's a duplicate
+		if (this.isSetNameUnique(e.target.value)) {
+			this.setState({
+				addNewSetButtonDisabled: false,
+				newSetName: e.target.value
+			})
+		} else {
 			this.setState({
 				addNewSetButtonDisabled: true,
 				addNewSetDisabledReason: "Set name must be unique",
 				newSetName: e.target.value
 			})
 			return;
-		} else {
-			this.setState({
-				addNewSetButtonDisabled: false,
-				newSetName: e.target.value
-			})
 		}
 	}
 
@@ -71,16 +79,28 @@ class AddSetForm extends React.Component {
 	}
 
 	addSet = () => {
-		console.log("Add Set button clicked props: ", this.props);
+		const { currentSamplingEventID, sedimentType, samplingMethod } = this.props;
 
-		const { currentSamplingEventID } = this.props;
-		let newSetName = this.state.newSetName;  //FIXME: underscores not allowed
+		if (!sedimentType || !samplingMethod) {   //TODO: move to proptypes check
+			alert("Must have both Sediment Type and Sampling Method filled out on Field Form sheet before you can add a set");
+			return;
+		}
+
+		let newSetName = this.state.newSetName;
 		if (!newSetName) {
-			newSetName = String.fromCharCode(65 + getNumberOfSets(currentSamplingEventID))
+			let tries = 0;
+			do {  // rare cases exist where the auto-generated set name may already be taken, in such case, generate the next until we find a unique one
+				newSetName = String.fromCharCode(65 + tries + getNumberOfSets(currentSamplingEventID, sedimentType));
+				tries++;
+			} while (!this.isSetNameUnique(newSetName))
+		}
+
+		if (!this.isSetNameUnique(newSetName)) {
+			alert("Set name (" + newSetName + ") must be unique within sediment type");
+			return;
 		}
 
 		let newSetValue = {};
-		
 
 		if (this.state.copyStationing) {
 			// duplicating stationing from state.duplicateFromSet set
@@ -119,19 +139,12 @@ class AddSetForm extends React.Component {
 			//newSetValue['samplesTable_EDI'] = //TODO: pull from FF
 		}
 
-		let sedimentType = this.props.sedimentType; //getQuestionValue(currentSamplingEventID, "sedimentType");
-		let samplingMethod = this.props.samplingMethod;//getQuestionValue(currentSamplingEventID, "samplingMethod_" + sedimentType); 
-		// console.log("SedType: ", sedimentType);
-		// console.log("SampMethod: ", samplingMethod); 
-		if (!sedimentType || !samplingMethod) {
-			alert("Must have both Sediment Type and Sampling Method filled out on Field Form sheet before you can add a set");
-			return;
-		}
+
 
 		let newSetQuestion = {
-			"id": DATA_ENTRY_INFORMATION_IDENTIFIER+this.props.sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + newSetName,  //this sets the name of the question in custom questions
-			"sedimentType": sedimentType,  
-			"samplingMethod": samplingMethod, 
+			"id": this.fullSetName(newSetName),  //this sets the name of the question in custom questions
+			"sedimentType": sedimentType,
+			"samplingMethod": samplingMethod,
 			"label": "Set Information",
 			"setName": newSetName,
 			"type": "SetInformation",
@@ -145,29 +158,19 @@ class AddSetForm extends React.Component {
 			"value": newSetValue
 		}
 
-		// let existingDataEntrySheetQD = getQuestionDataFromID(DATA_ENTRY_INFORMATION_IDENTIFIER+this.props.sedimentType);
-		// let DES = existingDataEntrySheetQD;
-		// if(existingDataEntrySheetQD) {
-		// 	DES = _.cloneDeep(existingDataEntrySheetQD)
-		// 	DES[SET_INFORMATION_IDENTIFIER + newSetName]=newSetQuestion;
-		// }
-
-		// console.log('DES :', JSON.stringify(DES));  // Set is part of DES at this point
-
 		// save the sets QuestionsData to custom question area
 		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);
 
 		// save the VALUES...
-		if(this.props.alternateChangeHandler) {
-			this.props.alternateChangeHandler(currentSamplingEventID, newSetQuestion.id, newSetValue); 
+		if (this.props.alternateChangeHandler) {
+			this.props.alternateChangeHandler(currentSamplingEventID, newSetQuestion.id, newSetValue);
 		} else {
-			this.props.SEQuestionValueChange(currentSamplingEventID, newSetQuestion.id, newSetValue); 
+			this.props.SEQuestionValueChange(currentSamplingEventID, newSetQuestion.id, newSetValue);
 		}
-		
 
 		this.setState({
 			newSetName: "",
-			duplicateFromSet: this.state.duplicateFromSet ? this.state.duplicateFromSet : SET_INFORMATION_IDENTIFIER + newSetName
+			duplicateFromSet: this.state.duplicateFromSet ? this.state.duplicateFromSet : this.fullSetName(newSetName)
 		})
 	}
 
@@ -182,7 +185,7 @@ class AddSetForm extends React.Component {
 			return <Redirect to='/' />
 		}
 
-		let setList = getSetListAsObject(currentSamplingEventID);
+		let setList = getSetListAsObject(currentSamplingEventID, this.props.sedimentType);
 
 		return (<React.Fragment>
 			<Paper> {/*Add Set Form  FUTURE: split out as separate component?*/}

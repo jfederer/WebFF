@@ -19,6 +19,9 @@ export const EDI_METHOD_CATEGORY = "EDI";
 export const EWI_METHOD_CATEGORY = "EWI";
 export const OTHER_METHOD_CATEGORY = "OTHER";
 
+export const DISALLOWED_CHARACTERS_IN_SETNAME_REGEX = /[^a-zA-Z0-9 -]/g;
+
+
 export const PROGRAM_VERSION = "0.6.0";
 
 export const defaultHiddenTabs = [
@@ -38,6 +41,12 @@ export const METHOD_QIDS = {
 export const defaultHiddenPanels = [
     "DataEntry:IntakeEfficiencyTest"
 ];
+
+export const SEDIMENT_TYPES = {
+	"Suspended":"Suspended",
+	"Bedload":"Bedload",
+	"Bottom":"Bottom Material"
+}
 
 
 export const defaultPCodesToShow = ["P00010", "P00020", "P00061", "P00065", "P00095", "P00300", "P00400"];

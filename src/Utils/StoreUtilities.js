@@ -1,13 +1,15 @@
 import store from '../Store';
 import _ from 'lodash';
 import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
+import { getQuestionValue } from '../Utils/QuestionUtilities';
 
-
-import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES} from '../Constants/Config';
 // import { eventNames } from 'cluster';
 
-export function getNumberOfSets(eventID) {
-	return getSetListAsArray(eventID).length;
+export function getNumberOfSets(eventID, sedType) {
+	checkForValidSedimentType(sedType, "getNumberOfSets");
+
+	return getSetListAsArray(eventID, sedType).length;
 }
 
 export function getNumberOfSamplesInSet(eventID, setID) {
@@ -22,7 +24,9 @@ export function getNumberOfSamplesInSet(eventID, setID) {
 	}
 }
 
-export function getSetListAsArray(eventID) {
+export function getSetListAsArray(eventID, sedType) {
+	checkForValidSedimentType(sedType, "getSetListAsArray");
+	
 	let event = getEventFromID(eventID);
 
 	if (!event) {
@@ -30,18 +34,27 @@ export function getSetListAsArray(eventID) {
 	}
 
 	let setListArr = [];
-	setListArr = Object.keys(event.questionsValues).filter((key) => { //TODO: change these to getQuestionValues
-		return key.startsWith(SET_INFORMATION_IDENTIFIER);
+	let DEQV = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType);
+
+	setListArr = Object.keys(DEQV).filter((key) => { //TODO: change these to getQuestionValues
+		return key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER+sedType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER);
 	})
 	return setListArr;
 }
 
-export function getSetListAsObject(eventID) {
+export function getSetListAsObject(eventID, sedType) {
+	checkForValidSedimentType(sedType, "getSetListAsObject");
 	let setListObj = {};
-	getSetListAsArray(eventID).forEach(qid => {
+	getSetListAsArray(eventID, sedType).forEach(qid => {
 		setListObj[qid.split(SET_INFORMATION_IDENTIFIER)[1]] = qid;
 	});
 	return setListObj;
+}
+
+function checkForValidSedimentType(sedType, funcName) {
+	if(!Object.keys(SEDIMENT_TYPES).includes(sedType)) {
+		throw new Error("Invalid sediment type (" + sedType + ") provided to " + funcName);
+	}
 }
 
 export function getEventFromID(eventID) {

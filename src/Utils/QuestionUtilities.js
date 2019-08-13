@@ -11,7 +11,7 @@ import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
 
-	console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, ")");
+	// console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, ")");
 	// creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	// returns array of question components
@@ -83,7 +83,7 @@ function recursiveGetValue(haystack, haystackType, sub_QIDs) {
  */
 export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	let DEBUG = false;
-	console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
+	// console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	if (DEBUG) console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	//TODO: look for dialog questions, system questions, handle tables
 
