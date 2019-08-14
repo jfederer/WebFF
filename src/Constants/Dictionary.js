@@ -31,8 +31,8 @@ export const NOT_SAMPLED = "Not Sampled";
 
 export const ADD_STATION = "Add Station";
 
-export const SUSPENDED_METHOD_TEXT = "Suspended";
-export const BEDLOAD_METHOD_TEXT = "Bedload";
-export const BOTTOM_MATERIAL_METHOD_TEXT = 'Bottom Material';
+export const SUSPENDED_TEXT = "Suspended";
+export const BEDLOAD_TEXT = "Bedload";
+export const BOTTOM_MATERIAL_TEXT = 'Bottom';
 
 export const SEDLOGIN_SUCCESS_MESSAGE = "Imported 1 event into SedLOGIN project";

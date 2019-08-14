@@ -1,4 +1,4 @@
-import { SUSPENDED_METHOD_TEXT, BEDLOAD_METHOD_TEXT, BOTTOM_MATERIAL_METHOD_TEXT } from './Dictionary';
+import { SUSPENDED_TEXT, BEDLOAD_TEXT, BOTTOM_MATERIAL_TEXT } from './Dictionary';
 
 export const USER_DB_NODES = ['stations', 'customQuestions'];   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers"
 
@@ -33,19 +33,19 @@ export const defaultHiddenTabs = [
 ];
 
 export const METHOD_QIDS = {
-	'samplingMethod_Suspended': SUSPENDED_METHOD_TEXT,
-	'samplingMethod_Bedload': BEDLOAD_METHOD_TEXT,
-	'samplingMethod_Bottom': BOTTOM_MATERIAL_METHOD_TEXT
+	[SUSPENDED_TEXT] : 'samplingMethod_Suspended',
+	[BEDLOAD_TEXT] : 'samplingMethod_Bedload',
+	[BOTTOM_MATERIAL_TEXT] : 'samplingMethod_Bottom'
 }
 
 export const defaultHiddenPanels = [
     "DataEntry:IntakeEfficiencyTest"
 ];
 
-export const SEDIMENT_TYPES = {
-	"Suspended":"Suspended",
-	"Bedload":"Bedload",
-	"Bottom":"Bottom Material"
+export const SEDIMENT_TYPES = {   //key = Internal type for equality, etc, value = any sort of display
+	[SUSPENDED_TEXT]:"Suspended",
+	[BEDLOAD_TEXT]:"Bedload",
+	[BOTTOM_MATERIAL_TEXT]:"Bottom Material"
 }
 
 

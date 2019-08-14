@@ -105,14 +105,11 @@ class DataEntrySheet extends React.Component {
 
 
 	render() {
+		const { samplingMethod, sedimentType } = this.props;
+
+		if(true)console.log('DES: Render: this.props :', this.props);
 
 		let QD = getQuestionsData(this.props.currentSamplingEventID);
-
-		// let dataEntrySheetQuestionsData = Object.keys(QD).filter(key => {
-		// 	console.log("key: ", key);
-		// 	return key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType)
-		// 	}
-		// );
 
 		const dataEntrySheetQuestionsData = Object.keys(QD)
 		.filter(key =>  key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType))
@@ -121,18 +118,7 @@ class DataEntrySheet extends React.Component {
 		  return obj;
 		}, {});
 	  
-
-		// const dataEntrySheetQuestionsData = getQuestionDataFromID(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType);
-
-		//Add in applicable custom questions (generally set information questions)
-		// getQuestionsData()
-
 		if(DEBUG)console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
-		if(DEBUG)console.log("DES: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
-
-
-
-		const { samplingMethod, sedimentType } = this.props;
 
 		return <React.Fragment>
 			<QuestionPage
@@ -154,7 +140,6 @@ const mapStateToProps = function (state) {
 	return {
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
-		// currentEventQuestionsValues: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsValues,
 		defaultQuestionsData: state.Questions.questionsData,
 	}
 }

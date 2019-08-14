@@ -63,7 +63,6 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-	//TODO: all the getSetList refactoring complete
 	//TODO: get set tables up
 	//TODO: QWDATA and PArameters
 	

@@ -16,8 +16,9 @@ import AddSetForm from './AddSetForm';
 import DataEntrySheet from '../../Questions/DataEntrySheet';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { NOT_SAMPLED } from '../../../Constants/Dictionary';
-import { METHOD_QIDS, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
+import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
 // import {  } from '../../Constants/Config';
+import { getQuestionDataFromID } from './../../../Utils/StoreUtilities';
 
 
 function TabPanel(props) {
@@ -52,7 +53,7 @@ class DataEntry extends React.Component {
 	}
 
 	render() {
-		const { currentEvent } = this.props;
+		const { currentEvent, currentEventID } = this.props;
 
 		if (!currentEvent) {
 			console.log("No current event, redirecting to dashboard");
@@ -63,23 +64,31 @@ class DataEntry extends React.Component {
 		let tabsPanelList = {};
 		let singleDataEntryPanel = null;
 
-		Object.keys(METHOD_QIDS).forEach((methodQID, index) => {
-			if (getQuestionValue(this.props.currentEventID, methodQID) !== NOT_SAMPLED) {
+		console.log('METHOD_QIDS :', METHOD_QIDS);
+
+		Object.entries(METHOD_QIDS).forEach(([sedType, methodQID], index) => {
+			console.log('sedType :', sedType);
+			console.log('methodQID :', methodQID);
+			console.log('index :', index);
+
+
+
+			if (getQuestionValue(currentEventID, methodQID) !== NOT_SAMPLED) {
+
+				let DES = <DataEntrySheet
+					id={DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]}
+					samplingMethod={getQuestionValue(currentEventID, methodQID)}
+					sedimentType={sedType}
+					value={getQuestionValue(currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1])} />
+
 				if (!singleDataEntryPanel) {
-					singleDataEntryPanel = <DataEntrySheet
-						samplingMethod={METHOD_QIDS[methodQID]}
-						id={DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]}
-						sedimentType={methodQID.split('_')[1]} 
-						value={getQuestionValue(this.props.currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1])} />
+					singleDataEntryPanel = DES;
 				}
-				tabsList[methodQID] = <Tab key={methodQID} label={METHOD_QIDS[methodQID]} />;
-				tabsPanelList[methodQID] =
-					<TabPanel value={this.state.tabValue} key={methodQID} index={Object.keys(tabsPanelList).length}>
-						<DataEntrySheet
-							id={DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]}
-							samplingMethod={METHOD_QIDS[methodQID]}
-							sedimentType={methodQID.split('_')[1]} 
-							value={getQuestionValue(this.props.currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1])} />
+
+				tabsList[sedType] = <Tab key={DATA_ENTRY_INFORMATION_IDENTIFIER + sedType} label={SEDIMENT_TYPES[sedType]} />;
+				tabsPanelList[sedType] =
+					<TabPanel value={this.state.tabValue} key={DATA_ENTRY_INFORMATION_IDENTIFIER + sedType} index={Object.keys(tabsPanelList).length}>
+						{DES}
 					</TabPanel>
 			}
 		})
