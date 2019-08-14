@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -27,7 +27,7 @@ import AddSetForm from '../Pages/DataEntry/AddSetForm';
 // import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
-import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
 import { getDataEntrySheetQuestionsData, getQuestionsData } from '../../Utils/StoreUtilities';
 import { addQuestionToEvent } from '../../Actions/Questions';
@@ -45,38 +45,26 @@ const styles = theme => ({
 
 });
 
-
-export const getRealQID = (sedimentType, sub_q_id) => {
-	return DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ":" + sub_q_id;
-}
-
 const DEBUG = false;
 
 class DataEntrySheet extends React.Component {
 	constructor(props) {
 		super(props);
-		if(DEBUG)console.log("DES: CONSTRUCTOR: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
-		if(DEBUG)console.log("DES: CONSTRUCTOR: this.props.value: ", this.props.value);
-		if (_.isEmpty(this.props.value)) {
+		const { id, sedimentType, currentSamplingEventID, value } = this.props;
+
+		if (DEBUG) console.log("DES: CONSTRUCTOR: this.props.value: ", this.props.value);
+		if (_.isEmpty(value)) {
 			let initValue = {}; //load value with default?
 			if (this.props.alternateChangeHandler) {
-				if(DEBUG)console.log("DES init alt");
-				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
+				if (DEBUG) console.log("DES init alt");
+				this.props.alternateChangeHandler(currentSamplingEventID, id, initValue);
 			} else {
-				if(DEBUG)console.log("DES init stand");
-				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
+				if (DEBUG) console.log("DES init stand");
+				this.props.SEQuestionValueChange(currentSamplingEventID, id, initValue);
 			}
 		} else {
-			if(DEBUG)console.log("Creating Passed Value Data Entry Information Component");
+			if (DEBUG) console.log("Creating Passed Value Data Entry Information Component");
 		}
-
-		//check if custom question has been added, if not, add custom Data Entry question// TODO: ?
-
-		// if (!getQuestionDataFromID(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType)) {
-		// 	let thisDataEntryCustomQuestion = getDataEntrySheetQuestionsData(this.props.sedimentType);
-		// 	thisDataEntryCustomQuestion.id = DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType;
-		// 	this.props.addQuestionToEvent(this.props.currentSamplingEventID, thisDataEntryCustomQuestion);
-		// }
 
 		this.state = {
 			show: false
@@ -84,8 +72,8 @@ class DataEntrySheet extends React.Component {
 	}
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
-		if(DEBUG)console.log("DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
-		this.setState({ show: !this.state.show });  // triggers new render of component
+		if (DEBUG) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		this.setState({ show: !this.state.show });  // triggers new render of component  //FIXME: not sure why this is needed
 		this.doChange(eventID, sub_QID, value);
 	};
 
@@ -93,43 +81,65 @@ class DataEntrySheet extends React.Component {
 	 * @description doChange exists as separate function so the 'save' and the 'special questions' can be handled more easily. If the 'save' is done in the wrong order, some of the additional changes might not propagate appropriately. DRY
 	 */
 	doChange = (eventID, sub_QID, value) => {
-		let newValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType);
+		const { id, sedimentType } = this.props;
+
+		let newValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType);
 		newValue[sub_QID] = _.cloneDeep(value);
 
 		if (this.props.alternateChangeHandler) {
-			this.props.alternateChangeHandler(eventID, this.props.id, newValue);
+			this.props.alternateChangeHandler(eventID, id, newValue);
 		} else {
-			this.props.SEQuestionValueChange(eventID, this.props.id, newValue);
+			this.props.SEQuestionValueChange(eventID, id, newValue);
 		}
 	};
 
 
 	render() {
-		const { samplingMethod, sedimentType } = this.props;
+		const { samplingMethod, sedimentType, currentSamplingEventID } = this.props;
 
-		if(true)console.log('DES: Render: this.props :', this.props);
+		if (DEBUG) console.log('DES: Render: this.props :', this.props);
 
-		let QD = getQuestionsData(this.props.currentSamplingEventID);
+		let QD = getQuestionsData(currentSamplingEventID);
+
+		if (DEBUG) console.log('DES: all QD :', QD);
 
 		const dataEntrySheetQuestionsData = Object.keys(QD)
-		.filter(key =>  key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType))
-		.reduce((obj, key) => {
-		  obj[key] = QD[key];
-		  return obj;
-		}, {});
-	  
-		if(DEBUG)console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
+			.filter(key => key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType))
+			.reduce((obj, key) => {
+				obj[key] = QD[key];
+				return obj;
+			}, {});
 
+		if (DEBUG) console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
+
+		// rip open the DES questionsData object so we match expected input for QuestionPage
+		Object.keys(dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType]).forEach(sub_QID=> {
+			dataEntrySheetQuestionsData[sub_QID]=dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType][sub_QID];
+		})
+
+		//TODO:  Kludge until we get "order priority" into questions data.   By default, Object.keys returns in the order the items were added ... so this keeps 'sets' at the bottom of the questoinPage.
+		Object.entries(dataEntrySheetQuestionsData).forEach(([key,value]) => {
+			if(key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER)) {
+				let tempVal = value;
+				delete dataEntrySheetQuestionsData[key];
+				dataEntrySheetQuestionsData[key]=tempVal;
+			} 
+		});
+		
 		return <React.Fragment>
 			<QuestionPage
 				questionsData={dataEntrySheetQuestionsData}
-				parentComponentNames={[DATA_ENTRY_INFORMATION_IDENTIFIER + this.props.sedimentType]}
+				parentComponentNames={[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType]}
 				tabName={"DataEntry"}
 				alternateChangeHandler={this.DEChangeHandler} />
 			<AddSetForm
 				samplingMethod={samplingMethod}
 				sedimentType={sedimentType}
 				alternateChangeHandler={this.DEChangeHandler} />
+			<button label="CLICKER!" onClick={() => {
+				alert("Hi");
+			}
+			}	/>
 		</React.Fragment>
 
 	}
@@ -140,7 +150,7 @@ const mapStateToProps = function (state) {
 	return {
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
-		defaultQuestionsData: state.Questions.questionsData,
+		// defaultQuestionsData: state.Questions.questionsData,
 	}
 }
 
@@ -148,6 +158,11 @@ const mapDispatchToProps = {
 	SEQuestionValueChange,
 	addQuestionToEvent
 }
+
+DataEntrySheet.propTypes = {
+	sedimentType: PropTypes.string.isRequired,
+	samplingMethod: PropTypes.string.isRequired
+};
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntrySheet));
 

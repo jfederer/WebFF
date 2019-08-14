@@ -55,7 +55,7 @@ class QuestionPage extends React.Component {
 		const { hiddenPanels } = this.props.UI.visibility;
 
 		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
-		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
+		// if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 		let questionsValues = currentEvent.questionsValues
 		if (DEBUG) console.log("Question Page: Render: init QV: ", questionsValues);
@@ -77,24 +77,25 @@ class QuestionPage extends React.Component {
 		// let layoutGroupNames = [];
 		let questionPanels = [];
 		
+		if (DEBUG) console.log("Question Page: Render: Page all Questions Data: ", questionsData);
 		
-
-
 		if (questionsData) {
 
 			Object.keys(questionsData).filter(key=> typeof key === "object");  // OPTIMIZE: (could likely remove, as items without tabName are filtered out elsewhere)
 
 			let tabQuestionsData;
 			if (this.props.questionsData) { //if questionsData is passed, use that and don't filter on tabName
+			if (DEBUG) console.log("Question Page: Render: QD was passed, not filtering on TabName");
 				tabQuestionsData = Object.values(this.props.questionsData);
 			} else {
+				if (DEBUG) console.log("Question Page: Render: filtering on ", tabName);
 				tabQuestionsData = getTabQuestionsData(questionsData, tabName);
 			}
 			
-			if (DEBUG) console.log("Question Page: Render: TAB QUESTION DATA: ", tabQuestionsData);
-			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
+			if (DEBUG) console.log("Question Page: Render: Post Tab Filtering (all Q's that belong on tab): ", tabQuestionsData);
 
-			if (DEBUG) console.log("Question Page: Render: RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
+			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
+			if (DEBUG) console.log("Question Page: Render: RAW LAYOUT GROUP NAMES (all names of layout groups): ", layoutGroupNames);
 
 
 			//OPTIMIZE: filter whitespaces at a higher level

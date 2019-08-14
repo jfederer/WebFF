@@ -63,7 +63,12 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-	//TODO: get set tables up
+	//TODO: DataEntrySheet
+		//TODO: adding second set brings up avg rep measures...
+		//TODO: selecting certain sampler types brings up IET
+		//TODO: tables appear when # samples entered
+
+
 	//TODO: QWDATA and PArameters
 	
 	//TODO: duplicate stationing from set to set
@@ -101,7 +106,7 @@ class WebFF extends React.Component {
 	//BUG: Does not check for updated data outside localstorage
 
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
-
+//TODO: set orders in QD
 	//TODO: remove DataEntry question when selecting 'not sampled' non-linearly.
 	//TODO: QWDATA page, time estimate -> optionally overwrite
 	//TODO: QWDATA page, duplicate date for remaining...
