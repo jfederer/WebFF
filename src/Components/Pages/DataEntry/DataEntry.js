@@ -11,14 +11,10 @@ import Box from '@material-ui/core/Box';
 
 
 import { setAppBarText } from '../../../Actions/UI';
-import QuestionPage from '../../QuestionPage';
-import AddSetForm from './AddSetForm';
 import DataEntrySheet from '../../Questions/DataEntrySheet';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { NOT_SAMPLED } from '../../../Constants/Dictionary';
 import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
-// import {  } from '../../Constants/Config';
-import { getQuestionDataFromID } from './../../../Utils/StoreUtilities';
 
 
 function TabPanel(props) {
@@ -64,14 +60,7 @@ class DataEntry extends React.Component {
 		let tabsPanelList = {};
 		let singleDataEntryPanel = null;
 
-		console.log('METHOD_QIDS :', METHOD_QIDS);
-
 		Object.entries(METHOD_QIDS).forEach(([sedType, methodQID], index) => {
-			console.log('sedType :', sedType);
-			console.log('methodQID :', methodQID);
-			console.log('index :', index);
-
-
 
 			if (getQuestionValue(currentEventID, methodQID) !== NOT_SAMPLED) {
 
