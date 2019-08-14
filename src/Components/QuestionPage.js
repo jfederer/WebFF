@@ -54,15 +54,15 @@ class QuestionPage extends React.Component {
 		const { tabName, currentEvent } = this.props;
 		const { hiddenPanels } = this.props.UI.visibility;
 
-		console.log("Question Page Render:  props:  ", this.props);
-		console.log("Question Page Render:  props.currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
+		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
+		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 		let questionsValues = currentEvent.questionsValues
-		console.log("QP: init QV: ", questionsValues);
+		if (DEBUG) console.log("Question Page: Render: init QV: ", questionsValues);
 		if(this.props.parentComponentNames) {
 			questionsValues = questionsValues[this.props.parentComponentNames]; //TODO: make parentComponentNames an array
 		}
-		console.log("QP: parent? QV: ", questionsValues);
+		if (DEBUG) console.log("Question Page: Render: parent? QV: ", questionsValues);
 
 
 		let questionsData;   //if questionsData is passed, use that and don't filter on tabName
@@ -77,7 +77,7 @@ class QuestionPage extends React.Component {
 		// let layoutGroupNames = [];
 		let questionPanels = [];
 		
-		if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
+		
 
 
 		if (questionsData) {
@@ -91,10 +91,10 @@ class QuestionPage extends React.Component {
 				tabQuestionsData = getTabQuestionsData(questionsData, tabName);
 			}
 			
-			if (DEBUG) console.log("TAB QUESTION DATA: ", tabQuestionsData);
+			if (DEBUG) console.log("Question Page: Render: TAB QUESTION DATA: ", tabQuestionsData);
 			let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
 
-			if (DEBUG) console.log("RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
+			if (DEBUG) console.log("Question Page: Render: RAW LAYOUT GROUP NAMES: ", layoutGroupNames);
 
 
 			//OPTIMIZE: filter whitespaces at a higher level

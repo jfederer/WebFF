@@ -169,9 +169,9 @@ export const getMethodCategoryFromValue = (methodValue) => {
  * @param {string} eventID eventID to look in (does not check if loaded, nor does it error nicely)
  * @return {Array} Array of strings that describes each set/sample row in the event
  */
-export const getDescriptiveColumnForTable = (eventID) => {
+export const getDescriptiveColumnForTable = (eventID, sedType) => {
 	let sampleEventLocations = [];
-	let setList = getSetListAsArray(eventID);
+	let setList = getSetListAsArray(eventID, sedType);
 
 	// let samplingMethod
 	// let setType = getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod")); //EDI, EWI, or OTHER
@@ -282,6 +282,7 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 		}
 		catch (e) {
 			if (e instanceof TypeError) {
+				if(!key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER))
 				console.warn("tabName did not exist for questionsData[", key, "]: ", questionsData[key]);
 			}
 

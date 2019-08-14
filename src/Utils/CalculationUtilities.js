@@ -74,14 +74,14 @@ export const insertEstimatedTime = (eventID, value) => {
 }
 
 
-export const getEstimatedTimeColumn = (eventID) => {
+export const getEstimatedTimeColumn = (eventID, sedType) => {
 	let descColumn = getDescriptiveColumnForTable(eventID);
 	let estimatedTimeColumn = new Array(descColumn.length).fill("");
-	let setList = getSetListAsArray(eventID);
+	let setList = getSetListAsArray(eventID, sedType);
 
 	let totalNumberOfSamplesInPreviousSets = 0;
 	setList.forEach((setName) => {
-		let numberOfSamplesInSet = getNumberOfSamplesInSet(eventID, setName);
+		let numberOfSamplesInSet = getNumberOfSamplesInSet(eventID, sedType, setName);
 		let startTime = getQuestionValue(eventID, setName, "startTime");
 		let endTime = getQuestionValue(eventID, setName, "endTime");
 		let ai = !getQuestionValue(eventID, setName, "samplesComposited");

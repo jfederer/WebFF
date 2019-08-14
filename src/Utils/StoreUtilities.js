@@ -12,7 +12,7 @@ export function getNumberOfSets(eventID, sedType) {
 	return getSetListAsArray(eventID, sedType).length;
 }
 
-export function getNumberOfSamplesInSet(eventID, setID) {
+export function getNumberOfSamplesInSet(eventID, sedType, setID) {
 	let event = getEventFromID(eventID);
 	if (!event) {
 		throw new Error("eventID (", eventID, ") failed to return a valid event in getNumberOfSamplesInSet");

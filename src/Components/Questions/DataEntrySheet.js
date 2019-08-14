@@ -50,22 +50,24 @@ export const getRealQID = (sedimentType, sub_q_id) => {
 	return DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ":" + sub_q_id;
 }
 
+const DEBUG = false;
+
 class DataEntrySheet extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log("DES: CONSTRUCTOR: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
-		console.log("DES: CONSTRUCTOR: this.props.value: ", this.props.value);
+		if(DEBUG)console.log("DES: CONSTRUCTOR: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
+		if(DEBUG)console.log("DES: CONSTRUCTOR: this.props.value: ", this.props.value);
 		if (_.isEmpty(this.props.value)) {
 			let initValue = {}; //load value with default?
 			if (this.props.alternateChangeHandler) {
-				console.log("DES init alt");
+				if(DEBUG)console.log("DES init alt");
 				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
 			} else {
-				console.log("DES init stand");
+				if(DEBUG)console.log("DES init stand");
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
 		} else {
-			console.log("Creating Passed Value Data Entry Information Component");
+			if(DEBUG)console.log("Creating Passed Value Data Entry Information Component");
 		}
 
 		//check if custom question has been added, if not, add custom Data Entry question// TODO: ?
@@ -82,7 +84,7 @@ class DataEntrySheet extends React.Component {
 	}
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
-		console.log("DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		if(DEBUG)console.log("DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
 		this.setState({ show: !this.state.show });  // triggers new render of component
 		this.doChange(eventID, sub_QID, value);
 	};
@@ -125,8 +127,8 @@ class DataEntrySheet extends React.Component {
 		//Add in applicable custom questions (generally set information questions)
 		// getQuestionsData()
 
-		console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
-		console.log("DES: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
+		if(DEBUG)console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
+		if(DEBUG)console.log("DES: currentEvent.questionsValues.DataEntry::Suspended:  ", JSON.stringify(this.props.currentEvent.questionsValues["DataEntry::Suspended"]));
 
 
 

@@ -118,7 +118,7 @@ const buildParamObj = (pCode, value) => {
 
 // get total number of samples before this one to know what row we are looking at in QWDATA table
 const getQWDATARowNum = (eventID, setName, sampNum) => {  //note, this is also the parameters table row num
-	let setList = getSetListAsArray(eventID);  // FIXME: will this always return the right order?
+	let setList = getSetListAsArray(eventID);  // FIXME: 1) Need to add sedType 2)will this always return the right order?
 	let totalNumberOfSamplesInPreviousSets = 0;
 	for (let i = 0; i < setList.length; i++) {
 		if (setList[i] === setName) {
@@ -329,7 +329,7 @@ const buildSampleEventtObj = (eventID) => {
 		}
 	}
 
-	let setNamesList = getSetListAsArray(eventID);
+	let setNamesList = getSetListAsArray(eventID);  //FIXME: need to add sedType
 
 	setNamesList.forEach((setName) => {
 		SEObj.Event[setName] = buildSetObj(eventID, setName);
