@@ -13,7 +13,7 @@ import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFI
 
 import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
-import { getQuestionValue, getMethodCategoryFromValue } from '../../../Utils/QuestionUtilities';
+import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { getNumberOfSets, getSetListAsArray, getSetListAsObject, getQuestionDataFromID } from '../../../Utils/StoreUtilities';
 
 
@@ -41,7 +41,7 @@ class AddSetForm extends React.Component {
 	 * is setName unique within all the sets of this given sediment type
 	 */
 	isSetNameUnique = (setName) => {
-		
+
 
 		let filteredSetList = getSetListAsArray(this.props.currentSamplingEventID, this.props.sedimentType).filter((existingSetName) => {
 			return existingSetName.toUpperCase() === this.fullSetName(setName).toUpperCase();
@@ -51,8 +51,6 @@ class AddSetForm extends React.Component {
 	}
 
 	handleAddSetNameChange = (e) => {
-		const { currentSamplingEventID } = this.props;
-
 		// various characters are not allowed due to being special delinators
 		if (e.target.value.match(DISALLOWED_CHARACTERS_IN_SETNAME_REGEX)) {
 			return;
@@ -177,18 +175,17 @@ class AddSetForm extends React.Component {
 
 
 	render() {
-		const { currentEvent, currentSamplingEventID, classes } = this.props;
-		// console.log("DATA ENTRY RENDER STATE: ", this.state);
+		const { currentEvent, currentSamplingEventID, classes, sedimentType } = this.props;
 
 		if (!currentEvent) {
-			console.log("No current event, redirecting to dashboard");
+			console.warn("No current event, redirecting to dashboard");
 			return <Redirect to='/' />
 		}
 
-		let setList = getSetListAsObject(currentSamplingEventID, this.props.sedimentType);
+		let setList = getSetListAsObject(currentSamplingEventID, sedimentType);
 
 		return (<React.Fragment>
-			<Paper> {/*Add Set Form  FUTURE: split out as separate component?*/}
+			<Paper>
 				<div className={classes.horzCenterText}>
 					<TextField
 						id="addSetNameField"
@@ -198,7 +195,6 @@ class AddSetForm extends React.Component {
 						onChange={this.handleAddSetNameChange}
 						value={this.state.newSetName}
 					/>
-					{/* <Button variant="contained" color="default" className={classes.button}> */}
 					<Tooltip title={this.state.addNewSetButtonDisabled ? this.state.addNewSetDisabledReason : ""}>
 						<div><Button
 							variant="outlined"
@@ -212,14 +208,11 @@ class AddSetForm extends React.Component {
 					</Tooltip>
 
 					{Object.keys(setList).length > 0
-						// {typeof this.state.setSelectOptions !== "undefined" &&  Object.keys(this.state.setSelectOptions).length > 0
-						?
-						<React.Fragment>
+						? <React.Fragment>
 
 							<Checkbox
 								checked={this.state.copyStationing}
 								onChange={() => this.setState({ copyStationing: !this.state.copyStationing })}
-
 							/>
 							<Typography>Duplicate Stationing From Set:"</Typography>
 
@@ -261,5 +254,10 @@ const mapDispatchToProps = {
 	addQuestionToEvent,
 	SEQuestionValueChange
 }
+
+AddSetForm.propTypes = {
+	sedimentType: PropTypes.string.isRequired,
+	samplingMethod: PropTypes.string.isRequired
+};
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(AddSetForm));

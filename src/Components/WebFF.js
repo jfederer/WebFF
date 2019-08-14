@@ -63,6 +63,11 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
+	//TODO: all the getSetList refactoring complete
+	//TODO: get set tables up
+	//TODO: QWDATA and PArameters
+	
+	//TODO: duplicate stationing from set to set
 
 	//TODO: system menu rebuild
 
