@@ -16,7 +16,7 @@ import {
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER } from '../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue, getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
 import { showNavigationTab } from './UI';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
@@ -180,8 +180,8 @@ export function stationNameChanged(eventID, newStationName) {
 	}
 }
 
-export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, numPoints, setInfoChangeHandler) {
-	// console.log("numberOfSamplingPointsChanged(", eventID, setName, samplingMethod, numPoints, ")");
+export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, samplingMethod, numPoints, setInfoChangeHandler) {
+	console.log("numberOfSamplingPointsChanged(", eventID, sedimentType, setName, samplingMethod, numPoints, ")");
 	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}
@@ -192,11 +192,15 @@ export function numberOfSamplingPointsChanged(eventID, setName, samplingMethod, 
 		
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
-		let setInfoSampleTableValue = getQuestionValue(eventID, SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + getMethodCategoryFromValue(samplingMethod));
+		console.log("get setInforSampleTableValue");
+		let setInfoSampleTableValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + getMethodCategoryFromValue(samplingMethod));
 
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
 			// eslint-disable-next-line no-useless-concat
-			throw new Error("getQuestionValue(" + eventID + ", " + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + ") returned undefined or null");
+			let errMSG = "getQuestionValue(" + eventID + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + ") returned ";
+			errMSG += setInfoSampleTableValue === null?"null":"undefined";
+
+			throw new Error(errMSG);
 		}
 
 		//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...

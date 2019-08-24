@@ -74,7 +74,7 @@ class SetInformation extends React.Component {
 		if (sub_QID === "numberOfSamplingPoints") {
 			this.doChange(eventID, sub_QID, value)
 			this.setState({ showDataTable: true });
-			this.props.numberOfSamplingPointsChanged(eventID, this.props.setName, this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
+			this.props.numberOfSamplingPointsChanged(eventID, this.props.sedimentType, this.props.setName,  this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
 			return;
 		}
 

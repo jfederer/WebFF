@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
-import { SEQuestionValueChange, numberOfSamplingPointsChanged } from '../../Actions/SamplingEvents';
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import _ from 'lodash';
 
 

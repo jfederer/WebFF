@@ -13,15 +13,19 @@ export function getNumberOfSets(eventID, sedType) {
 }
 
 export function getNumberOfSamplesInSet(eventID, sedType, setID) {
+	console.log("getNumberOfSamplesInSet(", eventID, sedType, setID,")");
 	let event = getEventFromID(eventID);
 	if (!event) {
 		throw new Error("eventID (", eventID, ") failed to return a valid event in getNumberOfSamplesInSet");
 	}
-	if (setID.startsWith(SET_INFORMATION_IDENTIFIER)) {
-		return event.questionsValues[setID]["numberOfSamplingPoints"]
-	} else {
-		return event.questionsValues[SET_INFORMATION_IDENTIFIER + setID]["numberOfSamplingPoints"]
-	}
+	// if (setID.startsWith(SET_INFORMATION_IDENTIFIER)) {
+	// 	return event.questionsValues[setID]["numberOfSamplingPoints"]
+	// } else {
+
+		let ret = event.questionsValues[DATA_ENTRY_INFORMATION_IDENTIFIER+sedType][SET_INFORMATION_IDENTIFIER + setID]["numberOfSamplingPoints"];
+		console.log("Returning: ", ret);
+		return ret;
+	// }
 }
 
 export function getSetListAsArray(eventID, sedType) {

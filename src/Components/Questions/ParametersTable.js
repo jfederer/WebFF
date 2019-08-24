@@ -51,6 +51,7 @@ const styles = theme => ({
 
 
 export const createInitialParametersTableValue = (eventID) => {
+	return null;
 	// build header from scratch
 	let value = []
 	let headerRow = [];
@@ -74,6 +75,7 @@ export const createInitialParametersTableValue = (eventID) => {
 }
 
 export const verifyPassedParametersTableValue = (eventID, value) => {
+	return null;
 	// need to ensure the value has the right number of rows
 
 	let nowValue = [];
@@ -294,6 +296,7 @@ class ParametersTable extends React.Component {
 	}
 
 	render() {
+		return null;
 		const { classes } = this.props;
 		// let setType = this.props.getCurrentSampleEventMethod();
 		let firstColumn = this.props.getDescriptiveColumnForTable();

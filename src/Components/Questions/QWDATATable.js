@@ -38,7 +38,10 @@ const styles = theme => ({
 
 });
 
-export const createInitialQWDATAValue = (eventID) => {  //separated out from the class so the value gets updated when the numberOfsamples get updated
+export const createInitialQWDATAValue = (eventID, sedType) => {  //separated out from the class so the value gets updated when the numberOfsamples get updated
+
+	return null;
+
 	let initValue = [];
 
 	// build header from scratch
@@ -48,7 +51,7 @@ export const createInitialQWDATAValue = (eventID) => {  //separated out from the
 	});
 	initValue.push(headerRow);
 
-	let descriptiveColumn = getDescriptiveColumnForTable(eventID); // this gives us number of rows too
+	let descriptiveColumn = getDescriptiveColumnForTable(eventID, sedType); // this gives us number of rows too
 
 	for (let i = 1; i < descriptiveColumn.length; i++) {
 		let emptyRow = new Array(headerRow.length - 1).fill("");
@@ -70,13 +73,15 @@ export const createInitialQWDATAValue = (eventID) => {  //separated out from the
 	return initValue;
 }
 
-export const verifyPassedQWDATAValue = (eventID, value) => {    //separated out from the class so the value gets updated when the numberOfsamples get updated
+export const verifyPassedQWDATAValue = (eventID, sedType, value) => {    //separated out from the class so the value gets updated when the numberOfsamples get updated
+return null;
+
 	let nowValue = [];
 	// build new header row, note, the header row should still be correct.
 	nowValue.push(_.cloneDeep(value[0])); // 
 
 	// build rows based on existing values
-	let descriptiveColumn = getDescriptiveColumnForTable(eventID); // descriptiveColumn will now be the authoritative new [0] element in each row
+	let descriptiveColumn = getDescriptiveColumnForTable(eventID, sedType); // descriptiveColumn will now be the authoritative new [0] element in each row
 	// console.log("NEW FIRST COLUMN: ", descriptiveColumn);
 	for (let newRowNum = 1; newRowNum < descriptiveColumn.length; newRowNum++) { // start at 1 to skip the header row
 		// console.log("Looking for...", descriptiveColumn[newRowNum]);
@@ -114,9 +119,9 @@ class QWDATATable extends React.Component {
 		// console.log("QWDATA: Props: ", this.props);
 
 		if(this.props.value) {
-			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, verifyPassedQWDATAValue(this.props.currentSamplingEventID, this.props.value));
+			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, verifyPassedQWDATAValue(this.props.currentSamplingEventID, this.props.sedimentType, this.props.value));
 		} else {
-			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, createInitialQWDATAValue(this.props.currentSamplingEventID));
+			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, createInitialQWDATAValue(this.props.currentSamplingEventID, this.props.sedimentType));
 		}
 
 		this.state = {
@@ -142,7 +147,7 @@ class QWDATATable extends React.Component {
 		// console.log("handleAddOnClickOpen: (", row, ", ", col, ")");
 		let addOnOpts = {};
 		//load up addOnOpts 
-		let sedType = this.props.getQuestionValue("sedimentType");
+		let sedType = this.props.sedimentType;
 		switch (sedType) {
 			case "bedload": Object.assign(addOnOpts, allAddOnOpts_bedload); break;
 			case "bottom": Object.assign(addOnOpts, allAddOnOpts_bottom); break;
@@ -158,7 +163,7 @@ class QWDATATable extends React.Component {
 		let analysesQID = "analysedFor_" + sedType;
 		// console.log("analysesQ_id:", analysesQID);
 
-		// will get us the question that tells us what's already been added to the entire set ....
+		// will get us the question that tells us what's already been added to the entire set .... //FIXME: (need to add sediment type)
 		let alreadyDoing = getQuestionValue(this.props.currentSamplingEventID, SET_INFORMATION_IDENTIFIER + setName, analysesQID);
 		// console.log("alreadyDoing:", alreadyDoing);
 
@@ -225,6 +230,8 @@ class QWDATATable extends React.Component {
 		if (typeof this.props.value === 'undefined' || this.props.value === null) {
 			return null;
 		}
+
+		return null;
 
 		return (
 			<React.Fragment>
