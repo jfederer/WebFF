@@ -1,20 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { styles } from '../../../style';
+import { styles } from '../../style';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import _ from 'lodash';
 
 
-import { setAppBarText } from '../../../Actions/UI';
-import DataEntrySheet from '../../Questions/DataEntrySheet';
-import { getQuestionValue } from '../../../Utils/QuestionUtilities';
-import { NOT_SAMPLED } from '../../../Constants/Dictionary';
-import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../../Constants/Config';
+import { setAppBarText } from '../../Actions/UI';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { NOT_SAMPLED } from '../../Constants/Dictionary';
+import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE } from '../../Constants/Config';
+import DataEntrySheet from '../Questions/DataEntrySheet';
+import ParametersTable from '../Questions/ParametersTable';
+import QWDATATable from '../Questions/QWDATATable';
 
 
 function TabPanel(props) {
@@ -34,8 +37,17 @@ function TabPanel(props) {
 	);
 }
 
+function ComponentCreator(componentType, passedProps) {
+	switch (componentType) {
+		case DATA_ENTRY_SHEET_TYPE: return <DataEntrySheet {...passedProps} />
+		case PARAMETER_TABLE_TYPE: return <ParametersTable {...passedProps} />
+		case QWDATA_TABLE_TYPE: return <QWDATATable {...passedProps} />
+		default:  return null
+	}
+}
 
-class DataEntry extends React.Component {
+
+class TabbedPage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -64,20 +76,26 @@ class DataEntry extends React.Component {
 
 			if (getQuestionValue(currentEventID, methodQID) !== NOT_SAMPLED) {
 
-				let DES = <DataEntrySheet
-					id={DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]}
-					samplingMethod={getQuestionValue(currentEventID, methodQID)}
-					sedimentType={sedType}
-					value={getQuestionValue(currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1])} />
+				let tabComponent = _.cloneDeep(this.props.content);
+
+				let passedProps = {};
+
+				passedProps.id = DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1];
+				passedProps.samplingMethod = getQuestionValue(currentEventID, methodQID);
+				passedProps.sedimentType = sedType;
+				passedProps.value = getQuestionValue(currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]);
+
+				let tabContent = ComponentCreator(this.props.componentType, passedProps);
+
 
 				if (!singleDataEntryPanel) {
-					singleDataEntryPanel = DES;
+					singleDataEntryPanel = tabContent;
 				}
 
 				tabsList[sedType] = <Tab key={DATA_ENTRY_INFORMATION_IDENTIFIER + sedType} label={SEDIMENT_TYPES[sedType]} />;
 				tabsPanelList[sedType] =
 					<TabPanel value={this.state.tabValue} key={DATA_ENTRY_INFORMATION_IDENTIFIER + sedType} index={Object.keys(tabsPanelList).length}>
-						{DES}
+						{tabContent}
 					</TabPanel>
 			}
 		})
@@ -126,5 +144,5 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setAppBarText
 }
-
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntry));
+ 
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(TabbedPage));

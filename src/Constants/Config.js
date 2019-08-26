@@ -10,6 +10,12 @@ export const IDENTIFIER_SPLITTER = "&&";
 export const QUESTIONS_DATA_OBJECT_TYPE = "questionsDataObjectType";
 export const QUESTIONS_VALUES_OBJECT_TYPE = "questionsValuesObjectType";
 
+export const QWDATA_TABLE_TYPE = "QWDATA_TABLE_TYPE";
+export const PARAMETER_TABLE_TYPE = "PARAMETER_TABLE_TYPE";
+export const DATA_ENTRY_SHEET_TYPE = "DATA_ENTRY_SHEET_TYPE";
+
+
+
 // export const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TODO: need to ensure no custom questions include these 
 
 export const QIDS_LINKED_TO_STATION_NAME = ["stationNumber", "projectName", "projectID", "agencyCode"];

@@ -159,10 +159,10 @@ const mapDispatchToProps = {
 	addQuestionToEvent
 }
 
-DataEntrySheet.propTypes = {
-	sedimentType: PropTypes.string.isRequired,
-	samplingMethod: PropTypes.string.isRequired
-};
+// DataEntrySheet.propTypes = {
+// 	sedimentType: PropTypes.string.isRequired,
+// 	samplingMethod: PropTypes.string.isRequired
+// };
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntrySheet));
 
