@@ -136,10 +136,6 @@ class DataEntrySheet extends React.Component {
 				samplingMethod={samplingMethod}
 				sedimentType={sedimentType}
 				alternateChangeHandler={this.DEChangeHandler} />
-			<button label="CLICKER!" onClick={() => {
-				alert("Hi");
-			}
-			}	/>
 		</React.Fragment>
 
 	}
@@ -159,10 +155,10 @@ const mapDispatchToProps = {
 	addQuestionToEvent
 }
 
-// DataEntrySheet.propTypes = {
-// 	sedimentType: PropTypes.string.isRequired,
-// 	samplingMethod: PropTypes.string.isRequired
-// };
+DataEntrySheet.propTypes = {
+	sedimentType: PropTypes.string.isRequired,
+	samplingMethod: PropTypes.string.isRequired
+};
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(DataEntrySheet));
 

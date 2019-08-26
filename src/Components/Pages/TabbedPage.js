@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 
 import { setAppBarText } from '../../Actions/UI';
-import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { NOT_SAMPLED } from '../../Constants/Dictionary';
 import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE } from '../../Constants/Config';
 import DataEntrySheet from '../Questions/DataEntrySheet';
@@ -46,6 +46,15 @@ function ComponentCreator(componentType, passedProps) {
 	}
 }
 
+function ComponentQID(componentType, sedType) {
+	switch (componentType) {
+		case DATA_ENTRY_SHEET_TYPE: return DATA_ENTRY_INFORMATION_IDENTIFIER + sedType;
+		case PARAMETER_TABLE_TYPE: return "parametersTable";
+		case QWDATA_TABLE_TYPE: return "QWDATATable";
+		default:  return null
+	}
+}
+
 
 class TabbedPage extends React.Component {
 
@@ -61,7 +70,7 @@ class TabbedPage extends React.Component {
 	}
 
 	render() {
-		const { currentEvent, currentEventID } = this.props;
+		const { currentEvent, currentEventID, componentType } = this.props;
 
 		if (!currentEvent) {
 			console.log("No current event, redirecting to dashboard");
@@ -76,16 +85,15 @@ class TabbedPage extends React.Component {
 
 			if (getQuestionValue(currentEventID, methodQID) !== NOT_SAMPLED) {
 
-				let tabComponent = _.cloneDeep(this.props.content);
-
 				let passedProps = {};
 
+				passedProps.stateChangeHandler= (val) => this.props.SEQuestionValueChange(currentEventID, ComponentQID(componentType, sedType), val) //TODO: NEXT:  This isn't called with appropraite information
 				passedProps.id = DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1];
 				passedProps.samplingMethod = getQuestionValue(currentEventID, methodQID);
 				passedProps.sedimentType = sedType;
-				passedProps.value = getQuestionValue(currentEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1]);
+				passedProps.value = getQuestionValue(currentEventID, ComponentQID(componentType, sedType));
 
-				let tabContent = ComponentCreator(this.props.componentType, passedProps);
+				let tabContent = ComponentCreator(componentType, passedProps);
 
 
 				if (!singleDataEntryPanel) {

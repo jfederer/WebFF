@@ -258,9 +258,9 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		let origParameterValue = getQuestionValue(eventID, "parametersTable");
 		let parameterValue;
 		if(!origParameterValue) {
-			parameterValue = createInitialParametersTableValue(eventID);
+			parameterValue = createInitialParametersTableValue(eventID, sedimentType);
 		} else {
-			parameterValue = verifyPassedParametersTableValue(eventID, origParameterValue);
+			parameterValue = verifyPassedParametersTableValue(eventID, origParameterValue, sedimentType);
 		}
 
 		if (!_.isEqual(origParameterValue, parameterValue)) {

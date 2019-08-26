@@ -22,7 +22,7 @@ export function getNumberOfSamplesInSet(eventID, sedType, setID) {
 	// 	return event.questionsValues[setID]["numberOfSamplingPoints"]
 	// } else {
 
-		let ret = event.questionsValues[DATA_ENTRY_INFORMATION_IDENTIFIER+sedType][SET_INFORMATION_IDENTIFIER + setID]["numberOfSamplingPoints"];
+		let ret = event.questionsValues[DATA_ENTRY_INFORMATION_IDENTIFIER+sedType][setID]["numberOfSamplingPoints"];
 		console.log("Returning: ", ret);
 		return ret;
 	// }
@@ -34,7 +34,7 @@ export function getSetListAsArray(eventID, sedType) {
 	let event = getEventFromID(eventID);
 
 	if (!event) {
-		throw new Error("eventID (", eventID, ") failed to return a valid event in getSetListAsArray");
+		throw new Error("eventID (" + eventID + ") failed to return a valid event in getSetListAsArray");
 	}
 
 	let setListArr = [];

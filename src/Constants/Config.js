@@ -14,7 +14,7 @@ export const QWDATA_TABLE_TYPE = "QWDATA_TABLE_TYPE";
 export const PARAMETER_TABLE_TYPE = "PARAMETER_TABLE_TYPE";
 export const DATA_ENTRY_SHEET_TYPE = "DATA_ENTRY_SHEET_TYPE";
 
-
+export const DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER = 0;
 
 // export const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TODO: need to ensure no custom questions include these 
 

@@ -5,9 +5,12 @@ import _ from 'lodash';
 import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, getSetInformationQuestionsData } from './StoreUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
-	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY
+	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY, IDENTIFIER_SPLITTER, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER,
+	METHOD_QIDS
 } from '../Constants/Config';
 import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
+import { getShortSetNameFromFullSetName } from '../Utils/Utilities';
+
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
 
@@ -184,20 +187,22 @@ export const getMethodCategoryFromValue = (methodValue) => {
 /**
  * @desc Get the stationing-descriptive column for various combined tables
  * @param {string} eventID eventID to look in (does not check if loaded, nor does it error nicely)
+ * @param {string} sedType sediment type to provide column for
  * @return {Array} Array of strings that describes each set/sample row in the event
  */
 export const getDescriptiveColumnForTable = (eventID, sedType) => {
 	let sampleEventLocations = [];
 	let setList = getSetListAsArray(eventID, sedType);
 
+	console.log('setList :', setList);
+
 	// let samplingMethod
 	// let setType = getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod")); //EDI, EWI, or OTHER
 
 	setList.forEach((setName) => {
-		let stationingColumn = 0;
-		let shortSetName = setName.replace(SET_INFORMATION_IDENTIFIER, "");
+		let shortSetName = getShortSetNameFromFullSetName(setName);
 		// console.log("realSetName: ", shortSetName);
-		let numSamps = getNumberOfSamplesInSet(eventID, sedType, shortSetName);
+		let numSamps = getNumberOfSamplesInSet(eventID, sedType, setName);
 
 		let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
 		// console.log(samplesComposited);
@@ -212,8 +217,10 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 				// } else {
 				// let bigLoc = getQuestionValue(eventID, setName, "samplesTable_EWI", i);
 				// console.log("Big Loc: ", bigLoc);
-				location = getQuestionValue(eventID, setName, "samplesTable_EWI", i, stationingColumn);
-				// console.log("LOCATION for " + shortSetName + "[" + i + "]: ", location);
+				let methodCategory = getMethodCategoryFromValue(getQuestionValue(eventID, METHOD_QIDS[sedType]));
+				console.log('methodCategory :', methodCategory);
+				location = getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesTable_"+methodCategory, i, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER);
+				console.log("LOCATION for " + setName + "[" + i + "]: ", location);
 				// }
 
 				setLocations.push(location);
@@ -231,18 +238,17 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 
 	// fill out the descColumn based on the sampleEventLoations generated above
 	for (let i = 0; i < sampleEventLocations.length; i++) {
-		let setName = setList[i].replace(SET_INFORMATION_IDENTIFIER, "");
+		let setName = setList[i];
 		for (let k = 0; k < sampleEventLocations[i].length; k++) {
-
 			switch (sampleEventLocations[i][k]) {
 				case '':
-					descColumn.push(setName + "-" + (k + 1));
+					descColumn.push(getShortSetNameFromFullSetName(setName) + "-" + (k + 1));
 					break;
 				case "Comp":
-					descColumn.push(setName + " Comp");
+					descColumn.push(getShortSetNameFromFullSetName(setName) + " Comp");
 					break;
 				default:
-					descColumn.push(setName + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
+					descColumn.push(getShortSetNameFromFullSetName(setName) + "-" + (k + 1) + " @ " + sampleEventLocations[i][k]);
 			}
 		}
 	}

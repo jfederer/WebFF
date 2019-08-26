@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -18,10 +19,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Question from '../Question';
 import { pCodes, nq_options, nq_options_meanings, rmk_options, mth_options, types } from '../../Utils/QuestionOptions';
-import { defaultPCodesToShow } from '../../Constants/Config';
+import { defaultPCodesToShow, SEDIMENT_TYPES } from '../../Constants/Config';
 import { getKeyFromValue } from '../../Utils/Utilities';
 import { DESCRIPTION_HEADER } from '../../Constants/Dictionary';
 import { getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
+import { setAppBarText } from '../../Actions/UI';
 
 
 import _ from 'lodash';
@@ -50,8 +52,7 @@ const styles = theme => ({
 });
 
 
-export const createInitialParametersTableValue = (eventID) => {
-	return null;
+export const createInitialParametersTableValue = (eventID, sedType) => {
 	// build header from scratch
 	let value = []
 	let headerRow = [];
@@ -64,7 +65,7 @@ export const createInitialParametersTableValue = (eventID) => {
 	value.push(headerRow);
 
 	// build default values (blanks)
-	let firstColumn = getDescriptiveColumnForTable(eventID);
+	let firstColumn = getDescriptiveColumnForTable(eventID, sedType);
 	for (let i = 1; i < firstColumn.length; i++) {
 		let emptyRow = new Array(headerRow.length - 1).fill("");
 		emptyRow.unshift(firstColumn[i]);
@@ -74,8 +75,7 @@ export const createInitialParametersTableValue = (eventID) => {
 	return value;
 }
 
-export const verifyPassedParametersTableValue = (eventID, value) => {
-	return null;
+export const verifyPassedParametersTableValue = (eventID, value, sedType) => {
 	// need to ensure the value has the right number of rows
 
 	let nowValue = [];
@@ -83,7 +83,7 @@ export const verifyPassedParametersTableValue = (eventID, value) => {
 	nowValue.push(_.cloneDeep(value[0])); // 
 
 	// build rows based on existing values  
-	let firstColumn = getDescriptiveColumnForTable(eventID); // firstColumn will now be the authoritative new [0] element in each row
+	let firstColumn = getDescriptiveColumnForTable(eventID, sedType); // firstColumn will now be the authoritative new [0] element in each row
 	// console.log("NEW FIRST COLUMN: ", firstColumn);
 	for (let newRowNum = 1; newRowNum < firstColumn.length; newRowNum++) { // start at 1 to skip the header row
 		// console.log("Looking for...", firstColumn[newRowNum]);
@@ -115,14 +115,15 @@ export const verifyPassedParametersTableValue = (eventID, value) => {
 class ParametersTable extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", this.props);
 
 		let nowValue = [];
 		let startingPCodes = [];
 		if (typeof this.props.value === "undefined" || this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
-			nowValue = createInitialParametersTableValue(this.props.eventID);
+			nowValue = createInitialParametersTableValue(this.props.currentSamplingEventID, this.props.sedimentType);
 			startingPCodes = _.cloneDeep(defaultPCodesToShow);
 		} else { // if a value was sent
-			nowValue = verifyPassedParametersTableValue(this.props.eventID, this.props.value);
+			nowValue = verifyPassedParametersTableValue(this.props.currentSamplingEventID, this.props.value, this.props.sedimentType);
 			// find all pCodes in header
 			let pCodesInHeader = [];
 			for (let i = 1; i < nowValue[0].length; i++) { // start at 1 to skip the DESCRIPTION_HEADER
@@ -296,10 +297,10 @@ class ParametersTable extends React.Component {
 	}
 
 	render() {
-		return null;
-		const { classes } = this.props;
+		// return null;
+		const { classes, currentSamplingEventID, sedimentType } = this.props;
 		// let setType = this.props.getCurrentSampleEventMethod();
-		let firstColumn = this.props.getDescriptiveColumnForTable();
+		let firstColumn = getDescriptiveColumnForTable(currentSamplingEventID, sedimentType);
 
 
 		return (
@@ -518,9 +519,21 @@ ParametersTable.propTypes = {
 	label: PropTypes.string,
 	placeholder: PropTypes.string,
 	XMLTag: PropTypes.string,
-	type: PropTypes.oneOf(["ParametersTable"]).isRequired,
+	sedimentType: PropTypes.oneOf(Object.keys(SEDIMENT_TYPES)).isRequired,
 	selectOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 
-export default withStyles(styles, { withTheme: true })(ParametersTable);
+const mapStateToProps = function (state) {
+	return {
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+	}
+}
+
+const mapDispatchToProps = {
+	setAppBarText
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ParametersTable));
+
+// export default withStyles(styles, { withTheme: true })(ParametersTable);
