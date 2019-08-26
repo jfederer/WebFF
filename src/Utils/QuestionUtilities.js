@@ -52,43 +52,50 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
  * @returns returns value associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 function recursiveGetValue(haystack, haystackType, sub_QIDs) {
-	console.log("recursiveGetValue(", haystack, haystackType, sub_QIDs, ")");
+		let DEBUG=false;
+	// console.log("recursiveGetValue(", "Haystack: ", haystack, haystackType, sub_QIDs, ")");
 
 	if (haystack === null) {
+		if(DEBUG)console.log("returning null");
 		return null;
 	}
 
 	if (typeof haystack === 'undefined') {
+		if(DEBUG)console.log("returning undefined");
 		return undefined;
 	}
 
 	if (sub_QIDs.length < 1) {
 		if (haystackType === QUESTIONS_DATA_OBJECT_TYPE) {
+			if(DEBUG)console.log("returning : ", haystack.value);
 			return haystack.value;
 		} else {
+			if(DEBUG)console.log("returning : ", haystack);
 			return haystack;
 		}
 	}
 
+	if(DEBUG)console.log("returning RECURSINON!");
 	return recursiveGetValue(haystack[sub_QIDs.shift()], haystackType, sub_QIDs);
 }
 
 
 /**
- * @desc gets value object for the given question.  Gives preference in the following order: the specific event, (global) questionsValues, (global) setInformationValues
+ * @desc gets value object for the given question.  Gives preference in the following order: the specific event values, (global) questionsData values, (global) dataEntryData values, (global) setInformation values
  * @param {String} eventID eventID to look for the value in.
  * @param {String} questionID question ID to search for
  * @param {Array} sub_QIDs Additional questionID's for child objects of the questionID object, in genelogical order from parent to child.
  * @returns returns VALUE associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
-	let DEBUG = true;
+	let DEBUG = false;
 	// console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	if (DEBUG) console.log("FUNC: getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	//TODO: look for dialog questions, system questions
 
 	let event = getEventFromID(eventID);
-	let questionsData = getQuestionsData();  // questions data is a combo of currentEvent, currentUser, and currentStation questionsData
+	
+	let questionsData = getQuestionsData();  // questions data is a combo of global questionsData, currentEvent, currentUser, and currentStation questionsData
 
 	if (DEBUG) console.log('getQuestionValue: questionsData :', questionsData);
 
@@ -96,7 +103,7 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	let QDvalue;
 	try {
 		// note, questionsData[questionID] being undefined here is perfectly reasonable.
-		QDvalue = recursiveGetValue(questionsData[questionID].value, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));  //TODO: should this be QUESTIONS_VALUES_OBJECT_TYPE?
+		QDvalue = recursiveGetValue(questionsData[questionID], QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs));  //TODO: should this be QUESTIONS_VALUES_OBJECT_TYPE?
 	}
 	catch (e) {
 		if (e.name === "TypeError") {
@@ -105,21 +112,25 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 
 	}
 
-	if (DEBUG) console.log('getQuestionValue: QDvalue pre special:', QDvalue);
+	if (DEBUG) console.log('getQuestionValue: QDvalue pre special cases:', QDvalue);
 
 	// try {
-	if ((typeof QDvalue === 'undefined' || QDvalue === null) && questionID.startsWith(SET_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo... //FIXME: likely not right anymore
-		// console.log("Looking at set entry information... QD: ", questionsData);
-		QDvalue = recursiveGetValue(getSetInformationQuestionsData(), QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
-		if (DEBUG) console.log('getQuestionValue: QDvalue post SET INFORMATION:', QDvalue);
-	}
+	// if ((typeof QDvalue === 'undefined' || QDvalue === null) && questionID.startsWith(SET_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo... //FIXME: likely not right anymore
+	// 	if (DEBUG) console.log("Looking at set entry information... QD: ", questionsData);
+	// 	QDvalue = recursiveGetValue(getSetInformationQuestionsData(), QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
+	// 	if (DEBUG) console.log('getQuestionValue: QDvalue post SET INFORMATION:', QDvalue);
+	// }
 	
-
 	if ((typeof QDvalue === 'undefined' || QDvalue === null) && questionID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for data entry.  Data entry->sets are in the event custom questions list ...
-		// if (questionID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for setInfo...
-		// console.log("Looking at data entry information... QD: ", questionsData);
+
+	if (DEBUG) console.log("Looking at data entry information... QD: ", questionsData);
+		
 		QDvalue = recursiveGetValue(questionsData, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
-		if (DEBUG) console.log('getQuestionValue: QDvalue post DATA ENTRY INFORMATION:', QDvalue);
+		// if((typeof QDvalue === 'undefined' || QDvalue === null) && sub_QIDs[0].startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER) && sub_QIDs.length>1) {
+		// 	QDvalue == questionsData[sub_QID]
+		// }
+	
+	if (DEBUG) console.log('getQuestionValue: QDvalue post DATA ENTRY INFORMATION:', QDvalue);
 	}
 	
 

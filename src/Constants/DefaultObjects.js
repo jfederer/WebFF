@@ -39,10 +39,6 @@ export const emptyUser = {
 }
 
 
-// export const defaultDateEntrySheetQuestionsData = {
-
-
-
 export const defaultSetInformationQuestionsData = {
 	startTime: {
 		"id": "startTime",

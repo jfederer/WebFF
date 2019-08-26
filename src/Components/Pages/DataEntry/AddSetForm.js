@@ -15,7 +15,7 @@ import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { getNumberOfSets, getSetListAsArray, getSetListAsObject, getQuestionDataFromID } from '../../../Utils/StoreUtilities';
-
+import { getSetInformationQuestionsData } from '../../../Utils/StoreUtilities';
 
 
 class AddSetForm extends React.Component {
@@ -137,7 +137,7 @@ class AddSetForm extends React.Component {
 			//newSetValue['samplesTable_EDI'] = //TODO: pull from FF
 		}
 
-
+		let defaultSetInformationQD = getSetInformationQuestionsData();
 
 		let newSetQuestion = {
 			"id": this.fullSetName(newSetName),  //this sets the name of the question in custom questions
@@ -155,6 +155,8 @@ class AddSetForm extends React.Component {
 				{},
 			"value": newSetValue
 		}
+		_.merge(newSetQuestion, defaultSetInformationQD);
+		console.log("SET INFO 2: ", newSetQuestion);
 
 		// save the sets QuestionsData to custom question area
 		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);

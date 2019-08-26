@@ -51,18 +51,18 @@ export const getRealQID = (setName, sub_q_id) => {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log("SI CONSTRUCTOR PROPS: ", this.props);
+		// console.log("SI CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			let initValue = {}; //load value with default table?
 			if (this.props.alternateChangeHandler) {
-				console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, alt change handler with initValue");
+				// console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, alt change handler with initValue");
 				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
 			} else {
-				console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, standard change handler with initValue");
+				// console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, standard change handler with initValue");
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
 		} else {
-			console.log("Creating Passed Value Set Information Component");
+			// console.log("Creating Passed Value Set Information Component");
 		}
 		this.state = {
 			showDataTable: false

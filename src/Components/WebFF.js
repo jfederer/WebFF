@@ -103,6 +103,7 @@ class WebFF extends React.Component {
 	//TODO: Multiple Sampling evnts at same time...
 	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
 	
+	//OPTIMIZE default set infomration stroage in store (storing full questisonsdata for sets repeatedly... not great)
 	//BUG: Does not check for updated data outside localstorage
 
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.

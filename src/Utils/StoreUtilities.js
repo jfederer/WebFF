@@ -66,7 +66,7 @@ export function getEventFromID(eventID) {
 }
 
 /** 
-@desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's and the default questionsData
+@desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's... defaultSetInformation and the global default questionsData
 @returns {object} combined questionsData object.
 */
 export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add eventID
@@ -91,9 +91,11 @@ export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add e
 		}
 	}
 
+	let defaultSetInfoQD = getSetInformationQuestionsData();
+
 	let defaultQD = store.getState().Questions.questionsData;
 
-	return _.merge({}, defaultQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	return _.merge({}, defaultQD, defaultSetInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 }
 
 /**
