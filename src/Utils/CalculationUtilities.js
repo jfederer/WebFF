@@ -1,4 +1,5 @@
 import { SAMPLE_TIME_HEADER } from '../Constants/Dictionary';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION_IDENTIFIER} from '../Constants/Config';
 import { getQuestionValue, getDescriptiveColumnForTable } from './QuestionUtilities';
 import { getSetListAsArray, getNumberOfSamplesInSet, checkForValidSedimentType } from './StoreUtilities';
 
@@ -78,16 +79,16 @@ export const insertEstimatedTime = (eventID, sedType, value) => {
 export const getEstimatedTimeColumn = (eventID, sedType) => {
 	checkForValidSedimentType(sedType, "getEstimatedTimeColumn");
 
-	let descColumn = getDescriptiveColumnForTable(eventID, sedType);
+	let descColumn = getDescriptiveColumnForTable(eventID, sedType); // this is an easy way to get number of rows  //FUTURE: can this come from number of samples?
 	let estimatedTimeColumn = new Array(descColumn.length).fill("");
 	let setList = getSetListAsArray(eventID, sedType);
 
 	let totalNumberOfSamplesInPreviousSets = 0;
 	setList.forEach((setName) => {
 		let numberOfSamplesInSet = getNumberOfSamplesInSet(eventID, sedType, setName);
-		let startTime = getQuestionValue(eventID, setName, "startTime");
-		let endTime = getQuestionValue(eventID, setName, "endTime");
-		let ai = !getQuestionValue(eventID, setName, "samplesComposited");
+		let startTime = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "startTime");
+		let endTime = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "endTime");
+		let ai = !getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "samplesComposited");
 		let startDateTime = new Date("January 1, 2000 " + startTime)
 		let endDateTime = new Date("January 1, 2000 " + endTime)
 		let msElapsed = Math.abs(endDateTime - startDateTime);

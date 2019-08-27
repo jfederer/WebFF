@@ -203,7 +203,8 @@ class QWDATATable extends React.Component {
 		let newVal = _.cloneDeep(this.props.value);
 		newVal[row][col] = value;
 
-		this.props.SEQuestionValueChange(eventID, QID, newVal);
+		this.props.SEQuestionValueChange(eventID, this.props.id, newVal);
+		// this.props.SEQuestionValueChange(eventID, QID, newVal);
 	}
 
 	handleEstimateClick = (e) => {  //TODO: allow overwrites vs no overwrites
@@ -212,7 +213,7 @@ class QWDATATable extends React.Component {
 			return;
 		}
 
-		let newVal = insertEstimatedTime(this.props.currentSamplingEventID, this.props.sedType, this.props.value);
+		let newVal = insertEstimatedTime(this.props.currentSamplingEventID, this.props.sedimentType, this.props.value);
 
 		this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, newVal);
 	}

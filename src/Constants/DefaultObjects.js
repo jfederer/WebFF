@@ -54,7 +54,7 @@ export const defaultSetInformationQuestionsData = {
 		"id": "endTime",
 		"label": "End Time",
 		"type": "TimeInput",
-		"value": "13:00",
+		"value": "",
 		"width_xs": 5,
 		"width_lg": 2
 	},
@@ -2300,7 +2300,7 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	["parametersTable"+BOTTOM_MATERIAL_TEXT]: {
+	["parametersTable_"+BOTTOM_MATERIAL_TEXT]: {
 		"id": "parametersTable"+BOTTOM_MATERIAL_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
@@ -2325,7 +2325,7 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	["parametersTable"+SUSPENDED_TEXT]: {
+	["parametersTable_"+SUSPENDED_TEXT]: {
 		"id": "parametersTable"+SUSPENDED_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
@@ -2350,7 +2350,7 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	["parametersTable"+BEDLOAD_TEXT]: {
+	["parametersTable_"+BEDLOAD_TEXT]: {
 		"id": "parametersTable"+BEDLOAD_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",

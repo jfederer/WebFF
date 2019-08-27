@@ -181,7 +181,7 @@ export function stationNameChanged(eventID, newStationName) {
 }
 
 export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, samplingMethod, numPoints, setInfoChangeHandler) {
-	console.log("numberOfSamplingPointsChanged(", eventID, sedimentType, setName, samplingMethod, numPoints, ")");
+	// console.log("numberOfSamplingPointsChanged(", eventID, sedimentType, setName, samplingMethod, numPoints, ")");
 	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}
@@ -192,7 +192,6 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
-		console.log("get setInforSampleTableValue");
 		let setInfoSampleTableValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + getMethodCategoryFromValue(samplingMethod));
 
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
@@ -242,7 +241,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		// re-do any distance data  if EWI (confirm with user)
 
 		////// modify QWDATA table //////TODO:
-		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable");
+		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable_"+sedimentType);
 		let QWDATAValue;
 		if(!origQWDATAValue) {
 			QWDATAValue = createInitialQWDATAValue(eventID, sedimentType);
@@ -251,11 +250,11 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		}
 
 		if (!_.isEqual(origQWDATAValue, QWDATAValue)) {
-			dispatch(SEQuestionValueChange(eventID, "QWDATATable", QWDATAValue));
+			dispatch(SEQuestionValueChange(eventID, "QWDATATable_"+sedimentType, QWDATAValue));
 		}
 
 		////// modify Parameters table //////TODO:
-		let origParameterValue = getQuestionValue(eventID, "parametersTable");
+		let origParameterValue = getQuestionValue(eventID, "parametersTable_"+sedimentType);
 		let parameterValue;
 		if(!origParameterValue) {
 			parameterValue = createInitialParametersTableValue(eventID, sedimentType);
@@ -264,7 +263,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		}
 
 		if (!_.isEqual(origParameterValue, parameterValue)) {
-			dispatch(SEQuestionValueChange(eventID, "parametersTable", parameterValue));
+			dispatch(SEQuestionValueChange(eventID, "parametersTable_"+sedimentType, parameterValue));
 		}
 	}
 }

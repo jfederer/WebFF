@@ -24,6 +24,7 @@ import { getKeyFromValue } from '../../Utils/Utilities';
 import { DESCRIPTION_HEADER } from '../../Constants/Dictionary';
 import { getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { setAppBarText } from '../../Actions/UI';
+import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 
 
 import _ from 'lodash';
@@ -164,7 +165,7 @@ class ParametersTable extends React.Component {
 	handleValueChange = (row, col) => e => {
 		let newVal = this.state.value.slice();
 		newVal[row][col] = e.target.value;
-		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.state.value) });
+		this.setState({ value: newVal }, () => { this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, this.state.value) });
 	}
 
 
@@ -229,7 +230,7 @@ class ParametersTable extends React.Component {
 			}
 		}
 
-		this.setState({ value: newVal }, () => this.props.stateChangeHandler(this.state.value));
+		this.setState({ value: newVal }, () => this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, this.state.value));
 
 		this.handleSetDefaultValueDialogClose();
 	}
@@ -274,7 +275,7 @@ class ParametersTable extends React.Component {
 		// console.log("POST PCODES TO SHOW: ", newPCodesToShow);
 		// console.log("POST VALUE: ", newValue);
 
-		this.setState({ pCodesToShow: newPCodesToShow, value: newValue }, this.props.stateChangeHandler(this.state.value));
+		this.setState({ pCodesToShow: newPCodesToShow, value: newValue }, this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, this.state.value));
 		this.handleAddColumnDialogClose();
 	}
 
@@ -528,7 +529,8 @@ const mapStateToProps = function (state) {
 }
 
 const mapDispatchToProps = {
-	setAppBarText
+	setAppBarText,
+	SEQuestionValueChange
 }
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ParametersTable));

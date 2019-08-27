@@ -114,7 +114,7 @@ class SetInformation extends React.Component {
 		if (samplingMethod === null || typeof samplingMethod === "undefined")
 			return <Typography>Sampling Method not set, please return to field form and set Sampling Method</Typography>
 
-		console.log("Set Info Render Props: ", this.props);
+		// console.log("Set Info Render Props: ", this.props);
 
 
 		let gridedQuestions = [];

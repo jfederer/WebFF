@@ -15,7 +15,6 @@ import Box from '@material-ui/core/Box';
 import { NOT_SAMPLED } from '../../Constants/Dictionary';
 import { METHOD_QIDS, SEDIMENT_TYPES, PARAMETER_TABLE_TYPE } from '../../Constants/Config';
 import ParametersTable from '../Questions/ParametersTable';
-import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import TabbedPage from './TabbedPage';
 

@@ -13,7 +13,7 @@ export function getNumberOfSets(eventID, sedType) {
 }
 
 export function getNumberOfSamplesInSet(eventID, sedType, setID) {
-	console.log("getNumberOfSamplesInSet(", eventID, sedType, setID,")");
+	// console.log("getNumberOfSamplesInSet(", eventID, sedType, setID,")");
 	let event = getEventFromID(eventID);
 	if (!event) {
 		throw new Error("eventID (", eventID, ") failed to return a valid event in getNumberOfSamplesInSet");
@@ -23,7 +23,6 @@ export function getNumberOfSamplesInSet(eventID, sedType, setID) {
 	// } else {
 
 		let ret = event.questionsValues[DATA_ENTRY_INFORMATION_IDENTIFIER+sedType][setID]["numberOfSamplingPoints"];
-		console.log("Returning: ", ret);
 		return ret;
 	// }
 }

@@ -156,7 +156,6 @@ class AddSetForm extends React.Component {
 			"value": newSetValue
 		}
 		_.merge(newSetQuestion, defaultSetInformationQD);
-		console.log("SET INFO 2: ", newSetQuestion);
 
 		// save the sets QuestionsData to custom question area
 		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);

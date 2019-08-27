@@ -54,30 +54,30 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
  * @returns returns value associated with the questionID/sub_QIDs...  This may come back as undefined, null, or empty objects as appropriate.  Calling function must handle any return errors.
  */
 function recursiveGetValue(haystack, haystackType, sub_QIDs) {
-		let DEBUG=false;
+	let DEBUG = false;
 	// console.log("recursiveGetValue(", "Haystack: ", haystack, haystackType, sub_QIDs, ")");
 
 	if (haystack === null) {
-		if(DEBUG)console.log("returning null");
+		if (DEBUG) console.log("returning null");
 		return null;
 	}
 
 	if (typeof haystack === 'undefined') {
-		if(DEBUG)console.log("returning undefined");
+		if (DEBUG) console.log("returning undefined");
 		return undefined;
 	}
 
 	if (sub_QIDs.length < 1) {
 		if (haystackType === QUESTIONS_DATA_OBJECT_TYPE) {
-			if(DEBUG)console.log("returning : ", haystack.value);
+			if (DEBUG) console.log("returning : ", haystack.value);
 			return haystack.value;
 		} else {
-			if(DEBUG)console.log("returning : ", haystack);
+			if (DEBUG) console.log("returning : ", haystack);
 			return haystack;
 		}
 	}
 
-	if(DEBUG)console.log("returning RECURSINON!");
+	if (DEBUG) console.log("returning RECURSINON!");
 	return recursiveGetValue(haystack[sub_QIDs.shift()], haystackType, sub_QIDs);
 }
 
@@ -96,7 +96,7 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	//TODO: look for dialog questions, system questions
 
 	let event = getEventFromID(eventID);
-	
+
 	let questionsData = getQuestionsData();  // questions data is a combo of global questionsData, currentEvent, currentUser, and currentStation questionsData
 
 	if (DEBUG) console.log('getQuestionValue: questionsData :', questionsData);
@@ -122,19 +122,19 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	// 	QDvalue = recursiveGetValue(getSetInformationQuestionsData(), QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
 	// 	if (DEBUG) console.log('getQuestionValue: QDvalue post SET INFORMATION:', QDvalue);
 	// }
-	
+
 	if ((typeof QDvalue === 'undefined' || QDvalue === null) && questionID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) { // if questionsData came back with nothing, and it's looking for data entry.  Data entry->sets are in the event custom questions list ...
 
-	if (DEBUG) console.log("Looking at data entry information... QD: ", questionsData);
-		
+		if (DEBUG) console.log("Looking at data entry information... QD: ", questionsData);
+
 		QDvalue = recursiveGetValue(questionsData, QUESTIONS_DATA_OBJECT_TYPE, _.cloneDeep(sub_QIDs))
 		// if((typeof QDvalue === 'undefined' || QDvalue === null) && sub_QIDs[0].startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER) && sub_QIDs.length>1) {
 		// 	QDvalue == questionsData[sub_QID]
 		// }
-	
-	if (DEBUG) console.log('getQuestionValue: QDvalue post DATA ENTRY INFORMATION:', QDvalue);
+
+		if (DEBUG) console.log('getQuestionValue: QDvalue post DATA ENTRY INFORMATION:', QDvalue);
 	}
-	
+
 
 	// } catch (e) {
 	// 	console.err("Error came from: getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
@@ -195,49 +195,28 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 	let sampleEventLocations = [];
 	let setList = getSetListAsArray(eventID, sedType);
 
-	console.log('setList :', setList);
-
-	// let samplingMethod
-	// let setType = getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod")); //EDI, EWI, or OTHER
-
 	setList.forEach((setName) => {
-		let shortSetName = getShortSetNameFromFullSetName(setName);
-		// console.log("realSetName: ", shortSetName);
 		let numSamps = getNumberOfSamplesInSet(eventID, sedType, setName);
-
 		let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
-		// console.log(samplesComposited);
+
 		let setLocations = [];
 		if (!samplesComposited) { // samples will be analysized individually (and thus each sample needs it's own line)
-			// console.log("Set " + shortSetName + " SAMPLES ARE NOT COMPOSITED");
-			// let table_q_id = "set" + String.fromCharCode(65 + i) + "_samplesTable_" + setType;
 			for (let i = 1; i <= numSamps; i++) {
 				let location = 0;
-				// if (setType === "EWI") { //TODO: this is probably a useless conditional now that the headers are the same
-				// 	location = this.getTableQuestionValue(table_q_id, 0, k);
-				// } else {
-				// let bigLoc = getQuestionValue(eventID, setName, "samplesTable_EWI", i);
-				// console.log("Big Loc: ", bigLoc);
 				let methodCategory = getMethodCategoryFromValue(getQuestionValue(eventID, METHOD_QIDS[sedType]));
-				console.log('methodCategory :', methodCategory);
-				location = getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesTable_"+methodCategory, i, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER);
-				console.log("LOCATION for " + setName + "[" + i + "]: ", location);
-				// }
 
+				location = getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesTable_" + methodCategory, i, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER);
 				setLocations.push(location);
 			}
 		} else {
-			// console.log("Set " + shortSetName + " SAMPLES ARE COMPOSITED");
 			setLocations.push("Comp"); // for a composite, there isn't really a 'location'
 		}
 		sampleEventLocations.push(setLocations);
 	});
 
-	// console.log(sampleEventLocations);
-
 	let descColumn = [];
 
-	// fill out the descColumn based on the sampleEventLoations generated above
+	// fill out the descColumn based on the sampleEventLocations generated above
 	for (let i = 0; i < sampleEventLocations.length; i++) {
 		let setName = setList[i];
 		for (let k = 0; k < sampleEventLocations[i].length; k++) {
@@ -256,9 +235,7 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 	// push below the header
 	descColumn.unshift(DESCRIPTION_HEADER);
 
-	// console.log("FIRST COLUMN: ", firstColumn);
 	return descColumn;
-
 }
 
 
