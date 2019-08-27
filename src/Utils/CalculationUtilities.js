@@ -84,7 +84,7 @@ export const getEstimatedTimeColumn = (eventID, sedType) => {
 	let setList = getSetListAsArray(eventID, sedType);
 
 	let totalNumberOfSamplesInPreviousSets = 0;
-	setList.forEach((setName) => {
+	setList.forEach((setName) => { 
 		let numberOfSamplesInSet = getNumberOfSamplesInSet(eventID, sedType, setName);
 		let startTime = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "startTime");
 		let endTime = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "endTime");
