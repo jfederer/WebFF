@@ -55,7 +55,7 @@ export function getSetListAsObject(eventID, sedType) {
 	return setListObj;
 }
 
-function checkForValidSedimentType(sedType, funcName) {
+export function checkForValidSedimentType(sedType, funcName) {
 	if(!Object.keys(SEDIMENT_TYPES).includes(sedType)) {
 		throw new Error("Invalid sediment type (" + sedType + ") provided to " + funcName);
 	}

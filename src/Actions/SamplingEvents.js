@@ -17,7 +17,7 @@ import {
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
-import { getQuestionValue, getMethodCategoryFromValue, getDescriptiveColumnForTable } from '../Utils/QuestionUtilities';
+import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { showNavigationTab } from './UI';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue} from '../Components/Questions/ParametersTable';
@@ -245,9 +245,9 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable");
 		let QWDATAValue;
 		if(!origQWDATAValue) {
-			QWDATAValue = createInitialQWDATAValue(eventID);
+			QWDATAValue = createInitialQWDATAValue(eventID, sedimentType);
 		} else {
-			QWDATAValue = verifyPassedQWDATAValue(eventID, origQWDATAValue);
+			QWDATAValue = verifyPassedQWDATAValue(eventID, sedimentType, origQWDATAValue);
 		}
 
 		if (!_.isEqual(origQWDATAValue, QWDATAValue)) {

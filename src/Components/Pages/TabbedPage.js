@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 
 import { setAppBarText } from '../../Actions/UI';
-import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import { NOT_SAMPLED } from '../../Constants/Dictionary';
 import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE } from '../../Constants/Config';
 import DataEntrySheet from '../Questions/DataEntrySheet';
@@ -87,8 +87,10 @@ class TabbedPage extends React.Component {
 
 				let passedProps = {};
 
+
 				passedProps.stateChangeHandler= (val) => this.props.SEQuestionValueChange(currentEventID, ComponentQID(componentType, sedType), val) //TODO: NEXT:  This isn't called with appropraite information
-				passedProps.id = DATA_ENTRY_INFORMATION_IDENTIFIER + methodQID.split('_')[1];
+				passedProps.id = ComponentQID(componentType, sedType);
+				passedProps.key = ComponentQID(componentType, sedType);
 				passedProps.samplingMethod = getQuestionValue(currentEventID, methodQID);
 				passedProps.sedimentType = sedType;
 				passedProps.value = getQuestionValue(currentEventID, ComponentQID(componentType, sedType));

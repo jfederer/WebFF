@@ -25,18 +25,12 @@ class Parameters extends React.Component {
 	constructor(props) {
 		super(props);
 		this.props.setAppBarText("SedFF → Parameters");
-		this.state = { tabValue: 0 };
 	}
 
-
-	handleTabClick = (event, newValue) => {
-		this.setState({ tabValue: newValue })
-	}
 
 	render() {
 		const {
 			currentEvent,
-			currentEventID
 		} = this.props;
 
 		if (!currentEvent) {
@@ -54,9 +48,7 @@ class Parameters extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		currentEventID: state.SedFF.currentSamplingEventID,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
-		defaultQuestionsData: state.Questions.questionsData,
 	}
 }
 

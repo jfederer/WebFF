@@ -33,7 +33,7 @@ import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '..
 import { loadAndSetCurrentUser } from '../Actions/SedFF';
 
 //utils
-import { getDescriptiveColumnForTable, getQuestionValue } from '../Utils/QuestionUtilities';
+// import { getDescriptiveColumnForTable, getQuestionValue } from '../Utils/QuestionUtilities';
 
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
@@ -63,6 +63,8 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
+
+	//tODO: move checkForValidSedimentType to QuestionUtilities or Utilites
 	//TODO: DataEntrySheet
 		//TODO: adding second set brings up avg rep measures...
 		//TODO: selecting certain sampler types brings up IET

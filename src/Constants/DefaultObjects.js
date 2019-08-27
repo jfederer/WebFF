@@ -9,7 +9,10 @@ import {
 	ANALYSE_TEXT_T,
 	ANALYSE_TEXT_DS,
 	ANALYSE_TEXT_SC,
-	NOT_SAMPLED
+	NOT_SAMPLED,
+	SUSPENDED_TEXT,
+	BEDLOAD_TEXT,
+	BOTTOM_MATERIAL_TEXT
 } from './Dictionary';
 
 import { DATA_ENTRY_INFORMATION_IDENTIFIER } from './Config';
@@ -20,9 +23,7 @@ export const emptySamplingEvent = {
 	dateModified: "",
 	shippedStatus: "Not Shipped",
 	questionsValues: {
-		// [DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended"]: {},
-		// [DATA_ENTRY_INFORMATION_IDENTIFIER + "Bedload"]: {},
-		// [DATA_ENTRY_INFORMATION_IDENTIFIER + "Bottom"]: {}
+
 	},
 	questionsData: {
 	}
@@ -193,8 +194,8 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 10
 	},
 
-	analysedFor_Bedload: {
-		"id": "analysedFor_bedload",
+	["analysedFor_"+BEDLOAD_TEXT]: {
+		"id": "analysedFor_"+BEDLOAD_TEXT,
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
@@ -216,8 +217,8 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 2
 	},
 
-	analysedFor_Bottom: {
-		"id": "analysedFor_bottom",
+	["analysedFor_"+BOTTOM_MATERIAL_TEXT]: {
+		"id": "analysedFor_"+BOTTOM_MATERIAL_TEXT,
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
@@ -242,8 +243,8 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 2
 	},
 
-	analysedFor_Suspended: {
-		"id": "analysedFor_suspended",
+	["analysedFor_"+SUSPENDED_TEXT]: {
+		"id": "analysedFor_"+SUSPENDED_TEXT,
 		"label": "Analyze Set/Group A for:",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
@@ -388,8 +389,8 @@ export const defaultQuestionsData = {
 
 
 
-	samplingMethod_Suspended: {
-		"id": "samplingMethod_Suspended",
+	["samplingMethod_"+SUSPENDED_TEXT]: {
+		"id": "samplingMethod_"+SUSPENDED_TEXT,
 		"label": "Suspended Sediment Method",
 		"XMLTag": "P82398",
 		"type": "DropDown",
@@ -437,8 +438,8 @@ export const defaultQuestionsData = {
 		"width_lg": 4
 	},
 
-	samplingMethod_Bedload: {
-		"id": "samplingMethod_Bedload",
+	["samplingMethod_"+BEDLOAD_TEXT]: {
+		"id": "samplingMethod_"+BEDLOAD_TEXT,
 		"label": "Bedload Sampling Method",
 		"XMLTag": "P82398",
 		"type": "DropDown",
@@ -465,8 +466,8 @@ export const defaultQuestionsData = {
 		"width_lg": 4
 	},
 
-	samplingMethod_Bottom: {
-		"id": "samplingMethod_Bottom",
+	["samplingMethod_"+BOTTOM_MATERIAL_TEXT]: {
+		"id": "samplingMethod_"+BOTTOM_MATERIAL_TEXT,
 		"label": "Bottom Material Sampling Method",
 		"XMLTag": "P82398",
 		"type": "DropDown",
@@ -1126,40 +1127,40 @@ export const defaultQuestionsData = {
 		"width_lg": 2
 	},
 
-	samplingMethod_bedload_QWDATA_CV: {
-		"id": "samplingMethod_bedload_QWDATA_CV",
+	["samplingMethod_"+BEDLOAD_TEXT+"_QWDATA_CV"]: {
+		"id": "samplingMethod_"+BEDLOAD_TEXT+"_QWDATA_CV",
 		"label": "Sampling Method",
 		"type": "ComputedValue",
 		"tabName": "QWDATA",
 		"layoutGroup": "QWDATA Info",
 		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_bedload",
+		"computationString": "samplingMethod_"+BEDLOAD_TEXT,
 		"value": "",
 		"width_xs": 4,
 		"width_lg": 2
 	},
 
-	samplingMethod_bottom_QWDATA_CV: {
-		"id": "samplingMethod_bottom_QWDATA_CV",
+	["samplingMethod_"+BOTTOM_MATERIAL_TEXT+"_QWDATA_CV"]: {
+		"id": "samplingMethod_"+BOTTOM_MATERIAL_TEXT+"_QWDATA_CV",
 		"label": "Sampling Method",
 		"type": "ComputedValue",
 		"tabName": "QWDATA",
 		"layoutGroup": "QWDATA Info",
 		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_bottom",
+		"computationString": "samplingMethod_"+BOTTOM_MATERIAL_TEXT,
 		"value": "",
 		"width_xs": 4,
 		"width_lg": 2
 	},
 
-	samplingMethod_suspended_QWDATA_CV: {
-		"id": "samplingMethod_suspended_QWDATA_CV",
+	["samplingMethod_"+SUSPENDED_TEXT+"_QWDATA_CV"]: {
+		"id": "samplingMethod_"+SUSPENDED_TEXT+"_QWDATA_CV",
 		"label": "Sampling Method",
 		"type": "ComputedValue",
 		"tabName": "QWDATA",
 		"layoutGroup": "QWDATA Info",
 		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_suspended",
+		"computationString": "samplingMethod_"+SUSPENDED_TEXT,
 		"value": "",
 		"width_xs": 4,
 		"width_lg": 2
@@ -1179,10 +1180,10 @@ export const defaultQuestionsData = {
 	},
 
 
-	[DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended"]: {
-		id: DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended",
-		samplerType_suspended: {
-			"id": "samplerType_Suspended",
+	[DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: {
+		id: DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT,
+		["samplerType_"+SUSPENDED_TEXT]: {
+			"id": "samplerType_"+SUSPENDED_TEXT,
 			"label": "Sampler Type",
 			"XMLTag": "P84164",
 			"type": "DropDown",
@@ -1623,10 +1624,10 @@ export const defaultQuestionsData = {
 
 
 
-	[DATA_ENTRY_INFORMATION_IDENTIFIER + "Bottom"]: {
-		id: DATA_ENTRY_INFORMATION_IDENTIFIER + "Bottom",
-		samplerType_bottom: {
-			"id": "samplerType_Bottom",
+	[DATA_ENTRY_INFORMATION_IDENTIFIER + BOTTOM_MATERIAL_TEXT]: {
+		id: DATA_ENTRY_INFORMATION_IDENTIFIER + BOTTOM_MATERIAL_TEXT,
+		["samplerType_"+BOTTOM_MATERIAL_TEXT]: {
+			"id": "samplerType_"+BOTTOM_MATERIAL_TEXT,
 			"label": "Sampler Type",
 			"XMLTag": "P84164",
 			"type": "DropDown",
@@ -1958,10 +1959,10 @@ export const defaultQuestionsData = {
 		}
 	},
 
-	[DATA_ENTRY_INFORMATION_IDENTIFIER + "Bedload"]: {
-		id: DATA_ENTRY_INFORMATION_IDENTIFIER + "Bedload",
-		samplerType_bedload: {
-			"id": "samplerType_Bedload",
+	[DATA_ENTRY_INFORMATION_IDENTIFIER + BEDLOAD_TEXT]: {
+		id: DATA_ENTRY_INFORMATION_IDENTIFIER + BEDLOAD_TEXT,
+		["samplerType_"+BEDLOAD_TEXT]: {
+			"id": "samplerType_"+BEDLOAD_TEXT,
 			"label": "Sampler Type",
 			"XMLTag": "P84164",
 			"type": "DropDown",

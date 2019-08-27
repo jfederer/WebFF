@@ -2,7 +2,7 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import { Grid } from '@material-ui/core';
 import _ from 'lodash';
-import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, getSetInformationQuestionsData } from './StoreUtilities';
+import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, checkForValidSedimentType } from './StoreUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
 	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY, IDENTIFIER_SPLITTER, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER,
@@ -10,7 +10,6 @@ import {
 } from '../Constants/Config';
 import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 import { getShortSetNameFromFullSetName } from '../Utils/Utilities';
-
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
 
@@ -191,6 +190,8 @@ export const getMethodCategoryFromValue = (methodValue) => {
  * @return {Array} Array of strings that describes each set/sample row in the event
  */
 export const getDescriptiveColumnForTable = (eventID, sedType) => {
+	checkForValidSedimentType(sedType, "getDescriptiveColumnForTable");
+
 	let sampleEventLocations = [];
 	let setList = getSetListAsArray(eventID, sedType);
 

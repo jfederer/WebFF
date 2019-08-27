@@ -15,13 +15,14 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
 import { getKeyFromValue } from '../../Utils/Utilities';
+import { getQuestionDataFromID } from '../../Utils/StoreUtilities';
 
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
-import { SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../../Constants/Config';
 import TextFieldDialog from '../Dialogs/TextFieldDialog';
 import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
-import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER, HYDROLOGIC_EVENT_HEADER,HYDROLOGIC_COND_HEADER,SAMPLE_TYPE_HEADER,ASTAT_CODE_HEADER } from '../../Constants/Dictionary';
+import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER, BEDLOAD_TEXT, BOTTOM_MATERIAL_TEXT, SUSPENDED_TEXT, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER, SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER } from '../../Constants/Dictionary';
 
 
 import { insertEstimatedTime } from '../../Utils/CalculationUtilities';
@@ -39,8 +40,6 @@ const styles = theme => ({
 });
 
 export const createInitialQWDATAValue = (eventID, sedType) => {  //separated out from the class so the value gets updated when the numberOfsamples get updated
-
-	return null;
 
 	let initValue = [];
 
@@ -66,15 +65,14 @@ export const createInitialQWDATAValue = (eventID, sedType) => {  //separated out
 		initValue[row][AddOnAnalysesIndex] = {};
 	}
 
-	// fill out the estimated time, if possible  // TODO: FIXME: 
+	// fill out the estimated time, if possible  
 
-	 insertEstimatedTime(eventID, initValue); //TODO: estimate time
+	insertEstimatedTime(eventID, sedType, initValue);
 
 	return initValue;
 }
 
 export const verifyPassedQWDATAValue = (eventID, sedType, value) => {    //separated out from the class so the value gets updated when the numberOfsamples get updated
-return null;
 
 	let nowValue = [];
 	// build new header row, note, the header row should still be correct.
@@ -118,7 +116,7 @@ class QWDATATable extends React.Component {
 
 		// console.log("QWDATA: Props: ", this.props);
 
-		if(this.props.value) {
+		if (this.props.value) {
 			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, verifyPassedQWDATAValue(this.props.currentSamplingEventID, this.props.sedimentType, this.props.value));
 		} else {
 			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, createInitialQWDATAValue(this.props.currentSamplingEventID, this.props.sedimentType));
@@ -149,9 +147,10 @@ class QWDATATable extends React.Component {
 		//load up addOnOpts 
 		let sedType = this.props.sedimentType;
 		switch (sedType) {
-			case "bedload": Object.assign(addOnOpts, allAddOnOpts_bedload); break;
-			case "bottom": Object.assign(addOnOpts, allAddOnOpts_bottom); break;
-			default: Object.assign(addOnOpts, allAddOnOpts_suspended);
+			case BEDLOAD_TEXT: Object.assign(addOnOpts, allAddOnOpts_bedload); break;
+			case BOTTOM_MATERIAL_TEXT: Object.assign(addOnOpts, allAddOnOpts_bottom); break;
+			case SUSPENDED_TEXT: Object.assign(addOnOpts, allAddOnOpts_suspended); break;
+			default: throw new Error("Unacceptable Sediment Type passed to handleAddOnClickOpen switch statement");
 		}
 		// console.log("addOnOpts (base):", addOnOpts);
 
@@ -164,7 +163,7 @@ class QWDATATable extends React.Component {
 		// console.log("analysesQ_id:", analysesQID);
 
 		// will get us the question that tells us what's already been added to the entire set .... //FIXME: (need to add sediment type)
-		let alreadyDoing = getQuestionValue(this.props.currentSamplingEventID, SET_INFORMATION_IDENTIFIER + setName, analysesQID);
+		let alreadyDoing = getQuestionValue(this.props.currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName, analysesQID);
 		// console.log("alreadyDoing:", alreadyDoing);
 
 		// ...to 'subtract' from the list of options
@@ -213,7 +212,7 @@ class QWDATATable extends React.Component {
 			return;
 		}
 
-		let newVal = insertEstimatedTime(this.props.currentSamplingEventID, this.props.value);
+		let newVal = insertEstimatedTime(this.props.currentSamplingEventID, this.props.sedType, this.props.value);
 
 		this.props.stateChangeHandler(newVal);
 	}
@@ -222,7 +221,7 @@ class QWDATATable extends React.Component {
 
 
 	render() {
-		const { classes } = this.props;
+		const { classes, currentSamplingEventID } = this.props;
 
 		let classlessProps = this.props;
 		delete classlessProps[classes];
@@ -231,7 +230,6 @@ class QWDATATable extends React.Component {
 			return null;
 		}
 
-		return null;
 
 		return (
 			<React.Fragment>
@@ -249,16 +247,16 @@ class QWDATATable extends React.Component {
 								if (headerValue) {
 									let qidForDefaultValue = headerValue;
 									// console.log("qidForDefaultValue: ", qidForDefaultValue);
-									defaultValue = this.props.getQuestionValue(qidForDefaultValue);
+									defaultValue = getQuestionValue(currentSamplingEventID, qidForDefaultValue);
 									// console.log("Default Value: ", defaultValue);
 									if (defaultValue) {
-										let QD = this.props.getQuestionData(qidForDefaultValue);
+										let QD = getQuestionDataFromID(qidForDefaultValue);
 										displayValue = getKeyFromValue(QD.options, defaultValue);
 									}
 								}
 
 								if (headerKey === SAMPLE_DATE_HEADER) {
-									let sdArr = this.props.getQuestionValue("sampleDate").split("-");
+									let sdArr = getQuestionValue(currentSamplingEventID, "sampleDate").split("-");
 									displayValue = sdArr[1] + "/" + sdArr[2] + "/" + sdArr[0];
 								}
 								if (headerKey === SAMPLE_TIME_HEADER) {
@@ -337,7 +335,7 @@ class QWDATATable extends React.Component {
 												default: throw new Error(headerKey + " case not handled in QWDATA table");
 											}
 										} else {
-											let motherQuestion = this.props.getQuestionData(allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
+											let motherQuestion = getQuestionDataFromID(allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
 
 											Q = <Question {...this.classlessProps}
 												label={null}

@@ -1,6 +1,6 @@
 import { SAMPLE_TIME_HEADER } from '../Constants/Dictionary';
 import { getQuestionValue, getDescriptiveColumnForTable } from './QuestionUtilities';
-import { getSetListAsArray, getNumberOfSamplesInSet } from './StoreUtilities';
+import { getSetListAsArray, getNumberOfSamplesInSet, checkForValidSedimentType } from './StoreUtilities';
 
 export const provideEWISamplingLocations = (samplingZone_left, samplingZone_right, pierLocations, pierWidths, numberOfSamples) => {
     
@@ -61,8 +61,9 @@ return results;
 }
 
 
-export const insertEstimatedTime = (eventID, value) => {
-	let etc = getEstimatedTimeColumn(eventID);
+export const insertEstimatedTime = (eventID, sedType, value) => {
+	checkForValidSedimentType(sedType, "insertEstimatedTime");
+	let etc = getEstimatedTimeColumn(eventID, sedType);
 	let SampleTimeIndex = value[0].indexOf(SAMPLE_TIME_HEADER);
 	if (SampleTimeIndex < 0) { throw new Error(SAMPLE_TIME_HEADER + " not found in header of QWDATA table") }
 	for (let row = 1; row < value.length; row++) { // skip header row
@@ -75,7 +76,9 @@ export const insertEstimatedTime = (eventID, value) => {
 
 
 export const getEstimatedTimeColumn = (eventID, sedType) => {
-	let descColumn = getDescriptiveColumnForTable(eventID);
+	checkForValidSedimentType(sedType, "getEstimatedTimeColumn");
+
+	let descColumn = getDescriptiveColumnForTable(eventID, sedType);
 	let estimatedTimeColumn = new Array(descColumn.length).fill("");
 	let setList = getSetListAsArray(eventID, sedType);
 
