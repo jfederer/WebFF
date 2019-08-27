@@ -188,7 +188,7 @@ class QWDATATable extends React.Component {
 	handleCellValueSave = (cellValue) => {
 		let newVal = this.props.value.slice();
 		newVal[this.state.curRow][this.state.curCol] = cellValue;
-		this.setState({ value: newVal }, () => { this.props.stateChangeHandler(this.props.value) });
+		this.setState({ value: newVal }, () => { this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, this.props.value) });
 		this.handleDialogsClose();
 	}
 
@@ -203,7 +203,7 @@ class QWDATATable extends React.Component {
 		let newVal = _.cloneDeep(this.props.value);
 		newVal[row][col] = value;
 
-		this.props.stateChangeHandler(newVal)
+		this.props.SEQuestionValueChange(eventID, QID, newVal);
 	}
 
 	handleEstimateClick = (e) => {  //TODO: allow overwrites vs no overwrites
@@ -214,7 +214,7 @@ class QWDATATable extends React.Component {
 
 		let newVal = insertEstimatedTime(this.props.currentSamplingEventID, this.props.sedType, this.props.value);
 
-		this.props.stateChangeHandler(newVal);
+		this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, newVal);
 	}
 
 

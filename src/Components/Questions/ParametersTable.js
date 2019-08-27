@@ -115,8 +115,6 @@ export const verifyPassedParametersTableValue = (eventID, value, sedType) => {
 class ParametersTable extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", this.props);
-
 		let nowValue = [];
 		let startingPCodes = [];
 		if (typeof this.props.value === "undefined" || this.props.value === null || (this.props.value.length === 1 && this.props.value[0].length === 0)) {// if no value was sent
@@ -513,7 +511,6 @@ class ParametersTable extends React.Component {
 ParametersTable.propTypes = {
 	classes: PropTypes.object.isRequired,
 	validator: PropTypes.func,
-	stateChangeHandler: PropTypes.func,
 	key: PropTypes.string,
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string,
@@ -536,4 +533,3 @@ const mapDispatchToProps = {
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(ParametersTable));
 
-// export default withStyles(styles, { withTheme: true })(ParametersTable);

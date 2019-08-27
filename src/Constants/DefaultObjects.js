@@ -2287,8 +2287,8 @@ export const defaultQuestionsData = {
 
 
 
-	QWDATATable: {
-		"id": "QWDATATable",
+	["QWDATATable_"+BOTTOM_MATERIAL_TEXT]: {
+		"id": "QWDATATable_"+BOTTOM_MATERIAL_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2300,8 +2300,58 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	parametersTable: {
-		"id": "parametersTable",
+	["parametersTable"+BOTTOM_MATERIAL_TEXT]: {
+		"id": "parametersTable"+BOTTOM_MATERIAL_TEXT,
+		"label": "Parameters Table",
+		"type": "ParametersTable",
+		"tabName": "Parameters",
+		"layoutGroup": "Parameters",
+		"colHeaders": true,
+		"rowHeaders": true,
+		"value": null,
+		"width_xs": 12,
+		"width_lg": 12
+	},
+	["QWDATATable_"+SUSPENDED_TEXT]: {
+		"id": "QWDATATable_"+SUSPENDED_TEXT,
+		"label": "QWDATA Table",
+		"type": "QWDATATable",
+		"tabName": "QWDATA",
+		"layoutGroup": "QWDATA Information",
+		"colHeaders": true,
+		"rowHeaders": true,
+		"value": null,
+		"width_xs": 12,
+		"width_lg": 12
+	},
+
+	["parametersTable"+SUSPENDED_TEXT]: {
+		"id": "parametersTable"+SUSPENDED_TEXT,
+		"label": "Parameters Table",
+		"type": "ParametersTable",
+		"tabName": "Parameters",
+		"layoutGroup": "Parameters",
+		"colHeaders": true,
+		"rowHeaders": true,
+		"value": null,
+		"width_xs": 12,
+		"width_lg": 12
+	},
+	["QWDATATable_"+BEDLOAD_TEXT]: {
+		"id": "QWDATATable_"+BEDLOAD_TEXT,
+		"label": "QWDATA Table",
+		"type": "QWDATATable",
+		"tabName": "QWDATA",
+		"layoutGroup": "QWDATA Information",
+		"colHeaders": true,
+		"rowHeaders": true,
+		"value": null,
+		"width_xs": 12,
+		"width_lg": 12
+	},
+
+	["parametersTable"+BEDLOAD_TEXT]: {
+		"id": "parametersTable"+BEDLOAD_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",

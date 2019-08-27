@@ -13,7 +13,12 @@ import _ from 'lodash';
 
 import { setAppBarText } from '../../Actions/UI';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
-import { NOT_SAMPLED } from '../../Constants/Dictionary';
+import {
+	NOT_SAMPLED,
+	SUSPENDED_TEXT,
+	BEDLOAD_TEXT,
+	BOTTOM_MATERIAL_TEXT
+} from '../../Constants/Dictionary';
 import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE } from '../../Constants/Config';
 import DataEntrySheet from '../Questions/DataEntrySheet';
 import ParametersTable from '../Questions/ParametersTable';
@@ -42,16 +47,16 @@ function ComponentCreator(componentType, passedProps) {
 		case DATA_ENTRY_SHEET_TYPE: return <DataEntrySheet {...passedProps} />
 		case PARAMETER_TABLE_TYPE: return <ParametersTable {...passedProps} />
 		case QWDATA_TABLE_TYPE: return <QWDATATable {...passedProps} />
-		default:  return null
+		default: return null
 	}
 }
 
 function ComponentQID(componentType, sedType) {
 	switch (componentType) {
 		case DATA_ENTRY_SHEET_TYPE: return DATA_ENTRY_INFORMATION_IDENTIFIER + sedType;
-		case PARAMETER_TABLE_TYPE: return "parametersTable";
-		case QWDATA_TABLE_TYPE: return "QWDATATable";
-		default:  return null
+		case PARAMETER_TABLE_TYPE: return "parametersTable_"+sedType;
+		case QWDATA_TABLE_TYPE: return "QWDATATable_"+sedType;
+		default: return null
 	}
 }
 
@@ -88,7 +93,7 @@ class TabbedPage extends React.Component {
 				let passedProps = {};
 
 
-				passedProps.stateChangeHandler= (val) => this.props.SEQuestionValueChange(currentEventID, ComponentQID(componentType, sedType), val) //TODO: NEXT:  This isn't called with appropraite information
+				passedProps.stateChangeHandler = (val) => this.props.SEQuestionValueChange(currentEventID, ComponentQID(componentType, sedType), val) //TODO: NEXT:  This isn't called with appropraite information
 				passedProps.id = ComponentQID(componentType, sedType);
 				passedProps.key = ComponentQID(componentType, sedType);
 				passedProps.samplingMethod = getQuestionValue(currentEventID, methodQID);
@@ -154,5 +159,5 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setAppBarText
 }
- 
+
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(TabbedPage));
