@@ -63,17 +63,16 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-
-	//tODO: move checkForValidSedimentType to QuestionUtilities or Utilites
+	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
+	
 	//TODO: DataEntrySheet
+		//TODO: actions for sampler info don't appear to work
 		//TODO: adding second set brings up avg rep measures...
 		//TODO: selecting certain sampler types brings up IET
 		//TODO: tables appear when # samples entered
+		//TODO: duplicate stationing from set to set
 
-
-	//TODO: QWDATA and PArameters
-	
-	//TODO: duplicate stationing from set to set
+	//TODO: move checkForValidSedimentType to QuestionUtilities or Utilites
 
 	//TODO: system menu rebuild
 

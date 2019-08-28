@@ -7,7 +7,7 @@ import {
 	SAMPLING_EVENT_LOAD_COMPLETE
 } from '../Constants/ActionTypes';
 
-import { runAllSamplingEventActionStrings } from './SamplingEvents';
+// import { runAllSamplingEventActionStrings } from './SamplingEvents';
 
 import { makeNewUser } from './User';
 
@@ -100,7 +100,7 @@ export function loadAndSetCurrentSamplingEvent(eventID, callback) { // safer way
 		dispatch(setCurrentSamplingEvent(eventID))
 		dispatch(samplingEventLoadComplete(eventID));
 
-		dispatch(runAllSamplingEventActionStrings(eventID));
+		// dispatch(runAllSamplingEventActionStrings(eventID));  //TODO: FIXME: will need to replicate this 
 		if(callback) {
 			callback();
 		}

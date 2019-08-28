@@ -16,11 +16,11 @@ import {
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER, ACTIONABLE_GLOBAL_QIDS } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { showNavigationTab } from './UI';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
-import { createInitialParametersTableValue, verifyPassedParametersTableValue} from '../Components/Questions/ParametersTable';
+import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
 
 
 
@@ -33,63 +33,103 @@ import { createInitialParametersTableValue, verifyPassedParametersTableValue} fr
 */
 export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events questions (settings, etc)
 
-	// console.log("SEQuestionVAlueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
+	console.log("SEQuestionValueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 
 	return (dispatch, getState) => {
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
 		//get question and conditionally the action string
-		dispatch(conditionallyRunActionString(eventID, getQuestionDataFromID(questionID))); //TODO: need getState?  Call a store util instead?
+
+		if (ACTIONABLE_GLOBAL_QIDS.includes(questionID)) {
+			runSpecialQIDAction(eventID, questionID, newValue);
+		}
+		// 	Object.newValue  .startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
+		// 	dispatch(conditionallyRunActionString(eventID, questionID)); //TODO: need getState?  Call a store util instead?
+		// }
 	}
 }
 
-function conditionallyRunActionString(eventID, question) {
-	// console.log("conditionallyRunActionString(", eventID, question, ")");
+function runSpecialQIDAction(eventID, questionID, newValue) {
+	console.log("runSpecialQIDAction(", eventID, questionID, newValue, ")");
 
 	return (dispatch, getState) => {
-		if (question) {
-			let value = getQuestionValue(eventID, question.id);
-			let actions = question.actions;
-			if (actions) {
-				// if action string exists...
-				let anyValueActionString = actions["anyValue"];
-				if (anyValueActionString) {
-					// run 'anyValue' action strings first
-					dispatchAllActionsFromActionString(dispatch, anyValueActionString);
-				}
+		if(questionID.startsWith("samplingMethod_")) {
+			//show/hide data entry tab
+			//TODO: make show/hide on that tab a direct function that checks samplingMethod_*  //TODO:
+		}
 
-				let thisValueActionString = actions[value];
-				if (thisValueActionString) {
-					// run this specific value's action string second
-					dispatchAllActionsFromActionString(dispatch, thisValueActionString);
-				}
+		if(questionID === "collectingAgency") {
+			//action showQuestion / hideQuestion depending on question.value
+		}
+
+		let value = getQuestionValue(eventID, question.id);
+		let actions = question.actions;
+		if (actions) {
+			// if action string exists...
+			let anyValueActionString = actions["anyValue"];
+			if (anyValueActionString) {
+				// run 'anyValue' action strings first
+				dispatchAllActionsFromActionString(dispatch, anyValueActionString);
 			}
-		} else {
-			console.warn("Attempted to conditionally run action string on falsey question object");	
-		}//TODO: do I need to include somethign if this conditional is false...?
+
+			let thisValueActionString = actions[value];
+			if (thisValueActionString) {
+				// run this specific value's action string second
+				dispatchAllActionsFromActionString(dispatch, thisValueActionString);
+			}
+		}
+
 	}
 }
+// function conditionallyRunActionString(eventID, questionID, subQ) {
+// 	console.log("conditionallyRunActionString(", eventID, questionID, subQ, ")");
 
-export function runAllSamplingEventActionStrings(eventID) { // TODO: recursive to allow sub ID's to have actions
-	//console.log("runAllSamplingEventActionStrings(", eventID, ")");
+// 	let question = getQuestionDataFromID(questionID);
 
-	return (dispatch, getState) => {
-		dispatch({type:RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS}); // basically just for redux logging purposes - FUTURE: use this to block view changes until complete
-		let event = getEventFromID(eventID);
-		Object.keys(event.questionsValues).map((key) => {
-			try {
-				let questionData = getQuestionDataFromID(key);
-				if (questionData) {
-					dispatch(conditionallyRunActionString(eventID, questionData));
-				}
-			}
-			catch (e) {
-				console.warn("Unable to get questionsValues or questionData for event: ", eventID, e.name, e.message);
-			}
-			return null; //satsify linter
-		})
-	}
-}
+// 	return (dispatch, getState) => {
+// 		if (question) {
+// 			let value = getQuestionValue(eventID, question.id);
+// 			let actions = question.actions;
+// 			if (actions) {
+// 				// if action string exists...
+// 				let anyValueActionString = actions["anyValue"];
+// 				if (anyValueActionString) {
+// 					// run 'anyValue' action strings first
+// 					dispatchAllActionsFromActionString(dispatch, anyValueActionString);
+// 				}
+
+// 				let thisValueActionString = actions[value];
+// 				if (thisValueActionString) {
+// 					// run this specific value's action string second
+// 					dispatchAllActionsFromActionString(dispatch, thisValueActionString);
+// 				}
+// 			}
+// 		} else {
+// 			console.warn("Attempted to conditionally run action string on falsey question object");	
+// 		}//TODO: do I need to include somethign if this conditional is false...?
+// 	}
+// }
+
+// export function runAllSamplingEventActionStrings(eventID) { // TODO: recursive to allow sub ID's to have actions
+// 	//console.log("runAllSamplingEventActionStrings(", eventID, ")");
+
+// 	return (dispatch, getState) => {
+// 		dispatch({type:RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS}); // basically just for redux logging purposes - FUTURE: use this to block view changes until complete
+// 		let event = getEventFromID(eventID);
+// 		Object.keys(event.questionsValues).map((key) => {
+// 			try {
+// 				let questionData = getQuestionDataFromID(key);
+// 				if (questionData) {
+// 					dispatch(conditionallyRunActionString(eventID, questionData));
+// 				}
+// 			}
+// 			catch (e) {
+// 				console.warn("Unable to get questionsValues or questionData for event: ", eventID, e.name, e.message);
+// 			}
+// 			return null; //satsify linter
+// 		})
+// 	}
+// }
 
 
 /**
@@ -159,7 +199,7 @@ export function stationNameChanged(eventID, newStationName) {
 	// console.log("stationNameChanged(", eventID,", ", newStationName,")");
 
 	//TODO: verify station is acceptable
-	
+
 	//note: displayName is already changed.
 	return (dispatch, getState) => {
 		let stationID = getStationIDsFromName(getState().SedFF.currentUsername, newStationName)[0];
@@ -167,13 +207,13 @@ export function stationNameChanged(eventID, newStationName) {
 
 		dispatch(SEQuestionValueChange(eventID, "stationNumber", station.number)); //station.number is a required station attribute
 
-		if(station.defaultProjectName) {
+		if (station.defaultProjectName) {
 			dispatch(SEQuestionValueChange(eventID, "projectName", station.defaultProjectName));
 		}
-		if(station.defaultProjectID) {
+		if (station.defaultProjectID) {
 			dispatch(SEQuestionValueChange(eventID, "projectID", station.defaultProjectID));
 		}
-		if(station.defaultAgencyCode) {
+		if (station.defaultAgencyCode) {
 			dispatch(SEQuestionValueChange(eventID, "agencyCode", station.defaultAgencyCode));
 		}
 
@@ -189,7 +229,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 	return dispatch => {
 		dispatch(showNavigationTab("QWDATA"));
 		dispatch(showNavigationTab("Parameters"));
-		
+
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
 		let setInfoSampleTableValue = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName, "samplesTable_" + getMethodCategoryFromValue(samplingMethod));
@@ -197,14 +237,14 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
 			// eslint-disable-next-line no-useless-concat
 			let errMSG = "getQuestionValue(" + eventID + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + ") returned ";
-			errMSG += setInfoSampleTableValue === null?"null":"undefined";
+			errMSG += setInfoSampleTableValue === null ? "null" : "undefined";
 
 			throw new Error(errMSG);
 		}
 
 		//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
 
-		if (setInfoSampleTableValue.length >= parseInt(numPoints)+1) {
+		if (setInfoSampleTableValue.length >= parseInt(numPoints) + 1) {
 			// table must shrink
 			// console.log("Table must shrink");
 
@@ -237,106 +277,106 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 			setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod), setInfoSampleTableValue);
 		}
 
-		
+
 		// re-do any distance data  if EWI (confirm with user)
 
 		////// modify QWDATA table //////TODO:
-		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable_"+sedimentType);
+		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable_" + sedimentType);
 		let QWDATAValue;
-		if(!origQWDATAValue) {
+		if (!origQWDATAValue) {
 			QWDATAValue = createInitialQWDATAValue(eventID, sedimentType);
 		} else {
 			QWDATAValue = verifyPassedQWDATAValue(eventID, sedimentType, origQWDATAValue);
 		}
 
 		if (!_.isEqual(origQWDATAValue, QWDATAValue)) {
-			dispatch(SEQuestionValueChange(eventID, "QWDATATable_"+sedimentType, QWDATAValue));
+			dispatch(SEQuestionValueChange(eventID, "QWDATATable_" + sedimentType, QWDATAValue));
 		}
 
 		////// modify Parameters table //////TODO:
-		let origParameterValue = getQuestionValue(eventID, "parametersTable_"+sedimentType);
+		let origParameterValue = getQuestionValue(eventID, "parametersTable_" + sedimentType);
 		let parameterValue;
-		if(!origParameterValue) {
+		if (!origParameterValue) {
 			parameterValue = createInitialParametersTableValue(eventID, sedimentType);
 		} else {
 			parameterValue = verifyPassedParametersTableValue(eventID, origParameterValue, sedimentType);
 		}
 
 		if (!_.isEqual(origParameterValue, parameterValue)) {
-			dispatch(SEQuestionValueChange(eventID, "parametersTable_"+sedimentType, parameterValue));
+			dispatch(SEQuestionValueChange(eventID, "parametersTable_" + sedimentType, parameterValue));
 		}
 	}
 }
 
 
-function getActionsFromActionString(actionsString) {
-	/* 
-	@desc splits an action string up in to constituent parts.  Combines all like-actions.
-	@param actionString {string} - string with actions delimited by ampersand (&) and actions split from action parameters by double-colon (::)
-	@returns actions {object}, where action[actionName] is an array of arrays of that action's parametes.
-	*/
+// function getActionsFromActionString(actionsString) {
+// 	/* 
+// 	@desc splits an action string up in to constituent parts.  Combines all like-actions.
+// 	@param actionString {string} - string with actions delimited by ampersand (&) and actions split from action parameters by double-colon (::)
+// 	@returns actions {object}, where action[actionName] is an array of arrays of that action's parametes.
+// 	*/
 
-	let actionsArr = actionsString.split('&');
-	let actions = {};
-	actionsArr.map((actionString) => {
-		let actionParameters = actionString.split('::');
-		let actionName = actionParameters.splice(0, 1);
+// 	let actionsArr = actionsString.split('&');
+// 	let actions = {};
+// 	actionsArr.map((actionString) => {
+// 		let actionParameters = actionString.split('::');
+// 		let actionName = actionParameters.splice(0, 1);
 
-		if (typeof actions[actionName] === 'undefined') {
-			actions[actionName] = [actionParameters];
-		} else {
-			actions[actionName].push(actionParameters);
-		}
-		return null;
-	}
-	);
-	return actions;
-}
+// 		if (typeof actions[actionName] === 'undefined') {
+// 			actions[actionName] = [actionParameters];
+// 		} else {
+// 			actions[actionName].push(actionParameters);
+// 		}
+// 		return null;
+// 	}
+// 	);
+// 	return actions;
+// }
 
 
 
-function translateActionStringActionNameToAction(sedFFActionName) {
-	/* 
-	@desc translates between SedFF action names and redux action names. //FUTURE: switch sedFF action names to match redux action names?
-	@param sedFFActionName {string} the sedFF action name... found in 'actions' object as a part of each question object
-	@returns redux-equivalent action {string}.  If non found, warns and returns null.
-	*/
-	switch (sedFFActionName) {
-		case "ShowTab":
-			return SHOW_NAVIGATION_TABS;
-		case "HideTab":
-			return HIDE_NAVIGATION_TABS;
-		case "ShowQuestion":
-			return SHOW_QUESTIONS
-		case "HideQuestion":
-			return HIDE_QUESTIONS;
-		case "ShowPanel":
-			return SHOW_PANELS;
-		case "HidePanel":
-			return HIDE_PANELS;
-		// case "SetValue":
-		// 	// let qid = splitActionString[1].split(":")[0];
-		// 	// let val = splitActionString[1].split(":")[1];
-		// 	// this.setQuestionValue(qid, val, () => console.log("Set Value!"));
-		// 	console.log("SET VALUE: TODO"); //TODO:
-		// 	break;
-		default:
-			console.warn("Requested action '" + sedFFActionName + "' not recognized");
-			return null;
-	}
-}
+// function translateActionStringActionNameToAction(sedFFActionName) {
+// 	/* 
+// 	@desc translates between SedFF action names and redux action names. //FUTURE: switch sedFF action names to match redux action names?
+// 	@param sedFFActionName {string} the sedFF action name... found in 'actions' object as a part of each question object
+// 	@returns redux-equivalent action {string}.  If non found, warns and returns null.
+// 	*/
+// 	switch (sedFFActionName) {
+// 		case "ShowTab":
+// 			return SHOW_NAVIGATION_TABS;
+// 		case "HideTab":
+// 			return HIDE_NAVIGATION_TABS;
+// 		case "ShowQuestion":
+// 			return SHOW_QUESTIONS
+// 		case "HideQuestion":
+// 			return HIDE_QUESTIONS;
+// 		case "ShowPanel":
+// 			return SHOW_PANELS;
+// 		case "HidePanel":
+// 			return HIDE_PANELS;
+// 		// case "SetValue":
+// 		// 	// let qid = splitActionString[1].split(":")[0];
+// 		// 	// let val = splitActionString[1].split(":")[1];
+// 		// 	// this.setQuestionValue(qid, val, () => console.log("Set Value!"));
+// 		// 	console.log("SET VALUE: TODO"); //TODO:
+// 		// 	break;
+// 		default:
+// 			console.warn("Requested action '" + sedFFActionName + "' not recognized");
+// 			return null;
+// 	}
+// }
 
-/** 
-@desc dispatches all actions included in the action string.
-@param dispatch {function} the redux-thunk dispatch function
-@param actionString {string} the sedFF action action string.  it will be split up and translated in order to dispatch.
-@returns {void}
-*/
-function dispatchAllActionsFromActionString(dispatch, actionString) {
-	//console.log("dispatchAllActionsFromActionString(", actionString, ")");
+// /** 
+// @desc dispatches all actions included in the action string.
+// @param dispatch {function} the redux-thunk dispatch function
+// @param actionString {string} the sedFF action action string.  it will be split up and translated in order to dispatch.
+// @returns {void}
+// */
+// function dispatchAllActionsFromActionString(dispatch, actionString) {
+// 	//console.log("dispatchAllActionsFromActionString(", actionString, ")");
 
-	let actionsToDispatch = getActionsFromActionString(actionString);
-	Object.keys(actionsToDispatch).forEach((sedFFActionName) => {
-		dispatch({ type: translateActionStringActionNameToAction(sedFFActionName), payload: actionsToDispatch[sedFFActionName] });
-	});
-}
+// 	let actionsToDispatch = getActionsFromActionString(actionString);
+// 	Object.keys(actionsToDispatch).forEach((sedFFActionName) => {
+// 		dispatch({ type: translateActionStringActionNameToAction(sedFFActionName), payload: actionsToDispatch[sedFFActionName] });
+// 	});
+// }

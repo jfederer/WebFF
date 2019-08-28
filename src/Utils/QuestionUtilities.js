@@ -284,7 +284,7 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 		catch (e) {
 			if (e instanceof TypeError) {
 				if (!key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER))
-					console.warn("tabName did not exist for questionsData[", key, "]: ", questionsData[key]);
+					console.debug("tabName did not exist for questionsData[", key, "]: ", questionsData[key]);
 			}
 
 		}
