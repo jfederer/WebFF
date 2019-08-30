@@ -55,6 +55,14 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 			} else {
 				dispatch(hideNavigationTab("Data Entry"));
 			}
+
+			//create Data Entry object in values if it doesn't exist...
+			let sedType = questionID.split("samplingMethod_")[1];
+			console.log('sedType :', sedType);
+			let DE = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType);
+			if(typeof DE === "undefined") {
+				dispatch(SEQuestionValueChange(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType, {}))
+			}
 		}
 
 		if (questionID === "collectingAgency") {

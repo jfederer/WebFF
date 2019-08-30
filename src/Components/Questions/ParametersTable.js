@@ -25,7 +25,10 @@ import { DESCRIPTION_HEADER } from '../../Constants/Dictionary';
 import { getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { setAppBarText } from '../../Actions/UI';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
-
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { getShortSetNameFromFullSetName } from '../../Utils/Utilities';
+import { getSetListAsArray } from '../../Utils/StoreUtilities';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 
 import _ from 'lodash';
 
@@ -298,12 +301,28 @@ class ParametersTable extends React.Component {
 	render() {
 		// return null;
 		const { classes, currentSamplingEventID, sedimentType } = this.props;
-		// let setType = this.props.getCurrentSampleEventMethod();
+				
+		if (typeof this.props.value === 'undefined' || this.props.value === null || this.props.value.length === 1) {
+			return <Typography key={this.props.sedimentType + "_PARAMETER_FAILURE_MESSAGE"}>{"Parameters Table has insufficient information to display.  This is likely due to this sediment type, '" + this.props.sedimentType + "', having no sets or no sampling points in a set"}</Typography>;
+		}
+
 		let firstColumn = getDescriptiveColumnForTable(currentSamplingEventID, sedimentType);
+
+		// if sedimentType dataEntrySheet contains a blank # of sampling points for any set, provide message
+		let setList = getSetListAsArray(currentSamplingEventID, sedimentType);
+		let warningMessage = [];
+		setList.forEach(setName => {
+			if (!getQuestionValue(currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, setName, "numberOfSamplingPoints")) {
+				warningMessage.push(<Typography key={setName + "_warning_key"}>Set "{getShortSetNameFromFullSetName(setName)}"" does not have a valid number of sampling points. Ensure this is what you intend.</Typography>)
+			}
+		})
 
 
 		return (
 			<React.Fragment>
+				<React.Fragment>
+					{warningMessage.map(msg => msg)}
+				</React.Fragment>
 				{/* <Paper className={classes.root}> */}
 				<Button className={classes.addColumnButton} onClick={this.handleShowAddColumnDialog}>Add</Button>
 				<Table className={classes.table}>

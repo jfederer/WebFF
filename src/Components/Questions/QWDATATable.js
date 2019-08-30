@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { allQWDATAOptionalHeaders, allAddOnOpts_bedload, allAddOnOpts_bottom, allAddOnOpts_suspended } from '../../Utils/QuestionOptions';
 import { getKeyFromValue } from '../../Utils/Utilities';
-import { getQuestionDataFromID } from '../../Utils/StoreUtilities';
+import { getQuestionDataFromID, getSetListAsArray } from '../../Utils/StoreUtilities';
 
 import { getQuestionValue, getDescriptiveColumnForTable } from '../../Utils/QuestionUtilities';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
@@ -23,7 +23,7 @@ import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFI
 import TextFieldDialog from '../Dialogs/TextFieldDialog';
 import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
 import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER, BEDLOAD_TEXT, BOTTOM_MATERIAL_TEXT, SUSPENDED_TEXT, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER, SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER } from '../../Constants/Dictionary';
-
+import { getShortSetNameFromFullSetName } from '../../Utils/Utilities';
 
 import { insertEstimatedTime } from '../../Utils/CalculationUtilities';
 
@@ -222,18 +222,36 @@ class QWDATATable extends React.Component {
 
 
 	render() {
-		const { classes, currentSamplingEventID } = this.props;
+		const { classes, currentSamplingEventID, sedimentType } = this.props;
 
 		let classlessProps = this.props;
 		delete classlessProps[classes];
 
-		if (typeof this.props.value === 'undefined' || this.props.value === null) {
-			return null;
+		if (typeof this.props.value === 'undefined' || this.props.value === null || this.props.value.length === 1) {
+			return <Typography key={this.props.sedimentType + "_QWDATA_FAILURE_MESSAGE"}>{"QWDATA Table has insufficient information to display.  This is likely due to this sediment type, '" + this.props.sedimentType + "', having no sets or no sampling points in a set"}</Typography>;
 		}
+		
+		// if(this.props.value.length === 1 ) {
+		// 	return 
+		// }
 
+		// if sedimentType dataEntrySheet contains a blank # of sampling points for any set, provide message
+		let setList = getSetListAsArray(currentSamplingEventID, sedimentType);
+		let warningMessage = [];
+		setList.forEach(setName => {
+			if (!getQuestionValue(currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, setName, "numberOfSamplingPoints")) {
+				warningMessage.push(<Typography key={setName + "_warning_key"}>Set "{getShortSetNameFromFullSetName(setName)}"" does not have a valid number of sampling points. Ensure this is what you intend.</Typography>)
+			}
+		})
+
+		
+		
 
 		return (
 			<React.Fragment>
+				<React.Fragment>
+					{warningMessage.map(msg => msg)}
+				</React.Fragment>
 				<br></br>
 				<Typography style={{ flex: 1 }}>Ensure unique sample times.   All samples will get codes in parenthesis (values pulled from FieldForm page), unless changed here.</Typography>
 				<Table className={classes.table}>
