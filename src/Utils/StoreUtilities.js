@@ -27,6 +27,12 @@ export function getNumberOfSamplesInSet(eventID, sedType, setID) {
 	// }
 }
 
+
+/**
+ * Provides full long-name list of sets for a given sediment type.  If the data entry information for that sediment type does not exist, warns and returns an empty array.
+ * @param {string} eventID 
+ * @param {string} sedType 
+ */
 export function getSetListAsArray(eventID, sedType) {
 	checkForValidSedimentType(sedType, "getSetListAsArray");
 
@@ -44,8 +50,10 @@ export function getSetListAsArray(eventID, sedType) {
 			return key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER);
 		})
 	} catch (e) {
-		console.warn("getSetListAsArray attempted to get a list of sets on a data entry type that didn't exist." + e);
+		console.warn("getSetListAsArray attempted to get a list of sets on a data entry type that didn't exist." + e + e.stackTrace());
+		return [];
 	}
+
 	return setListArr;
 }
 

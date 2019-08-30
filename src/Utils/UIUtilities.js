@@ -22,11 +22,13 @@ export function shouldTablePagesShow(eventID) {
 	let show = false;
 
 	Object.keys(METHOD_QIDS).forEach(sedType => {
-		getSetListAsArray(eventID, sedType).forEach(setName => {
-			if (getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "numberOfSamplingPoints")) {
-				show = true;
-			}
-		})
+		if (getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType)) {
+			getSetListAsArray(eventID, sedType).forEach(setName => {
+				if (getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "numberOfSamplingPoints")) {
+					show = true;
+				}
+			})
+		}
 	})
 	return show;
 }

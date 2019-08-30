@@ -52,10 +52,9 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 
 			//create Data Entry object in values if it doesn't exist... 
 			let sedType = questionID.split("samplingMethod_")[1];
-			console.log('sedType :', sedType);
 			let DE = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType);
 			if (typeof DE === "undefined") {
-				dispatch(SEQuestionValueChange(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, {}))
+				dispatch(SEQuestionValueChange(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, {}));
 			}
 
 			//show/hide data entry tab
