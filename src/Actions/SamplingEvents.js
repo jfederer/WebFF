@@ -18,9 +18,10 @@ import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER, ACTIONABLE_GLOBAL_QIDS } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
-import { showNavigationTab } from './UI';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
+import { shouldDataEntryTabShow } from '../Utils/UIUtilities';
+import { showNavigationTab, hideNavigationTab} from './UI';
 
 
 
@@ -32,20 +33,14 @@ import { createInitialParametersTableValue, verifyPassedParametersTableValue } f
 * @returns void
 */
 export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: add something in for non-Sampling-Events questions (settings, etc)
-
-	console.log("SEQuestionValueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
+	// console.log("SEQuestionValueChange(eventID: ", eventID, "  questionID: ", questionID, "  newValue: ", newValue);
 
 	return (dispatch, getState) => {
 		dispatch({ type: SE_QUESTION_VALUE_CHANGE, eventID, questionID, newValue });
 
-		//get question and conditionally the action string
-
 		if (ACTIONABLE_GLOBAL_QIDS.includes(questionID)) {
-			runSpecialQIDAction(eventID, questionID, newValue);
-		}
-		// 	Object.newValue  .startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
-		// 	dispatch(conditionallyRunActionString(eventID, questionID)); //TODO: need getState?  Call a store util instead?
-		// }
+			dispatch(runSpecialQIDAction(eventID, questionID, newValue));
+		} 
 	}
 }
 
@@ -53,31 +48,35 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 	console.log("runSpecialQIDAction(", eventID, questionID, newValue, ")");
 
 	return (dispatch, getState) => {
-		if(questionID.startsWith("samplingMethod_")) {
+		if (questionID.startsWith("samplingMethod_")) {
 			//show/hide data entry tab
-			//TODO: make show/hide on that tab a direct function that checks samplingMethod_*  //TODO:
+			if (shouldDataEntryTabShow(eventID)) {
+				dispatch(showNavigationTab("Data Entry"));
+			} else {
+				dispatch(hideNavigationTab("Data Entry"));
+			}
 		}
 
-		if(questionID === "collectingAgency") {
+		if (questionID === "collectingAgency") {
 			//action showQuestion / hideQuestion depending on question.value
 		}
 
-		let value = getQuestionValue(eventID, question.id);
-		let actions = question.actions;
-		if (actions) {
-			// if action string exists...
-			let anyValueActionString = actions["anyValue"];
-			if (anyValueActionString) {
-				// run 'anyValue' action strings first
-				dispatchAllActionsFromActionString(dispatch, anyValueActionString);
-			}
+		// let value = getQuestionValue(eventID, questionID);
+		// let actions = question.actions;
+		// if (actions) {
+		// 	// if action string exists...
+		// 	let anyValueActionString = actions["anyValue"];
+		// 	if (anyValueActionString) {
+		// 		// run 'anyValue' action strings first
+		// 		dispatchAllActionsFromActionString(dispatch, anyValueActionString);
+		// 	}
 
-			let thisValueActionString = actions[value];
-			if (thisValueActionString) {
-				// run this specific value's action string second
-				dispatchAllActionsFromActionString(dispatch, thisValueActionString);
-			}
-		}
+		// 	let thisValueActionString = actions[value];
+		// 	if (thisValueActionString) {
+		// 		// run this specific value's action string second
+		// 		dispatchAllActionsFromActionString(dispatch, thisValueActionString);
+		// 	}
+		// }
 
 	}
 }

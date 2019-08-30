@@ -9,7 +9,8 @@ import {
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
 	SET_APP_BAR_TEXT,
-	SHOW_NAVIGATION_TABS
+	SHOW_NAVIGATION_TABS,
+	HIDE_NAVIGATION_TABS
 } from '../Constants/ActionTypes';
 
 
@@ -57,5 +58,11 @@ export function showNavigationTab(tabName) {
 	let pl = [];
 	pl.push([tabName]);  // show navigation tabs expects an array of arrays with tabnames as the payload
 	return { type: SHOW_NAVIGATION_TABS, payload: pl }
+}
+
+export function hideNavigationTab(tabName) { 
+	let pl = [];
+	pl.push([tabName]);  // show navigation tabs expects an array of arrays with tabnames as the payload
+	return { type: HIDE_NAVIGATION_TABS, payload: pl }
 }
 

@@ -18,7 +18,17 @@ import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
 import { navMenuItems } from '../../Constants/NavMenu';
 import { setNavMenuExpand } from '../../Actions/UI';
+import { shouldDataEntryTabShow } from '../../Utils/UIUtilities';
 
+
+function createNavItem(menuItem) {
+	return <ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route} >  {/* // onClick={()=>console.log("load page ", menuItem.text)}> */}
+		<ListItemIcon>
+			{materialIconBuilder(menuItem.icon)}
+		</ListItemIcon>
+		<ListItemText className={styles.navMenuText} primary={menuItem.text} />
+	</ListItem>
+}
 
 class NavMenu extends React.Component {
 	render() {
@@ -39,21 +49,15 @@ class NavMenu extends React.Component {
 					</IconButton>
 				</div>
 				<List>
-					{navMenuItems.map((menuItem) => {
-						return (
-							hiddenNavMenuItems === undefined || !hiddenNavMenuItems.includes(menuItem.text.replace(/\s/g,''))
-								? <ListItem key={menuItem.route + "_key"} button component={Link} to={menuItem.route} >  {/* // onClick={()=>console.log("load page ", menuItem.text)}> */}
-									<ListItemIcon>
-										{materialIconBuilder(menuItem.icon)}
-									</ListItemIcon>
-									<ListItemText className={styles.navMenuText} primary={menuItem.text} />
-								</ListItem>
-								: null
-						)
+					{Object.entries(navMenuItems).map(([name, menuItem], index) => {
+						if (typeof hiddenNavMenuItems !== 'undefined' && hiddenNavMenuItems.includes(menuItem.text.replace(/\s/g, ''))) {
+							return null; // if this item is on the hidden list, hide it. (this overrides other coniditonal appearances)
+						}
+						return createNavItem(menuItem);
 					})}
 
 				</List>
-			</Drawer>
+			</Drawer >
 		);
 	}
 }
@@ -65,6 +69,7 @@ NavMenu.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		UI: state.UI,
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 	}
 }
 
