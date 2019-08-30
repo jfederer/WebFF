@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
 
-import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES} from '../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES } from '../Constants/Config';
 // import { eventNames } from 'cluster';
 
 export function getNumberOfSets(eventID, sedType) {
@@ -22,14 +22,14 @@ export function getNumberOfSamplesInSet(eventID, sedType, setID) {
 	// 	return event.questionsValues[setID]["numberOfSamplingPoints"]
 	// } else {
 
-		let ret = event.questionsValues[DATA_ENTRY_INFORMATION_IDENTIFIER+sedType][setID]["numberOfSamplingPoints"];
-		return ret;
+	let ret = event.questionsValues[DATA_ENTRY_INFORMATION_IDENTIFIER + sedType][setID]["numberOfSamplingPoints"];
+	return ret;
 	// }
 }
 
 export function getSetListAsArray(eventID, sedType) {
 	checkForValidSedimentType(sedType, "getSetListAsArray");
-	
+
 	let event = getEventFromID(eventID);
 
 	if (!event) {
@@ -37,11 +37,15 @@ export function getSetListAsArray(eventID, sedType) {
 	}
 
 	let setListArr = [];
-	let DEQV = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType);
+	let DEQV = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType);
 
-	setListArr = Object.keys(DEQV).filter((key) => { //TODO: change these to getQuestionValues
-		return key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER+sedType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER);
-	})
+	try {
+		setListArr = Object.keys(DEQV).filter((key) => { //TODO: change these to getQuestionValues
+			return key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER);
+		})
+	} catch (e) {
+		console.warn("getSetListAsArray attempted to get a list of sets on a data entry type that didn't exist." + e);
+	}
 	return setListArr;
 }
 
@@ -55,7 +59,7 @@ export function getSetListAsObject(eventID, sedType) {
 }
 
 export function checkForValidSedimentType(sedType, funcName) {
-	if(!Object.keys(SEDIMENT_TYPES).includes(sedType)) {
+	if (!Object.keys(SEDIMENT_TYPES).includes(sedType)) {
 		throw new Error("Invalid sediment type (" + sedType + ") provided to " + funcName);
 	}
 }
@@ -83,7 +87,7 @@ export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add e
 	let currentEvent = state.SamplingEvents[currentEventID]; //note, currentEvent is used below to get stationName
 	if (currentEvent) {
 		currentEventQD = getEventQuestionData(currentEvent);
-		
+
 		let stationNameValue = currentEvent.questionsValues['stationName'];
 		if (stationNameValue && username) {
 			currentStationQD = getStationNameQuestionData(username, stationNameValue);
@@ -156,7 +160,7 @@ export function getStationQuestionData(station) {
 */
 export function getQuestionDataFromID(QID) { //TODO: add eventID
 	//TODO: build this recursively, like getQuestionValue, to work with nested questions?
-	
+
 	let questionsData = getQuestionsData();
 
 	if (!questionsData[QID]) {
@@ -175,11 +179,11 @@ export function getSetInformationQuestionsData() {
 // 	Object.keys(DES_QD[sedimentType]).forEach(key=>{
 // 		retQD[key]=DES_QD[sedimentType][key];
 // 	})
-	
+
 
 // 	console.log('retQD :', retQD);
 // 	//tood check we are getting appropriate sediment type input
-	
+
 // 	return retQD;
 // }
 

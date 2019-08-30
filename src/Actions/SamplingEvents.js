@@ -20,8 +20,8 @@ import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
-import { shouldDataEntryTabShow } from '../Utils/UIUtilities';
-import { showNavigationTab, hideNavigationTab} from './UI';
+import { shouldDataEntryTabShow, shouldTablePagesShow } from '../Utils/UIUtilities';
+import { showNavigationTab, hideNavigationTab } from './UI';
 
 
 
@@ -40,7 +40,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 
 		if (ACTIONABLE_GLOBAL_QIDS.includes(questionID)) {
 			dispatch(runSpecialQIDAction(eventID, questionID, newValue));
-		} 
+		}
 	}
 }
 
@@ -49,20 +49,35 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 
 	return (dispatch, getState) => {
 		if (questionID.startsWith("samplingMethod_")) {
+
+			//create Data Entry object in values if it doesn't exist... 
+			let sedType = questionID.split("samplingMethod_")[1];
+			console.log('sedType :', sedType);
+			let DE = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType);
+			if (typeof DE === "undefined") {
+				dispatch(SEQuestionValueChange(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, {}))
+			}
+
 			//show/hide data entry tab
 			if (shouldDataEntryTabShow(eventID)) {
 				dispatch(showNavigationTab("Data Entry"));
+				// conditionally show other tabs
+				if (shouldTablePagesShow(eventID)) {
+					dispatch(showNavigationTab("QWDATA"));
+					dispatch(showNavigationTab("Parameters"));
+				}
 			} else {
+				// if Data Entry tab shouldn't show, the QwDATA and Parameters tabs should go away too.
 				dispatch(hideNavigationTab("Data Entry"));
+				dispatch(hideNavigationTab("QWDATA"));
+				dispatch(hideNavigationTab("Parameters"));
 			}
 
-			//create Data Entry object in values if it doesn't exist...
-			let sedType = questionID.split("samplingMethod_")[1];
-			console.log('sedType :', sedType);
-			let DE = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType);
-			if(typeof DE === "undefined") {
-				dispatch(SEQuestionValueChange(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType, {}))
-			}
+
+
+
+
+
 		}
 
 		if (questionID === "collectingAgency") {
