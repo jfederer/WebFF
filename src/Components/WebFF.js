@@ -66,7 +66,6 @@ class WebFF extends React.Component {
 	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	
 	//TODO: DataEntrySheet
-		//TODO: selecting certain sampler types brings up IET
 		//TODO: tables appear when # samples entered
 		//TODO: duplicate stationing from set to set
 

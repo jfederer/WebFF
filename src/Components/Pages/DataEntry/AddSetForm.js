@@ -147,8 +147,8 @@ class AddSetForm extends React.Component {
 
 		let newSetQuestion = {
 			"id": this.fullSetName(newSetName),  //this sets the name of the question in custom questions
-			"sedimentType": sedimentType,
-			"samplingMethod": samplingMethod,
+			// "sedimentType": sedimentType,
+			// "samplingMethod": samplingMethod,
 			"label": "Set Information",
 			"setName": newSetName,
 			"type": "SetInformation",

@@ -51,7 +51,7 @@ export const getRealQID = (setName, sub_q_id) => {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		// console.log("SI CONSTRUCTOR PROPS: ", this.props);
+		 console.log("SI CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			let initValue = {}; //load value with default table?
 			if (this.props.alternateChangeHandler) {
@@ -64,8 +64,10 @@ class SetInformation extends React.Component {
 		} else {
 			// console.log("Creating Passed Value Set Information Component");
 		}
+
+		console.log(this.props.value);
 		this.state = {
-			showDataTable: false
+			showDataTable: Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod))
 		}
 	}
 
@@ -135,7 +137,8 @@ class SetInformation extends React.Component {
 		});
 
 
-		let tableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethod)
+		let tableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethod);
+		console.log('tableName :', tableName);
 		let realTableName = getRealQID(this.props.setName, tableName);
 
 		let analysedForName = "analysedFor_" + sedimentType;

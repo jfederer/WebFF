@@ -11,8 +11,11 @@ import {
 import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 import { getShortSetNameFromFullSetName } from '../Utils/Utilities';
 
-export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, debug) => {
+export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, opts) => {
 
+	if(typeof opts === "undefined") {
+		opts = {}
+	}
 	// console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, ")");
 	// creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
@@ -22,21 +25,21 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
 	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
 		questionComponents = questionsData.map(questionData => {
 			let value = questionData.value;
-			if (debug) console.log("CREATEQ: First Assigned: ", value);
-			if (debug) console.log("CREATEQ: questionsVallues: ", questionsValues);
-			if (debug) console.log("CREATEQ: questionData.id: ", questionData.id);
-			if (debug) console.log("CREATEQ: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
+			if (opts.debug) console.log("CREATEQ: First Assigned: ", value);
+			if (opts.debug) console.log("CREATEQ: questionsVallues: ", questionsValues);
+			if (opts.debug) console.log("CREATEQ: questionData.id: ", questionData.id);
+			if (opts.debug) console.log("CREATEQ: questionsValues[questionData.id]: ", questionsValues[questionData.id]);
 			if (questionsValues[questionData.id] !== null && typeof questionsValues[questionData.id] !== 'undefined') {
 				// question exists in questionsValues.  Note, keep not-equal-to-null, as the questionValue can be a boolean and break stuff
 				value = questionsValues[questionData.id];
-				if (debug) console.log("CREATEQ: OVERWRITE WITH: ", value);
+				if (opts.debug) console.log("CREATEQ: OVERWRITE WITH: ", value);
 			}
 
-			let retQ = <Question {...questionData}
+			let retQ = <Question {...questionData} {...opts.props}
 				value={value}
 				key={questionData.id["key"] ? questionData.id["key"] : questionData.id}
 				alternateChangeHandler={alternateChangeHandler} />;
-			if (debug) console.log("CREATEQ: VALUE AT RETURN: ", value);
+			if (opts.debug) console.log("CREATEQ: VALUE AT RETURN: ", value);
 			return retQ;
 		});
 	}

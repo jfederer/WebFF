@@ -74,16 +74,16 @@ class DataEntrySheet extends React.Component {
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
 		if (true) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
-		
-		if(sub_QID.startsWith("samplerType_")) {
+
+		if (sub_QID.startsWith("samplerType_")) {
 			//depending on what sampler type was selected, we need to show the IET
-			if(IET_REQUIRING_SAMPLER_TYPE_VALUES.includes(value)) {
-				this.props.showQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
+			if (IET_REQUIRING_SAMPLER_TYPE_VALUES.includes(value)) {
+				this.props.showQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::" + this.props.sedimentType);
 			} else {
-				this.props.hideQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
+				this.props.hideQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::" + this.props.sedimentType);
 			}
 		}
-		
+
 
 		this.setState({ show: !this.state.show });  // triggers new render of component  //FIXME: not sure why this is needed
 
@@ -126,32 +126,38 @@ class DataEntrySheet extends React.Component {
 		if (DEBUG) console.log('DES: PRE: dataEntrySheetQuestionsData :', _.cloneDeep(dataEntrySheetQuestionsData));
 
 		//rip open the DES questionsData object so we match expected input for QuestionPage
-		Object.keys(dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType]).forEach(sub_QID=> {
-			dataEntrySheetQuestionsData[sub_QID]=dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType][sub_QID];
+		Object.keys(dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType]).forEach(sub_QID => {
+			dataEntrySheetQuestionsData[sub_QID] = dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType][sub_QID];
 		});
 
 		if (DEBUG) console.log('DES: POST: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
 
 		// //TODO:  Kludge until we get "order priority" into questions data.   By default, Object.keys returns in the order the items were added ... so this keeps 'sets' at the bottom of the questoinPage.
-		
-		Object.entries(dataEntrySheetQuestionsData).forEach(([key,value]) => {
-			if(key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER)) {
+
+		Object.entries(dataEntrySheetQuestionsData).forEach(([key, value]) => {
+			if (key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER)) {
 				let tempVal = value;
 				delete dataEntrySheetQuestionsData[key];
-				dataEntrySheetQuestionsData[key]=tempVal;
-			} 
+				dataEntrySheetQuestionsData[key] = tempVal;
+			}
 		});
+
+		console.log("Set VALUE", getQuestionValue(this.props.currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + 'A'));
 
 		return <React.Fragment>
 			<QuestionPage
 				questionsData={dataEntrySheetQuestionsData}
 				parentComponentNames={[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType]}
 				tabName={"DataEntry"}
-				alternateChangeHandler={this.DEChangeHandler} />
+				alternateChangeHandler={this.DEChangeHandler}
+				samplingMethod={samplingMethod}
+				sedimentType={sedimentType}
+			/>
 			<AddSetForm
 				samplingMethod={samplingMethod}
 				sedimentType={sedimentType}
-				alternateChangeHandler={this.DEChangeHandler} />
+				alternateChangeHandler={this.DEChangeHandler}
+			/>
 		</React.Fragment>
 
 	}

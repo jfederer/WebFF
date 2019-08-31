@@ -54,7 +54,7 @@ class QuestionPage extends React.Component {
 		const { tabName, currentEvent } = this.props;
 		const { hiddenPanels } = this.props.UI.visibility;
 
-		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
+		if (true) console.log("Question Page: Render:  props:  ", this.props);
 		// if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 		let questionsValues = currentEvent.questionsValues
@@ -85,7 +85,7 @@ class QuestionPage extends React.Component {
 
 			let tabQuestionsData;
 			if (this.props.questionsData) { //if questionsData is passed, use that and don't filter on tabName
-				if (true) console.log("Question Page: Render: QD was passed, not filtering on TabName");
+				if (DEBUG) console.log("Question Page: Render: QD was passed, not filtering on TabName");
 				tabQuestionsData = Object.values(this.props.questionsData);
 				//if QD was passed, let's ensure unqiue panel names
 				tabQuestionsData.forEach(question => {
@@ -118,13 +118,17 @@ class QuestionPage extends React.Component {
 				return keepPanel;
 			})
 
+			let opts = {props: {sedimentType:this.props.sedimentType, samplingMethod:this.props.samplingMethod}};
+			
+			// opts.props=this.props;
+
 			for (let i = 0; filteredLayoutGroupNames !== null && i < filteredLayoutGroupNames.length; i++) {
 				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredLayoutGroupNames[i]);
 
 				questionPanels.push(
 					<div key={tabName + filteredLayoutGroupNames[i] + '_div'}>
 						<QuestionPanel
-							questions={createQuestionComponents(layoutGroupQuestionsData, questionsValues, this.props.alternateChangeHandler)}
+							questions={createQuestionComponents(layoutGroupQuestionsData, questionsValues, this.props.alternateChangeHandler, opts)}
 							panelName={filteredLayoutGroupNames[i].split(IDENTIFIER_SPLITTER)[0]}
 							key={tabName + filteredLayoutGroupNames[i]}
 							grey={i % 2 === 1} />
