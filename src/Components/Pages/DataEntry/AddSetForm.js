@@ -6,7 +6,7 @@ import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 
-import { setAppBarText } from '../../../Actions/UI';
+import { setAppBarText, showQuestionPanel } from '../../../Actions/UI';
 import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from '@material-ui/core';
 
 import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DISALLOWED_CHARACTERS_IN_SETNAME_REGEX } from '../../../Constants/Config';
@@ -41,7 +41,6 @@ class AddSetForm extends React.Component {
 	 * is setName unique within all the sets of this given sediment type
 	 */
 	isSetNameUnique = (setName) => {
-
 
 		let filteredSetList = getSetListAsArray(this.props.currentSamplingEventID, this.props.sedimentType).filter((existingSetName) => {
 			return existingSetName.toUpperCase() === this.fullSetName(setName).toUpperCase();
@@ -80,15 +79,23 @@ class AddSetForm extends React.Component {
 		const { currentSamplingEventID, sedimentType, samplingMethod } = this.props;
 
 		if (!sedimentType || !samplingMethod) {   //TODO: move to proptypes check
-			alert("Must have both Sediment Type and Sampling Method filled out on Field Form sheet before you can add a set");
+			alert("Must have a Sampling Method filled out on Field Form sheet before you can add a set");
 			return;
+		}
+
+		let setList = getSetListAsArray(currentSamplingEventID, sedimentType);
+		
+		if(setList.length>=1) {
+			let QP = "DataEntry:Average Representational Measures"+IDENTIFIER_SPLITTER+DATA_ENTRY_INFORMATION_IDENTIFIER+sedimentType;
+			console.log('QP :', QP);
+			this.props.showQuestionPanel(QP);
 		}
 
 		let newSetName = this.state.newSetName;
 		if (!newSetName) {
 			let tries = 0;
 			do {  // rare cases exist where the auto-generated set name may already be taken, in such case, generate the next until we find a unique one
-				newSetName = String.fromCharCode(65 + tries + getNumberOfSets(currentSamplingEventID, sedimentType));
+				newSetName = String.fromCharCode(65 + tries + setList.length);
 				tries++;
 			} while (!this.isSetNameUnique(newSetName))
 		}
@@ -126,11 +133,10 @@ class AddSetForm extends React.Component {
 			// duplicate # sampling points //TODO:
 
 			// set value
-			Object.keys(copyFromValue).map((origKey) => {
+			Object.keys(copyFromValue).forEach((origKey) => {
 				// origSetName = this.state.duplicateFromSet;
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
 				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
-				return null; //returning to satisfy linter
 			})
 		} else { // not copying stationing
 			// insert the default samplesTable value
@@ -253,7 +259,8 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setAppBarText,
 	addQuestionToEvent,
-	SEQuestionValueChange
+	SEQuestionValueChange,
+	showQuestionPanel
 }
 
 AddSetForm.propTypes = {

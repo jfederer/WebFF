@@ -31,7 +31,7 @@ import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
 import { getDataEntrySheetQuestionsData, getQuestionsData } from '../../Utils/StoreUtilities';
 import { addQuestionToEvent } from '../../Actions/Questions';
-import { showNavigationPanel, hideNavigationPanel } from '../../Actions/UI';
+import { showQuestionPanel, hideQuestionPanel } from '../../Actions/UI';
 import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
@@ -77,14 +77,11 @@ class DataEntrySheet extends React.Component {
 		
 		if(sub_QID.startsWith("samplerType_")) {
 			//depending on what sampler type was selected, we need to show the IET
-
 			if(IET_REQUIRING_SAMPLER_TYPE_VALUES.includes(value)) {
-				this.props.showNavigationPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
+				this.props.showQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
 			} else {
-				this.props.hideNavigationPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
+				this.props.hideQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
 			}
-
-			
 		}
 		
 
@@ -126,14 +123,17 @@ class DataEntrySheet extends React.Component {
 				return obj;
 			}, {});
 
-		if (DEBUG) console.log('DES: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
+		if (DEBUG) console.log('DES: PRE: dataEntrySheetQuestionsData :', _.cloneDeep(dataEntrySheetQuestionsData));
 
-		// rip open the DES questionsData object so we match expected input for QuestionPage
+		//rip open the DES questionsData object so we match expected input for QuestionPage
 		Object.keys(dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType]).forEach(sub_QID=> {
 			dataEntrySheetQuestionsData[sub_QID]=dataEntrySheetQuestionsData[DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType][sub_QID];
-		})
+		});
 
-		//TODO:  Kludge until we get "order priority" into questions data.   By default, Object.keys returns in the order the items were added ... so this keeps 'sets' at the bottom of the questoinPage.
+		if (DEBUG) console.log('DES: POST: dataEntrySheetQuestionsData :', dataEntrySheetQuestionsData);
+
+		// //TODO:  Kludge until we get "order priority" into questions data.   By default, Object.keys returns in the order the items were added ... so this keeps 'sets' at the bottom of the questoinPage.
+		
 		Object.entries(dataEntrySheetQuestionsData).forEach(([key,value]) => {
 			if(key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER)) {
 				let tempVal = value;
@@ -141,7 +141,7 @@ class DataEntrySheet extends React.Component {
 				dataEntrySheetQuestionsData[key]=tempVal;
 			} 
 		});
-		
+
 		return <React.Fragment>
 			<QuestionPage
 				questionsData={dataEntrySheetQuestionsData}
@@ -169,8 +169,8 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	SEQuestionValueChange,
 	addQuestionToEvent,
-	showNavigationPanel,
-	hideNavigationPanel
+	showQuestionPanel,
+	hideQuestionPanel
 }
 
 DataEntrySheet.propTypes = {

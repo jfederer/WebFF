@@ -68,13 +68,13 @@ export function hideNavigationTab(tabName) {
 	return { type: HIDE_NAVIGATION_TABS, payload }
 }
 
-export function showNavigationPanel(panelName) { 
+export function showQuestionPanel(panelName) { 
 	let payload = [];
 	payload.push([panelName]);  // show navigation panels expects an array of arrays with tabnames as the payload
 	return { type: SHOW_PANELS, payload }
 }
 
-export function hideNavigationPanel(panelName) { 
+export function hideQuestionPanel(panelName) { 
 	let payload = [];
 	payload.push([panelName]);  // hide navigation panels expects an array of arrays with tabnames as the payload
 	return { type: HIDE_PANELS, payload }

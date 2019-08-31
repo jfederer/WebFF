@@ -85,7 +85,7 @@ class QuestionPage extends React.Component {
 
 			let tabQuestionsData;
 			if (this.props.questionsData) { //if questionsData is passed, use that and don't filter on tabName
-				if (DEBUG) console.log("Question Page: Render: QD was passed, not filtering on TabName");
+				if (true) console.log("Question Page: Render: QD was passed, not filtering on TabName");
 				tabQuestionsData = Object.values(this.props.questionsData);
 				//if QD was passed, let's ensure unqiue panel names
 				tabQuestionsData.forEach(question => {
