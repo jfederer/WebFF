@@ -1893,7 +1893,7 @@ export const defaultQuestionsData = {
 			"placeholder": "P72217",
 			"value": "",
 			"tabName": "DataEntry",
-			"layoutGroup": "Intake Efficiency Test",
+			"layoutGroup": "Intake Efficiency Test - " + BOTTOM_MATERIAL_TEXT,
 			"width_xs": 4,
 			"width_lg": 3
 		},

@@ -27,10 +27,11 @@ import AddSetForm from '../Pages/DataEntry/AddSetForm';
 // import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION_IDENTIFIER } from '../../Constants/Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION_IDENTIFIER, IET_REQUIRING_SAMPLER_TYPE_VALUES } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
 import { getDataEntrySheetQuestionsData, getQuestionsData } from '../../Utils/StoreUtilities';
 import { addQuestionToEvent } from '../../Actions/Questions';
+import { showNavigationPanel, hideNavigationPanel } from '../../Actions/UI';
 import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
@@ -72,8 +73,23 @@ class DataEntrySheet extends React.Component {
 	}
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
-		if (DEBUG) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		if (true) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		
+		if(sub_QID.startsWith("samplerType_")) {
+			//depending on what sampler type was selected, we need to show the IET
+
+			if(IET_REQUIRING_SAMPLER_TYPE_VALUES.includes(value)) {
+				this.props.showNavigationPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
+			} else {
+				this.props.hideNavigationPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::"+this.props.sedimentType);
+			}
+
+			
+		}
+		
+
 		this.setState({ show: !this.state.show });  // triggers new render of component  //FIXME: not sure why this is needed
+
 		this.doChange(eventID, sub_QID, value);
 	};
 
@@ -152,7 +168,9 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	SEQuestionValueChange,
-	addQuestionToEvent
+	addQuestionToEvent,
+	showNavigationPanel,
+	hideNavigationPanel
 }
 
 DataEntrySheet.propTypes = {

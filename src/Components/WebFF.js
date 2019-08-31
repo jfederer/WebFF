@@ -72,6 +72,8 @@ class WebFF extends React.Component {
 		//TODO: tables appear when # samples entered
 		//TODO: duplicate stationing from set to set
 
+	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
+
 	//TODO: move checkForValidSedimentType to QuestionUtilities or Utilites
 
 	//TODO: system menu rebuild
@@ -106,6 +108,11 @@ class WebFF extends React.Component {
 	
 	//OPTIMIZE default set infomration stroage in store (storing full questisonsdata for sets repeatedly... not great)
 	//BUG: Does not check for updated data outside localstorage
+
+	//FIXME: enter zero as number of smaples
+	//FIXME: Look at passed questions data on question page render... from DataEntry object, the questions all appear to be doubled up...
+
+	//TODO: disable bag material / size / nozzel until after sampler type is selected?  ("Disable question" action?)
 
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
 //TODO: set orders in QD
@@ -164,8 +171,8 @@ class WebFF extends React.Component {
 			curDialogName: "",
 			curDialogQuestions: [],
 
-			hiddenTabs: defaultHiddenTabs,
-			hiddenPanels: defaultHiddenPanels,
+			// hiddenTabs: defaultHiddenTabs,
+			// hiddenPanels: defaultHiddenPanels,
 
 			appBarText: "Sediment Field Forms",
 

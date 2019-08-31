@@ -16,7 +16,7 @@ import {
 	HIDE_NAVIGATION_TABS,
 } from '../Constants/ActionTypes';
 
-import { DEFAULT_HIDDEN_NAVIGATION_TABS } from '../Constants/Config';
+import { DEFAULT_HIDDEN_NAVIGATION_TABS, DEFAULT_HIDDEN_PANELS } from '../Constants/Config';
 
 
 
@@ -26,7 +26,7 @@ const initialUIState = {
 		expandedSysMenu: false,
 		loginDialogVisibility: false,
 		hiddenNavMenuItems: DEFAULT_HIDDEN_NAVIGATION_TABS,
-		hiddenPanels: ["FieldForm:Weather", "DataEntry:IntakeEfficiencyTest", "DataEntry:AverageRepresentationalMeasures"],
+		hiddenPanels: DEFAULT_HIDDEN_PANELS,
 		exportDialogVisibility: false,
 		addRemoveStationDialogVisibility: false,
 		addRemoveQuestionDialogVisibility: false,

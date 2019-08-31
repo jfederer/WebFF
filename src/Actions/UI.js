@@ -10,7 +10,9 @@ import {
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
 	SET_APP_BAR_TEXT,
 	SHOW_NAVIGATION_TABS,
-	HIDE_NAVIGATION_TABS
+	HIDE_NAVIGATION_TABS,
+	SHOW_PANELS,
+	HIDE_PANELS
 } from '../Constants/ActionTypes';
 
 
@@ -55,14 +57,26 @@ export function setAppBarText(appBarText) {
 }
 
 export function showNavigationTab(tabName) { 
-	let pl = [];
-	pl.push([tabName]);  // show navigation tabs expects an array of arrays with tabnames as the payload
-	return { type: SHOW_NAVIGATION_TABS, payload: pl }
+	let payload = [];
+	payload.push([tabName]);  // show navigation tabs expects an array of arrays with tabnames as the payload
+	return { type: SHOW_NAVIGATION_TABS, payload }
 }
 
 export function hideNavigationTab(tabName) { 
-	let pl = [];
-	pl.push([tabName]);  // show navigation tabs expects an array of arrays with tabnames as the payload
-	return { type: HIDE_NAVIGATION_TABS, payload: pl }
+	let payload = [];
+	payload.push([tabName]);  // hide navigation tabs expects an array of arrays with tabnames as the payload
+	return { type: HIDE_NAVIGATION_TABS, payload }
+}
+
+export function showNavigationPanel(panelName) { 
+	let payload = [];
+	payload.push([panelName]);  // show navigation panels expects an array of arrays with tabnames as the payload
+	return { type: SHOW_PANELS, payload }
+}
+
+export function hideNavigationPanel(panelName) { 
+	let payload = [];
+	payload.push([panelName]);  // hide navigation panels expects an array of arrays with tabnames as the payload
+	return { type: HIDE_PANELS, payload }
 }
 

@@ -71,12 +71,6 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 				dispatch(hideNavigationTab("QWDATA"));
 				dispatch(hideNavigationTab("Parameters"));
 			}
-
-
-
-
-
-
 		}
 
 		if (questionID === "collectingAgency") {
