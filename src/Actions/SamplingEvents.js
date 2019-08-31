@@ -45,7 +45,7 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 }
 
 function runSpecialQIDAction(eventID, questionID, newValue) {
-	console.log("runSpecialQIDAction(", eventID, questionID, newValue, ")");
+	// console.log("runSpecialQIDAction(", eventID, questionID, newValue, ")");
 
 	return (dispatch, getState) => {
 		if (questionID.startsWith("samplingMethod_")) {
@@ -236,7 +236,7 @@ export function stationNameChanged(eventID, newStationName) {
 }
 
 export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, samplingMethod, numPoints, setInfoChangeHandler) {
-	// console.log("numberOfSamplingPointsChanged(", eventID, sedimentType, setName, samplingMethod, numPoints, ")");
+	//  console.log("numberOfSamplingPointsChanged(", eventID, sedimentType, setName, samplingMethod, numPoints, ")");
 	if (numPoints === null || numPoints === "" || isNaN(numPoints)) {
 		return { type: 'CANCEL numberOfSamplingPointsChanged due to invalid numPoints passed' };
 	}

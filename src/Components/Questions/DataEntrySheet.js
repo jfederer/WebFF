@@ -73,7 +73,7 @@ class DataEntrySheet extends React.Component {
 	}
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
-		if (true) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		if (DEBUG) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
 
 		if (sub_QID.startsWith("samplerType_")) {
 			//depending on what sampler type was selected, we need to show the IET
@@ -142,7 +142,7 @@ class DataEntrySheet extends React.Component {
 			}
 		});
 
-		console.log("Set VALUE", getQuestionValue(this.props.currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + 'A'));
+		// console.log("Set VALUE", getQuestionValue(this.props.currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + 'A'));
 
 		return <React.Fragment>
 			<QuestionPage

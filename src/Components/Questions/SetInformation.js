@@ -51,7 +51,7 @@ export const getRealQID = (setName, sub_q_id) => {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		 console.log("SI CONSTRUCTOR PROPS: ", this.props);
+		//  console.log("SI CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			let initValue = {}; //load value with default table?
 			if (this.props.alternateChangeHandler) {
@@ -61,13 +61,19 @@ class SetInformation extends React.Component {
 				// console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, standard change handler with initValue");
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
-		} else {
-			// console.log("Creating Passed Value Set Information Component");
-		}
+		} 
 
-		console.log(this.props.value);
 		this.state = {
-			showDataTable: Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod))
+			showDataTable: Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod)) 
+		}
+	}
+
+	componentDidMount() {
+		// This comes up if numberOfSamplingPoints is entered on a set, and then the user goes back and changes the sampling method... this will regenerate the table
+		if(this.props.value["numberOfSamplingPoints"]) {
+			if (!Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod))) {
+				this.setInfoChangeHandler(this.props.currentSamplingEventID, "numberOfSamplingPoints", this.props.value["numberOfSamplingPoints"]);
+			}
 		}
 	}
 
@@ -138,7 +144,6 @@ class SetInformation extends React.Component {
 
 
 		let tableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethod);
-		console.log('tableName :', tableName);
 		let realTableName = getRealQID(this.props.setName, tableName);
 
 		let analysedForName = "analysedFor_" + sedimentType;
@@ -154,6 +159,7 @@ class SetInformation extends React.Component {
 
 			{/* Data table  */}
 			{samplingMethod && this.state.showDataTable
+			// {samplingMethod && Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod)) 
 				? <Question {...setInfoQuestionsData[tableName]}
 					id={tableName}
 					key={realTableName}
