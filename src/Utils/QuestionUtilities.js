@@ -200,7 +200,7 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 
 	setList.forEach((setName) => {
 		let numSamps = getNumberOfSamplesInSet(eventID, sedType, setName);
-		let samplesComposited = getQuestionValue(eventID, setName, "samplesComposited");
+		let samplesComposited = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType, setName, "samplesComposited");
 
 		let setLocations = [];
 		if (!samplesComposited) { // samples will be analysized individually (and thus each sample needs it's own line)
