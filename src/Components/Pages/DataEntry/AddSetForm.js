@@ -87,7 +87,7 @@ class AddSetForm extends React.Component {
 		
 		if(setList.length>=1) {
 			let QP = "DataEntry:Average Representational Measures"+IDENTIFIER_SPLITTER+DATA_ENTRY_INFORMATION_IDENTIFIER+sedimentType;
-			console.log('QP :', QP);
+			// console.log('QP :', QP);
 			this.props.showQuestionPanel(QP);
 		}
 
@@ -107,15 +107,18 @@ class AddSetForm extends React.Component {
 
 		let newSetValue = {};
 
+		
+
 		if (this.state.copyStationing) {
 			// duplicating stationing from state.duplicateFromSet set
-
+			console.log("DUPE: Duplicating stationing... yes");
 			// find selected set
+			console.log("DUPE: duplicateFromSet: ", this.state.duplicateFromSet);
 
 			// get value
 			let copyFromValue;
 			try {
-				copyFromValue = getQuestionValue(currentSamplingEventID, this.state.duplicateFromSet);
+				copyFromValue = getQuestionValue(currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedimentType, this.state.duplicateFromSet);
 			}
 			catch (err) {
 				if (err.name === "TypeError") {
@@ -125,6 +128,7 @@ class AddSetForm extends React.Component {
 					throw Error("Error occurred when trying to get value to duplicate set: ", err);
 				}
 			}
+			console.log('DUPE: copyFromValue :', copyFromValue);
 
 			// pass to getDistanceCol //TODO:
 
@@ -162,6 +166,8 @@ class AddSetForm extends React.Component {
 			"value": newSetValue
 		}
 		_.merge(newSetQuestion, defaultSetInformationQD);
+
+		console.log('DUPE: newSetQuestion :', newSetQuestion);
 
 		// save the sets QuestionsData to custom question area
 		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);
