@@ -227,7 +227,7 @@ class AddSetForm extends React.Component {
 								checked={this.state.copyStationing}
 								onChange={() => this.setState({ copyStationing: !this.state.copyStationing })}
 							/>
-							<Typography>Duplicate Stationing From Set:"</Typography>
+							<Typography>Duplicate Set:"</Typography>
 
 							<Select
 								native
