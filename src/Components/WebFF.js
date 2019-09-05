@@ -8,6 +8,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -25,11 +26,11 @@ import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersi
 
 import {
 	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
-	dialogQuestions, defaultHiddenTabs, defaultHiddenPanels
+	dialogQuestions, defaultHiddenTabs, defaultHiddenPanels, DATA_ENTRY_INFORMATION_IDENTIFIER
 	// QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
 } from '../Constants/Config';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
-import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility } from '../Actions/UI';
+import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility, hideQuestion } from '../Actions/UI';
 import { loadAndSetCurrentUser } from '../Actions/SedFF';
 
 //utils
@@ -56,17 +57,11 @@ import QWDATA from './Pages/QWDATA';
 import ErrorPage from './Errors/ErrorPage';
 
 
-
-
 const FUNCDEBUG = false;
-
 
 class WebFF extends React.Component {
 
 	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
-	
-	//TODO: DataEntrySheet
-		//TODO: duplicate stationing from set to set
 
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 
@@ -78,7 +73,7 @@ class WebFF extends React.Component {
 
 	//TODO: NEXT:  rebuild setInfo to write sedimentType and SamplingMethod to DE and copied into sets...?  build DE as question that gets sedType andSamp and bunch of setInformations?
 	//TODO: ASK KEN:  "Suspended/Bottom Material/Bedload Sampling Method" drop down with 'none' value?
-	
+
 
 	//TODO: push event to sedlong
 	//TODO: add/remove question (saved to user / saved to event / saved to site)
@@ -93,15 +88,15 @@ class WebFF extends React.Component {
 	//TODO: setname cannot be Sngl
 
 	//TODO: add/remove station
-		//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
+	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 
 	//TODO: remove set (delete question does this... but make it easier with button from DE page)
-		//TODO: settings dialog
-		//TODO: rename sets
+	//TODO: settings dialog
+	//TODO: rename sets
 
 	//TODO: Multiple Sampling evnts at same time...
 	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
-	
+
 	//OPTIMIZE default set infomration stroage in store (storing full questisonsdata for sets repeatedly... not great)
 	//BUG: Does not check for updated data outside localstorage
 
@@ -111,7 +106,7 @@ class WebFF extends React.Component {
 	//TODO: disable bag material / size / nozzel until after sampler type is selected?  ("Disable question" action?)
 
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
-//TODO: set orders in QD
+	//TODO: set orders in QD
 	//TODO: remove DataEntry question when selecting 'not sampled' non-linearly.
 	//TODO: QWDATA page, time estimate -> optionally overwrite
 	//TODO: QWDATA page, duplicate date for remaining...
@@ -135,6 +130,7 @@ class WebFF extends React.Component {
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 	//TODO: add 'options' argument to createComponents so we can add parentComponentNames (and other items) to it rather than assuming parent of a set is a data entry sheet (which is is, but still)...
 
+	//TODO: duplicate stationing from set to set
 
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
@@ -215,7 +211,10 @@ class WebFF extends React.Component {
 	}
 
 
-
+	testFunc(props) {
+		props.hideQuestion(["stationNumber"]);
+		props.hideQuestion([DATA_ENTRY_INFORMATION_IDENTIFIER+"Suspended", "bagMaterial"]);
+	}
 
 	render() {
 		const { classes, sedff, UI, currentUser } = this.props;
@@ -225,6 +224,9 @@ class WebFF extends React.Component {
 			console.log("There is no currentuser...going to login page");
 			return <Redirect to='/' />;
 		}
+
+
+
 
 
 		return (
@@ -327,6 +329,7 @@ class WebFF extends React.Component {
 						{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 					</React.Fragment>
 				}
+				<Button onClick={()=>this.testFunc(this.props)}>TEST</Button>
 			</React.Fragment>
 
 		);
@@ -352,7 +355,8 @@ const mapDispatchToProps = {
 	setLoginDialogVisibility,
 	loadAndSetCurrentUser,
 	setNavMenuExpand,
-	setSysMenuExpand
+	setSysMenuExpand,
+	hideQuestion
 }
 
 

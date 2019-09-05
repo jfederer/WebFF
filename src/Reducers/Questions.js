@@ -16,6 +16,8 @@ const initialState = {
 	questionsData: defaultQuestionsData
 };
 
+
+
 const userQuestions = { };
 const eventQuestions = {};
 
@@ -43,7 +45,7 @@ export function Questions(state = initialState, action) {
 		// 		console.warn("Attempted to set options on non-existent question " + action.questionID);
 		// 	}
 		// 	return newState;
-		case SHOW_QUESTIONS: // action.payload is an array of 1-length arrays containing questionIDs
+		case SHOW_QUESTIONS: // action.payload is an array of arrays containing full paths to questionIDs
 			//FUTURE: should question show/hide belong in the sampling event? user?
 			//OPTIMIZE: SHOW and HIDE are copies of each other with one thing changed... combine?
 			let questionsToShow = action.payload.map((questionArr) => questionArr[0]);
@@ -57,13 +59,29 @@ export function Questions(state = initialState, action) {
 			});
 			return newState;
 		case HIDE_QUESTIONS:
-			let questionsToHide = action.payload.map((questionArr) => questionArr[0]);
-			questionsToHide.forEach(q_ID => {
+			// let questionsToHide = action.payload.map((questionArr) => questionArr[0]);
+			action.QID_paths.forEach(QID_path => {
 				try {
-					newState.questionsData[q_ID]['hidden'] = true;
+					// console.log('QID_path1 :', QID_path);
+					// let getValue = _.get(newState.questionsData, ...QID_path.concat(['hidden']));
+					// console.log("getValue1: ", getValue);
+
+					let hiddenPath = QID_path.concat(['hidden']);
+
+					console.log('hidden path :', hiddenPath);
+					// let questionData = _.get(newState.questionsData, QID_path.concat('hidden'));
+					// console.log("questionData: ", questionData);
+
+					_.set(newState.questionsData, hiddenPath, true);
+					console.log("statonNumberQD: ", newState.questionsData.stationNumber);
+					// questionData['hidden'] = true;
+					// _.set(newState.questionsData, q_ID_path.push('hidden'), true )
+
+
+					// newState.questionsData[q_ID]['hidden'] = true;
 				}
 				catch (err) {
-					console.warn("Attempted to hide non-existent question " + q_ID);
+					console.warn("Attempted to hide non-existent question " + QID_path);
 				}
 			});
 			return newState;

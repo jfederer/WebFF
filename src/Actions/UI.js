@@ -12,7 +12,9 @@ import {
 	SHOW_NAVIGATION_TABS,
 	HIDE_NAVIGATION_TABS,
 	SHOW_PANELS,
-	HIDE_PANELS
+	HIDE_PANELS,
+	SHOW_QUESTIONS,
+	HIDE_QUESTIONS
 } from '../Constants/ActionTypes';
 
 
@@ -78,5 +80,17 @@ export function hideQuestionPanel(panelName) {
 	let payload = [];
 	payload.push([panelName]);  // hide navigation panels expects an array of arrays with tabnames as the payload
 	return { type: HIDE_PANELS, payload }
+}
+
+export function showQuestion(QID_path) { 
+	let QID_paths = [];
+	QID_paths.push(QID_path);  // hide navigation tabs expects an array of arrays with tabnames as the payload
+	return { type: SHOW_QUESTIONS, QID_paths }
+}
+
+export function hideQuestion(QID_path) { 
+	let QID_paths = [];
+	QID_paths.push(QID_path);  // hide navigation tabs expects an array of arrays with tabnames as the payload
+	return { type: HIDE_QUESTIONS, QID_paths }
 }
 

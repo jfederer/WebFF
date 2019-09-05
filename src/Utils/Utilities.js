@@ -45,3 +45,10 @@ export const getShortSetNameFromFullSetName = (fullSetName) => {
 	}
 	return shortSetName;
 }
+
+export const getPathInObject = (obj, path) => {
+	if(path.length<1) {
+		return obj;
+	}
+	return getPathInObject(obj[path.shift()], path);
+}

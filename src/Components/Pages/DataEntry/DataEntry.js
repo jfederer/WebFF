@@ -38,11 +38,6 @@ class DataEntry extends React.Component {
 			return <Redirect to='/' />
 		}
 
-		let tabsList = {};
-		let tabsPanelList = {};
-		let singleDataEntryPanel = null;
-
-
 		return (<React.Fragment>
 			<TabbedPage componentType={DATA_ENTRY_SHEET_TYPE} />
 		</React.Fragment >

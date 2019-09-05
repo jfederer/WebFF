@@ -82,7 +82,15 @@ class DataEntrySheet extends React.Component {
 			} else {
 				this.props.hideQuestionPanel("DataEntry:IntakeEfficiencyTest&&DataEntry::" + this.props.sedimentType);
 			}
+
+			// if(BOTTLE_USING_SAMPLER_TYPE_VALUES.includes(value)) {
+			// 	this.props.showQuestion()
+			// }
+
+
 		}
+
+
 
 
 		this.setState({ show: !this.state.show });  // triggers new render of component  //FIXME: not sure why this is needed
