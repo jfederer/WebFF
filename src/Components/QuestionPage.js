@@ -54,7 +54,7 @@ class QuestionPage extends React.Component {
 		const { tabName, currentEvent } = this.props;
 		const { hiddenPanels } = this.props.UI.visibility;
 
-		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
+		if (true) console.log("Question Page: Render:  props:  ", this.props);
 		// if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 		let questionsValues = currentEvent.questionsValues
@@ -157,6 +157,11 @@ QuestionPage.propTypes = {
 };
 
 const mapStateToProps = function (state) {
+
+	let stnName = state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues.stationName
+	let stn = "";
+	Object.keys(state.Stations).f
+
 	return {
 		// linkTables: state.LinkTables, // to get users event IDs
 		// allSamplingEvents: state.SamplingEvents,
@@ -165,8 +170,14 @@ const mapStateToProps = function (state) {
 		//samplingEvents: state.SamplingEvents,
 		UI: state.UI,
 		// questionsData: state.Questions.questionsData,
-		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID]
-		// currentUser: state.User[state.SedFF.currentUsername]
+		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
+
+		//unused, just here to trigger re-renders
+		TRIGGER_questionsData: state.Questions.questionsData,
+		TRIGGER_userQuestionsData: state.Users[state.SedFF.currentUsername].settings.questionsData,
+		TRIGGER_eventQuestionsData: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsData,
+		TRIGGER_stationQuestionsData: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues.stationName,
+
 	}
 }
 

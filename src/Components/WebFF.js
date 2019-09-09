@@ -65,6 +65,10 @@ class WebFF extends React.Component {
 
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 
+	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
+
+	//TODO: switching events doesn't do the nav bar right
+
 	//TODO: move checkForValidSedimentType to QuestionUtilities or Utilites
 
 	//TODO: system menu rebuild

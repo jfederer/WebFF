@@ -27,7 +27,6 @@ const initialUIState = {
 		loginDialogVisibility: false,
 		hiddenNavMenuItems: DEFAULT_HIDDEN_NAVIGATION_TABS,
 		hiddenPanels: DEFAULT_HIDDEN_PANELS,
-		hiddenQuestions: [],
 		exportDialogVisibility: false,
 		addRemoveStationDialogVisibility: false,
 		addRemoveQuestionDialogVisibility: false,
