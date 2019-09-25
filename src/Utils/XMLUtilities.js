@@ -2,7 +2,7 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import xmljs from 'xml-js';
 import { PROGRAM_VERSION } from '../Constants/Config';
-import { getQuestionValue } from './QuestionUtilities';
+import { getQuestionValue, getActiveSedimentTypes } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
@@ -15,32 +15,41 @@ import {
 
 
 export function getSedLOGINcompatibleXML(eventID) {
-	let SLCXML = {
-		"SedWE_data": buildSampleEventtObj(eventID)
+	let sedTypes = getActiveSedimentTypes(EventID);
+
+	if (!sedTypes || sedTypes.length === 0) {
+		throw new Error("No Sediment Type has been selected in this event");
 	}
 
-	var options = { compact: true, ignoreComment: true, spaces: 4 };
-	var result = xmljs.json2xml(SLCXML, options);
-
-	// remove numbers from "set"
-	var reg = /<Set\d+/g;
-	let cleanXML = result.replace(reg, "<Set")
-	reg = /<\/Set\d+/g;
-	cleanXML = cleanXML.replace(reg, "</Set")
-
-	// remove numbers from "sample"
-	reg = /<Sample\d+/g;
-	cleanXML = cleanXML.replace(reg, "<Sample")
-	reg = /<\/Sample\d+/g;
-	cleanXML = cleanXML.replace(reg, "</Sample")
-
-	// remove numbers from "param"
-	reg = /<Param\d+/g;
-	cleanXML = cleanXML.replace(reg, "<Param")
-	reg = /<\/Param\d+/g;
-	cleanXML = cleanXML.replace(reg, "</Param")
-
-	return cleanXML;
+	let SLCXML = sedTypes.map(sedType=> {
+		let sedType_SLCXML = {
+			["SedWE_data_"+sedType]: buildSampleEventtObj(eventID, sedType)
+		}
+	
+		var options = { compact: true, ignoreComment: true, spaces: 4 };
+		var result = xmljs.json2xml(sedType_SLCXML, options);
+	
+		// remove numbers from "set"
+		var reg = /<Set\d+/g;
+		let cleanXML = result.replace(reg, "<Set")
+		reg = /<\/Set\d+/g;
+		cleanXML = cleanXML.replace(reg, "</Set")
+	
+		// remove numbers from "sample"
+		reg = /<Sample\d+/g;
+		cleanXML = cleanXML.replace(reg, "<Sample")
+		reg = /<\/Sample\d+/g;
+		cleanXML = cleanXML.replace(reg, "</Sample")
+	
+		// remove numbers from "param"
+		reg = /<Param\d+/g;
+		cleanXML = cleanXML.replace(reg, "<Param")
+		reg = /<\/Param\d+/g;
+		cleanXML = cleanXML.replace(reg, "</Param")
+	
+		return cleanXML;
+	})
+	
 }
 
 

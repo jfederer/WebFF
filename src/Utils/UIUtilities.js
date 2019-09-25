@@ -1,4 +1,4 @@
-import { getQuestionValue } from './QuestionUtilities';
+import { getQuestionValue, getActiveSedimentTypes } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import { METHOD_QIDS, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { NOT_SAMPLED } from '../Constants/Dictionary';
@@ -7,14 +7,11 @@ export function shouldDataEntryTabShow(eventID) {
 	if (eventID === null) {
 		return false;
 	}
-	let show = false;
-	Object.values(METHOD_QIDS).forEach(method_QID => {
-		if (getQuestionValue(eventID, method_QID) !== NOT_SAMPLED) {
-			show = true;
-		}
-	});
-	return show;
+	return  getActiveSedimentTypes(eventID).length > 0
 }
+
+
+
 export function shouldTablePagesShow(eventID) {
 	if (eventID === null) {
 		return false;

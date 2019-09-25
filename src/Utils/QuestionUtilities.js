@@ -10,6 +10,7 @@ import {
 } from '../Constants/Config';
 import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 import { getShortSetNameFromFullSetName } from '../Utils/Utilities';
+import { NOT_SAMPLED } from '../Constants/Dictionary';
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, opts) => {
 
@@ -242,7 +243,13 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 }
 
 
-
+export function getActiveSedimentTypes(eventID) {
+	return Object.keys(METHOD_QIDS).filter(sedType => {
+		if (getQuestionValue(eventID, METHOD_QIDS[sedType]) !== NOT_SAMPLED) {
+			return sedType;
+		}
+	});
+}
 
 // export const getQuestionDataFromQuestionsDataByQuestionID = (questionsData, questionID) => {
 // 	let DEBUG = false;

@@ -56,8 +56,11 @@ import Parameters from './Pages/Parameters';
 import QWDATA from './Pages/QWDATA';
 import ErrorPage from './Errors/ErrorPage';
 
+//TEST
 
 const FUNCDEBUG = false;
+
+
 
 class WebFF extends React.Component {
 
@@ -333,7 +336,7 @@ class WebFF extends React.Component {
 						{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 					</React.Fragment>
 				}
-				<Button onClick={()=>this.testFunc(this.props)}>TEST</Button>
+				{/* <Button onClick={()=>console.log(getActiveSedimentTypes(this.props.currentSamplingEventID))}>TEST</Button> */}
 			</React.Fragment>
 
 		);

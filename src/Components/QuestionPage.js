@@ -73,7 +73,7 @@ class QuestionPage extends React.Component {
 		}
 
 
-		// let tabQuestionData = [];
+		// let tabQuestionData = []; 
 		// let layoutGroupNames = [];
 		let questionPanels = [];
 
@@ -158,9 +158,9 @@ QuestionPage.propTypes = {
 
 const mapStateToProps = function (state) {
 
-	let stnName = state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues.stationName
-	let stn = "";
-	Object.keys(state.Stations).f
+	// let stnName = state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues.stationName
+	// let stn = "";
+	// Object.keys(state.Stations).f
 
 	return {
 		// linkTables: state.LinkTables, // to get users event IDs
@@ -176,7 +176,7 @@ const mapStateToProps = function (state) {
 		TRIGGER_questionsData: state.Questions.questionsData,
 		TRIGGER_userQuestionsData: state.Users[state.SedFF.currentUsername].settings.questionsData,
 		TRIGGER_eventQuestionsData: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionsData,
-		TRIGGER_stationQuestionsData: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues.stationName,
+		// TRIGGER_stationQuestionsData: state.SamplingEvents[state.SedFF.currentSamplingEventID].questionValues.stationName,
 
 	}
 }
