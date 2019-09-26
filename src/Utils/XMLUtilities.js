@@ -1,7 +1,7 @@
 import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import xmljs from 'xml-js';
-import { PROGRAM_VERSION } from '../Constants/Config';
+import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../Constants/Config';
 import { getQuestionValue, getActiveSedimentTypes } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import {
@@ -15,7 +15,8 @@ import {
 
 
 export function getSedLOGINcompatibleXML(eventID) {
-	let sedTypes = getActiveSedimentTypes(EventID);
+	console.log("getSedLOGINcompatibleXML");
+	let sedTypes = getActiveSedimentTypes(eventID);
 
 	if (!sedTypes || sedTypes.length === 0) {
 		throw new Error("No Sediment Type has been selected in this event");
@@ -49,6 +50,7 @@ export function getSedLOGINcompatibleXML(eventID) {
 	
 		return cleanXML;
 	})
+	return SLCXML;
 	
 }
 
@@ -325,22 +327,23 @@ const buildSetObj = (eventID, setName) => {
 	return setObj;
 }
 
-const buildSampleEventtObj = (eventID) => {
+const buildSampleEventtObj = (eventID, sedType) => {
 	let SEObj = {
 		"SedFF_version": PROGRAM_VERSION,
 		"Event": {
 			"EventNumber": 1,
 			"SiteId": getQuestionValue(eventID, 'stationNumber'),
 			"AgencyCd": getQuestionValue(eventID, 'agencyCode'),
-			"SedTranspMode": getQuestionValue(eventID, 'sedimentType'),
+			"SedTranspMode": sedType,
 			"SmplMediumCode": getQuestionValue(eventID, 'sampleMedium'),
-			"AvgRepMeasures": getQuestionValue(eventID, 'avgRepMeasures') ? 'Y' : 'N'
+			"AvgRepMeasures": getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+IDENTIFIER_SPLITTER+sedType, 'avgRepMeasures') ? 'Y' : 'N'
 		}
 	}
 
-	let setNamesList = getSetListAsArray(eventID);  //FIXME: need to add sedType
+	let setNamesList = getSetListAsArray(eventID, sedType); 
 
 	setNamesList.forEach((setName) => {
+		console.log("SETNAME: ", setName);
 		SEObj.Event[setName] = buildSetObj(eventID, setName);
 	});
 
