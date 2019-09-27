@@ -160,7 +160,8 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 	activePCodesArr.forEach((pCode, index) => {
 		console.log(pCode, index);
 		
-		// sampleObj["Param" + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
+		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
+	
 
 
 
@@ -174,9 +175,7 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 
 		if (!getQuestionValue(eventID, DEName, setName, "groupOfSamples")) {
-			console.log("NOT A GROUP OF SAMPLES");
 			let p00063val = getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints");
-			console.log('p00063val :', p00063val);
 			sampleObj["Param" + XML_SPLITTER + index + "P00063"] = buildParamObj("P00063", p00063val);
 		}
 
@@ -185,16 +184,7 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
 		let distanceHeaderText = "Distance from L bank, feet";
 		let colNum = getColumnNumberFromTableHeader(getQuestionValue(eventID, DEName, setName, samplesTableName), distanceHeaderText);
-		let tableValue = getQuestionValue(eventID, DEName, setName, samplesTableName);
-		let rowNum = sampNum + 1;
-		let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, colNum, sampNum + 1);
-		console.log('samplingMethodValue :', samplingMethodValue);
-		console.log('samplesTableName :', samplesTableName);
-		console.log('tableValue :', tableValue);
-		console.log('colNum :', colNum);
-		console.log('rowNum :', rowNum);
-		console.log('qv :', qv);
-
+		let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
 		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", qv);   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
 		// //  - Transit rate, sampler, feet per second  should be written to P50015.
