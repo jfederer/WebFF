@@ -16,7 +16,7 @@ import {
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER, ACTIONABLE_GLOBAL_QIDS } from '../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, ACTIONABLE_GLOBAL_QIDS } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
@@ -289,14 +289,14 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 				setInfoSampleTableValue.push(newRow);
 			}
 
-			setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod), setInfoSampleTableValue);
+			setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod), setInfoSampleTableValue);  //TODO: underscore should be something defined in config
 		}
 
 
 		// re-do any distance data  if EWI (confirm with user)
 
 		////// modify QWDATA table //////TODO:
-		let origQWDATAValue = getQuestionValue(eventID, "QWDATATable_" + sedimentType);
+		let origQWDATAValue = getQuestionValue(eventID, QWDATA_TABLE_IDENTIFIER + sedimentType);
 		let QWDATAValue;
 		if (!origQWDATAValue) {
 			QWDATAValue = createInitialQWDATAValue(eventID, sedimentType);
@@ -305,11 +305,11 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		}
 
 		if (!_.isEqual(origQWDATAValue, QWDATAValue)) {
-			dispatch(SEQuestionValueChange(eventID, "QWDATATable_" + sedimentType, QWDATAValue));
+			dispatch(SEQuestionValueChange(eventID, QWDATA_TABLE_IDENTIFIER + sedimentType, QWDATAValue));
 		}
 
 		////// modify Parameters table //////TODO:
-		let origParameterValue = getQuestionValue(eventID, "parametersTable_" + sedimentType);
+		let origParameterValue = getQuestionValue(eventID, PARAMETERS_TABLE_IDENTIFIER + sedimentType);
 		let parameterValue;
 		if (!origParameterValue) {
 			parameterValue = createInitialParametersTableValue(eventID, sedimentType);
@@ -318,7 +318,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		}
 
 		if (!_.isEqual(origParameterValue, parameterValue)) {
-			dispatch(SEQuestionValueChange(eventID, "parametersTable_" + sedimentType, parameterValue));
+			dispatch(SEQuestionValueChange(eventID, PARAMETERS_TABLE_IDENTIFIER + sedimentType, parameterValue));
 		}
 	}
 }

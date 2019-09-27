@@ -301,7 +301,7 @@ class ParametersTable extends React.Component {
 	render() {
 		// return null;
 		const { classes, currentSamplingEventID, sedimentType } = this.props;
-				
+						
 		if (typeof this.props.value === 'undefined' || this.props.value === null || this.props.value.length === 1) {
 			return <Typography key={this.props.sedimentType + "_PARAMETER_FAILURE_MESSAGE"}>{"Parameters Table has insufficient information to display.  This is likely due to this sediment type, '" + this.props.sedimentType + "', having no sets or no sampling points in a set"}</Typography>;
 		}
@@ -317,6 +317,7 @@ class ParametersTable extends React.Component {
 			}
 		})
 
+		
 
 		return (
 			<React.Fragment>
@@ -354,6 +355,7 @@ class ParametersTable extends React.Component {
 								</TableCell>
 								{this.state.pCodesToShow.map((pCode, colNum) => {
 									let realColNum = (colNum * types.length) + 1;
+				
 									return <TableCell key={pCode + realRowNum} className={classes.tableCell}>
 										{/* VALUE */}
 										<input

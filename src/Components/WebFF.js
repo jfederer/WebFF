@@ -66,6 +66,8 @@ class WebFF extends React.Component {
 
 	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 
+	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
+
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)

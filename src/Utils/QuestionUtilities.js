@@ -95,7 +95,7 @@ function recursiveGetValue(haystack, haystackType, sub_QIDs) {
  */
 export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	let DEBUG = false;
-	console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
+	// console.log("getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	if (DEBUG) console.log("FUNC: getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	//TODO: look for dialog questions, system questions
 

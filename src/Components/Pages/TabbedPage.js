@@ -19,7 +19,7 @@ import {
 	BEDLOAD_TEXT,
 	BOTTOM_MATERIAL_TEXT
 } from '../../Constants/Dictionary';
-import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE } from '../../Constants/Config';
+import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER } from '../../Constants/Config';
 import DataEntrySheet from '../Questions/DataEntrySheet';
 import ParametersTable from '../Questions/ParametersTable';
 import QWDATATable from '../Questions/QWDATATable';
@@ -54,8 +54,8 @@ function ComponentCreator(componentType, passedProps) {
 function ComponentQID(componentType, sedType) {
 	switch (componentType) {
 		case DATA_ENTRY_SHEET_TYPE: return DATA_ENTRY_INFORMATION_IDENTIFIER + sedType;
-		case PARAMETER_TABLE_TYPE: return "parametersTable_"+sedType;
-		case QWDATA_TABLE_TYPE: return "QWDATATable_"+sedType;
+		case QWDATA_TABLE_TYPE: return QWDATA_TABLE_IDENTIFIER+sedType;
+		case PARAMETER_TABLE_TYPE: return PARAMETERS_TABLE_IDENTIFIER+sedType;
 		default: return null
 	}
 }

@@ -15,7 +15,7 @@ import {
 	BOTTOM_MATERIAL_TEXT
 } from './Dictionary';
 
-import { DATA_ENTRY_INFORMATION_IDENTIFIER } from './Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER } from './Config';
 
 export const emptySamplingEvent = {
 	eventID: "",
@@ -2287,8 +2287,8 @@ export const defaultQuestionsData = {
 
 
 
-	["QWDATATable_"+BOTTOM_MATERIAL_TEXT]: {
-		"id": "QWDATATable_"+BOTTOM_MATERIAL_TEXT,
+	[QWDATA_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT]: {
+		"id": QWDATA_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2300,8 +2300,8 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	["parametersTable_"+BOTTOM_MATERIAL_TEXT]: {
-		"id": "parametersTable"+BOTTOM_MATERIAL_TEXT,
+	[PARAMETERS_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT]: {
+		"id": PARAMETERS_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",
@@ -2312,8 +2312,8 @@ export const defaultQuestionsData = {
 		"width_xs": 12,
 		"width_lg": 12
 	},
-	["QWDATATable_"+SUSPENDED_TEXT]: {
-		"id": "QWDATATable_"+SUSPENDED_TEXT,
+	[QWDATA_TABLE_IDENTIFIER+SUSPENDED_TEXT]: {
+		"id": QWDATA_TABLE_IDENTIFIER+SUSPENDED_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2325,8 +2325,8 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	["parametersTable_"+SUSPENDED_TEXT]: {
-		"id": "parametersTable"+SUSPENDED_TEXT,
+	[PARAMETERS_TABLE_IDENTIFIER+SUSPENDED_TEXT]: {
+		"id": PARAMETERS_TABLE_IDENTIFIER+SUSPENDED_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",
@@ -2337,8 +2337,8 @@ export const defaultQuestionsData = {
 		"width_xs": 12,
 		"width_lg": 12
 	},
-	["QWDATATable_"+BEDLOAD_TEXT]: {
-		"id": "QWDATATable_"+BEDLOAD_TEXT,
+	[QWDATA_TABLE_IDENTIFIER+BEDLOAD_TEXT]: {
+		"id": QWDATA_TABLE_IDENTIFIER+BEDLOAD_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2350,8 +2350,8 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	["parametersTable_"+BEDLOAD_TEXT]: {
-		"id": "parametersTable"+BEDLOAD_TEXT,
+	[PARAMETERS_TABLE_IDENTIFIER+BEDLOAD_TEXT]: {
+		"id": PARAMETERS_TABLE_IDENTIFIER+BEDLOAD_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",

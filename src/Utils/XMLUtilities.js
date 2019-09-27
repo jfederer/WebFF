@@ -2,10 +2,12 @@ import React from 'react'; //lets me use JSX
 import Question from '../Components/Question';
 import xmljs from 'xml-js';
 import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../Constants/Config';
-import { getQuestionValue, getActiveSedimentTypes } from './QuestionUtilities';
+import { getQuestionValue, getActiveSedimentTypes, getMethodCategoryFromValue } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
+	QWDATA_TABLE_IDENTIFIER,
+	PARAMETERS_TABLE_IDENTIFIER
 } from '../Constants/Config';
 
 import {
@@ -119,7 +121,8 @@ const buildSampleObj = (eventID, setName, sampNum, sedType) => {
 	console.log("buildSampleObj(", eventID, ",", setName, ",", sampNum, ",", sedType, ")");
 
 	let QWDATARowNum = getQWDATARowNum(eventID, sedType, setName, sampNum);
-	let QWDATATableName = "QWDATATable_"+sedType;
+	let QWDATATableName = QWDATA_TABLE_IDENTIFIER + sedType;
+	let parametersTableName = PARAMETERS_TABLE_IDENTIFIER + sedType;
 
 	console.log('QWDATARowNum :', QWDATARowNum);
 	// console.log("Begin Date: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)));
@@ -159,11 +162,11 @@ const buildSampleObj = (eventID, setName, sampNum, sedType) => {
 	}
 
 	// build param part of sample object from the parameters table headers
-	let parametersTableHeaders = getQuestionValue(eventID, "parametersTable")[0];
+	let parametersTableHeaders = getQuestionValue(eventID, parametersTableName)[0];
 
 	let activePCodes = {};
 	for (let i = 0; i < parametersTableHeaders.length; i++) {
-		activePCodes[parametersTableHeaders[i].split("_")[0]] = true;
+		activePCodes[parametersTableHeaders[i].split("_")[0]] = true;  //TODO: change this splitter to a constant
 	}
 	let activePCodesArr = Object.keys(activePCodes).filter((el) => el !== DESCRIPTION_HEADER);
 
@@ -181,11 +184,11 @@ const buildSampleObj = (eventID, setName, sampNum, sedType) => {
 
 		//  - the "number of Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
 		if (!getQuestionValue(eventID, setName, "groupOfSamples")) {
-			sampleObj["Param" + index] = buildParamObj("P00063", getQuestionValue(eventID, setName, "numberOfSamplingPoints"));
+			sampleObj["Param" + index] = buildParamObj("P00063", getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "numberOfSamplingPoints"));
 		}
 
 		//  - the Distance from L Bank should be written to P00009.
-		// sampleObj["Param" + index] = buildParamObj("P00009", getQuestionValue(eventID, setName + "_samplesTable_" + getCurrentSampleEventMethod(), "Distance from L bank, feet", sampNum + 1));
+		sampleObj["Param" + index] = buildParamObj("P00009", getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName,  + "samplesTable_" + getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod_"+sedType)), "Distance from L bank, feet", sampNum + 1));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
 		// //  - Transit rate, sampler, feet per second  should be written to P50015.
 		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum + 1));
@@ -319,7 +322,7 @@ const buildParamObj = (pCode, value) => {
 // }
 
 
-/////////  UTILS for XML creation //////////////
+/////////  UTILS for XML creation //////////////  TODO: cleanup?
 
 const getNumberRowsForSampleBlock = (eventID, setName) => {
 	let ai = !getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesComposited");
