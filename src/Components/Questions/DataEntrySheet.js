@@ -118,7 +118,7 @@ class DataEntrySheet extends React.Component {
 	render() {
 		const { samplingMethod, sedimentType, currentSamplingEventID } = this.props;
 
-		if (true) console.log('DES: Render: this.props :', this.props);
+		if (DEBUG) console.log('DES: Render: this.props :', this.props);
 
 		let QD = getQuestionsData(currentSamplingEventID);
 

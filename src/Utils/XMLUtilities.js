@@ -30,8 +30,8 @@ export function getSedLOGINcompatibleXML(eventID) {
 		var options = { compact: true, ignoreComment: true, spaces: 4 };
 		var result = xmljs.json2xml(sedType_SLCXML, options);
 	
-		// remove numbers from "set"
-		var reg = /<Set\d+/g;
+		// strip set tags back to just 'set'
+		var reg = /<Set\d+/g;   //TODO: this needs to stay at 'set' and nothing ele
 		let cleanXML = result.replace(reg, "<Set")
 		reg = /<\/Set\d+/g;
 		cleanXML = cleanXML.replace(reg, "</Set")
@@ -280,8 +280,8 @@ const buildSampleObj = (eventID, setName, sampNum) => {
 }
 
 const getNumberRowsForSampleBlock = (eventID, setName) => {
-	let ai = !getQuestionValue(eventID, setName, "samplesComposited");
-	return ai ? getQuestionValue(eventID, setName, "numberOfSamplingPoints") : 1;  // if analyize individually, then we'll check each sample... otherwise, just the one
+	let ai = !getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesComposited");
+	return ai ? getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "numberOfSamplingPoints") : 1;  // if analyize individually, then we'll check each sample... otherwise, just the one
 }
 
 
@@ -294,19 +294,19 @@ const stringFromMultipleChoice = (MCObj) => {
 }
 
 
-const buildSetObj = (eventID, setName) => {
-	console.log("buildSetOb(", eventID, ",", setName, ")");
+const buildSetObj = (eventID, setName, sedType) => {
+	console.log("buildSetOb(", eventID, ",", setName, ",", sedType, ")");
 
-
+	let DEName = DATA_ENTRY_INFORMATION_IDENTIFIER + sedType;
 	let setObj = {
-		"Name": getQuestionValue(eventID, setName, 'groupOfSamples') ? "Sngl" : setName.replace(SET_INFORMATION_IDENTIFIER, ""),
-		"NumberOfSamples": getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
-		"AnalyzeIndSamples": getQuestionValue(eventID, setName, "samplesComposited") ? 'N' : 'Y',
-		"Analyses": stringFromMultipleChoice(getQuestionValue(eventID, setName, "analysedFor_" + getQuestionValue(eventID, "sedimentType"))),
+		"Name": getQuestionValue(eventID, DEName, setName, 'groupOfSamples') ? "Sngl" : setName.replace(DATA_ENTRY_INFORMATION_IDENTIFIER+sedType+IDENTIFIER_SPLITTER+SET_INFORMATION_IDENTIFIER, ""),
+		"NumberOfSamples": getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints"),
+		"AnalyzeIndSamples": getQuestionValue(eventID, DEName, setName, "samplesComposited") ? 'N' : 'Y',
+		"Analyses": stringFromMultipleChoice(getQuestionValue(eventID, DEName, setName, "analysedFor_" + sedType)),
 		// "NumberOfContainers" : getQuestionValue(eventID, setName, "numberOfSamplingPoints"),
 	}
 
-	switch (getQuestionValue(eventID, setName, 'samplingMethod')) {
+	switch (getQuestionValue(eventID, 'samplingMethod_'+sedType)) {
 		case '10':
 			setObj["SetType"] = "EWI";
 			break;
@@ -318,7 +318,11 @@ const buildSetObj = (eventID, setName) => {
 			break;
 	}
 
-	let numOfSampleBlocks = getNumberRowsForSampleBlock(eventID, setName);
+	//TODO: what tag does "setType" compare to
+
+
+	let numOfSampleBlocks = getNumberRowsForSampleBlock(eventID, setName); 
+	// let numOfSampleBlocks = setObj.AnalyzeIndSamples==="Y"?setObj.NumberOfSamples:1;
 
 	for (let i = 0; i < numOfSampleBlocks; i++) {
 		setObj["Sample" + i] = buildSampleObj(eventID, setName, i);
@@ -343,8 +347,7 @@ const buildSampleEventtObj = (eventID, sedType) => {
 	let setNamesList = getSetListAsArray(eventID, sedType); 
 
 	setNamesList.forEach((setName) => {
-		console.log("SETNAME: ", setName);
-		SEObj.Event[setName] = buildSetObj(eventID, setName);
+		SEObj.Event["Set"+setName] = buildSetObj(eventID, setName, sedType);
 	});
 
 	return SEObj;

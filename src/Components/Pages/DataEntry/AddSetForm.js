@@ -167,7 +167,7 @@ class AddSetForm extends React.Component {
 		}
 		_.merge(newSetQuestion, defaultSetInformationQD);
 
-		console.log('DUPE: newSetQuestion :', newSetQuestion);
+		// console.log('DUPE: newSetQuestion :', newSetQuestion);
 
 		// save the sets QuestionsData to custom question area
 		this.props.addQuestionToEvent(currentSamplingEventID, newSetQuestion);

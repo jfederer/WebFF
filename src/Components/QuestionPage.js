@@ -54,7 +54,7 @@ class QuestionPage extends React.Component {
 		const { tabName, currentEvent } = this.props;
 		const { hiddenPanels } = this.props.UI.visibility;
 
-		if (true) console.log("Question Page: Render:  props:  ", this.props);
+		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
 		// if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
 		let questionsValues = currentEvent.questionsValues
