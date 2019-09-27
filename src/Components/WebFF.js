@@ -68,6 +68,8 @@ class WebFF extends React.Component {
 
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 
+	//TODO: entering '1' in number of samples when blank, warns that removing data...
+
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)

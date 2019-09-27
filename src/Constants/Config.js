@@ -7,7 +7,10 @@ export const DATA_ENTRY_INFORMATION_IDENTIFIER = "DataEntry::";
 export const SET_INFORMATION_IDENTIFIER = "SetInfo::";
 export const QWDATA_TABLE_IDENTIFIER = "QWDATATable::"
 export const PARAMETERS_TABLE_IDENTIFIER = "ParametersTable::";
-export const IDENTIFIER_SPLITTER = "&&";
+
+export const IDENTIFIER_SPLITTER = "&&";  //for use between identifiers
+export const XML_SPLITTER = "XMLSPLIT"; //for use when stripping XML tags of superfluous info.  Anything after the splitter will be cut off in final xml.
+
 
 export const QUESTIONS_DATA_OBJECT_TYPE = "questionsDataObjectType";
 export const QUESTIONS_VALUES_OBJECT_TYPE = "questionsValuesObjectType";

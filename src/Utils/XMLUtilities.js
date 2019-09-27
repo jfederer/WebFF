@@ -7,7 +7,8 @@ import { getSetListAsArray } from './StoreUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
 	QWDATA_TABLE_IDENTIFIER,
-	PARAMETERS_TABLE_IDENTIFIER
+	PARAMETERS_TABLE_IDENTIFIER,
+	XML_SPLITTER,
 } from '../Constants/Config';
 
 import {
@@ -26,31 +27,16 @@ export function getSedLOGINcompatibleXML(eventID) {
 
 	let SLCXML = sedTypes.map(sedType=> {
 		let sedType_SLCXML = {
-			["SedWE_data_"+sedType]: buildSampleEventObj(eventID, sedType)
+			["SedWE_data"+XML_SPLITTER+sedType]: buildSampleEventObj(eventID, sedType)
 		}
 	
 		var options = { compact: true, ignoreComment: true, spaces: 4 };
-		var result = xmljs.json2xml(sedType_SLCXML, options);
+		var rawXML = xmljs.json2xml(sedType_SLCXML, options);
 	
-		// strip set tags back to just 'set'
-		var reg = /<Set\d+/g;   //TODO: this needs to stay at 'set' and nothing ele
-		let cleanXML = result.replace(reg, "<Set")
-		reg = /<\/Set\d+/g;
-		cleanXML = cleanXML.replace(reg, "</Set")
-	
-		// remove numbers from "sample"
-		reg = /<Sample\d+/g;
-		cleanXML = cleanXML.replace(reg, "<Sample")
-		reg = /<\/Sample\d+/g;
-		cleanXML = cleanXML.replace(reg, "</Sample")
-	
-		// remove numbers from "param"
-		reg = /<Param\d+/g;
-		cleanXML = cleanXML.replace(reg, "<Param")
-		reg = /<\/Param\d+/g;
-		cleanXML = cleanXML.replace(reg, "</Param")
-	
-		return cleanXML;
+		// strip tags of any unique identifiers back to just what was before th splitter
+		let reg = new RegExp(XML_SPLITTER+"[^>]*>", "g");
+		return rawXML.replace(reg, ">")
+
 	})
 	return SLCXML;
 	
@@ -73,7 +59,7 @@ const buildSampleEventObj = (eventID, sedType) => {
 	let setNamesList = getSetListAsArray(eventID, sedType); 
 
 	setNamesList.forEach((setName) => {
-		SEObj.Event["Set"+setName] = buildSetObj(eventID, setName, sedType);
+		SEObj.Event["Set"+XML_SPLITTER+setName] = buildSetObj(eventID, setName, sedType);
 	});
 
 	return SEObj;
@@ -111,24 +97,24 @@ const buildSetObj = (eventID, setName, sedType) => {
 	// let numOfSampleBlocks = setObj.AnalyzeIndSamples==="Y"?setObj.NumberOfSamples:1;
 
 	for (let i = 0; i < numOfSampleBlocks; i++) {
-		setObj["Sample" + i] = buildSampleObj(eventID, setName, i, sedType);
+		setObj["Sample" + XML_SPLITTER + i] = buildSampleObj(eventID, DEName, setName, i, sedType);
 	}
 
 	return setObj;
 }
 
-const buildSampleObj = (eventID, setName, sampNum, sedType) => {
+const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 	console.log("buildSampleObj(", eventID, ",", setName, ",", sampNum, ",", sedType, ")");
 
 	let QWDATARowNum = getQWDATARowNum(eventID, sedType, setName, sampNum);
 	let QWDATATableName = QWDATA_TABLE_IDENTIFIER + sedType;
 	let parametersTableName = PARAMETERS_TABLE_IDENTIFIER + sedType;
 
-	console.log('QWDATARowNum :', QWDATARowNum);
+	// console.log('QWDATARowNum :', QWDATARowNum);
 	// console.log("Begin Date: ", getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), SAMPLE_DATE_HEADER)));
 
-	console.log("QWDATA Value: ", getQuestionValue(eventID, QWDATATableName));
-	console.log("QWDATA: ADD ON: ", getQuestionValue(eventID, QWDATATableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, QWDATATableName), ADD_ON_HEADER)));
+	// console.log("QWDATA Value: ", getQuestionValue(eventID, QWDATATableName));
+	// console.log("QWDATA: ADD ON: ", getQuestionValue(eventID, QWDATATableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, QWDATATableName), ADD_ON_HEADER)));
 
 	// build sample object
 
@@ -169,10 +155,12 @@ const buildSampleObj = (eventID, setName, sampNum, sedType) => {
 		activePCodes[parametersTableHeaders[i].split("_")[0]] = true;  //TODO: change this splitter to a constant
 	}
 	let activePCodesArr = Object.keys(activePCodes).filter((el) => el !== DESCRIPTION_HEADER);
+	console.log('activePCodesArr :', activePCodesArr);
 
 	activePCodesArr.forEach((pCode, index) => {
-		// console.log(index);
-		sampleObj["Param" + index] = buildParamTableParamObj(eventID, QWDATARowNum, pCode);
+		console.log(pCode, index);
+		
+		// sampleObj["Param" + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
 
 
 
@@ -183,12 +171,31 @@ const buildSampleObj = (eventID, setName, sampNum, sedType) => {
 		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
 
 		//  - the "number of Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
-		if (!getQuestionValue(eventID, setName, "groupOfSamples")) {
-			sampleObj["Param" + index] = buildParamObj("P00063", getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "numberOfSamplingPoints"));
+
+
+		if (!getQuestionValue(eventID, DEName, setName, "groupOfSamples")) {
+			console.log("NOT A GROUP OF SAMPLES");
+			let p00063val = getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints");
+			console.log('p00063val :', p00063val);
+			sampleObj["Param" + XML_SPLITTER + index + "P00063"] = buildParamObj("P00063", p00063val);
 		}
 
 		//  - the Distance from L Bank should be written to P00009.
-		sampleObj["Param" + index] = buildParamObj("P00009", getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName,  + "samplesTable_" + getMethodCategoryFromValue(getQuestionValue(eventID, "samplingMethod_"+sedType)), "Distance from L bank, feet", sampNum + 1));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
+		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_"+sedType);
+		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
+		let distanceHeaderText = "Distance from L bank, feet";
+		let colNum = getColumnNumberFromTableHeader(getQuestionValue(eventID, DEName, setName, samplesTableName), distanceHeaderText);
+		let tableValue = getQuestionValue(eventID, DEName, setName, samplesTableName);
+		let rowNum = sampNum + 1;
+		let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, colNum, sampNum + 1);
+		console.log('samplingMethodValue :', samplingMethodValue);
+		console.log('samplesTableName :', samplesTableName);
+		console.log('tableValue :', tableValue);
+		console.log('colNum :', colNum);
+		console.log('rowNum :', rowNum);
+		console.log('qv :', qv);
+
+		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", qv);   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
 		// //  - Transit rate, sampler, feet per second  should be written to P50015.
 		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum + 1));
@@ -258,14 +265,13 @@ const buildSampleObj = (eventID, setName, sampNum, sedType) => {
 	return sampleObj;
 }
 
-const buildParamTableParamObj = (eventID, QWDATARowNum, pCode) => {
+const buildParamTableParamObj = (eventID, parametersTableName, QWDATARowNum, pCode) => {
 	let paramObj = {
 		"Name": pCode,
-		// "Value": getTableQuestionValue("parametersTable", pCode + "_val", QWDATARowNum),
-		"Value": getQuestionValue(eventID, "parametersTable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "parametersTable"), pCode + "_val")),
-		"Rmrk": getQuestionValue(eventID, "parametersTable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "parametersTable"), pCode + "_rmk")),
-		"NullQlfr": getQuestionValue(eventID, "parametersTable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "parametersTable"), pCode + "_nq")),
-		"Method": getQuestionValue(eventID, "parametersTable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "parametersTable"), pCode + "_mth"))
+		"Value": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_val")),
+		"Rmrk": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_rmk")),
+		"NullQlfr": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_nq")),
+		"Method": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_mth"))
 
 		// "Rmrk": this.getTableQuestionValue("parametersTable", pCode + "_rmk", QWDATARowNum),
 		// "M2Lab": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), M2LAB_HEADER))
