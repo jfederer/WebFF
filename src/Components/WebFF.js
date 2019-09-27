@@ -68,6 +68,8 @@ class WebFF extends React.Component {
 
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 
+	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
+
 	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
 
 	//TODO: switching events doesn't do the nav bar right
