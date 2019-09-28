@@ -159,7 +159,10 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 	activePCodesArr.forEach((pCode, index) => {
 		console.log(pCode, index);
-		
+		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_"+sedType);
+		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
+		let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
+
 		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
 	
 
@@ -180,15 +183,19 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		}
 
 		//  - the Distance from L Bank should be written to P00009.
-		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_"+sedType);
-		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
 		let distanceHeaderText = "Distance from L bank, feet";
-		let colNum = getColumnNumberFromTableHeader(getQuestionValue(eventID, DEName, setName, samplesTableName), distanceHeaderText);
-		let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
-		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", qv);   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
+		let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
+		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
-		// //  - Transit rate, sampler, feet per second  should be written to P50015.
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P50015", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Transit Rate, ft/sec", sampNum + 1));
+		//  - Transit rate, sampler, feet per second  should be written to P50015.
+		let transitHeaderText = "Transit Rate, ft / sec";
+		colNum = getColumnNumberFromTableHeader(samplesTable, transitHeaderText);
+		let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
+		// console.log("P50015");
+		// console.log('samplesTable :', samplesTable);
+		// console.log('colNum :', colNum);
+		// console.log('qv :', qv);
+		sampleObj["Param" + XML_SPLITTER + index + "P50015"] = buildParamObj("P50015", qv);   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
 		// //  - Start Time should be written to P82073, 
 		// //  - End Time should be written to P82074.  
