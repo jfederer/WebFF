@@ -200,7 +200,6 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 
 		// - the "Stream Width", if calculated, should be written to P00004.  
-		// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
 		try {
 			let streamWidth = Math.abs(getQuestionValue(eventID, "streamWidth"));
 			if (streamWidth !== 0) {
@@ -217,11 +216,11 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		// console.log('colNum :', colNum);
 		
 
-		// // - - Mean Depth of Stream (00064), 
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00064", this.getQuestionValue("meanStreamDepth"));
+		// - - Mean Depth of Stream (00064), 
+		sampleObj["Param" + XML_SPLITTER + index + "P00064"] = buildParamObj("P00064", getQuestionValue(eventID, "meanStreamDepth"));
 
-		// // - - Stream Velocity (00055)
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00055", this.getQuestionValue("streamVelocity"));
+		// - - Stream Velocity (00055)
+		sampleObj["Param" + XML_SPLITTER + index + "P00055"] = buildParamObj("P00055", getQuestionValue(eventID, "streamVelocity"));
 
 
 		// // IET testing

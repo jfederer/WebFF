@@ -145,6 +145,8 @@ class WebFF extends React.Component {
 
 	//TODO: duplicate stationing from set to set
 
+	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
+
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
 
