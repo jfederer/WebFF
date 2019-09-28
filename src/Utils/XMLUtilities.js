@@ -13,7 +13,7 @@ import {
 
 import {
 	SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER,
-	SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER
+	SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER, BEDLOAD_TEXT
 } from '../Constants/Dictionary';
 
 
@@ -162,6 +162,10 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
 		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
 		let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
+		let distanceHeaderText = "Distance from L bank, feet";
+		let transitHeaderText = "Transit Rate, ft / sec";
+		let restTimeHeaderText = "Rest time on Bed for Bed load sample, seconds";
+		let horizWidthHeaderText = "Horizontal width of Vertical, feet"
 
 		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
 
@@ -183,12 +187,10 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		}
 
 		//  - the Distance from L Bank should be written to P00009.
-		let distanceHeaderText = "Distance from L bank, feet";
 		let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
 		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
 		//  - Transit rate, sampler, feet per second  should be written to P50015.
-		let transitHeaderText = "Transit Rate, ft / sec";
 		colNum = getColumnNumberFromTableHeader(samplesTable, transitHeaderText);
 		sampleObj["Param" + XML_SPLITTER + index + "P50015"] = buildParamObj("P50015", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
@@ -237,26 +239,28 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 
 
-		// // for Bedload samples only:  
-		// if (this.getQuestionValue("sedimentType") === "bedload") {
-		// 	//  - - Bag Mesh Size, in mm - - should be P30333.
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P30333", this.getQuestionValue("bagMesh"));
+		// for Bedload samples only:  
+		if (sedType === BEDLOAD_TEXT) {
+			//  - - Bag Mesh Size, in mm - - should be P30333.
+			sampleObj["Param"  + XML_SPLITTER + index + "P30333"] = buildParamObj("P30333", getQuestionValue(eventID, DEName, "bagMesh"));
 
-		// 	//  - - Tether Line Used - -  should be P04117.
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04117", this.getQuestionValue("tetherLine") ? 1 : 0);
+			//  - - Tether Line Used - -  should be P04117.
+			sampleObj["Param"  + XML_SPLITTER + index + "P04117"] = buildParamObj("P04117", getQuestionValue(eventID, DEName, "tetherLine") ? 1 : 0);
 
-		// 	//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04118", this.getQuestionValue("compositeSamplesInCrossSection"));
+			//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
+			sampleObj["Param"  + XML_SPLITTER + index + "P04118"] = buildParamObj("P04118", getQuestionValue(eventID, DEName, "compositeSamplesInCrossSection"));
 
-		// 	//  - - Verticals in composite sample, a number - - should be P04119. 
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04119", this.getQuestionValue("verticalsInComposite"));
+			//  - - Verticals in composite sample, a number - - should be P04119. 
+			sampleObj["Param"  + XML_SPLITTER + index + "P04119"] = buildParamObj("P04119", getQuestionValue(eventID, DEName, "verticalsInComposite"));
 
-		// 	//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04120", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Rest time on Bed for Bed load sample, seconds", sampNum + 1));//TODO: test
+			//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
+			colNum = getColumnNumberFromTableHeader(samplesTable, restTimeHeaderText);
+			sampleObj["Param" + XML_SPLITTER + index + "P04120"] = buildParamObj("P04120", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum)); 
 
-		// 	//  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P04121", this.getTableQuestionValue("set" + setName + "_samplesTable_" + this.getCurrentSampleEventMethod(), "Horizontal width of Vertical, feet", sampNum + 1)); //TODO: test
-		// }
+			// //  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
+			colNum = getColumnNumberFromTableHeader(samplesTable, horizWidthHeaderText);
+			sampleObj["Param" + XML_SPLITTER + index + "P04121"] = buildParamObj("P04121", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum)); 
+		}
 	});
 
 	return sampleObj;

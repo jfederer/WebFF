@@ -1406,23 +1406,9 @@ export const defaultQuestionsData = {
 			"width_lg": 2
 		},
 
-		bagMesh: {
-			"id": "bagMesh",
-			"hidden": true,
-			"label": "Bag Mesh Size (mm)",
-			"XMLTag": "P30333",
-			"type": "Text",
-			"value": "",
-			"placeholder": "mm",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 3
-		},
-
 		nozzleMaterial: {
 			"id": "nozzleMaterial",
-			"label": "Nozzle Material",
+			"label": "Nozzle M aterial",
 			"XMLTag": "P72219",
 			"type": "DropDown",
 			"includeBlank": true,
@@ -1441,7 +1427,7 @@ export const defaultQuestionsData = {
 
 		nozzleDiameter: {
 			"id": "nozzleDiameter",
-			"label": "Nozzle Diameter",
+			"label": "Nozzle D iameter",
 			"XMLTag": "P72220",
 			"type": "DropDown",
 			"includeBlank": true,
@@ -1451,46 +1437,6 @@ export const defaultQuestionsData = {
 				"1/4": "4",
 				"5/16": "5"
 			},
-			"value": "",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		tetherLine: {
-			"id": "tetherLine",
-			"hidden": true,
-			"label": "Tether Line Used",
-			"XMLTag": "P04117",
-			"type": "Toggle",
-			"value": false,
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"checkbox": true,
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		compositeSamplesInCrossSection: {
-			"id": "compositeSamplesInCrossSection",
-			"hidden": true,
-			"label": "Composite Samples in Cross Sectional",
-			"XMLTag": "P04118",
-			"type": "Text",
-			"value": "",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		verticalsInComposite: {
-			"id": "verticalsInComposite",
-			"hidden": true,
-			"label": "Verticals In Composite",
-			"XMLTag": "P04119",
-			"type": "Text",
 			"value": "",
 			"tabName": "DataEntry",
 			"layoutGroup": "Sampler Info",
@@ -1743,19 +1689,7 @@ export const defaultQuestionsData = {
 			"width_lg": 2
 		},
 
-		bagMesh: {
-			"id": "bagMesh",
-			"hidden": true,
-			"label": "Bag Mesh Size (mm)",
-			"XMLTag": "P30333",
-			"type": "Text",
-			"value": "",
-			"placeholder": "mm",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 3
-		},
+
 
 		nozzleMaterial: {
 			"id": "nozzleMaterial",
@@ -1788,46 +1722,6 @@ export const defaultQuestionsData = {
 				"1/4": "4",
 				"5/16": "5"
 			},
-			"value": "",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		tetherLine: {
-			"id": "tetherLine",
-			"hidden": true,
-			"label": "Tether Line Used",
-			"XMLTag": "P04117",
-			"type": "Toggle",
-			"value": false,
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"checkbox": true,
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		compositeSamplesInCrossSection: {
-			"id": "compositeSamplesInCrossSection",
-			"hidden": true,
-			"label": "Composite Samples in Cross Sectional",
-			"XMLTag": "P04118",
-			"type": "Text",
-			"value": "",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		verticalsInComposite: {
-			"id": "verticalsInComposite",
-			"hidden": true,
-			"label": "Verticals In Composite",
-			"XMLTag": "P04119",
-			"type": "Text",
 			"value": "",
 			"tabName": "DataEntry",
 			"layoutGroup": "Sampler Info",
@@ -2070,7 +1964,6 @@ export const defaultQuestionsData = {
 
 		bagMesh: {
 			"id": "bagMesh",
-			"hidden": true,
 			"label": "Bag Mesh Size (mm)",
 			"XMLTag": "P30333",
 			"type": "Text",
@@ -2080,6 +1973,43 @@ export const defaultQuestionsData = {
 			"layoutGroup": "Sampler Info",
 			"width_xs": 4,
 			"width_lg": 3
+		},
+
+		tetherLine: {
+			"id": "tetherLine",
+			"label": "Tether Line Used",
+			"XMLTag": "P04117",
+			"type": "Toggle",
+			"value": false,
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"checkbox": true,
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		compositeSamplesInCrossSection: {
+			"id": "compositeSamplesInCrossSection",
+			"label": "Composite Samples in Cross Sectional",
+			"XMLTag": "P04118",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
+		},
+
+		verticalsInComposite: {
+			"id": "verticalsInComposite",
+			"label": "Verticals In Composite",
+			"XMLTag": "P04119",
+			"type": "Text",
+			"value": "",
+			"tabName": "DataEntry",
+			"layoutGroup": "Sampler Info",
+			"width_xs": 4,
+			"width_lg": 2
 		},
 
 		nozzleMaterial: {
@@ -2113,46 +2043,6 @@ export const defaultQuestionsData = {
 				"1/4": "4",
 				"5/16": "5"
 			},
-			"value": "",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		tetherLine: {
-			"id": "tetherLine",
-			"hidden": true,
-			"label": "Tether Line Used",
-			"XMLTag": "P04117",
-			"type": "Toggle",
-			"value": false,
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"checkbox": true,
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		compositeSamplesInCrossSection: {
-			"id": "compositeSamplesInCrossSection",
-			"hidden": true,
-			"label": "Composite Samples in Cross Sectional",
-			"XMLTag": "P04118",
-			"type": "Text",
-			"value": "",
-			"tabName": "DataEntry",
-			"layoutGroup": "Sampler Info",
-			"width_xs": 4,
-			"width_lg": 2
-		},
-
-		verticalsInComposite: {
-			"id": "verticalsInComposite",
-			"hidden": true,
-			"label": "Verticals In Composite",
-			"XMLTag": "P04119",
-			"type": "Text",
 			"value": "",
 			"tabName": "DataEntry",
 			"layoutGroup": "Sampler Info",

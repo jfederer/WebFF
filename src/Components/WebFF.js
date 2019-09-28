@@ -64,7 +64,11 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
+	//TODO: Bottom material questions (Bag mesh, tether line, etc... look in xml) are not showing up.
+
 	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
+
+	//TODO: nozell material and nozzle diameter calculated values in IET don't appear to work...
 
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 
@@ -146,6 +150,12 @@ class WebFF extends React.Component {
 	//TODO: duplicate stationing from set to set
 
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
+
+	//TODO: 'stream depth for IET test' doesn't make it to XML... issue?
+	//TODO: 'transit rate for IET test' doesn't make it to XML... issue?
+	//TODO: 'ratio of vertical' doesn't make it to XML... issue?
+	//TODO: 'intake efficiency' doesn't make it to XML... issue?
+	//TODO: "Sampling depth" doesn't go into XML?
 
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");

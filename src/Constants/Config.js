@@ -53,7 +53,7 @@ export const defaultHiddenPanels = [
     "DataEntry:IntakeEfficiencyTest"
 ];
 
-export const SEDIMENT_TYPES = {   //key = Internal type for equality, etc, value = any sort of display
+export const SEDIMENT_TYPES = {   //use the key (or the direct value from dictionary for internal type for equality, etc.  Use the value for any sort of UI display.
 	[SUSPENDED_TEXT]:"Suspended",
 	[BEDLOAD_TEXT]:"Bedload",
 	[BOTTOM_MATERIAL_TEXT]:"Bottom Material"
