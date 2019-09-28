@@ -25,21 +25,21 @@ export function getSedLOGINcompatibleXML(eventID) {
 		throw new Error("No Sediment Type has been selected in this event");
 	}
 
-	let SLCXML = sedTypes.map(sedType=> {
+	let SLCXML = sedTypes.map(sedType => {
 		let sedType_SLCXML = {
-			["SedWE_data"+XML_SPLITTER+sedType]: buildSampleEventObj(eventID, sedType)
+			["SedWE_data" + XML_SPLITTER + sedType]: buildSampleEventObj(eventID, sedType)
 		}
-	
+
 		var options = { compact: true, ignoreComment: true, spaces: 4 };
 		var rawXML = xmljs.json2xml(sedType_SLCXML, options);
-	
+
 		// strip tags of any unique identifiers back to just what was before th splitter
-		let reg = new RegExp(XML_SPLITTER+"[^>]*>", "g");
+		let reg = new RegExp(XML_SPLITTER + "[^>]*>", "g");
 		return rawXML.replace(reg, ">")
 
 	})
 	return SLCXML;
-	
+
 }
 
 
@@ -52,14 +52,14 @@ const buildSampleEventObj = (eventID, sedType) => {
 			"AgencyCd": getQuestionValue(eventID, 'agencyCode'),
 			"SedTranspMode": sedType,
 			"SmplMediumCode": getQuestionValue(eventID, 'sampleMedium'),
-			"AvgRepMeasures": getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+IDENTIFIER_SPLITTER+sedType, 'avgRepMeasures') ? 'Y' : 'N'
+			"AvgRepMeasures": getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + IDENTIFIER_SPLITTER + sedType, 'avgRepMeasures') ? 'Y' : 'N'
 		}
 	}
 
-	let setNamesList = getSetListAsArray(eventID, sedType); 
+	let setNamesList = getSetListAsArray(eventID, sedType);
 
 	setNamesList.forEach((setName) => {
-		SEObj.Event["Set"+XML_SPLITTER+setName] = buildSetObj(eventID, setName, sedType);
+		SEObj.Event["Set" + XML_SPLITTER + setName] = buildSetObj(eventID, setName, sedType);
 	});
 
 	return SEObj;
@@ -71,14 +71,14 @@ const buildSetObj = (eventID, setName, sedType) => {
 
 	let DEName = DATA_ENTRY_INFORMATION_IDENTIFIER + sedType;
 	let setObj = {
-		"Name": getQuestionValue(eventID, DEName, setName, 'groupOfSamples') ? "Sngl" : setName.replace(DATA_ENTRY_INFORMATION_IDENTIFIER+sedType+IDENTIFIER_SPLITTER+SET_INFORMATION_IDENTIFIER, ""),
+		"Name": getQuestionValue(eventID, DEName, setName, 'groupOfSamples') ? "Sngl" : setName.replace(DATA_ENTRY_INFORMATION_IDENTIFIER + sedType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER, ""),
 		"NumberOfSamples": getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints"),
 		"AnalyzeIndSamples": getQuestionValue(eventID, DEName, setName, "samplesComposited") ? 'N' : 'Y',
 		"Analyses": stringFromMultipleChoice(getQuestionValue(eventID, DEName, setName, "analysedFor_" + sedType)),
 		// "NumberOfContainers" : getQuestionValue(eventID, setName, "numberOfSamplingPoints"), //TODO: KEN?
 	}
 
-	switch (getQuestionValue(eventID, 'samplingMethod_'+sedType)) {
+	switch (getQuestionValue(eventID, 'samplingMethod_' + sedType)) {
 		case '10':
 			setObj["SetType"] = "EWI";
 			break;
@@ -93,7 +93,7 @@ const buildSetObj = (eventID, setName, sedType) => {
 	//TODO: what tag does "setType" compare to
 
 
-	let numOfSampleBlocks = getNumberRowsForSampleBlock(eventID, setName); 
+	let numOfSampleBlocks = getNumberRowsForSampleBlock(eventID, setName);
 	// let numOfSampleBlocks = setObj.AnalyzeIndSamples==="Y"?setObj.NumberOfSamples:1;
 
 	for (let i = 0; i < numOfSampleBlocks; i++) {
@@ -159,12 +159,12 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 	activePCodesArr.forEach((pCode, index) => {
 		console.log(pCode, index);
-		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_"+sedType);
+		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
 		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
 		let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
 
 		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
-	
+
 
 
 
@@ -197,26 +197,25 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		//  These should be written in 24-hour military time, with NO colon between the hour & minutes.
 		sampleObj["Param" + XML_SPLITTER + index + "P82073"] = buildParamObj("P82073", getQuestionValue(eventID, DEName, setName, "startTime").replace(":", ""));
 		sampleObj["Param" + XML_SPLITTER + index + "P82074"] = buildParamObj("P82074", getQuestionValue(eventID, DEName, setName, "endTime").replace(":", ""));
-		
+
+
+		// - the "Stream Width", if calculated, should be written to P00004.  
+		// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
+		try {
+			let streamWidth = Math.abs(getQuestionValue(eventID, "streamWidth"));
+			if (streamWidth !== 0) {
+				sampleObj["Param" + XML_SPLITTER + index + "P00004"] = buildParamObj("P00004", streamWidth);
+			}
+		} catch (e) {
+			console.warn("Stream Width not added to XML", e);
+		}
+
 
 		// let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
 		// console.log("P50015");
 		// console.log('samplesTable :', samplesTable);
 		// console.log('colNum :', colNum);
-		// console.log('qv :', qv);
-
-		// // - the "Stream Width", if calculated, should be written to P00004.  
-		// // TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
-		// //	try {
-		// let streamWidth = Math.abs(this.getQuestionValue("streamWidth"));
-		// if (streamWidth !== 0) {
-		// 	sampleObj["Param" + curParamNum++] = this.buildParamObj("P00004", streamWidth);
-		// }
-
-		// // } catch (e) {
-		// // 	console.warn("Stream Width not added to XML");
-		// // }
-
+		
 
 		// // - - Mean Depth of Stream (00064), 
 		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00064", this.getQuestionValue("meanStreamDepth"));
@@ -389,7 +388,7 @@ const getSamplerTypeQuestionIDString = (eventID) => { // yes, this and the one b
 
 // get total number of samples before this one to know what row we are looking at in QWDATA table
 const getQWDATARowNum = (eventID, sedType, setName, sampNum) => {  //note, this is also the parameters table row num
-	let setList = getSetListAsArray(eventID, sedType); 
+	let setList = getSetListAsArray(eventID, sedType);
 	let totalNumberOfSamplesInPreviousSets = 0;
 	for (let i = 0; i < setList.length; i++) {
 		if (setList[i] === setName) {
