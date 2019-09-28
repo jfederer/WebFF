@@ -224,16 +224,16 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 
 		// // IET testing
-		// // - - Stream Velocity (ft) - - should be written to P72196
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72196", this.getQuestionValue("streamVelocity_IET")); //TODO: stream velocity question name collision 
-		// // - - Seconds Sampler collected water - - should be written to P72217
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72217", this.getQuestionValue("duration_IET"));
-		// // - - Sample Volume for Test (mL) - - should be written to P72218
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72218", this.getQuestionValue("sampleVolume_IET"));
-		// // - - Nozzle Material - - should be written to P72219
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72219", this.getQuestionValue("nozzleMaterial_IET"));
-		// // - - Nozzle Diameter - - should be written to P72220
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P72220", this.getQuestionValue("nozzleDiameter_IET"));
+		// - - Stream Velocity (ft) - - should be written to P72196
+		sampleObj["Param" + XML_SPLITTER + index + "P72196"] = buildParamObj("P72196", getQuestionValue(eventID, DEName, "streamVelocity_IET")); 
+		// - - Seconds Sampler collected water - - should be written to P72217
+		sampleObj["Param" + XML_SPLITTER + index + "P72217"] = buildParamObj("P72217", getQuestionValue(eventID, DEName, "duration_IET"));
+		// - - Sample Volume for Test (mL) - - should be written to P72218
+		sampleObj["Param" + XML_SPLITTER + index + "P72218"] = buildParamObj("P72218", getQuestionValue(eventID, DEName, "sampleVolume_IET"));
+		// - - Nozzle Material - - should be written to P72219
+		sampleObj["Param" + XML_SPLITTER + index + "P72219"] = buildParamObj("P72219", getQuestionValue(eventID, DEName, "nozzleMaterial_IET"));
+		// - - Nozzle Diameter - - should be written to P72220
+		sampleObj["Param" + XML_SPLITTER + index + "P72220"] = buildParamObj("P72220", getQuestionValue(eventID, DEName, "nozzleDiameter_IET"));
 
 
 
