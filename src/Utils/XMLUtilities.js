@@ -190,18 +190,20 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		//  - Transit rate, sampler, feet per second  should be written to P50015.
 		let transitHeaderText = "Transit Rate, ft / sec";
 		colNum = getColumnNumberFromTableHeader(samplesTable, transitHeaderText);
-		let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
+		sampleObj["Param" + XML_SPLITTER + index + "P50015"] = buildParamObj("P50015", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
+
+		//  - Start Time should be written to P82073, 
+		//  - End Time should be written to P82074.  
+		//  These should be written in 24-hour military time, with NO colon between the hour & minutes.
+		sampleObj["Param" + XML_SPLITTER + index + "P82073"] = buildParamObj("P82073", getQuestionValue(eventID, DEName, setName, "startTime").replace(":", ""));
+		sampleObj["Param" + XML_SPLITTER + index + "P82074"] = buildParamObj("P82074", getQuestionValue(eventID, DEName, setName, "endTime").replace(":", ""));
+		
+
+		// let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
 		// console.log("P50015");
 		// console.log('samplesTable :', samplesTable);
 		// console.log('colNum :', colNum);
 		// console.log('qv :', qv);
-		sampleObj["Param" + XML_SPLITTER + index + "P50015"] = buildParamObj("P50015", qv);   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
-
-		// //  - Start Time should be written to P82073, 
-		// //  - End Time should be written to P82074.  
-		// //  These should be written in 24-hour military time, with NO colon between the hour & minutes.
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P82073", this.getQuestionValue("set" + setName + "_StartTime").replace(":", ""));
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P82074", this.getQuestionValue("set" + setName + "_EndTime").replace(":", ""));
 
 		// // - the "Stream Width", if calculated, should be written to P00004.  
 		// // TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width P00004 by hand.  QWDATA can also accept this if left blank.
