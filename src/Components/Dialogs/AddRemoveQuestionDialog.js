@@ -155,11 +155,10 @@ class AddRemoveQuestionDialog extends React.Component {
 	}
 
 	onEnter = () => {
-
 		let pageOptions = {};
 		let saveLocations = {};
 		let currentPage = "";
-		navMenuItems.forEach((navMenuItem) => {
+		Object.entries(navMenuItems).forEach(([navMenuKey, navMenuItem]) => {
 			if (navMenuItem.text !== "Dashboard") {
 				pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
 			}

@@ -67,26 +67,42 @@ class WebFF extends React.Component {
 	//KEN:
 	//TODO: test save sedlogin compat xml
 	//TODO: push event to sedlong
-
+	//TODO: 'stream depth for IET test' doesn't make it to XML... issue?
+	//TODO: 'transit rate for IET test' doesn't make it to XML... issue?
+	//TODO: 'ratio of vertical' doesn't make it to XML... issue?
+	//TODO: 'intake efficiency' doesn't make it to XML... issue?
+	//TODO: "Sampling depth" doesn't go into XML?
 
 
 	//BREAKING:
 	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
-	//TODO: add/remove question (saved to user / saved to event / saved to site)
 	//TODO: Style sheet
 	//TODO: webserver, network loads
-		//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
+	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
+	//TODO: Does not check for updated data outside localstorage
 
 	//BUGS: 
-	//TODO: setname cannot be Sngl
+	//TODO: setname can be Sngl - this could break XML
+	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
+	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
+	//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)
+	//BUG: New Event -> DE page -> Add Set -> enter numbe of sampling points -> leave page -> return (bug: table is missing)
+	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
+	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
+	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
+	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
+	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
+	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
 
 	//TEST:
 	// Add/REmove station
 	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
+	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	//tODO: waterway info question type
 	//TODO: rememver current sediment type from page to page
 	//TODO: single-page view 
 	//TODO: single-page view saveable as pdf (ingest pdf??)
@@ -96,7 +112,8 @@ class WebFF extends React.Component {
 	//TODO: validators (numSampPoints not allowing alpha might be good test case)
 	//TODO: templates	
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
-
+	//TODO: duplicate just stationing (vs all - optionally) from set to set ... even existing?
+	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
 
 	//Would be nice:
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
@@ -110,62 +127,34 @@ class WebFF extends React.Component {
 	//TODO: station editor
 	//TODO: QWDATA page, time estimate -> optionally overwrite
 	//TODO: QWDATA page, duplicate date for remaining...
-
+	//TODO: set orders in QD
+	//TODO: settings -> auto fill out avaialble station information from station values
+	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
 
 	//Cleanup
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
-//TODO: Multiple Sampling evnts at same time...
+	//TODO: Multiple Sampling evnts at same time...
 	//TODO: move checkForValidSedimentType to QuestionUtilities or Utilites
-
-
-
-
-
-
-
-
-
-
-
-	//OPTIMIZE default set infomration stroage in store (storing full questisonsdata for sets repeatedly... not great)
-	//BUG: Does not check for updated data outside localstorage
-
-	
-	//FIXME: Look at passed questions data on question page render... from DataEntry object, the questions all appear to be doubled up...
-
 	//TODO: disable bag material / size / nozzel until after sampler type is selected?  ("Disable question" action?)
-
-	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
-	//TODO: set orders in QD
-	//TODO: remove DataEntry question when selecting 'not sampled' non-linearly.
-	
-	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
-	//TODO: settings -> auto fill out avaialble station information from station values
-	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
+	//OPTIMIZE default set infomration stroage in store (storing full questisonsdata for sets repeatedly... not great)
 	//TODO: Nozzle material and diameter show 'value' rather than display value... niceity.
-	//TODO: Drop down for 'tabname' on add question. include blank/type option too.
-	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
-	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
-	//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)
-	//BUG: New Event -> DE page -> Add Set -> enter numbe of sampling points -> leave page -> return (bug: table is missing)
-	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
-	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
-	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
-	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
-	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
+	//TODO: Drop down for 'Panel name' on add question. include blank/typing option too.. type-ahead might be enough
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 	//TODO: add 'options' argument to createComponents so we can add parentComponentNames (and other items) to it rather than assuming parent of a set is a data entry sheet (which is is, but still)...
+	//FIXME: Look at passed questions data on question page render... from DataEntry object, the questions all appear to be doubled up...
 
-	//TODO: duplicate stationing from set to set
 
-	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
 
-	//TODO: 'stream depth for IET test' doesn't make it to XML... issue?
-	//TODO: 'transit rate for IET test' doesn't make it to XML... issue?
-	//TODO: 'ratio of vertical' doesn't make it to XML... issue?
-	//TODO: 'intake efficiency' doesn't make it to XML... issue?
-	//TODO: "Sampling depth" doesn't go into XML?
+
+
+
+
+
+
+
+
+
 
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
