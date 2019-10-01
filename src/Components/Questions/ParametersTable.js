@@ -435,7 +435,7 @@ class ParametersTable extends React.Component {
 							/>
 						</DialogContent>
 						<DialogActions>
-							<Button onClick={this.handleClose} color="primary">
+							<Button onClick={this.handleAddColumnDialogClose} color="primary">
 								Cancel
 				  </Button>
 							<Button onClick={this.handleAddColumn} color="primary">
