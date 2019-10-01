@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 import _ from 'lodash';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
 const math = require('mathjs');
 
 const styles = theme => ({
@@ -67,6 +68,12 @@ class ComputedValue extends React.Component {
 			console.log("computationString not set in computeValue function in ComputedValue component");
 		}
 
+		if (Array.isArray(computationString)) {  // at this time, arrays passed as computation strings are just pass-through to getQuestionValue - no computation is preformed
+			//TODO: error
+			return getQuestionValue(this.props.currentEventID, ...computationString);
+		}
+		
+
 		let DEBUG = false;
 		if (DEBUG) console.log("--------------------------------");
 		if (DEBUG) console.log("computeValue: computationString: ", computationString);
@@ -87,6 +94,7 @@ class ComputedValue extends React.Component {
 				// splitCS[i] is a questionID
 				let q_id = splitCS[i];
 				let q_val;
+
 
 				if (defaultQuestionsData[q_id]) {
 					if (DEBUG) console.log("question found in default");
@@ -159,7 +167,10 @@ class ComputedValue extends React.Component {
 }
 
 ComputedValue.propTypes = {
-	computationString: PropTypes.string.isRequired,
+	computationString: PropTypes.oneOfType([
+		PropTypes.string.isRequired,
+		PropTypes.array.isRequired
+	]),
 	classes: PropTypes.object,
 	validator: PropTypes.func,
 	id: PropTypes.string.isRequired,

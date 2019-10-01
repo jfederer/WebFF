@@ -65,11 +65,7 @@ const FUNCDEBUG = false;
 class WebFF extends React.Component {
 
 
-	//TODO: add-column PCode in parameters table cancel button doesn't work.
-
 	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
-
-	//TODO: nozell material and nozzle diameter calculated values in IET don't appear to work...
 
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 
