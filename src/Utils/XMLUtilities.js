@@ -158,7 +158,10 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 	console.log('activePCodesArr :', activePCodesArr);
 
 	activePCodesArr.forEach((pCode, index) => {
-		console.log(pCode, index);
+		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATATableName, QWDATARowNum, pCode);
+
+
+		//get remaining sample info
 		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
 		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
 		let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
@@ -166,11 +169,6 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		let transitHeaderText = "Transit Rate, ft / sec";
 		let restTimeHeaderText = "Rest time on Bed for Bed load sample, seconds";
 		let horizWidthHeaderText = "Horizontal width of Vertical, feet"
-
-		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATARowNum, pCode);
-
-
-
 
 		// REMOVED per KASKACH request that this be a param block instead of a sample-level item.
 		//  "Average Gage Height", if calculated, should be written to P00065.
@@ -216,7 +214,7 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		// console.log("P50015");
 		// console.log('samplesTable :', samplesTable);
 		// console.log('colNum :', colNum);
-		
+
 
 		// - - Mean Depth of Stream (00064), 
 		sampleObj["Param" + XML_SPLITTER + index + "P00064"] = buildParamObj("P00064", getQuestionValue(eventID, "meanStreamDepth"));
@@ -227,7 +225,7 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 		// // IET testing
 		// - - Stream Velocity (ft) - - should be written to P72196
-		sampleObj["Param" + XML_SPLITTER + index + "P72196"] = buildParamObj("P72196", getQuestionValue(eventID, DEName, "streamVelocity_IET")); 
+		sampleObj["Param" + XML_SPLITTER + index + "P72196"] = buildParamObj("P72196", getQuestionValue(eventID, DEName, "streamVelocity_IET"));
 		// - - Seconds Sampler collected water - - should be written to P72217
 		sampleObj["Param" + XML_SPLITTER + index + "P72217"] = buildParamObj("P72217", getQuestionValue(eventID, DEName, "duration_IET"));
 		// - - Sample Volume for Test (mL) - - should be written to P72218
@@ -242,46 +240,39 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 		// for Bedload samples only:  
 		if (sedType === BEDLOAD_TEXT) {
 			//  - - Bag Mesh Size, in mm - - should be P30333.
-			sampleObj["Param"  + XML_SPLITTER + index + "P30333"] = buildParamObj("P30333", getQuestionValue(eventID, DEName, "bagMesh"));
+			sampleObj["Param" + XML_SPLITTER + index + "P30333"] = buildParamObj("P30333", getQuestionValue(eventID, DEName, "bagMesh"));
 
 			//  - - Tether Line Used - -  should be P04117.
-			sampleObj["Param"  + XML_SPLITTER + index + "P04117"] = buildParamObj("P04117", getQuestionValue(eventID, DEName, "tetherLine") ? 1 : 0);
+			sampleObj["Param" + XML_SPLITTER + index + "P04117"] = buildParamObj("P04117", getQuestionValue(eventID, DEName, "tetherLine") ? 1 : 0);
 
 			//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
-			sampleObj["Param"  + XML_SPLITTER + index + "P04118"] = buildParamObj("P04118", getQuestionValue(eventID, DEName, "compositeSamplesInCrossSection"));
+			sampleObj["Param" + XML_SPLITTER + index + "P04118"] = buildParamObj("P04118", getQuestionValue(eventID, DEName, "compositeSamplesInCrossSection"));
 
 			//  - - Verticals in composite sample, a number - - should be P04119. 
-			sampleObj["Param"  + XML_SPLITTER + index + "P04119"] = buildParamObj("P04119", getQuestionValue(eventID, DEName, "verticalsInComposite"));
+			sampleObj["Param" + XML_SPLITTER + index + "P04119"] = buildParamObj("P04119", getQuestionValue(eventID, DEName, "verticalsInComposite"));
 
 			//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
 			colNum = getColumnNumberFromTableHeader(samplesTable, restTimeHeaderText);
-			sampleObj["Param" + XML_SPLITTER + index + "P04120"] = buildParamObj("P04120", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum)); 
+			sampleObj["Param" + XML_SPLITTER + index + "P04120"] = buildParamObj("P04120", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));
 
 			// //  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
 			colNum = getColumnNumberFromTableHeader(samplesTable, horizWidthHeaderText);
-			sampleObj["Param" + XML_SPLITTER + index + "P04121"] = buildParamObj("P04121", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum)); 
+			sampleObj["Param" + XML_SPLITTER + index + "P04121"] = buildParamObj("P04121", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));
 		}
-	});
 
+	});
 	return sampleObj;
 }
 
-const buildParamTableParamObj = (eventID, parametersTableName, QWDATARowNum, pCode) => {
+const buildParamTableParamObj = (eventID, parametersTableName, QWDATATableName, QWDATARowNum, pCode) => {
+	console.log("buildParametersTableParamObj(", eventID, parametersTableName, QWDATARowNum, pCode, ")");
 	let paramObj = {
 		"Name": pCode,
 		"Value": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_val")),
 		"Rmrk": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_rmk")),
 		"NullQlfr": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_nq")),
-		"Method": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_mth"))
-
-		// "Rmrk": this.getTableQuestionValue("parametersTable", pCode + "_rmk", QWDATARowNum),
-		// "M2Lab": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), M2LAB_HEADER))
-
-		// "NullQlfr": this.getTableQuestionValue("parametersTable", pCode + "_nq", QWDATARowNum),
-		// "M2Lab": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), M2LAB_HEADER))
-
-		// "Method": this.getTableQuestionValue("parametersTable", pCode + "_mth", QWDATARowNum),
-		// "M2Lab": getQuestionValue(eventID, "QWDATATable", QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, "QWDATATable"), M2LAB_HEADER))
+		"Method": getQuestionValue(eventID, parametersTableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, parametersTableName), pCode + "_mth")),
+		"M2Lab": getQuestionValue(eventID, QWDATATableName, QWDATARowNum, getColumnNumberFromTableHeader(getQuestionValue(eventID, QWDATATableName), M2LAB_HEADER))
 	}
 	return paramObj;
 }

@@ -64,7 +64,6 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-	//TODO: Bottom material questions (Bag mesh, tether line, etc... look in xml) are not showing up.
 
 	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 
