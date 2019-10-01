@@ -78,8 +78,13 @@ class SetInformation extends React.Component {
 	}
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
-		// console.log("setInfoChangeHandler(", eventID, sub_QID, value, ")");
+		//  console.log("setInfoChangeHandler(", eventID, sub_QID, value, ")");
 		if (sub_QID === "numberOfSamplingPoints") {
+
+			if(parseInt(value)===0) {
+				// can't have a value of zero samples...
+				return;
+			}
 			this.doChange(eventID, sub_QID, value)
 			this.setState({ showDataTable: true });
 			this.props.numberOfSamplingPointsChanged(eventID, this.props.sedimentType, this.props.setName,  this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);

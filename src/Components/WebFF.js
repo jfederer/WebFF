@@ -64,57 +64,74 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-
-	//tODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
-
-	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
-
-	//TODO: entering '1' in number of samples when blank, warns that removing data...
-
-	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
-
-	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
-
-	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
-
-	//TODO: switching events doesn't do the nav bar right
-
-	//TODO: move checkForValidSedimentType to QuestionUtilities or Utilites
-
-	//TODO: system menu rebuild
-
-	//TODO: save sedlogin compat xml
-
-	//TODO: NEXT:  rebuild setInfo to write sedimentType and SamplingMethod to DE and copied into sets...?  build DE as question that gets sedType andSamp and bunch of setInformations?
-	//TODO: ASK KEN:  "Suspended/Bottom Material/Bedload Sampling Method" drop down with 'none' value?
-
-
+	//KEN:
+	//TODO: test save sedlogin compat xml
 	//TODO: push event to sedlong
+
+
+
+	//BREAKING:
+	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
+	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
+	//TODO: system menu rebuild
 	//TODO: add/remove question (saved to user / saved to event / saved to site)
-	//TODO: user/site settings (station names, etc)
-	//TODO: save entire event as xml
-	//TODO: single-page view 
-	//TODO: single-page view saveable as pdf (ingest pdf??)
-	//TODO: validators (numSampPoints not allowing alpha might be good test case)
+	//TODO: Style sheet
 	//TODO: webserver, network loads
-	//TODO: sediment type should be passed to the DE page as prop, not saved in event (or something similar) to facilitate multiple DE pages
-	//TODO: templates
+		//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
+
+	//BUGS: 
 	//TODO: setname cannot be Sngl
 
-	//TODO: add/remove station
-	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
-
-	//TODO: remove set (delete question does this... but make it easier with button from DE page)
-	//TODO: settings dialog
-	//TODO: rename sets
-
-	//TODO: Multiple Sampling evnts at same time...
+	//TEST:
+	// Add/REmove station
 	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
+
+	//SHOULD:
+	//TODO: rememver current sediment type from page to page
+	//TODO: single-page view 
+	//TODO: single-page view saveable as pdf (ingest pdf??)
+	//TODO: save entire event as xml
+	//TODO: switching events doesn't do the nav bar right
+	//TODO: user/site settings (station names, etc)
+	//TODO: validators (numSampPoints not allowing alpha might be good test case)
+	//TODO: templates	
+	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
+
+
+	//Would be nice:
+	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
+	//TODO: settings: 
+	// paper vs no... 
+	// auto-estimate vs no ...
+	// add/remove sampler types from lists  (and other long drop-downs)
+	//TODO: settings dialog
+	//TODO: remove set (delete question does this... but make it easier with button from DE page)
+	//TODO: rename sets
+	//TODO: station editor
+	//TODO: QWDATA page, time estimate -> optionally overwrite
+	//TODO: QWDATA page, duplicate date for remaining...
+
+
+	//Cleanup
+	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
+	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
+//TODO: Multiple Sampling evnts at same time...
+	//TODO: move checkForValidSedimentType to QuestionUtilities or Utilites
+
+
+
+
+
+
+
+
+
+
 
 	//OPTIMIZE default set infomration stroage in store (storing full questisonsdata for sets repeatedly... not great)
 	//BUG: Does not check for updated data outside localstorage
 
-	//FIXME: enter zero as number of smaples
+	
 	//FIXME: Look at passed questions data on question page render... from DataEntry object, the questions all appear to be doubled up...
 
 	//TODO: disable bag material / size / nozzel until after sampler type is selected?  ("Disable question" action?)
@@ -122,11 +139,7 @@ class WebFF extends React.Component {
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
 	//TODO: set orders in QD
 	//TODO: remove DataEntry question when selecting 'not sampled' non-linearly.
-	//TODO: QWDATA page, time estimate -> optionally overwrite
-	//TODO: QWDATA page, duplicate date for remaining...
-	//TODO: automatically generate estimated times as setting
-	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
-	//TODO: station editor
+	
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 	//TODO: settings -> auto fill out avaialble station information from station values
 	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
@@ -235,7 +248,7 @@ class WebFF extends React.Component {
 
 	testFunc(props) {
 		props.hideQuestion(["stationNumber"]);
-		props.hideQuestion([DATA_ENTRY_INFORMATION_IDENTIFIER+"Suspended", "bagMaterial"]);
+		props.hideQuestion([DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended", "bagMaterial"]);
 	}
 
 	render() {
