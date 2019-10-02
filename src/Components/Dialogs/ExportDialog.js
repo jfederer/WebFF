@@ -52,12 +52,9 @@ class ExportDialog extends React.Component {
 	constructor(props) {
 		super(props);
 
-		// let realUsername = "";
-		// if (this.props.username) {
-		// 	realUsername = this.props.username.split('@')[0];
-		// }
-
 		this.state =  _.cloneDeep(initialState);
+
+		this.state.sedLOGINUsername = this.props.sedLOGINUsername;
 
 		this.saveXML = this.saveXML.bind(this);
 		this.saveAllXML = this.saveAllXML.bind(this);
@@ -146,7 +143,7 @@ class ExportDialog extends React.Component {
 	sedLoginSubmitHandler = () => {
 		this.setState({ showStatus: true });
 		this.setState({ showSedLOGINQs: false })
-		this.pushXMLToSedLOGIN(this.state.SedLOGINprojectID, this.state.username, this.state.pw);
+		this.pushXMLToSedLOGIN(this.state.SedLOGINprojectID, this.state.sedLOGINUsername, this.state.pw);
 	}
 
 	passwordChangeHandler = (e) => {
@@ -154,7 +151,7 @@ class ExportDialog extends React.Component {
 	}
 
 	usernameChangeHandler = (e) => {
-		this.setState({ username: e.target.value });
+		this.setState({ sedLOGINUsername: e.target.value });
 	}
 
 	projectIDChangeHandler = (e) => {
@@ -183,8 +180,7 @@ class ExportDialog extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props;
-		const { exportDialogVisibility } = this.props.UI.visibility;
+		const { classes, exportDialogVisibility } = this.props;
 
 		return (
 			<Dialog
@@ -250,11 +246,11 @@ class ExportDialog extends React.Component {
 								<Grid item xs={5}>
 									<TextField
 										margin="dense"
-										id="username"
+										id="sedLOGINUsername"
 										label="SedLOGIN username"
 										onChange={this.usernameChangeHandler}
 										fullWidth
-										value={this.state.username}
+										value={this.state.sedLOGINUsername}
 									/>
 								</Grid>
 								<Grid item xs={4}>
@@ -295,9 +291,8 @@ class ExportDialog extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI, // to get dialog visibility
-		users: state.Users,  // to get sedlogin username
-		sedff: state.SedFF // to get current user
+		exportDialogVisibility: state.UI.visibility.exportDialogVisibility,
+		sedLOGINUsername: state.Users[state.SedFF.currentUsername].sedLoginUsername
 	}
 }
 
