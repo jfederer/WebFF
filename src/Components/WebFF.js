@@ -39,6 +39,8 @@ import { loadAndSetCurrentUser } from '../Actions/SedFF';
 //dialogs
 import ExportDialog from './Dialogs/ExportDialog';
 import SwitchUserDialog from './Dialogs/SwitchUserDialog';
+import SettingsDialog from './Dialogs/SettingsDialog';
+
 // import SettingsDialog from './Dialogs/SettingsDialog';
 import AboutDialog from './Dialogs/AboutDialog';
 import AddRemoveQuestionDialog from './Dialogs/AddRemoveQuestionDialog';
@@ -301,7 +303,7 @@ class WebFF extends React.Component {
 							{/* <SyncDataDialog /> */}
 							<AddRemoveQuestionDialog />
 							<AddRemoveStationDialog />
-							{/* <SettingsDialog /> */}
+							<SettingsDialog />
 							<AboutDialog />
 							<SwitchUserDialog />
 

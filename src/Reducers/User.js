@@ -32,15 +32,16 @@ const initialUserState = {
 
 export function Users(state = initialUserState, action) {
 	let newState = _.cloneDeep(state);
+	console.log('action :', action);
 	switch (action.type) {
 		case SET_OUTLINE_QUESTIONS:
-			newState.settings.outlineQuestions = action.useOutlineQuestions; //FIXME: doesn't affect right part of store
+			newState[action.username].settings.outlineQuestions = action.useOutlineQuestions; //FIXME: doesn't affect right part of store
 			return newState;
 		case SET_BACKUP_INTERVAL:
-			newState.settings.backupInterval = action.intervalInSeconds; //FIXME: doesn't affect right part of store
+			newState[action.username].settings.backupInterval = action.intervalInSeconds; //FIXME: doesn't affect right part of store
 			return newState;
 		case SET_SEDLOGIN_USERNAME:
-			newState.sedLoginUsername = action.newSedLoginUsername; //FIXME: doesn't affect right part of store
+			newState[action.username].sedLoginUsername = action.newSedLoginUsername; //FIXME: doesn't affect right part of store
 			return newState;
 		case SET_USER_DATA:
 			newState[action.user.username] = action.user;

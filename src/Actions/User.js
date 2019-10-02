@@ -9,16 +9,16 @@ import {
 
 import { emptyUser } from '../Constants/DefaultObjects';
 
-export function setOutlineQuestions(usePaper) {
-	return { type: SET_OUTLINE_QUESTIONS, useOutlineQuestions: usePaper }
+export function setOutlineQuestions(username, useOutlineQuestions) {
+	return { type: SET_OUTLINE_QUESTIONS, username, useOutlineQuestions }
   }
 
-export function setBackupInterval(seconds) {
-	return { type: SET_BACKUP_INTERVAL, intervalInSeconds: seconds }
+export function setBackupInterval(username, intervalInSeconds) {
+	return { type: SET_BACKUP_INTERVAL, username, intervalInSeconds }
   }
 
-export function setSedLoginUsername(newSedLoginUsername) {
-	return { type: SET_SEDLOGIN_USERNAME, newSedLoginUsername: newSedLoginUsername }
+export function setSedLoginUsername(username, newSedLoginUsername) {
+	return { type: SET_SEDLOGIN_USERNAME, username, newSedLoginUsername }
   }
   
 export function setUserData(user) {
