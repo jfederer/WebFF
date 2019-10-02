@@ -97,6 +97,7 @@ class WebFF extends React.Component {
 	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
 	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
+	//Remove currently-active station in event using dialog.
 
 	//TEST:
 	// Add/REmove station

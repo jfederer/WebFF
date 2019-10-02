@@ -53,8 +53,7 @@ class AddRemoveStationDialog extends React.Component {
 			newStation_displayName: "",
 			newStation_stationNumber: "",
 			newStation_projectName: "",
-			newStation_projectID: "",
-			test: {value:5}
+			newStation_projectID: ""
 			// allStationIDs: this.props.getUsersStationIDs(this.props.currentUsername);
 		})
 	}
@@ -62,13 +61,12 @@ class AddRemoveStationDialog extends React.Component {
 
 
 	onEnter = () => {
-		console.log("ON enter");
-		this.setState(this.getInitialState(), 
-			() => this.setState({isInitialized:true})
+		this.setState(this.getInitialState(),
+			() => this.setState({ isInitialized: true })
 		);
 	}
 
-	
+
 	handleValueChange = (eventID, QID, value) => {
 
 		this.setState({ [QID]: value });
@@ -106,7 +104,7 @@ class AddRemoveStationDialog extends React.Component {
 			this.props.stationNameChanged(this.props.currentSamplingEventID, getStationFromID(newStationID).name);
 		}
 
-		this.closeHandler();
+		this.dialogCloseHandler();
 	}
 
 
@@ -126,136 +124,137 @@ class AddRemoveStationDialog extends React.Component {
 		} else {
 			alert("Removal of site '", this.state.removeStation_stationName, "' from your personal station list cancelled");
 		}
-		this.closeHandler();
+		this.dialogCloseHandler();
 	}
 
 
 
 
-	closeHandler = () => {
+	dialogCloseHandler = () => {
 		this.props.setAddRemoveStationDialogVisibility(false);
-		setTimeout(() => {
-			this.setState(this.getInitialState());
-		}, 250);
+		this.setState({
+			isInitialized: false
+		});
 	}
 
 	//TODO: go through some global prop types for questions to get all avaiable options
 	//TODO: there might not be existing custom questions -- hide the delete button and dialog info if there isn't
 	render() {
-		const { classes } = this.props;
-		const { addRemoveStationDialogVisibility } = this.props.UI.visibility;
+		const { classes, addRemoveStationDialogVisibility } = this.props;
 
 		return (
 			<Dialog
 				open={addRemoveStationDialogVisibility}
-				onClose={this.closeHandler}
+				onClose={this.dialogCloseHandler}
 				onEnter={this.onEnter}
 				aria-labelledby="form-dialog-title"
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
-				<DialogTitle id="form-dialog-title">
-					Station Manager
+				{this.state.isInitialized && addRemoveStationDialogVisibility ?
+					<React.Fragment><DialogTitle id="form-dialog-title">
+						Station Manager
 					{this.state.addOrRemove === ADD ? " (Adding)" : null}
-					{this.state.addOrRemove === REMOVE ? " (Removing)" : null}
-				</DialogTitle>
+						{this.state.addOrRemove === REMOVE ? " (Removing)" : null}
+					</DialogTitle>
 
-				<DialogContent>
-					{this.state.addOrRemove === ""
-						? <React.Fragment>
-							Add a new station to, or remove an existing station from, your personalized station list?
+						<DialogContent>
+							{this.state.addOrRemove === ""
+								? <React.Fragment>
+									Add a new station to, or remove an existing station from, your personalized station list?
 							<br></br>
-							<Button onClick={() => this.setState({ addOrRemove: ADD })}>Add Station</Button>
-							<Button onClick={() => this.setState({ addOrRemove: REMOVE })}>Remove Station</Button>
-						</React.Fragment>
-						: null}
+									<Button onClick={() => this.setState({ addOrRemove: ADD })}>Add Station</Button>
+									<Button onClick={() => this.setState({ addOrRemove: REMOVE })}>Remove Station</Button>
+								</React.Fragment>
+								: null}
 
-					{this.state.addOrRemove === ADD
-						? <React.Fragment>
-							<Question
-								id="newStation_stationName"
-								label="Station Full Name"
-								type="Text"
-								helperText="Full station name for use in SedLOGIN and other output formats"
-								value={this.state.newStation_stationName}
-								required
-								alternateChangeHandler={this.handleValueChange}
-							/>
-							<Question
-								id="newStation_displayName"
-								label="Station Display Name"
-								type="Text"
-								helperText="Station Name to be displayed in the drop down menu in SedFF"
-								value={this.state.newStation_displayName}
-								alternateChangeHandler={this.handleValueChange}
-							/>
-							<Question id="newStation_stationNumber"
-								label="Station Number"
-								type="Text"
-								required
-								value={this.state.newStation_stationNumber}
-								alternateChangeHandler={this.handleValueChange}
-							/>
-							<Question id="newStation_projectName"
-								label="Project Name"
-								type="Text"
-								value={this.state.newStation_projectName}
-								alternateChangeHandler={this.handleValueChange}
-							/>
-							<Question id="newStation_projectID"
-								label="Project ID"
-								type="Text"
-								value={this.state.newStation_projectID}
-								alternateChangeHandler={this.handleValueChange}
-							/>
-							<Question id="newStation_agencyCode"
-								label="Agency Code"
-								type="Text"
-								value={this.state.newStation_agencyCode}
-								alternateChangeHandler={this.handleValueChange}
-							/>
-							<Question id="newStation_changeCurrent"
-								label="Set current event to this station"
-								type="Toggle"
-								checkbox={true}
-								value={this.state.newStation_changeCurrent}
-								alternateChangeHandler={this.handleValueChange}
-							/>
+							{this.state.addOrRemove === ADD
+								? <React.Fragment>
+									<Question
+										id="newStation_stationName"
+										label="Station Full Name"
+										type="Text"
+										helperText="Full station name for use in SedLOGIN and other output formats"
+										value={this.state.newStation_stationName}
+										required
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<Question
+										id="newStation_displayName"
+										label="Station Display Name"
+										type="Text"
+										helperText="Station Name to be displayed in the drop down menu in SedFF"
+										value={this.state.newStation_displayName}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<Question id="newStation_stationNumber"
+										label="Station Number"
+										type="Text"
+										required
+										value={this.state.newStation_stationNumber}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<Question id="newStation_projectName"
+										label="Project Name"
+										type="Text"
+										value={this.state.newStation_projectName}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<Question id="newStation_projectID"
+										label="Project ID"
+										type="Text"
+										value={this.state.newStation_projectID}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<Question id="newStation_agencyCode"
+										label="Agency Code"
+										type="Text"
+										value={this.state.newStation_agencyCode}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<Question id="newStation_changeCurrent"
+										label="Set current event to this station"
+										type="Toggle"
+										checkbox={true}
+										value={this.state.newStation_changeCurrent}
+										alternateChangeHandler={this.handleValueChange}
+									/>
 
-						</React.Fragment>
-						: null}
+								</React.Fragment>
+								: null}
 
 
-					{this.state.addOrRemove === REMOVE
-						? <React.Fragment>
-							<Typography>Select the station to remove from your personal station list:</Typography>
-							<Question
-								id="removeStation_stationName"
-								label="Station To Remove"
-								type="StationDropDown"
-								includeAddStation={false}
-								includeBlank={true}
-								alternateChangeHandler={this.handleValueChange}
-							/>
-						</React.Fragment>
-						: null}
-				</DialogContent>
+							{this.state.addOrRemove === REMOVE
+								? <React.Fragment>
+									<Typography>Select the station to remove from your personal station list:</Typography>
+									<Question
+										id="removeStation_stationName"
+										label="Station To Remove"
+										type="StationDropDown"
+										includeAddStation={false}
+										includeBlank={true}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+								</React.Fragment>
+								: null}
+						</DialogContent>
 
-				<DialogActions>
-					{this.state.addOrRemove === ADD
-						? <Button onClick={this.addButtonClickHandler} color="primary">
-							Add Station
+						<DialogActions>
+							{this.state.addOrRemove === ADD
+								? <Button onClick={this.addButtonClickHandler} color="primary">
+									Add Station
             		</Button>
-						: null}
-					{this.state.addOrRemove === REMOVE
-						? <Button onClick={this.removeButtonClickHandler} color="primary">
-							Remove Station
+								: null}
+							{this.state.addOrRemove === REMOVE
+								? <Button onClick={this.removeButtonClickHandler} color="primary">
+									Remove Station
             		</Button>
-						: null}
-					<Button onClick={this.closeHandler} color="primary">
-						Cancel
+								: null}
+							<Button onClick={this.dialogCloseHandler} color="primary">
+								Cancel
             		</Button>
-				</DialogActions>
+						</DialogActions>
+					</React.Fragment> : null}
 			</Dialog>
 		);
 	}
@@ -266,8 +265,7 @@ class AddRemoveStationDialog extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI, // to get dialog visibility
-		users: state.Users,
+		addRemoveStationDialogVisibility: state.UI.visibility.addRemoveStationDialogVisibility,
 		currentUsername: state.SedFF.currentUsername,
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername]
