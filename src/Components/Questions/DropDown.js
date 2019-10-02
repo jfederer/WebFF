@@ -48,6 +48,13 @@ class DropDown extends React.Component {
 		// if (tooltip != null) {
 		// 	return <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{this.buildQuestion()}</Tooltip>;
 
+		
+		//check for required info, return null if required elements are missing....
+		if(!this.props.options) {
+			// this occuring with fire an error from the propTypes checks... but at least this will keep it from crashing.
+			return null;
+		}
+		
 			return <FormControl  
 			className={classes.formControl}
 			>

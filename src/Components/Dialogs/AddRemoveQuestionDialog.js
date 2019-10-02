@@ -41,38 +41,15 @@ const USER_SAVE_LOCATION_TEXT = "User Configuration";
 
 //TODO: these keys can reflect current situation --- "JFEDERER's Configuration" ..."Rum River station"..."Current event Sediment on Jordan"...etc.
 
-const initialState = {
-	creatingQ: "",
-	Q_save_loc: "",
-	addQuestion_id: "",
-	addQuestion_label: "",
-	addQuestion_Qtype: "",
-	addQuestion_panel: "",
-	addQuestion_tab: "",
-	addQuestion_sizexs: "",
-	addQuestion_sizelg: "",
-	deleteQuestion_qid: "",
-	addSubmitButtonDisabled: true,
-	deleteSubmitButtonDisabled: true,
-	pageOptions: {},
-	saveLocations: {},
-	stationDeleteOptions: {},
-	eventDeleteOptions: {},
-	userDeleteOptions: {},
-	deleteQuestion_user_qid: "",
-	deleteQuestion_station_qid: "",
-	deleteQuestion_event_qid: "",
-	numDeleteSelected: 0
-}
-
-
 
 class AddRemoveQuestionDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = _.cloneDeep(initialState);
 
+		this.state = { 
+			isInitialized: false
+		};
 	}
 
 	// customQuestionsList() {
@@ -90,6 +67,97 @@ class AddRemoveQuestionDialog extends React.Component {
 	// 		return null;
 	// 	}
 	// }
+
+
+	getInitialState = () => {
+		return _.cloneDeep({
+			creatingQ: "",
+			Q_save_loc: "",
+			addQuestion_id: "",
+			addQuestion_label: "",
+			addQuestion_Qtype: "",
+			addQuestion_panel: "",
+			addQuestion_tab: "",
+			addQuestion_sizexs: "",
+			addQuestion_sizelg: "",
+			deleteQuestion_qid: "",
+			addSubmitButtonDisabled: true,
+			deleteSubmitButtonDisabled: true,
+			pageOptions: {},
+			saveLocations: {},
+			stationDeleteOptions: {},
+			eventDeleteOptions: {},
+			userDeleteOptions: {},
+			deleteQuestion_user_qid: "",
+			deleteQuestion_station_qid: "",
+			deleteQuestion_event_qid: "",
+			numDeleteSelected: 0
+		})
+	}
+
+	onEnter = () => {
+		let { currentUsername, currentSamplingEventID } = this.props;
+		this.setState(this.getInitialState(), () => {
+
+			let pageOptions = {};
+			let saveLocations = {};
+			let currentPage = "";
+			Object.entries(navMenuItems).forEach(([navMenuKey, navMenuItem]) => {
+				if (navMenuItem.text !== "Dashboard") {
+					pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
+				}
+			})
+
+			currentPage = this.props.location.pathname.substring(1);
+
+			if (currentPage === "") {
+				currentPage = "FieldForm";
+			}
+
+			let eventQD = {}, userQD = {}, stationQD = {};
+			let eventDeleteOpts = {}, userDeleteOpts = {}, stationDeleteOpts = {};
+			if (currentSamplingEventID) {
+				saveLocations[EVENT_SAVE_LOCATION_TEXT] = "Event";
+				eventQD = getEventIDQuestionData(currentSamplingEventID);
+				if (eventQD) {
+					Object.keys(eventQD).forEach(id => eventDeleteOpts[id] = id);
+				}
+			}
+			if (currentUsername) {
+				saveLocations[USER_SAVE_LOCATION_TEXT] = "User";
+				userQD = getUserQuestionData(currentUsername);
+				if (userQD) {
+					Object.keys(userQD).forEach(id => userDeleteOpts[id] = id);
+				}
+			}
+			if (getCurrentStationID()) {
+				saveLocations[STATION_SAVE_LOCATION_TEXT] = "Station";
+				stationQD = getStationIDQuestionData(getCurrentStationID());
+				if (stationQD) {
+					Object.keys(stationQD).forEach(id => stationDeleteOpts[id] = id);
+				}
+			}
+
+			if (Object.keys(userDeleteOpts).length === 0 && Object.keys(stationDeleteOpts).length === 0 && Object.keys(eventDeleteOpts).length === 0) {
+				this.setState({ creatingQ: true });  // if there are no custom questions, just assume they are here to create
+			}
+
+			this.setState({  				// Secondary state setting could likely be combined, this allowed copy-paste rather than refactor
+				saveLocations: saveLocations,
+				addQuestion_tab: currentPage,
+				pageOptions: pageOptions,
+				Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT],
+				stationDeleteOptions: stationDeleteOpts,
+				eventDeleteOptions: eventDeleteOpts,
+				userDeleteOptions: userDeleteOpts,
+			}, () => {
+
+				this.setState({
+					isInitialized: true
+				});
+			});
+		});
+	}
 
 
 	shouldEnableAddSubmitButton() {
@@ -154,64 +222,10 @@ class AddRemoveQuestionDialog extends React.Component {
 		this.setState({ creatingQ: true });
 	}
 
-	onEnter = () => {
-		let pageOptions = {};
-		let saveLocations = {};
-		let currentPage = "";
-		Object.entries(navMenuItems).forEach(([navMenuKey, navMenuItem]) => {
-			if (navMenuItem.text !== "Dashboard") {
-				pageOptions[navMenuItem.text] = navMenuItem.text.replace(/\s/g, '');
-			}
-		})
-
-		currentPage = this.props.location.pathname.substring(1);
-
-		if (currentPage === "") {
-			currentPage = "FieldForm";
-		}
-
-		let eventQD = {}, userQD = {}, stationQD = {};
-		let eventDeleteOpts = {}, userDeleteOpts = {}, stationDeleteOpts = {};
-		if (this.props.currentSamplingEventID) {
-			saveLocations[EVENT_SAVE_LOCATION_TEXT] = "Event";
-			eventQD = getEventIDQuestionData(this.props.currentSamplingEventID);
-			if (eventQD) {
-				Object.keys(eventQD).forEach(id => eventDeleteOpts[id] = id);
-			}
-		}
-		if (this.props.currentUsername) {
-			saveLocations[USER_SAVE_LOCATION_TEXT] = "User";
-			userQD = getUserQuestionData(this.props.currentUsername);
-			if (userQD) {
-				Object.keys(userQD).forEach(id => userDeleteOpts[id] = id);
-			}
-		}
-		if (getCurrentStationID()) {
-			saveLocations[STATION_SAVE_LOCATION_TEXT] = "Station";
-			stationQD = getStationIDQuestionData(getCurrentStationID());
-			if (stationQD) {
-				Object.keys(stationQD).forEach(id => stationDeleteOpts[id] = id);
-			}
-		}
-
-		if (Object.keys(userDeleteOpts).length === 0 && Object.keys(stationDeleteOpts).length === 0 && Object.keys(eventDeleteOpts).length === 0) {
-			this.setState({ creatingQ: true });  // if there are no custom questions, just assume they are here to create
-		}
-
-		this.setState({
-			saveLocations: saveLocations,
-			addQuestion_tab: currentPage,
-			pageOptions: pageOptions,
-			Q_save_loc: saveLocations[USER_SAVE_LOCATION_TEXT],
-			stationDeleteOptions: stationDeleteOpts,
-			eventDeleteOptions: eventDeleteOpts,
-			userDeleteOptions: userDeleteOpts,
-		}
-		);
-	}
 
 
 	addSubmitHandler = () => {
+		let { currentUsername, currentSamplingEventID } = this.props;
 		//build q_id dynamically
 		let QID = "#Type=" + this.state.addQuestion_Qtype + "#Label=" + this.state.addQuestion_label + "#Location=" + this.state.addQuestion_tab + ":" + this.state.addQuestion_panel;
 
@@ -250,13 +264,13 @@ class AddRemoveQuestionDialog extends React.Component {
 
 		switch (this.state.Q_save_loc) {
 			case "User":
-				this.props.addQuestionToUser(this.props.currentUsername, Q_obj);
+				this.props.addQuestionToUser(currentUsername, Q_obj);
 				break;
 			case "Station":
 				this.props.addQuestionToStation(getCurrentStationID(), Q_obj);
 				break;
 			case "Event":
-				this.props.addQuestionToEvent(this.props.currentSamplingEventID, Q_obj);
+				this.props.addQuestionToEvent(currentSamplingEventID, Q_obj);
 				break;
 			default:
 				throw new Error("Attempting to add question to location for ", this.state.Q_save_loc, " which is not implemented");
@@ -267,11 +281,12 @@ class AddRemoveQuestionDialog extends React.Component {
 
 
 	deleteSubmitHandler = () => {
+		let { currentUsername, currentSamplingEventID } = this.props;
 		if (this.state.deleteQuestion_user_qid !== "") {
-			this.props.deleteQuestionFromUser(this.props.currentUsername, this.state.deleteQuestion_user_qid);
+			this.props.deleteQuestionFromUser(currentUsername, this.state.deleteQuestion_user_qid);
 		}
 		if (this.state.deleteQuestion_event_qid !== "") {
-			this.props.deleteQuestionFromEvent(this.props.currentSamplingEventID, this.state.deleteQuestion_event_qid);
+			this.props.deleteQuestionFromEvent(currentSamplingEventID, this.state.deleteQuestion_event_qid);
 		}
 		if (this.state.deleteQuestion_station_qid !== "") {
 			this.props.deleteQuestionFromStation(getCurrentStationID(), this.state.deleteQuestion_station_qid);
@@ -283,15 +298,14 @@ class AddRemoveQuestionDialog extends React.Component {
 
 	handleDialogClose = () => {
 		this.props.setAddRemoveQuestionDialogVisibility(false);
-		setTimeout(() => {
-			this.setState(initialState);
-		}, 250);
+		this.setState({
+			isInitialized: false
+		});
 	}
 
 
 	render() {
-		const { classes } = this.props;
-		const { addRemoveQuestionDialogVisibility } = this.props.UI.visibility;
+		const { classes, addRemoveQuestionDialogVisibility, currentUsername } = this.props;
 
 		return (
 			<Dialog
@@ -302,181 +316,183 @@ class AddRemoveQuestionDialog extends React.Component {
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
-				<DialogTitle id="form-dialog-title">
-					{this.state.creatingQ === ""
-						? "Add/Delete "
-						: this.state.creatingQ === true
-							? "Add "
-							: "Delete "}
-					Custom Questions
-        </DialogTitle>
-				<DialogContent>
-					<Grid justify="space-around" container >
-						<Grid item xs={10}>
-							<DialogContentText>
-								{this.state.creatingQ === ""
-									? "Create or Delete a custom question in your user configuration."
-									: this.state.creatingQ === true
-										? "Create a new custom question:"
-										: "Select custom question to delete:"}
-							</DialogContentText>
-						</Grid>
+				{/* {this.state.isInitialized && addRemoveQuestionDialogVisibility ? <React.Fragment> */}
+				{this.state.isInitialized && addRemoveQuestionDialogVisibility ? <React.Fragment>
+					<DialogTitle id="form-dialog-title">
 						{this.state.creatingQ === ""
-							? <React.Fragment>
-								<Grid item xs={4}>
-									<Paper className={classes.paper}><Button onClick={this.createQButtonHandler}>Create a New Question</Button></Paper>
-								</Grid>
-								<Grid item xs={4}>
-									<Paper className={classes.paper}><Button onClick={this.deleteButtonHandler}>Delete existing Question</Button></Paper>
-								</Grid>
-							</React.Fragment>
+							? "Add/Delete "
 							: this.state.creatingQ === true
+								? "Add "
+								: "Delete "}
+						Custom Questions
+        		</DialogTitle>
+					<DialogContent>
+						<Grid justify="space-around" container >
+							<Grid item xs={10}>
+								<DialogContentText>
+									{this.state.creatingQ === ""
+										? "Create or Delete a custom question in your user configuration."
+										: this.state.creatingQ === true
+											? "Create a new custom question:"
+											: "Select custom question to delete:"}
+								</DialogContentText>
+							</Grid>
+							{this.state.creatingQ === ""
 								? <React.Fragment>
-									<Grid item xs={7}>
-										<Question
-											type="Text"
-											required
-											id="addQuestion_label"
-											label="Question Label"
-											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_label}
-										/>
+									<Grid item xs={4}>
+										<Paper className={classes.paper}><Button onClick={this.createQButtonHandler}>Create a New Question</Button></Paper>
 									</Grid>
-									<Grid item xs={6}>
-										{/* TODO: these should be drop downs with existing options as well as a 'new' option */}
-										<Question
-											type="DropDown"
-											required
-											id="addQuestion_tab"
-											label="Question location: Tab name"
-											placeholder="What 'page' should this be on"
-											options={this.state.pageOptions}
-											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_tab}
-										/>
+									<Grid item xs={4}>
+										<Paper className={classes.paper}><Button onClick={this.deleteButtonHandler}>Delete existing Question</Button></Paper>
 									</Grid>
-									<Grid item xs={6}>
-										<Question
-											type="Text"
-											required
-											id="addQuestion_panel"
-											label="Question location: Panel name"
-											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_panel}
-										/>
-									</Grid>
-									<Grid item xs={6}>
-										<Question
-											type="Text"
-											id="addQuestion_sizexs"
-											label="Size (when screen small)"
-											placeholder="1-12 (optional)"
-											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_sizexs}
-										/>
-									</Grid>
-									<Grid item xs={6}>
-										<Question
-											type="Text"
-											id="addQuestion_sizelg"
-											label="Size (when screen large)"
-											placeholder="1-12 (optional)"
-											alternateChangeHandler={this.handleValueChange}
-											value={this.state.addQuestion_sizelg}
-										/>
-									</Grid>
-									<Grid item xs={12}>
-										<InputLabel>Question Type</InputLabel>
-										<Question
-											required
-											id="addQuestion_Qtype"
-											includeBlank={true}
-											value={this.state.addQuestion_Qtype}
-											alternateChangeHandler={this.handleValueChange}
-											options={implementedQuestions}
-											type="DropDown"
-										/>
-									</Grid>
-									<Grid item xs={12}>
-										<InputLabel>Save Question to:</InputLabel>
-										<Question
-											required
-											id="Q_save_loc"
-											includeBlank={false}
-											value={this.state.Q_save_loc}
-											alternateChangeHandler={this.handleValueChange}
-											options={this.state.saveLocations}
-											type="DropDown"
-										/>
-									</Grid>
-
 								</React.Fragment>
-								// creatingQ===false
-								: <Grid item xs={12}>
-									<br />
-									<br />
-									{this.props.currentUsername}'s Questions:
-									<Question
-										id="deleteQuestion_user_qid"
-										includeBlank={true}
-										value={this.state.deleteQuestion_user_qid}
-										alternateChangeHandler={this.handleValueChange}
-										options={this.state.userDeleteOptions}
-										type="DropDown"
-									/>
-									<br />
-									<Divider variant='fullWidth' />
-									<br />
-									{getCurrentStationID()
-										? <React.Fragment><Typography>Current STATION Questions</Typography>:
-									<Question
-												id="deleteQuestion_station_qid"
-												includeBlank={true}
-												value={this.state.deleteQuestion_station_qid}
-												alternateChangeHandler={this.handleValueChange}
-												options={this.state.stationDeleteOptions}
-												type="DropDown"
-											/></React.Fragment>
-										: null}
-									<br />
-									<Divider />
-									<br />
-									{this.props.currentSamplingEventID
-										? <React.Fragment><Typography>Current EVENT questions:</Typography>
+								: this.state.creatingQ === true
+									? <React.Fragment>
+										<Grid item xs={7}>
 											<Question
-												id="deleteQuestion_event_qid"
-												includeBlank={true}
-												value={this.state.deleteQuestion_event_qid}
+												type="Text"
+												required
+												id="addQuestion_label"
+												label="Question Label"
 												alternateChangeHandler={this.handleValueChange}
-												options={this.state.eventDeleteOptions}
+												value={this.state.addQuestion_label}
+											/>
+										</Grid>
+										<Grid item xs={6}>
+											{/* TODO: these should be drop downs with existing options as well as a 'new' option */}
+											<Question
 												type="DropDown"
-											/></React.Fragment>
-										: null}
-								</Grid>
+												required
+												id="addQuestion_tab"
+												label="Question location: Tab name"
+												placeholder="What 'page' should this be on"
+												options={this.state.pageOptions}
+												alternateChangeHandler={this.handleValueChange}
+												value={this.state.addQuestion_tab}
+											/>
+										</Grid>
+										<Grid item xs={6}>
+											<Question
+												type="Text"
+												required
+												id="addQuestion_panel"
+												label="Question location: Panel name"
+												alternateChangeHandler={this.handleValueChange}
+												value={this.state.addQuestion_panel}
+											/>
+										</Grid>
+										<Grid item xs={6}>
+											<Question
+												type="Text"
+												id="addQuestion_sizexs"
+												label="Size (when screen small)"
+												placeholder="1-12 (optional)"
+												alternateChangeHandler={this.handleValueChange}
+												value={this.state.addQuestion_sizexs}
+											/>
+										</Grid>
+										<Grid item xs={6}>
+											<Question
+												type="Text"
+												id="addQuestion_sizelg"
+												label="Size (when screen large)"
+												placeholder="1-12 (optional)"
+												alternateChangeHandler={this.handleValueChange}
+												value={this.state.addQuestion_sizelg}
+											/>
+										</Grid>
+										<Grid item xs={12}>
+											<InputLabel>Question Type</InputLabel>
+											<Question
+												required
+												id="addQuestion_Qtype"
+												includeBlank={true}
+												value={this.state.addQuestion_Qtype}
+												alternateChangeHandler={this.handleValueChange}
+												options={implementedQuestions}
+												type="DropDown"
+											/>
+										</Grid>
+										<Grid item xs={12}>
+											<InputLabel>Save Question to:</InputLabel>
+											<Question
+												required
+												id="Q_save_loc"
+												includeBlank={false}
+												value={this.state.Q_save_loc}
+												alternateChangeHandler={this.handleValueChange}
+												options={this.state.saveLocations}
+												type="DropDown"
+											/>
+										</Grid>
+
+									</React.Fragment>
+									// creatingQ===false
+									: <Grid item xs={12}>
+										<br />
+										<br />
+										{currentUsername}'s Questions:
+									<Question
+											id="deleteQuestion_user_qid"
+											includeBlank={true}
+											value={this.state.deleteQuestion_user_qid}
+											alternateChangeHandler={this.handleValueChange}
+											options={this.state.userDeleteOptions}
+											type="DropDown"
+										/>
+										<br />
+										<Divider variant='fullWidth' />
+										<br />
+										{getCurrentStationID()
+											? <React.Fragment><Typography>Current STATION Questions</Typography>:
+									<Question
+													id="deleteQuestion_station_qid"
+													includeBlank={true}
+													value={this.state.deleteQuestion_station_qid}
+													alternateChangeHandler={this.handleValueChange}
+													options={this.state.stationDeleteOptions}
+													type="DropDown"
+												/></React.Fragment>
+											: null}
+										<br />
+										<Divider />
+										<br />
+										{this.props.currentSamplingEventID
+											? <React.Fragment><Typography>Current EVENT questions:</Typography>
+												<Question
+													id="deleteQuestion_event_qid"
+													includeBlank={true}
+													value={this.state.deleteQuestion_event_qid}
+													alternateChangeHandler={this.handleValueChange}
+													options={this.state.eventDeleteOptions}
+													type="DropDown"
+												/></React.Fragment>
+											: null}
+									</Grid>
+							}
+
+
+						</Grid>
+					</DialogContent>
+					<DialogActions>
+						{this.state.creatingQ === ""
+							? null
+							: this.state.creatingQ === true
+								? <Button disabled={this.state.addSubmitButtonDisabled} onClick={this.addSubmitHandler} color="primary">
+									Add Question
+              </Button>
+								: <Button disabled={this.state.deleteSubmitButtonDisabled} onClick={this.deleteSubmitHandler} color="primary">
+									{this.state.numDeleteSelected === 0 ? 'Must Select Question' : null}
+									{this.state.numDeleteSelected === 1 ? 'Delete Question' : null}
+									{this.state.numDeleteSelected > 1 ? 'Can only select one question at a time' : null}
+								</Button>
 						}
 
-
-					</Grid>
-				</DialogContent>
-				<DialogActions>
-					{this.state.creatingQ === ""
-						? null
-						: this.state.creatingQ === true
-							? <Button disabled={this.state.addSubmitButtonDisabled} onClick={this.addSubmitHandler} color="primary">
-								Add Question
-              </Button>
-							: <Button disabled={this.state.deleteSubmitButtonDisabled} onClick={this.deleteSubmitHandler} color="primary">
-								{this.state.numDeleteSelected === 0 ? 'Must Select Question' : null}
-								{this.state.numDeleteSelected === 1 ? 'Delete Question' : null}
-								{this.state.numDeleteSelected > 1 ? 'Can only select one question at a time' : null}
-							</Button>
-					}
-
-					<Button onClick={this.handleDialogClose} color="primary">
-						Cancel
+						<Button onClick={this.handleDialogClose} color="primary">
+							Cancel
             		</Button>
 
-				</DialogActions>
+					</DialogActions> </React.Fragment> : 'Dialog Not Initalized'}
 			</Dialog>
 		);
 	}
@@ -486,7 +502,7 @@ class AddRemoveQuestionDialog extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI, // to get dialog visibility
+		addRemoveQuestionDialogVisibility: state.UI.visibility.addRemoveQuestionDialogVisibility, // to get dialog visibility
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
 		currentUsername: state.SedFF.currentUsername,

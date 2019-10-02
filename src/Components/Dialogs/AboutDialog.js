@@ -17,8 +17,7 @@ import { setAboutDialogVisibility } from '../../Actions/UI';
 class AboutDialog extends React.Component {
 
 	render() {
-		const { classes } = this.props;
-		const { aboutDialogVisibility } = this.props.UI.visibility;
+		const { classes, aboutDialogVisibility } = this.props;
 
 		return (
 			<Dialog
@@ -44,7 +43,7 @@ class AboutDialog extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI, // to get dialog visibility
+		aboutDialogVisibility: state.UI.visibility.aboutDialogVisibility, 
 	}
 }
 

@@ -30,16 +30,15 @@ import { Typography } from '@material-ui/core';
 const ADD = "ADD";
 const REMOVE = "REMOVE";
 
-const initialState = {
-
-}
 
 class AddRemoveStationDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
 
-		this.state = this.getInitialState();
+		this.state = {
+			isInitialized: false
+		};
 
 	}
 
@@ -55,15 +54,25 @@ class AddRemoveStationDialog extends React.Component {
 			newStation_stationNumber: "",
 			newStation_projectName: "",
 			newStation_projectID: "",
+			test: {value:5}
 			// allStationIDs: this.props.getUsersStationIDs(this.props.currentUsername);
 		})
 	}
 
+
+
+	onEnter = () => {
+		console.log("ON enter");
+		this.setState(this.getInitialState(), 
+			() => this.setState({isInitialized:true})
+		);
+	}
+
+	
 	handleValueChange = (eventID, QID, value) => {
 
 		this.setState({ [QID]: value });
 	};
-
 
 	addButtonClickHandler = () => {
 		//verify inputs
@@ -136,11 +145,11 @@ class AddRemoveStationDialog extends React.Component {
 		const { classes } = this.props;
 		const { addRemoveStationDialogVisibility } = this.props.UI.visibility;
 
-
 		return (
 			<Dialog
 				open={addRemoveStationDialogVisibility}
 				onClose={this.closeHandler}
+				onEnter={this.onEnter}
 				aria-labelledby="form-dialog-title"
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
