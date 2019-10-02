@@ -64,7 +64,7 @@ class SettingsDialog extends React.Component {
 
 
 	render() {
-		const { classes, settingsDialogVisibility, isFetchingUserData, setSedLoginUsername, currentUsername, currentUser } = this.props;
+		const { classes, settingsDialogVisibility, isFetchingUserData, currentUsername, currentUser } = this.props;
 
 		return (
 			<Dialog

@@ -54,7 +54,6 @@ class ExportDialog extends React.Component {
 
 		this.state =  _.cloneDeep(initialState);
 
-		this.state.sedLOGINUsername = this.props.sedLOGINUsername;
 
 		this.saveXML = this.saveXML.bind(this);
 		this.saveAllXML = this.saveAllXML.bind(this);
@@ -63,8 +62,8 @@ class ExportDialog extends React.Component {
 		this.updateStatus = this.updateStatus.bind(this);
 	}
 
-	componentDidMount() {
-		// this.props.appBarTextCB('SedWE Dashboard');
+	onEnter = () => {
+		this.setState({sedLOGINUsername: this.props.sedLOGINUsername});
 	}
 
 	saveXML() {
@@ -186,6 +185,7 @@ class ExportDialog extends React.Component {
 			<Dialog
 				open={exportDialogVisibility}
 				onClose={this.closeHandler}
+				onEnter={this.onEnter}
 				aria-labelledby="form-dialog-title"
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}

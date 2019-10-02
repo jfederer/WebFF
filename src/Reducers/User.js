@@ -32,7 +32,6 @@ const initialUserState = {
 
 export function Users(state = initialUserState, action) {
 	let newState = _.cloneDeep(state);
-	console.log('action :', action);
 	switch (action.type) {
 		case SET_OUTLINE_QUESTIONS:
 			newState[action.username].settings.outlineQuestions = action.useOutlineQuestions; //FIXME: doesn't affect right part of store
