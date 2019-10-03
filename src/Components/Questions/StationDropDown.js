@@ -11,6 +11,8 @@ import { SEQuestionValueChange, stationNameChanged } from '../../Actions/Samplin
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
 import { ADD_STATION } from '../../Constants/Dictionary';
 import { getStationFromID, getUsersStationIDs } from '../../Utils/StoreUtilities';
+import _ from 'lodash';
+import { objectTypeSpreadProperty, jsxClosingElement } from '@babel/types';
 
 
 //TODO: generate minWidth based on content & label
@@ -37,6 +39,7 @@ class StationDropDown extends React.Component {
 
 	constructor(props) {
 		super(props);
+		console.log("CONSTRUCTOR");
 
 		let options = this.getOptions();
 
@@ -48,7 +51,8 @@ class StationDropDown extends React.Component {
 	}
 
 	handleValueChange = (value) => {
-
+		console.log("SDD: handleValueChange(", value, ")");
+		const { currentEventID, id } = this.props;
 		if(value === ADD_STATION) {
 			this.props.setAddRemoveStationDialogVisibility(true);
 			return; //don't actually allow 'setting' this value to Add Station
@@ -56,13 +60,13 @@ class StationDropDown extends React.Component {
 
 
 		if (this.props.alternateChangeHandler) {
-			this.props.alternateChangeHandler(this.props.currentEventID, this.props.id, value);
+			this.props.alternateChangeHandler(currentEventID, id, value);
 		} else {
-			this.props.SEQuestionValueChange(this.props.currentEventID, this.props.id, value);
+			this.props.SEQuestionValueChange(currentEventID, id, value);
 		}
 
 		if(!this.props.inDialog) { // if we are not in a dialog version of this question, we need to propage these changes to other questions
-			this.props.stationNameChanged(this.props.currentEventID, value);
+			this.props.stationNameChanged(currentEventID, value);
 		}
 	};
 
@@ -82,10 +86,29 @@ class StationDropDown extends React.Component {
 		return options;
 	}
 
+	isValueIsValidOption = (options) => {
+		if(this.props.includeBlank && !this.props.value) {
+			return true;
+		}
+
+		let key = _.findKey(options, (item) => item===this.props.value);
+		return typeof key !== 'undefined';
+	}
+
+
+
 	render() {
-		const { classes, currentUsername, stationIDs } = this.props;
+		const { classes, value } = this.props;
 
 		let options = this.getOptions();
+
+		if(!this.isValueIsValidOption(options)) {  //FIXME: throws warning, updating state transition within render
+			console.log("INVALID VALUE");
+			if(Object.keys(options).length > 0) {
+				let newValue = options[Object.keys(options)[0]];
+				this.handleValueChange(newValue);
+			}  //too small of an option will be picked up in the undefined/less than 1 check below.
+		} 
 	
 		//TODO: let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
@@ -115,6 +138,7 @@ class StationDropDown extends React.Component {
 				}}
 			>
 
+				{this.props.includeBlank ? <option key="nada" value="nothing"></option> : null}
 				{typeof options === 'undefined' || Object.keys(options).length < 1
 					? <option key="nada2" value="nothing"></option> // just a blank so the user can select 'Add Station' and trigger value change event handler
 					: Object.keys(options).map((optionLabel, index) => <option key={optionLabel} value={options[optionLabel]}>{optionLabel}</option>)}
@@ -143,9 +167,8 @@ StationDropDown.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
-		currentUsername: state.SedFF.currentUsername,
-		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername],
-		inDialog: state.UI.visibility.addRemoveStationDialogVisibility
+		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername]
+		// inDialog: state.UI.visibility.addRemoveStationDialogVisibility
 	}
 }
 

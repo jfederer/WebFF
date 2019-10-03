@@ -133,6 +133,8 @@ class WebFF extends React.Component {
 	//TODO: set orders in QD
 	//TODO: settings -> auto fill out avaialble station information from station values
 	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
+	//TODO: no duplicate station names for a given user
+	
 
 	//Cleanup
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
@@ -146,6 +148,7 @@ class WebFF extends React.Component {
 	//OPTIMIZE: getNumberOfSamplesInSet, getQuestionValue, and others are called a lot in dialog on parameters table... looks like reconstructing descriptive column each update
 	//TODO: add 'options' argument to createComponents so we can add parentComponentNames (and other items) to it rather than assuming parent of a set is a data entry sheet (which is is, but still)...
 	//FIXME: Look at passed questions data on question page render... from DataEntry object, the questions all appear to be doubled up...
+	//TODO: removing the last user link to a station... remove the station.
 
 
 

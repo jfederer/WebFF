@@ -18,7 +18,7 @@ import { getStationIDsFromName } from '../Utils/StoreUtilities';
 * @returns the eventID of the newly created event 
 */
 export function createNewStationForUser(newStationObject, username) {
-	if (!username) {
+	if (!username) { 
 		throw new Error("No username passed to createNewSamplingEventForUser function");
 	}
 
@@ -77,7 +77,7 @@ export function removeStationFromUser(username, stationName) {
 		matchingIDs.forEach((stationIDToRemove) => {
 			dispatch({ type: REMOVE_STATION_FROM_USERNAME, username, stationIDToRemove })
 		});
-
+		
 	}
 }
 

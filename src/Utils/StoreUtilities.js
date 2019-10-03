@@ -140,7 +140,24 @@ export function getEventQuestionData(event) {
  * @returns {Object} the questionsData (custom questions) for a given stationName
  */
 export function getStationNameQuestionData(username, stationName) {
-	return getStationIDQuestionData(getStationIDsFromName(username, stationName)[0]);
+	if(!username) {
+		throw new Error("Requested username '" + username + "' was falsey with type of: " + typeof username);
+	}
+	if(!stationName) {
+		throw new Error("Requested stationName '" + stationName + "' was falsey with type of: " + typeof stationName);
+	}
+
+	let stationIDsWithMatchingNames = getStationIDsFromName(username, stationName);
+	if (stationIDsWithMatchingNames.length < 1) {
+		console.warn("No Station IDs matched ' ", stationName, "' for username '", username, "'");
+		return undefined;
+	}
+
+	if (stationIDsWithMatchingNames.length > 1) {
+		console.warn("Multiple Station IDs matched ' ", stationName, "' for username '", username, "'");
+	}
+
+	return getStationIDQuestionData(stationIDsWithMatchingNames[0]); //FUTURE: return the first one now... should we warn or offer option? 
 }
 
 /**
@@ -148,7 +165,18 @@ export function getStationNameQuestionData(username, stationName) {
  * @returns {Object} the questionsData (custom questions) for a given stationID
  */
 export function getStationIDQuestionData(stationID) {
-	return getStationQuestionData(getStationFromID(stationID));
+	if(!stationID) {
+		throw new Error("Requested stationID '" + stationID + "' was falsey with type of: " + typeof stationID);
+	}
+	let station = getStationFromID(stationID);
+
+	if (!station) {
+		console.warn("Requested station '" + station + "' was falsey with type of: " + typeof station + ".  Returning undefined questionsData");
+		return undefined;
+	} else {
+		return getStationQuestionData(station);
+	}
+	
 }
 
 /**
@@ -156,6 +184,9 @@ export function getStationIDQuestionData(stationID) {
  * @returns {Object} the questionsData (custom questions) for a given station
  */
 export function getStationQuestionData(station) {
+	if(!station) {
+		throw new Error("Requested station '" + station + "' was falsey with type of: " + typeof station);
+	}
 	return station.questionsData;
 }
 
@@ -212,6 +243,9 @@ export function getCurrentStationID() {
 }
 
 export function getStationFromID(stationID) {
+	if(!stationID) {
+		throw new Error("Requested stationID '" + stationID + "' was falsey with type of: " + typeof stationID);
+	}
 	return store.getState().Stations[stationID];
 }
 

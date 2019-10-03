@@ -53,7 +53,8 @@ class AddRemoveStationDialog extends React.Component {
 			newStation_displayName: "",
 			newStation_stationNumber: "",
 			newStation_projectName: "",
-			newStation_projectID: ""
+			newStation_projectID: "",
+			removeStation_stationName: ""
 			// allStationIDs: this.props.getUsersStationIDs(this.props.currentUsername);
 		})
 	}
@@ -68,7 +69,6 @@ class AddRemoveStationDialog extends React.Component {
 
 
 	handleValueChange = (eventID, QID, value) => {
-
 		this.setState({ [QID]: value });
 	};
 
@@ -111,18 +111,23 @@ class AddRemoveStationDialog extends React.Component {
 	removeButtonClickHandler = () => {
 		let removalConfirmed = window.confirm("You are about to remove station '" + this.state.removeStation_stationName + "' from your personal station list.  Are you sure?");
 
+		let cancellationMessage = "Removal of site '" + this.state.removeStation_stationName + "' from your personal station list cancelled";
+
 		if (removalConfirmed === true) {
 			// check if station name is current in use in the sampling event
 			let doubleCheckPassed = true;
 			if (this.props.currentSamplingEventID && getQuestionValue(this.props.currentSamplingEventID, "stationName") === this.state.removeStation_stationName) {
-				doubleCheckPassed = window.confirm("Station '" + this.state.removeStation_stationName + "' is set as your current event's station.  Removal will change this to the next available station in your personal station list.  Are you sure you want to continue?");
+				doubleCheckPassed = window.confirm("Station '" + this.state.removeStation_stationName + "' is set as your current event's station.\n\n  Removal will change this, and all station-linked data (station number, project name, project ID, agency code, and any custom questions saved to this station), to the next available station in your personal station list.  \n\nAre you sure you want to continue?");
 			}
 
 			if (doubleCheckPassed) {
 				this.props.removeStationFromUser(this.props.currentUsername, this.state.removeStation_stationName);
+				// the process of switching to the next available station name is handled with the validity checking of the stationDropDown question.
+			} else {
+				alert(cancellationMessage);
 			}
 		} else {
-			alert("Removal of site '", this.state.removeStation_stationName, "' from your personal station list cancelled");
+			alert(cancellationMessage);
 		}
 		this.dialogCloseHandler();
 	}
@@ -132,9 +137,10 @@ class AddRemoveStationDialog extends React.Component {
 
 	dialogCloseHandler = () => {
 		this.props.setAddRemoveStationDialogVisibility(false);
-		this.setState({
+		setTimeout(() => {
+			this.setState({
 			isInitialized: false
-		});
+		})}, 250);
 	}
 
 	//TODO: go through some global prop types for questions to get all avaiable options
@@ -234,6 +240,8 @@ class AddRemoveStationDialog extends React.Component {
 										includeAddStation={false}
 										includeBlank={true}
 										alternateChangeHandler={this.handleValueChange}
+										inDialog={true}
+										value={this.state.removeStation_stationName}
 									/>
 								</React.Fragment>
 								: null}
@@ -254,7 +262,7 @@ class AddRemoveStationDialog extends React.Component {
 								Cancel
             		</Button>
 						</DialogActions>
-					</React.Fragment> : null}
+					</React.Fragment> : 'Working...'}
 			</Dialog>
 		);
 	}

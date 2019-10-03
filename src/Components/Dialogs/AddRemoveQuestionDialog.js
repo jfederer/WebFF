@@ -298,9 +298,10 @@ class AddRemoveQuestionDialog extends React.Component {
 
 	handleDialogClose = () => {
 		this.props.setAddRemoveQuestionDialogVisibility(false);
-		this.setState({
+		setTimeout(() => {
+			this.setState({
 			isInitialized: false
-		});
+		})}, 250);
 	}
 
 
@@ -492,7 +493,7 @@ class AddRemoveQuestionDialog extends React.Component {
 							Cancel
             		</Button>
 
-					</DialogActions> </React.Fragment> : 'Dialog Not Initalized'}
+					</DialogActions> </React.Fragment> : 'Working...'}
 			</Dialog>
 		);
 	}

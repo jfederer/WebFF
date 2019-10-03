@@ -211,7 +211,6 @@ export function createNewSamplingEvent(eventName) {
 
 export function stationNameChanged(eventID, newStationName) {
 	// remember to make any changes here reflect in addButtonClickHandler for the AddRemoveStationDialog function
-	// console.log("stationNameChanged(", eventID,", ", newStationName,")");
 
 	//TODO: verify station is acceptable
 
