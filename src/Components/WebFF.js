@@ -56,6 +56,7 @@ import FieldForm from './Pages/FieldForm';
 import DataEntry from './Pages/DataEntry/DataEntry';
 import Parameters from './Pages/Parameters';
 import QWDATA from './Pages/QWDATA';
+import EventSummary from './Pages/EventSummary';
 import ErrorPage from './Errors/ErrorPage';
 
 //TEST
@@ -344,6 +345,8 @@ class WebFF extends React.Component {
 									<Route path="/DataEntry" component={DataEntry} />
 									<Route path="/Parameters" component={Parameters} />
 									<Route path="/QWDATA" component={QWDATA} />
+									<Route path="/EventSummary/:eventID" component={EventSummary} />
+
 									<Route path="/error" component={ErrorPage} />
 								</Switch>
 

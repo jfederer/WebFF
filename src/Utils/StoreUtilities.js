@@ -73,7 +73,7 @@ export function checkForValidSedimentType(sedType, funcName) {
 }
 
 export function getEventFromID(eventID) {
-	return store.getState().SamplingEvents[eventID];
+	return store.getState().SamplingEvents[eventID]; //TODO: fail gracefully, attempt to fetch it??
 }
 
 /** 
