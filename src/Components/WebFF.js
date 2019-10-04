@@ -100,6 +100,8 @@ class WebFF extends React.Component {
 	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
 	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
 	//Remove currently-active station in event using dialog.
+	//BUG: Dashboard -> EventManger -> Event Summary -> BAck Button ... sends you to the FF page.
+	//BUG: average rep measures (from adding a second set) sticks around on a new event....  (Should get fixed if we reset UI before loading event)
 
 	//TEST:
 	// Add/REmove station

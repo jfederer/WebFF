@@ -16,7 +16,9 @@ import MUIDataTable from "mui-datatables";
 import { loadAndSetCurrentSamplingEvent } from "../../../Actions/SedFF";
 import { showNavigationTab } from "../../../Actions/UI";
 import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
+import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import Button from '@material-ui/core/Button';
+import { CLIENT_RENEG_LIMIT } from 'tls';
 
 const columns = [
 	{
@@ -149,12 +151,11 @@ class EventsManager extends React.Component {
 			[
 				event.eventID,
 				event.eventName,
-				event.eventDate ? event.eventDate : "N/A", //TODO: dig into question values
+				getQuestionValue(event.eventID, "sampleDate") ? getQuestionValue(event.eventID, "sampleDate") : "N/A",   //TODO: this isn't working
 				new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours() + ":" + (new Date(event.dateModified).getMinutes() + 1),
-				event.stationName ? event.stationName : "N/A",//TODO: dig into question values
+				getQuestionValue(event.eventID, "stationName") ? getQuestionValue(event.eventID, "stationName") : "N/A",
 				event.shippedStatus,
 				<Button onClick={() => {
-					console.log("CLICK");
 					this.setState({ toEventSummary: true, SummaryEventID: event.eventID })
 				}}>
 					View Event Summary
@@ -166,18 +167,16 @@ class EventsManager extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("CDM");
 		this.setState({ data: this.getDataTable() });
 	}
 
 	componentWillUnmount() {
-		console.log("CWU");
 		this.setState(initialState);
 	}
 
 	render() {
 		if (this.state.toFieldForm) {
-			return <Redirect to='/FieldForm' /> //loading event happens in the onCellClick
+			return <Redirect to='/FieldForm' /> //loading event happens in the onCellClick and toFieldForm doesn't get set until the leader callback
 		}
 
 		if (this.state.toEventSummary) {
