@@ -79,6 +79,7 @@ class WebFF extends React.Component {
 
 	//BREAKING:
 	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
+		//TODO: loading event should reset nav menu (both remove and add items as needed)
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
 	//TODO: Style sheet
@@ -103,6 +104,7 @@ class WebFF extends React.Component {
 	//TEST:
 	// Add/REmove station
 	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
+	//TODO: loading from secondary pages in event manager
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
@@ -138,6 +140,7 @@ class WebFF extends React.Component {
 	
 
 	//Cleanup
+	
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 	//TODO: Multiple Sampling evnts at same time...

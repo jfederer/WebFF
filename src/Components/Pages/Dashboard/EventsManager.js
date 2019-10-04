@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { styles } from '../../../style';
 import { withStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
 
 import { withRouter } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ import MUIDataTable from "mui-datatables";
 import { loadAndSetCurrentSamplingEvent } from "../../../Actions/SedFF";
 import { showNavigationTab } from "../../../Actions/UI";
 import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
+import Button from '@material-ui/core/Button';
 
 const columns = [
 	{
@@ -52,7 +54,13 @@ const columns = [
 		options: {
 			filter: true
 		}
-	}
+	},
+	{
+		name: "View Summary",
+		options: {
+			filter: false
+		}
+	},
 ];
 
 
@@ -60,73 +68,127 @@ class EventsManager extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			toFieldForm: false
+			toFieldForm: false,
+			toEventSummary: false
 		}
 		this.options = {
 			filterType: 'checkbox',
 			print: false,
 			download: false,
 			onRowClick: this.onRowClick,
-			onRowsSelect: this.onRowsSelect
+			onRowsSelect: this.onRowsSelect,
+			onCellClick: (colData, cellMeta) => {
+				console.log("CellMeta: ", cellMeta);
+				console.log("colData:", colData);
+				if (cellMeta.colIndex !== 6) {
+					this.setState({ toFieldForm: true, selectedEventIndex: cellMeta.dataIndex });    //TODO: add loader
+				}
+			}
 		};
 
-	//	console.log("Sampling Events: ", this.props.samplingEvents);
+		//	console.log("Sampling Events: ", this.props.samplingEvents);
 	}
 
 
-	onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
-		// console.log("----RowClick");
-		// console.log("rowData: ", rowData);
-		// console.log("rowMeta: ", rowMeta);
-		// console.log("Load Event: ", rowData[0]);
-		this.props.loadAndSetCurrentSamplingEvent(rowData[0], ()=> {
-			this.props.history.push("/FieldForm");
-			this.props.showNavigationTab("FieldForm");
-			this.props.showNavigationTab("Data Entry");
+	// onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
+	// 	console.log("----RowClick");
+	// 	console.log("rowData: ", rowData);
+	// 	console.log("rowMeta: ", rowMeta);
+	// 	console.log("Load Event: ", rowData[0]);
+	// 	console.log(this.state.goTo);
+
+	// 	// 
+	// 	// 	this.props.history.push("/FieldForm");
+	// 	// 	// this.props.showNavigationTab("FieldForm");
+	// 	// 	// this.props.showNavigationTab("Data Entry");
 
 
-			
-		});
 
+
+
+	// 	// });
+
+	// }
+
+
+
+	// onRowsSelect = (curRowSelected, allRowsSelected) => {
+	// 	console.log("---RowSelect")
+	// 	// console.log("Row Selected: ", curRowSelected);
+	// 	// console.log("All Selected: ", allRowsSelected);
+
+	// }
+
+
+	getDataTable = () => {
+		console.log("Building data table");
+		if (!this.props.currentUser) {
+			return [];
+		}
+		if (!this.props.allSamplingEvents) {
+			return [];
+		}
+
+
+		//build table data
+		let currentUserEventIDs = getAllUsersEventIDs(this.props.currentUser.username);
+
+		let currentUserEvents = currentUserEventIDs.map((eventID) => {
+			return this.props.allSamplingEvents[eventID]
+		})
+
+		let data = currentUserEvents.map((event) =>
+			[
+				event.eventID,
+				event.eventName,
+				event.eventDate ? event.eventDate : "N/A", //TODO: dig into question values
+				new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours() + ":" + (new Date(event.dateModified).getMinutes() + 1),
+				event.stationName ? event.stationName : "N/A",//TODO: dig into question values
+				event.shippedStatus,
+				<Button onClick={() => {
+					console.log("CLICK");
+					this.setState({ toEventSummary: true, SummaryEventID: event.eventID })
+				}}>
+					View Event Summary
+			</Button>,
+			]
+		)
+
+		return data;
 	}
 
-	onRowsSelect = (curRowSelected, allRowsSelected) => {
-		// console.log("---RowSelect")
-		// console.log("Row Selected: ", curRowSelected);
-		// console.log("All Selected: ", allRowsSelected);
-		
+	componentDidMount() {
+		this.setState({data:this.getDataTable()});
 	}
 
 	render() {
-		const { currentUser, sedff, allSamplingEvents } = this.props;
-		
-		if(sedff.isFetchingUserData) {
-			return <p>BLAH!</p> //TODO:
+		const { isFetchingUserData, fetchingUserDataComplete, allSamplingEvents } = this.props;
+
+
+		// if (isFetchingUserData) {
+		// 	return null;
+		// }
+
+		// if (!fetchingUserDataComplete) {
+		// 	return null;
+		// }
+
+
+		if (this.state.toFieldForm) {
+			// this.props.loadAndSetCurrentSamplingEvent(rowData[0], ()=> {
+			// 	this.props.history.push("/FieldForm");
+			// 	this.props.showNavigationTab("FieldForm");
+			// 	this.props.showNavigationTab("Data Entry");
+			return <Redirect to='/FieldForm' />
 		}
 
-		let currentUserEventIDs = getAllUsersEventIDs(currentUser.username);
+		if (this.state.toEventSummary) {
+			return <Redirect to={"/EventSummary/" + this.state.SummaryEventID} />
+		}
 
-		let currentUserEvents = currentUserEventIDs.map( (eventID) => {
-			return allSamplingEvents[eventID]
-		})
-
-		
-		//build table data
-		let data = currentUserEvents.map((event)=>			
-			 [
-				event.eventID, 
-				event.eventName, 
-				event.eventDate ? event.eventDate : "N/A", //TODO: dig into question values
-				new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours()+":"+ (new Date(event.dateModified).getMinutes()+1),
-				event.stationName ? event.stationName : "N/A",//TODO: dig into question values
-				event.shippedStatus
-			 ]
-		); 
-	
-			
 		return <MUIDataTable
 			title={"Events Manager"}
-			data={data}
+			data={this.state.data}
 			columns={columns}
 			options={this.options}
 		/>
@@ -136,7 +198,8 @@ class EventsManager extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		allSamplingEvents: state.SamplingEvents,
-		sedff: state.SedFF, // loading / fetching data
+		isFetchingUserData: state.SedFF.isFetchingUserData,
+		fetchingUserDataComplete: state.SedFF.fetchingUserDataComplete,
 		currentUser: state.Users[state.SedFF.currentUsername]
 	}
 }

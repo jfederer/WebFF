@@ -16,7 +16,8 @@ const initialSedFFState = {
 		// : null,
 		: "jfederer@usgs.gov",
 	currentSamplingEventID: null,
-	isFetchingUserData: true
+	isFetchingUserData: true,
+	fetchingUserDataComplete: false
 };
 
 export function SedFF(state = initialSedFFState, action) {
@@ -34,6 +35,7 @@ export function SedFF(state = initialSedFFState, action) {
 			return newState;
 		case USER_DATA_LOAD_COMPLETE:
 			newState.isFetchingUserData = false;
+			newState.fetchingUserDataComplete = true;
 			return newState
 
 		case SAMPLING_EVENTS_REQUEST:
