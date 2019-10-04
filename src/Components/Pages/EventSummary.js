@@ -13,7 +13,7 @@ class EventSummary extends React.Component {
 	render() {
 		
 		const { eventID } = this.props.match.params
-		console.log("EvtSum");
+		// console.log("EvtSum");
 
 		// if (!event) {
 		// 	console.log("No current event, redirecting to dashboard");

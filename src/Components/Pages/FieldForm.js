@@ -13,7 +13,7 @@ import QuestionPage from './../QuestionPage';
 class FieldForm extends React.Component {
 
 	render() {
-		
+	
 		const { currentEvent } = this.props;
 
 		if (!currentEvent) {

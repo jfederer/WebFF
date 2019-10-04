@@ -39,7 +39,7 @@ class StationDropDown extends React.Component {
 
 	constructor(props) {
 		super(props);
-		console.log("CONSTRUCTOR");
+		// console.log("CONSTRUCTOR");
 
 		let options = this.getOptions();
 
@@ -51,7 +51,7 @@ class StationDropDown extends React.Component {
 	}
 
 	handleValueChange = (value) => {
-		console.log("SDD: handleValueChange(", value, ")");
+		// console.log("SDD: handleValueChange(", value, ")");
 		const { currentEventID, id } = this.props;
 		if(value === ADD_STATION) {
 			this.props.setAddRemoveStationDialogVisibility(true);
@@ -103,7 +103,7 @@ class StationDropDown extends React.Component {
 		let options = this.getOptions();
 
 		if(!this.isValueIsValidOption(options)) {  //FIXME: throws warning, updating state transition within render
-			console.log("INVALID VALUE");
+			// console.log("INVALID VALUE");
 			if(Object.keys(options).length > 0) {
 				let newValue = options[Object.keys(options)[0]];
 				this.handleValueChange(newValue);

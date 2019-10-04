@@ -63,14 +63,16 @@ const columns = [
 	},
 ];
 
+const initialState = {
+	toFieldForm: false,
+	toEventSummary: false
+}
+
 
 class EventsManager extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			toFieldForm: false,
-			toEventSummary: false
-		}
+		this.state = initialState;
 		this.options = {
 			filterType: 'checkbox',
 			print: false,
@@ -78,10 +80,10 @@ class EventsManager extends React.Component {
 			onRowClick: this.onRowClick,
 			onRowsSelect: this.onRowsSelect,
 			onCellClick: (colData, cellMeta) => {
-				console.log("CellMeta: ", cellMeta);
-				console.log("colData:", colData);
 				if (cellMeta.colIndex !== 6) {
-					this.setState({ toFieldForm: true, selectedEventIndex: cellMeta.dataIndex });    //TODO: add loader
+					this.props.loadAndSetCurrentSamplingEvent(this.state.data[cellMeta.dataIndex][0], ()=> { // zero is the column number of the eventID
+						this.setState({ toFieldForm: true, selectedEventIndex: cellMeta.dataIndex });
+					})
 				}
 			}
 		};
@@ -121,7 +123,6 @@ class EventsManager extends React.Component {
 
 
 	getDataTable = () => {
-		console.log("Building data table");
 		if (!this.props.currentUser) {
 			return [];
 		}
@@ -129,6 +130,13 @@ class EventsManager extends React.Component {
 			return [];
 		}
 
+		if (this.props.isFetchingUserData) {
+			return [];
+		}
+
+		if (!this.props.fetchingUserDataComplete) {
+			return [];
+		}
 
 		//build table data
 		let currentUserEventIDs = getAllUsersEventIDs(this.props.currentUser.username);
@@ -158,28 +166,18 @@ class EventsManager extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState({data:this.getDataTable()});
+		console.log("CDM");
+		this.setState({ data: this.getDataTable() });
+	}
+
+	componentWillUnmount() {
+		console.log("CWU");
+		this.setState(initialState);
 	}
 
 	render() {
-		const { isFetchingUserData, fetchingUserDataComplete, allSamplingEvents } = this.props;
-
-
-		// if (isFetchingUserData) {
-		// 	return null;
-		// }
-
-		// if (!fetchingUserDataComplete) {
-		// 	return null;
-		// }
-
-
 		if (this.state.toFieldForm) {
-			// this.props.loadAndSetCurrentSamplingEvent(rowData[0], ()=> {
-			// 	this.props.history.push("/FieldForm");
-			// 	this.props.showNavigationTab("FieldForm");
-			// 	this.props.showNavigationTab("Data Entry");
-			return <Redirect to='/FieldForm' />
+			return <Redirect to='/FieldForm' /> //loading event happens in the onCellClick
 		}
 
 		if (this.state.toEventSummary) {
