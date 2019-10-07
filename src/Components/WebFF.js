@@ -90,7 +90,7 @@ class WebFF extends React.Component {
 	//TODO: Does not check for updated data outside localstorage
 
 	//BUGS: 
-	//TODO: FIXME: TODO: MUST copy default questions data values into event values... because if questions data changes, future events could change because the default from QD might no longer be accurate
+	//TODO: FIXME: TODO: FIXME: MUST copy default questions data values into event values... because if questions data changes, future events could change because the default from QD might no longer be accurate
 	//TODO: setname can be Sngl - this could break XML
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
@@ -105,6 +105,7 @@ class WebFF extends React.Component {
 	//Remove currently-active station in event using dialog.
 	//BUG: Dashboard -> EventManger -> Event Summary -> BAck Button ... sends you to the FF page.
 	//BUG: average rep measures (from adding a second set) sticks around on a new event....  (Should get fixed if we reset UI before loading event)
+	//BUG: why is are we getting samples composited and "this is a group of samples" in an undefind panel on event summary (the problem is not event summary, the problem is that these are undefined)
 
 	//TEST:
 	// Add/REmove station

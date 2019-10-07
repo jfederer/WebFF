@@ -56,10 +56,16 @@ class EventSummary extends React.Component {
 
 		Object.keys(event.questionsValues).forEach(QID => {
 			let question = getQuestionDataFromID(QID);
+			if(!question) {
+				console.error("No question found for questionID '" + QID + "' in event summary");
+				return;
+			}
 
-			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER) ||
-				QID.startsWith(QWDATA_TABLE_IDENTIFIER) ||
-				QID.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
+			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
+				return;
+			} else if (QID.startsWith(QWDATA_TABLE_IDENTIFIER)) {
+				return;
+			} else if (QID.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
 				// this is harder, ignore and come back //TODO:
 				return;
 			} else {
