@@ -90,6 +90,7 @@ class WebFF extends React.Component {
 	//TODO: Does not check for updated data outside localstorage
 
 	//BUGS: 
+	//TODO: FIXME: TODO: MUST copy default questions data values into event values... because if questions data changes, future events could change because the default from QD might no longer be accurate
 	//TODO: setname can be Sngl - this could break XML
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
@@ -141,6 +142,7 @@ class WebFF extends React.Component {
 	//TODO: settings -> auto fill out avaialble station information from station values
 	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
 	//TODO: no duplicate station names for a given user
+	//TODO: add-on analysis keeps options for things that apply to entire set... should filter them out (did at one point... bug)
 	
 
 	//Cleanup

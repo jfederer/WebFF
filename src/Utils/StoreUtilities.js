@@ -80,23 +80,30 @@ export function getEventFromID(eventID) {
 @desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's... defaultSetInformation and the global default questionsData
 @returns {object} combined questionsData object.
 */
-export function getQuestionsData() {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add eventID
+export function getQuestionsData(eventID) {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add eventID
 	let state = store.getState();
 
 	let currentUserQD = {};
 	let username = state.SedFF.currentUsername;
 	if (username) {
 		currentUserQD = getUserQuestionData(username);
+	} else {
+		console.warn("Collecting user data without active username.")
 	}
 
 	let currentEventQD = {};
 	let currentStationQD = {};
-	let currentEventID = state.SedFF.currentSamplingEventID;
-	let currentEvent = state.SamplingEvents[currentEventID]; //note, currentEvent is used below to get stationName
-	if (currentEvent) {
-		currentEventQD = getEventQuestionData(currentEvent);
 
-		let stationNameValue = currentEvent.questionsValues['stationName'];
+		
+	if(!eventID) {
+		eventID = state.SedFF.currentSamplingEventID;
+	}
+
+	let event = state.SamplingEvents[eventID]; //note, currentEvent is used below to get stationName
+	if (event) {
+		currentEventQD = getEventQuestionData(event);
+
+		let stationNameValue = getQuestionValue[eventID, 'stationName'];
 		if (stationNameValue && username) {
 			currentStationQD = getStationNameQuestionData(username, stationNameValue);
 		}

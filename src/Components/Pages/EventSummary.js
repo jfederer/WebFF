@@ -7,25 +7,25 @@ import { withStyles } from '@material-ui/core/styles';
 import { getEventFromID, getQuestionsData } from '../../Utils/StoreUtilities';
 
 import { setAppBarText } from '../../Actions/UI'; //TODO: we don't atually set appbar text
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER } from '../../Constants/Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, SEDIMENT_TYPES } from '../../Constants/Config';
 import { Typography } from '@material-ui/core';
 import { Fragment } from 'react';
-import { getQuestionValue, getTabQuestionsData, getLayoutGroupNames } from '../../Utils/QuestionUtilities';
+import { getQuestionValue, getTabQuestionsData, getLayoutGroupNames, getLayoutGroupQuestionsData } from '../../Utils/QuestionUtilities';
 
 
 class EventSummary extends React.Component {
 
 
-	QIDs_stationBasics = [
-		"stationName",
-		"stationNumber",
-		"projectName",
-		"projectID",
-		"agencyCode",
-		"sampleDate"
-	]
+	// QIDs_stationBasics = [
+	// 	"stationName",
+	// 	"stationNumber",
+	// 	"projectName",
+	// 	"projectID",
+	// 	"agencyCode",
+	// 	"sampleDate"
+	// ]
 
-	QIDs_AllHandledByHand = this.QIDs_stationBasics;
+	// QIDs_AllHandledByHand = this.QIDs_stationBasics;
 
 
 	constructor(props) {
@@ -52,30 +52,17 @@ class EventSummary extends React.Component {
 		}
 
 
-		//build station basics
-		// let stationBasics = this.QIDs_stationBasics.map(qid => {
-		// 	let question = questionsData[qid];
-		// 	return <Fragment>
-		// 		<b><Typography display="inline" className="summaryLabel">{question.label}</Typography> : </b>
-		// 		<Typography display="inline" className="summaryValue">{getQuestionValue(eventID, question.id)}</Typography>
-		// 		<br /> 
-		// 	</Fragment>
-		// })
+		////////////////// FIELD FORM information Summary //////////////////
 
-
-		let tabQuestionsData = getTabQuestionsData(questionsData, "FIELDFORM");
-		let layoutGroupNames = getLayoutGroupNames(tabQuestionsData);
-
-		console.log('tabQuestionsData :', tabQuestionsData);
-		console.log('layoutGroupNames :', layoutGroupNames);
+		let FFQuestionsData = getTabQuestionsData(questionsData, "FIELDFORM");
+		let layoutGroupNames = getLayoutGroupNames(FFQuestionsData);
 
 		let FFSummary = layoutGroupNames.map((layoutName, index) => { // yes, this means we run through this more than needed, but this isn't a often-repeated process
+			let FFLGQD = getLayoutGroupQuestionsData(FFQuestionsData, layoutName);
 
-			let layoutGroupSummary = Object.values(tabQuestionsData).map(question => {
-				// if (this.QIDs_AllHandledByHand.includes(question.id)) {
-				// 	return;
-				// }
-				if (question.layoutGroup === layoutName) {
+			let layoutGroupSummary = Object.values(FFLGQD).map(question => {
+				
+				// if (question.layoutGroup === layoutName) {
 					let value = getQuestionValue(eventID, question.id);
 					if (value) {
 						return <Fragment key={question.id}>
@@ -84,7 +71,7 @@ class EventSummary extends React.Component {
 							<br />
 						</Fragment>
 					}
-				}
+				// }
 			}).filter(el => typeof el !== 'undefined');
 
 			if (layoutGroupSummary.length < 1) {
@@ -95,18 +82,27 @@ class EventSummary extends React.Component {
 				{index !== 0 ? <hr /> : null}
 				<Typography className="summaryLayoutHeader">{layoutName}</Typography>
 				{layoutGroupSummary}
-
 			</Fragment>
 		});
 
-		// let DESummary = Object.values(questionsData).map(question => {
-		// 	if (question.tabName && question.tabName.replace(/ /g, '').toUpperCase() === "DATAENTRY") {
-		// 		let value = getQuestionValue(eventID, question.id);
-		// 		if (value) {
-		// 			return <Typography>{question.id} ----> {value}</Typography>
-		// 		}
-		// 	}
-		// })
+
+		////////////////// DATA ENTRY information Summary //////////////////
+
+		let DESummary = Object.keys(SEDIMENT_TYPES).map(sedType => {
+			// if we didn't do this sediment type, skip it
+
+			// this is a valid sediment type based on current values on the FF page
+			let DEQuestionsData = getTabQuestionsData(questionsData, "DATAENTRY");
+			console.log('questionsData :', questionsData);
+			console.log('DEQuestionsData :', DEQuestionsData);
+
+			
+
+
+		}).filter(el => typeof el !== 'undefined'); // end sedType loop
+
+
+
 
 		// let QWDATASummary =
 		// 	Let ParametersSummary = 
@@ -114,11 +110,12 @@ class EventSummary extends React.Component {
 
 		return (
 			<React.Fragment>
-				{/* {stationBasics} */}
-				{/* <hr /> */}
 				{FFSummary}
-				{/* <hr /> */}
-				{/* {DESummary} */}
+				<hr />
+				<hr />
+				<hr />
+				<hr />
+				{DESummary}
 			</React.Fragment>
 		);
 

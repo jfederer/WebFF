@@ -331,43 +331,43 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 
 
-export const saveQuestionValueToLS = (Q) => {
-	//this function saves updated question "values" (must be located at "Q.state.value") to localStorage.questionsData
-	// returns updated questionsData object
-	//console.log("getQuestionDataWithUpdatedValue", Q.state.value);
-	var DEBUG = false;
-	if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q: ", Q);
-	if (Q == null) { //POC
-		console.log("Question passed to getQuestionDataWithUpdatedValue was null or undefined");
-		return;
-	}
+// export const saveQuestionValueToLS = (Q) => {
+// 	//this function saves updated question "values" (must be located at "Q.state.value") to localStorage.questionsData
+// 	// returns updated questionsData object
+// 	//console.log("getQuestionDataWithUpdatedValue", Q.state.value);
+// 	var DEBUG = false;
+// 	if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q: ", Q);
+// 	if (Q == null) { //POC
+// 		console.log("Question passed to getQuestionDataWithUpdatedValue was null or undefined");
+// 		return;
+// 	}
 
-	// get the questions in localStorage
-	var questionsDataFromLS = JSON.parse(localStorage.getItem('questionsData'));
-	if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionsDataFromLS: ", questionsDataFromLS);
+// 	// get the questions in localStorage
+// 	var questionsDataFromLS = JSON.parse(localStorage.getItem('questionsData'));
+// 	if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionsDataFromLS: ", questionsDataFromLS);
 
-	// find the specific question in questionsDataFromLS based on the id,then update the value property
-	var newQuestionsData = questionsDataFromLS.filter(questionData => {
-		//if (DEBUG) console.log("saveQuestionValueToLS: ", questionData.id + " === " + Q.props.id);
-		if (questionData.id === Q.props.id) {
-			if (DEBUG) console.log("------FOUND!--------");
-			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (pre): ", questionData);
-			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q.state.value", Q.state.value);
-			questionData.value = Q.state.value;
-			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (post)", questionData);
+// 	// find the specific question in questionsDataFromLS based on the id,then update the value property
+// 	var newQuestionsData = questionsDataFromLS.filter(questionData => {
+// 		//if (DEBUG) console.log("saveQuestionValueToLS: ", questionData.id + " === " + Q.props.id);
+// 		if (questionData.id === Q.props.id) {
+// 			if (DEBUG) console.log("------FOUND!--------");
+// 			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (pre): ", questionData);
+// 			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: Q.state.value", Q.state.value);
+// 			questionData.value = Q.state.value;
+// 			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: questionData (post)", questionData);
 
-		} else {
-			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: no");
-		}
-		return questionData;
-	});
+// 		} else {
+// 			if (DEBUG) console.log("getQuestionDataWithUpdatedValue: no");
+// 		}
+// 		return questionData;
+// 	});
 
-	if (DEBUG) console.log("getQuestionDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
+// 	if (DEBUG) console.log("getQuestionDataWithUpdatedValue: newQuestionsData: ", newQuestionsData);
 
-	// replace the questionData in localStorage
-	localStorage.setItem('questionsData', JSON.stringify(newQuestionsData));
+// 	// replace the questionData in localStorage
+// 	localStorage.setItem('questionsData', JSON.stringify(newQuestionsData));
 
-}
+// }
 
 export const getGridedQuestions = (questions) => {
 	return <Grid
