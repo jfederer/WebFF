@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { styles } from '../../style';
 import { withStyles } from '@material-ui/core/styles';
-import { getEventFromID, getQuestionsData } from '../../Utils/StoreUtilities';
+import { getEventFromID, getQuestionsData, getQuestionDataFromID } from '../../Utils/StoreUtilities';
 
 import { setAppBarText } from '../../Actions/UI'; //TODO: we don't atually set appbar text
 import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, SEDIMENT_TYPES } from '../../Constants/Config';
@@ -52,54 +52,78 @@ class EventSummary extends React.Component {
 		}
 
 
-		////////////////// FIELD FORM information Summary //////////////////
+		let FFSummary = {};
 
-		let FFQuestionsData = getTabQuestionsData(questionsData, "FIELDFORM");
-		let layoutGroupNames = getLayoutGroupNames(FFQuestionsData);
+		Object.keys(event.questionsValues).forEach(QID => {
+			let question = getQuestionDataFromID(QID);
 
-		let FFSummary = layoutGroupNames.map((layoutName, index) => { // yes, this means we run through this more than needed, but this isn't a often-repeated process
-			let FFLGQD = getLayoutGroupQuestionsData(FFQuestionsData, layoutName);
-
-			let layoutGroupSummary = Object.values(FFLGQD).map(question => {
-				
-				// if (question.layoutGroup === layoutName) {
-					let value = getQuestionValue(eventID, question.id);
-					if (value) {
-						return <Fragment key={question.id}>
-							<b><Typography display="inline" className="summaryLabel">{question.label}</Typography> : </b>
-							<Typography display="inline" className="summaryValue">{value}</Typography>
-							<br />
-						</Fragment>
-					}
-				// }
-			}).filter(el => typeof el !== 'undefined');
-
-			if (layoutGroupSummary.length < 1) {
+			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER) ||
+				QID.startsWith(QWDATA_TABLE_IDENTIFIER) ||
+				QID.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
+				// this is harder, ignore and come back //TODO:
 				return;
+			} else {
+				let labelValuePair = <Fragment key={"SummaryLabelValuePair_" + QID}>
+					<Typography display="inline" className="summaryLabel">{question.label}</Typography> :
+					<Typography display="inline" className="summaryValue">{event.questionsValues[QID]}</Typography>
+					<br />
+				</Fragment>
+
+				if (!FFSummary[question.layoutGroup]) {
+					FFSummary[question.layoutGroup] = [labelValuePair]
+				} else {
+					FFSummary[question.layoutGroup].push(labelValuePair)
+				}
 			}
+		})
+		// .filter(el => typeof el !== 'undefined');
 
-			return <Fragment key={'SummaryKey' + layoutName}>
-				{index !== 0 ? <hr /> : null}
-				<Typography className="summaryLayoutHeader">{layoutName}</Typography>
-				{layoutGroupSummary}
-			</Fragment>
-		});
+		// ////////////////// FIELD FORM information Summary //////////////////
+
+		// let FFQuestionsData = getTabQuestionsData(questionsData, "FIELDFORM");
+		// let layoutGroupNames = getLayoutGroupNames(FFQuestionsData);
+
+		// let FFSummary = layoutGroupNames.map((layoutName, index) => { // yes, this means we run through this more than needed, but this isn't a often-repeated process
+		// 	let FFLGQD = getLayoutGroupQuestionsData(FFQuestionsData, layoutName);
+
+		// 	let layoutGroupSummary = Object.values(FFLGQD).map(question => {
+
+		// 			let value = getQuestionValue(eventID, question.id);
+		// 			if (value) {
+		// 				return <Fragment key={question.id}>
+		// 					<b><Typography display="inline" className="summaryLabel">{question.label}</Typography> : </b>
+		// 					<Typography display="inline" className="summaryValue">{value}</Typography>
+		// 					<br />
+		// 				</Fragment>
+		// 			}
+		// 	}).filter(el => typeof el !== 'undefined');
+
+		// 	if (layoutGroupSummary.length < 1) {
+		// 		return;
+		// 	}
+
+		// 	return <Fragment key={'SummaryKey' + layoutName}>
+		// 		{index !== 0 ? <hr /> : null}
+		// 		<Typography className="summaryLayoutHeader">{layoutName}</Typography>
+		// 		{layoutGroupSummary}
+		// 	</Fragment>
+		// });
 
 
-		////////////////// DATA ENTRY information Summary //////////////////
+		// ////////////////// DATA ENTRY information Summary //////////////////
 
-		let DESummary = Object.keys(SEDIMENT_TYPES).map(sedType => {
-			// if we didn't do this sediment type, skip it
+		// let DESummary = Object.keys(SEDIMENT_TYPES).map(sedType => {
+		// 	// if we didn't do this sediment type, skip it
 
-			// this is a valid sediment type based on current values on the FF page
-			let DEQuestionsData = getTabQuestionsData(questionsData, "DATAENTRY");
-			console.log('questionsData :', questionsData);
-			console.log('DEQuestionsData :', DEQuestionsData);
-
-			
+		// 	// this is a valid sediment type based on current values on the FF page
+		// 	let DEQuestionsData = getTabQuestionsData(questionsData, "DATAENTRY");
+		// 	console.log('questionsData :', questionsData);
+		// 	console.log('DEQuestionsData :', DEQuestionsData);
 
 
-		}).filter(el => typeof el !== 'undefined'); // end sedType loop
+
+
+		// }).filter(el => typeof el !== 'undefined'); // end sedType loop
 
 
 
@@ -110,12 +134,20 @@ class EventSummary extends React.Component {
 
 		return (
 			<React.Fragment>
-				{FFSummary}
+				{Object.keys(FFSummary).map((layoutGroupName, index) => {
+					return (
+						<Fragment key={'SummaryKey' + layoutGroupName}>
+							{index !== 0 ? <hr /> : null}
+							<Typography className="summaryLayoutHeader">{layoutGroupName}</Typography>
+							{FFSummary[layoutGroupName]}
+						</Fragment>
+					)
+				})}
 				<hr />
 				<hr />
 				<hr />
 				<hr />
-				{DESummary}
+				{/* {DESummary} */}
 			</React.Fragment>
 		);
 
