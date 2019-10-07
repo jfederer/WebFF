@@ -83,6 +83,8 @@ class WebFF extends React.Component {
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
 	//TODO: Style sheet
+		//TODO: getQuestionsData needs to get updated in eventID...
+		//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
 	//TODO: webserver, network loads
 	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 	//TODO: Does not check for updated data outside localstorage

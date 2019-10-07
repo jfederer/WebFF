@@ -7,7 +7,11 @@ import _ from 'lodash';
 
 const initialEventLinkTableState = {
 	"userEvents": {
-		"jfederer@usgs.gov": ["695833f2-e483-4c34-a962-d14f79037920", "dd8c3689-d8a8-42ef-bf9f-a52a52f611b8"], 
+		'jfederer@usgs.gov': [
+			'695833f2-e483-4c34-a962-d14f79037920',
+			'dd8c3689-d8a8-42ef-bf9f-a52a52f611b8',
+			'2a22be8e-aa07-41ef-81b2-6b09f8752075'
+		],
 		"test@usgs.gov": ["475c42c6-8642-4d0c-a98a-36d5374f00f4", "695833f2-e483-4c34-a962-d14f79037920"]
 	},
 	"userStations": {
