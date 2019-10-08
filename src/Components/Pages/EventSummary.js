@@ -38,23 +38,73 @@ class EventSummary extends React.Component {
 		}
 	}
 
+	buildLabelValuePair(label, value) {
+		return <Fragment key={"SummaryLabelValuePair_" + label + ":" + value}>
+			<Typography display="inline" className="summaryLabel">{label}</Typography> :
+		<Typography display="inline" className="summaryValue">{value}</Typography>
+			<br />
+		</Fragment>
+	}
 
-	buildDataEntryPanel(eventID, DE_QID) {
-		let DEpanel = {};
-		let questionData = getQuestionDataFromID(DE_QID);
-		let questionValues = getQuestionValue(eventID, DE_QID);
-		if(!questionData) {
+	buildSamplesTableSummary(tableData, tableValue) {
+		console.log('tableData :', tableData);
+		console.log('tableValue :', tableValue);
+	}
+
+	buildSetInfoPanelSummary(eventID, DE_QID, Set_QID) {
+		let SetPanel = [];
+		let SetQuestionData = getQuestionDataFromID(Set_QID);
+		let SetQuestionValues = getQuestionValue(eventID, DE_QID, Set_QID);
+		if (!SetQuestionData) {
 			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
 			return;
 		}
 
+		console.log('SetQuestionData :', SetQuestionData);
 
-		Object.keys(questionValues).forEach(QID => {
+		Object.keys(SetQuestionValues).forEach(QID => {
+			//TODO: add in a special setup for the analizd for_
+			if (QID.startsWith("samplesTable_")) {
+				SetPanel.push(this.buildSamplesTableSummary(SetQuestionData[QID], SetQuestionValues[QID]))
+
+			} else {
+				SetPanel.push(this.buildLabelValuePair(QID, getQuestionValue(eventID, DE_QID, Set_QID, QID)));
+			}
+		});
+
+		console.log('SetQuestionData :', SetQuestionData);
+		console.log('SetQuestionValues :', SetQuestionValues);
+
+		return SetPanel;
+	}
+
+	buildDataEntryPanel(eventID, DE_QID) {
+		let DEpanel = [];
+		let DEquestionData = getQuestionDataFromID(DE_QID);
+		let DEquestionValues = getQuestionValue(eventID, DE_QID);
+		if (!DEquestionData) {
+			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
+			return;
+		}
+		// console.log("DEquestionData : ", DEquestionData);
+		// console.log('questionValues :', DEquestionValues);
+
+		Object.keys(DEquestionValues).forEach(QID => {
+			// console.log('QID :', QID);
+			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
+				// then this is a set
+				DEpanel.push(this.buildSetInfoPanelSummary(eventID, DE_QID, QID));
+			} else {
+				// let questionData = getQuestionDataFromID(QID);
+				// console.log('questionData :', questionData);
+				// DEpanel.push(this.buildLabelValuePair(questionData.label, getQuestionValue(eventID, DE_QID, QID)))
+				DEpanel.push(this.buildLabelValuePair(QID, getQuestionValue(eventID, DE_QID, QID)))
+			}
+
 
 		})
 
-		console.log(questionData);
-		console.log('questionValues :', questionValues);
+		// console.log('DEpanel :', DEpanel);
 
 		return DEpanel;
 	}
@@ -74,30 +124,26 @@ class EventSummary extends React.Component {
 
 
 		let FFSummary = {};
+		let DESummary = {};
 
 		Object.keys(event.questionsValues).forEach(QID => {
 			let questionData = getQuestionDataFromID(QID); // TODO: this should involve eventID
-			if(!questionData) {
+			if (!questionData) {
 				console.error("No question data found for questionID '" + QID + "' in event summary.");
 				return;
 			}
 
 			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
-				this.buildDataEntryPanel(eventID, QID);
-
-
-
+				let sedType = QID.split(DATA_ENTRY_INFORMATION_IDENTIFIER)[1];
+				// console.log('sedType :', sedType);
+				DESummary[sedType] = this.buildDataEntryPanel(eventID, QID);
 			} else if (QID.startsWith(QWDATA_TABLE_IDENTIFIER)) {
 				return;
 			} else if (QID.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
 				// this is harder, ignore and come back //TODO:
 				return;
 			} else {
-				let labelValuePair = <Fragment key={"SummaryLabelValuePair_" + QID}>
-					<Typography display="inline" className="summaryLabel">{questionData.label}</Typography> :
-					<Typography display="inline" className="summaryValue">{event.questionsValues[QID]}</Typography>
-					<br />
-				</Fragment>
+				let labelValuePair = this.buildLabelValuePair(questionData.label, event.questionsValues[QID])
 
 				if (!FFSummary[questionData.layoutGroup]) {
 					FFSummary[questionData.layoutGroup] = [labelValuePair]
@@ -177,6 +223,15 @@ class EventSummary extends React.Component {
 				<hr />
 				<hr />
 				<hr />
+				{Object.keys(DESummary).map((sedType, index) => {
+					return (
+						<Fragment key={'SummaryKey:DE:' + sedType}>
+							{index !== 0 ? <hr /> : null}
+							<Typography className="summaryLayoutHeader">{sedType}</Typography>
+							{DESummary[sedType]}
+						</Fragment>
+					)
+				})}
 				{/* {DESummary} */}
 			</React.Fragment>
 		);
