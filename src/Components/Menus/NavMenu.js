@@ -31,9 +31,9 @@ function createNavItem(menuItem) {
 }
 
 class NavMenu extends React.Component {
+
 	render() {
-		const { classes } = this.props;
-		const { hiddenNavMenuItems, expandedNavMenu } = this.props.UI.visibility;
+		const { classes, hiddenNavMenuItems, expandedNavMenu } = this.props;
 
 		return (
 			<Drawer
@@ -50,6 +50,7 @@ class NavMenu extends React.Component {
 				</div>
 				<List>
 					{Object.entries(navMenuItems).map(([name, menuItem], index) => {
+
 						if (typeof hiddenNavMenuItems !== 'undefined' && hiddenNavMenuItems.includes(menuItem.text.replace(/\s/g, ''))) {
 							return null; // if this item is on the hidden list, hide it. (this overrides other coniditonal appearances)
 						}
@@ -68,8 +69,9 @@ NavMenu.propTypes = {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI,
-		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		hiddenNavMenuItems: state.UI.visibility.hiddenNavMenuItems,
+		expandedNavMenu: state.UI.visibility.expandedNavMenu,
+		// currentSamplingEventID: state.SedFF.currentSamplingEventID,
 	}
 }
 

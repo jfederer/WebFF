@@ -42,14 +42,19 @@ class EventSummary extends React.Component {
 	buildDataEntryPanel(eventID, DE_QID) {
 		let DEpanel = {};
 		let questionData = getQuestionDataFromID(DE_QID);
-		let questionValue = getQuestionValue(eventID, DE_QID);
+		let questionValues = getQuestionValue(eventID, DE_QID);
 		if(!questionData) {
 			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
 			return;
 		}
 
+
+		Object.keys(questionValues).forEach(QID => {
+
+		})
+
 		console.log(questionData);
-		console.log('questionValue :', questionValue);
+		console.log('questionValues :', questionValues);
 
 		return DEpanel;
 	}

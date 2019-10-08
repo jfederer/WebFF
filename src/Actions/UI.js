@@ -1,7 +1,7 @@
 import {
-	SET_NAV_MENU_EXPAND, 
-	SET_SYS_MENU_EXPAND, 
-	SET_LOGIN_DIALOG_VISIBILITY, 
+	SET_NAV_MENU_EXPAND,
+	SET_SYS_MENU_EXPAND,
+	SET_LOGIN_DIALOG_VISIBILITY,
 	SET_EXPORT_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY,
@@ -17,6 +17,9 @@ import {
 	HIDE_QUESTIONS
 } from '../Constants/ActionTypes';
 
+import { shouldDataEntryTabShow, shouldTablePagesShow } from '../Utils/UIUtilities';
+
+import { DEFAULT_HIDDEN_NAVIGATION_TABS } from '../Constants/Config';
 
 export function setNavMenuExpand(expandValue) {
 	return { type: SET_NAV_MENU_EXPAND, expandValue: expandValue }
@@ -54,43 +57,77 @@ export function setSwitchUserDialogVisibility(switchUserDialogVisibility) { //TO
 	return { type: SET_SWITCH_USER_DIALOG_VISIBILITY, switchUserDialogVisibility: switchUserDialogVisibility }
 }
 
-export function setAppBarText(appBarText) { 
+export function setAppBarText(appBarText) {
 	return { type: SET_APP_BAR_TEXT, appBarText: appBarText }
 }
 
-export function showNavigationTab(tabName) { 
+export function showNavigationTab(tabName) {
 	let payload = [];
-	payload.push([tabName]);  // show navigation tabs expects an array of arrays with tabnames as the payload
+	payload.push(tabName);
 	return { type: SHOW_NAVIGATION_TABS, payload }
 }
 
-export function hideNavigationTab(tabName) { 
+export function hideNavigationTab(tabName) {
 	let payload = [];
-	payload.push([tabName]);  // hide navigation tabs expects an array of arrays with tabnames as the payload
+	payload.push(tabName);
 	return { type: HIDE_NAVIGATION_TABS, payload }
 }
 
-export function showQuestionPanel(panelName) { 
+export function hideNavigationTabs(tabArr) {
+	return { type: HIDE_NAVIGATION_TABS, payload: tabArr }
+}
+
+export function showQuestionPanel(panelName) {
 	let payload = [];
 	payload.push([panelName]);  // show navigation panels expects an array of arrays with tabnames as the payload
 	return { type: SHOW_PANELS, payload }
 }
 
-export function hideQuestionPanel(panelName) { 
+export function hideQuestionPanel(panelName) {
 	let payload = [];
 	payload.push([panelName]);  // hide navigation panels expects an array of arrays with tabnames as the payload
 	return { type: HIDE_PANELS, payload }
 }
 
-export function showQuestion(QID_path) { 
+export function showQuestion(QID_path) {
 	let QID_paths = [];
 	QID_paths.push(QID_path);  // hide navigation tabs expects an array of arrays with tabnames as the payload
 	return { type: SHOW_QUESTIONS, QID_paths }
 }
 
-export function hideQuestion(QID_path) { 
+export function hideQuestion(QID_path) {
 	let QID_paths = [];
 	QID_paths.push(QID_path);  // hide navigation tabs expects an array of arrays with tabnames as the payload
 	return { type: HIDE_QUESTIONS, QID_paths }
+}
+
+//automated update of navMenuItems based on methods selection, etc
+export function updateNavMenu() {
+	return (dispatch, getState) => {
+		// reset hidden nav tabs
+		dispatch(hideNavigationTabs(DEFAULT_HIDDEN_NAVIGATION_TABS))
+
+		let currentSamplingEventID = getState().SedFF.currentSamplingEventID;
+
+		if (currentSamplingEventID) {
+			dispatch(showNavigationTab("Field Form"));
+
+
+			//show/hide data entry tab
+			if (shouldDataEntryTabShow(currentSamplingEventID)) {
+				dispatch(showNavigationTab("Data Entry"));
+				// conditionally show other tabs
+				if (shouldTablePagesShow(currentSamplingEventID)) {
+					dispatch(showNavigationTab("QWDATA"));
+					dispatch(showNavigationTab("Parameters"));
+				}
+			} else {
+				// if Data Entry tab shouldn't show, the QwDATA and Parameters tabs should go away too.
+				dispatch(hideNavigationTab("Data Entry"));
+				dispatch(hideNavigationTab("QWDATA"));
+				dispatch(hideNavigationTab("Parameters"));
+			}
+		}
+	}
 }
 

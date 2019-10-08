@@ -90,6 +90,7 @@ class WebFF extends React.Component {
 	//TODO: Does not check for updated data outside localstorage
 
 	//BUGS: 
+	//TODO: paramters and qwdata table don't appear to load existing info from loaded event
 	//TODO: FIXME: TODO: FIXME: MUST copy default questions data values into event values... because if questions data changes, future events could change because the default from QD might no longer be accurate
 	//TODO: setname can be Sngl - this could break XML
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)

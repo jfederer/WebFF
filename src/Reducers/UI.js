@@ -73,11 +73,11 @@ export function UI(state = initialUIState, action) {
 			newState.appBarText = action.appBarText;
 			break;
 		case SHOW_NAVIGATION_TABS:
-			let tabsToShow = action.payload.map((tabsArr) => tabsArr[0].replace(/\s/g,''));
+			let tabsToShow = action.payload.map((tabName) => tabName.replace(/\s/g,''));
 			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.filter((tabName) => !tabsToShow.includes(tabName));
 			break;
 		case HIDE_NAVIGATION_TABS:
-			let tabsToHide = action.payload.map((tabsArr) => tabsArr[0].replace(/\s/g,''));
+			let tabsToHide = action.payload.map((tabName) => tabName.replace(/\s/g,''));
 			newState.visibility.hiddenNavMenuItems = newState.visibility.hiddenNavMenuItems.concat(tabsToHide);
 			break;
 		case SHOW_PANELS:

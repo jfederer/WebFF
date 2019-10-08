@@ -20,8 +20,8 @@ import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
-import { shouldDataEntryTabShow, shouldTablePagesShow } from '../Utils/UIUtilities';
-import { showNavigationTab, hideNavigationTab } from './UI';
+
+import { showNavigationTab, updateNavMenu } from './UI';
 
 
 
@@ -46,30 +46,20 @@ export function SEQuestionValueChange(eventID, questionID, newValue) {  //TODO: 
 
 function runSpecialQIDAction(eventID, questionID, newValue) {
 	// console.log("runSpecialQIDAction(", eventID, questionID, newValue, ")");
+	if (!ACTIONABLE_GLOBAL_QIDS.includes(questionID)) {
+		return null;
+	}
 
 	return (dispatch, getState) => {
 		if (questionID.startsWith("samplingMethod_")) {
-
 			//create Data Entry object in values if it doesn't exist... 
 			let sedType = questionID.split("samplingMethod_")[1];
 			let DE = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType);
 			if (typeof DE === "undefined") {
 				dispatch(SEQuestionValueChange(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, {}));
 			}
-
-			//show/hide data entry tab
-			if (shouldDataEntryTabShow(eventID)) {
-				dispatch(showNavigationTab("Data Entry"));
-				// conditionally show other tabs
-				if (shouldTablePagesShow(eventID)) {
-					dispatch(showNavigationTab("QWDATA"));
-					dispatch(showNavigationTab("Parameters"));
-				}
-			} else {
-				// if Data Entry tab shouldn't show, the QwDATA and Parameters tabs should go away too.
-				dispatch(hideNavigationTab("Data Entry"));
-				dispatch(hideNavigationTab("QWDATA"));
-				dispatch(hideNavigationTab("Parameters"));
+			if (eventID === getState().SedFF.currentSamplingEventID) {
+				dispatch(updateNavMenu());
 			}
 		}
 
@@ -248,11 +238,11 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 		////// modify setInfo table //////
 		// make it the correct size (confirm with user if shrinking)
-		let setInfoSampleTableValue = 
-				getQuestionValue(eventID, 
-								DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, 
-								DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName, 
-								"samplesTable_" + getMethodCategoryFromValue(samplingMethod));
+		let setInfoSampleTableValue =
+			getQuestionValue(eventID,
+				DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType,
+				DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName,
+				"samplesTable_" + getMethodCategoryFromValue(samplingMethod));
 
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
 			// eslint-disable-next-line no-useless-concat
@@ -263,21 +253,21 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 		//TODO: Decide when/how to react and/or confirm ... change stationing without notice? delete without notice if empty other than stationing, etc...
 
-		
+
 
 		if (setInfoSampleTableValue.length > parseInt(numPoints) + 1) {
-			
+
 			// table must shrink
 			// console.log("Table must shrink");
 
 			//TODO: // if the removed tables are empty... no worries, just do it.
-			
+
 			// otherwise, confirm before proceeding...
 
 			let deletionconfirmed = window.confirm("This will result in removing rows containing data from the Data Entry Set Information Data Table, QWDATA table, and Parameters Table... \n\n Do you want to continue?");
 
 			if (deletionconfirmed === true) {
-				while (setInfoSampleTableValue.length > parseInt(numPoints)+1) {
+				while (setInfoSampleTableValue.length > parseInt(numPoints) + 1) {
 					setInfoSampleTableValue.pop();
 				}
 			} else {

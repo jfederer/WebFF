@@ -11,6 +11,9 @@ import {
 
 import { makeNewUser } from './User';
 
+import { updateNavMenu } from './UI';
+import { getQuestionValue } from '../Utils/QuestionUtilities';
+
 
 // ****** Terminology ***********
 //LOAD = triggered overall event
@@ -47,9 +50,9 @@ function userDataRequest(username) {
 }
 
 function userDataAcquire(username) {
-		// check if username is in store
-		// if not, check from database
-		// if not, reject with false
+	// check if username is in store
+	// if not, check from database
+	// if not, reject with false
 	return (dispatch, getState) => {
 		return new Promise(function (resolve, reject) {
 			const user = getState().Users[username];
@@ -98,10 +101,17 @@ export function loadAndSetCurrentSamplingEvent(eventID, callback) { // safer way
 		//TODO: verify it's loaded in memory, fetch as needed,
 		// (likely uneeded, as we'll never load an event that's not in memory... but just for safety sake)
 		dispatch(setCurrentSamplingEvent(eventID))
+
+		// TODO: run ALL values (or at least all actionaly global QIDs ) through SEQuestionValueChange in order to propate all actions...  the above just does the nav items.
+
+		dispatch(updateNavMenu());
+
 		dispatch(samplingEventLoadComplete(eventID));
 
+
+
 		// dispatch(runAllSamplingEventActionStrings(eventID));  //TODO: FIXME: will need to replicate this 
-		if(callback) {
+		if (callback) {
 			callback();
 		}
 	}

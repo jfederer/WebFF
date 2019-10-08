@@ -12,7 +12,7 @@ export function shouldDataEntryTabShow(eventID) {
 
 
 
-export function shouldTablePagesShow(eventID) {
+export function shouldTablePagesShow(eventID) {  //FIXME: table pages shouldn't show up until a number of smaplings points exsits...
 	if (eventID === null) {
 		return false;
 	}
