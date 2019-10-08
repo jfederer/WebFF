@@ -38,6 +38,22 @@ class EventSummary extends React.Component {
 		}
 	}
 
+
+	buildDataEntryPanel(eventID, DE_QID) {
+		let DEpanel = {};
+		let questionData = getQuestionDataFromID(DE_QID);
+		let questionValue = getQuestionValue(eventID, DE_QID);
+		if(!questionData) {
+			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
+			return;
+		}
+
+		console.log(questionData);
+		console.log('questionValue :', questionValue);
+
+		return DEpanel;
+	}
+
 	render() {
 		const { event, questionsData } = this.state;
 		const { eventID } = this.props.match.params;
@@ -55,14 +71,17 @@ class EventSummary extends React.Component {
 		let FFSummary = {};
 
 		Object.keys(event.questionsValues).forEach(QID => {
-			let question = getQuestionDataFromID(QID);
-			if(!question) {
-				console.error("No question found for questionID '" + QID + "' in event summary");
+			let questionData = getQuestionDataFromID(QID); // TODO: this should involve eventID
+			if(!questionData) {
+				console.error("No question data found for questionID '" + QID + "' in event summary.");
 				return;
 			}
 
 			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
-				return;
+				this.buildDataEntryPanel(eventID, QID);
+
+
+
 			} else if (QID.startsWith(QWDATA_TABLE_IDENTIFIER)) {
 				return;
 			} else if (QID.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
@@ -70,15 +89,15 @@ class EventSummary extends React.Component {
 				return;
 			} else {
 				let labelValuePair = <Fragment key={"SummaryLabelValuePair_" + QID}>
-					<Typography display="inline" className="summaryLabel">{question.label}</Typography> :
+					<Typography display="inline" className="summaryLabel">{questionData.label}</Typography> :
 					<Typography display="inline" className="summaryValue">{event.questionsValues[QID]}</Typography>
 					<br />
 				</Fragment>
 
-				if (!FFSummary[question.layoutGroup]) {
-					FFSummary[question.layoutGroup] = [labelValuePair]
+				if (!FFSummary[questionData.layoutGroup]) {
+					FFSummary[questionData.layoutGroup] = [labelValuePair]
 				} else {
-					FFSummary[question.layoutGroup].push(labelValuePair)
+					FFSummary[questionData.layoutGroup].push(labelValuePair)
 				}
 			}
 		})

@@ -47,7 +47,7 @@ const initialState = { //MOCK //TODO:
 			question6: "3value6"
 		}
 	},
-	"2a22be8e-aa07-41ef-81b2-6b09f8752075": {
+	'2a22be8e-aa07-41ef-81b2-6b09f8752075': {
 		eventID: '2a22be8e-aa07-41ef-81b2-6b09f8752075',
 		eventName: 'Filled Out #1',
 		dateModified: 'Mon Oct 07 2019 16:00:41 GMT-0500 (Central Daylight Time)',
@@ -79,31 +79,39 @@ const initialState = { //MOCK //TODO:
 							'Horizontal width of Vertical, feet'
 						],
 						[
-							'Fill Out Number Of Samples',
-							'',
-							'',
-							'',
-							''
-						],
-						[
-							'',
-							'',
-							'',
+							'2',
+							'2',
+							'5',
 							'',
 							''
 						],
 						[
+							'3',
+							'2',
+							'6',
 							'',
-							'',
-							'',
+							''
+						],
+						[
+							'4',
+							'2',
+							'5.5',
 							'',
 							''
 						]
-					]
+					],
+					startTime: '11:11',
+					endTime: '22:22'
 				},
-				samplerType_Suspended: '100',
+				samplerType_Suspended: '3057',
 				bagMaterial: 'Plastic',
-				sizeOfBag: '1 Liter'
+				sizeOfBag: '1 Liter',
+				nozzleMaterial_IET: '',
+				nozzleDiameter_IET: '',
+				streamDepth_IET: '12',
+				transitRate: '22',
+				streamVelocity_IET: '2',
+				duration_IET: '3'
 			},
 			hydrologicEvent: '2',
 			analysisStatus: 'U',
@@ -136,7 +144,7 @@ const initialState = { //MOCK //TODO:
 				[
 					'A-2',
 					'',
-					'11:12',
+					'16:46',
 					'',
 					'',
 					'',
@@ -147,7 +155,7 @@ const initialState = { //MOCK //TODO:
 				[
 					'A-3',
 					'',
-					'11:13',
+					'22:22',
 					'',
 					'',
 					'',
@@ -281,7 +289,8 @@ const initialState = { //MOCK //TODO:
 					'',
 					''
 				]
-			]
+			],
+			'DataEntry::Bedload': {}
 		},
 		questionsData: {
 			'DataEntry::Suspended&&SetInfo::A': {
@@ -527,6 +536,7 @@ const initialState = { //MOCK //TODO:
 			}
 		}
 	}
+
 }
 
 
