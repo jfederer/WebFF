@@ -269,7 +269,7 @@ class QWDATATable extends React.Component {
 									defaultValue = getQuestionValue(currentSamplingEventID, qidForDefaultValue);
 									// console.log("Default Value: ", defaultValue);
 									if (defaultValue) {
-										let QD = getQuestionDataFromID(qidForDefaultValue);
+										let QD = getQuestionDataFromID(currentSamplingEventID, qidForDefaultValue);
 										displayValue = getKeyFromValue(QD.options, defaultValue);
 									}
 								}
@@ -354,7 +354,7 @@ class QWDATATable extends React.Component {
 												default: throw new Error(headerKey + " case not handled in QWDATA table");
 											}
 										} else {
-											let motherQuestion = getQuestionDataFromID(allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
+											let motherQuestion = getQuestionDataFromID(currentSamplingEventID, allQWDATAOptionalHeaders[headerKey]); //TODO: should ensure this comes back with a question that has 'options' or things go loony
 
 											Q = <Question {...this.classlessProps}
 												label={null}

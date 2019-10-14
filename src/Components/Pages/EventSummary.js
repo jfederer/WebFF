@@ -53,10 +53,10 @@ class EventSummary extends React.Component {
 
 	buildSetInfoPanelSummary(eventID, DE_QID, Set_QID) {
 		let SetPanel = [];
-		let SetQuestionData = getQuestionDataFromID(Set_QID);
+		let SetQuestionData = getQuestionDataFromID(eventID, Set_QID);
 		let SetQuestionValues = getQuestionValue(eventID, DE_QID, Set_QID);
 		if (!SetQuestionData) {
-			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
+			console.error("No question found for questionID '" + DE_QID + "' in event Set Info Entry summary");
 			return;
 		}
 
@@ -80,7 +80,7 @@ class EventSummary extends React.Component {
 
 	buildDataEntryPanel(eventID, DE_QID) {
 		let DEpanel = [];
-		let DEquestionData = getQuestionDataFromID(DE_QID);
+		let DEquestionData = getQuestionDataFromID(eventID, DE_QID);
 		let DEquestionValues = getQuestionValue(eventID, DE_QID);
 		if (!DEquestionData) {
 			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
@@ -127,7 +127,7 @@ class EventSummary extends React.Component {
 		let DESummary = {};
 
 		Object.keys(event.questionsValues).forEach(QID => {
-			let questionData = getQuestionDataFromID(QID); // TODO: this should involve eventID
+			let questionData = getQuestionDataFromID(eventID, QID); // TODO: this should involve eventID
 			if (!questionData) {
 				console.error("No question data found for questionID '" + QID + "' in event summary.");
 				return;

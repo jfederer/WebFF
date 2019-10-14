@@ -201,18 +201,19 @@ export function getStationQuestionData(station) {
 
 /** 
 @desc gets the question object from questionsData in the store based on the ID
-@param {string} questionID  - the question ID
+@param {string} eventID  - the eventID
+@param {string} questionID  - the question ID - can be multiple
 @returns {object} question .  If the object is not found, warns and returns null.
 */
-export function getQuestionDataFromID(QID) { //TODO: add eventID
+export function getQuestionDataFromID(eventID, ...QIDs) { 
 	//TODO: build this recursively, like getQuestionValue, to work with nested questions?
 
-	let questionsData = getQuestionsData();
+	let questionsData = getQuestionsData(eventID);
 
-	if (!questionsData[QID]) {
-		console.warn("Attempted to get question Data on falsey question ID: ", QID, "QuestionsData: ", questionsData);
+	if (!questionsData[QIDs[0]]) {
+		console.warn("Attempted to get question Data on falsey question ID: ", QIDs, "QuestionsData: ", questionsData);
 	}
-	return questionsData[QID];
+	return questionsData[QIDs[0]];
 }
 
 export function getSetInformationQuestionsData() {
