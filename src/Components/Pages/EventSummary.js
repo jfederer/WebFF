@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { styles } from '../../style';
+import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID } from '../../Utils/StoreUtilities';
 
@@ -11,7 +12,11 @@ import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_
 import { Typography } from '@material-ui/core';
 import { Fragment } from 'react';
 import { getQuestionValue, getTabQuestionsData, getLayoutGroupNames, getLayoutGroupQuestionsData } from '../../Utils/QuestionUtilities';
-
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 class EventSummary extends React.Component {
 
@@ -26,6 +31,8 @@ class EventSummary extends React.Component {
 	// ]
 
 	// QIDs_AllHandledByHand = this.QIDs_stationBasics;
+
+	
 
 
 	constructor(props) {
@@ -47,8 +54,27 @@ class EventSummary extends React.Component {
 	}
 
 	buildSamplesTableSummary(tableData, tableValue) {
-		console.log('tableData :', tableData);
-		console.log('tableValue :', tableValue);
+		return (<Table>
+			{tableValue.map((row, rowNum) => {
+
+				let rowInfo = row.map((cell, colNum) => {  //TODO: add if tableData.rowHeaders and give that element some different look (matching TableHead)
+					return <TableCell>{cell}</TableCell>
+				})
+
+				if (rowNum === 0 && tableData.colHeaders) {
+					return <TableHead>
+						{rowInfo}
+					</TableHead>
+				} else {    //TODO: should add in 'TableBody' or something...
+					return <TableRow>
+						{rowInfo}
+					</TableRow>
+				}
+			})
+			}
+		</Table>
+		);
+
 	}
 
 	buildSetInfoPanelSummary(eventID, DE_QID, Set_QID) {

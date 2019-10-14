@@ -213,7 +213,7 @@ export function getQuestionDataFromID(eventID, ...QIDs) {
 	if (!questionsData[QIDs[0]]) {
 		console.warn("Attempted to get question Data on falsey question ID: ", QIDs, "QuestionsData: ", questionsData);
 	}
-	return recursiveGetQuestionDataFromID(questionsData, QIDs);
+	return recursiveGetQuestionDataFromID(questionsData, ...QIDs);
 	// return questionsData[QIDs[0]];
 }
 
