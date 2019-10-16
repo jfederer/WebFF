@@ -20,7 +20,11 @@ class SummaryTable extends React.Component {
 		return <TableRow key={"Summary_" + tableName + "_TableRow" + rowNum}>
 			{arr.map((cell, colNum) => {  //TODO: add if tableData.rowHeaders and give that element some different look (matching TableHead)
 				// console.log('cell :', cell);
-				return <TableCell key={"Summary_" + tableName + "_TableCell" + rowNum + ":" + colNum}>{JSON.stringify(cell)}</TableCell>  //TODO: cleaner cell options for objects, etc
+				let cleanCell = cell;
+				if (typeof cell === 'object') {
+					cleanCell = JSON.stringify(cell);
+				}
+				return <TableCell key={"Summary_" + tableName + "_TableCell" + rowNum + ":" + colNum}>{cleanCell}</TableCell>  //TODO: cleaner cell options for objects, etc
 			})}
 		</TableRow>
 	}

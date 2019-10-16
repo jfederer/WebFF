@@ -193,7 +193,7 @@ const initialState = { //MOCK //TODO:
 			],
 			[
 			  'A-1 @ 2',
-			  '',
+			  '1',
 			  '',
 			  '',
 			  '',
@@ -206,7 +206,7 @@ const initialState = { //MOCK //TODO:
 			  'A-2 @ 3',
 			  '',
 			  '',
-			  '',
+			  '22',
 			  '',
 			  '',
 			  '',
@@ -220,7 +220,7 @@ const initialState = { //MOCK //TODO:
 			  '',
 			  '',
 			  '',
-			  '',
+			  '33',
 			  '',
 			  ''
 			],
@@ -266,10 +266,18 @@ const initialState = { //MOCK //TODO:
 			  'P00400_val',
 			  'P00400_mth',
 			  'P00400_rmk',
-			  'P00400_nq'
+			  'P00400_nq',
+			  'P63675_val',
+			  'P63675_mth',
+			  'P63675_rmk',
+			  'P63675_nq'
 			],
 			[
 			  'A-1 @ 2',
+			  '1',
+			  '',
+			  '',
+			  '',
 			  '',
 			  '',
 			  '',
@@ -305,6 +313,10 @@ const initialState = { //MOCK //TODO:
 			  '',
 			  '',
 			  '',
+			  '2',
+			  'G0005',
+			  '<',
+			  'a',
 			  '',
 			  '',
 			  '',
@@ -332,6 +344,10 @@ const initialState = { //MOCK //TODO:
 			],
 			[
 			  'A-3 @ 4',
+			  '',
+			  '',
+			  '',
+			  '',
 			  '',
 			  '',
 			  '',
@@ -390,7 +406,11 @@ const initialState = { //MOCK //TODO:
 			  '',
 			  '',
 			  '',
-			  ''
+			  '',
+			  '55',
+			  'TS028',
+			  '<',
+			  'a'
 			]
 		  ],
 		  'DataEntry::Bedload': {}
@@ -880,6 +900,7 @@ const initialState = { //MOCK //TODO:
 		  }
 		}
 	  }
+	
 
 }
 

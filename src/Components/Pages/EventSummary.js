@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID } from '../../Utils/StoreUtilities';
 
 import { setAppBarText } from '../../Actions/UI'; //TODO: we don't atually set appbar text
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, SEDIMENT_TYPES } from '../../Constants/Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, PCODE_MATCHING_REGEX, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, SEDIMENT_TYPES } from '../../Constants/Config';
 import { Typography } from '@material-ui/core';
 import { Fragment } from 'react';
 import { getQuestionValue, getTabQuestionsData, getLayoutGroupNames, getLayoutGroupQuestionsData } from '../../Utils/QuestionUtilities';
@@ -19,6 +19,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DataEntrySummary from '../Summaries/DataEntrySummary';
 import KVPair from '../Summaries/KVPair';
+import { DESCRIPTION_HEADER } from '../../Constants/Dictionary';
+import SummaryTable from '../Summaries/SummaryTable';
+
 
 class EventSummary extends React.Component {
 
@@ -46,14 +49,6 @@ class EventSummary extends React.Component {
 			questionsData: getQuestionsData(eventID)
 		}
 	}
-
-	// buildLabelValuePair(label, value) {   //TODO: cleaner object handling - analysed_for...
-	// 	return <KVPair key={"SummaryLabelValuePair_" + label + ":" + JSON.stringify(value)} 
-	// 				label={label}
-	// 				value={value}
-	// 	/>
-
-	// } 
 
 	buildRow(arr, tableName, rowNum) {
 		return <TableRow key={"Summary_" + tableName + "_TableRow" + rowNum}>
@@ -97,7 +92,8 @@ class EventSummary extends React.Component {
 		let QWDataValue = getQuestionValue(eventID, QW_QID);
 		// console.log('QWDataQD :', QWDataQD);
 		// console.log('QWDataValue :', QWDataValue);
-		return this.buildTable(QWDataQD, QWDataValue);
+		return <SummaryTable key={"QWDATATableSummary:"+QW_QID} tableData={QWDataQD} tableValue={QWDataValue}/>
+		// return this.buildTable(QWDataQD, QWDataValue);
 	}
 
 	buildParameterSummary(eventID, P_QID) {
@@ -105,8 +101,50 @@ class EventSummary extends React.Component {
 		let QD = getQuestionDataFromID(eventID, P_QID);
 		let value = getQuestionValue(eventID, P_QID);
 		// console.log('QWDataQD :', QWDataQD);
-		// console.log('QWDataValue :', QWDataValue);
-		return this.buildTable(QD, value);
+		console.log('value :', value);
+
+		// create summaryHeader from existing...
+		// let summaryHeader = [DESCRIPTION_HEADER, ...this.getPcodesFromHeader(value[0])];
+		let pCodes = this.getPcodesFromHeader(value[0]);
+		console.log('pCodes :', pCodes);
+
+		// build summaryValue
+		let summaryValue = [];
+		summaryValue[0] = [DESCRIPTION_HEADER, ...pCodes];
+		for (let rowNum = 1; rowNum < value.length; rowNum++) {
+			summaryValue[rowNum]=[];
+			summaryValue[rowNum][0]=value[rowNum][0];
+			pCodes.forEach((pCode, colNum) => {
+				summaryValue[rowNum][colNum+1]=this.getPCodeValue(pCode, value, rowNum);
+			})
+		}
+		console.log('summaryValue :', summaryValue);
+
+		// return this.buildTable(QD, value);
+		return <SummaryTable key={"ParamtersTableSummary:"+P_QID} tableData={QD} tableValue={summaryValue}/>
+	}
+
+	getPcodesFromHeader(headerArr) {
+		let pCodesObj = {};
+		headerArr.forEach(header => {
+			if (header.match(PCODE_MATCHING_REGEX)) {
+				let pCode = header.split('_')[0];
+				pCodesObj[pCode] = true;
+			}
+		})
+		return Object.keys(pCodesObj);
+	}
+
+	getPCodeValue(pCode, tableValue, rowNum) {
+		let retVal = [];
+		
+		tableValue[rowNum].forEach((cellValue, colNum) => {
+			if (tableValue[0][colNum].startsWith(pCode)) {
+				retVal.push(cellValue);
+			}
+		})
+
+		return retVal.join(' ');
 	}
 
 	render() {
@@ -142,8 +180,6 @@ class EventSummary extends React.Component {
 					eventID={eventID}
 					DE_QID={QID}
 				/>
-
-
 			} else if (QID.startsWith(QWDATA_TABLE_IDENTIFIER)) {
 				let sedType = QID.split(QWDATA_TABLE_IDENTIFIER)[1];
 				QWSummary[sedType] = this.buildQWDATASummary(eventID, QID);
@@ -151,9 +187,11 @@ class EventSummary extends React.Component {
 				let sedType = QID.split(PARAMETERS_TABLE_IDENTIFIER)[1];
 				ParSummary[sedType] = this.buildParameterSummary(eventID, QID);
 			} else {
-				let labelValuePair = <KVPair key={"LabelValuePair_" + QID}
+				let labelValuePair = <React.Fragment key={"LabelValuePair_frag" + QID} ><KVPair key={"LabelValuePair_" + QID}
 					label={questionData.label}
 					value={event.questionsValues[QID]} />
+					<br key={"LabelValuePair_br" + QID} />
+				</React.Fragment>
 
 				if (!FFSummary[questionData.layoutGroup]) {
 					FFSummary[questionData.layoutGroup] = [labelValuePair]
@@ -224,7 +262,7 @@ class EventSummary extends React.Component {
 					return (
 						<Fragment key={'SummaryKey' + layoutGroupName}>
 							{index !== 0 ? <hr /> : null}
-							<Typography className="summaryLayoutHeader">{layoutGroupName}</Typography>
+							<Typography variant='h5' className="summaryLayoutHeader">{layoutGroupName}</Typography>
 							{FFSummary[layoutGroupName]}
 						</Fragment>
 					)
@@ -237,7 +275,7 @@ class EventSummary extends React.Component {
 					return (
 						<Fragment key={'SummaryKey:DE:' + sedType}>
 							{index !== 0 ? <hr /> : null}
-							<Typography className="summaryLayoutHeader">Data Entry: {sedType}</Typography>
+							<Typography variant='h5' className="summaryLayoutHeader">Data Entry: {sedType}</Typography>
 							{DESummary[sedType]}
 						</Fragment>
 					)
@@ -250,7 +288,7 @@ class EventSummary extends React.Component {
 					return (
 						<Fragment key={'SummaryKey:QW:' + sedType}>
 							{index !== 0 ? <hr /> : null}
-							<Typography className="summaryLayoutHeader">QWDATA: {sedType}</Typography>
+							<Typography variant='h5' className="summaryLayoutHeader">QWDATA: {sedType}</Typography>
 							{QWSummary[sedType]}
 						</Fragment>
 					)
@@ -263,7 +301,7 @@ class EventSummary extends React.Component {
 					return (
 						<Fragment key={'SummaryKey:Par:' + sedType}>
 							{index !== 0 ? <hr /> : null}
-							<Typography className="summaryLayoutHeader">Parameters: {sedType}</Typography>
+							<Typography variant='h5' className="summaryLayoutHeader">Parameters: {sedType}</Typography>
 							{ParSummary[sedType]}
 						</Fragment>
 					)

@@ -46,7 +46,7 @@ class SetSummary extends React.Component {
 		});
 
 		return (<Paper>
-			<Typography variant="h5">{"Set " + questionData.setName} </Typography>
+			<Typography variant="h6">{"Set " + questionData.setName} </Typography>
 			{KVPairs}
 			{sampleTable}
 		</Paper>

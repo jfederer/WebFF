@@ -10,9 +10,9 @@ import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import SetSummary from './SetSummary';
 import KVPair from './KVPair';
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, SEDIMENT_TYPES } from '../../Constants/Config';
-import { getQuestionValue, getTabQuestionsData, getLayoutGroupNames, getLayoutGroupQuestionsData } from '../../Utils/QuestionUtilities';
-import { getEventFromID, getQuestionsData, getQuestionDataFromID } from '../../Utils/StoreUtilities';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import {  getQuestionDataFromID } from '../../Utils/StoreUtilities';
 
 class DataEntrySummary extends React.Component {
 
@@ -43,7 +43,7 @@ class DataEntrySummary extends React.Component {
 			} else {
 				DEpanel.push(
 					<KVPair key={"DELabelValuePair_" + QID}
-						label={QID}
+						label={DEquestionData[QID].label}
 						value={getQuestionValue(eventID, DE_QID, QID)} />
 						
 				);
