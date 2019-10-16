@@ -145,7 +145,7 @@ class WebFF extends React.Component {
 	//TODO: NEXT: Do not allow duplicate station names (add/remove dialog... disable add button when duplicate name exists)
 	//TODO: no duplicate station names for a given user
 	//TODO: add-on analysis keeps options for things that apply to entire set... should filter them out (did at one point... bug)
-	
+	//TODO: different summary settings (different layouts, etc)
 
 	//Cleanup
 	

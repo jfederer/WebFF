@@ -17,6 +17,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import DataEntrySummary from '../Summaries/DataEntrySummary';
+import KVPair from '../Summaries/KVPair';
 
 class EventSummary extends React.Component {
 
@@ -32,7 +34,7 @@ class EventSummary extends React.Component {
 
 	// QIDs_AllHandledByHand = this.QIDs_stationBasics;
 
-	
+
 
 
 	constructor(props) {
@@ -45,94 +47,66 @@ class EventSummary extends React.Component {
 		}
 	}
 
-	buildLabelValuePair(label, value) {
-		return <Fragment key={"SummaryLabelValuePair_" + label + ":" + value}>
-			<Typography display="inline" className="summaryLabel">{label}</Typography> :
-		<Typography display="inline" className="summaryValue">{value}</Typography>
-			<br />
-		</Fragment>
+	// buildLabelValuePair(label, value) {   //TODO: cleaner object handling - analysed_for...
+	// 	return <KVPair key={"SummaryLabelValuePair_" + label + ":" + JSON.stringify(value)} 
+	// 				label={label}
+	// 				value={value}
+	// 	/>
+
+	// } 
+
+	buildRow(arr, tableName, rowNum) {
+		return <TableRow key={"Summary_" + tableName + "_TableRow" + rowNum}>
+			{arr.map((cell, colNum) => {  //TODO: add if tableData.rowHeaders and give that element some different look (matching TableHead)
+				// console.log('cell :', cell);
+				return <TableCell key={"Summary_" + tableName + "_TableCell" + rowNum + ":" + colNum}>{JSON.stringify(cell)}</TableCell>  //TODO: cleaner cell options for objects, etc
+			})}
+		</TableRow>
 	}
 
-	buildSamplesTableSummary(tableData, tableValue) {
-		return (<Table>
-			{tableValue.map((row, rowNum) => {
+	buildTable(tableData, tableValue) {
+		// TODO: add ColHead, make tabel generation function generic 
+		let tableName = tableData.id;
 
-				let rowInfo = row.map((cell, colNum) => {  //TODO: add if tableData.rowHeaders and give that element some different look (matching TableHead)
-					return <TableCell>{cell}</TableCell>
-				})
+		let headRow = tableData.colHeaders ? this.buildRow(tableValue[0], tableName, 0) : null;
 
-				if (rowNum === 0 && tableData.colHeaders) {
-					return <TableHead>
-						{rowInfo}
-					</TableHead>
-				} else {    //TODO: should add in 'TableBody' or something...
-					return <TableRow>
-						{rowInfo}
-					</TableRow>
-				}
-			})
+		let bodyRows = tableValue.map((row, rowNum) => {
+			if (rowNum === 0 && tableData.colHeaders) {
+				return;
+			} else {
+				return this.buildRow(row, tableName, rowNum);
 			}
+		})
+		bodyRows.shift();  // remove the header row from the bodyRows
+
+		return (<Table key={"Summary_" + tableName + "_Table" + tableData.id}>
+			<TableHead>{headRow}</TableHead>
+			<TableBody>{bodyRows}</TableBody>
 		</Table>
 		);
 
 	}
 
-	buildSetInfoPanelSummary(eventID, DE_QID, Set_QID) {
-		let SetPanel = [];
-		let SetQuestionData = getQuestionDataFromID(eventID, Set_QID);
-		let SetQuestionValues = getQuestionValue(eventID, DE_QID, Set_QID);
-		if (!SetQuestionData) {
-			console.error("No question found for questionID '" + DE_QID + "' in event Set Info Entry summary");
-			return;
-		}
 
-		console.log('SetQuestionData :', SetQuestionData);
 
-		Object.keys(SetQuestionValues).forEach(QID => {
-			//TODO: add in a special setup for the analizd for_
-			if (QID.startsWith("samplesTable_")) {
-				SetPanel.push(this.buildSamplesTableSummary(SetQuestionData[QID], SetQuestionValues[QID]))
 
-			} else {
-				SetPanel.push(this.buildLabelValuePair(QID, getQuestionValue(eventID, DE_QID, Set_QID, QID)));
-			}
-		});
 
-		console.log('SetQuestionData :', SetQuestionData);
-		console.log('SetQuestionValues :', SetQuestionValues);
-
-		return SetPanel;
+	buildQWDATASummary(eventID, QW_QID) {
+		// console.log("Here");
+		let QWDataQD = getQuestionDataFromID(eventID, QW_QID);
+		let QWDataValue = getQuestionValue(eventID, QW_QID);
+		// console.log('QWDataQD :', QWDataQD);
+		// console.log('QWDataValue :', QWDataValue);
+		return this.buildTable(QWDataQD, QWDataValue);
 	}
 
-	buildDataEntryPanel(eventID, DE_QID) {
-		let DEpanel = [];
-		let DEquestionData = getQuestionDataFromID(eventID, DE_QID);
-		let DEquestionValues = getQuestionValue(eventID, DE_QID);
-		if (!DEquestionData) {
-			console.error("No question found for questionID '" + DE_QID + "' in event Data Entry summary");
-			return;
-		}
-		// console.log("DEquestionData : ", DEquestionData);
-		// console.log('questionValues :', DEquestionValues);
-
-		Object.keys(DEquestionValues).forEach(QID => {
-			// console.log('QID :', QID);
-			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
-				// then this is a set
-				DEpanel.push(this.buildSetInfoPanelSummary(eventID, DE_QID, QID));
-			} else {
-				// let questionData = getQuestionDataFromID(QID);
-				// console.log('questionData :', questionData);
-				// DEpanel.push(this.buildLabelValuePair(questionData.label, getQuestionValue(eventID, DE_QID, QID)))
-				DEpanel.push(this.buildLabelValuePair(QID, getQuestionValue(eventID, DE_QID, QID)))
-			}
-
-
-		})
-
-		// console.log('DEpanel :', DEpanel);
-
-		return DEpanel;
+	buildParameterSummary(eventID, P_QID) {
+		// console.log("Here");
+		let QD = getQuestionDataFromID(eventID, P_QID);
+		let value = getQuestionValue(eventID, P_QID);
+		// console.log('QWDataQD :', QWDataQD);
+		// console.log('QWDataValue :', QWDataValue);
+		return this.buildTable(QD, value);
 	}
 
 	render() {
@@ -151,6 +125,8 @@ class EventSummary extends React.Component {
 
 		let FFSummary = {};
 		let DESummary = {};
+		let QWSummary = {};
+		let ParSummary = {};
 
 		Object.keys(event.questionsValues).forEach(QID => {
 			let questionData = getQuestionDataFromID(eventID, QID); // TODO: this should involve eventID
@@ -162,14 +138,22 @@ class EventSummary extends React.Component {
 			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
 				let sedType = QID.split(DATA_ENTRY_INFORMATION_IDENTIFIER)[1];
 				// console.log('sedType :', sedType);
-				DESummary[sedType] = this.buildDataEntryPanel(eventID, QID);
+				DESummary[sedType] = <DataEntrySummary key={"DataEntrySummary:" + QID}
+					eventID={eventID}
+					DE_QID={QID}
+				/>
+
+
 			} else if (QID.startsWith(QWDATA_TABLE_IDENTIFIER)) {
-				return;
+				let sedType = QID.split(QWDATA_TABLE_IDENTIFIER)[1];
+				QWSummary[sedType] = this.buildQWDATASummary(eventID, QID);
 			} else if (QID.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
-				// this is harder, ignore and come back //TODO:
-				return;
+				let sedType = QID.split(PARAMETERS_TABLE_IDENTIFIER)[1];
+				ParSummary[sedType] = this.buildParameterSummary(eventID, QID);
 			} else {
-				let labelValuePair = this.buildLabelValuePair(questionData.label, event.questionsValues[QID])
+				let labelValuePair = <KVPair key={"LabelValuePair_" + QID}
+					label={questionData.label}
+					value={event.questionsValues[QID]} />
 
 				if (!FFSummary[questionData.layoutGroup]) {
 					FFSummary[questionData.layoutGroup] = [labelValuePair]
@@ -233,7 +217,7 @@ class EventSummary extends React.Component {
 		// let QWDATASummary =
 		// 	Let ParametersSummary = 
 
-
+		// console.log("QWSummary: ", QWSummary);
 		return (
 			<React.Fragment>
 				{Object.keys(FFSummary).map((layoutGroupName, index) => {
@@ -253,23 +237,40 @@ class EventSummary extends React.Component {
 					return (
 						<Fragment key={'SummaryKey:DE:' + sedType}>
 							{index !== 0 ? <hr /> : null}
-							<Typography className="summaryLayoutHeader">{sedType}</Typography>
+							<Typography className="summaryLayoutHeader">Data Entry: {sedType}</Typography>
 							{DESummary[sedType]}
 						</Fragment>
 					)
 				})}
-				{/* {DESummary} */}
+				<hr />
+				<hr />
+				<hr />
+				<hr />
+				{Object.keys(QWSummary).map((sedType, index) => {
+					return (
+						<Fragment key={'SummaryKey:QW:' + sedType}>
+							{index !== 0 ? <hr /> : null}
+							<Typography className="summaryLayoutHeader">QWDATA: {sedType}</Typography>
+							{QWSummary[sedType]}
+						</Fragment>
+					)
+				})}
+				<hr />
+				<hr />
+				<hr />
+				<hr />
+				{Object.keys(ParSummary).map((sedType, index) => {
+					return (
+						<Fragment key={'SummaryKey:Par:' + sedType}>
+							{index !== 0 ? <hr /> : null}
+							<Typography className="summaryLayoutHeader">Parameters: {sedType}</Typography>
+							{ParSummary[sedType]}
+						</Fragment>
+					)
+				})}
+
 			</React.Fragment>
 		);
-
-		// if(question.id.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER) ||
-		// question.id.startsWith(QWDATA_TABLE_IDENTIFIER) ||
-		// question.id.startsWith(PARAMETERS_TABLE_IDENTIFIER)) {
-		// 	// this is harder, ignore and come back //TODO:
-		// } else {
-		// 	return <Typography>{question.id}</Typography>
-		// }
-
 
 	}
 }

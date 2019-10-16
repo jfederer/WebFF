@@ -196,7 +196,7 @@ export const defaultSetInformationQuestionsData = {
 
 	["analysedFor_"+BEDLOAD_TEXT]: {
 		"id": "analysedFor_"+BEDLOAD_TEXT,
-		"label": "Analyze Set/Group A for:",
+		"label": "Analyze Set/Group for",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
 		"options": {
@@ -219,7 +219,7 @@ export const defaultSetInformationQuestionsData = {
 
 	["analysedFor_"+BOTTOM_MATERIAL_TEXT]: {
 		"id": "analysedFor_"+BOTTOM_MATERIAL_TEXT,
-		"label": "Analyze Set/Group A for:",
+		"label": "Analyze Set/Group for",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
 		"options":
@@ -245,7 +245,7 @@ export const defaultSetInformationQuestionsData = {
 
 	["analysedFor_"+SUSPENDED_TEXT]: {
 		"id": "analysedFor_"+SUSPENDED_TEXT,
-		"label": "Analyze Set/Group A for:",
+		"label": "Analyze Set/Group for",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
 		"helperText": "* possible add-on analysis for individual samples.",
