@@ -269,21 +269,11 @@ export function getStationFromID(stationID) {
 export function getStationIDsFromName(username, stationName) {	//find station number
 	// console.log("getStationIDsFromName(", username, ",", stationName, ")");
 	let stationIDList = store.getState().LinkTables.userStations[username];
-	if(!stationIDList) {
-		//TODO: trigger network?
-		console.warn("User, " + username + ", has no stations in stations.");
-		return null;
-	}
-
 	let matchingIDs = stationIDList.filter((stationID) => {
 		return store.getState().Stations[stationID].name === stationName
 	})
 	if (matchingIDs.length > 1) {
 		console.warn("Multiple ID's ", matchingIDs, " matched that station name.  This could represent a bug, please contact jfederer@usgs.gov and include this message");
-	}
-	if (matchingIDs.length < 1) {
-		//TODO: trigger network?
-		console.warn("No matching station ID's found for station name, ", stationName, ". This could represent a bug, please contact jfederer@usgs.gov and include this message");
 	}
 	return matchingIDs;
 }

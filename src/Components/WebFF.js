@@ -40,7 +40,6 @@ import { loadAndSetCurrentUser } from '../Actions/SedFF';
 import ExportDialog from './Dialogs/ExportDialog';
 import SwitchUserDialog from './Dialogs/SwitchUserDialog';
 import SettingsDialog from './Dialogs/SettingsDialog';
-import LoginDialog from './Dialogs/LoginDialog';
 
 // import SettingsDialog from './Dialogs/SettingsDialog';
 import AboutDialog from './Dialogs/AboutDialog';
@@ -89,7 +88,6 @@ class WebFF extends React.Component {
 	//TODO: webserver, network loads
 	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 	//TODO: Does not check for updated data outside localstorage
-	//TODO: import/export
 
 	//BUGS: 
 	//TODO: paramters and qwdata table don't appear to load existing info from loaded event
@@ -181,64 +179,58 @@ class WebFF extends React.Component {
 
 		super(props);
 
-		// var allItemsToSyncToLS = USER_DB_NODES.slice();
+		var allItemsToSyncToLS = USER_DB_NODES.slice();
 
-		// allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
+		allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
 
 		this.state = {
-			//v2
-
-
-
-
-			//unknown use below...
 
 			// system config
 			// questionsData: questionsData,
-			// dialogQuestions: dialogQuestions,
+			dialogQuestions: dialogQuestions,
 
-			// itemsToSyncToLS: allItemsToSyncToLS,
+			itemsToSyncToLS: allItemsToSyncToLS,
 
-			// syncIntervalFunction: null,
+			syncIntervalFunction: null,
 
-			// itemsLoaded: [],
-			// usePaper: false,
-			// syncDelay: 300000,
+			itemsLoaded: [],
+			usePaper: false,
+			syncDelay: 300000,
 
-			// questionDialogOpen: false,
+			questionDialogOpen: false,
 
-			// dialogValues: {},
-			// dialogOpen: false,
-			// curDialogDescription: "",
-			// curDialogName: "",
-			// curDialogQuestions: [],
+			dialogValues: {},
+			dialogOpen: false,
+			curDialogDescription: "",
+			curDialogName: "",
+			curDialogQuestions: [],
 
 			// hiddenTabs: defaultHiddenTabs,
 			// hiddenPanels: defaultHiddenPanels,
 
-			// appBarText: "Sediment Field Forms",
+			appBarText: "Sediment Field Forms",
 
-			// stations: [],
-			// customQuestions: [],
+			stations: [],
+			customQuestions: [],
 
 			// loggedInUser:
-			// needsToUpdateDB: (localStorage.getItem('needsToUpdateDB')) ? JSON.parse(localStorage.getItem('needsToUpdateDB')) : [],
-			// curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
+			needsToUpdateDB: (localStorage.getItem('needsToUpdateDB')) ? JSON.parse(localStorage.getItem('needsToUpdateDB')) : [],
+			curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
 
 		};
 
-		// if (isReasonablyValidUsernameInLS()) {
-		// 	// load all events from LS if the user is logged in. // TODO: this is a kludge bugfix for when people refresh the page
-		// 	let allNodeNames = Object.keys(localStorage);
-		// 	for (let i = 0; i < allNodeNames.length; i++) {
-		// 		if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
-		// 			let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
-		// 			if (SE.user === this.state.loggedInUser) {
-		// 				this.state[allNodeNames[i]] = SE;
-		// 			}
-		// 		}
-		// 	}
-		// }
+		if (isReasonablyValidUsernameInLS()) {
+			// load all events from LS if the user is logged in. // TODO: this is a kludge bugfix for when people refresh the page
+			let allNodeNames = Object.keys(localStorage);
+			for (let i = 0; i < allNodeNames.length; i++) {
+				if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+					let SE = JSON.parse(localStorage.getItem(allNodeNames[i]));
+					if (SE.user === this.state.loggedInUser) {
+						this.state[allNodeNames[i]] = SE;
+					}
+				}
+			}
+		}
 	}
 
 	componentWillMount() { //FUTURE: could load just the missing parts insted of everything if just a single node is missing
@@ -255,7 +247,6 @@ class WebFF extends React.Component {
 			// this.gatherUserConfig(USER_DB_NODES); // after setting loggedInUser, load user configuration);
 		} else {
 			console.log("No one is logged in... requesting user id");
-			this.props.setLoginDialogVisibility(true);
 			// this.buildRoutesAndRenderPages(); // router handles showing the login
 		}
 
@@ -268,7 +259,8 @@ class WebFF extends React.Component {
 	}
 
 	render() {
-		const { classes, sedff, UI, currentUser, isFetchingUserData } = this.props;
+		const { classes, sedff, UI, currentUser } = this.props;
+		const { isFetchingUserData } = sedff;
 
 		if (currentUser === undefined && this.props.location.pathname !== '/') {
 			console.log("There is no currentuser...going to login page");
@@ -283,9 +275,7 @@ class WebFF extends React.Component {
 			<React.Fragment>
 				{isFetchingUserData === true
 					? <img src={loading} alt="LOADING"></img>  //TODO:  better behavior
-					: null }
-					 
-					<React.Fragment>
+					: <React.Fragment>
 						<div className={classes.root} >
 							<AppBar
 								position="absolute"
@@ -319,22 +309,20 @@ class WebFF extends React.Component {
 							<NavMenu />
 
 							<SystemMenu />
-							<LoginDialog />
-							{isFetchingUserData !== true ? <React.Fragment>
-								<ExportDialog
+							<ExportDialog
 								//TODO: REDUX
 								eventID={this.props.currentSamplingEventID}
 								setShippedStatus={this.setShippedStatus}
 								username={this.state.loggedInUser}
 								globalState={this.state}
 							/>
+							{/* <SyncDataDialog /> */}
 							<AddRemoveQuestionDialog />
 							<AddRemoveStationDialog />
 							<SettingsDialog />
 							<AboutDialog />
 							<SwitchUserDialog />
-							 </React.Fragment>
-							: null }
+
 
 
 							{/* <SystemDialog isOpen={this.state.dialogOpen}
@@ -384,7 +372,7 @@ class WebFF extends React.Component {
 						{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
 						{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 					</React.Fragment>
-				
+				}
 				{/* <Button onClick={()=>console.log(getActiveSedimentTypes(this.props.currentSamplingEventID))}>TEST</Button> */}
 			</React.Fragment>
 
@@ -401,7 +389,6 @@ const mapStateToProps = function (state) {
 		UI: state.UI,
 		users: state.Users,
 		sedff: state.SedFF,
-		isFetchingUserData: state.SedFF.isFetchingUserData,
 		events: state.Events,
 		currentUser: state.Users[state.SedFF.currentUsername],
 		currentSamplingEventID: state.SedFF.currentSamplingEventID
