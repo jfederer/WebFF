@@ -30,35 +30,35 @@ export function setSysMenuExpand(expandValue) {
 }
 
 export function setLoginDialogVisibility(loginDialogVisibility) { //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_LOGIN_DIALOG_VISIBILITY, loginDialogVisibility: loginDialogVisibility }
+	return { type: SET_LOGIN_DIALOG_VISIBILITY, loginDialogVisibility }
 }
 
 export function setExportDialogVisibility(exportDialogVisibility) {  //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_EXPORT_DIALOG_VISIBILITY, exportDialogVisibility: exportDialogVisibility }
+	return { type: SET_EXPORT_DIALOG_VISIBILITY, exportDialogVisibility }
 }
 
 export function setAddRemoveStationDialogVisibility(addRemoveStationDialogVisibility) { //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY, addRemoveStationDialogVisibility: addRemoveStationDialogVisibility }
+	return { type: SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY, addRemoveStationDialogVisibility }
 }
 
 export function setAddRemoveQuestionDialogVisibility(addRemoveQuestionDialogVisibility) {//TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY, addRemoveQuestionDialogVisibility: addRemoveQuestionDialogVisibility }
+	return { type: SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY, addRemoveQuestionDialogVisibility }
 }
 
 export function setSettingsDialogVisibility(settingsDialogVisibility) { //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_SETTINGS_DIALOG_VISIBILITY, settingsDialogVisibility: settingsDialogVisibility }
+	return { type: SET_SETTINGS_DIALOG_VISIBILITY, settingsDialogVisibility }
 }
 
 export function setAboutDialogVisibility(aboutDialogVisibility) { //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_ABOUT_DIALOG_VISIBILITY, aboutDialogVisibility: aboutDialogVisibility }
+	return { type: SET_ABOUT_DIALOG_VISIBILITY, aboutDialogVisibility }
 }
 
 export function setSwitchUserDialogVisibility(switchUserDialogVisibility) { //TODO:  (if visitibility... show... if not, clear and hide)
-	return { type: SET_SWITCH_USER_DIALOG_VISIBILITY, switchUserDialogVisibility: switchUserDialogVisibility }
+	return { type: SET_SWITCH_USER_DIALOG_VISIBILITY, switchUserDialogVisibility }
 }
 
 export function setAppBarText(appBarText) {
-	return { type: SET_APP_BAR_TEXT, appBarText: appBarText }
+	return { type: SET_APP_BAR_TEXT, appBarText }
 }
 
 export function showNavigationTab(tabName) {

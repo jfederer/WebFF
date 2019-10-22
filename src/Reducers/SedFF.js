@@ -13,8 +13,8 @@ import _ from 'lodash';
 const initialSedFFState = {
 	currentUsername: (localStorage.getItem('loggedInUser')) && localStorage.getItem('loggedInUser') !== 'undefined'
 		? JSON.parse(localStorage.getItem('loggedInUser'))
-		// : null,
-		: "jfederer@usgs.gov",
+		: null,
+		// : "jfederer@usgs.gov",
 	currentSamplingEventID: null,
 	isFetchingUserData: true,
 	fetchingUserDataComplete: false
