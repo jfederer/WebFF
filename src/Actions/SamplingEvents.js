@@ -204,7 +204,7 @@ export function stationNameChanged(eventID, newStationName) {
 
 	//TODO: verify station is acceptable
 
-	//note: displayName is already changed.
+	//note: displayName is already changed at this point.
 	return (dispatch, getState) => {
 		let stationID = getStationIDsFromName(getState().SedFF.currentUsername, newStationName)[0];
 		let station = getStationFromID(stationID);
