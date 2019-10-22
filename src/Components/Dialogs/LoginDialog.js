@@ -54,7 +54,6 @@ class LoginDialog extends React.Component {
 	}
 
 	onPress = (ev) => {
-		console.log(`Pressed keyCode ${ev.key}`);
 		if (ev.key === 'Enter' && this.isNewUsernameValid()) {
 			this.handleLoginPress();
 			ev.preventDefault();
