@@ -138,7 +138,7 @@ export const defaultSetInformationQuestionsData = {
 		}
 	},
 
-	samplesTable_EDI: {
+	["samplesTable_EDI_" + BEDLOAD_TEXT]: {
 		"id": "samplesTable_EDI",
 		"label": "Samples Table",
 		"type": "TableInput",
@@ -158,7 +158,7 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 10
 	},
 
-	samplesTable_EWI: {
+	["samplesTable_EWI_" + BEDLOAD_TEXT]: {
 		"id": "samplesTable_EWI",
 		"label": "Samples Table",
 		"type": "TableInput",
@@ -166,25 +166,11 @@ export const defaultSetInformationQuestionsData = {
 		"colHeaders": true,
 		"rowHeaders": false,
 
-		"value": [["Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bedload sample, seconds", "Horizontal width of Vertical, feet"],
-		["Fill Out Number Of Samples",
-			"",
-			"",
-			"",
-			""]],
-		"width_xs": 10,
-		"width_lg": 10
-	},
-
-	samplesTable_OTHER: {
-		"id": "samplesTable_OTHER",
-		"label": "Samples Table",
-		"type": "TableInput",
-		// "hidden": true,
-		"colHeaders": true,
-		"rowHeaders": false,
-
-		"value": [["Distance from L bank, feet", "Sampling Depth, feet", "Transit Rate, ft / sec", "Rest time on Bed for Bed load sample, seconds", "Horizontal width of Vertical, feet"],
+		"value": [["Distance from L bank, feet", 
+		"Sampling Depth, feet", 
+		"Transit Rate, ft / sec", 
+		"Rest time on Bed for Bedload sample, seconds", 
+		"Horizontal width of Vertical, feet"],
 		["",
 			"",
 			"",
@@ -194,8 +180,132 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 10
 	},
 
-	["analysedFor_"+BEDLOAD_TEXT]: {
-		"id": "analysedFor_"+BEDLOAD_TEXT,
+	["samplesTable_OTHER_" + BEDLOAD_TEXT]: {
+		"id": "samplesTable_OTHER",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+
+		"value": [["Distance from L bank, feet", 
+		"Sampling Depth, feet", 
+		"Transit Rate, ft / sec", 
+		"Rest time on Bed for Bed load sample, seconds", 
+		"Horizontal width of Vertical, feet"],
+		["",
+			"",
+			"",
+			"",
+			""]],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+	["samplesTable_EDI_" + BOTTOM_MATERIAL_TEXT]: {
+		"id": "samplesTable_EDI",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+		"invalidMessage": "Must input number of samples before table will display",
+		"value": [
+			["Distance from L bank, feet",
+				"Sampling Depth, feet",
+				"Transit Rate, ft / sec"],
+				["","",""]
+		],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+
+	["samplesTable_EWI_" + BOTTOM_MATERIAL_TEXT]: {
+		"id": "samplesTable_EWI",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+
+		"value": [["Distance from L bank, feet", 
+		"Sampling Depth, feet", 
+		"Transit Rate, ft / sec"],
+		["","",""]],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+
+	["samplesTable_OTHER_" + BOTTOM_MATERIAL_TEXT]: {
+		"id": "samplesTable_OTHER",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+
+		"value": [["Distance from L bank, feet",
+			"Sampling Depth, feet",
+			"Transit Rate, ft / sec"],
+		["", "", ""]],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+	["samplesTable_EDI_" + SUSPENDED_TEXT]: {
+		"id": "samplesTable_EDI",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+		"invalidMessage": "Must input number of samples before table will display",
+		"value": [
+			["Distance from L bank, feet",
+				"Sampling Depth, feet",
+				"Transit Rate, ft / sec"],
+			["", "", ""]
+		],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+
+	["samplesTable_EWI_" + SUSPENDED_TEXT]: {
+		"id": "samplesTable_EWI",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+
+		"value": [
+			["Distance from L bank, feet",
+				"Sampling Depth, feet",
+				"Transit Rate, ft / sec",
+			],
+			["", "", ""]
+		],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+
+	["samplesTable_OTHER_" + SUSPENDED_TEXT]: {
+		"id": "samplesTable_OTHER",
+		"label": "Samples Table",
+		"type": "TableInput",
+		// "hidden": true,
+		"colHeaders": true,
+		"rowHeaders": false,
+
+		"value": [["Distance from L bank, feet",
+			"Sampling Depth, feet",
+			"Transit Rate, ft / sec"],
+		["", "", ""]
+		],
+		"width_xs": 10,
+		"width_lg": 10
+	},
+
+	["analysedFor_" + BEDLOAD_TEXT]: {
+		"id": "analysedFor_" + BEDLOAD_TEXT,
 		"label": "Analyze Set/Group for",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
@@ -217,8 +327,8 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 2
 	},
 
-	["analysedFor_"+BOTTOM_MATERIAL_TEXT]: {
-		"id": "analysedFor_"+BOTTOM_MATERIAL_TEXT,
+	["analysedFor_" + BOTTOM_MATERIAL_TEXT]: {
+		"id": "analysedFor_" + BOTTOM_MATERIAL_TEXT,
 		"label": "Analyze Set/Group for",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
@@ -243,8 +353,8 @@ export const defaultSetInformationQuestionsData = {
 		"width_lg": 2
 	},
 
-	["analysedFor_"+SUSPENDED_TEXT]: {
-		"id": "analysedFor_"+SUSPENDED_TEXT,
+	["analysedFor_" + SUSPENDED_TEXT]: {
+		"id": "analysedFor_" + SUSPENDED_TEXT,
 		"label": "Analyze Set/Group for",
 		"XMLTag": "Analyses",
 		"type": "MultipleChoice",
@@ -358,8 +468,8 @@ export const defaultQuestionsData = {
 		"width_lg": 2
 	},
 
-	["samplingMethod_"+SUSPENDED_TEXT]: {
-		"id": "samplingMethod_"+SUSPENDED_TEXT,
+	["samplingMethod_" + SUSPENDED_TEXT]: {
+		"id": "samplingMethod_" + SUSPENDED_TEXT,
 		"label": "Suspended Sediment Method",
 		"XMLTag": "P82398",
 		"type": "DropDown",
@@ -407,8 +517,8 @@ export const defaultQuestionsData = {
 		"width_lg": 4
 	},
 
-	["samplingMethod_"+BEDLOAD_TEXT]: {
-		"id": "samplingMethod_"+BEDLOAD_TEXT,
+	["samplingMethod_" + BEDLOAD_TEXT]: {
+		"id": "samplingMethod_" + BEDLOAD_TEXT,
 		"label": "Bedload Sampling Method",
 		"XMLTag": "P82398",
 		"type": "DropDown",
@@ -435,8 +545,8 @@ export const defaultQuestionsData = {
 		"width_lg": 4
 	},
 
-	["samplingMethod_"+BOTTOM_MATERIAL_TEXT]: {
-		"id": "samplingMethod_"+BOTTOM_MATERIAL_TEXT,
+	["samplingMethod_" + BOTTOM_MATERIAL_TEXT]: {
+		"id": "samplingMethod_" + BOTTOM_MATERIAL_TEXT,
 		"label": "Bottom Material Sampling Method",
 		"XMLTag": "P82398",
 		"type": "DropDown",
@@ -1096,40 +1206,40 @@ export const defaultQuestionsData = {
 		"width_lg": 2
 	},
 
-	["samplingMethod_"+BEDLOAD_TEXT+"_QWDATA_CV"]: {
-		"id": "samplingMethod_"+BEDLOAD_TEXT+"_QWDATA_CV",
+	["samplingMethod_" + BEDLOAD_TEXT + "_QWDATA_CV"]: {
+		"id": "samplingMethod_" + BEDLOAD_TEXT + "_QWDATA_CV",
 		"label": "Sampling Method",
 		"type": "ComputedValue",
 		"tabName": "QWDATA",
 		"layoutGroup": "QWDATA Info",
 		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_"+BEDLOAD_TEXT,
+		"computationString": "samplingMethod_" + BEDLOAD_TEXT,
 		"value": "",
 		"width_xs": 4,
 		"width_lg": 2
 	},
 
-	["samplingMethod_"+BOTTOM_MATERIAL_TEXT+"_QWDATA_CV"]: {
-		"id": "samplingMethod_"+BOTTOM_MATERIAL_TEXT+"_QWDATA_CV",
+	["samplingMethod_" + BOTTOM_MATERIAL_TEXT + "_QWDATA_CV"]: {
+		"id": "samplingMethod_" + BOTTOM_MATERIAL_TEXT + "_QWDATA_CV",
 		"label": "Sampling Method",
 		"type": "ComputedValue",
 		"tabName": "QWDATA",
 		"layoutGroup": "QWDATA Info",
 		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_"+BOTTOM_MATERIAL_TEXT,
+		"computationString": "samplingMethod_" + BOTTOM_MATERIAL_TEXT,
 		"value": "",
 		"width_xs": 4,
 		"width_lg": 2
 	},
 
-	["samplingMethod_"+SUSPENDED_TEXT+"_QWDATA_CV"]: {
-		"id": "samplingMethod_"+SUSPENDED_TEXT+"_QWDATA_CV",
+	["samplingMethod_" + SUSPENDED_TEXT + "_QWDATA_CV"]: {
+		"id": "samplingMethod_" + SUSPENDED_TEXT + "_QWDATA_CV",
 		"label": "Sampling Method",
 		"type": "ComputedValue",
 		"tabName": "QWDATA",
 		"layoutGroup": "QWDATA Info",
 		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_"+SUSPENDED_TEXT,
+		"computationString": "samplingMethod_" + SUSPENDED_TEXT,
 		"value": "",
 		"width_xs": 4,
 		"width_lg": 2
@@ -1151,8 +1261,8 @@ export const defaultQuestionsData = {
 
 	[DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: {
 		id: DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT,
-		["samplerType_"+SUSPENDED_TEXT]: {
-			"id": "samplerType_"+SUSPENDED_TEXT,
+		["samplerType_" + SUSPENDED_TEXT]: {
+			"id": "samplerType_" + SUSPENDED_TEXT,
 			"label": "Sampler Type",
 			"XMLTag": "P84164",
 			"type": "DropDown",
@@ -1539,8 +1649,8 @@ export const defaultQuestionsData = {
 
 	[DATA_ENTRY_INFORMATION_IDENTIFIER + BOTTOM_MATERIAL_TEXT]: {
 		id: DATA_ENTRY_INFORMATION_IDENTIFIER + BOTTOM_MATERIAL_TEXT,
-		["samplerType_"+BOTTOM_MATERIAL_TEXT]: {
-			"id": "samplerType_"+BOTTOM_MATERIAL_TEXT,
+		["samplerType_" + BOTTOM_MATERIAL_TEXT]: {
+			"id": "samplerType_" + BOTTOM_MATERIAL_TEXT,
 			"label": "Sampler Type",
 			"XMLTag": "P84164",
 			"type": "DropDown",
@@ -1822,8 +1932,8 @@ export const defaultQuestionsData = {
 
 	[DATA_ENTRY_INFORMATION_IDENTIFIER + BEDLOAD_TEXT]: {
 		id: DATA_ENTRY_INFORMATION_IDENTIFIER + BEDLOAD_TEXT,
-		["samplerType_"+BEDLOAD_TEXT]: {
-			"id": "samplerType_"+BEDLOAD_TEXT,
+		["samplerType_" + BEDLOAD_TEXT]: {
+			"id": "samplerType_" + BEDLOAD_TEXT,
 			"label": "Sampler Type",
 			"XMLTag": "P84164",
 			"type": "DropDown",
@@ -2141,8 +2251,8 @@ export const defaultQuestionsData = {
 		}
 	},
 
-	[QWDATA_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT]: {
-		"id": QWDATA_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT,
+	[QWDATA_TABLE_IDENTIFIER + BOTTOM_MATERIAL_TEXT]: {
+		"id": QWDATA_TABLE_IDENTIFIER + BOTTOM_MATERIAL_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2154,8 +2264,8 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	[PARAMETERS_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT]: {
-		"id": PARAMETERS_TABLE_IDENTIFIER+BOTTOM_MATERIAL_TEXT,
+	[PARAMETERS_TABLE_IDENTIFIER + BOTTOM_MATERIAL_TEXT]: {
+		"id": PARAMETERS_TABLE_IDENTIFIER + BOTTOM_MATERIAL_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",
@@ -2166,9 +2276,9 @@ export const defaultQuestionsData = {
 		"width_xs": 12,
 		"width_lg": 12
 	},
-	
-	[QWDATA_TABLE_IDENTIFIER+SUSPENDED_TEXT]: {
-		"id": QWDATA_TABLE_IDENTIFIER+SUSPENDED_TEXT,
+
+	[QWDATA_TABLE_IDENTIFIER + SUSPENDED_TEXT]: {
+		"id": QWDATA_TABLE_IDENTIFIER + SUSPENDED_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2180,8 +2290,8 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	[PARAMETERS_TABLE_IDENTIFIER+SUSPENDED_TEXT]: {
-		"id": PARAMETERS_TABLE_IDENTIFIER+SUSPENDED_TEXT,
+	[PARAMETERS_TABLE_IDENTIFIER + SUSPENDED_TEXT]: {
+		"id": PARAMETERS_TABLE_IDENTIFIER + SUSPENDED_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",
@@ -2192,8 +2302,8 @@ export const defaultQuestionsData = {
 		"width_xs": 12,
 		"width_lg": 12
 	},
-	[QWDATA_TABLE_IDENTIFIER+BEDLOAD_TEXT]: {
-		"id": QWDATA_TABLE_IDENTIFIER+BEDLOAD_TEXT,
+	[QWDATA_TABLE_IDENTIFIER + BEDLOAD_TEXT]: {
+		"id": QWDATA_TABLE_IDENTIFIER + BEDLOAD_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
 		"tabName": "QWDATA",
@@ -2205,8 +2315,8 @@ export const defaultQuestionsData = {
 		"width_lg": 12
 	},
 
-	[PARAMETERS_TABLE_IDENTIFIER+BEDLOAD_TEXT]: {
-		"id": PARAMETERS_TABLE_IDENTIFIER+BEDLOAD_TEXT,
+	[PARAMETERS_TABLE_IDENTIFIER + BEDLOAD_TEXT]: {
+		"id": PARAMETERS_TABLE_IDENTIFIER + BEDLOAD_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
 		"tabName": "Parameters",

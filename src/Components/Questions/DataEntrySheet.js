@@ -73,7 +73,7 @@ class DataEntrySheet extends React.Component {
 	}
 
 	DEChangeHandler = (eventID, sub_QID, value) => {
-		if (DEBUG) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
+		if (true) console.log("DES: DEChangeHandler(", eventID, ", ", sub_QID, ", ", value, ")");
 
 		if (sub_QID.startsWith("samplerType_")) {
 			//depending on what sampler type was selected, we need to show the IET

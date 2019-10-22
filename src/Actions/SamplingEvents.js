@@ -242,11 +242,11 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 			getQuestionValue(eventID,
 				DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType,
 				DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName,
-				"samplesTable_" + getMethodCategoryFromValue(samplingMethod));
+				"samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType);
 
 		if (typeof setInfoSampleTableValue === 'undefined' || setInfoSampleTableValue === null) {
 			// eslint-disable-next-line no-useless-concat
-			let errMSG = "getQuestionValue(" + eventID + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + ") returned ";
+			let errMSG = "getQuestionValue(" + eventID + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + ", " + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + setName + ", " + "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType + ") returned ";
 			errMSG += setInfoSampleTableValue === null ? "null" : "undefined";
 			throw new Error(errMSG);
 		}
@@ -286,7 +286,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 			}
 		}
 
-		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod), setInfoSampleTableValue);  //TODO: underscore should be something defined in config
+		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoSampleTableValue);  //TODO: underscore should be something defined in config
 
 		// re-do any distance data  if EWI (confirm with user) //TODO:
 

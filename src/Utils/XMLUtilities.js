@@ -163,7 +163,7 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 		//get remaining sample info
 		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
-		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue);
+		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue) + "_" + sedType;
 		let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
 		let distanceHeaderText = "Distance from L bank, feet";
 		let transitHeaderText = "Transit Rate, ft / sec";

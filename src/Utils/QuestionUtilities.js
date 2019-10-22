@@ -209,7 +209,7 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 				let location = 0;
 				let methodCategory = getMethodCategoryFromValue(getQuestionValue(eventID, METHOD_QIDS[sedType]));
 
-				location = getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesTable_" + methodCategory, i, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER);
+				location = getQuestionValue(eventID, setName.split(IDENTIFIER_SPLITTER)[0], setName, "samplesTable_" + methodCategory + "_" + sedType, i, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER);
 				setLocations.push(location);
 			}
 		} else {
