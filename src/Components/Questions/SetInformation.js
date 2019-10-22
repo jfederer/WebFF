@@ -51,24 +51,13 @@ export const getRealQID = (setName, sub_q_id) => {
 class SetInformation extends React.Component {
 	constructor(props) {
 		super(props);
-		 console.log("SI CONSTRUCTOR PROPS: ", this.props);
+		//  console.log("SI CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
-			console.log("Value empty");
-
-			let initValue = {"Here":"Hi"};
-			// let initValue = [
-			// 	["BLAH!!!",
-			// 		"Sampling Depth, feet",
-			// 		"Transit Rate, ft / sec",
-			// 		"Rest time on Bed for Bedload sample,seconds",
-			// 		"Horizontal width of Vertical, feet"],
-			// 	["", "", "", "", ""]
-			// ]; //load value with default table?
+			let initValue = {};
+			 //load value with default table?
 			if (this.props.alternateChangeHandler) {
-				console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, alt change handler with initValue");
 				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
 			} else {
-				console.log("SETINFOMATIONCOMPONENT: CONSTRUCTOR, standard change handler with initValue");
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
 		} 
@@ -76,7 +65,6 @@ class SetInformation extends React.Component {
 		this.state = {
 			showDataTable: Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType) 
 		}
-		console.log("End SI constructor");
 	}
 
 	componentDidMount() {
@@ -89,16 +77,15 @@ class SetInformation extends React.Component {
 	}
 
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
-		  console.log("setInfoChangeHandler(", eventID, sub_QID, value, ")");
+		//   console.log("setInfoChangeHandler(", eventID, sub_QID, value, ")");
 		if (sub_QID === "numberOfSamplingPoints") {
-
 			if(parseInt(value)===0) {
 				// can't have a value of zero samples...
 				return;
 			}
 			this.doChange(eventID, sub_QID, value)
 			this.setState({ showDataTable: true });
-			// this.props.numberOfSamplingPointsChanged(eventID, this.props.sedimentType, this.props.setName,  this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
+			this.props.numberOfSamplingPointsChanged(eventID, this.props.sedimentType, this.props.setName,  this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
 			return;
 		}
 
@@ -109,15 +96,13 @@ class SetInformation extends React.Component {
 	 * @description doChange exists as separate function so the 'save' and the 'special questions' can be handled more easily. If the 'save' is done in the wrong order, some of the additional changes might not propagate appropriately. DRY
 	 */
 	doChange = (eventID, sub_QID, value) => {
-		console.log("Set Info: doChange(", eventID, sub_QID, value, ")");
+		// console.log("Set Info: doChange(", eventID, sub_QID, value, ")");
 
 		let splitID = this.props.id.split(IDENTIFIER_SPLITTER);
-		// console.log(splitID);
-
+	
 		let newValue = getQuestionValue(eventID, splitID.shift(), this.props.id); // have to look a the split ID in order to get the VALUE out of questionValues
 		newValue[sub_QID] = _.cloneDeep(value);
-		console.log('newValue :', newValue);
-		
+			
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(eventID, this.props.id, newValue);
 		} else {

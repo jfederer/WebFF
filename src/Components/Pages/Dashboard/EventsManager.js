@@ -147,7 +147,6 @@ class EventsManager extends React.Component {
 			return this.props.allSamplingEvents[eventID]
 		})
 
-		console.log('currentUserEvents :', currentUserEvents);
 		let data = currentUserEvents.map((event) => {
 			if (event) {
 				return [
@@ -163,7 +162,7 @@ class EventsManager extends React.Component {
 						View Event Summary
 			</Button>,
 				]
-			} else {
+			} else {  //TODO: trigger pull from DB?
 				return null;
 			}
 

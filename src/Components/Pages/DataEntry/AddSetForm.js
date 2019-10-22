@@ -142,11 +142,7 @@ class AddSetForm extends React.Component {
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
 				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
 			})
-		} else { // not copying stationing
-			console.log('this.props :', this.props);
-			// insert the default samplesTable value
-			// newSetValue['samplesTable_'+getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType)] = //TODO: pull from FF
-		}
+		} 
 
 		let defaultSetInformationQD = getSetInformationQuestionsData();
 
