@@ -83,7 +83,7 @@ class EventsManager extends React.Component {
 			onRowsSelect: this.onRowsSelect,
 			onCellClick: (colData, cellMeta) => {
 				if (cellMeta.colIndex !== 6) {
-					this.props.loadAndSetCurrentSamplingEvent(this.state.data[cellMeta.dataIndex][0], ()=> { // zero is the column number of the eventID
+					this.props.loadAndSetCurrentSamplingEvent(this.state.data[cellMeta.dataIndex][0], () => { // zero is the column number of the eventID
 						this.setState({ toFieldForm: true, selectedEventIndex: cellMeta.dataIndex });
 					})
 				}
@@ -147,21 +147,27 @@ class EventsManager extends React.Component {
 			return this.props.allSamplingEvents[eventID]
 		})
 
-		let data = currentUserEvents.map((event) =>
-			[
-				event.eventID,
-				event.eventName,
-				getQuestionValue(event.eventID, "sampleDate") ? getQuestionValue(event.eventID, "sampleDate") : "N/A",   //TODO: this isn't working
-				new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours() + ":" + (new Date(event.dateModified).getMinutes() + 1),
-				getQuestionValue(event.eventID, "stationName") ? getQuestionValue(event.eventID, "stationName") : "N/A",
-				event.shippedStatus,
-				<Button onClick={() => {
-					this.setState({ toEventSummary: true, SummaryEventID: event.eventID })
-				}}>
-					View Event Summary
+		console.log('currentUserEvents :', currentUserEvents);
+		let data = currentUserEvents.map((event) => {
+			if (event) {
+				return [
+					event.eventID,
+					event.eventName,
+					getQuestionValue(event.eventID, "sampleDate") ? getQuestionValue(event.eventID, "sampleDate") : "N/A",   //TODO: this isn't working
+					new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours() + ":" + (new Date(event.dateModified).getMinutes() + 1),
+					getQuestionValue(event.eventID, "stationName") ? getQuestionValue(event.eventID, "stationName") : "N/A",
+					event.shippedStatus,
+					<Button onClick={() => {
+						this.setState({ toEventSummary: true, SummaryEventID: event.eventID })
+					}}>
+						View Event Summary
 			</Button>,
-			]
-		)
+				]
+			} else {
+				return null;
+			}
+
+		}).filter(datum => datum);
 
 		return data;
 	}
