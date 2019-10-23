@@ -36,8 +36,9 @@ export function loadAndSetCurrentUser(username) {
 					dispatch(userDataLoadComplete());
 					//TODO: will need to fire off event loading, etc...
 				}, () => {
-					console.log("Unable to acquire user data");
+					console.log("Unable to acquire user data... making new user.");
 					dispatch(makeNewUser(username));
+					dispatch(setCurrentUsername(username));
 					dispatch(userDataLoadComplete());
 					//TODO: modal dialog indicating could overwrite old user data
 				}
@@ -71,7 +72,6 @@ function userDataAcquire(username) {
 						}
 					});
 			}
-
 		})
 	}
 }

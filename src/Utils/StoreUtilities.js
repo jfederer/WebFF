@@ -244,7 +244,11 @@ export function getSetInformationQuestionsData() {
 // }
 
 export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
-	return store.getState().LinkTables.userEvents[username];
+	let evts = store.getState().LinkTables.userEvents[username];
+	if(typeof evts === 'undefined') {
+		return [];
+	}
+	return evts;
 }
 
 export function getCurrentStationID() {

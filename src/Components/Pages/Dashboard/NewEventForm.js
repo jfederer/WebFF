@@ -40,6 +40,10 @@ class NewEventForm extends React.Component {
 	}
 
 	handleBrandNewButtonClick = () => {
+		if(!this.props.currentUser) {
+			alert("There is no current user.  You cannot create an event without a current user set.  Please reload sedFF and try again.  If failures continue, contact jfederer@usgs.gov");
+			return;
+		}
 		let newEventID = this.props.createNewSampingEventForUser( // this is a syncronous process
 			this.state.newSamplingEventName	? this.state.newSamplingEventName : "",  //deal with blank in action
 			this.props.currentUser.username
@@ -74,7 +78,6 @@ class NewEventForm extends React.Component {
 					Create/Start New Sampling Event
 				</div>
 
-				{/* <Link to='/FieldForm'> */}
 				<div className={classes.horzCenterText}>
 					<TextField
 						margin="none"

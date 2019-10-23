@@ -24,13 +24,19 @@ export function LinkTables(state = initialEventLinkTableState, action) {
 	let newState = _.cloneDeep(state);
 	switch (action.type) {
 		case REGISTER_EVENT_WITH_USERNAME:
+			if (!newState.userEvents[action.username]) {
+				newState.userEvents[action.username] = [];
+			}
 			newState.userEvents[action.username].push(action.eventID); // push acceptable on clone  //FIXME: fails if user doesn't exist in list
 			return newState;
 		case REGISTER_STATION_WITH_USERNAME:
+			if (!newState.userStations[action.username]) {
+				newState.userStations[action.username] = [];
+			}
 			newState.userStations[action.username].push(action.stationID); // push acceptable on clone //FIXME: fails if user doesn't exist in list
 			return newState;
-		case REMOVE_STATION_FROM_USERNAME: 
-			newState.userStations[action.username] = newState.userStations[action.username].filter((linkedStationID)=>linkedStationID!==action.stationIDToRemove);
+		case REMOVE_STATION_FROM_USERNAME:
+			newState.userStations[action.username] = newState.userStations[action.username].filter((linkedStationID) => linkedStationID !== action.stationIDToRemove);
 			//TODO: actually deleting the station, not just the link - optionally looking at the network and other users.
 			return newState;
 		default:
