@@ -31,7 +31,7 @@ class SwitchUserDialog extends React.Component {
 		setTimeout(this.setState(initialState), 250);
 	}
 
-	handleSwitchUser = () => {
+	handleSwitchUserPress = () => {
 		this.props.loadAndSetCurrentUser(this.state.newUsername);
 		this.handleClose();
 	}
@@ -42,6 +42,13 @@ class SwitchUserDialog extends React.Component {
 
 	isNewUsernameValid = () => {
 		return isReasonableUsername(this.state.newUsername); // note, we are not checking that the username is different than the current because this might be a good way to backdoor reload a user.
+	}
+
+	onPress = (ev) => {
+		if (ev.key === 'Enter' && this.isNewUsernameValid()) {
+			this.handleSwitchUserPress();
+			ev.preventDefault();
+		}
 	}
 
 
@@ -60,7 +67,8 @@ class SwitchUserDialog extends React.Component {
 			>
 				<DialogTitle id="form-dialog-title">Switch User</DialogTitle>
 				<DialogContent>
-					All your SedFF data is associated with your username.  For most, this will be your email address.  Your username must end in @usgs.gov.  If you wish to log in to SedFF with a different username, enter it below.
+					All your SedFF data is associated with your username.  For most, this will be your email address.  Your username must end in @usgs.gov. <br />
+					If you wish to log in to SedFF with a different username, enter it below.
 					<Divider />			
 					<br />		
 					The currently logged in user is: <em>{currentUsername}</em>
@@ -76,11 +84,12 @@ class SwitchUserDialog extends React.Component {
                             type="email"
                             fullWidth
                             onChange={this.handleTextChange}
-                            value={this.state.newUsername}
+							value={this.state.newUsername}
+							onKeyPress={(ev) => { this.onPress(ev) }}
                         />
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={this.handleSwitchUser} disabled={!this.isNewUsernameValid()} color="primary">
+					<Button onClick={this.handleSwitchUserPress} disabled={!this.isNewUsernameValid()} color="primary">
 						Switch
             		</Button>
 					<Button onClick={this.handleClose} color="primary">

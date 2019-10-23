@@ -75,7 +75,6 @@ class EventsManager extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = initialState;
-		this.state["data"] = this.getDataTable();
 		this.options = {
 			filterType: 'checkbox',
 			print: false,
@@ -84,7 +83,7 @@ class EventsManager extends React.Component {
 			onRowsSelect: this.onRowsSelect,
 			onCellClick: (colData, cellMeta) => {
 				if (cellMeta.colIndex !== 6) {
-					this.props.loadAndSetCurrentSamplingEvent(this.state.data[cellMeta.dataIndex][0], () => { // zero is the column number of the eventID
+					this.props.loadAndSetCurrentSamplingEvent(this.getDataTable()[cellMeta.dataIndex][0], () => { // zero is the column number of the eventID
 						this.setState({ toFieldForm: true, selectedEventIndex: cellMeta.dataIndex });
 					})
 				}
@@ -140,13 +139,6 @@ class EventsManager extends React.Component {
 		return data;
 	}
 
-	componentWillReceiveProps() {
-		console.log("CWRP");
-		this.setState({data: this.getDataTable()}, console.log(JSON.stringify(this.state.data)));
-	}
-	componentDidUpdate() {
-		console.log("CDU");
-	}
 
 	componentWillUnmount() {
 		this.setState(initialState);
@@ -154,9 +146,6 @@ class EventsManager extends React.Component {
 
 	render() {
 		// const {fetchingUserDataComplete}
-
-		console.log("EventMangager Render Props: ", this.props);
-		console.log("EventMangager Render STATE: ", this.state);
 
 		if (this.state.toFieldForm) {
 			return <Redirect to='/FieldForm' /> //loading event happens in the onCellClick and toFieldForm doesn't get set until the leader callback
@@ -168,7 +157,7 @@ class EventsManager extends React.Component {
 
 		return <MUIDataTable
 			title={"Events Manager"}
-			data={this.state.data}
+			data={this.getDataTable()}
 			columns={columns}
 			options={this.options}
 		/>
