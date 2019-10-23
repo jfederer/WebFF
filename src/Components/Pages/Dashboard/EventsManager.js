@@ -141,7 +141,11 @@ class EventsManager extends React.Component {
 	}
 
 	componentWillReceiveProps() {
-		this.setState({data: this.getDataTable()});
+		console.log("CWRP");
+		this.setState({data: this.getDataTable()}, console.log(JSON.stringify(this.state.data)));
+	}
+	componentDidUpdate() {
+		console.log("CDU");
 	}
 
 	componentWillUnmount() {
@@ -151,7 +155,8 @@ class EventsManager extends React.Component {
 	render() {
 		// const {fetchingUserDataComplete}
 
-		// console.log("EventMangager Render Props: ", this.props);
+		console.log("EventMangager Render Props: ", this.props);
+		console.log("EventMangager Render STATE: ", this.state);
 
 		if (this.state.toFieldForm) {
 			return <Redirect to='/FieldForm' /> //loading event happens in the onCellClick and toFieldForm doesn't get set until the leader callback
