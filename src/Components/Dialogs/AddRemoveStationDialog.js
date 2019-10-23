@@ -29,6 +29,7 @@ import { Typography } from '@material-ui/core';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
+const EITHER = "EITHER";
 
 
 class AddRemoveStationDialog extends React.Component {
@@ -43,9 +44,10 @@ class AddRemoveStationDialog extends React.Component {
 	}
 
 	getInitialState = () => {
+
 		return _.cloneDeep({
-			addOrRemove: this.props.stationIDs.length > 0
-				? ""
+			addOrRemove: this.props.stationIDs && this.props.stationIDs.length > 0
+				? EITHER
 				: ADD,
 			newStation_agencyCode: "USGS",   //TODO: set this default in settings
 			newStation_changeCurrent: true,
@@ -139,8 +141,9 @@ class AddRemoveStationDialog extends React.Component {
 		this.props.setAddRemoveStationDialogVisibility(false);
 		setTimeout(() => {
 			this.setState({
-			isInitialized: false
-		})}, 250);
+				isInitialized: false
+			})
+		}, 250);
 	}
 
 	//TODO: go through some global prop types for questions to get all avaiable options
@@ -165,7 +168,7 @@ class AddRemoveStationDialog extends React.Component {
 					</DialogTitle>
 
 						<DialogContent>
-							{this.state.addOrRemove === ""
+							{this.state.addOrRemove === EITHER
 								? <React.Fragment>
 									Add a new station to, or remove an existing station from, your personalized station list?
 							<br></br>

@@ -206,7 +206,11 @@ export function stationNameChanged(eventID, newStationName) {
 
 	//note: displayName is already changed at this point.
 	return (dispatch, getState) => {
-		let stationID = getStationIDsFromName(getState().SedFF.currentUsername, newStationName)[0];
+		let stationIDs = getStationIDsFromName(getState().SedFF.currentUsername, newStationName);
+		if(!stationIDs) {
+			return null;
+		}
+		let stationID = stationIDs[0];
 		let station = getStationFromID(stationID);
 
 		dispatch(SEQuestionValueChange(eventID, "stationNumber", station.number)); //station.number is a required station attribute
