@@ -22,7 +22,7 @@ export function setSedLoginUsername(username, newSedLoginUsername) {
   }
   
 export function setUserData(user) {
-	console.log(user);
+	console.log("setUserData( ", user);
 	return { type: SET_USER_DATA, user}
   }
 

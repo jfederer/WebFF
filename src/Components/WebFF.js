@@ -129,6 +129,7 @@ class WebFF extends React.Component {
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 	//TODO: duplicate just stationing (vs all - optionally) from set to set ... even existing?
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
+	//TODO: disable system menu buttons when they can't apply
 
 	//Would be nice:
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)

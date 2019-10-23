@@ -26,6 +26,7 @@ import Question from '../Question';
 import { getUsersStationIDs, getStationFromID } from '../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import { Typography } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -74,14 +75,20 @@ class AddRemoveStationDialog extends React.Component {
 		this.setState({ [QID]: value });
 	};
 
-	addButtonClickHandler = () => {
-		//verify inputs
+	//returns tool tip message for add button... or true if all prereqs exist.
+	requiredInputsExist = () => {
 		if (typeof this.state.newStation_stationName === 'undefined' || this.state.newStation_stationName.length < 3) { // length shouldnt' be less than 3
-			alert("New station requires a name before it can be added.");
-			return;
+			return "New station requires a name before it can be added.";
 		}
 		if (typeof this.state.newStation_stationNumber === 'undefined' || this.state.newStation_stationNumber === "") {
-			alert("New station requires a station number before it can be added.");
+			return "New station requires a station number before it can be added.";
+		}
+		return true;
+	}
+
+	addButtonClickHandler = () => {
+		//verify inputs
+		if (!this.requiredInputsExist() === true) {
 			return;
 		}
 
@@ -252,13 +259,19 @@ class AddRemoveStationDialog extends React.Component {
 
 						<DialogActions>
 							{this.state.addOrRemove === ADD
-								? <Button onClick={this.addButtonClickHandler} color="primary">
-									Add Station
-            		</Button>
+								? <Tooltip title={this.requiredInputsExist() === true ? "good" : this.requiredInputsExist()} placement="bottom-end">
+									<div><Button onClick={this.addButtonClickHandler} color="primary" disabled={this.requiredInputsExist() !== true}>
+										Add Station
+									</Button></div>
+								</Tooltip>
+
+
 								: null}
 							{this.state.addOrRemove === REMOVE
 								? <Button onClick={this.removeButtonClickHandler} color="primary">
-									Remove Station
+									Remove Station  
+									{//TODO: disable button util station selected...
+									}
             		</Button>
 								: null}
 							<Button onClick={this.dialogCloseHandler} color="primary">

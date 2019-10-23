@@ -15,7 +15,7 @@ import {
 	BOTTOM_MATERIAL_TEXT
 } from './Dictionary';
 
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER } from './Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, DEFAULT_BACKUP_INTERVAL} from './Config';
 
 export const emptySamplingEvent = {
 	eventID: "",
@@ -33,7 +33,7 @@ export const emptyUser = {
 	username: "",
 	sedLoginUsername: "",
 	settings: {
-		backupInterval: 300,
+		backupInterval: DEFAULT_BACKUP_INTERVAL,
 		outlineQuestions: true,
 		questionsData: {}
 	}

@@ -22,6 +22,7 @@ import {
 
 import { setSettingsDialogVisibility } from '../../Actions/UI';
 import { setOutlineQuestions, setBackupInterval, setSedLoginUsername } from '../../Actions/User';
+import { DEFAULT_BACKUP_INTERVAL } from '../../Constants/Config';
 
 var debounce = []; // used for debounce control
 
@@ -36,8 +37,7 @@ class SettingsDialog extends React.Component {
 		super(props);
 		const { currentUser } = this.props;
 		this.state = {
-			backupInterval: currentUser.settings.backupInterval,
-			sedLoginUsername: currentUser.sedLoginUsername,
+
 		};
 	}
 
@@ -64,7 +64,9 @@ class SettingsDialog extends React.Component {
 
 
 	render() {
-		const { classes, settingsDialogVisibility, isFetchingUserData, currentUsername, currentUser } = this.props;
+		const { classes, settingsDialogVisibility, isFetchingUserData, currentUsername, currentUser, sedLoginUsername, backupInterval } = this.props;
+
+		console.log('currentUser :', currentUser);
 
 		return (
 			<Dialog
@@ -75,47 +77,50 @@ class SettingsDialog extends React.Component {
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
 				<DialogTitle id="form-dialog-title">Settings</DialogTitle>
-				<DialogContent>
-					<Paper>
-						{
-							!isFetchingUserData || !currentUser ? (
-								<Fragment>
-									<Typography>User Settings:</Typography>
-									<List className={classes.hundredWidth}>
-										<ListItem>
-											<Checkbox
-												checked={currentUser.settings.outlineQuestions}
-												onChange={() => this.props.setOutlineQuestions(currentUsername, !currentUser.settings.outlineQuestions)}
-											></Checkbox>
-											<label>Outline Questions</label>
-										</ListItem>
-										<ListItem >
-											<TextField
-												className={classes.settingsTextField}
-												label="Auto-Backup Interval"
-												value={this.state.backupInterval}
-												onChange={this.textFieldChangeHandler("backupInterval", currentUsername, this.props.setBackupInterval)}
-												InputProps={{
-													endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
-												}}
-											/>
-										</ListItem>
-										<ListItem >
-											<TextField
-												className={classes.settingsTextField}
-												label="SedLOGIN username"
-												value={this.state.sedLoginUsername}
-												onChange={this.textFieldChangeHandler("sedLoginUsername", currentUsername, this.props.setSedLoginUsername)}
-											/>
-										</ListItem>
-									</List>
-								</Fragment>
-							) : (
-									<h1>User Data Still Loading</h1>
-								)}
-					</Paper>
+				{currentUser ?
+					<DialogContent>
+						<Paper>
+							{
+								!isFetchingUserData || !currentUser ? (
+									<Fragment>
+										<Typography>User Settings:</Typography>
+										<List className={classes.hundredWidth}>
+											<ListItem>
+												<Checkbox
+													checked={currentUser.settings.outlineQuestions}
+													onChange={() => this.props.setOutlineQuestions(currentUsername, !currentUser.settings.outlineQuestions)}
+												></Checkbox>
+												<label>Outline Questions</label>
+											</ListItem>
+											<ListItem >
+												<TextField
+													className={classes.settingsTextField}
+													label="Auto-Backup Interval"
+													value={backupInterval}
+													onChange={this.textFieldChangeHandler("backupInterval", currentUsername, this.props.setBackupInterval)}
+													InputProps={{
+														endAdornment: <InputAdornment position="end">seconds</InputAdornment>,
+													}}
+												/>
+											</ListItem>
+											<ListItem >
+												<TextField
+													className={classes.settingsTextField}
+													label="SedLOGIN username"
+													value={sedLoginUsername}
+													onChange={this.textFieldChangeHandler("sedLoginUsername", currentUsername, this.props.setSedLoginUsername)}
+												/>
+											</ListItem>
+										</List>
+									</Fragment>
+								) : (
+										<h1>User Data Still Loading</h1>
+									)}
+						</Paper>
 
-				</DialogContent>
+					</DialogContent>
+					: <DialogContent>Settings dialog is disabled when current user is not set.</DialogContent>
+				}
 				<DialogActions>
 					<Button onClick={this.handleClose} color="primary">
 						Done
@@ -129,12 +134,17 @@ class SettingsDialog extends React.Component {
 
 
 const mapStateToProps = function (state) {
+
 	return {
 		settingsDialogVisibility: state.UI.visibility.settingsDialogVisibility,
 		isFetchingUserData: state.SedFF.isFetchingUserData,
 		currentUsername: state.SedFF.currentUsername,
 		currentUser: state.Users[state.SedFF.currentUsername],
-		sedLoginUsername: state.Users[state.SedFF.currentUsername].sedLoginUsername
+		sedLoginUsername: state.Users[state.SedFF.currentUsername] ? state.Users[state.SedFF.currentUsername].sedLoginUsername : state.SedFF.currentUsername,
+		backupInterval: state.Users[state.SedFF.currentUsername]
+			? state.Users[state.SedFF.currentUsername].settings.backupInterval
+			: DEFAULT_BACKUP_INTERVAL
+
 	}
 }
 

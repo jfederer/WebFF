@@ -14,7 +14,7 @@ const initialSedFFState = {
 	currentUsername: (localStorage.getItem('loggedInUser')) && localStorage.getItem('loggedInUser') !== 'undefined'
 		? JSON.parse(localStorage.getItem('loggedInUser'))
 		: null,
-		// : "jfederer@usgs.gov",
+	// : "jfederer@usgs.gov",
 	currentSamplingEventID: null,
 	isFetchingUserData: false,
 	fetchingUserDataComplete: false
@@ -27,12 +27,15 @@ export function SedFF(state = initialSedFFState, action) {
 		case SET_CURRENT_USERNAME:
 			newState.currentUsername = action.username;
 			return newState;
+
 		case SET_CURRENT_SAMPLING_EVENT:
 			newState.currentSamplingEventID = action.eventID;
 			return newState;
+
 		case USER_DATA_REQUEST:
 			newState.isFetchingUserData = true;
 			return newState;
+
 		case USER_DATA_LOAD_COMPLETE:
 			newState.isFetchingUserData = false;
 			newState.fetchingUserDataComplete = true;
@@ -48,6 +51,7 @@ export function SedFF(state = initialSedFFState, action) {
 		case SAMPLING_EVENT_REQUEST:
 			newState.isFetchingEventData = true;
 			return newState;
+
 		case SAMPLING_EVENT_LOAD_COMPLETE:
 			newState.isFetchingEventData = false;
 			return newState;

@@ -292,7 +292,7 @@ class ExportDialog extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		exportDialogVisibility: state.UI.visibility.exportDialogVisibility,
-		sedLOGINUsername: state.Users[state.SedFF.currentUsername].sedLoginUsername
+		sedLOGINUsername: state.Users[state.SedFF.currentUsername] ? state.Users[state.SedFF.currentUsername].sedLoginUsername : ""
 	}
 }
 
