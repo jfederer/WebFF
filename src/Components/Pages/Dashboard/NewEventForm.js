@@ -29,48 +29,44 @@ class NewEventForm extends React.Component {
 	handleSamplingEventNameChange = (e) => {
 		let allEventsIDs = getAllUsersEventIDs(this.props.currentUser.username);
 		let isDuplicate = false;
-		allEventsIDs.map((eventID)=> {
-			if(e.target.value.toUpperCase() === this.props.samplingEvents[eventID].eventName.toUpperCase()) {
-				isDuplicate = true;
+		allEventsIDs.forEach((eventID) => {
+			if (this.props.samplingEvents[eventID]) {
+				if (e.target.value.toUpperCase() === this.props.samplingEvents[eventID].eventName.toUpperCase()) {
+					isDuplicate = true;
+				}
+			} else {
+				//TODO: trigger network pull?
 			}
-			return null; //satisfy linter
 		})
-		
+
 		this.setState({ newEventButtonDisabled: isDuplicate, newSamplingEventName: e.target.value });
 	}
 
 	handleBrandNewButtonClick = () => {
-		if(!this.props.currentUser) {
+		if (!this.props.currentUser) {
 			alert("There is no current user.  You cannot create an event without a current user set.  Please reload sedFF and try again.  If failures continue, contact jfederer@usgs.gov");
 			return;
 		}
 		let newEventID = this.props.createNewSampingEventForUser( // this is a syncronous process
-			this.state.newSamplingEventName	? this.state.newSamplingEventName : "",  //deal with blank in action
+			this.state.newSamplingEventName ? this.state.newSamplingEventName : "",  //deal with blank in action
 			this.props.currentUser.username
-		); 
+		);
 
-		this.props.loadAndSetCurrentSamplingEvent(newEventID, ()=> {
+		this.props.loadAndSetCurrentSamplingEvent(newEventID, () => {
 			this.props.history.push("/FieldForm");
 			this.props.showNavigationTab("FieldForm");
-			// this.props.showNavigationTab("Data Entry")
 		});
 	}
 
-
-	// ,
-	// 		() => { //success  //TODO: this shoudl be LOAD  event action
-	// 			this.props.showNavigationTab("Field Form");
-	// 			this.props.showNavigationTab("Water Quality");
-	// 			this.props.history.push('/FieldForm');
-	// 		},
-	// 		() => { //failure
-	// 			alert("Failed to make new sampling event.");
-	// 		}
+	onPress = (ev) => {
+		if (ev.key === 'Enter' && !this.state.newEventButtonDisabled) {
+			this.handleBrandNewButtonClick();
+			ev.preventDefault();
+		}
+	}
 
 	render() {
 		const { classes } = this.props;
-
-		// const MyLink = props => <Link to="/FieldForm" {...props} />
 
 		return (
 			<Paper className={classes.paper}>
@@ -89,6 +85,7 @@ class NewEventForm extends React.Component {
 						inputProps={{
 							size: 35
 						}}
+						onKeyPress={(ev) => { this.onPress(ev) }}
 
 					/>
 
@@ -128,4 +125,4 @@ NewEventForm.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withRouter( withStyles(styles, { withTheme: true }) (connect(mapStateToProps, mapDispatchToProps)(NewEventForm)));
+export default withRouter(withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(NewEventForm)));
