@@ -109,6 +109,7 @@ class WebFF extends React.Component {
 	//BUG: Dashboard -> EventManger -> Event Summary -> BAck Button ... sends you to the FF page.
 	//BUG: average rep measures (from adding a second set) sticks around on a new event....  (Should get fixed if we reset UI before loading event)
 	//BUG: why is are we getting samples composited and "this is a group of samples" in an undefind panel on event summary (the problem is not event summary, the problem is that these are undefined)
+	
 
 	//TEST:
 	// Add/REmove station
@@ -149,6 +150,7 @@ class WebFF extends React.Component {
 	//TODO: no duplicate station names for a given user
 	//TODO: add-on analysis keeps options for things that apply to entire set... should filter them out (did at one point... bug)
 	//TODO: different summary settings (different layouts, etc)
+	//BUG: have add/remove station drop down not actually change the value to add/remove...    start
 
 	//Cleanup
 

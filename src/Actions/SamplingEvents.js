@@ -148,6 +148,8 @@ export function createNewSampingEventForUser(eventName, username) {
 		throw new Error("No username passed to createNewSamplingEventForUser function");
 	}
 
+	
+
 	return dispatch => {
 		let eventID = dispatch(createNewSamplingEvent(eventName));
 		dispatch({ type: REGISTER_EVENT_WITH_USERNAME, eventID, username });

@@ -67,7 +67,7 @@ const columns = [
 
 const initialState = {
 	toFieldForm: false,
-	toEventSummary: false
+	toEventSummary: false,
 }
 
 
@@ -75,6 +75,7 @@ class EventsManager extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = initialState;
+		this.state["data"] = this.getDataTable();
 		this.options = {
 			filterType: 'checkbox',
 			print: false,
@@ -89,40 +90,7 @@ class EventsManager extends React.Component {
 				}
 			}
 		};
-
-		//	console.log("Sampling Events: ", this.props.samplingEvents);
 	}
-
-
-	// onRowClick = (rowData: string[], rowMeta: { dataIndex: number, rowIndex: number }) => {
-	// 	console.log("----RowClick");
-	// 	console.log("rowData: ", rowData);
-	// 	console.log("rowMeta: ", rowMeta);
-	// 	console.log("Load Event: ", rowData[0]);
-	// 	console.log(this.state.goTo);
-
-	// 	// 
-	// 	// 	this.props.history.push("/FieldForm");
-	// 	// 	// this.props.showNavigationTab("FieldForm");
-	// 	// 	// this.props.showNavigationTab("Data Entry");
-
-
-
-
-
-	// 	// });
-
-	// }
-
-
-
-	// onRowsSelect = (curRowSelected, allRowsSelected) => {
-	// 	console.log("---RowSelect")
-	// 	// console.log("Row Selected: ", curRowSelected);
-	// 	// console.log("All Selected: ", allRowsSelected);
-
-	// }
-
 
 	getDataTable = () => {
 		if (!this.props.currentUser) {
@@ -142,6 +110,7 @@ class EventsManager extends React.Component {
 
 		//build table data
 		let currentUserEventIDs = getAllUsersEventIDs(this.props.currentUser.username);
+		
 
 		let currentUserEvents = currentUserEventIDs.map((eventID) => {
 			return this.props.allSamplingEvents[eventID]
@@ -171,6 +140,10 @@ class EventsManager extends React.Component {
 		return data;
 	}
 
+	componentWillReceiveProps() {
+		this.setState({data: this.getDataTable()});
+	}
+
 	componentWillUnmount() {
 		this.setState(initialState);
 	}
@@ -190,7 +163,7 @@ class EventsManager extends React.Component {
 
 		return <MUIDataTable
 			title={"Events Manager"}
-			data={this.getDataTable()}
+			data={this.state.data}
 			columns={columns}
 			options={this.options}
 		/>
