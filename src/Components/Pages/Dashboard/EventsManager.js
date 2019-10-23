@@ -171,15 +171,15 @@ class EventsManager extends React.Component {
 		return data;
 	}
 
-	componentDidMount() {
-		this.setState({ data: this.getDataTable() });
-	}
-
 	componentWillUnmount() {
 		this.setState(initialState);
 	}
 
 	render() {
+		// const {fetchingUserDataComplete}
+
+		// console.log("EventMangager Render Props: ", this.props);
+
 		if (this.state.toFieldForm) {
 			return <Redirect to='/FieldForm' /> //loading event happens in the onCellClick and toFieldForm doesn't get set until the leader callback
 		}
@@ -190,7 +190,7 @@ class EventsManager extends React.Component {
 
 		return <MUIDataTable
 			title={"Events Manager"}
-			data={this.state.data}
+			data={this.getDataTable()}
 			columns={columns}
 			options={this.options}
 		/>

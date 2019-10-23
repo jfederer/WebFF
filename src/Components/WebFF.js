@@ -80,12 +80,12 @@ class WebFF extends React.Component {
 
 	//BREAKING:
 	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
-		//TODO: loading event should reset nav menu (both remove and add items as needed)
+	//TODO: loading event should reset nav menu (both remove and add items as needed)
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
 	//TODO: Style sheet
-		//TODO: getQuestionsData needs to get updated in eventID...
-		//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
+	//TODO: getQuestionsData needs to get updated in eventID...
+	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
 	//TODO: webserver, network loads
 	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
 	//TODO: Does not check for updated data outside localstorage
@@ -150,7 +150,7 @@ class WebFF extends React.Component {
 	//TODO: different summary settings (different layouts, etc)
 
 	//Cleanup
-	
+
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 	//TODO: Multiple Sampling evnts at same time...
@@ -268,7 +268,7 @@ class WebFF extends React.Component {
 	}
 
 	render() {
-		const { classes, sedff, UI, currentUser, isFetchingUserData } = this.props;
+		const { classes, UI, currentUser, isFetchingUserData, fetchingUserDataComplete } = this.props;
 
 		if (currentUser === undefined && this.props.location.pathname !== '/') {
 			console.log("There is no currentuser...going to login page");
@@ -283,45 +283,45 @@ class WebFF extends React.Component {
 			<React.Fragment>
 				{isFetchingUserData === true
 					? <img src={loading} alt="LOADING"></img>  //TODO:  better behavior
-					: null }
-					 
-					<React.Fragment>
-						<div className={classes.root} >
-							<AppBar
-								position="absolute"
-								className={classNames(classes.appBar, UI.visibility.expandedNavMenu && classes.appBarShift)}
-							>
-								<Toolbar disableGutters={!UI.visibility.expandedNavMenu}>
-									<IconButton
-										color="inherit"
-										aria-label="expand drawer"
-										onClick={() => this.props.setNavMenuExpand(true)}
-										className={classNames(classes.menuButton, UI.visibility.expandedNavMenu && classes.hide)}
-									>
-										<ChevronRightIcon />
-									</IconButton>
+					: null}
 
-									<Typography variant="h4" color="inherit" noWrap>
-										{UI.appBarText}
-									</Typography>
+				<React.Fragment>
+					<div className={classes.root} >
+						<AppBar
+							position="absolute"
+							className={classNames(classes.appBar, UI.visibility.expandedNavMenu && classes.appBarShift)}
+						>
+							<Toolbar disableGutters={!UI.visibility.expandedNavMenu}>
+								<IconButton
+									color="inherit"
+									aria-label="expand drawer"
+									onClick={() => this.props.setNavMenuExpand(true)}
+									className={classNames(classes.menuButton, UI.visibility.expandedNavMenu && classes.hide)}
+								>
+									<ChevronRightIcon />
+								</IconButton>
 
-									<IconButton
-										color="inherit"
-										aria-label="System Menu"
-										onClick={() => this.props.setSysMenuExpand(true)}
-										className={classNames(classes.menuButton, classes.rightJustify, UI.visibility.expandedSysMenu && classes.hide)}
-									>
-										<MenuIcon />
-									</IconButton>
-								</Toolbar>
-							</AppBar>
+								<Typography variant="h4" color="inherit" noWrap>
+									{UI.appBarText}
+								</Typography>
 
-							<NavMenu />
+								<IconButton
+									color="inherit"
+									aria-label="System Menu"
+									onClick={() => this.props.setSysMenuExpand(true)}
+									className={classNames(classes.menuButton, classes.rightJustify, UI.visibility.expandedSysMenu && classes.hide)}
+								>
+									<MenuIcon />
+								</IconButton>
+							</Toolbar>
+						</AppBar>
 
-							<SystemMenu />
-							<LoginDialog />
-							{isFetchingUserData !== true ? <React.Fragment>
-								<ExportDialog
+						<NavMenu />
+
+						<SystemMenu />
+						<LoginDialog />
+						{fetchingUserDataComplete === true ? <React.Fragment>
+							<ExportDialog
 								//TODO: REDUX
 								eventID={this.props.currentSamplingEventID}
 								setShippedStatus={this.setShippedStatus}
@@ -333,11 +333,11 @@ class WebFF extends React.Component {
 							<SettingsDialog />
 							<AboutDialog />
 							<SwitchUserDialog />
-							 </React.Fragment>
-							: null }
+						</React.Fragment>
+							: null}
 
 
-							{/* <SystemDialog isOpen={this.state.dialogOpen}
+						{/* <SystemDialog isOpen={this.state.dialogOpen}
 						closeHandler={this.handleDialogClose}
 						dialogQuestions={this.state.curDialogQuestions}
 						dialogName={this.state.curDialogName}
@@ -353,38 +353,38 @@ class WebFF extends React.Component {
 
 
 
-							{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
+						{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
 						
 					/> */}
 
-							<main className={classes.content} >
-								<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
+						<main className={classes.content} >
+							<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
-								{/* {this.state.routesAndPages} */}
-								<Switch>
-									<Route exact path="/" component={Dashboard} />
-									<Route path="/Dashboard" component={Dashboard} />
-									<Route path="/FieldForm" component={FieldForm} />
-									<Route path="/DataEntry" component={DataEntry} />
-									<Route path="/Parameters" component={Parameters} />
-									<Route path="/QWDATA" component={QWDATA} />
-									<Route path="/EventSummary/:eventID" component={EventSummary} />
+							{/* {this.state.routesAndPages} */}
+							<Switch>
+								<Route exact path="/" component={Dashboard} />
+								<Route path="/Dashboard" component={Dashboard} />
+								<Route path="/FieldForm" component={FieldForm} />
+								<Route path="/DataEntry" component={DataEntry} />
+								<Route path="/Parameters" component={Parameters} />
+								<Route path="/QWDATA" component={QWDATA} />
+								<Route path="/EventSummary/:eventID" component={EventSummary} />
 
-									<Route path="/error" component={ErrorPage} />
-								</Switch>
+								<Route path="/error" component={ErrorPage} />
+							</Switch>
 
 
-								{/* {!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
+							{/* {!isReasonablyValidUsernameInLS() && this.props.location.pathname !== '/'
 							? <Redirect to='/' />
 							: null} */}
 
-							</main>
-						</div >
-						{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
-						{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
-						{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
-					</React.Fragment>
-				
+						</main>
+					</div >
+					{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
+					{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
+					{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
+				</React.Fragment>
+
 				{/* <Button onClick={()=>console.log(getActiveSedimentTypes(this.props.currentSamplingEventID))}>TEST</Button> */}
 			</React.Fragment>
 
@@ -402,6 +402,7 @@ const mapStateToProps = function (state) {
 		users: state.Users,
 		sedff: state.SedFF,
 		isFetchingUserData: state.SedFF.isFetchingUserData,
+		fetchingUserDataComplete: state.SedFF.fetchingUserDataComplete,
 		events: state.Events,
 		currentUser: state.Users[state.SedFF.currentUsername],
 		currentSamplingEventID: state.SedFF.currentSamplingEventID

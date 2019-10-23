@@ -16,7 +16,7 @@ const initialSedFFState = {
 		: null,
 		// : "jfederer@usgs.gov",
 	currentSamplingEventID: null,
-	isFetchingUserData: true,
+	isFetchingUserData: false,
 	fetchingUserDataComplete: false
 };
 
