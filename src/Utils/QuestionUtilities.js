@@ -99,9 +99,10 @@ export const getQuestionValue = (eventID, questionID, ...sub_QIDs) => {
 	if (DEBUG) console.log("FUNC: getQuestionValue(", eventID, questionID, ...sub_QIDs, ")");
 	//TODO: look for dialog questions, system questions
 
+
 	let event = getEventFromID(eventID);
 
-	let questionsData = getQuestionsData();  // questions data is a combo of global questionsData, currentEvent, currentUser, and currentStation questionsData
+	let questionsData = getQuestionsData(eventID, true);  // questions data is a combo of global questionsData, currentEvent, currentUser, and currentStation questionsData
 
 	if (DEBUG) console.log('getQuestionValue: questionsData :', questionsData);
 
@@ -292,10 +293,10 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 			}
 		}
 		catch (e) {
-			if (e instanceof TypeError) {
-				if (!key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER))
-					console.debug("tabName did not exist for questionsData[", key, "]: ", questionsData[key]);
-			}
+			// if (e instanceof TypeError) {
+			// 	if (!key.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER))
+			// 		console.debug("tabName did not exist for questionsData[", key, "]: ", questionsData[key]);
+			// }
 
 		}
 	});

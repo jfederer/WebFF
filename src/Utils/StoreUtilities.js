@@ -80,35 +80,36 @@ export function getEventFromID(eventID) {
 @desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's... defaultSetInformation and the global default questionsData
 @returns {object} combined questionsData object.
 */
-export function getQuestionsData(eventID) {  //OPTIMIZE:  THIS RUNS ALOT! //TODO: add eventID
+export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  THIS RUNS ALOT!
 	let state = store.getState();
 
+	// get USER questions data
 	let currentUserQD = {};
 	let username = state.SedFF.currentUsername;
 	if (username) {
 		currentUserQD = getUserQuestionData(username);
 	} else {
-		console.warn("Collecting user data without active username.")
+		console.warn("Attempting to collecting user data without active username.")
 	}
 
+	// get EVENT questions data
 	let currentEventQD = {};
-	let currentStationQD = {};
-
-		
-	if(!eventID) {
-		eventID = state.SedFF.currentSamplingEventID;
+	if (eventID) { // this might be run whn there is no current sampling event (ie: upon event creation)
+		let event = getEventFromID(eventID);
+		if (event) {
+			currentEventQD = getEventQuestionData(event);
+		}
 	}
-
-	let event = state.SamplingEvents[eventID]; //note, currentEvent is used below to get stationName
-	if (event) {
-		currentEventQD = getEventQuestionData(event);
-
-		let stationNameValue = getQuestionValue[eventID, 'stationName'];
+	
+	// get STATION questions data
+	let currentStationQD = {};
+	if (eventID && !fromGetQuestionValue) {
+		let stationNameValue = getQuestionValue(eventID, 'stationName');
 		if (stationNameValue && username) {
 			currentStationQD = getStationNameQuestionData(username, stationNameValue);
 		}
 	}
-
+	
 	let defaultSetInfoQD = getSetInformationQuestionsData();
 
 	let defaultQD = store.getState().Questions.questionsData;
@@ -147,10 +148,10 @@ export function getEventQuestionData(event) {
  * @returns {Object} the questionsData (custom questions) for a given stationName
  */
 export function getStationNameQuestionData(username, stationName) {
-	if(!username) {
+	if (!username) {
 		throw new Error("Requested username '" + username + "' was falsey with type of: " + typeof username);
 	}
-	if(!stationName) {
+	if (!stationName) {
 		throw new Error("Requested stationName '" + stationName + "' was falsey with type of: " + typeof stationName);
 	}
 
@@ -172,7 +173,7 @@ export function getStationNameQuestionData(username, stationName) {
  * @returns {Object} the questionsData (custom questions) for a given stationID
  */
 export function getStationIDQuestionData(stationID) {
-	if(!stationID) {
+	if (!stationID) {
 		throw new Error("Requested stationID '" + stationID + "' was falsey with type of: " + typeof stationID);
 	}
 	let station = getStationFromID(stationID);
@@ -183,7 +184,7 @@ export function getStationIDQuestionData(stationID) {
 	} else {
 		return getStationQuestionData(station);
 	}
-	
+
 }
 
 /**
@@ -191,7 +192,7 @@ export function getStationIDQuestionData(stationID) {
  * @returns {Object} the questionsData (custom questions) for a given station
  */
 export function getStationQuestionData(station) {
-	if(!station) {
+	if (!station) {
 		throw new Error("Requested station '" + station + "' was falsey with type of: " + typeof station);
 	}
 	return station.questionsData;
@@ -205,7 +206,7 @@ export function getStationQuestionData(station) {
 @param {string} questionID  - the question ID - can be multiple
 @returns {object} question .  If the object is not found, warns and returns null.
 */
-export function getQuestionDataFromID(eventID, ...QIDs) { 
+export function getQuestionDataFromID(eventID, ...QIDs) {
 	//TODO: build this recursively, like getQuestionValue, to work with nested questions?
 
 	let questionsData = getQuestionsData(eventID);
@@ -218,7 +219,7 @@ export function getQuestionDataFromID(eventID, ...QIDs) {
 }
 
 export function recursiveGetQuestionDataFromID(questionsData, ...QIDs) {
-	if(QIDs.length>1) {
+	if (QIDs.length > 1) {
 		console.warn("This part of recursiveGetQuestionDataFromID is untested.")
 		return recursiveGetQuestionDataFromID(questionsData[QIDs.shift(), QIDs])
 	}
@@ -245,7 +246,7 @@ export function getSetInformationQuestionsData() {
 
 export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
 	let evts = store.getState().LinkTables.userEvents[username];
-	if(typeof evts === 'undefined') {
+	if (typeof evts === 'undefined') {
 		return [];
 	}
 	return evts;
@@ -264,7 +265,7 @@ export function getCurrentStationID() {
 }
 
 export function getStationFromID(stationID) {
-	if(!stationID) {
+	if (!stationID) {
 		throw new Error("Requested stationID '" + stationID + "' was falsey with type of: " + typeof stationID);
 	}
 	return store.getState().Stations[stationID];
@@ -273,7 +274,7 @@ export function getStationFromID(stationID) {
 export function getStationIDsFromName(username, stationName) {	//find station number
 	// console.log("getStationIDsFromName(", username, ",", stationName, ")");
 	let stationIDList = store.getState().LinkTables.userStations[username];
-	if(!stationIDList) {
+	if (!stationIDList) {
 		//TODO: trigger network?
 		console.warn("User, " + username + ", has no stations in stations.");
 		return null;

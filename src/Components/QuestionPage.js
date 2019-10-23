@@ -51,9 +51,8 @@ class QuestionPage extends React.Component {
 
 	render() {
 		const DEBUG = false;
-		const { tabName, currentEvent } = this.props;
-		const { hiddenPanels } = this.props.UI.visibility;
-
+		const { tabName, currentEvent, currentSamplingEventID, hiddenPanels} = this.props;
+		
 		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
 		// if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
@@ -69,7 +68,7 @@ class QuestionPage extends React.Component {
 		if (this.props.questionsData) {
 			questionsData = Object.values(this.props.questionsData);
 		} else {
-			questionsData = getQuestionsData();
+			questionsData = getQuestionsData(currentSamplingEventID);
 		}
 
 
@@ -168,9 +167,10 @@ const mapStateToProps = function (state) {
 		//sedff: state.SedFF, // loading / fetching data
 		// currentUser: state.Users[state.SedFF.currentUsername],
 		//samplingEvents: state.SamplingEvents,
-		UI: state.UI,
+		hiddenPanels: state.UI.visibility.hiddenPanels,
 		// questionsData: state.Questions.questionsData,
 		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
 
 		//unused, just here to trigger re-renders
 		TRIGGER_questionsData: state.Questions.questionsData,

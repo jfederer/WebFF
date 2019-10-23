@@ -181,14 +181,13 @@ export function createNewSamplingEvent(eventName) {
 
 
 		// find all questions with actual default 'values' in questionsData and include those in the new event
-		let filtered = _.filter(getQuestionsData(), (QD) =>
+		let filtered = _.filter(getQuestionsData(null), (QD) =>  //TODO: could we use newEvent.eventID
 			typeof QD.value !== 'undefined' && // undefined gets filtered out
 			(QD.value || QD.value === 0 || typeof QD.value === 'boolean') && // truthy value, zero, and booleans make it through filter
 			(typeof QD.value !== 'object' || Object.keys(QD).length < 1)
 		);
-		Object.keys(filtered).map((key) => {
+		Object.keys(filtered).forEach((key) => {
 			newEvent['questionsValues'][filtered[key].id] = filtered[key].value;
-			return null // safisfy linter
 		}
 		);
 
