@@ -94,6 +94,7 @@ export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  
 
 	// get EVENT questions data
 	let currentEventQD = {};
+	let event;
 	if (eventID) { // this might be run whn there is no current sampling event (ie: upon event creation)
 		let event = getEventFromID(eventID);
 		if (event) {
@@ -103,7 +104,7 @@ export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  
 	
 	// get STATION questions data
 	let currentStationQD = {};
-	if (eventID && !fromGetQuestionValue) {
+	if (eventID && !fromGetQuestionValue && event) {
 		let stationNameValue = getQuestionValue(eventID, 'stationName');
 		if (stationNameValue && username) {
 			currentStationQD = getStationNameQuestionData(username, stationNameValue);

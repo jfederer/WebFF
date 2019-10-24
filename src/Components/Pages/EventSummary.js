@@ -43,11 +43,6 @@ class EventSummary extends React.Component {
 	constructor(props) {
 		super(props);
 		this.props.setAppBarText("SedFF → Event Summary");
-		const { eventID } = this.props.match.params;
-		this.state = {
-			event: getEventFromID(eventID),
-			questionsData: getQuestionsData(eventID)
-		}
 	}
 
 	buildRow(arr, tableName, rowNum) {
@@ -147,18 +142,21 @@ class EventSummary extends React.Component {
 	}
 
 	render() {
-		const { event, questionsData } = this.state;
 		const { eventID } = this.props.match.params;
 
-		if (!event) {
-			alert("Event ID, '" + eventID + "', did not match any events.  Redirecting to dashboard..");
-			return <Redirect to='/' />
-		}
-		if (!questionsData) {
-			console.error("Event ID, '" + eventID + "', did not match any questionsData.  Redirecting to dashboard..");
-			return <Redirect to='/' />
-		}
+		let event = getEventFromID(eventID);
 
+		if (!event) {
+			//TODO: trigger network pull?
+			alert("Event ID, '" + eventID + "', did not match any events.  Redirecting to dashboard...");
+			return <Redirect to='/' />
+		}
+		let questionsData = getQuestionsData(eventID);
+
+		if (!questionsData) {
+			console.error("Event ID, '" + eventID + "', did not return any questionsData.  Redirecting to dashboard...");
+			return <Redirect to='/' />
+		}
 
 		let FFSummary = {};
 		let DESummary = {};
