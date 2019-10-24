@@ -8,7 +8,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -22,13 +21,9 @@ import {
 	Redirect
 } from 'react-router-dom';
 
-import { isReasonablyValidUsernameInLS, isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
+import { isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import {
-	USER_DB_NODES, SAMPLING_EVENT_IDENTIFIER,
-	dialogQuestions, defaultHiddenTabs, defaultHiddenPanels, DATA_ENTRY_INFORMATION_IDENTIFIER
-	// QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, MAX_NUM_OF_SETS, QIDS_LINKED_TO_STATION_NAME
-} from '../Constants/Config';   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';  
 
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility, hideQuestion } from '../Actions/UI';
 import { loadAndSetCurrentUser } from '../Actions/SedFF';
@@ -131,6 +126,7 @@ class WebFF extends React.Component {
 	//TODO: duplicate just stationing (vs all - optionally) from set to set ... even existing?
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
 	//TODO: disable system menu buttons when they can't apply
+	 //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 
 	//Would be nice:
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)

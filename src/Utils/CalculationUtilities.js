@@ -1,5 +1,5 @@
 import { SAMPLE_TIME_HEADER } from '../Constants/Dictionary';
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION_IDENTIFIER} from '../Constants/Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue, getDescriptiveColumnForTable } from './QuestionUtilities';
 import { getSetListAsArray, getNumberOfSamplesInSet, checkForValidSedimentType } from './StoreUtilities';
 
@@ -102,7 +102,7 @@ export const getEstimatedTimeColumn = (eventID, sedType) => {
 				? ('0' + d.getHours()).slice(-2) + ":" + ('0' + (d.getMinutes())).slice(-2)
 				: "";
 		}
-		totalNumberOfSamplesInPreviousSets += ai ? eval(numberOfSamplesInSet) : eval(1); // if this set was a composite, it was only one line in the QWDATA Table
+		totalNumberOfSamplesInPreviousSets += ai ? parseInt(numberOfSamplesInSet) : parseInt(1); // if this set was a composite, it was only one line in the QWDATA Table
 	});
 
 	return estimatedTimeColumn;

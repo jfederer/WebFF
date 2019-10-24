@@ -7,7 +7,6 @@ import {
 	REMOVE_STATION_FROM_USERNAME
 } from '../Constants/ActionTypes';
 
-import { emptyUser } from '../Constants/DefaultObjects';
 import { getStationIDsFromName } from '../Utils/StoreUtilities';
 
 

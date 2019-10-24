@@ -10,9 +10,9 @@ import FormControl from '@material-ui/core/FormControl';
 import { SEQuestionValueChange, stationNameChanged } from '../../Actions/SamplingEvents';
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
 import { ADD_STATION } from '../../Constants/Dictionary';
-import { getStationFromID, getUsersStationIDs } from '../../Utils/StoreUtilities';
+import { getStationFromID } from '../../Utils/StoreUtilities';
 import _ from 'lodash';
-import { objectTypeSpreadProperty, jsxClosingElement } from '@babel/types';
+
 
 
 //TODO: generate minWidth based on content & label
@@ -98,7 +98,7 @@ class StationDropDown extends React.Component {
 
 
 	render() {
-		const { classes, value } = this.props;
+		const { classes } = this.props;
 
 		let options = this.getOptions();
 

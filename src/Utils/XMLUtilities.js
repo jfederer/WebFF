@@ -1,5 +1,3 @@
-import React from 'react'; //lets me use JSX
-import Question from '../Components/Question';
 import xmljs from 'xml-js';
 import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../Constants/Config';
 import { getQuestionValue, getActiveSedimentTypes, getMethodCategoryFromValue } from './QuestionUtilities';

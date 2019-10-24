@@ -23,7 +23,7 @@ import { SEQuestionValueChange, stationNameChanged } from '../../Actions/Samplin
 import { setAddRemoveStationDialogVisibility } from '../../Actions/UI';
 import { createNewStationForUser, removeStationFromUser } from '../../Actions/Stations';
 import Question from '../Question';
-import { getUsersStationIDs, getStationFromID } from '../../Utils/StoreUtilities';
+import { getStationFromID } from '../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import { Typography } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';

@@ -16,7 +16,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import {getSedLOGINcompatibleXML} from '../../Utils/XMLUtilities';
-import {getEventFromID} from '../../Utils/StoreUtilities';
 
 import { saveFile } from '../../Utils/FileHandling';
 

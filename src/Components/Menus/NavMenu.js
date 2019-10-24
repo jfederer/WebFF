@@ -18,7 +18,7 @@ import { materialIconBuilder } from '../../Utils/MaterialIcons';
 
 import { navMenuItems } from '../../Constants/NavMenu';
 import { setNavMenuExpand } from '../../Actions/UI';
-import { shouldDataEntryTabShow } from '../../Utils/UIUtilities';
+
 
 
 function createNavItem(menuItem) {

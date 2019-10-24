@@ -18,7 +18,6 @@ import { showNavigationTab } from "../../../Actions/UI";
 import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import Button from '@material-ui/core/Button';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 const columns = [
 	{

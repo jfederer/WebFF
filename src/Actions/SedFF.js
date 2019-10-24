@@ -12,8 +12,6 @@ import {
 import { makeNewUser } from './User';
 
 import { updateNavMenu } from './UI';
-import { getQuestionValue } from '../Utils/QuestionUtilities';
-
 
 // ****** Terminology ***********
 //LOAD = triggered overall event

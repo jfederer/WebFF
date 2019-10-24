@@ -14,7 +14,7 @@ import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFI
 import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
-import { getNumberOfSets, getSetListAsArray, getSetListAsObject, getQuestionDataFromID } from '../../../Utils/StoreUtilities';
+import { getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
 import { getSetInformationQuestionsData } from '../../../Utils/StoreUtilities';
 
 

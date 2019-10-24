@@ -8,16 +8,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import _ from 'lodash';
 
 
 import { setAppBarText } from '../../Actions/UI';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import {
 	NOT_SAMPLED,
-	SUSPENDED_TEXT,
-	BEDLOAD_TEXT,
-	BOTTOM_MATERIAL_TEXT
 } from '../../Constants/Dictionary';
 import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_ENTRY_SHEET_TYPE, PARAMETER_TABLE_TYPE, QWDATA_TABLE_TYPE, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER } from '../../Constants/Config';
 import DataEntrySheet from '../Questions/DataEntrySheet';

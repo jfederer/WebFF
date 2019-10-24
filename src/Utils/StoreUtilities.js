@@ -221,7 +221,7 @@ export function getQuestionDataFromID(eventID, ...QIDs) {
 export function recursiveGetQuestionDataFromID(questionsData, ...QIDs) {
 	if (QIDs.length > 1) {
 		console.warn("This part of recursiveGetQuestionDataFromID is untested.")
-		return recursiveGetQuestionDataFromID(questionsData[QIDs.shift(), QIDs])
+		return recursiveGetQuestionDataFromID(questionsData[QIDs.shift()], QIDs)
 	}
 	return questionsData[QIDs[0]];
 }
