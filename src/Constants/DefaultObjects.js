@@ -394,6 +394,70 @@ export const defaultSetInformationQuestionsData = {
 }
 
 
+export const defaultWaterwayInfoQuestionsData = {
+	
+	edgeOfWater_Left: {
+		"id": "edgeOfWater_Left",
+		"label": "Left Edge Of Water",
+		"type": "Text",
+		"placeholder": "Feet from XYZ",
+		"value": "",
+		"tabName": "FieldForm",
+		"layoutGroup": "Waterway Info",
+		"width_xs": 6,
+		"width_lg": 2
+	},
+
+	edgeOfSamplingZone_Left: {
+		"id": "edgeOfSamplingZone_Left",
+		"label": "Left Edge Of Sampling Zone",
+		"type": "Text",
+		"placeholder": "Feet from XYZ",
+		"value": "",
+		"tabName": "FieldForm",
+		"layoutGroup": "Waterway Info",
+		"width_xs": 6,
+		"width_lg": 3
+	},
+
+	edgeOfSamplingZone_Right: {
+		"id": "edgeOfSamplingZone_Right",
+		"label": "Right Edge Of Sampling Zone",
+		"type": "Text",
+		"placeholder": "Feet from XYZ",
+		"value": "",
+		"tabName": "FieldForm",
+		"layoutGroup": "Waterway Info",
+		"width_xs": 5,
+		"width_lg": 3
+	},
+
+	edgeOfWater_Right: {
+		"id": "edgeOfWater_Right",
+		"label": "Right Edge Of Water",
+		"type": "Text",
+		"placeholder": "Feet from XYZ",
+		"value": "",
+		"tabName": "FieldForm",
+		"layoutGroup": "Waterway Info",
+		"width_xs": 5,
+		"width_lg": 2
+	},
+
+	streamWidth: {
+		"id": "streamWidth",
+		"label": "Stream Width",
+		"XMLTag": "P00004",
+		"type": "ComputedValue",
+		"computationString": "edgeOfWater_Right-edgeOfWater_Left",
+		"placeholder": "This will be calculated",
+		"value": "",
+		"tabName": "FieldForm",
+		"layoutGroup": "Waterway Info",
+		"width_xs": 2,
+		"width_lg": 2
+	},
+}
 
 
 
@@ -959,210 +1023,14 @@ export const defaultQuestionsData = {
 		"width_lg": 3
 	},
 
-	edgeOfWater_Left: {
-		"id": "edgeOfWater_Left",
-		"label": "Left Edge Of Water",
-		"type": "Text",
-		"placeholder": "Feet from XYZ",
+	waterwayInfo: {
+		"id": "waterwayInfo",
+		"type": "WaterwayInfo",
 		"value": "",
 		"tabName": "FieldForm",
 		"layoutGroup": "Waterway Info",
-		"width_xs": 6,
-		"width_lg": 2
-	},
-
-	edgeOfSamplingZone_Left: {
-		"id": "edgeOfSamplingZone_Left",
-		"label": "Left Edge Of Sampling Zone",
-		"type": "Text",
-		"placeholder": "Feet from XYZ",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 6,
-		"width_lg": 3
-	},
-
-	edgeOfSamplingZone_Right: {
-		"id": "edgeOfSamplingZone_Right",
-		"label": "Right Edge Of Sampling Zone",
-		"type": "Text",
-		"placeholder": "Feet from XYZ",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 5,
-		"width_lg": 3
-	},
-
-	edgeOfWater_Right: {
-		"id": "edgeOfWater_Right",
-		"label": "Right Edge Of Water",
-		"type": "Text",
-		"placeholder": "Feet from XYZ",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 5,
-		"width_lg": 2
-	},
-
-	streamWidth: {
-		"id": "streamWidth",
-		"label": "Stream Width",
-		"XMLTag": "P00004",
-		"type": "ComputedValue",
-		"computationString": "edgeOfWater_Right-edgeOfWater_Left",
-		"placeholder": "This will be calculated",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 2
-	},
-
-	pier1_start: {
-		"id": "pier1_start",
-		"label": "Pier 1 Start",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier2_start: {
-		"id": "pier2_start",
-		"label": "Pier 2 Start",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier3_start: {
-		"id": "pier3_start",
-		"label": "Pier 3 Start",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier4_start: {
-		"id": "pier4_start",
-		"label": "Pier 4 Start",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier5_start: {
-		"id": "pier5_start",
-		"label": "Pier 5 Start",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier6_start: {
-		"id": "pier6_start",
-		"label": "Pier 6 Start",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier1_end: {
-		"id": "pier1_end",
-		"label": "Pier 1 End",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier2_end: {
-		"id": "pier2_end",
-		"label": "Pier 2 End",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier3_end: {
-		"id": "pier3_end",
-		"label": "Pier 3 End",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier4_end: {
-		"id": "pier4_end",
-		"label": "Pier 4 End",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier5_end: {
-		"id": "pier5_end",
-		"label": "Pier 5 End",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
-	},
-
-	pier6_end: {
-		"id": "pier6_end",
-		"label": "Pier 6 End",
-		"type": "Text",
-		"placeholder": "Feet",
-		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 1
+		"width_xs": 12,
+		"width_lg": 12
 	},
 
 

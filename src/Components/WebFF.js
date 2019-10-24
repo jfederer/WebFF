@@ -71,6 +71,7 @@ class WebFF extends React.Component {
 	//TODO: 'ratio of vertical' doesn't make it to XML... issue?
 	//TODO: 'intake efficiency' doesn't make it to XML... issue?
 	//TODO: "Sampling depth" doesn't go into XML?
+	//TODO: where should "L" or "R" bank be saved?  User? Station? Event?
 
 
 	//BREAKING:

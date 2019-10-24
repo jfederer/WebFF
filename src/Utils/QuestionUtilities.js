@@ -17,7 +17,7 @@ export const createQuestionComponents = (questionsData, questionsValues, alterna
 	if(typeof opts === "undefined") {
 		opts = {}
 	}
-	// console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, ")");
+	// console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, opts, ")");
 	// creates one question component for every question in questionsData
 	// if value exists in currentSamplingEvent, this value takes precidence over value from questionsData
 	// returns array of question components

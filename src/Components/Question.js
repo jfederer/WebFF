@@ -18,6 +18,7 @@ import ParametersTable from './Questions/ParametersTable';
 import QWDATATable from './Questions/QWDATATable';
 import SetInformation from './Questions/SetInformation';
 import StationDropDown from './Questions/StationDropDown';
+import WaterwayInfo from './Questions/WaterwayInfo';
 
 //this.state.value always contains the up-to-date question values/answers.
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
@@ -121,6 +122,10 @@ class Question extends React.Component {
 				theQ = <SetInformation {...this.props} />;
 				break;
 			}
+			case 'WaterwayInfo' : {
+				theQ = <WaterwayInfo {...this.props} />;
+				break;
+			}
 			default: {
 				//TODO: Throw error
 				console.log("Question " +this.props.type+ " doesn't match any type");
@@ -172,7 +177,7 @@ class Question extends React.Component {
 		placeholder: PropTypes.string,
 		XMLTag: PropTypes.string,
 		type: PropTypes.oneOf(['Text', "QWDATATable", "ParametersTable", "ButtonInput", 'DropDown', 'MultipleChoice', 'Toggle', "TableInput", "Checkbox", 
-							"DateInput", "TimeInput", "ComputedValue", "SetInformation", "StationDropDown"]).isRequired,
+							"DateInput", "TimeInput", "ComputedValue", "SetInformation", "StationDropDown", "WaterwayInfo"]).isRequired,
 		selectOptions: PropTypes.arrayOf(PropTypes.object),
 
 		//TODO: custom validator prop types https://reactjs.org/docs/typechecking-with-proptypes.html
