@@ -3,9 +3,6 @@ import React from 'react';
 import { styles } from '../../style';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
 import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import SummaryTable from './SummaryTable';
@@ -15,7 +12,7 @@ import KVPair from './KVPair';
 class SetSummary extends React.Component {
 
 	render() {
-		const { classes, questionData, questionValues } = this.props;
+		const { questionData, questionValues } = this.props;
 
 		let sampleTable = null;
 		let KVPairs = [];

@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { styles } from '../../style';
-import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { getEventFromID, getQuestionsData, getQuestionDataFromID } from '../../Utils/StoreUtilities';
 
 import { setAppBarText } from '../../Actions/UI'; //TODO: we don't atually set appbar text
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, PCODE_MATCHING_REGEX, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, SEDIMENT_TYPES } from '../../Constants/Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, PCODE_MATCHING_REGEX, 
+	QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER } from '../../Constants/Config';
 import { Typography } from '@material-ui/core';
 import { Fragment } from 'react';
-import { getQuestionValue, getTabQuestionsData, getLayoutGroupNames, getLayoutGroupQuestionsData } from '../../Utils/QuestionUtilities';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -67,13 +67,12 @@ class EventSummary extends React.Component {
 
 		let bodyRows = tableValue.map((row, rowNum) => {
 			if (rowNum === 0 && tableData.colHeaders) {
-				return;
+				return null;
 			} else {
 				return this.buildRow(row, tableName, rowNum);
 			}
-		})
-		bodyRows.shift();  // remove the header row from the bodyRows
-
+		}).filter(el=>el);
+	
 		return (<Table key={"Summary_" + tableName + "_Table" + tableData.id}>
 			<TableHead>{headRow}</TableHead>
 			<TableBody>{bodyRows}</TableBody>

@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamplesInSet, checkForValidSedimentType } from './StoreUtilities';
 import {
-	SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
+	DATA_ENTRY_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
 	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY, IDENTIFIER_SPLITTER, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER,
 	METHOD_QIDS
 } from '../Constants/Config';
@@ -243,44 +243,14 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 	return descColumn;
 }
 
-
 export function getActiveSedimentTypes(eventID) {
 	return Object.keys(METHOD_QIDS).filter(sedType => {
 		if (getQuestionValue(eventID, METHOD_QIDS[sedType]) !== NOT_SAMPLED) {
-			return sedType;
+			return true;
 		}
+		return false;
 	});
 }
-
-// export const getQuestionDataFromQuestionsDataByQuestionID = (questionsData, questionID) => {
-// 	let DEBUG = false;
-
-// 	if (DEBUG) console.log("--------------");
-// 	if (DEBUG) console.log(questionsData);
-// 	if (DEBUG) console.log("looking for questionID: ", questionID);
-
-// 	let questionData = questionsData.filter(questionData => {
-
-// 		// var areEqual = questionData.id.toUpperCase() === questionID.toUpperCase();
-// 		// console.log(questionData.id + " " + areEqual);
-
-// 		if (questionData.id === questionID) {
-// 			if (DEBUG) console.log("Found");
-// 			return questionData;
-// 		}
-// 		return null;
-// 	}
-// 	);
-
-// 	if (DEBUG) console.log(questionData);
-
-// 	if (questionData != null && questionData.length === 1) {
-
-// 		return questionData[0];
-// 	} else {
-// 		return null; //TODO: throw errors
-// 	}
-// }
 
 export const getTabQuestionsData = (questionsData, tabName) => {
 	//given OBJECT questionsData and STRING tabName... 

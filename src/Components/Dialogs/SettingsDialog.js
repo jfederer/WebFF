@@ -33,13 +33,7 @@ class SettingsDialog extends React.Component {
 	//FUTURE: "save settings to db" button
 	//FUTURE: import/export settings
 
-	constructor(props) {
-		super(props);
-		const { currentUser } = this.props;
-		this.state = {
 
-		};
-	}
 
 	handleClose = () => {
 		this.props.setSettingsDialogVisibility(false);

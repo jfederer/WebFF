@@ -3,9 +3,6 @@ import React from 'react';
 import { styles } from '../../style';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
 import { Typography } from '@material-ui/core';
 
 
@@ -13,7 +10,7 @@ import { Typography } from '@material-ui/core';
 class KVPair extends React.Component {
 
 	render() {
-		const { classes, label, value } = this.props;
+		const {  label, value } = this.props;
 
 		let safeValue = value;
 		if (typeof value === 'object') {

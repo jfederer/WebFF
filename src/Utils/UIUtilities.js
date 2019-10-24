@@ -1,7 +1,6 @@
 import { getQuestionValue, getActiveSedimentTypes } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import { METHOD_QIDS, DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
-import { NOT_SAMPLED } from '../Constants/Dictionary';
 
 export function shouldDataEntryTabShow(eventID) {
 	if (eventID === null) {

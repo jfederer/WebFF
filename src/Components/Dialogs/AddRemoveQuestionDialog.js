@@ -32,9 +32,6 @@ const implementedQuestions = {
 	Checkbox: "Checkbox"
 }
 
-const DELETE_QUESTION = "Delete Question";
-const ONLY_ONE_CAN_BE_SELECTED = "Only one question can be selected at a time";
-
 const EVENT_SAVE_LOCATION_TEXT = "This specific Event";
 const STATION_SAVE_LOCATION_TEXT = "Station Setup";
 const USER_SAVE_LOCATION_TEXT = "User Configuration";

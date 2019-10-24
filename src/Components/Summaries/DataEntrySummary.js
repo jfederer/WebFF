@@ -3,11 +3,7 @@ import React from 'react';
 import { styles } from '../../style';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
 import { Typography } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
 import SetSummary from './SetSummary';
 import KVPair from './KVPair';
 import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
@@ -17,7 +13,7 @@ import {  getQuestionDataFromID } from '../../Utils/StoreUtilities';
 class DataEntrySummary extends React.Component {
 
 	render() {
-		const { classes, eventID, DE_QID } = this.props;
+		const { eventID, DE_QID } = this.props;
 		if (!eventID) {
 			return <Typography>Set Summary event ID unavailable</Typography>;
 		}

@@ -28,11 +28,10 @@ import AddSetForm from '../Pages/DataEntry/AddSetForm';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
 import { DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SET_INFORMATION_IDENTIFIER, IET_REQUIRING_SAMPLER_TYPE_VALUES } from '../../Constants/Config';
-import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
-import { getDataEntrySheetQuestionsData, getQuestionsData } from '../../Utils/StoreUtilities';
+import { getQuestionValue } from '../../Utils/QuestionUtilities';
+import { getQuestionsData } from '../../Utils/StoreUtilities';
 import { addQuestionToEvent } from '../../Actions/Questions';
 import { showQuestionPanel, hideQuestionPanel } from '../../Actions/UI';
-import { Typography, Paper } from '@material-ui/core';
 
 const styles = theme => ({
 	table: {
@@ -51,7 +50,7 @@ const DEBUG = false;
 class DataEntrySheet extends React.Component {
 	constructor(props) {
 		super(props);
-		const { id, sedimentType, currentSamplingEventID, value } = this.props;
+		const { id, currentSamplingEventID, value } = this.props;
 
 		if (DEBUG) console.log("DES: CONSTRUCTOR: this.props.value: ", this.props.value);
 		if (_.isEmpty(value)) {

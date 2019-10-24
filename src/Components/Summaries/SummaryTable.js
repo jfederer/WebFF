@@ -3,10 +3,10 @@ import React from 'react';
 import { styles } from '../../style';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
-import { Typography } from '@material-ui/core';
+// import Dialog from '@material-ui/core/Dialog';
+// import DialogContent from '@material-ui/core/DialogContent';
+// import Divider from '@material-ui/core/Divider';
+// import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -30,7 +30,7 @@ class SummaryTable extends React.Component {
 	}
 
 	render() {
-		const { classes, tableData, tableValue } = this.props;
+		const { tableData, tableValue } = this.props;
 
 		if(!tableData) {
 			return null;
@@ -46,14 +46,11 @@ class SummaryTable extends React.Component {
 
 		let bodyRows = tableValue.map((row, rowNum) => {
 			if (rowNum === 0 && tableData.colHeaders) {
-				return;
+				return null;
 			} else {
 				return this.buildRow(row, tableName, rowNum);
 			}
-		})
-		bodyRows.shift();  // remove the header row from the bodyRows
-
-
+		}).filter(el=>el);
 
 
 		return (<Paper>

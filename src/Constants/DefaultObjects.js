@@ -371,14 +371,14 @@ export const defaultSetInformationQuestionsData = {
 			[ANALYSE_TEXT_Z + "*"]: "Z"
 		},
 		"value": {
-			['C']: false,
-			['SF']: false,
-			['SA']: false,
-			['T']: false,
-			['LOI']: false,
-			['DS']: false,
-			['SC']: false,
-			['Z']: false
+			'C': false,
+			'SF': false,
+			'SA': false,
+			'T': false,
+			'LOI': false,
+			'DS': false,
+			'SC': false,
+			'Z': false
 			// [ANALYSE_TEXT_C]: false,
 			// [ANALYSE_TEXT_SF + "*"]: false,
 			// [ANALYSE_TEXT_SA + "*"]: false,

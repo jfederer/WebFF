@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import Table from '@material-ui/core/Table';
@@ -22,7 +21,8 @@ import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../../Constants/Config';
 import TextFieldDialog from '../Dialogs/TextFieldDialog';
 import MultipleChoiceDialog from '../Dialogs/MultipleChoiceDialog';
-import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER, BEDLOAD_TEXT, BOTTOM_MATERIAL_TEXT, SUSPENDED_TEXT, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER, SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER } from '../../Constants/Dictionary';
+import { SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, M2LAB_HEADER, DESCRIPTION_HEADER, ADD_ON_HEADER, BEDLOAD_TEXT, 
+	BOTTOM_MATERIAL_TEXT, SUSPENDED_TEXT } from '../../Constants/Dictionary';
 import { getShortSetNameFromFullSetName } from '../../Utils/Utilities';
 
 import { insertEstimatedTime } from '../../Utils/CalculationUtilities';

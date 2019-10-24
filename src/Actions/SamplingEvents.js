@@ -5,17 +5,10 @@ import uuidv4 from 'uuid';
 import {
 	CREATE_NEW_SAMPLING_EVENT,
 	REGISTER_EVENT_WITH_USERNAME,
-	SE_QUESTION_VALUE_CHANGE,
-	SHOW_PANELS,
-	HIDE_PANELS,
-	SHOW_NAVIGATION_TABS,
-	HIDE_NAVIGATION_TABS,
-	SHOW_QUESTIONS,
-	HIDE_QUESTIONS,
-	RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS
+	SE_QUESTION_VALUE_CHANGE
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
-import { getEventFromID, getQuestionsData, getQuestionDataFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
+import {  getQuestionsData, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, ACTIONABLE_GLOBAL_QIDS } from '../Constants/Config';
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';

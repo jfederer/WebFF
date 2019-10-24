@@ -6,15 +6,8 @@ import { styles } from '../../style';
 import { withStyles } from '@material-ui/core/styles';
 
 import { setAppBarText } from '../../Actions/UI';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { PARAMETER_TABLE_TYPE } from '../../Constants/Config';
 
-import { NOT_SAMPLED } from '../../Constants/Dictionary';
-import { METHOD_QIDS, SEDIMENT_TYPES, PARAMETER_TABLE_TYPE } from '../../Constants/Config';
-import ParametersTable from '../Questions/ParametersTable';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
 import TabbedPage from './TabbedPage';
 

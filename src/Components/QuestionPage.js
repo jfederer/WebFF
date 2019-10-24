@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { styles } from '../style';
@@ -15,7 +14,7 @@ import {
 } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
 import { setAppBarText } from '../Actions/UI';
-import { QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION, IDENTIFIER_SPLITTER } from './../Constants/Config';
+import {  IDENTIFIER_SPLITTER } from './../Constants/Config';
 
 
 // standardize (library?) the use of "questionsData" string to generalized variable
