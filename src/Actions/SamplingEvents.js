@@ -5,7 +5,8 @@ import uuidv4 from 'uuid';
 import {
 	CREATE_NEW_SAMPLING_EVENT,
 	REGISTER_EVENT_WITH_USERNAME,
-	SE_QUESTION_VALUE_CHANGE
+	SE_QUESTION_VALUE_CHANGE,
+	SE_QUESTION_VALUE_DELETE
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import {  getQuestionsData, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
@@ -15,7 +16,6 @@ import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
 
 import { showNavigationTab, updateNavMenu } from './UI';
-
 
 
 /**
@@ -130,6 +130,20 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 // }
 
 
+
+/**
+* @desc removed/deletes value of a question in a given event.
+* @param eventID {string} - the unique event ID.
+* @param questionID {string} - the question ID. 
+* @returns void
+*/
+export function SEQuestionValueDelete(eventID, questionID) { 
+	return (dispatch) => {
+		dispatch({ type: SE_QUESTION_VALUE_DELETE, eventID, questionID, });
+	}
+}
+
+
 /**
 * @desc creates a new sampling event from scratch and links it to a given user
 * @param {string} eventName  - the event name.  If empty string, will be given date-based name
@@ -140,8 +154,6 @@ export function createNewSampingEventForUser(eventName, username) {
 	if (!username) {
 		throw new Error("No username passed to createNewSamplingEventForUser function");
 	}
-
-	
 
 	return dispatch => {
 		let eventID = dispatch(createNewSamplingEvent(eventName));

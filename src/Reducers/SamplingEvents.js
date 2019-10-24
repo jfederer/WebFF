@@ -4,7 +4,8 @@ import {
 	CREATE_NEW_SAMPLING_EVENT,
 	SE_QUESTION_VALUE_CHANGE,
 	ADD_QUESTION_TO_EVENT,
-	DELETE_QUESTION_FROM_EVENT
+	DELETE_QUESTION_FROM_EVENT,
+	SE_QUESTION_VALUE_DELETE
 } from '../Constants/ActionTypes';
 
 
@@ -61,6 +62,9 @@ export function SamplingEvents(state = initialState, action) {
 			return newState;
 		case SE_QUESTION_VALUE_CHANGE:
 			newState[action.eventID].questionsValues[action.questionID] = action.newValue;
+			return newState;
+		case SE_QUESTION_VALUE_DELETE:
+			delete newState[action.eventID].questionsValues[action.questionID];
 			return newState;
 		case ADD_QUESTION_TO_EVENT:
 			newState[action.eventID].questionsData[action.question.id] = action.question;

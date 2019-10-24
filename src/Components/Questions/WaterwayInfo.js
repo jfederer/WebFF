@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
-import { SEQuestionValueChange } from '../../Actions/SamplingEvents';
+import { SEQuestionValueChange, SEQuestionValueDelete } from '../../Actions/SamplingEvents';
 import { createQuestionComponents } from '../../Utils/QuestionUtilities';
 import _ from 'lodash';
 
@@ -120,6 +120,11 @@ class WaterwayInfo extends React.Component {
 			label: "Pier #" + pierNumber + " End",
 		};
 
+		//OPTION 1 -- add them, effectively, as custom questions.... lack of customization
+		// this.props.addQuestionToEvent(this.props.currentSamplingEventID, newPierStartQuestion);
+		// this.props.addQuestionToEvent(this.props.currentSamplingEventID, newPierEndQuestion);
+
+		//OPTION 2 -- make Waterway info a more complex, and customizable... end up with orphaned "questionValues" that don't have "questionData"
 		let newQuestions = _.cloneDeep(this.state.pierQuestions);
 		newQuestions.push(newPierStartQuestion);
 		newQuestions.push(newPierEndQuestion);
@@ -131,8 +136,8 @@ class WaterwayInfo extends React.Component {
 		let newQuestions = _.cloneDeep(this.state.pierQuestions).filter(q => !q.id.startsWith("pier_" + pierNumberToRemove));
 
 		this.setState({ pierQuestions: newQuestions }, ()=> {
-			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, "pier_"+pierNumberToRemove+"_start", "");
-			this.props.SEQuestionValueChange(this.props.currentSamplingEventID, "pier_"+pierNumberToRemove+"_end", "");
+			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_"+pierNumberToRemove+"_start", "");
+			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_"+pierNumberToRemove+"_end", "");
 		});
 
 	}
@@ -175,8 +180,13 @@ class WaterwayInfo extends React.Component {
 		// let questions = Object.keys(defaultWaterwayInfoQuestionsData).map(key=><Question></Question>)
 
 		return <React.Fragment>
+			{/* OPTION #1... doesn't involve any question creation here... */}
+			
+			{/* OPTION #2... */}
 			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions, currentEvent.questionsValues, this.WWIChangeHandler))}
 			{createQuestionComponents(this.state.pierQuestions, currentEvent.questionsValues, this.WWIChangeHandler)}
+
+
 			<Button onClick={this.addPierClickedHandler}>ADD PIER</Button>
 			{this.state.pierQuestions.length
 				? <Button onClick={() => this.removePierClickedHandler(this.state.pierQuestions.length / 2)}>Remove pier</Button>
@@ -197,6 +207,7 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	SEQuestionValueChange,
+	SEQuestionValueDelete,
 	addQuestionToEvent
 }
 
