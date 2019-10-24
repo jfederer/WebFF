@@ -76,6 +76,7 @@ class WebFF extends React.Component {
 	//BREAKING:
 	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
 	//TODO: loading event should reset nav menu (both remove and add items as needed)
+	//TODO: event L or R bank
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
 	//TODO: Style sheet
