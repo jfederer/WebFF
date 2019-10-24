@@ -146,11 +146,6 @@ class AddRemoveStationDialog extends React.Component {
 
 	dialogCloseHandler = () => {
 		this.props.setAddRemoveStationDialogVisibility(false);
-		setTimeout(() => {
-			this.setState({
-				isInitialized: false
-			})
-		}, 250);
 	}
 
 	//TODO: go through some global prop types for questions to get all avaiable options
