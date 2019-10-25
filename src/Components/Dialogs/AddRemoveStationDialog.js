@@ -27,11 +27,11 @@ import { getStationFromID } from '../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import { Typography } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
+import { LEFT_BANK_VALUE, RIGHT_BANK_VALUE } from '../../Constants/Dictionary';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
 const EITHER = "EITHER";
-
 
 class AddRemoveStationDialog extends React.Component {
 
@@ -57,7 +57,9 @@ class AddRemoveStationDialog extends React.Component {
 			newStation_stationNumber: "",
 			newStation_projectName: "",
 			newStation_projectID: "",
-			removeStation_stationName: ""
+			newStation_fromLBank: LEFT_BANK_VALUE,
+			removeStation_stationName: "",
+
 			// allStationIDs: this.props.getUsersStationIDs(this.props.currentUsername);
 		})
 	}
@@ -101,6 +103,7 @@ class AddRemoveStationDialog extends React.Component {
 			defaultProjectName: this.state.newStation_projectName,
 			defaultProjectID: this.state.newStation_projectID,
 			defaultAgencyCode: this.state.newStation_agencyCode,
+			defaultBank: this.state.newStation_fromLBank,
 			questionsData: {}
 		}
 
@@ -223,6 +226,19 @@ class AddRemoveStationDialog extends React.Component {
 										value={this.state.newStation_agencyCode}
 										alternateChangeHandler={this.handleValueChange}
 									/>
+
+									<Question id="newStation_fromLBank"
+										label="Default bank for measuring distance"
+										type="DropDown"
+										options={{
+											"Left Bank": LEFT_BANK_VALUE,
+											"Right Bank": RIGHT_BANK_VALUE
+										}}
+										value={this.state.newStation_fromLBank}
+										alternateChangeHandler={this.handleValueChange}
+									/>
+									<br />
+
 									<Question id="newStation_changeCurrent"
 										label="Set current event to this station"
 										type="Toggle"
@@ -264,10 +280,10 @@ class AddRemoveStationDialog extends React.Component {
 								: null}
 							{this.state.addOrRemove === REMOVE
 								? <Button onClick={this.removeButtonClickHandler} color="primary">
-									Remove Station  
+									Remove Station
 									{//TODO: disable button util station selected...
 									}
-            		</Button>
+								</Button>
 								: null}
 							<Button onClick={this.dialogCloseHandler} color="primary">
 								Cancel

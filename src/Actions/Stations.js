@@ -52,6 +52,10 @@ export function createNewStation(newStationObject) {
 		throw new Error("No Station number included in new station object sent to createNewStation action", newStationObject);
 	}
 
+	if (!newStationObject.defaultBank) { // if no station number given, fail
+		throw new Error("No 'defaultBank' value included in new station object sent to createNewStation action", newStationObject);
+	}
+
 
 	return dispatch => {
 		let stationObject = _.cloneDeep(newStationObject);

@@ -35,4 +35,7 @@ export const SUSPENDED_TEXT = "Suspended";
 export const BEDLOAD_TEXT = "Bedload";
 export const BOTTOM_MATERIAL_TEXT = 'Bottom';
 
+export const LEFT_BANK_VALUE = "Left Bank";
+export const RIGHT_BANK_VALUE = "Right Bank";
+
 export const SEDLOGIN_SUCCESS_MESSAGE = "Imported 1 event into SedLOGIN project";

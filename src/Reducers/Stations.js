@@ -35,7 +35,17 @@ const initialStations = {
 		defaultProjectID: "Default ID",
 		defaultAgencyCode: "DefAg",
 		questionsData:{}
-	}
+	},
+	'8b444434-2f01-4c05-80b1-06a7518bdf23': {
+		displayName: 'Station1',
+		name: 'Station1',
+		number: '11111',
+		defaultProjectName: 'PRoj1',
+		defaultProjectID: 'ID1',
+		defaultAgencyCode: 'USGS',
+		questionsData: {},
+		stationID: '8b444434-2f01-4c05-80b1-06a7518bdf23'
+	  }
 
 };
 

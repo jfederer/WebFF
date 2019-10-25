@@ -104,7 +104,7 @@ class WebFF extends React.Component {
 	//BUG: Dashboard -> EventManger -> Event Summary -> BAck Button ... sends you to the FF page.
 	//BUG: average rep measures (from adding a second set) sticks around on a new event....  (Should get fixed if we reset UI before loading event)
 	//BUG: why is are we getting samples composited and "this is a group of samples" in an undefind panel on event summary (the problem is not event summary, the problem is that these are undefined)
-	
+	//BUG: not correctly estimating time on first load of qwdata page...
 
 	//TEST:
 	// Add/REmove station
