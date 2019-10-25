@@ -73,7 +73,7 @@ const buildSetObj = (eventID, setName, sedType) => {
 		"NumberOfSamples": getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints"),
 		"AnalyzeIndSamples": getQuestionValue(eventID, DEName, setName, "samplesComposited") ? 'N' : 'Y',
 		"Analyses": stringFromMultipleChoice(getQuestionValue(eventID, DEName, setName, "analysedFor_" + sedType)),
-		// "NumberOfContainers" : getQuestionValue(eventID, setName, "numberOfSamplingPoints"), //TODO: KEN?
+		"NumberOfContainers" : getQuestionValue(eventID, DEName, setName, "numberOfContainers"), 
 	}
 
 	switch (getQuestionValue(eventID, 'samplingMethod_' + sedType)) {
@@ -182,7 +182,8 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 			sampleObj["Param" + XML_SPLITTER + index + "P00063"] = buildParamObj("P00063", p00063val);
 		}
 
-		//  - the Distance from L Bank should be written to P00009.
+
+		//  - the Distance from L Bank should be written to P00009.  (distance from Right bank is P00001)
 		let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
 		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 

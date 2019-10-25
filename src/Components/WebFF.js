@@ -65,32 +65,30 @@ class WebFF extends React.Component {
 
 	//KEN:
 	//TODO: test save sedlogin compat xml
-	//TODO: push event to sedlong
-	//TODO: 'stream depth for IET test' doesn't make it to XML... issue?
-	//TODO: 'transit rate for IET test' doesn't make it to XML... issue?
-	//TODO: 'ratio of vertical' doesn't make it to XML... issue?
-	//TODO: 'intake efficiency' doesn't make it to XML... issue?
-	//TODO: "Sampling depth" doesn't go into XML?
-	//TODO: where should "L" or "R" bank be saved?  User? Station? Event?
+	//TODO: push event to sedlogin
+	//TODO: add set automatically
 
+	//USERs:
+	// event summary --> conceptualize for me.
 
 	//BREAKING:
-	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
+	
 	//TODO: loading event should reset nav menu (both remove and add items as needed)
-	//TODO: event L or R bank
+	//TODO: webserver, network loads
+		//TODO: Does not check for updated data outside localstorage
+	//TODO: Bridge wizard 
+		//TODO: event L or R bank -> where should "L" or "R" bank be saved?  User? Station? Event?  (station default, change by event)
+		//TODO: XML -> Distance from right bank is (distance from Right bank is P00001)
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
 	//TODO: Style sheet
-	//TODO: getQuestionsData needs to get updated in eventID...
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
-	//TODO: webserver, network loads
-	//FIXME: link tables fall appart if entry doesn't already exist -- larger concept for when nothing exists... hold up until loaded from network.  Some things can be built on fly (This likely a good example).
-	//TODO: Does not check for updated data outside localstorage
 	//TODO: import/export
+	//TODO: can I convert?? --> compare to providing access
 
 	//BUGS: 
+	//TODO: station custom questions didn't render on field form
 	//TODO: paramters and qwdata table don't appear to load existing info from loaded event
-	//TODO: FIXME: TODO: FIXME: MUST copy default questions data values into event values... because if questions data changes, future events could change because the default from QD might no longer be accurate
 	//TODO: setname can be Sngl - this could break XML
 	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
 	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
@@ -110,18 +108,21 @@ class WebFF extends React.Component {
 
 	//TEST:
 	// Add/REmove station
+	// remove station that is set as the station for a different event
+	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
 	//TODO: add icons (setting) / check scrolling for sediemnt type tabs
 	//TODO: loading from secondary pages in event manager
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	//TODO: avgrepmeas -> alert/confirm
 	//tODO: waterway info question type
 	//TODO: rememver current sediment type from page to page
 	//TODO: single-page view 
 	//TODO: single-page view saveable as pdf (ingest pdf??)
 	//TODO: save entire event as xml
 	//TODO: switching events doesn't do the nav bar right
-	//TODO: user/site settings (station names, etc)
+	//TODO: user/site settings (station names, remember what sediment type tab, etc)
 	//TODO: validators (numSampPoints not allowing alpha might be good test case)
 	//TODO: templates	
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
@@ -129,6 +130,7 @@ class WebFF extends React.Component {
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
 	//TODO: disable system menu buttons when they can't apply
 	 //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
+
 
 	//Would be nice:
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
