@@ -15,7 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import {getSedLOGINcompatibleXML} from '../../Utils/XMLUtilities';
+import { getSedLOGINcompatibleXML } from '../../Utils/XMLUtilities';
 
 import { saveFile } from '../../Utils/FileHandling';
 
@@ -51,7 +51,7 @@ class ExportDialog extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state =  _.cloneDeep(initialState);
+		this.state = _.cloneDeep(initialState);
 
 
 		this.saveXML = this.saveXML.bind(this);
@@ -62,7 +62,7 @@ class ExportDialog extends React.Component {
 	}
 
 	onEnter = () => {
-		this.setState({sedLOGINUsername: this.props.sedLOGINUsername});
+		this.setState({ sedLOGINUsername: this.props.sedLOGINUsername });
 	}
 
 	saveXML() {
@@ -75,7 +75,7 @@ class ExportDialog extends React.Component {
 
 	saveAllXML() {
 		let d = new Date();
-		
+
 		let allData = getSedLOGINcompatibleXML(this.props.eventID);
 
 		// let curEvt = getEventFromID(this.props.eventID)
@@ -178,7 +178,7 @@ class ExportDialog extends React.Component {
 	}
 
 	render() {
-		const { classes, exportDialogVisibility } = this.props;
+		const { classes, exportDialogVisibility, currentSamplingEventID } = this.props;
 
 		return (
 			<Dialog
@@ -190,117 +190,125 @@ class ExportDialog extends React.Component {
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
 				<DialogTitle id="form-dialog-title">Save SedLOGIN-compatible XML</DialogTitle>
-				<DialogContent>
+				{!currentSamplingEventID 
+					? <DialogContent>
+						<DialogContentText>
+						You must have a sampling event loaded to export an event
+            			</DialogContentText>
+						</DialogContent>
+					: <DialogContent>
 
-					<Grid justify="space-around" container spacing={10}>
-						<Grid item xs={12}>
-							<DialogContentText>
-								Save the current event to your computer, or directly upload it to SedLOGIN
+						<Grid justify="space-around" container spacing={10}>
+							<Grid item xs={12}>
+								<DialogContentText>
+									Save the current event to your computer, or directly upload it to SedLOGIN
             				</DialogContentText>
-						</Grid>
-						<Grid item xs={4} >
-							<Paper style={{ height: '90%' }} className={classes.paper}>
-								<Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button>
-							</Paper>
-						</Grid>
-						<Grid item xs={4} >
-							<Paper style={{ height: '90%' }} className={classes.paper}>
-								<Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button>
-							</Paper>
-						</Grid>
-						<Grid item xs={4} >
-							<Paper style={{ height: '90%' }} className={classes.paper}>
-								<Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button>
-							</Paper>
-						</Grid>
+							</Grid>
+							<Grid item xs={4} >
+								<Paper style={{ height: '90%' }} className={classes.paper}>
+									<Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button>
+								</Paper>
+							</Grid>
+							<Grid item xs={4} >
+								<Paper style={{ height: '90%' }} className={classes.paper}>
+									<Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button>
+								</Paper>
+							</Grid>
+							<Grid item xs={4} >
+								<Paper style={{ height: '90%' }} className={classes.paper}>
+									<Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button>
+								</Paper>
+							</Grid>
 
-						{this.state.showStatus ? <Grid item xs={12}>
-							<Paper className={classes.paper}>
-								<TextField
-									margin="dense"
-									id="name"
-									label="Status"
-									rows={8}
-									fullWidth
-									multiline
-									value={this.state.statusMessage}
-								/>
-							</Paper>
-						</Grid> : null}
-
-						{this.state.showSedLOGINQs ?
-							<React.Fragment>
-								<Divider></Divider>
-								<Grid item xs={12}><Typography>Enter the SedLOGIN Project ID, Username, and Password.<br />The Username/Password will typically be the same as your active directory login.</Typography></Grid>
-								<Grid item xs={3}>
+							{this.state.showStatus ? <Grid item xs={12}>
+								<Paper className={classes.paper}>
 									<TextField
 										margin="dense"
-										id="sedLOGINProjectID"
-										label="SedLOGIN Project ID"
+										id="name"
+										label="Status"
+										rows={8}
 										fullWidth
-										onChange={this.projectIDChangeHandler}
-										value={this.state.SedLOGINprojectID}
+										multiline
+										value={this.state.statusMessage}
 									/>
-								</Grid>
-								<Grid item xs={5}>
-									<TextField
-										margin="dense"
-										id="sedLOGINUsername"
-										label="SedLOGIN username"
-										onChange={this.usernameChangeHandler}
-										fullWidth
-										value={this.state.sedLOGINUsername}
-									/>
-								</Grid>
-								<Grid item xs={4}>
-									<TextField
-										margin="dense"
-										type="password"
-										id="pass"
-										label="Password"
-										onChange={this.passwordChangeHandler}
-										fullWidth
-										value={this.state.pw}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<Button
-										variant="contained"
-										margin="dense"
-										onClick={this.sedLoginSubmitHandler}
-									>Submit to SedLOGIN</Button>
-								</Grid>
-							</React.Fragment>
-							: null}
+								</Paper>
+							</Grid> : null}
 
-					</Grid>
+							{this.state.showSedLOGINQs ?
+								<React.Fragment>
+									<Divider></Divider>
+									<Grid item xs={12}><Typography>Enter the SedLOGIN Project ID, Username, and Password.<br />The Username/Password will typically be the same as your active directory login.</Typography></Grid>
+									<Grid item xs={3}>
+										<TextField
+											margin="dense"
+											id="sedLOGINProjectID"
+											label="SedLOGIN Project ID"
+											fullWidth
+											onChange={this.projectIDChangeHandler}
+											value={this.state.SedLOGINprojectID}
+										/>
+									</Grid>
+									<Grid item xs={5}>
+										<TextField
+											margin="dense"
+											id="sedLOGINUsername"
+											label="SedLOGIN username"
+											onChange={this.usernameChangeHandler}
+											fullWidth
+											value={this.state.sedLOGINUsername}
+										/>
+									</Grid>
+									<Grid item xs={4}>
+										<TextField
+											margin="dense"
+											type="password"
+											id="pass"
+											label="Password"
+											onChange={this.passwordChangeHandler}
+											fullWidth
+											value={this.state.pw}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<Button
+											variant="contained"
+											margin="dense"
+											onClick={this.sedLoginSubmitHandler}
+										>Submit to SedLOGIN</Button>
+									</Grid>
+								</React.Fragment>
+								: null}
+
+						</Grid>
 
 
 
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={this.closeHandler} color="primary">
-						Done
+					</DialogContent>
+				}
+					<DialogActions>
+						<Button onClick={this.closeHandler} color="primary">
+							Done
             </Button>
-				</DialogActions>
+					</DialogActions>
 			</Dialog>
-		);
+			);
+		}
 	}
-}
-
+	
 const mapStateToProps = function (state) {
 	return {
-		exportDialogVisibility: state.UI.visibility.exportDialogVisibility,
-		sedLOGINUsername: state.Users[state.SedFF.currentUsername] ? state.Users[state.SedFF.currentUsername].sedLoginUsername : ""
-	}
-}
-
+					exportDialogVisibility: state.UI.visibility.exportDialogVisibility,
+				sedLOGINUsername: state.Users[state.SedFF.currentUsername] ? state.Users[state.SedFF.currentUsername].sedLoginUsername : "",
+				currentSamplingEventID: state.SedFF.currentSamplingEventID
+			}
+		}
+		
 const mapDispatchToProps = {
-	setExportDialogVisibility: setExportDialogVisibility,
-}
-
+					setExportDialogVisibility: setExportDialogVisibility,
+			}
+			
 ExportDialog.propTypes = {
-	classes: PropTypes.object.isRequired
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(ExportDialog));
+					classes: PropTypes.object.isRequired
+			};
+			
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, {withTheme: true })(ExportDialog));
