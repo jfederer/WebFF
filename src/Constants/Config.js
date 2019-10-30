@@ -10,7 +10,7 @@ export const PARAMETERS_TABLE_IDENTIFIER = "ParametersTable::";
 export const WATERWAY_INFORMATION_IDENTIFIER = "Waterway::";
 
 export const IDENTIFIER_SPLITTER = "&&";  //for use between identifiers
-export const XML_SPLITTER = "XMLSPLIT"; //for use when stripping XML tags of superfluous info.  Anything after the splitter will be cut off in final xml.
+export const XML_SPLITTER = "_XMLSPLIT_"; //for use when stripping XML tags of superfluous info.  Anything after the splitter will be cut off in final xml.
 
 
 export const QUESTIONS_DATA_OBJECT_TYPE = "questionsDataObjectType";

@@ -151,6 +151,7 @@ class WebFF extends React.Component {
 	//TODO: add-on analysis keeps options for things that apply to entire set... should filter them out (did at one point... bug)
 	//TODO: different summary settings (different layouts, etc)
 	//BUG: have add/remove station drop down not actually change the value to add/remove...    start
+	//TODO: export dialog allows event selection...   (revampe to import/export dialog?)
 
 	//Cleanup
 

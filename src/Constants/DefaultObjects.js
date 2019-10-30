@@ -12,10 +12,12 @@ import {
 	NOT_SAMPLED,
 	SUSPENDED_TEXT,
 	BEDLOAD_TEXT,
-	BOTTOM_MATERIAL_TEXT
+	BOTTOM_MATERIAL_TEXT,
+	LEFT_BANK_VALUE,
+	RIGHT_BANK_VALUE
 } from './Dictionary';
 
-import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, DEFAULT_BACKUP_INTERVAL} from './Config';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, DEFAULT_BACKUP_INTERVAL } from './Config';
 
 export const emptySamplingEvent = {
 	eventID: "",
@@ -166,11 +168,11 @@ export const defaultSetInformationQuestionsData = {
 		"colHeaders": true,
 		"rowHeaders": false,
 
-		"value": [["Distance from L bank, feet", 
-		"Sampling Depth, feet", 
-		"Transit Rate, ft / sec", 
-		"Rest time on Bed for Bedload sample, seconds", 
-		"Horizontal width of Vertical, feet"],
+		"value": [["Distance from L bank, feet",
+			"Sampling Depth, feet",
+			"Transit Rate, ft / sec",
+			"Rest time on Bed for Bedload sample, seconds",
+			"Horizontal width of Vertical, feet"],
 		["",
 			"",
 			"",
@@ -188,11 +190,11 @@ export const defaultSetInformationQuestionsData = {
 		"colHeaders": true,
 		"rowHeaders": false,
 
-		"value": [["Distance from L bank, feet", 
-		"Sampling Depth, feet", 
-		"Transit Rate, ft / sec", 
-		"Rest time on Bed for Bed load sample, seconds", 
-		"Horizontal width of Vertical, feet"],
+		"value": [["Distance from L bank, feet",
+			"Sampling Depth, feet",
+			"Transit Rate, ft / sec",
+			"Rest time on Bed for Bed load sample, seconds",
+			"Horizontal width of Vertical, feet"],
 		["",
 			"",
 			"",
@@ -213,7 +215,7 @@ export const defaultSetInformationQuestionsData = {
 			["Distance from L bank, feet",
 				"Sampling Depth, feet",
 				"Transit Rate, ft / sec"],
-				["","",""]
+			["", "", ""]
 		],
 		"width_xs": 10,
 		"width_lg": 10
@@ -227,10 +229,10 @@ export const defaultSetInformationQuestionsData = {
 		"colHeaders": true,
 		"rowHeaders": false,
 
-		"value": [["Distance from L bank, feet", 
-		"Sampling Depth, feet", 
-		"Transit Rate, ft / sec"],
-		["","",""]],
+		"value": [["Distance from L bank, feet",
+			"Sampling Depth, feet",
+			"Transit Rate, ft / sec"],
+		["", "", ""]],
 		"width_xs": 10,
 		"width_lg": 10
 	},
@@ -395,7 +397,21 @@ export const defaultSetInformationQuestionsData = {
 
 
 export const defaultWaterwayInfoQuestionsData = {
-	
+
+	bank: {
+		"id": "bank",
+		"label": "Measure From",
+		"type": "DropDown",
+		"value": LEFT_BANK_VALUE,
+		'options': {
+			"Left Bank": LEFT_BANK_VALUE,
+			"Right Bank": RIGHT_BANK_VALUE
+		},
+		"tabName": "FieldForm",
+		"layoutGroup": "Waterway Info",
+		"width_xs": 6,
+		"width_lg": 2
+	},
 	edgeOfWater_Left: {
 		"id": "edgeOfWater_Left",
 		"label": "Left Edge Of Water",
@@ -464,7 +480,7 @@ export const defaultWaterwayInfoQuestionsData = {
 
 export const defaultQuestionsData = {
 
-	
+
 	stationName: {
 		"id": "stationName",
 		"label": "Station Name",

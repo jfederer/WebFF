@@ -1,5 +1,5 @@
 import xmljs from 'xml-js';
-import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../Constants/Config';
+import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES } from '../Constants/Config';
 import { getQuestionValue, getActiveSedimentTypes, getMethodCategoryFromValue } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import {
@@ -23,42 +23,68 @@ export function getSedLOGINcompatibleXML(eventID) {
 		throw new Error("No Sediment Type has been selected in this event");
 	}
 
-	let SLCXML = sedTypes.map(sedType => {
-		let sedType_SLCXML = {
-			["SedWE_data" + XML_SPLITTER + sedType]: buildSampleEventObj(eventID, sedType)
-		}
+	console.log('sedTypes :', sedTypes);
+
+	let SLCXML = {"SedFF_data": {
+		"SedFF_version": PROGRAM_VERSION,
+		"XML_Generation_Date": new Date().toString()
+	}};
+
+	sedTypes.forEach( (sedType, index) => {
+		SLCXML.SedFF_data["Event" + XML_SPLITTER + sedType]=buildSampleEventObj(eventID, sedType, index+1);
+
+	})
+
+	console.log('SLCXML :', SLCXML);
 
 		var options = { compact: true, ignoreComment: true, spaces: 4 };
-		var rawXML = xmljs.json2xml(sedType_SLCXML, options);
+		var rawXML = xmljs.json2xml(SLCXML, options);
+
+		console.log('rawXML :', rawXML);
 
 		// strip tags of any unique identifiers back to just what was before th splitter
 		let reg = new RegExp(XML_SPLITTER + "[^>]*>", "g");
-		return rawXML.replace(reg, ">")
+		let cleanXML = rawXML.replace(reg, ">")
 
 
-	})
+
+	// let SLCXML = sedTypes.map(sedType => {
+	// 	let sedType_SLCXML = {
+	// 		["SedFF" + XML_SPLITTER + sedType]: buildSampleEventObj(eventID, sedType, 1)
+	// 	}
+
+	// 	var options = { compact: true, ignoreComment: true, spaces: 4 };
+	// 	var rawXML = xmljs.json2xml(sedType_SLCXML, options);
+
+	// 	// strip tags of any unique identifiers back to just what was before th splitter
+	// 	let reg = new RegExp(XML_SPLITTER + "[^>]*>", "g");
+	// 	return rawXML.replace(reg, ">")
+
+
+	// });
+
+	return cleanXML;
 	return SLCXML;
 
 }
 
 
-const buildSampleEventObj = (eventID, sedType) => {
+const buildSampleEventObj = (eventID, sedType, eventNum) => {
+	console.log("buildSampleEventObj(", eventID, sedType, eventNum, ")");
 	let SEObj = {
-		"SedFF_version": PROGRAM_VERSION,
-		"Event": {
-			"EventNumber": 1,
+			"EventNumber": eventNum,
 			"SiteId": getQuestionValue(eventID, 'stationNumber'),
 			"AgencyCd": getQuestionValue(eventID, 'agencyCode'),
 			"SedTranspMode": sedType,
 			"SmplMediumCode": getQuestionValue(eventID, 'sampleMedium'),
 			"AvgRepMeasures": getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + IDENTIFIER_SPLITTER + sedType, 'avgRepMeasures') ? 'Y' : 'N'
-		}
 	}
 
 	let setNamesList = getSetListAsArray(eventID, sedType);
 
 	setNamesList.forEach((setName) => {
-		SEObj.Event["Set" + XML_SPLITTER + setName] = buildSetObj(eventID, setName, sedType);
+		console.log('MAking setName :', setName);
+		SEObj["Set" + XML_SPLITTER + setName] = buildSetObj(eventID, setName, sedType);
 	});
 
 	return SEObj;

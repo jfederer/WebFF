@@ -232,6 +232,9 @@ export function stationNameChanged(eventID, newStationName) {
 		if (station.defaultAgencyCode) {
 			dispatch(SEQuestionValueChange(eventID, "agencyCode", station.defaultAgencyCode));
 		}
+		if(station.defaultBank) {
+			dispatch(SEQuestionValueChange(eventID, "bank", station.defaultBank));
+		}
 
 	}
 }
