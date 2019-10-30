@@ -35,6 +35,7 @@ export function getSedLOGINcompatibleXML(eventID) {
 		let reg = new RegExp(XML_SPLITTER + "[^>]*>", "g");
 		return rawXML.replace(reg, ">")
 
+
 	})
 	return SLCXML;
 
@@ -73,7 +74,7 @@ const buildSetObj = (eventID, setName, sedType) => {
 		"NumberOfSamples": getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints"),
 		"AnalyzeIndSamples": getQuestionValue(eventID, DEName, setName, "samplesComposited") ? 'N' : 'Y',
 		"Analyses": stringFromMultipleChoice(getQuestionValue(eventID, DEName, setName, "analysedFor_" + sedType)),
-		"NumberOfContainers" : getQuestionValue(eventID, DEName, setName, "numberOfContainers"), 
+		"NumberOfContainers": getQuestionValue(eventID, DEName, setName, "numberOfContainers"),
 	}
 
 	switch (getQuestionValue(eventID, 'samplingMethod_' + sedType)) {
@@ -157,109 +158,109 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 	activePCodesArr.forEach((pCode, index) => {
 		sampleObj["Param" + XML_SPLITTER + index] = buildParamTableParamObj(eventID, parametersTableName, QWDATATableName, QWDATARowNum, pCode);
-
-
-		//get remaining sample info
-		let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
-		let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue) + "_" + sedType;
-		let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
-		let distanceHeaderText = "Distance from L bank, feet";
-		let transitHeaderText = "Transit Rate, ft / sec";
-		let restTimeHeaderText = "Rest time on Bed for Bed load sample, seconds";
-		let horizWidthHeaderText = "Horizontal width of Vertical, feet"
-
-		// REMOVED per KASKACH request that this be a param block instead of a sample-level item.
-		//  "Average Gage Height", if calculated, should be written to P00065.
-		//  If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
-		// QWDATA can also accept this if left blank.
-		// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
-
-		//  - the "number of Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
-
-
-		if (!getQuestionValue(eventID, DEName, setName, "groupOfSamples")) {
-			let p00063val = getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints");
-			sampleObj["Param" + XML_SPLITTER + index + "P00063"] = buildParamObj("P00063", p00063val);
-		}
-
-
-		//  - the Distance from L Bank should be written to P00009.  (distance from Right bank is P00001)
-		let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
-		sampleObj["Param" + XML_SPLITTER + index + "P00009"] = buildParamObj("P00009", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
-
-		//  - Transit rate, sampler, feet per second  should be written to P50015.
-		colNum = getColumnNumberFromTableHeader(samplesTable, transitHeaderText);
-		sampleObj["Param" + XML_SPLITTER + index + "P50015"] = buildParamObj("P50015", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
-
-		//  - Start Time should be written to P82073, 
-		//  - End Time should be written to P82074.  
-		//  These should be written in 24-hour military time, with NO colon between the hour & minutes.
-		sampleObj["Param" + XML_SPLITTER + index + "P82073"] = buildParamObj("P82073", getQuestionValue(eventID, DEName, setName, "startTime").replace(":", ""));
-		sampleObj["Param" + XML_SPLITTER + index + "P82074"] = buildParamObj("P82074", getQuestionValue(eventID, DEName, setName, "endTime").replace(":", ""));
-
-
-		// - the "Stream Width", if calculated, should be written to P00004.  
-		try {
-			let streamWidth = Math.abs(getQuestionValue(eventID, "streamWidth"));
-			if (streamWidth !== 0) {
-				sampleObj["Param" + XML_SPLITTER + index + "P00004"] = buildParamObj("P00004", streamWidth);
-			}
-		} catch (e) {
-			console.warn("Stream Width not added to XML", e);
-		}
-
-
-		// let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
-		// console.log("P50015");
-		// console.log('samplesTable :', samplesTable);
-		// console.log('colNum :', colNum);
-
-
-		// - - Mean Depth of Stream (00064), 
-		sampleObj["Param" + XML_SPLITTER + index + "P00064"] = buildParamObj("P00064", getQuestionValue(eventID, "meanStreamDepth"));
-
-		// - - Stream Velocity (00055)
-		sampleObj["Param" + XML_SPLITTER + index + "P00055"] = buildParamObj("P00055", getQuestionValue(eventID, "streamVelocity"));
-
-
-		// // IET testing
-		// - - Stream Velocity (ft) - - should be written to P72196
-		sampleObj["Param" + XML_SPLITTER + index + "P72196"] = buildParamObj("P72196", getQuestionValue(eventID, DEName, "streamVelocity_IET"));
-		// - - Seconds Sampler collected water - - should be written to P72217
-		sampleObj["Param" + XML_SPLITTER + index + "P72217"] = buildParamObj("P72217", getQuestionValue(eventID, DEName, "duration_IET"));
-		// - - Sample Volume for Test (mL) - - should be written to P72218
-		sampleObj["Param" + XML_SPLITTER + index + "P72218"] = buildParamObj("P72218", getQuestionValue(eventID, DEName, "sampleVolume_IET"));
-		// - - Nozzle Material - - should be written to P72219
-		sampleObj["Param" + XML_SPLITTER + index + "P72219"] = buildParamObj("P72219", getQuestionValue(eventID, DEName, "nozzleMaterial_IET"));
-		// - - Nozzle Diameter - - should be written to P72220
-		sampleObj["Param" + XML_SPLITTER + index + "P72220"] = buildParamObj("P72220", getQuestionValue(eventID, DEName, "nozzleDiameter_IET"));
-
-
-
-		// for Bedload samples only:  
-		if (sedType === BEDLOAD_TEXT) {
-			//  - - Bag Mesh Size, in mm - - should be P30333.
-			sampleObj["Param" + XML_SPLITTER + index + "P30333"] = buildParamObj("P30333", getQuestionValue(eventID, DEName, "bagMesh"));
-
-			//  - - Tether Line Used - -  should be P04117.
-			sampleObj["Param" + XML_SPLITTER + index + "P04117"] = buildParamObj("P04117", getQuestionValue(eventID, DEName, "tetherLine") ? 1 : 0);
-
-			//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
-			sampleObj["Param" + XML_SPLITTER + index + "P04118"] = buildParamObj("P04118", getQuestionValue(eventID, DEName, "compositeSamplesInCrossSection"));
-
-			//  - - Verticals in composite sample, a number - - should be P04119. 
-			sampleObj["Param" + XML_SPLITTER + index + "P04119"] = buildParamObj("P04119", getQuestionValue(eventID, DEName, "verticalsInComposite"));
-
-			//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
-			colNum = getColumnNumberFromTableHeader(samplesTable, restTimeHeaderText);
-			sampleObj["Param" + XML_SPLITTER + index + "P04120"] = buildParamObj("P04120", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));
-
-			// //  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
-			colNum = getColumnNumberFromTableHeader(samplesTable, horizWidthHeaderText);
-			sampleObj["Param" + XML_SPLITTER + index + "P04121"] = buildParamObj("P04121", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));
-		}
-
 	});
+
+	//get remaining sample info
+	let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
+	let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue) + "_" + sedType;
+	let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
+	let distanceHeaderText = "Distance from L bank, feet";
+	let transitHeaderText = "Transit Rate, ft / sec";
+	let restTimeHeaderText = "Rest time on Bed for Bed load sample, seconds";
+	let horizWidthHeaderText = "Horizontal width of Vertical, feet"
+
+	// REMOVED per KASKACH request that this be a param block instead of a sample-level item.
+	//  "Average Gage Height", if calculated, should be written to P00065.
+	//  If they DON'T fill in Start and End Gage Ht, they should be able to enter Average Gage Ht P00065 by hand.  
+	// QWDATA can also accept this if left blank.
+	// sampleObj["Param" + curParamNum++] = this.buildParamObj("P00065", this.getQuestionValue("set" + setName + "_AvgGageHeight"));
+
+	//  - the "number of Sampling Points" should be written to P00063.  This will be left blank for 'Groups' of samples.
+
+
+	if (!getQuestionValue(eventID, DEName, setName, "groupOfSamples")) {
+		let p00063val = getQuestionValue(eventID, DEName, setName, "numberOfSamplingPoints");
+		sampleObj["Param" + XML_SPLITTER +  "P00063"] = buildParamObj("P00063", p00063val);
+	}
+
+
+	//  - the Distance from L Bank should be written to P00009.  (distance from Right bank is P00001)
+	let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
+	sampleObj["Param" + XML_SPLITTER +  "P00009"] = buildParamObj("P00009", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
+
+	//  - Transit rate, sampler, feet per second  should be written to P50015.
+	colNum = getColumnNumberFromTableHeader(samplesTable, transitHeaderText);
+	sampleObj["Param" + XML_SPLITTER +  "P50015"] = buildParamObj("P50015", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
+
+	//  - Start Time should be written to P82073, 
+	//  - End Time should be written to P82074.  
+	//  These should be written in 24-hour military time, with NO colon between the hour & minutes.
+	sampleObj["Param" + XML_SPLITTER +  "P82073"] = buildParamObj("P82073", getQuestionValue(eventID, DEName, setName, "startTime").replace(":", ""));
+	sampleObj["Param" + XML_SPLITTER +  "P82074"] = buildParamObj("P82074", getQuestionValue(eventID, DEName, setName, "endTime").replace(":", ""));
+
+
+	// - the "Stream Width", if calculated, should be written to P00004.  
+	try {
+		let streamWidth = Math.abs(getQuestionValue(eventID, "streamWidth"));
+		if (streamWidth !== 0) {
+			sampleObj["Param" + XML_SPLITTER + "P00004"] = buildParamObj("P00004", streamWidth);
+		}
+	} catch (e) {
+		console.warn("Stream Width not added to XML", e);
+	}
+
+
+	// let qv = getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum);
+	// console.log("P50015");
+	// console.log('samplesTable :', samplesTable);
+	// console.log('colNum :', colNum);
+
+
+	// - - Mean Depth of Stream (00064), 
+	sampleObj["Param" + XML_SPLITTER  + "P00064"] = buildParamObj("P00064", getQuestionValue(eventID, "meanStreamDepth"));
+
+	// - - Stream Velocity (00055)
+	sampleObj["Param" + XML_SPLITTER  + "P00055"] = buildParamObj("P00055", getQuestionValue(eventID, "streamVelocity"));
+
+
+	// // IET testing
+	// - - Stream Velocity (ft) - - should be written to P72196
+	sampleObj["Param" + XML_SPLITTER  + "P72196"] = buildParamObj("P72196", getQuestionValue(eventID, DEName, "streamVelocity_IET"));
+	// - - Seconds Sampler collected water - - should be written to P72217
+	sampleObj["Param" + XML_SPLITTER + "P72217"] = buildParamObj("P72217", getQuestionValue(eventID, DEName, "duration_IET"));
+	// - - Sample Volume for Test (mL) - - should be written to P72218
+	sampleObj["Param" + XML_SPLITTER  + "P72218"] = buildParamObj("P72218", getQuestionValue(eventID, DEName, "sampleVolume_IET"));
+	// - - Nozzle Material - - should be written to P72219
+	sampleObj["Param" + XML_SPLITTER  + "P72219"] = buildParamObj("P72219", getQuestionValue(eventID, DEName, "nozzleMaterial_IET"));
+	// - - Nozzle Diameter - - should be written to P72220
+	sampleObj["Param" + XML_SPLITTER  + "P72220"] = buildParamObj("P72220", getQuestionValue(eventID, DEName, "nozzleDiameter_IET"));
+
+
+
+	// for Bedload samples only:  
+	if (sedType === BEDLOAD_TEXT) {
+		//  - - Bag Mesh Size, in mm - - should be P30333.
+		sampleObj["Param" + XML_SPLITTER  + "P30333"] = buildParamObj("P30333", getQuestionValue(eventID, DEName, "bagMesh"));
+
+		//  - - Tether Line Used - -  should be P04117.
+		sampleObj["Param" + XML_SPLITTER  + "P04117"] = buildParamObj("P04117", getQuestionValue(eventID, DEName, "tetherLine") ? 1 : 0);
+
+		//  - - Composited samples in cross sectional bedload measurement, a number - - should be P04118.
+		sampleObj["Param" + XML_SPLITTER  + "P04118"] = buildParamObj("P04118", getQuestionValue(eventID, DEName, "compositeSamplesInCrossSection"));
+
+		//  - - Verticals in composite sample, a number - - should be P04119. 
+		sampleObj["Param" + XML_SPLITTER  + "P04119"] = buildParamObj("P04119", getQuestionValue(eventID, DEName, "verticalsInComposite"));
+
+		//  - - Rest time on Bed (for Bed load sample), seconds - - should be P04120.
+		colNum = getColumnNumberFromTableHeader(samplesTable, restTimeHeaderText);
+		sampleObj["Param" + XML_SPLITTER  + "P04120"] = buildParamObj("P04120", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));
+
+		// //  - - Horizontal width of Vertical (for Bed load sample), feet - - should be P04121
+		colNum = getColumnNumberFromTableHeader(samplesTable, horizWidthHeaderText);
+		sampleObj["Param" + XML_SPLITTER  + "P04121"] = buildParamObj("P04121", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));
+	}
+
+
 	return sampleObj;
 }
 
