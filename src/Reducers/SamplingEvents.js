@@ -6,7 +6,7 @@ import {
 	ADD_QUESTION_TO_EVENT,
 	DELETE_QUESTION_FROM_EVENT,
 	SE_QUESTION_VALUE_DELETE,
-	SET_SAMPLING_EVENT_BANK
+	SAMPLING_EVENT_BANK_CHANGE
 } from '../Constants/ActionTypes';
 
 
@@ -1801,7 +1801,7 @@ export function SamplingEvents(state = initialState, action) {
 		case DELETE_QUESTION_FROM_EVENT:
 			delete newState[action.eventID].questionsData[action.QID];
 			return newState;
-		case SET_SAMPLING_EVENT_BANK:
+		case SAMPLING_EVENT_BANK_CHANGE:
 			newState[action.eventID].bank = action.bank;
 			return newState;
 		default:

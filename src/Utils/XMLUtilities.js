@@ -1,6 +1,6 @@
 import xmljs from 'xml-js';
 import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES } from '../Constants/Config';
-import { getQuestionValue, getActiveSedimentTypes, getMethodCategoryFromValue } from './QuestionUtilities';
+import { getQuestionValue, getActiveSedimentTypes, getMethodCategoryFromValue, getColumnNumberFromTableHeader } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
@@ -11,7 +11,8 @@ import {
 
 import {
 	SAMPLE_TIME_HEADER, SAMPLE_DATE_HEADER, HYDROLOGIC_EVENT_HEADER, HYDROLOGIC_COND_HEADER,
-	SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER, BEDLOAD_TEXT
+	SAMPLE_TYPE_HEADER, ASTAT_CODE_HEADER, M2LAB_HEADER, ADD_ON_HEADER, DESCRIPTION_HEADER, BEDLOAD_TEXT,
+	LEFT_BANK_VALUE
 } from '../Constants/Dictionary';
 
 
@@ -190,7 +191,7 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 	let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
 	let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue) + "_" + sedType;
 	let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
-	let distanceHeaderText = "Distance from L bank, feet";
+	let distanceHeaderText = "Distance from " +getQuestionValue(eventID, "bank").startsWith(LEFT_BANK_VALUE)?"L":"R" + " bank, feet";
 	let transitHeaderText = "Transit Rate, ft / sec";
 	let restTimeHeaderText = "Rest time on Bed for Bed load sample, seconds";
 	let horizWidthHeaderText = "Horizontal width of Vertical, feet"
@@ -362,17 +363,6 @@ const stringFromMultipleChoice = (MCObj) => {
 	}
 }
 
-
-const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {
-	// console.log('getColNum :', tableValue, headerToSearchFor);
-	let ret = -1;
-	tableValue[0].forEach((header, index) => {
-		if (headerToSearchFor === header) {
-			ret = index;
-		}
-	});
-	return ret;
-}
 
 const getSamplingMethodQuestionIDString = (eventID) => {
 	let samplingMethodQuestionIDString = "samplingMethod";

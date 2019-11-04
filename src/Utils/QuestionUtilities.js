@@ -300,6 +300,30 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 }
 
+export const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {  //TODO: switch to startsWith
+	// console.log('getColNum :', tableValue, headerToSearchFor);
+	let ret = -1;
+	tableValue[0].forEach((header, index) => {
+		if (headerToSearchFor === header) {
+			ret = index;
+		}
+	});
+	return ret;
+}
+
+// export const getSampleTableValueValueWithBank = (eventID, QID, sub_QID, set_QID, bank) => {
+// 	// given ARRAY questionData, will filter down to items that match questionData.layoutgroup = layoutGroupName ....
+// 	let layoutGroupQuestionsData = [];
+
+// 	if (questionsData !== null && questionsData.length > 0) {  //TODO: add error
+// 		layoutGroupQuestionsData = questionsData.filter((questionData) => {
+// 			return questionData.layoutGroup === layoutGroupName;
+// 		});
+// 	}
+// 	return layoutGroupQuestionsData;
+
+// }
+
 
 
 // export const saveQuestionValueToLS = (Q) => {

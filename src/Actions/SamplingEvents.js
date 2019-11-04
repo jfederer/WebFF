@@ -1,16 +1,25 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 
-
 import {
 	CREATE_NEW_SAMPLING_EVENT,
 	REGISTER_EVENT_WITH_USERNAME,
 	SE_QUESTION_VALUE_CHANGE,
-	SE_QUESTION_VALUE_DELETE
+	SE_QUESTION_VALUE_DELETE,
+	SAMPLING_EVENT_BANK_CHANGE
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
-import {  getQuestionsData, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
-import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DATA_ENTRY_INFORMATION_IDENTIFIER, QWDATA_TABLE_IDENTIFIER, PARAMETERS_TABLE_IDENTIFIER, ACTIONABLE_GLOBAL_QIDS } from '../Constants/Config';
+import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
+import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
+import {
+	SET_INFORMATION_IDENTIFIER,
+	IDENTIFIER_SPLITTER,
+	DATA_ENTRY_INFORMATION_IDENTIFIER,
+	QWDATA_TABLE_IDENTIFIER,
+	PARAMETERS_TABLE_IDENTIFIER,
+	ACTIONABLE_GLOBAL_QIDS
+} from '../Constants/Config';
+import { LEFT_BANK_VALUE } from '../Constants/Dictionary';
 import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
@@ -56,6 +65,11 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 			}
 		}
 
+
+		if (questionID.startsWith("bank")) {
+			dispatch(samplingEventBankChange(eventID, newValue));
+		}
+
 		if (questionID === "collectingAgency") {
 			//action showQuestion / hideQuestion depending on question.value
 		}
@@ -79,6 +93,60 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 
 	}
 }
+
+
+function samplingEventBankChange(eventID, bank) {
+	return (dispatch, getState) => {
+		dispatch({ type: SAMPLING_EVENT_BANK_CHANGE, eventID, bank }); // this is often redundant because the SEQuestionVAlueChange would happen first in most flow paths
+
+		// change all samples_tables in values
+		let event = getEventFromID(eventID);
+		Object.keys(event.questionsValues).forEach((QID) => {
+			if (!QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
+				return;
+			}
+			Object.keys(event.questionsValues[QID]).forEach((sub_QID) => {
+				if (!sub_QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
+					return;
+				}
+				Object.keys(event.questionsValues[QID][sub_QID]).forEach((set_QID) => {
+					if (set_QID.startsWith("samplesTable_")) {
+						let STV = getQuestionValue(eventID, QID, sub_QID, set_QID);
+						console.log('STV :', STV);
+						let oldDistanceHeaderText = "Distance from " + (getQuestionValue(eventID, "bank").startsWith(LEFT_BANK_VALUE) ? "R" : "L") + " bank, feet"; // we are looking for the opposite of what we are asking to change TO
+						let newDistanceHeaderText = "Distance from " + (getQuestionValue(eventID, "bank").startsWith(LEFT_BANK_VALUE) ? "L" : "R") + " bank, feet"; // we are looking for the opposite of what we are asking to change TO
+						console.log('oldDistanceHeaderText :', oldDistanceHeaderText);
+						console.log('newDistanceHeaderText :', newDistanceHeaderText);
+						let columnToChange = getColumnNumberFromTableHeader(STV, oldDistanceHeaderText);
+						console.log('columnToChange :', columnToChange);
+
+						let newDEValue = _.cloneDeep(event.questionsValues[QID]);
+						console.log('newDEValue :', newDEValue);
+
+						try {
+							newDEValue[sub_QID][set_QID][0][columnToChange] = newDistanceHeaderText;
+
+
+							if (columnToChange > -1) {
+								dispatch(SEQuestionValueChange(eventID, QID, newDEValue));
+							} else {
+								console.warn("Distance from Header column not found in " + event.questionsValues[QID][sub_QID][set_QID]);
+							}
+						} catch (e) {
+							console.warn(e);
+						}
+
+					}
+				})
+			})
+
+		})
+
+		//FIXME: test what a new that a new smaple table does -- might nee dto change questions data (which would mean resetting questions data)
+	}
+}
+
+
 // function conditionallyRunActionString(eventID, questionID, subQ) {
 // 	console.log("conditionallyRunActionString(", eventID, questionID, subQ, ")");
 
@@ -137,7 +205,7 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 * @param questionID {string} - the question ID. 
 * @returns void
 */
-export function SEQuestionValueDelete(eventID, questionID) { 
+export function SEQuestionValueDelete(eventID, questionID) {
 	return (dispatch) => {
 		dispatch({ type: SE_QUESTION_VALUE_DELETE, eventID, questionID, });
 	}
@@ -213,7 +281,7 @@ export function stationNameChanged(eventID, newStationName) {
 	//note: displayName is already changed at this point.
 	return (dispatch, getState) => {
 		let stationIDs = getStationIDsFromName(getState().SedFF.currentUsername, newStationName);
-		if(!Array.isArray(stationIDs) || !stationIDs.length) {
+		if (!Array.isArray(stationIDs) || !stationIDs.length) {
 			return null;
 		}
 		let stationID = stationIDs[0];
@@ -232,7 +300,8 @@ export function stationNameChanged(eventID, newStationName) {
 		if (station.defaultAgencyCode) {
 			dispatch(SEQuestionValueChange(eventID, "agencyCode", station.defaultAgencyCode));
 		}
-		if(station.defaultBank) {
+		if (station.defaultBank) {
+			//TODO: throw warning if bridge wizard or stationinghas been filled out
 			dispatch(SEQuestionValueChange(eventID, "bank", station.defaultBank));
 		}
 
