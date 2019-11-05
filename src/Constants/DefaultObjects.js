@@ -407,8 +407,8 @@ export const defaultWaterwayInfoQuestionsData = {
 			"Left Bank": LEFT_BANK_VALUE,
 			"Right Bank": RIGHT_BANK_VALUE
 		},
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
+		// "tabName": "FieldForm",
+		// "layoutGroup": "Waterway Info",
 		"width_xs": 6,
 		"width_lg": 2
 	},
@@ -418,8 +418,8 @@ export const defaultWaterwayInfoQuestionsData = {
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
+		// "tabName": "FieldForm",
+		// "layoutGroup": "Waterway Info",
 		"width_xs": 6,
 		"width_lg": 2
 	},
@@ -430,8 +430,8 @@ export const defaultWaterwayInfoQuestionsData = {
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
+		// "tabName": "FieldForm",
+		// "layoutGroup": "Waterway Info",
 		"width_xs": 6,
 		"width_lg": 3
 	},
@@ -442,8 +442,8 @@ export const defaultWaterwayInfoQuestionsData = {
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
+		// "tabName": "FieldForm",
+		// "layoutGroup": "Waterway Info",
 		"width_xs": 5,
 		"width_lg": 3
 	},
@@ -454,8 +454,8 @@ export const defaultWaterwayInfoQuestionsData = {
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
+		// "tabName": "FieldForm",
+		// "layoutGroup": "Waterway Info",
 		"width_xs": 5,
 		"width_lg": 2
 	},
@@ -468,8 +468,8 @@ export const defaultWaterwayInfoQuestionsData = {
 		"computationString": "edgeOfWater_Right-edgeOfWater_Left",
 		"placeholder": "This will be calculated",
 		"value": "",
-		"tabName": "FieldForm",
-		"layoutGroup": "Waterway Info",
+		// "tabName": "FieldForm",
+		// "layoutGroup": "Waterway Info",
 		"width_xs": 2,
 		"width_lg": 2
 	},
