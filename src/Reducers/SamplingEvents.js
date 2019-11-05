@@ -55,6 +55,7 @@ const initialState = { //MOCK //TODO:
       dateModified: 'Wed Oct 30 2019 09:52:05 GMT-0500 (Central Daylight Time)',
       shippedStatus: 'Not Shipped',
       questionsValues: {
+		  bank: "Right Bank",
         samplingMethod_Suspended: '10',
         samplingMethod_Bedload: '50',
         samplingMethod_Bottom: 'Not Sampled',

@@ -17,10 +17,13 @@ import {
 	DATA_ENTRY_INFORMATION_IDENTIFIER,
 	QWDATA_TABLE_IDENTIFIER,
 	PARAMETERS_TABLE_IDENTIFIER,
-	ACTIONABLE_GLOBAL_QIDS
+	ACTIONABLE_GLOBAL_QIDS,
+	EWI_METHOD_CATEGORY,
+	EDI_METHOD_CATEGORY
 } from '../Constants/Config';
 
 import { getQuestionValue, getMethodCategoryFromValue, getSamplesTableValueWithGivenBank, getDataEntryValueWithGivenBank } from '../Utils/QuestionUtilities';
+import { provideEWISamplingLocations } from '../Utils/CalculationUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
 
@@ -89,7 +92,7 @@ export function samplingEventBankChange(eventID, bank) {
 				return;
 			}
 			let newDEValue = getDataEntryValueWithGivenBank(event.questionsValues[QID], bank);
-		
+
 			dispatch(SEQuestionValueChange(eventID, QID, newDEValue));
 		})
 	}
@@ -203,7 +206,9 @@ export function createNewSamplingEvent(eventName) {
 
 
 		// find all questions with actual default 'values' in questionsData and include those in the new event
-		let filtered = _.filter(getQuestionsData(null), (QD) =>  //TODO: could we use newEvent.eventID
+		let GQD = getQuestionsData(null);
+		console.log('GQD :', GQD);
+		let filtered = _.filter(GQD, (QD) =>  //TODO: could we use newEvent.eventID
 			typeof QD.value !== 'undefined' && // undefined gets filtered out
 			(QD.value || QD.value === 0 || typeof QD.value === 'boolean') && // truthy value, zero, and booleans make it through filter
 			(typeof QD.value !== 'object' || Object.keys(QD).length < 1)
@@ -319,16 +324,62 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 			}
 		}
 
-		//verify the table value is coming from the correct bank...
-		let fromBank = getEventFromID(eventID).bank;
-		console.log('setInfoSampleTableValue :', setInfoSampleTableValue);
-		console.log('fromBank :', fromBank);
-		let setInfoPost = getSamplesTableValueWithGivenBank(setInfoSampleTableValue, fromBank);
-		console.log('setInfoPost :', setInfoPost);
+		//setInfoSampleTableValue is now appropriate size...
 
-		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoPost);  //TODO: underscore should be something defined in config
+		//verify the table value is coming from the correct bank...\
+		let fromBank = getEventFromID(eventID).questionsValues.bank;
+		console.assert(fromBank, "From bank is "+typeof fromBank);
+		setInfoSampleTableValue = getSamplesTableValueWithGivenBank(setInfoSampleTableValue, fromBank);
 
-		// re-do any distance data  if EWI (confirm with user) //TODO:
+		// re-do any distance data (confirm with user) //TODO:
+		switch (getMethodCategoryFromValue(samplingMethod)) {
+			case EWI_METHOD_CATEGORY: {
+				let LESZ = getQuestionValue(eventID, "edgeOfSamplingZone_Left");  //TODO: change to "Starting" and "Ending" rather than "left and "right"?
+				let RESZ = getQuestionValue(eventID, "edgeOfSamplingZone_Right");
+				console.log("Left Edge SZ: ", LESZ);
+				console.log("Right Edge SZ: ", RESZ);
+
+				let pierStartLocations = Object.keys(getEventFromID(eventID).questionsValues)
+					.filter(QID => QID.startsWith("pier_") && QID.endsWith("_start"))
+					.map(QID => getQuestionValue(eventID, QID));
+				let pierEndLocations = Object.keys(getEventFromID(eventID).questionsValues)
+					.filter(QID => QID.startsWith("pier_") && QID.endsWith("_end"))
+					.map(QID => getQuestionValue(eventID, QID));
+				let pierWidths = pierStartLocations.map((startLocation, i) => pierEndLocations[i] - startLocation);
+				console.log('pierStartLocations :', pierStartLocations);
+				console.log('pierEndLocations :', pierEndLocations);
+				console.log('pierWidths :', pierWidths);
+
+				let tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierStartLocations, pierWidths, numPoints);
+				console.log('tempValArr :', tempValArr);
+				
+				//insert distances into setInfoSampleTableValue   //TODO: instead of column zero, do the appropriate search for header
+				tempValArr.forEach((dist,i)=>setInfoSampleTableValue[i+1][0]=dist);
+			}
+		}
+		
+		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoSampleTableValue);  //TODO: underscore should be something defined in config
+
+
+
+
+
+
+
+			// let samplingLocations = provideEWISamplingLocations(
+
+			// 	,
+
+
+			// 	)
+			// case EDI_METHOD_CATEGORY:
+		
+
+
+
+
+
+
 
 		////// modify QWDATA table //////TODO:
 		let origQWDATAValue = getQuestionValue(eventID, QWDATA_TABLE_IDENTIFIER + sedimentType);
