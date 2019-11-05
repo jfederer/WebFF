@@ -12,7 +12,7 @@ import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from 
 import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DISALLOWED_CHARACTERS_IN_SETNAME_REGEX } from '../../../Constants/Config';
 
 import { addQuestionToEvent } from '../../../Actions/Questions';
-import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
+import { SEQuestionValueChange, samplingEventBankChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
 import { getSetInformationQuestionsData } from '../../../Utils/StoreUtilities';
@@ -175,7 +175,7 @@ class AddSetForm extends React.Component {
 		} else {
 			this.props.SEQuestionValueChange(currentSamplingEventID, newSetQuestion.id, newSetValue);
 		}
-
+		
 		this.setState({
 			newSetName: "",
 			duplicateFromSet: this.state.duplicateFromSet ? this.state.duplicateFromSet : this.fullSetName(newSetName)
@@ -263,7 +263,8 @@ const mapDispatchToProps = {
 	setAppBarText,
 	addQuestionToEvent,
 	SEQuestionValueChange,
-	showQuestionPanel
+	showQuestionPanel,
+	samplingEventBankChange
 }
 
 AddSetForm.propTypes = {

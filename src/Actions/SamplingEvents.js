@@ -10,7 +10,7 @@ import {
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
-import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
+// import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
 	IDENTIFIER_SPLITTER,
@@ -19,8 +19,8 @@ import {
 	PARAMETERS_TABLE_IDENTIFIER,
 	ACTIONABLE_GLOBAL_QIDS
 } from '../Constants/Config';
-import { LEFT_BANK_VALUE } from '../Constants/Dictionary';
-import { getQuestionValue, getMethodCategoryFromValue } from '../Utils/QuestionUtilities';
+
+import { getQuestionValue, getMethodCategoryFromValue, getSamplesTableValueWithGivenBank, getDataEntryValueWithGivenBank } from '../Utils/QuestionUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
 
@@ -67,35 +67,18 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 
 
 		if (questionID.startsWith("bank")) {
+			//TODO: check if values exist in stationing, piers, etc... if so, warn before dispatching
 			dispatch(samplingEventBankChange(eventID, newValue));
 		}
 
 		if (questionID === "collectingAgency") {
 			//action showQuestion / hideQuestion depending on question.value
 		}
-
-		// let value = getQuestionValue(eventID, questionID);
-		// let actions = question.actions;
-		// if (actions) {
-		// 	// if action string exists...
-		// 	let anyValueActionString = actions["anyValue"];
-		// 	if (anyValueActionString) {
-		// 		// run 'anyValue' action strings first
-		// 		dispatchAllActionsFromActionString(dispatch, anyValueActionString);
-		// 	}
-
-		// 	let thisValueActionString = actions[value];
-		// 	if (thisValueActionString) {
-		// 		// run this specific value's action string second
-		// 		dispatchAllActionsFromActionString(dispatch, thisValueActionString);
-		// 	}
-		// }
-
 	}
 }
 
 
-function samplingEventBankChange(eventID, bank) {
+export function samplingEventBankChange(eventID, bank) {
 	return (dispatch, getState) => {
 		dispatch({ type: SAMPLING_EVENT_BANK_CHANGE, eventID, bank }); // this is often redundant because the SEQuestionVAlueChange would happen first in most flow paths
 
@@ -105,44 +88,10 @@ function samplingEventBankChange(eventID, bank) {
 			if (!QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
 				return;
 			}
-			Object.keys(event.questionsValues[QID]).forEach((sub_QID) => {
-				if (!sub_QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
-					return;
-				}
-				Object.keys(event.questionsValues[QID][sub_QID]).forEach((set_QID) => {
-					if (set_QID.startsWith("samplesTable_")) {
-						let STV = getQuestionValue(eventID, QID, sub_QID, set_QID);
-						console.log('STV :', STV);
-						let oldDistanceHeaderText = "Distance from " + (getQuestionValue(eventID, "bank").startsWith(LEFT_BANK_VALUE) ? "R" : "L") + " bank, feet"; // we are looking for the opposite of what we are asking to change TO
-						let newDistanceHeaderText = "Distance from " + (getQuestionValue(eventID, "bank").startsWith(LEFT_BANK_VALUE) ? "L" : "R") + " bank, feet"; // we are looking for the opposite of what we are asking to change TO
-						console.log('oldDistanceHeaderText :', oldDistanceHeaderText);
-						console.log('newDistanceHeaderText :', newDistanceHeaderText);
-						let columnToChange = getColumnNumberFromTableHeader(STV, oldDistanceHeaderText);
-						console.log('columnToChange :', columnToChange);
-
-						let newDEValue = _.cloneDeep(event.questionsValues[QID]);
-						console.log('newDEValue :', newDEValue);
-
-						try {
-							newDEValue[sub_QID][set_QID][0][columnToChange] = newDistanceHeaderText;
-
-
-							if (columnToChange > -1) {
-								dispatch(SEQuestionValueChange(eventID, QID, newDEValue));
-							} else {
-								console.warn("Distance from Header column not found in " + event.questionsValues[QID][sub_QID][set_QID]);
-							}
-						} catch (e) {
-							console.warn(e);
-						}
-
-					}
-				})
-			})
-
+			let newDEValue = getDataEntryValueWithGivenBank(event.questionsValues[QID], bank);
+		
+			dispatch(SEQuestionValueChange(eventID, QID, newDEValue));
 		})
-
-		//FIXME: test what a new that a new smaple table does -- might nee dto change questions data (which would mean resetting questions data)
 	}
 }
 
@@ -317,7 +266,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 
 	return dispatch => {
-		dispatch(showNavigationTab("QWDATA"));
+		dispatch(showNavigationTab("QWDATA"));   //TODO: change this to the nav tab calculator?
 		dispatch(showNavigationTab("Parameters"));
 
 		////// modify setInfo table //////
@@ -370,7 +319,14 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 			}
 		}
 
-		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoSampleTableValue);  //TODO: underscore should be something defined in config
+		//verify the table value is coming from the correct bank...
+		let fromBank = getEventFromID(eventID).bank;
+		console.log('setInfoSampleTableValue :', setInfoSampleTableValue);
+		console.log('fromBank :', fromBank);
+		let setInfoPost = getSamplesTableValueWithGivenBank(setInfoSampleTableValue, fromBank);
+		console.log('setInfoPost :', setInfoPost);
+
+		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoPost);  //TODO: underscore should be something defined in config
 
 		// re-do any distance data  if EWI (confirm with user) //TODO:
 

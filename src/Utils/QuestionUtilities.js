@@ -6,15 +6,16 @@ import { getEventFromID, getQuestionsData, getSetListAsArray, getNumberOfSamples
 import {
 	DATA_ENTRY_INFORMATION_IDENTIFIER, QUESTIONS_DATA_OBJECT_TYPE, QUESTIONS_VALUES_OBJECT_TYPE,
 	EDI_METHOD_CATEGORY, EWI_METHOD_CATEGORY, OTHER_METHOD_CATEGORY, IDENTIFIER_SPLITTER, DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER,
-	METHOD_QIDS
+	METHOD_QIDS,
+	SET_INFORMATION_IDENTIFIER
 } from '../Constants/Config';
 import { DESCRIPTION_HEADER } from '../Constants/Dictionary';
 import { getShortSetNameFromFullSetName } from '../Utils/Utilities';
-import { NOT_SAMPLED } from '../Constants/Dictionary';
+import { NOT_SAMPLED, LEFT_BANK_VALUE } from '../Constants/Dictionary';
 
 export const createQuestionComponents = (questionsData, questionsValues, alternateChangeHandler, opts) => {
 
-	if(typeof opts === "undefined") {
+	if (typeof opts === "undefined") {
 		opts = {}
 	}
 	// console.log("createQuestionComponents(\n\tQuestionsData: ", questionsData, "\n\tQuestionsValues ", questionsValues, "\n\tAltChangeHandler: ", alternateChangeHandler, opts, ")");
@@ -202,7 +203,7 @@ export const getDescriptiveColumnForTable = (eventID, sedType) => {
 
 	setList.forEach((setName) => {
 		let numSamps = getNumberOfSamplesInSet(eventID, sedType, setName);
-		let samplesComposited = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedType, setName, "samplesComposited");
+		let samplesComposited = getQuestionValue(eventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedType, setName, "samplesComposited");
 
 		let setLocations = [];
 		if (!samplesComposited) { // samples will be analysized individually (and thus each sample needs it's own line)
@@ -410,3 +411,33 @@ export const getGridedQuestions = (questions) => {
 	</Grid>
 }
 
+export function getDataEntryValueWithGivenBank(DEValue, bank) {
+	let newDEValue = _.cloneDeep(DEValue);
+	Object.keys(newDEValue).forEach((sub_QID) => {
+		if (sub_QID.includes(SET_INFORMATION_IDENTIFIER)) {
+			let newSetInfoValue = getSetInfoValueWithGivenBank(newDEValue[sub_QID], bank);
+			newDEValue[sub_QID] = newSetInfoValue;
+		}
+	});
+	return newDEValue;
+}
+
+export function getSetInfoValueWithGivenBank(SIValue, bank) {
+	let newSIValue = _.cloneDeep(SIValue);
+
+	Object.keys(newSIValue).forEach((set_QID) => {
+		if (set_QID.startsWith("samplesTable_")) {
+			newSIValue[set_QID] = getSamplesTableValueWithGivenBank(newSIValue[set_QID], bank)
+		}
+	})
+	return newSIValue;
+}
+
+export function getSamplesTableValueWithGivenBank(STValue, bank) {
+	let newSTValue = _.cloneDeep(STValue);
+	let oldDistanceHeaderText = "Distance from " + (bank.startsWith(LEFT_BANK_VALUE) ? "R" : "L") + " bank, feet"; // we are looking for the opposite of what we are asking to change TO
+	let newDistanceHeaderText = "Distance from " + (bank.startsWith(LEFT_BANK_VALUE) ? "L" : "R") + " bank, feet";
+	let columnToChange = getColumnNumberFromTableHeader(newSTValue, oldDistanceHeaderText);
+	newSTValue[0][columnToChange] = newDistanceHeaderText;
+	return newSTValue;
+}
