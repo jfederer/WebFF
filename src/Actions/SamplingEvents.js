@@ -207,12 +207,28 @@ export function createNewSamplingEvent(eventName) {
 
 		// find all questions with actual default 'values' in questionsData and include those in the new event
 		let GQD = getQuestionsData(null);
-		console.log('GQD :', GQD);
-		let filtered = _.filter(GQD, (QD) =>  //TODO: could we use newEvent.eventID
-			typeof QD.value !== 'undefined' && // undefined gets filtered out
-			(QD.value || QD.value === 0 || typeof QD.value === 'boolean') && // truthy value, zero, and booleans make it through filter
-			(typeof QD.value !== 'object' || Object.keys(QD).length < 1)
+		let filtered = _.filter(GQD, (QD) => {//TODO: could we use newEvent.eventID
+			if (typeof QD.value === 'undefined') { // undefined gets filtered out
+				return false;
+			}
+
+			if (QD.id === "waterwayInfo") {  // had to separate, because we want this value to copy... but other objects without default values not to.
+				return true;
+			}
+
+			if (typeof QD.value === 'object' || Object.keys(QD).length < 1) {
+			 	return false;
+			}
+
+			if (QD.value || QD.value === 0 || typeof QD.value === 'boolean') { // truthy value or zero, and booleans make it through filter
+				return true;
+			}
+
+
+			return false;
+		}
 		);
+
 		Object.keys(filtered).forEach((key) => {
 			newEvent['questionsValues'][filtered[key].id] = filtered[key].value;
 		}
@@ -328,7 +344,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 		//verify the table value is coming from the correct bank...\
 		let fromBank = getEventFromID(eventID).questionsValues.bank;
-		console.assert(fromBank, "From bank is "+typeof fromBank);
+		console.assert(fromBank, "From bank is " + typeof fromBank);
 		setInfoSampleTableValue = getSamplesTableValueWithGivenBank(setInfoSampleTableValue, fromBank);
 
 		// re-do any distance data (confirm with user) //TODO:
@@ -352,12 +368,12 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 				let tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierStartLocations, pierWidths, numPoints);
 				console.log('tempValArr :', tempValArr);
-				
+
 				//insert distances into setInfoSampleTableValue   //TODO: instead of column zero, do the appropriate search for header
-				tempValArr.forEach((dist,i)=>setInfoSampleTableValue[i+1][0]=dist);
+				tempValArr.forEach((dist, i) => setInfoSampleTableValue[i + 1][0] = dist);
 			}
 		}
-		
+
 		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoSampleTableValue);  //TODO: underscore should be something defined in config
 
 
@@ -366,14 +382,14 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 
 
-			// let samplingLocations = provideEWISamplingLocations(
+		// let samplingLocations = provideEWISamplingLocations(
 
-			// 	,
+		// 	,
 
 
-			// 	)
-			// case EDI_METHOD_CATEGORY:
-		
+		// 	)
+		// case EDI_METHOD_CATEGORY:
+
 
 
 

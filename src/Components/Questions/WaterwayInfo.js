@@ -70,12 +70,7 @@ class WaterwayInfo extends React.Component {
 		this.state = {
 			basicQuestions: Object.keys(defaultWaterwayInfoQuestionsData).map(key => defaultWaterwayInfoQuestionsData[key]),
 			pierQuestions: [],
-			edgeOfWater_Left: "",
-			edgeOfSamplingZone_Left: "",
-			edgeOfSamplingZone_Right: "",
-			edgeOfWater_Right: "",
-			streamWidth: "",
-			piers: {}
+			... this.props.value
 		}
 
 
@@ -101,7 +96,15 @@ class WaterwayInfo extends React.Component {
 	}
 
 	WWIChangeHandler = (eventID, QID, value) => {
-		this.props.SEQuestionValueChange(eventID, QID, value);
+		// console.log("WWIChangeHandler(", QID, value,")");
+		this.setState({[QID]:value}, ()=>{
+			let newWWValue = _.cloneDeep(this.state);
+			delete newWWValue.basicQuestions;
+			delete newWWValue.pierQuestions;
+			this.props.SEQuestionValueChange(eventID, this.props.id, newWWValue);
+		});
+
+		
 	};
 
 	addPierClickedHandler = () => {
@@ -144,6 +147,8 @@ class WaterwayInfo extends React.Component {
 
 	render() {
 		const { currentEvent, sedimentType, currentSamplingEventID } = this.props;
+	// console.log('this.props :', this.props);
+	// console.log('this.state :', this.state);
 
 		// let QD = getQuestionsData(currentSamplingEventID);
 
@@ -183,8 +188,10 @@ class WaterwayInfo extends React.Component {
 			{/* OPTION #1... doesn't involve any question creation here... */}
 			
 			{/* OPTION #2... */}
-			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions, currentEvent.questionsValues, this.WWIChangeHandler))}
-			{createQuestionComponents(this.state.pierQuestions, currentEvent.questionsValues, this.WWIChangeHandler)}
+			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions, 
+											this.state, 
+											this.WWIChangeHandler))}
+			{createQuestionComponents(this.state.pierQuestions, this.state, this.WWIChangeHandler)}
 
 
 			<Button onClick={this.addPierClickedHandler}>ADD PIER</Button>
@@ -200,7 +207,7 @@ class WaterwayInfo extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
-		currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
+		// currentEvent: state.SamplingEvents[state.SedFF.currentSamplingEventID],
 
 	}
 }

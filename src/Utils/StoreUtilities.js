@@ -112,11 +112,12 @@ export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  
 	}
 	
 	let defaultSetInfoQD = getSetInformationQuestionsData();
-	let defaultWWInfoQD = _.clone(defaultWaterwayInfoQuestionsData);
+	// let defaultWWInfoQD = _.clone(defaultWaterwayInfoQuestionsData);
 
 	let defaultQD = store.getState().Questions.questionsData;
 
-	return _.merge({}, defaultQD, defaultSetInfoQD, defaultWWInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	// return _.merge({}, defaultQD, defaultSetInfoQD, defaultWWInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	return _.merge({}, defaultQD, defaultSetInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 }
 
 /**

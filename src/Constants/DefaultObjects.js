@@ -412,9 +412,9 @@ export const defaultWaterwayInfoQuestionsData = {
 		"width_xs": 6,
 		"width_lg": 2
 	},
-	edgeOfWater_Left: {
-		"id": "edgeOfWater_Left",
-		"label": "Left Edge Of Water",
+	edgeOfWater_Start: {
+		"id": "edgeOfWater_Start",
+		"label": "Start Edge Of Water",
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
@@ -424,9 +424,9 @@ export const defaultWaterwayInfoQuestionsData = {
 		"width_lg": 2
 	},
 
-	edgeOfSamplingZone_Left: {
-		"id": "edgeOfSamplingZone_Left",
-		"label": "Left Edge Of Sampling Zone",
+	edgeOfSamplingZone_Start: {
+		"id": "edgeOfSamplingZone_Start",
+		"label": "Start Edge Of Sampling Zone",
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
@@ -436,9 +436,9 @@ export const defaultWaterwayInfoQuestionsData = {
 		"width_lg": 3
 	},
 
-	edgeOfSamplingZone_Right: {
-		"id": "edgeOfSamplingZone_Right",
-		"label": "Right Edge Of Sampling Zone",
+	edgeOfSamplingZone_End: {
+		"id": "edgeOfSamplingZone_End",
+		"label": "End Edge Of Sampling Zone",
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
@@ -448,9 +448,9 @@ export const defaultWaterwayInfoQuestionsData = {
 		"width_lg": 3
 	},
 
-	edgeOfWater_Right: {
-		"id": "edgeOfWater_Right",
-		"label": "Right Edge Of Water",
+	edgeOfWater_End: {
+		"id": "edgeOfWater_End",
+		"label": "End Edge Of Water",
 		"type": "Text",
 		"placeholder": "Feet from XYZ",
 		"value": "",
@@ -465,7 +465,7 @@ export const defaultWaterwayInfoQuestionsData = {
 		"label": "Stream Width",
 		"XMLTag": "P00004",
 		"type": "ComputedValue",
-		"computationString": "edgeOfWater_Right-edgeOfWater_Left",
+		"computationString": "edgeOfWater_Right-edgeOfWater_Left", //TODO:
 		"placeholder": "This will be calculated",
 		"value": "",
 		// "tabName": "FieldForm",
@@ -1039,72 +1039,18 @@ export const defaultQuestionsData = {
 		"width_lg": 3
 	},
 
-	// edgeOfWater_Left: {
-	// 	"id": "edgeOfWater_Left",
-	// 	"label": "Left Edge Of Water",
-	// 	"type": "Text",
-	// 	"placeholder": "Feet from XYZ",
-	// 	"value": "",
-	// 	"tabName": "FieldForm",
-	// 	"layoutGroup": "Waterway Info",
-	// 	"width_xs": 6,
-	// 	"width_lg": 2
-	// },
-
-	// edgeOfSamplingZone_Left: {
-	// 	"id": "edgeOfSamplingZone_Left",
-	// 	"label": "Left Edge Of Sampling Zone",
-	// 	"type": "Text",
-	// 	"placeholder": "Feet from XYZ",
-	// 	"value": "",
-	// 	"tabName": "FieldForm",
-	// 	"layoutGroup": "Waterway Info",
-	// 	"width_xs": 6,
-	// 	"width_lg": 3
-	// },
-
-	// edgeOfSamplingZone_Right: {
-	// 	"id": "edgeOfSamplingZone_Right",
-	// 	"label": "Right Edge Of Sampling Zone",
-	// 	"type": "Text",
-	// 	"placeholder": "Feet from XYZ",
-	// 	"value": "",
-	// 	"tabName": "FieldForm",
-	// 	"layoutGroup": "Waterway Info",
-	// 	"width_xs": 5,
-	// 	"width_lg": 3
-	// },
-
-	// edgeOfWater_Right: {
-	// 	"id": "edgeOfWater_Right",
-	// 	"label": "Right Edge Of Water",
-	// 	"type": "Text",
-	// 	"placeholder": "Feet from XYZ",
-	// 	"value": "",
-	// 	"tabName": "FieldForm",
-	// 	"layoutGroup": "Waterway Info",
-	// 	"width_xs": 5,
-	// 	"width_lg": 2
-	// },
-
-	// streamWidth: {
-	// 	"id": "streamWidth",
-	// 	"label": "Stream Width",
-	// 	"XMLTag": "P00004",
-	// 	"type": "ComputedValue",
-	// 	"computationString": "edgeOfWater_Right-edgeOfWater_Left",
-	// 	"placeholder": "This will be calculated",
-	// 	"value": "",
-	// 	"tabName": "FieldForm",
-	// 	"layoutGroup": "Waterway Info",
-	// 	"width_xs": 2,
-	// 	"width_lg": 2
-	// },
-
 	waterwayInfo: {
 		"id": "waterwayInfo",
 		"type": "WaterwayInfo",
-		"value": "",
+		"value": {
+			bank:LEFT_BANK_VALUE,
+			edgeOfWater_Start:"",
+			edgeOfWater_End:"",
+			edgeOfSamplingZone_Start:"",
+			edgeOfSamplingZone_End:"",
+			streamWidth:"",
+			piers:{}
+		},
 		"tabName": "FieldForm",
 		"layoutGroup": "Waterway Info",
 		"width_xs": 12,
