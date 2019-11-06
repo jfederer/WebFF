@@ -51,8 +51,8 @@ const styles = theme => ({
 
 const DEBUG = false;
 
-const pierQuestion = {
-	"id": "pier1",
+const defaultPierQuestion = {
+	"id": "pier_X_start",
 	"label": "PIER START",
 	"type": "Text",
 	"placeholder": "Feet from XYZ",
@@ -63,13 +63,21 @@ const pierQuestion = {
 	"width_lg": 2
 }
 
+const defaultPierObject = {
+	"start": "",
+	"end": "",
+	"number": ""
+}
+
+
+
 class WaterwayInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			basicQuestions: Object.keys(defaultWaterwayInfoQuestionsData).map(key => defaultWaterwayInfoQuestionsData[key]),
-			pierQuestions: [],
+			// pierQuestions: [],
 			... this.props.value
 		}
 
@@ -96,59 +104,83 @@ class WaterwayInfo extends React.Component {
 	}
 
 	WWIChangeHandler = (eventID, QID, value) => {
-		// console.log("WWIChangeHandler(", QID, value,")");
-		this.setState({[QID]:value}, ()=>{
-			let newWWValue = _.cloneDeep(this.state);
-			delete newWWValue.basicQuestions;
-			delete newWWValue.pierQuestions;
-			this.props.SEQuestionValueChange(eventID, this.props.id, newWWValue);
-		});
-
-		
+		if(QID.startsWith("pier_")) {
+			//create updated piers objects
+			let pierNumber = QID.split("_")[1];
+			let startEnd = QID.split("_")[2]
+			let newPiers = _.cloneDeep(this.state.piers);
+			newPiers[pierNumber-1][startEnd]=value;
+			this.setState({piers:newPiers}, () => this.doChange(eventID))
+		} else {
+			this.setState({ [QID]: value }, () => this.doChange(eventID));
+		}
 	};
 
-	addPierClickedHandler = () => {
-		let pierNumber = (this.state.pierQuestions.length / 2) + 1;
+	doChange = (eventID) => {
+		let newWWValue = _.cloneDeep(this.state);
+		delete newWWValue.basicQuestions;
+		this.props.SEQuestionValueChange(eventID, this.props.id, newWWValue);
+	}
 
-		let newPierStartQuestion = {
-			..._.cloneDeep(pierQuestion),
-			id: "pier_" + pierNumber + "_start",
-			key: "pier_" + pierNumber + "_start",
-			label: "Pier #" + pierNumber + " Start",
-		};
-		let newPierEndQuestion = {
-			..._.cloneDeep(pierQuestion),
-			id: "pier_" + pierNumber + "_end",
-			key: "pier_" + pierNumber + "_end",
-			label: "Pier #" + pierNumber + " End",
-		};
+	addPierClickedHandler = () => {
+
+		if (!this.state.piers) {
+			console.warn("state does not contain piers property in waterway info")
+			return;
+		}
+
+		let newPiers = _.cloneDeep(this.state.piers);
+		let newPier = _.cloneDeep(defaultPierObject);
+		newPier.number = this.state.piers.length + 1;
+		newPiers.push(newPier);
+		this.setState({piers:newPiers});
+
+
+
+		// let newPierStartQuestion = {
+		// 	..._.cloneDeep(pierQuestion),
+		// 	id: "pier_" + pierNumber + "_start",
+		// 	key: "pier_" + pierNumber + "_start",
+		// 	label: "Pier #" + pierNumber + " Start",
+		// };
+		// let newPierEndQuestion = {
+		// 	..._.cloneDeep(pierQuestion),
+		// 	id: "pier_" + pierNumber + "_end",
+		// 	key: "pier_" + pierNumber + "_end",
+		// 	label: "Pier #" + pierNumber + " End",
+		// };
 
 		//OPTION 1 -- add them, effectively, as custom questions.... lack of customization
 		// this.props.addQuestionToEvent(this.props.currentSamplingEventID, newPierStartQuestion);
 		// this.props.addQuestionToEvent(this.props.currentSamplingEventID, newPierEndQuestion);
 
 		//OPTION 2 -- make Waterway info a more complex, and customizable... end up with orphaned "questionValues" that don't have "questionData"
-		let newQuestions = _.cloneDeep(this.state.pierQuestions);
-		newQuestions.push(newPierStartQuestion);
-		newQuestions.push(newPierEndQuestion);
-		this.setState({ pierQuestions: newQuestions });
+		// let newQuestions = _.cloneDeep(this.state.pierQuestions);
+		// newQuestions.push(newPierStartQuestion);
+		// newQuestions.push(newPierEndQuestion);
+		// this.setState({ pierQuestions: newQuestions });
 
 	}
 
 	removePierClickedHandler = (pierNumberToRemove) => {
 		let newQuestions = _.cloneDeep(this.state.pierQuestions).filter(q => !q.id.startsWith("pier_" + pierNumberToRemove));
 
-		this.setState({ pierQuestions: newQuestions }, ()=> {
-			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_"+pierNumberToRemove+"_start", "");
-			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_"+pierNumberToRemove+"_end", "");
+		this.setState({ pierQuestions: newQuestions }, () => {
+			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_" + pierNumberToRemove + "_start", "");
+			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_" + pierNumberToRemove + "_end", "");
 		});
 
 	}
 
 	render() {
 		const { currentEvent, sedimentType, currentSamplingEventID } = this.props;
-	// console.log('this.props :', this.props);
-	// console.log('this.state :', this.state);
+		// console.log('this.props :', this.props);
+		// console.log('this.state :', this.state);
+		if (!this.state.piers) {
+			console.warn("Waterway Info State does not contain 'piers' property")
+			return;
+		}
+
 
 		// let QD = getQuestionsData(currentSamplingEventID);
 
@@ -183,20 +215,45 @@ class WaterwayInfo extends React.Component {
 		// console.log("Set VALUE", getQuestionValue(this.props.currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + 'A'));
 
 		// let questions = Object.keys(defaultWaterwayInfoQuestionsData).map(key=><Question></Question>)
+		let pierStartQuestions= this.state.piers.map(pierData => {
+			let pierStartQuestion = _.cloneDeep(defaultPierQuestion);
+			pierStartQuestion.id = "pier_" +pierData.number+ "_start";
+			pierStartQuestion.label = "Pier " +pierData.number+ " start";
+			pierStartQuestion.value = pierData.start ? pierData.start : "";
+			return pierStartQuestion;
+			})
+		
+
 
 		return <React.Fragment>
 			{/* OPTION #1... doesn't involve any question creation here... */}
-			
+
 			{/* OPTION #2... */}
-			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions, 
-											this.state, 
-											this.WWIChangeHandler))}
-			{createQuestionComponents(this.state.pierQuestions, this.state, this.WWIChangeHandler)}
+			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions,
+				this.state,
+				this.WWIChangeHandler))}
+
+{/* TODO: build pier question type and have better/combined look */}
+
+
+					{/* let pierEndQuestion = _.cloneDeep(defaultPierQuestion) = {
+						"id": "PierEnd"+pierData.number,
+						"label": "Pier " +pierData.number+ " end",
+						"type": "Text",
+						"placeholder": "Feet from XYZ",  //TODO:
+						"value": pierData.end ? pierData.end : "",
+						"width_xs": 5,
+						"width_lg": 2
+					}
+					return pierStartQuestion;
+				})} */}
+
+			{createQuestionComponents(pierStartQuestions, {}, this.WWIChangeHandler)}
 
 
 			<Button onClick={this.addPierClickedHandler}>ADD PIER</Button>
-			{this.state.pierQuestions.length
-				? <Button onClick={() => this.removePierClickedHandler(this.state.pierQuestions.length / 2)}>Remove pier</Button>
+			{this.state.piers.length
+				? <Button onClick={() => this.removePierClickedHandler(this.state.piers.length)}>Remove pier</Button>
 				: null}
 		</React.Fragment>
 

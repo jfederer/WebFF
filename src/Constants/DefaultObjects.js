@@ -1049,7 +1049,7 @@ export const defaultQuestionsData = {
 			edgeOfSamplingZone_Start:"",
 			edgeOfSamplingZone_End:"",
 			streamWidth:"",
-			piers:{}
+			piers:[]
 		},
 		"tabName": "FieldForm",
 		"layoutGroup": "Waterway Info",
