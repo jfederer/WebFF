@@ -73,7 +73,7 @@ class WebFF extends React.Component {
 
 	//BREAKING:
 	
-	//TODO: loading event should reset nav menu (both remove and add items as needed)
+	
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
 	//TODO: Bridge wizard 

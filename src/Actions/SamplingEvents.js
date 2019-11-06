@@ -69,11 +69,11 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 		}
 
 
-		if (questionID.startsWith("waterwayInfo") || questionID.startsWith("bank")) {
+		// if (questionID.startsWith("waterwayInfo") || questionID.startsWith("bank")) {
+		if (questionID.startsWith("waterwayInfo")) {
 			//TODO: check if values exist in stationing, piers, etc... if so, warn before dispatching
 
 			// check if bank has changed from current...
-
 			dispatch(samplingEventBankChange(eventID, newValue.bank));
 		}
 
@@ -85,9 +85,9 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 
 
 export function samplingEventBankChange(eventID, bank) {
+	// console.log("samplingEventBankChanged(", bank, ")");
 	return (dispatch, getState) => {
-		// dispatch({ type: SAMPLING_EVENT_BANK_CHANGE, eventID, bank }); // this is often redundant because the SEQuestionVAlueChange would happen first in most flow paths
-
+		dispatch({ type: SAMPLING_EVENT_BANK_CHANGE, eventID, bank }); // this is often redundant because the SEQuestionVAlueChange would happen first in most flow paths
 		// change all samples_tables in values
 		let event = getEventFromID(eventID);
 		Object.keys(event.questionsValues).forEach((QID) => {
@@ -100,58 +100,6 @@ export function samplingEventBankChange(eventID, bank) {
 		})
 	}
 }
-
-
-// function conditionallyRunActionString(eventID, questionID, subQ) {
-// 	console.log("conditionallyRunActionString(", eventID, questionID, subQ, ")");
-
-// 	let question = getQuestionDataFromID(questionID);
-
-// 	return (dispatch, getState) => {
-// 		if (question) {
-// 			let value = getQuestionValue(eventID, question.id);
-// 			let actions = question.actions;
-// 			if (actions) {
-// 				// if action string exists...
-// 				let anyValueActionString = actions["anyValue"];
-// 				if (anyValueActionString) {
-// 					// run 'anyValue' action strings first
-// 					dispatchAllActionsFromActionString(dispatch, anyValueActionString);
-// 				}
-
-// 				let thisValueActionString = actions[value];
-// 				if (thisValueActionString) {
-// 					// run this specific value's action string second
-// 					dispatchAllActionsFromActionString(dispatch, thisValueActionString);
-// 				}
-// 			}
-// 		} else {
-// 			console.warn("Attempted to conditionally run action string on falsey question object");	
-// 		}//TODO: do I need to include somethign if this conditional is false...?
-// 	}
-// }
-
-// export function runAllSamplingEventActionStrings(eventID) { // TODO: recursive to allow sub ID's to have actions
-// 	//console.log("runAllSamplingEventActionStrings(", eventID, ")");
-
-// 	return (dispatch, getState) => {
-// 		dispatch({type:RUN_ALL_SAMPLE_EVENT_QUESTION_ACTIONS}); // basically just for redux logging purposes - FUTURE: use this to block view changes until complete
-// 		let event = getEventFromID(eventID);
-// 		Object.keys(event.questionsValues).map((key) => {
-// 			try {
-// 				let questionData = getQuestionDataFromID(key);
-// 				if (questionData) {
-// 					dispatch(conditionallyRunActionString(eventID, questionData));
-// 				}
-// 			}
-// 			catch (e) {
-// 				console.warn("Unable to get questionsValues or questionData for event: ", eventID, e.name, e.message);
-// 			}
-// 			return null; //satsify linter
-// 		})
-// 	}
-// }
-
 
 
 /**
@@ -220,7 +168,7 @@ export function createNewSamplingEvent(eventName) {
 			}
 
 			if (typeof QD.value === 'object' || Object.keys(QD).length < 1) {
-			 	return false;
+				return false;
 			}
 
 			if (QD.value || QD.value === 0 || typeof QD.value === 'boolean') { // truthy value or zero, and booleans make it through filter
@@ -275,7 +223,9 @@ export function stationNameChanged(eventID, newStationName) {
 		}
 		if (station.defaultBank) {
 			//TODO: throw warning if bridge wizard or stationinghas been filled out
-			dispatch(SEQuestionValueChange(eventID, "bank", station.defaultBank));
+			let WWIValue = _.cloneDeep(getQuestionValue(eventID, "waterwayInfo"));
+			WWIValue.bank = station.defaultBank;
+			dispatch(SEQuestionValueChange(eventID, "waterwayInfo", WWIValue));
 		}
 
 	}
@@ -352,7 +302,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 
 		// re-do any distance data (confirm with user) //TODO:
 		switch (getMethodCategoryFromValue(samplingMethod)) {
-			case EWI_METHOD_CATEGORY: 
+			case EWI_METHOD_CATEGORY:
 				let WWQV = getQuestionValue(eventID, "waterwayInfo");
 				let ESZ_Start = WWQV["edgeOfSamplingZone_Start"];  //TODO: change to "Starting" and "Ending" rather than "left and "right"?
 				let ESZ_End = WWQV["edgeOfSamplingZone_End"]
@@ -370,7 +320,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 				//insert distances into setInfoSampleTableValue   //TODO: instead of column zero, do the appropriate search for header
 				samplingLocations.forEach((dist, i) => setInfoSampleTableValue[i + 1][distanceColumn] = dist);
 				break;
-			case EDI_METHOD_CATEGORY: 
+			case EDI_METHOD_CATEGORY:
 				let samplingPercentages = provideEDISamplingPercentages(numPoints);
 				samplingPercentages.forEach((percent, i) => setInfoSampleTableValue[i + 1][0] = percent);
 				break;

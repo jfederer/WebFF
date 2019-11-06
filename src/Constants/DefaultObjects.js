@@ -25,7 +25,7 @@ export const emptySamplingEvent = {
 	dateModified: "",
 	shippedStatus: "Not Shipped",
 	questionsValues: {
-
+		waterwayInfo:{}
 	},
 	questionsData: {
 	}
@@ -460,19 +460,19 @@ export const defaultWaterwayInfoQuestionsData = {
 		"width_lg": 2
 	},
 
-	streamWidth: {
-		"id": "streamWidth",
-		"label": "Stream Width",
-		"XMLTag": "P00004",
-		"type": "ComputedValue",
-		"computationString": "edgeOfWater_Right-edgeOfWater_Left", //TODO:
-		"placeholder": "This will be calculated",
-		"value": "",
-		// "tabName": "FieldForm",
-		// "layoutGroup": "Waterway Info",
-		"width_xs": 2,
-		"width_lg": 2
-	},
+	// streamWidth: {
+	// 	"id": "streamWidth",
+	// 	"label": "Stream Width",
+	// 	"XMLTag": "P00004",
+	// 	"type": "ComputedValue",
+	// 	"computationString": "edgeOfWater_Right-edgeOfWater_Left", //TODO:
+	// 	"placeholder": "This will be calculated",
+	// 	"value": "",
+	// 	// "tabName": "FieldForm",
+	// 	// "layoutGroup": "Waterway Info",
+	// 	"width_xs": 2,
+	// 	"width_lg": 2
+	// },
 }
 
 

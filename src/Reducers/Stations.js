@@ -14,6 +14,7 @@ const initialStations = {
 		defaultProjectName: "Default 1Project",
 		defaultProjectID: "Default 1ID",
 		defaultAgencyCode: "Def1Ag",
+		defaultBank:"Left Bank",
 		questionsData:{}
 	},
 	"d4e95192-00a4-4ef7-baa1-7827f50c7c67": {
@@ -24,6 +25,7 @@ const initialStations = {
 		defaultProjectName: "Default 2 Project",
 		defaultProjectID: "Default 2 ID",
 		defaultAgencyCode: "Def2Ag",
+		defaultBank:"Right Bank",
 		questionsData:{}
 	},
 	"d4e95192-00a4-4ef7-baa1-7827f50c7c68": {
@@ -37,12 +39,13 @@ const initialStations = {
 		questionsData:{}
 	},
 	'8b444434-2f01-4c05-80b1-06a7518bdf23': {
-		displayName: 'Station1',
-		name: 'Station1',
+		displayName: 'Station2',
+		name: 'Station2',
 		number: '11111',
 		defaultProjectName: 'PRoj1',
 		defaultProjectID: 'ID1',
 		defaultAgencyCode: 'USGS',
+		defaultBank:"Right Bank",
 		questionsData: {},
 		stationID: '8b444434-2f01-4c05-80b1-06a7518bdf23'
 	  }

@@ -99,6 +99,7 @@ class WaterwayInfo extends React.Component {
 
 		let pierQuestions = [];
 
+
 		this.state.piers.forEach(pierData => {
 			let pierStartQuestion = _.cloneDeep(defaultPierQuestion);
 			pierStartQuestion.id = "pier_" + pierData.number + "_start";
@@ -113,14 +114,19 @@ class WaterwayInfo extends React.Component {
 			pierQuestions.push(pierEndQuestion);
 		})
 
+		let pierValues = {};
+		pierQuestions.forEach(pierQuestion => {
+			pierValues[pierQuestion.id] = pierQuestion.value;
+		})
+
 		return <React.Fragment>
 			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions,
-				this.state,
+				this.props.value,
 				this.WWIChangeHandler))}
 
 			{/* TODO: build pier question type and have better/combined look */}
 
-			{createQuestionComponents(pierQuestions, {}, this.WWIChangeHandler)}
+			{createQuestionComponents(pierQuestions, pierValues, this.WWIChangeHandler)}
 
 			<Button onClick={this.addPierClickedHandler}>ADD PIER</Button>
 			{this.state.piers.length
@@ -135,6 +141,7 @@ class WaterwayInfo extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		currentEvent: state.SedFF[state.SedFF.currentSamplingEventID]
 	}
 }
 
@@ -143,7 +150,7 @@ const mapDispatchToProps = {
 }
 
 WaterwayInfo.propTypes = {
-	value:PropTypes.object.isRequired
+	value: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(WaterwayInfo));

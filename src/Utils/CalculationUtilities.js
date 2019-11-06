@@ -3,10 +3,10 @@ import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
 import { getQuestionValue, getDescriptiveColumnForTable } from './QuestionUtilities';
 import { getSetListAsArray, getNumberOfSamplesInSet, checkForValidSedimentType } from './StoreUtilities';
 
-export const provideEWISamplingLocations = (samplingZone_left, samplingZone_right, pierLocations, pierWidths, numberOfSamples) => {
+export const provideEWISamplingLocations = (samplingZone_start, samplingZone_end, pierLocations, pierWidths, numberOfSamples) => {
     
-    samplingZone_left = parseInt(samplingZone_left, 10);
-    samplingZone_right = parseInt(samplingZone_right, 10);
+    samplingZone_start = parseInt(samplingZone_start, 10);
+    samplingZone_end = parseInt(samplingZone_end, 10);
     pierLocations.filter((el)=>parseInt(el, 10));
     pierWidths.filter((el)=>parseInt(el, 10)); 
     numberOfSamples = parseInt(numberOfSamples, 10);
@@ -19,7 +19,7 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
 
    // console.log("CALCULATING");
 
-    // console.log(samplingZone_left, samplingZone_right, pierLocations, pierWidths, numberOfSamples);
+    // console.log(samplingZone_start, samplingZone_end, pierLocations, pierWidths, numberOfSamples);
 
     function correctSamplingLocationBasedOnPiers (location) {
         // console.log("location: ", location);
@@ -38,10 +38,10 @@ export const provideEWISamplingLocations = (samplingZone_left, samplingZone_righ
     for(let i = 0; i<pierWidths.length; i++) {
         pierTotalWidth += pierWidths[i];
     }
-    let samplingZoneWidth = (samplingZone_right - samplingZone_left) - pierTotalWidth;
+    let samplingZoneWidth = (samplingZone_end - samplingZone_start) - pierTotalWidth;
     let samplingWidth = samplingZoneWidth / numberOfSamples;
 
-    samplingLocations[0] = correctSamplingLocationBasedOnPiers(samplingZone_left+(samplingWidth/2));
+    samplingLocations[0] = correctSamplingLocationBasedOnPiers(samplingZone_start+(samplingWidth/2));
     for(let i = 1; i<samplingLocations.length;i++) {
         samplingLocations[i] = correctSamplingLocationBasedOnPiers(samplingLocations[i-1]+samplingWidth);
     }
