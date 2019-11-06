@@ -30,7 +30,14 @@ class AddSetForm extends React.Component {
 			copyStationing: false,
 			duplicateFromSet: ""
 		}
-		console.log("HERP");
+	}
+
+	componentWillMount() {
+		let setList = getSetListAsArray(this.props.currentSamplingEventID, this.props.sedimentType);
+		
+		if(setList.length<1) {
+			this.addSet();
+		}
 	}
 
 	fullSetName = (setName) => {
