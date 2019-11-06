@@ -163,13 +163,9 @@ class WaterwayInfo extends React.Component {
 	}
 
 	removePierClickedHandler = (pierNumberToRemove) => {
-		let newQuestions = _.cloneDeep(this.state.pierQuestions).filter(q => !q.id.startsWith("pier_" + pierNumberToRemove));
+		let newPiers = _.cloneDeep(this.state.piers).filter(pier => pier.number !== pierNumberToRemove);
 
-		this.setState({ pierQuestions: newQuestions }, () => {
-			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_" + pierNumberToRemove + "_start", "");
-			this.props.SEQuestionValueDelete(this.props.currentSamplingEventID, "pier_" + pierNumberToRemove + "_end", "");
-		});
-
+		this.setState({ piers: newPiers }, ()=>this.doChange(this.props.currentSamplingEventID));
 	}
 
 	render() {
