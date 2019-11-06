@@ -215,12 +215,20 @@ class WaterwayInfo extends React.Component {
 		// console.log("Set VALUE", getQuestionValue(this.props.currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType + IDENTIFIER_SPLITTER + SET_INFORMATION_IDENTIFIER + 'A'));
 
 		// let questions = Object.keys(defaultWaterwayInfoQuestionsData).map(key=><Question></Question>)
-		let pierStartQuestions= this.state.piers.map(pierData => {
+		let pierQuestions = [];
+		
+		this.state.piers.forEach(pierData => {
 			let pierStartQuestion = _.cloneDeep(defaultPierQuestion);
 			pierStartQuestion.id = "pier_" +pierData.number+ "_start";
 			pierStartQuestion.label = "Pier " +pierData.number+ " start";
 			pierStartQuestion.value = pierData.start ? pierData.start : "";
-			return pierStartQuestion;
+			pierQuestions.push(pierStartQuestion);
+
+			let pierEndQuestion = _.cloneDeep(defaultPierQuestion);
+			pierEndQuestion.id = "pier_" +pierData.number+ "_end";
+			pierEndQuestion.label = "Pier " +pierData.number+ " end";
+			pierEndQuestion.value = pierData.end ? pierData.end : "";
+			pierQuestions.push(pierEndQuestion);
 			})
 		
 
@@ -248,7 +256,7 @@ class WaterwayInfo extends React.Component {
 					return pierStartQuestion;
 				})} */}
 
-			{createQuestionComponents(pierStartQuestions, {}, this.WWIChangeHandler)}
+			{createQuestionComponents(pierQuestions, {}, this.WWIChangeHandler)}
 
 
 			<Button onClick={this.addPierClickedHandler}>ADD PIER</Button>
