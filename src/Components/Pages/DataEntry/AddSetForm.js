@@ -30,7 +30,7 @@ class AddSetForm extends React.Component {
 			copyStationing: false,
 			duplicateFromSet: ""
 		}
-
+		console.log("HERP");
 	}
 
 	fullSetName = (setName) => {

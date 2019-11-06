@@ -85,6 +85,7 @@ class WebFF extends React.Component {
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
 	//TODO: import/export
 	//TODO: can I convert?? --> compare to providing access
+	//TODO: transpose Pcodes for start/end edge/sampling zones
 
 	//BUGS: 
 	//TODO: station custom questions didn't render on field form
@@ -152,6 +153,7 @@ class WebFF extends React.Component {
 	//TODO: different summary settings (different layouts, etc)
 	//BUG: have add/remove station drop down not actually change the value to add/remove...    start
 	//TODO: export dialog allows event selection...   (revampe to import/export dialog?)
+	//TODO: auto-add first set as setting
 
 	//Cleanup
 

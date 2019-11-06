@@ -10,7 +10,7 @@ import {
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
-// import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
+import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
 	IDENTIFIER_SPLITTER,
@@ -23,7 +23,7 @@ import {
 } from '../Constants/Config';
 
 import { getQuestionValue, getMethodCategoryFromValue, getSamplesTableValueWithGivenBank, getDataEntryValueWithGivenBank } from '../Utils/QuestionUtilities';
-import { provideEWISamplingLocations } from '../Utils/CalculationUtilities';
+import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
 import { createInitialQWDATAValue, verifyPassedQWDATAValue } from '../Components/Questions/QWDATATable';
 import { createInitialParametersTableValue, verifyPassedParametersTableValue } from '../Components/Questions/ParametersTable';
 
@@ -69,9 +69,12 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 		}
 
 
-		if (questionID.startsWith("bank")) {
+		if (questionID.startsWith("waterwayInfo") || questionID.startsWith("bank")) {
 			//TODO: check if values exist in stationing, piers, etc... if so, warn before dispatching
-			dispatch(samplingEventBankChange(eventID, newValue));
+
+			// check if bank has changed from current...
+
+			dispatch(samplingEventBankChange(eventID, newValue.bank));
 		}
 
 		if (questionID === "collectingAgency") {
@@ -83,7 +86,7 @@ function runSpecialQIDAction(eventID, questionID, newValue) {
 
 export function samplingEventBankChange(eventID, bank) {
 	return (dispatch, getState) => {
-		dispatch({ type: SAMPLING_EVENT_BANK_CHANGE, eventID, bank }); // this is often redundant because the SEQuestionVAlueChange would happen first in most flow paths
+		// dispatch({ type: SAMPLING_EVENT_BANK_CHANGE, eventID, bank }); // this is often redundant because the SEQuestionVAlueChange would happen first in most flow paths
 
 		// change all samples_tables in values
 		let event = getEventFromID(eventID);
@@ -343,37 +346,39 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		//setInfoSampleTableValue is now appropriate size...
 
 		//verify the table value is coming from the correct bank...\
-		let fromBank = getEventFromID(eventID).questionsValues.bank;
+		let fromBank = getEventFromID(eventID).questionsValues.waterwayInfo.bank;
 		console.assert(fromBank, "From bank is " + typeof fromBank);
 		setInfoSampleTableValue = getSamplesTableValueWithGivenBank(setInfoSampleTableValue, fromBank);
 
 		// re-do any distance data (confirm with user) //TODO:
 		switch (getMethodCategoryFromValue(samplingMethod)) {
-			case EWI_METHOD_CATEGORY: {
-				let LESZ = getQuestionValue(eventID, "edgeOfSamplingZone_Left");  //TODO: change to "Starting" and "Ending" rather than "left and "right"?
-				let RESZ = getQuestionValue(eventID, "edgeOfSamplingZone_Right");
-				console.log("Left Edge SZ: ", LESZ);
-				console.log("Right Edge SZ: ", RESZ);
+			case EWI_METHOD_CATEGORY: 
+				let WWQV = getQuestionValue(eventID, "waterwayInfo");
+				let ESZ_Start = WWQV["edgeOfSamplingZone_Start"];  //TODO: change to "Starting" and "Ending" rather than "left and "right"?
+				let ESZ_End = WWQV["edgeOfSamplingZone_End"]
 
-				let pierStartLocations = Object.keys(getEventFromID(eventID).questionsValues)
-					.filter(QID => QID.startsWith("pier_") && QID.endsWith("_start"))
-					.map(QID => getQuestionValue(eventID, QID));
-				let pierEndLocations = Object.keys(getEventFromID(eventID).questionsValues)
-					.filter(QID => QID.startsWith("pier_") && QID.endsWith("_end"))
-					.map(QID => getQuestionValue(eventID, QID));
-				let pierWidths = pierStartLocations.map((startLocation, i) => pierEndLocations[i] - startLocation);
-				console.log('pierStartLocations :', pierStartLocations);
-				console.log('pierEndLocations :', pierEndLocations);
-				console.log('pierWidths :', pierWidths);
+				let pierStartLocations = [];
+				let pierWidths = [];
+				WWQV.piers.forEach(pierData => {
+					pierStartLocations.push(pierData.start);
+					pierWidths.push(pierData.end - pierData.start);
+				})
 
-				let tempValArr = provideEWISamplingLocations(LESZ, RESZ, pierStartLocations, pierWidths, numPoints);
-				console.log('tempValArr :', tempValArr);
+				let samplingLocations = provideEWISamplingLocations(ESZ_Start, ESZ_End, pierStartLocations, pierWidths, numPoints);
+				let distanceColumn = getColumnNumberFromTableHeader(setInfoSampleTableValue, "Distance from ");
 
 				//insert distances into setInfoSampleTableValue   //TODO: instead of column zero, do the appropriate search for header
-				tempValArr.forEach((dist, i) => setInfoSampleTableValue[i + 1][0] = dist);
-			}
+				samplingLocations.forEach((dist, i) => setInfoSampleTableValue[i + 1][distanceColumn] = dist);
+				break;
+			case EDI_METHOD_CATEGORY: 
+				let samplingPercentages = provideEDISamplingPercentages(numPoints);
+				samplingPercentages.forEach((percent, i) => setInfoSampleTableValue[i + 1][0] = percent);
+				break;
 		}
 
+
+
+		// 'save' the modified table...
 		setInfoChangeHandler(eventID, "samplesTable_" + getMethodCategoryFromValue(samplingMethod) + "_" + sedimentType, setInfoSampleTableValue);  //TODO: underscore should be something defined in config
 
 

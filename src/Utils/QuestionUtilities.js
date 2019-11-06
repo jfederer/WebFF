@@ -301,7 +301,7 @@ export const getLayoutGroupQuestionsData = (questionsData, layoutGroupName) => {
 
 }
 
-export const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {  //TODO: switch to startsWith
+export const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) => {  
 	// console.log('getColNum :', tableValue, headerToSearchFor);
 	let ret = -1;
 	tableValue[0].forEach((header, index) => {
@@ -309,6 +309,13 @@ export const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) =>
 			ret = index;
 		}
 	});
+	if (ret = -1) { // if we didn't find an exact match, let's look for a startsWith match instead
+		tableValue[0].forEach((header, index) => {
+			if (header.startsWith(headerToSearchFor)) {
+				ret = index;
+			}
+		});
+	}
 	return ret;
 }
 

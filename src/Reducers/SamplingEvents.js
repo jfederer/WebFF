@@ -1803,7 +1803,7 @@ export function SamplingEvents(state = initialState, action) {
 			delete newState[action.eventID].questionsData[action.QID];
 			return newState;
 		case SAMPLING_EVENT_BANK_CHANGE:
-			newState[action.eventID].bank = action.bank;
+			newState[action.eventID].waterwayInfo.bank = action.bank;
 			return newState;
 		default:
 			return state;
