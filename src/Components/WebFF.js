@@ -76,13 +76,11 @@ class WebFF extends React.Component {
 	// event summary --> conceptualize for me.
 
 	//BREAKING:
-	
-	
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
-	//TODO: Bridge wizard 
-			//TODO: XML -> Distance from right bank is (distance from Right bank is P00001)
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
+				// on FF page -- user & eventQ's show ... station does not.
+				// on FF page -- user and eventQ's 
 	//TODO: system menu rebuild
 	//TODO: Style sheet
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
@@ -119,8 +117,8 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	
 	//TODO: avgrepmeas -> alert/confirm
-	//tODO: waterway info question type
 	//TODO: rememver current sediment type from page to page
 	//TODO: single-page view 
 	//TODO: single-page view saveable as pdf (ingest pdf??)
@@ -137,6 +135,9 @@ class WebFF extends React.Component {
 
 
 	//Would be nice:
+	//TODO: "remove set" button on sets
+	//TODO: Bridge wizard 
+			//TODO: "recalculate" button appears in EWI table if data doesn't match calculated
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
 	//TODO: settings: 
 	// paper vs no... 
@@ -157,6 +158,9 @@ class WebFF extends React.Component {
 	//BUG: have add/remove station drop down not actually change the value to add/remove...    start
 	//TODO: export dialog allows event selection...   (revampe to import/export dialog?)
 	//TODO: auto-add first set as setting
+	// allow custom set names in settings
+	// warning for estimating time on QW pag eshould change if there aren't times available on DE page
+	// option to copy custom questions from station / user / event to another station / user / event
 
 	//Cleanup
 

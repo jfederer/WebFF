@@ -104,20 +104,24 @@ export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  
 	
 	// get STATION questions data
 	let currentStationQD = {};
-	if (eventID && !fromGetQuestionValue && event) {
+	// if (eventID && !fromGetQuestionValue && event) {  // get question value calls this... creating a infitite loop.  That said, I've removed (Nov 6, 2019) and see no ill effects.
+	if (eventID && !fromGetQuestionValue) {
 		let stationNameValue = getQuestionValue(eventID, 'stationName');
 		if (stationNameValue && username) {
 			currentStationQD = getStationNameQuestionData(username, stationNameValue);
 		}
 	}
-	
+
 	let defaultSetInfoQD = getSetInformationQuestionsData();
+	
 	// let defaultWWInfoQD = _.clone(defaultWaterwayInfoQuestionsData);
 
 	let defaultQD = store.getState().Questions.questionsData;
 
 	// return _.merge({}, defaultQD, defaultSetInfoQD, defaultWWInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
-	return _.merge({}, defaultQD, defaultSetInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	let bigQD = _.merge({}, defaultQD, defaultSetInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	// console.log('bigQD :', bigQD);
+	return bigQD;  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 }
 
 /**
