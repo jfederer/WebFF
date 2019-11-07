@@ -296,7 +296,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		//setInfoSampleTableValue is now appropriate size...
 
 		//verify the table value is coming from the correct bank...\
-		let fromBank = getEventFromID(eventID).questionsValues.waterwayInfo.bank;
+		let fromBank = getEventFromID(eventID).questionsValues.waterwayInfo.bank;  //TODO: getquestionvalue instead of direct connection
 		console.assert(fromBank, "From bank is " + typeof fromBank);
 		setInfoSampleTableValue = getSamplesTableValueWithGivenBank(setInfoSampleTableValue, fromBank);
 

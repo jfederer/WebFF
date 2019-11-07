@@ -68,6 +68,10 @@ class WebFF extends React.Component {
 	//TODO: push event to sedlogin
 	//TODO: add set automatically
 
+	//Q:  Should "bank" be required in station setup?
+	//Q: EDI - percentages in distance column, or separate new read-only column?
+	//Q: P00001 ->  ?   (lost in chats in migration)
+
 	//USERs:
 	// event summary --> conceptualize for me.
 
@@ -77,8 +81,7 @@ class WebFF extends React.Component {
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
 	//TODO: Bridge wizard 
-		//TODO: event L or R bank -> where should "L" or "R" bank be saved?  User? Station? Event?  (station default, change by event)
-		//TODO: XML -> Distance from right bank is (distance from Right bank is P00001)
+			//TODO: XML -> Distance from right bank is (distance from Right bank is P00001)
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 	//TODO: system menu rebuild
 	//TODO: Style sheet

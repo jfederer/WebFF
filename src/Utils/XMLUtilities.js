@@ -191,10 +191,12 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 	let samplingMethodValue = getQuestionValue(eventID, "samplingMethod_" + sedType);
 	let samplesTableName = "samplesTable_" + getMethodCategoryFromValue(samplingMethodValue) + "_" + sedType;
 	let samplesTable = getQuestionValue(eventID, DEName, setName, samplesTableName);
-	let distanceHeaderText = "Distance from " +getQuestionValue(eventID, "bank").startsWith(LEFT_BANK_VALUE)?"L":"R" + " bank, feet";
+	let fromBank = getQuestionValue(eventID, "waterwayInfo", "bank");
+	let distanceHeaderText = "Distance from " + (fromBank===LEFT_BANK_VALUE ? "L" : "R") + " bank, feet";
 	let transitHeaderText = "Transit Rate, ft / sec";
 	let restTimeHeaderText = "Rest time on Bed for Bed load sample, seconds";
 	let horizWidthHeaderText = "Horizontal width of Vertical, feet"
+	
 
 	// REMOVED per KASKACH request that this be a param block instead of a sample-level item.
 	//  "Average Gage Height", if calculated, should be written to P00065.
@@ -212,8 +214,10 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 
 
 	//  - the Distance from L Bank should be written to P00009.  (distance from Right bank is P00001)
+	
+	let distPCode = fromBank===LEFT_BANK_VALUE ? "P00009" : "P00001";
 	let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
-	sampleObj["Param" + XML_SPLITTER +  "P00009"] = buildParamObj("P00009", getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
+	sampleObj["Param" + XML_SPLITTER +  distPCode] = buildParamObj(distPCode, getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 
 	//  - Transit rate, sampler, feet per second  should be written to P50015.
 	colNum = getColumnNumberFromTableHeader(samplesTable, transitHeaderText);
