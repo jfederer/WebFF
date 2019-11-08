@@ -146,15 +146,16 @@ export const defaultSetInformationQuestionsData = {
 		"type": "TableInput",
 		// "hidden": true,
 		"colHeaders": true,
-		"rowHeaders": false,
+		"rowHeaders": true,
 		"invalidMessage": "Must input number of samples before table will display",
 		"value": [
-			["Distance from L bank, feet",
+			["% from bank",
+				"Distance from L bank, feet",
 				"Sampling Depth, feet",
 				"Transit Rate, ft / sec",
 				"Rest time on Bed for Bedload sample,seconds",
 				"Horizontal width of Vertical, feet"],
-			["", "", "", "", ""]
+			["", "", "", "", "", ""]
 		],
 		"width_xs": 10,
 		"width_lg": 10
@@ -209,13 +210,14 @@ export const defaultSetInformationQuestionsData = {
 		"type": "TableInput",
 		// "hidden": true,
 		"colHeaders": true,
-		"rowHeaders": false,
+		"rowHeaders": true,
 		"invalidMessage": "Must input number of samples before table will display",
 		"value": [
-			["Distance from L bank, feet",
+			["% from bank",
+			"Distance from L bank, feet",
 				"Sampling Depth, feet",
 				"Transit Rate, ft / sec"],
-			["", "", ""]
+			["", "", "", ""]
 		],
 		"width_xs": 10,
 		"width_lg": 10
@@ -258,13 +260,14 @@ export const defaultSetInformationQuestionsData = {
 		"type": "TableInput",
 		// "hidden": true,
 		"colHeaders": true,
-		"rowHeaders": false,
+		"rowHeaders": true,
 		"invalidMessage": "Must input number of samples before table will display",
 		"value": [
-			["Distance from L bank, feet",
+			["% from bank",
+			"Distance from L bank, feet",
 				"Sampling Depth, feet",
 				"Transit Rate, ft / sec"],
-			["", "", ""]
+			["", "", "", ""]
 		],
 		"width_xs": 10,
 		"width_lg": 10

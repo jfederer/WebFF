@@ -72,9 +72,9 @@ class WebFF extends React.Component {
 	//Q:  event summary --> conceptualize for me.
 	//Q: can I convert?? --> compare to providing access
 	//Q: "start/end edge of water / sampling zones ...  do they have specific pcodes? transpose Pcodes for start/end edge/sampling zones?
+	//Q: should EWI distance be editable?
 
 	//BREAKING:
-	//Q: percentages in distance column, or separate new read-only column?  (READ ONLY COLUMN)
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
 	//TODO: push event to sedlogin
@@ -112,7 +112,8 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
-	//TODO: new event from old... (pseudo)
+	//TODO: new event from old... (pseudo-event)
+	//TODO: template manager/event copy
 	//TODO: system menu rebuild  (import/export move?)
 		//TODO: disable system menu buttons when they can't apply
 	//TODO: avgrepmeas -> alert/confirm
