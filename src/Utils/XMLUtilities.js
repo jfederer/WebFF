@@ -213,9 +213,9 @@ const buildSampleObj = (eventID, DEName, setName, sampNum, sedType) => {
 	}
 
 
-	//  - the Distance from L Bank should be written to P00009.  (distance from Right bank is P00001)
+	//  - the Distance from L Bank should be written to P00009.  (distance from Right bank is 72103)
 	
-	let distPCode = fromBank===LEFT_BANK_VALUE ? "P00009" : "P00001";
+	let distPCode = fromBank===LEFT_BANK_VALUE ? "P00009" : "P72103";
 	let colNum = getColumnNumberFromTableHeader(samplesTable, distanceHeaderText);
 	sampleObj["Param" + XML_SPLITTER +  distPCode] = buildParamObj(distPCode, getQuestionValue(eventID, DEName, setName, samplesTableName, sampNum + 1, colNum));   //TODO: Distance from either bank.  Perhaps run the distance as a switchable string (switch via settings? - save to station?)?
 

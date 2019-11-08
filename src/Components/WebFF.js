@@ -69,13 +69,14 @@ class WebFF extends React.Component {
 	//TODO: add set automatically
 
 	//Q:  Should "bank" be required in station setup?
-	//Q: EDI - percentages in distance column, or separate new read-only column?
-	//Q: P00001 ->  ?   (lost in chats in migration)
+	
+	
 
 	//USERs:
 	// event summary --> conceptualize for me.
 
 	//BREAKING:
+	//Q: percentages in distance column, or separate new read-only column?  (READ ONLY COLUMN)
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
