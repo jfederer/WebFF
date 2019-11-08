@@ -101,8 +101,8 @@ export const defaultSetInformationQuestionsData = {
 		"placeholder": "Number of Points",
 		"width_xs": 3,
 		"width_lg": 3,
-		"actions":
-			{ "anyValue": "ShowTab::QWDATA" }
+		// "actions":
+		// 	{ "anyValue": "ShowTab::QWDATA" }
 	},
 
 	numberOfContainers: {
@@ -1096,57 +1096,57 @@ export const defaultQuestionsData = {
 		"width_lg": 2
 	},
 
-	["samplingMethod_" + BEDLOAD_TEXT + "_QWDATA_CV"]: {
-		"id": "samplingMethod_" + BEDLOAD_TEXT + "_QWDATA_CV",
-		"label": "Sampling Method",
-		"type": "ComputedValue",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Info",
-		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_" + BEDLOAD_TEXT,
-		"value": "",
-		"width_xs": 4,
-		"width_lg": 2
-	},
+	// ["samplingMethod_" + BEDLOAD_TEXT + "_QWDATA_CV"]: {
+	// 	"id": "samplingMethod_" + BEDLOAD_TEXT + "_QWDATA_CV",
+	// 	"label": "Sampling Method",
+	// 	"type": "ComputedValue",
+	// 	"tabName": "QWDATA",
+	// 	"layoutGroup": "QWDATA Info",
+	// 	"placeholder": "Select on Field Form page",
+	// 	"computationString": "samplingMethod_" + BEDLOAD_TEXT,
+	// 	"value": "",
+	// 	"width_xs": 4,
+	// 	"width_lg": 2
+	// },
 
-	["samplingMethod_" + BOTTOM_MATERIAL_TEXT + "_QWDATA_CV"]: {
-		"id": "samplingMethod_" + BOTTOM_MATERIAL_TEXT + "_QWDATA_CV",
-		"label": "Sampling Method",
-		"type": "ComputedValue",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Info",
-		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_" + BOTTOM_MATERIAL_TEXT,
-		"value": "",
-		"width_xs": 4,
-		"width_lg": 2
-	},
+	// ["samplingMethod_" + BOTTOM_MATERIAL_TEXT + "_QWDATA_CV"]: {
+	// 	"id": "samplingMethod_" + BOTTOM_MATERIAL_TEXT + "_QWDATA_CV",
+	// 	"label": "Sampling Method",
+	// 	"type": "ComputedValue",
+	// 	"tabName": "QWDATA",
+	// 	"layoutGroup": "QWDATA Info",
+	// 	"placeholder": "Select on Field Form page",
+	// 	"computationString": "samplingMethod_" + BOTTOM_MATERIAL_TEXT,
+	// 	"value": "",
+	// 	"width_xs": 4,
+	// 	"width_lg": 2
+	// },
 
-	["samplingMethod_" + SUSPENDED_TEXT + "_QWDATA_CV"]: {
-		"id": "samplingMethod_" + SUSPENDED_TEXT + "_QWDATA_CV",
-		"label": "Sampling Method",
-		"type": "ComputedValue",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Info",
-		"placeholder": "Select on Field Form page",
-		"computationString": "samplingMethod_" + SUSPENDED_TEXT,
-		"value": "",
-		"width_xs": 4,
-		"width_lg": 2
-	},
+	// ["samplingMethod_" + SUSPENDED_TEXT + "_QWDATA_CV"]: {
+	// 	"id": "samplingMethod_" + SUSPENDED_TEXT + "_QWDATA_CV",
+	// 	"label": "Sampling Method",
+	// 	"type": "ComputedValue",
+	// 	"tabName": "QWDATA",
+	// 	"layoutGroup": "QWDATA Info",
+	// 	"placeholder": "Select on Field Form page",
+	// 	"computationString": "samplingMethod_" + SUSPENDED_TEXT,
+	// 	"value": "",
+	// 	"width_xs": 4,
+	// 	"width_lg": 2
+	// },
 
-	sampleMedium_QWDATA_CV: {
-		"id": "sampleMedium_QWDATA_CV",
-		"label": "Sample Medium",
-		"type": "ComputedValue",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Info",
-		"placeholder": "Select on Field Form Page",
-		"computationString": "sampleMedium",
-		"value": "",
-		"width_xs": 4,
-		"width_lg": 2
-	},
+	// sampleMedium_QWDATA_CV: {
+	// 	"id": "sampleMedium_QWDATA_CV",
+	// 	"label": "Sample Medium",
+	// 	"type": "ComputedValue",
+	// 	"tabName": "QWDATA",
+	// 	"layoutGroup": "QWDATA Info",
+	// 	"placeholder": "Select on Field Form Page",
+	// 	"computationString": "sampleMedium",
+	// 	"value": "",
+	// 	"width_xs": 4,
+	// 	"width_lg": 2
+	// },
 
 
 	[DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: {
@@ -2145,8 +2145,8 @@ export const defaultQuestionsData = {
 		"id": QWDATA_TABLE_IDENTIFIER + BOTTOM_MATERIAL_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Information",
+		// "tabName": "QWDATA",
+		// "layoutGroup": "QWDATA Information",
 		"colHeaders": true,
 		"rowHeaders": true,
 		"value": null,
@@ -2158,8 +2158,8 @@ export const defaultQuestionsData = {
 		"id": PARAMETERS_TABLE_IDENTIFIER + BOTTOM_MATERIAL_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
-		"tabName": "Parameters",
-		"layoutGroup": "Parameters",
+		// "tabName": "Parameters",
+		// "layoutGroup": "Parameters",
 		"colHeaders": true,
 		"rowHeaders": true,
 		"value": null,
@@ -2171,8 +2171,8 @@ export const defaultQuestionsData = {
 		"id": QWDATA_TABLE_IDENTIFIER + SUSPENDED_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Information",
+		// "tabName": "QWDATA",
+		// "layoutGroup": "QWDATA Information",
 		"colHeaders": true,
 		"rowHeaders": true,
 		"value": null,
@@ -2184,8 +2184,8 @@ export const defaultQuestionsData = {
 		"id": PARAMETERS_TABLE_IDENTIFIER + SUSPENDED_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
-		"tabName": "Parameters",
-		"layoutGroup": "Parameters",
+		// "tabName": "Parameters",
+		// "layoutGroup": "Parameters",
 		"colHeaders": true,
 		"rowHeaders": true,
 		"value": null,
@@ -2196,8 +2196,8 @@ export const defaultQuestionsData = {
 		"id": QWDATA_TABLE_IDENTIFIER + BEDLOAD_TEXT,
 		"label": "QWDATA Table",
 		"type": "QWDATATable",
-		"tabName": "QWDATA",
-		"layoutGroup": "QWDATA Information",
+		// "tabName": "QWDATA",
+		// "layoutGroup": "QWDATA Information",
 		"colHeaders": true,
 		"rowHeaders": true,
 		"value": null,
@@ -2209,8 +2209,8 @@ export const defaultQuestionsData = {
 		"id": PARAMETERS_TABLE_IDENTIFIER + BEDLOAD_TEXT,
 		"label": "Parameters Table",
 		"type": "ParametersTable",
-		"tabName": "Parameters",
-		"layoutGroup": "Parameters",
+		// "tabName": "Parameters",
+		// "layoutGroup": "Parameters",
 		"colHeaders": true,
 		"rowHeaders": true,
 		"value": null,

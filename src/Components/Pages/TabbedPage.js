@@ -8,7 +8,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
+// import Fragment from 'react';
 
 import { setAppBarText } from '../../Actions/UI';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
@@ -19,6 +19,7 @@ import { METHOD_QIDS, SEDIMENT_TYPES, DATA_ENTRY_INFORMATION_IDENTIFIER, DATA_EN
 import DataEntrySheet from '../Questions/DataEntrySheet';
 import ParametersTable from '../Questions/ParametersTable';
 import QWDATATable from '../Questions/QWDATATable';
+import QuestionPage from './../QuestionPage';
 
 
 function TabPanel(props) {
@@ -39,10 +40,14 @@ function TabPanel(props) {
 }
 
 function ComponentCreator(componentType, passedProps) {
+	console.log('passedProps :', passedProps);
 	switch (componentType) {
-		case DATA_ENTRY_SHEET_TYPE: return <DataEntrySheet {...passedProps} />
-		case PARAMETER_TABLE_TYPE: return <ParametersTable {...passedProps} />
-		case QWDATA_TABLE_TYPE: return <QWDATATable {...passedProps} />
+		case DATA_ENTRY_SHEET_TYPE: return <React.Fragment><QuestionPage tabName="DataEntry" /><DataEntrySheet {...passedProps} /></React.Fragment>
+		case PARAMETER_TABLE_TYPE: return <React.Fragment><ParametersTable {...passedProps} /><QuestionPage tabName="Parameters" /></React.Fragment>
+		case QWDATA_TABLE_TYPE: return 	<React.Fragment>
+											<QuestionPage tabName="QWDATA" />
+											<QWDATATable {...passedProps} />
+										</React.Fragment>
 		default: return null
 	}
 }
@@ -50,8 +55,8 @@ function ComponentCreator(componentType, passedProps) {
 function ComponentQID(componentType, sedType) {
 	switch (componentType) {
 		case DATA_ENTRY_SHEET_TYPE: return DATA_ENTRY_INFORMATION_IDENTIFIER + sedType;
-		case QWDATA_TABLE_TYPE: return QWDATA_TABLE_IDENTIFIER+sedType;
-		case PARAMETER_TABLE_TYPE: return PARAMETERS_TABLE_IDENTIFIER+sedType;
+		case QWDATA_TABLE_TYPE: return QWDATA_TABLE_IDENTIFIER + sedType;
+		case PARAMETER_TABLE_TYPE: return PARAMETERS_TABLE_IDENTIFIER + sedType;
 		default: return null
 	}
 }

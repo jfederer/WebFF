@@ -63,22 +63,20 @@ const FUNCDEBUG = false;
 
 class WebFF extends React.Component {
 
-	//KEN:
+	//Waiting on KEN:
 	//TODO: test save sedlogin compat xml
-	//TODO: push event to sedlogin
-	//TODO: add set automatically
+	
 
 	//Q:  Should "bank" be required in station setup?
+	//Q:  custom question -> answered -> something occurs so it doens't apply (station change, for example) ... what do I do with that data?
+	//Q:  event summary --> conceptualize for me.
 	
-	
-
-	//USERs:
-	// event summary --> conceptualize for me.
 
 	//BREAKING:
 	//Q: percentages in distance column, or separate new read-only column?  (READ ONLY COLUMN)
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
+	//TODO: push event to sedlogin
 	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
 				// on FF page -- user & eventQ's show ... station does not.
 				// on FF page -- user and eventQ's 
@@ -164,7 +162,7 @@ class WebFF extends React.Component {
 	// option to copy custom questions from station / user / event to another station / user / event
 
 	//Cleanup
-
+	//TODO: Set-Sample-Dist column gives "NAN"...
 	//TODO: why is tabbed pages setting values in paramters and qwdata pages?
 	//TODO: move bag/bottle/nozzel actions from actions to DEChangeHandler like with IET panel
 	//TODO: Multiple Sampling evnts at same time...
