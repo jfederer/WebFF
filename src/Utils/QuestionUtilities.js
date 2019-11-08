@@ -259,7 +259,7 @@ export const getTabQuestionsData = (questionsData, tabName) => {
 	let tabQuestionsData = [];
 	Object.keys(questionsData).forEach(key => {
 		try {
-			if (questionsData[key].tabName.replace(/ /g, '').toUpperCase() === tabName.replace(/ /g, '').toUpperCase()) {
+			if (tabName.replace(/ /g, '').toUpperCase().startsWith(questionsData[key].tabName.replace(/ /g, '').toUpperCase())) {
 				tabQuestionsData.push(questionsData[key]);
 			}
 		}

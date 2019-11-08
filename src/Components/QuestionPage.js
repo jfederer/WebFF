@@ -14,7 +14,7 @@ import {
 } from '../Utils/QuestionUtilities';
 import { getQuestionsData } from '../Utils/StoreUtilities';
 import { setAppBarText } from '../Actions/UI';
-import {  IDENTIFIER_SPLITTER } from './../Constants/Config';
+import { IDENTIFIER_SPLITTER } from './../Constants/Config';
 
 
 // standardize (library?) the use of "questionsData" string to generalized variable
@@ -50,8 +50,8 @@ class QuestionPage extends React.Component {
 
 	render() {
 		const DEBUG = false;
-		const { tabName, currentEvent, currentSamplingEventID, hiddenPanels} = this.props;
-		
+		const { tabName, currentEvent, currentSamplingEventID, hiddenPanels, customOnly } = this.props;
+
 		if (DEBUG) console.log("Question Page: Render:  props:  ", this.props);
 		// if (DEBUG) console.log("Question Page Render:  hiddenPanels:  ", hiddenPanels);
 
@@ -78,6 +78,16 @@ class QuestionPage extends React.Component {
 		if (DEBUG) console.log("Question Page: Render: Page all Questions Data: ", questionsData);
 
 		if (questionsData) {
+			// if this is a custom-only page, filter out all non-custom questions
+			if (customOnly) {
+				Object.keys(questionsData).forEach(key => {
+					if (!key.startsWith("#")) {
+						delete questionsData[key];
+					}
+				})
+			}
+			
+
 
 			// Object.keys(questionsData).filter(key=> typeof key === "object");  // OPTIMIZE: (could likely remove, as items without tabName are filtered out elsewhere)
 
@@ -87,7 +97,7 @@ class QuestionPage extends React.Component {
 				tabQuestionsData = Object.values(this.props.questionsData);
 				//if QD was passed, let's ensure unqiue panel names
 				tabQuestionsData.forEach(question => {
-					if (typeof question !== 'string' &&  question.id !== this.props.parentComponentNames[0]) {
+					if (typeof question !== 'string' && question.id !== this.props.parentComponentNames[0]) {
 						question.layoutGroup = question.layoutGroup + IDENTIFIER_SPLITTER + this.props.parentComponentNames[0]
 					}
 				}
@@ -116,9 +126,9 @@ class QuestionPage extends React.Component {
 				return keepPanel;
 			})
 
-			let opts = {props: {sedimentType:this.props.sedimentType, samplingMethod:this.props.samplingMethod}};
-			
-			// opts.props=this.props;
+			let opts = { props: { sedimentType: this.props.sedimentType, samplingMethod: this.props.samplingMethod } };
+
+
 
 			for (let i = 0; filteredLayoutGroupNames !== null && i < filteredLayoutGroupNames.length; i++) {
 				let layoutGroupQuestionsData = getLayoutGroupQuestionsData(tabQuestionsData, filteredLayoutGroupNames[i]);
@@ -135,12 +145,13 @@ class QuestionPage extends React.Component {
 				);
 			}
 
-
 			return (
-				<div>
-					{this.props.tabName.split(IDENTIFIER_SPLITTER)[0]}
+				<React.Fragment>
+					{questionPanels.length > 0   //If no question panels exist, let's just have this return nothing...
+						? this.props.tabName.split(IDENTIFIER_SPLITTER)[0]
+						: null}
 					{questionPanels}
-				</div>
+				</React.Fragment>
 			);
 		} else {
 			return <div>ERROR: Question Data Not Loaded</div>

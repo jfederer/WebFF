@@ -39,15 +39,21 @@ function TabPanel(props) {
 	);
 }
 
-function ComponentCreator(componentType, passedProps) {
+function ComponentCreator(componentType, passedProps, sedType) {
 	console.log('passedProps :', passedProps);
 	switch (componentType) {
-		case DATA_ENTRY_SHEET_TYPE: return <React.Fragment><QuestionPage tabName="DataEntry" /><DataEntrySheet {...passedProps} /></React.Fragment>
-		case PARAMETER_TABLE_TYPE: return <React.Fragment><ParametersTable {...passedProps} /><QuestionPage tabName="Parameters" /></React.Fragment>
+		case DATA_ENTRY_SHEET_TYPE: return <React.Fragment>
+			<QuestionPage tabName="Data Entry Extra Questions - All Sediment Types"  customOnly={true}/>
+			<DataEntrySheet {...passedProps} />
+			</React.Fragment>
+		case PARAMETER_TABLE_TYPE: return <React.Fragment>
+			<ParametersTable {...passedProps} />
+			<QuestionPage tabName="Parameters Extra Questions - All Sediment Types" customOnly={true}/>
+			</React.Fragment>
 		case QWDATA_TABLE_TYPE: return 	<React.Fragment>
-											<QuestionPage tabName="QWDATA" />
-											<QWDATATable {...passedProps} />
-										</React.Fragment>
+			<QuestionPage tabName="QWDATA Extra Questions - All Sediment Types" customOnly={true}/>
+			<QWDATATable {...passedProps} />
+			</React.Fragment>
 		default: return null
 	}
 }
@@ -101,7 +107,7 @@ class TabbedPage extends React.Component {
 				passedProps.sedimentType = sedType;
 				passedProps.value = getQuestionValue(currentEventID, ComponentQID(componentType, sedType));
 
-				let tabContent = ComponentCreator(componentType, passedProps);
+				let tabContent = ComponentCreator(componentType, passedProps, sedType);
 
 
 				if (!singleDataEntryPanel) {
