@@ -27,8 +27,7 @@ export const DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER = 0;
 export const QIDS_LINKED_TO_STATION_NAME = ["stationNumber", "projectName", "projectID", "agencyCode"];
 
 export const DEFAULT_HIDDEN_NAVIGATION_TABS = ["FieldForm", "DataEntry", "Parameters", "QWDATA"];
-export const DEFAULT_HIDDEN_PANELS = ["FieldForm:Weather", 
-										"DataEntry:IntakeEfficiencyTest&&DataEntry::"+SUSPENDED_TEXT, "DataEntry:AverageRepresentationalMeasures&&DataEntry::"+SUSPENDED_TEXT,
+export const DEFAULT_HIDDEN_PANELS = [	"DataEntry:IntakeEfficiencyTest&&DataEntry::"+SUSPENDED_TEXT, "DataEntry:AverageRepresentationalMeasures&&DataEntry::"+SUSPENDED_TEXT,
 										"DataEntry:IntakeEfficiencyTest&&DataEntry::"+BEDLOAD_TEXT, "DataEntry:AverageRepresentationalMeasures&&DataEntry::"+BEDLOAD_TEXT,
 										"DataEntry:IntakeEfficiencyTest&&DataEntry::"+BOTTOM_MATERIAL_TEXT, "DataEntry:AverageRepresentationalMeasures&&DataEntry::"+BOTTOM_MATERIAL_TEXT];
 

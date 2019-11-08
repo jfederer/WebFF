@@ -70,22 +70,17 @@ class WebFF extends React.Component {
 	//Q:  Should "bank" be required in station setup?
 	//Q:  custom question -> answered -> something occurs so it doens't apply (station change, for example) ... what do I do with that data?
 	//Q:  event summary --> conceptualize for me.
-	
+	//Q: can I convert?? --> compare to providing access
+	//Q: "start/end edge of water / sampling zones ...  do they have specific pcodes? transpose Pcodes for start/end edge/sampling zones?
 
 	//BREAKING:
 	//Q: percentages in distance column, or separate new read-only column?  (READ ONLY COLUMN)
 	//TODO: webserver, network loads
 		//TODO: Does not check for updated data outside localstorage
 	//TODO: push event to sedlogin
-	//TODO: custom questions don't render on the tabbed pages anymore because we aren't generating them the same way anymore...
-				// on FF page -- user & eventQ's show ... station does not.
-				// on FF page -- user and eventQ's 
-	//TODO: system menu rebuild
 	//TODO: Style sheet
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
 	//TODO: import/export
-	//TODO: can I convert?? --> compare to providing access
-	//TODO: transpose Pcodes for start/end edge/sampling zones
 
 	//BUGS: 
 	//TODO: station custom questions didn't render on field form
@@ -108,6 +103,7 @@ class WebFF extends React.Component {
 	//BUG: not correctly estimating time on first load of qwdata page...
 
 	//TEST:
+	// hide/show panel button
 	// Add/REmove station
 	// remove station that is set as the station for a different event
 	//TODO: switching events (load event) doesn't re-build/re-generate/re-default the questionsData
@@ -116,7 +112,9 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
-	
+	//TODO: new event from old... (pseudo)
+	//TODO: system menu rebuild  (import/export move?)
+		//TODO: disable system menu buttons when they can't apply
 	//TODO: avgrepmeas -> alert/confirm
 	//TODO: rememver current sediment type from page to page
 	//TODO: single-page view 
@@ -129,12 +127,15 @@ class WebFF extends React.Component {
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 	//TODO: duplicate just stationing (vs all - optionally) from set to set ... even existing?
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
-	//TODO: disable system menu buttons when they can't apply
+	
 	 //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
-
+	
+	//TODO: "remove set" button on sets
 
 	//Would be nice:
-	//TODO: "remove set" button on sets
+	//TODO: "Station manager" - include extra waterway info, include "duplicate", include 'edit'
+	//TODO: "question manager" - include "duplicate" (Saved elsewhere), include 'edit'
+	//tODO: default value for custom questions
 	//TODO: Bridge wizard 
 			//TODO: "recalculate" button appears in EWI table if data doesn't match calculated
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
