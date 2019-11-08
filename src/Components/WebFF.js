@@ -83,19 +83,7 @@ class WebFF extends React.Component {
 	//TODO: import/export
 
 	//BUGS: 
-	//TODO: station custom questions didn't render on field form
-	//TODO: paramters and qwdata table don't appear to load existing info from loaded event
-	//TODO: setname can be Sngl - this could break XML
-	//BUG: New Event -> DE page -> enter # sampling points -> FF page -> change sampling method -> DE page (bug: empty table)
-	//BUG: New Event -> DE page -> enter '1' as sampling points (bug: says table must shrink)
-	//BUG: New Event -> Bedload -> DE page -> select some multi-choice options (bug: the options dissapear)
-	//BUG: New Event -> DE page -> Add Set -> enter numbe of sampling points -> leave page -> return (bug: table is missing)
-	//BUG: New Eent -> DE page -> Add Set -> Dashboard -> New Event -> QWDATA page (bug: nothing there - should hide QWDATA tab on making new event or when pre-reqs aren't met (ditto param))
-	//BUG: Add default value in defaultSetInformationQuestionsData to startTime input -> created question has props.value === "" instead of the default value.
-	//BUG: New Event -> DE page -> enter # of samp points -> QWDATA page -> Select add-on analysis -> DE page -> select anaysis that includes add-on -> QWDATA page -> select previously-set Add-on button (bug: no options for add-on analysis)
-	//BUG: New Event -> Bottom Material -> DE page -> # of samples -> QWDATA page -> descriptive column says 'undefined' 
-	//BUG: New Event -> pick sampling methods -> select "Not sampled" for one of them... tab dissapears.  reselecting a non-"not sampled" brings it back.
-	//BUG: New Event -> Pick Method -> DE page -> do something -> FF page -> return to DE ... original DE data gone from event in store.
+	//MAke event (event1) using staton1 ... at some point outside that event, remove station1 ... when going back to event1, the station will switch to next available in list
 	//Remove currently-active station in event using dialog.
 	//BUG: Dashboard -> EventManger -> Event Summary -> BAck Button ... sends you to the FF page.
 	//BUG: average rep measures (from adding a second set) sticks around on a new event....  (Should get fixed if we reset UI before loading event)
@@ -112,6 +100,7 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	//TODO: auto-estimate time on first load of QWDATA
 	//TODO: new event from old... (pseudo-event)
 	//TODO: template manager/event copy
 	//TODO: system menu rebuild  (import/export move?)

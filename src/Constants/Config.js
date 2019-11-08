@@ -35,7 +35,7 @@ export const EDI_METHOD_CATEGORY = "EDI";
 export const EWI_METHOD_CATEGORY = "EWI";
 export const OTHER_METHOD_CATEGORY = "OTHER";
 
-export const DISALLOWED_CHARACTERS_IN_SETNAME_REGEX = /[^a-zA-Z0-9 -]/g;
+export const DISALLOWED_CHARACTERS_IN_SETNAME_REGEX = /(?:[^a-zA-Z0-9 -]|sngl|Sngl|SNGL)/g;  // sngl could mess with XML stuff
 export const PCODE_MATCHING_REGEX = /[P]\d{5}/g;
 
 export const DEFAULT_BACKUP_INTERVAL = 300;
