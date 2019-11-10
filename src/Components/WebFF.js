@@ -10,8 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import loading from '../Images/loading.gif';
+import _ from 'lodash';
 
 import { styles } from '../style';
 import 'typeface-roboto';
@@ -23,7 +23,7 @@ import {
 
 import { isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
 
-import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';  
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility, hideQuestion } from '../Actions/UI';
 import { loadAndSetCurrentUser } from '../Actions/SedFF';
@@ -56,16 +56,17 @@ import EventSummary from './Pages/EventSummary';
 import ErrorPage from './Errors/ErrorPage';
 
 //TEST
+import { setDBInfo, fetchDBInfo } from '../Utils/NetworkUtilities';
 
 const FUNCDEBUG = false;
 
 
-
 class WebFF extends React.Component {
+	
 
 	//Waiting on KEN:
 	//TODO: test save sedlogin compat xml
-	
+
 
 	//Q:  Should "bank" be required in station setup?
 	//Q:  custom question -> answered -> something occurs so it doens't apply (station change, for example) ... what do I do with that data?
@@ -76,7 +77,7 @@ class WebFF extends React.Component {
 
 	//BREAKING:
 	//TODO: webserver, network loads
-		//TODO: Does not check for updated data outside localstorage
+	//TODO: Does not check for updated data outside localstorage
 	//TODO: push event to sedlogin
 	//TODO: Style sheet
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
@@ -104,7 +105,7 @@ class WebFF extends React.Component {
 	//TODO: new event from old... (pseudo-event)
 	//TODO: template manager/event copy
 	//TODO: system menu rebuild  (import/export move?)
-		//TODO: disable system menu buttons when they can't apply
+	//TODO: disable system menu buttons when they can't apply
 	//TODO: avgrepmeas -> alert/confirm
 	//TODO: rememver current sediment type from page to page
 	//TODO: single-page view 
@@ -117,9 +118,9 @@ class WebFF extends React.Component {
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 	//TODO: duplicate just stationing (vs all - optionally) from set to set ... even existing?
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
-	
-	 //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
-	
+
+	//TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
+
 	//TODO: "remove set" button on sets
 
 	//Would be nice:
@@ -127,7 +128,7 @@ class WebFF extends React.Component {
 	//TODO: "question manager" - include "duplicate" (Saved elsewhere), include 'edit'
 	//tODO: default value for custom questions
 	//TODO: Bridge wizard 
-			//TODO: "recalculate" button appears in EWI table if data doesn't match calculated
+	//TODO: "recalculate" button appears in EWI table if data doesn't match calculated
 	//TODO: Auto-estimate on first load of QWDATA table...  (Setting?)
 	//TODO: settings: 
 	// paper vs no... 
@@ -151,6 +152,7 @@ class WebFF extends React.Component {
 	// allow custom set names in settings
 	// warning for estimating time on QW pag eshould change if there aren't times available on DE page
 	// option to copy custom questions from station / user / event to another station / user / event
+	// secure setDBInfo ... (could be used nefariously)
 
 	//Cleanup
 	//TODO: Set-Sample-Dist column gives "NAN"...
@@ -170,64 +172,13 @@ class WebFF extends React.Component {
 
 
 
-
-
-
-
-
-
-
-
-
 	constructor(props) {
 		if (FUNCDEBUG) console.log("FUNC: WebFF Constructor");
 
 		super(props);
 
-		// var allItemsToSyncToLS = USER_DB_NODES.slice();
-
-		// allItemsToSyncToLS.push("loggedInUser", "curSamplingEventName", "needsToUpdateDB");
-
 		this.state = {
-			//v2
-
-
-
-
-			//unknown use below...
-
-			// system config
-			// questionsData: questionsData,
-			// dialogQuestions: dialogQuestions,
-
-			// itemsToSyncToLS: allItemsToSyncToLS,
-
-			// syncIntervalFunction: null,
-
-			// itemsLoaded: [],
-			// usePaper: false,
-			// syncDelay: 300000,
-
-			// questionDialogOpen: false,
-
-			// dialogValues: {},
-			// dialogOpen: false,
-			// curDialogDescription: "",
-			// curDialogName: "",
-			// curDialogQuestions: [],
-
-			// hiddenTabs: defaultHiddenTabs,
-			// hiddenPanels: defaultHiddenPanels,
-
-			// appBarText: "Sediment Field Forms",
-
-			// stations: [],
-			// customQuestions: [],
-
-			// loggedInUser:
-			// needsToUpdateDB: (localStorage.getItem('needsToUpdateDB')) ? JSON.parse(localStorage.getItem('needsToUpdateDB')) : [],
-			// curSamplingEventName: JSON.parse(localStorage.getItem('curSamplingEventName')) //TODO: multiple reloads mess this up if it starts null
-
+			usr: {}
 		};
 
 		// if (isReasonablyValidUsernameInLS()) {
@@ -249,7 +200,7 @@ class WebFF extends React.Component {
 		// this.setState({ showLoadingApp: true }); //TODO: redux, leading sign, false after load complete.
 
 		if (navigator.onLine) {
-			ensureProgramVersionUpToDate();
+			// ensureProgramVersionUpToDate();
 		}
 
 		if (isReasonableUsername(this.props.sedff.currentUsername)) {
@@ -265,11 +216,6 @@ class WebFF extends React.Component {
 	}
 
 
-	testFunc(props) {
-		props.hideQuestion(["stationNumber"]);
-		props.hideQuestion([DATA_ENTRY_INFORMATION_IDENTIFIER + "Suspended", "bagMaterial"]);
-	}
-
 	render() {
 		const { classes, UI, currentUser, isFetchingUserData, fetchingUserDataComplete } = this.props;
 
@@ -277,10 +223,6 @@ class WebFF extends React.Component {
 			console.log("There is no currentuser...going to login page");
 			return <Redirect to='/' />;
 		}
-
-
-
-
 
 		return (
 			<React.Fragment>
@@ -340,26 +282,6 @@ class WebFF extends React.Component {
 							: null}
 
 
-						{/* <SystemDialog isOpen={this.state.dialogOpen}
-						closeHandler={this.handleDialogClose}
-						dialogQuestions={this.state.curDialogQuestions}
-						dialogName={this.state.curDialogName}
-						dialogDescription={this.state.curDialogDescription}
-						stateChangeHandler={this.dialogQuestionChangeSystemCallback}
-						dialogValues={this.state.dialogValues}
-						globalState={this.state}
-						setLoggedInUser={this.setLoggedInUser}
-						addStation={this.addStation}
-						removeStation={this.removeStation}
-					/> */}
-
-
-
-
-						{/* <QuestionDialog isOpen={this.state.questionDialogOpen}
-						
-					/> */}
-
 						<main className={classes.content} >
 							<div className={classes.toolbar} />  {/*to push down the main content the same amount as the app titlebar */}
 
@@ -383,16 +305,138 @@ class WebFF extends React.Component {
 
 						</main>
 					</div >
-					{/* <button onClick={() => this.props.loadAndSetCurrentUser("username@email.com")}>LASCU</button><br /> */}
-					{/* <pre>{JSON.stringify(this.props.user)}</pre> */}
-					{/* <pre>{JSON.stringify(this.props.UI.visibility)}</pre> */}
 				</React.Fragment>
 
-				{/* <Button onClick={()=>console.log(getActiveSedimentTypes(this.props.currentSamplingEventID))}>TEST</Button> */}
+				<button onClick={this.doTestPull}>TEST PULL</button>
+				<button onClick={this.usrMod}>INT to 300</button>
+				<button onClick={this.doTestPush}>TEST PUSH</button>
+				{JSON.stringify(this.state.usr)}
 			</React.Fragment>
 
 		);
 	}
+
+	usrMod = () => {
+		let newUsr = _.cloneDeep(this.state.usr);
+		newUsr.settings.backupInterval = 300;
+		this.setState({usr:newUsr});
+	}
+	doTestPull = () => {
+		fetchDBInfo({ key: "username", value: "jfederer@usgs.gov" },
+			"Users",
+			(dbResponse) => {
+				if(Array.isArray(dbResponse) && dbResponse.length===1) {
+					this.setState({usr:dbResponse[0]})
+				} else {
+					console.log("dbResponse did not return user"); //TODO: do check for username/etc..
+				}
+			},
+			(res) => alert("TEST FAILURE" + res));
+	}
+	doTestPush = () => {
+		setDBInfo({ key: "username", value: "jfederer@usgs.gov" },
+			"Users",
+			this.state.usr,
+			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
+			(res) => alert("TEST FAILURE"+ res));
+	}
+
+
+	
+
+
+	// if (navigator.onLine) { //TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
+	// 			if (DEBUG) console.log("Online!... going to fetch from DB.");
+	// 			this.getUserConfigFromLS(nodesToGather, null, () => console.log("Done gathering from LS, looking at DB"));
+
+	// 			this.fetchDBInfo(this.state.loggedInUser, 'users',
+	// 				(JSONresponse) => {
+	// 					if (DEBUG) console.log("JSONresponse: ", JSONresponse);
+
+	// 					// check that this user even exists in database
+	// 					if (JSONresponse.length > 1) {
+	// 						throw new Error("User query for '" + this.state.loggedInUser + "' returned more than one result.  Please contact jfederer@usgs.gov to resolve.");
+	// 					}
+
+	// 					if (JSONresponse.length === 0) {
+	// 						// this user did not exist in the database - we must create their entry
+	// 						this.createNewUser(this.state.loggedInUser);
+	// 					};
+
+	// 					if (JSONresponse.length === 1) {
+	// 						// this user exists in the database
+	// 						let userData = JSONresponse[0];
+
+	// 						//  exact nodesToGather from the user data into nodeArr
+	// 						for (let i = 0; i < nodesToGather.length; i++) {
+	// 							let nodeArr = [];
+	// 							if (DEBUG) console.log("Extracting: ", nodesToGather[i]);
+
+	// 							userData[nodesToGather[i]].forEach((configNode) => {
+	// 								if (DEBUG) console.log("userData[" + nodesToGather[i] + "]: ", configNode);
+	// 								// yes, this is basically destructing and reconstructing an array.  This is being done for easier error checking in the future. (perhaps not actually easier)
+	// 								//TODO: error and duplication checking 
+	// 								nodeArr.push(configNode);
+	// 							});
+
+	// 							// put nodeArr (the data extracted from userData) into approparite place in state
+	// 							this.setState({ [nodesToGather[i]]: nodeArr }, () => {
+	// 								this.buildCombinedQuestionsData(() => {
+	// 									this.buildRoutesAndRenderPages();
+	// 								});
+	// 							});
+	// 						}
+
+	// 						// pull sampling events from DB response
+	// 						let allNodeNames = Object.keys(userData);
+	// 						for (let i = 0; i < allNodeNames.length; i++) {
+	// 							if (allNodeNames[i].startsWith(SAMPLING_EVENT_IDENTIFIER)) {
+	// 								console.log("Attempting to load " + allNodeNames[i] + " from DB.");
+	// 								// if (localStorage.getItem(allNodeNames[i])) {
+	// 								// 	console.log(allNodeNames[i] + " is in LS.  Ignoring DB values for this.");
+	// 								// 	continue;
+	// 								// }
+	// 								if (userData[allNodeNames[i]].deleted) {
+	// 									console.log(allNodeNames[i] + " is a previously-deleted event. Ignoring DB values for this.");
+	// 									continue;
+	// 								}
+
+	// 								this.conditionallyIngestSE(userData[allNodeNames[i]], () => {
+	// 									// this.addToItemsToSyncToLS(allNodeNames[i]);
+	// 									this.buildRoutesAndRenderPages();
+	// 								});
+
+	// 								// loading Event from DB into LS
+	// 								// this.setState({ [allNodeNames[i]]: userData[allNodeNames[i]] }, () => {
+	// 								// 	this.addToItemsToSyncToLS(allNodeNames[i]);
+	// 								// 	this.buildRoutesAndRenderPages();
+	// 								// });
+	// 							}
+	// 						}
+	// 					} // end one user found in DB
+
+	// 					// after loading everything we can from DB 
+	// 					// (This is still the callback from the fetchDB call), 
+	// 					// let's load everything we can from LS.
+	// 					this.getUserConfigFromLS(nodesToGather);
+	// 				},
+	// 				() => {
+	// 					console.warn("Call to DB failed, attempting to gather from LS");
+	// 					this.getUserConfigFromLS(nodesToGather)
+	// 				}
+	// 			); // end fetchDB callback
+
+	// 		} else {
+	// 			// not online
+	// 			this.getUserConfigFromLS(nodesToGather, null, () => console.log("TODO: redirect to Error page with 'not online and not enough data in LS to function' error"));
+
+	// 		}
+	// 		// set syncInterval for database backups
+	// 		var syncInterval = setInterval(() => this.updateDatabase(), this.state.syncDelay);
+	// 		this.setState({ syncIntervalFunction: syncInterval });
+	// 	}
+
+
 }
 
 WebFF.propTypes = {
