@@ -1,4 +1,4 @@
-import { SUSPENDED_TEXT, BEDLOAD_TEXT, BOTTOM_MATERIAL_TEXT, EVENT_LINK_TABLE_TYPE, STATION_LINK_TABLE_TYPE } from './Dictionary';
+import { SUSPENDED_TEXT, BEDLOAD_TEXT, BOTTOM_MATERIAL_TEXT, EVENTS_LINK_TABLE_TYPE, STATIONS_LINK_TABLE_TYPE } from './Dictionary';
 
 export const USER_DB_NODES = ['stations', 'customQuestions'];   //TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers"
 
@@ -45,8 +45,8 @@ export const PROGRAM_VERSION = "0.6.0";
 export const IET_REQUIRING_SAMPLER_TYPE_VALUES = ['3055', '3056', '3057', '3058'];
 
 export const LINK_TABLES = {
-	[EVENT_LINK_TABLE_TYPE] : "SamplingEventLinkTable",
-	[STATION_LINK_TABLE_TYPE]: "StationLinkTable"
+	[EVENTS_LINK_TABLE_TYPE] : "SamplingEventsLinkTable",  // value here is the table name in the database
+	[STATIONS_LINK_TABLE_TYPE]: "StationsLinkTable" // value here is the table name in the database
 }
 
 export const METHOD_QIDS = {

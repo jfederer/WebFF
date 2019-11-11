@@ -1,10 +1,11 @@
 import {
-	REQUEST_USER_SAMPLING_EVENTS,
-	LOAD_COMPLETE_USER_SAMPLING_EVENTS,
-	REQUEST_USER_SAMPLING_EVENTS_LIST,
-	LOAD_COMPLETE_USER_SAMPLING_EVENTS_LIST,
-	REQUEST_SAMPLING_EVENT,
-	LOAD_COMPLETE_SAMPLING_EVENT,
+	USER_SAMPLING_EVENTS_REQUEST,
+	USER_SAMPLING_EVENTS_LOAD_COMPLETE,
+	USER_SAMPLING_EVENTS_LIST_REQUEST,
+	USER_SAMPLING_EVENTS_LIST_LOAD_COMPLETE,
+	SAMPLING_EVENT_REQUEST,
+	SAMPLING_EVENT_LOAD_COMPLETE,
+	SAMPLING_EVENT_PUSH,
 	SYNC_ALL_TO_DB
 } from '../Constants/ActionTypes';
 import { LINK_TABLES } from '../Constants/Config';
@@ -18,41 +19,41 @@ export function syncToDB() {
 
 function requestUserEvents(username) {
 	return {
-		type: REQUEST_USER_SAMPLING_EVENTS,
+		type: USER_SAMPLING_EVENTS_REQUEST,
 		username
 	}
 }
 
 function loadCompleteUserEvents(username) {
 	return {
-		type: LOAD_COMPLETE_USER_SAMPLING_EVENTS,
+		type: USER_SAMPLING_EVENTS_LOAD_COMPLETE,
 		username
 	}
 }
 
 function requestSamplingEventLinkTable(username) {
 	return {
-		type: REQUEST_USER_SAMPLING_EVENTS_LIST,
+		type: USER_SAMPLING_EVENTS_LIST_REQUEST,
 		username
 	}
 }
 
 function loadCompleteSamplingEventLinkTable(username) {
 	return {
-		type: LOAD_COMPLETE_USER_SAMPLING_EVENTS_LIST,
+		type: USER_SAMPLING_EVENTS_LIST_LOAD_COMPLETE,
 		username
 	}
 }
 
 function requestSamplingEvent(eventID) {
 	return {
-		type: REQUEST_SAMPLING_EVENT,
+		type: SAMPLING_EVENT_REQUEST,
 		eventID
 	}
 }
 function loadCompleteSamplingEvent(eventID) {
 	return {
-		type: LOAD_COMPLETE_SAMPLING_EVENT,
+		type: SAMPLING_EVENT_LOAD_COMPLETE,
 		eventID
 	}
 }
@@ -128,6 +129,42 @@ export function loadAllUserEvents(username) {
 			});
 	};
 }
+
+
+// export function pushEventToDB(event) {
+// 	return (dispatch, getState) => {
+// 		dispatch(requestUserEvents(username));
+// 		dispatch(requestSamplingEventLinkTable(username));
+// 		dispatch(fetchSamplingEventLinkTable(username))
+// 			.then((samplingEventLinkTable) => {
+// 				dispatch(ingestSamplingEventLinkTable(samplingEventLinkTable, username))
+// 					.then(listIngestSuccess => {
+// 						dispatch(loadCompleteSamplingEventLinkTable(username))
+// 						samplingEventLinkTable.events.forEach((eventID) => {
+// 							dispatch(requestSamplingEvent(eventID));
+// 							dispatch(fetchSamplingEvent(eventID))
+// 								.then((event) => {
+// 									dispatch(ingestEvent(event))
+// 										.then(eventID => dispatch(loadCompleteSamplingEvent(eventID)))
+// 										.catch(eventIngestFailure => console.warn(eventID + " failed to ingest: " + eventIngestFailure));
+// 								})
+// 								.catch(eventFetchFailure => console.warn(eventID + " was in link table but not found cleanly in the database: " + eventFetchFailure)); //TODO: notify, upload? or cleanup table ... this event wasn't found in DB
+// 						});
+// 					})
+// 					.catch(listIngestFailure => console.warn('failed to ingest samplingEventLinkTable: ' + listIngestFailure));
+// 			})
+// 			.then(dispatch(loadCompleteUserEvents(username)))
+// 			.catch((samplingEventLinkTableFetchFailure) => {
+// 				console.log('CATCH samplingEventLinkTableResponse :', samplingEventLinkTableFetchFailure);
+// 			});
+// 	};
+// }
+
+
+
+
+
+///////////////////////
 
 
 

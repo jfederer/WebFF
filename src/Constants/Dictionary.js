@@ -40,7 +40,7 @@ export const RIGHT_BANK_VALUE = "Right Bank";
 
 export const SEDLOGIN_SUCCESS_MESSAGE = "Imported 1 event into SedLOGIN project";
 
-export const EVENT_LINK_TABLE_TYPE = "EVENT_LINK_TABLE_TYPE";
-export const STATION_LINK_TABLE_TYPE = "STATION_LINK_TABLE_TYPE";
+export const EVENTS_LINK_TABLE_TYPE = "EVENTS_LINK_TABLE_TYPE";
+export const STATIONS_LINK_TABLE_TYPE = "STATIONS_LINK_TABLE_TYPE";
 
 

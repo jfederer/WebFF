@@ -2,14 +2,14 @@ import _ from 'lodash';
 
 import {
 	CREATE_NEW_SAMPLING_EVENT,
-	SET_SAMPLING_EVENT,
+	SAMPLING_EVENT_SET,
 	SE_QUESTION_VALUE_CHANGE,
 	ADD_QUESTION_TO_EVENT,
 	DELETE_QUESTION_FROM_EVENT,
 	SE_QUESTION_VALUE_DELETE,
   SAMPLING_EVENT_BANK_CHANGE,
-  REQUEST_USER_SAMPLING_EVENTS,
-  LOAD_COMPLETE_USER_SAMPLING_EVENTS
+  USER_SAMPLING_EVENTS_REQUEST,
+  USER_SAMPLING_EVENTS_LOAD_COMPLETE
 } from '../Constants/ActionTypes';
 
 
@@ -22,7 +22,7 @@ export function SamplingEvents(state = initialState, action) {
 	let newState = _.cloneDeep(state);
 	switch (action.type) {
 		case CREATE_NEW_SAMPLING_EVENT:
-		case SET_SAMPLING_EVENT:
+		case SAMPLING_EVENT_SET:
 			newState[action.event.eventID] = action.event;
 			return newState;
 		case SE_QUESTION_VALUE_CHANGE:
@@ -40,11 +40,11 @@ export function SamplingEvents(state = initialState, action) {
 		case SAMPLING_EVENT_BANK_CHANGE:
 			newState[action.eventID].questionsValues.waterwayInfo.bank = action.bank;
       return newState;
-    case REQUEST_USER_SAMPLING_EVENTS:
+    case USER_SAMPLING_EVENTS_REQUEST:
       newState.isFetching = true;
       newState.didInvalidate = false;
       return newState;
-    case LOAD_COMPLETE_USER_SAMPLING_EVENTS:
+    case USER_SAMPLING_EVENTS_LOAD_COMPLETE:
       newState.isFetching = false;
       newState.didInvalidate = false;
       if(Array.isArray(action.events)) {

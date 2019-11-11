@@ -1,6 +1,6 @@
 import {
 	REGISTER_EVENT_WITH_USERNAME,
-	SET_SAMPLING_EVENT_LINK_TABLE
+	SAMPLING_EVENT_LINK_TABLE_SET
 } from '../Constants/ActionTypes';
 import { LINK_TABLES } from '../Constants/Config';
 
@@ -43,7 +43,7 @@ export function SamplingEventsLinkTables(state = initialState, action) {
 		// 		newState[action.tableName][action.username].didInvalidate = false
 		// 		newState[action.tableName][action.username].isFetching = false;  //TODO: add in some sort of 'updated' date (and/or date modified)
 		// 		return newState;
-		case SET_SAMPLING_EVENT_LINK_TABLE: 
+		case SAMPLING_EVENT_LINK_TABLE_SET: 
 			newState[action.samplingEventLinkTable.username]=action.samplingEventLinkTable;
 			return newState;
 		default:

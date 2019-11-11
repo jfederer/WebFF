@@ -59,9 +59,10 @@ import ErrorPage from './Errors/ErrorPage';
 //TEST
 import { setDBInfo, fetchDBInfo } from '../Utils/NetworkUtilities';
 import { linkTablePush, eventPush } from '../Actions/DB';
-import { EVENT_LINK_TABLE_TYPE, STATION_LINK_TABLE_TYPE } from '../Constants/Dictionary';
-import { getEventFromID } from '../Utils/StoreUtilities';
-import { loadAllUserEvents } from '../Actions/DB';
+import { EVENTS_LINK_TABLE_TYPE, STATIONS_LINK_TABLE_TYPE } from '../Constants/Dictionary';
+import { getEventFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
+import { loadAllUserEvents, pushEventToDB } from '../Actions/DB';
+import { getQuestionValue } from '../Utils/QuestionUtilities';
 const FUNCDEBUG = false;
 
 
@@ -330,7 +331,13 @@ class WebFF extends React.Component {
 				<br></br>
 				Actions
 				<br></br>
-				<button onClick={this.doTestAllUserEvents}>TEST GET ALL USER EVENTS ACTION</button>
+				<button onClick={this.doTestPushEvent_Action}>TEST PUSH USER EVENT</button>
+				<button onClick={this.doTestPushEventsTable_Action}>TEST PUSH EVENT TABLE</button>
+				<button onClick={this.doTestAllUserEvents_Action}>TEST GET ALL USER EVENTS</button>
+				<br></br>
+				<button onClick={this.doTestPushStation_Action}>TEST PUSH USER EVENT</button>
+				<button onClick={this.doTestPushStationsTable_Action}>TEST PUSH STATIONS TABLE</button>
+				<button onClick={this.doTestAllUserStations_Action}>TEST GET ALL USER STATIONS</button>
 				<br>
 				</br>	
 				<br>
@@ -342,13 +349,43 @@ class WebFF extends React.Component {
 		);
 	}
 
+
+	doTestPushEvent_Action = () => {
+		console.log("doTestPushEvent_Action");
+		this.props.pushEventToDB(this.props.currentSamplingEventID);
+	}
+
+	doTestPushEventsTable_Action = () => {
+		console.log("doTestPushEventsTable_Action");
+		this.props.pushLinkTable(EVENTS_LINK_TABLE_TYPE, 'jfederer@usgs.gov');
+	}
+
+	doTestAllUserEvents_Action = () => {
+		console.log("doTestAllUserEvents_Action");
+		this.props.loadAllUserEvents('jfederer@usgs.gov');
+	}
+
+	doTestPushStation_Action = () => {
+		console.log("doTestPushStation_Action");
+		let stationName = getQuestionValue('stationName');
+		this.props.pushStationToDB(getStationFromID(getStationIDsFromName('jfederer@usgs.gov', stationName)[0]));  // need to get the station object itself, first
+	}
+
+	doTestPushStationsTable_Action = () => {
+		console.log("doTestPushStationsTable_Action");
+		this.props.pushLinkTable(STATIONS_LINK_TABLE_TYPE, 'jfederer@usgs.gov');
+	}
+
+	doTestAllUserStations_Action = () => {
+		console.log("doTestAllUserStations_Action");
+	}
+
+////////////////////////////////
+
 	usrMod = () => {
 		let newUsr = _.cloneDeep(this.state.usr);
 		newUsr.settings.backupInterval = 300;
 		this.setState({ usr: newUsr });
-	}
-	doTestAllUserEvents = () => {
-		this.props.loadAllUserEvents('jfederer@usgs.gov');
 	}
 
 	doTestPull = () => {
@@ -380,7 +417,7 @@ class WebFF extends React.Component {
 	}
 	doTestEventTable = () => {
 		let username = "jfederer@usgs.gov";
-		linkTablePush(EVENT_LINK_TABLE_TYPE, 
+		linkTablePush(EVENTS_LINK_TABLE_TYPE, 
 			username, 
 			{username: username,
 				events: this.props.eventLinkTables[username]},
@@ -390,7 +427,17 @@ class WebFF extends React.Component {
 	}
 	doTestStationTable = () => {
 		let username = "jfederer@usgs.gov";
-		linkTablePush(STATION_LINK_TABLE_TYPE, 
+		linkTablePush(STATIONS_LINK_TABLE_TYPE, 
+			username, 
+			{username: username,
+				events: this.props.stationLinkTables[username]},
+			(res) => alert("WEBFF SUCCESS CB! " + res),
+			(res) => alert("WEBFF FAILURE CB! " + res)
+		);
+	}
+	doTestStationTable = () => {
+		let username = "jfederer@usgs.gov";
+		linkTablePush(STATIONS_LINK_TABLE_TYPE, 
 			username, 
 			{username: username,
 				events: this.props.stationLinkTables[username]},
@@ -406,7 +453,7 @@ class WebFF extends React.Component {
 			(res) => alert("WEBFF FAILURE CB! " + res)
 		);
 	}
-//doTestPushStation
+
 
 
 
@@ -534,7 +581,8 @@ const mapDispatchToProps = {
 	setNavMenuExpand,
 	setSysMenuExpand,
 	hideQuestion,
-	loadAllUserEvents
+	loadAllUserEvents,
+	pushEventToDB
 }
 
 

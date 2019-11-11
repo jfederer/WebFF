@@ -7,9 +7,10 @@ import {
 	SE_QUESTION_VALUE_CHANGE,
 	SE_QUESTION_VALUE_DELETE,
 	SAMPLING_EVENT_BANK_CHANGE,
-	SET_SAMPLING_EVENT,
-	SET_SAMPLING_EVENT_LINK_TABLE,
+	SAMPLING_EVENT_SET,
+	
 } from '../Constants/ActionTypes';
+
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
 import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
@@ -26,7 +27,7 @@ import {
 
 } from '../Constants/Config';
 
-import { EVENT_LINK_TABLE_TYPE } from '../Constants/Dictionary';
+import { EVENTS_LINK_TABLE_TYPE } from '../Constants/Dictionary';
 
 import { getQuestionValue, getMethodCategoryFromValue, getSamplesTableValueWithGivenBank, getDataEntryValueWithGivenBank } from '../Utils/QuestionUtilities';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -204,7 +205,7 @@ export function ingestEvent(event) {
 		return new Promise(function (resolve, reject) {
 			//FIXME: TODO: check for format & age
 			dispatch({
-				type: SET_SAMPLING_EVENT,
+				type: SAMPLING_EVENT_SET,
 				event
 			});
 			resolve(event.eventID);
@@ -218,8 +219,8 @@ export function ingestSamplingEventLinkTable(samplingEventLinkTable, username) {
 		return new Promise(function (resolve, reject) {
 			//FIXME: TODO: check for format & age
 			dispatch({
-				type: SET_SAMPLING_EVENT_LINK_TABLE,
-				tableType: EVENT_LINK_TABLE_TYPE,
+				type: SAMPLING_EVENT_LINK_TABLE_SET,
+				tableType: EVENTS_LINK_TABLE_TYPE,
 				samplingEventLinkTable
 			});
 			resolve();
