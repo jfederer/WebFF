@@ -10,12 +10,12 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
 	RootReducer,
-	// persistedState,
+	persistedState,
 	composeEnhancer(applyMiddleware(thunk))
 );
 
 store.subscribe(throttle(() => {
-	// saveState(store.getState())
-}, 1000));
+	saveState(store.getState())
+}, 5000));
 
 export default store;

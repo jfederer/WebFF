@@ -69,6 +69,7 @@ class LoginDialog extends React.Component {
 				open={loginDialogVisibility}
 				onClose={this.handleClose}
 				aria-labelledby="form-dialog-title"
+				disableBackdropClick={true}
 				fullWidth
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>

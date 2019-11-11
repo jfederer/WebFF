@@ -4,8 +4,11 @@ import {
 	USER_DATA_REQUEST,
 	USER_DATA_LOAD_COMPLETE,
 	SAMPLING_EVENT_REQUEST,
-	SAMPLING_EVENT_LOAD_COMPLETE
+	SAMPLING_EVENT_LOAD_COMPLETE,
+	SET_USER_DATA
 } from '../Constants/ActionTypes';
+
+import { fetchDBInfo } from '../Utils/NetworkUtilities';
 
 // import { runAllSamplingEventActionStrings } from './SamplingEvents';
 
@@ -49,6 +52,7 @@ function userDataRequest(username) {
 }
 
 function userDataAcquire(username) {
+	console.log("userDataAcquire(", username, ")");
 	// check if username is in store
 	// if not, check from database
 	// if not, reject with false
@@ -57,18 +61,37 @@ function userDataAcquire(username) {
 			const user = getState().Users[username];
 			if (user) {
 				console.log("User exists in memory");
+				//TODO: check if one in DB is newer...
 				resolve(true);
 			} else {
-				fetch('https://jsonplaceholder.typicode.com/users?username=Bret')
-					.then(response => response.json())
-					.then(json => dispatch(userDataIngest(json)))
-					.then((didIngest) => {
-						if (didIngest) {
+				fetchDBInfo({ key: "username", value: username },
+					"Users",
+					(dbResponse) => {  // success callback
+						console.log("Success callback");
+						if (Array.isArray(dbResponse) && dbResponse.length === 1) {
+							let dispatchResp = dispatch(userDataIngest(dbResponse[0]));
+							console.log('dispatchResp', dispatchResp)
 							resolve(true);
 						} else {
+							console.log("dbResponse did not return exactly one user");
 							reject(false);
 						}
+					},
+					(res) => { // failure callback
+						console.warn("userDataAcquire fetchDBInfo failure callback: " + res);
+						reject(false);
 					});
+
+				// fetch('https://jsonplaceholder.typicode.com/users?username=Bret')
+				// 	.then(response => response.json())
+				// 	.then(json => dispatch(userDataIngest(json)))
+				// 	.then((didIngest) => {
+				// 		if (didIngest) {
+				// 			resolve(true);
+				// 		} else {
+				// 			reject(false);
+				// 		}
+				// 	});
 			}
 		})
 	}
@@ -81,9 +104,9 @@ function setCurrentUsername(username) {
 function userDataIngest(userData) {
 	return (dispatch) => {
 		//TODO: ensure userdata is of appropriate format
-		// console.log(userData);
-		// dispatch({ type: SET_USER_DATA, user: userData }) //TODO: uncomment
-		return false;
+		console.log(userData);
+		dispatch({ type: SET_USER_DATA, user: userData }) //TODO: uncomment
+		return true;
 	}
 }
 

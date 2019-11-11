@@ -217,9 +217,16 @@ class WebFF extends React.Component {
 
 
 	render() {
-		const { classes, UI, currentUser, isFetchingUserData, fetchingUserDataComplete } = this.props;
+		const { classes,
+			appBarText, 
+			expandedSysMenu, 
+			expandedNavMenu, 
+			currentUser, 
+			isFetchingUserData, 
+			fetchingUserDataComplete } = this.props;
 
 		if (currentUser === undefined && this.props.location.pathname !== '/') {
+		// if (currentUser === undefined) {
 			console.log("There is no currentuser...going to login page");
 			return <Redirect to='/' />;
 		}
@@ -234,27 +241,27 @@ class WebFF extends React.Component {
 					<div className={classes.root} >
 						<AppBar
 							position="absolute"
-							className={classNames(classes.appBar, UI.visibility.expandedNavMenu && classes.appBarShift)}
+							className={classNames(classes.appBar, expandedNavMenu && classes.appBarShift)}
 						>
-							<Toolbar disableGutters={!UI.visibility.expandedNavMenu}>
+							<Toolbar disableGutters={!expandedNavMenu}>
 								<IconButton
 									color="inherit"
 									aria-label="expand drawer"
 									onClick={() => this.props.setNavMenuExpand(true)}
-									className={classNames(classes.menuButton, UI.visibility.expandedNavMenu && classes.hide)}
+									className={classNames(classes.menuButton, expandedNavMenu && classes.hide)}
 								>
 									<ChevronRightIcon />
 								</IconButton>
 
 								<Typography variant="h4" color="inherit" noWrap>
-									{UI.appBarText}
+									{appBarText}
 								</Typography>
 
 								<IconButton
 									color="inherit"
 									aria-label="System Menu"
 									onClick={() => this.props.setSysMenuExpand(true)}
-									className={classNames(classes.menuButton, classes.rightJustify, UI.visibility.expandedSysMenu && classes.hide)}
+									className={classNames(classes.menuButton, classes.rightJustify, expandedSysMenu && classes.hide)}
 								>
 									<MenuIcon />
 								</IconButton>
@@ -310,6 +317,7 @@ class WebFF extends React.Component {
 				<button onClick={this.doTestPull}>TEST PULL</button>
 				<button onClick={this.usrMod}>INT to 300</button>
 				<button onClick={this.doTestPush}>TEST PUSH</button>
+				<button onClick={this.doTestPushUser}>TEST PUSH USER</button>
 				{JSON.stringify(this.state.usr)}
 			</React.Fragment>
 
@@ -337,6 +345,14 @@ class WebFF extends React.Component {
 		setDBInfo({ key: "username", value: "jfederer@usgs.gov" },
 			"Users",
 			this.state.usr,
+			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
+			(res) => alert("TEST FAILURE"+ res));
+	}
+	doTestPushUser = () => {
+		let username = "jfederer@usgs.gov";
+		setDBInfo({ key: "username", value: username },
+			"Users",
+			this.props.users[username],
 			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
 			(res) => alert("TEST FAILURE"+ res));
 	}
@@ -445,7 +461,9 @@ WebFF.propTypes = {
 
 const mapStateToProps = function (state) {
 	return {
-		UI: state.UI,
+		expandedSysMenu: state.UI.visibility.expandedSysMenu,
+		expandedNavMenu: state.UI.visibility.expandedNavMenu,
+		appBarText: state.UI.appBarText,
 		users: state.Users,
 		sedff: state.SedFF,
 		isFetchingUserData: state.SedFF.isFetchingUserData,

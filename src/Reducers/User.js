@@ -10,24 +10,24 @@ import _ from 'lodash';
 
 //MOCK
 const initialUserState = {
-	"jfederer@usgs.gov": {
-		username: "jfederer@usgs.gov",
-		sedLoginUsername: "jfederer@usgs.gov",
-		settings: {
-			backupInterval: 310,
-			outlineQuestions: true,
-			questionsData: {}
-		}
-	},
-	"test@usgs.gov": {
-		username: "test@usgs.gov",
-		sedLoginUsername: "tvan@usgs.gov",
-		settings: {
-			backupInterval: 200,
-			outlineQuestions: false,
-			questionsData: {}
-		}
-	}
+	// "jfederer@usgs.gov": {
+	// 	username: "jfederer@usgs.gov",
+	// 	sedLoginUsername: "jfederer@usgs.gov",
+	// 	settings: {
+	// 		backupInterval: 310,
+	// 		outlineQuestions: true,
+	// 		questionsData: {}
+	// 	}
+	// },
+	// "test@usgs.gov": {
+	// 	username: "test@usgs.gov",
+	// 	sedLoginUsername: "tvan@usgs.gov",
+	// 	settings: {
+	// 		backupInterval: 200,
+	// 		outlineQuestions: false,
+	// 		questionsData: {}
+	// 	}
+	// }
 };
 
 export function Users(state = initialUserState, action) {

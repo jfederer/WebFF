@@ -43,16 +43,18 @@ class SettingsDialog extends React.Component {
 		//TODO: if valid (pass in validator function?)
 		//TODO: CSS for not valid
 
-		clearTimeout(debounce[stateValueName]);
+		// clearTimeout(debounce[stateValueName]);
 
-		this.setState({ [stateValueName]: e.target.value },
-			() => {
-				debounce[stateValueName] = setTimeout(() => {
-					actionCreator(username, this.state[stateValueName]);
-				}
-					, 2000); // 2 seconds of debounce control
-			}
-		);
+		// this.setState({ [stateValueName]: e.target.value },
+		// 	() => {
+		// 		debounce[stateValueName] = setTimeout(() => {
+		// 			actionCreator(username, this.state[stateValueName]);
+		// 		}
+		// 			, 2000); // 2 seconds of debounce control
+		// 	}
+		// );
+		actionCreator(username, e.target.value);
+
 	}
 
 
