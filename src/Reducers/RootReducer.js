@@ -3,7 +3,8 @@ import { UI } from './UI';
 import { Users } from './User';
 import { SedFF } from './SedFF';
 import { SamplingEvents } from './SamplingEvents';
-import { LinkTables } from './LinkTables';
+import { StationsLinkTables } from './StationsLinkTables';
+import { SamplingEventsLinkTables } from './SamplingEventsLinkTables';
 import { Questions } from './Questions';
 import { Stations } from './Stations';
 
@@ -13,8 +14,8 @@ const RootReducer = combineReducers({
 	SedFF,
 	SamplingEvents,
 	Questions,  
-	LinkTables, 
-	
+	SamplingEventsLinkTables, 
+	StationsLinkTables,
 	Stations
   });
   

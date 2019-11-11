@@ -303,7 +303,7 @@ const mapStateToProps = function (state) {
 		addRemoveStationDialogVisibility: state.UI.visibility.addRemoveStationDialogVisibility,
 		currentUsername: state.SedFF.currentUsername,
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
-		stationIDs: state.LinkTables.StationLinkTable[state.SedFF.currentUsername]
+		stationIDs: state.StationsLinkTables[state.SedFF.currentUsername] ? state.StationsLinkTables[state.SedFF.currentUsername].stations : null
 	}
 }
 

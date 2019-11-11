@@ -29,7 +29,7 @@ class FieldForm extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		// linkTables: state.LinkTables, // to get users event IDs
+		
 		// allSamplingEvents: state.SamplingEvents,
 		//sedff: state.SedFF, // loading / fetching data
 		// currentUser: state.Users[state.SedFF.currentUsername],

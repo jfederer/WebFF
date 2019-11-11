@@ -522,8 +522,8 @@ const mapStateToProps = function (state) {
 		events: state.Events,
 		currentUser: state.Users[state.SedFF.currentUsername],
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
-		eventLinkTables: state.LinkTables["userEvents"],
-		stationLinkTables: state.LinkTables["StationLinkTable"]
+		eventLinkTables: state.SamplingEventsLinkTables,
+		stationLinkTables: state.StationsLinkTables
 
 	}
 }

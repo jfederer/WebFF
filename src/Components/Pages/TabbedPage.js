@@ -40,7 +40,6 @@ function TabPanel(props) {
 }
 
 function ComponentCreator(componentType, passedProps, sedType) {
-	console.log('passedProps :', passedProps);
 	switch (componentType) {
 		case DATA_ENTRY_SHEET_TYPE: return <React.Fragment>
 			<QuestionPage tabName="Data Entry Extra Questions - All Sediment Types"  customOnly={true}/>

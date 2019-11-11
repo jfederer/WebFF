@@ -95,12 +95,12 @@ class EventSummary extends React.Component {
 		let QD = getQuestionDataFromID(eventID, P_QID);
 		let value = getQuestionValue(eventID, P_QID);
 		// console.log('QWDataQD :', QWDataQD);
-		console.log('value :', value);
+		
 
 		// create summaryHeader from existing...
 		// let summaryHeader = [DESCRIPTION_HEADER, ...this.getPcodesFromHeader(value[0])];
 		let pCodes = this.getPcodesFromHeader(value[0]);
-		console.log('pCodes :', pCodes);
+		
 
 		// build summaryValue
 		let summaryValue = [];
@@ -112,7 +112,7 @@ class EventSummary extends React.Component {
 				summaryValue[rowNum][colNum+1]=this.getPCodeValue(pCode, value, rowNum);
 			})
 		}
-		console.log('summaryValue :', summaryValue);
+		
 
 		// return this.buildTable(QD, value);
 		return <SummaryTable key={"ParamtersTableSummary:"+P_QID} tableData={QD} tableValue={summaryValue}/>
@@ -312,7 +312,6 @@ class EventSummary extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		// linkTables: state.LinkTables, // to get users event IDs
 		// allSamplingEvents: state.SamplingEvents,
 		//sedff: state.SedFF, // loading / fetching data
 		// currentUser: state.Users[state.SedFF.currentUsername],

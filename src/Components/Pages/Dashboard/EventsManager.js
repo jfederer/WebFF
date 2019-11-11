@@ -18,6 +18,7 @@ import { showNavigationTab } from "../../../Actions/UI";
 import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import Button from '@material-ui/core/Button';
+import { AvVolumeDown } from 'material-ui/svg-icons';
 
 const columns = [
 	{
@@ -106,9 +107,16 @@ class EventsManager extends React.Component {
 			return [];
 		}
 
+
+
 		//build table data
 		let currentUserEventIDs = getAllUsersEventIDs(this.props.currentUser.username);
 		
+		if (!currentUserEventIDs) {
+			return [];
+		}
+
+		console.log('currentUserEventIDs :', currentUserEventIDs);
 
 		let currentUserEvents = currentUserEventIDs.map((eventID) => {
 			return this.props.allSamplingEvents[eventID]
