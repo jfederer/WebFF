@@ -167,7 +167,7 @@ StationDropDown.propTypes = {
 const mapStateToProps = function (state) {
 	return {
 		currentEventID: state.SedFF.currentSamplingEventID,
-		stationIDs: state.LinkTables.userStations[state.SedFF.currentUsername]
+		stationIDs: state.LinkTables.StationLinkTable[state.SedFF.currentUsername]
 		// inDialog: state.UI.visibility.addRemoveStationDialogVisibility
 	}
 }

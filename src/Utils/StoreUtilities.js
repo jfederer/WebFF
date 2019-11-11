@@ -251,7 +251,7 @@ export function getSetInformationQuestionsData() {
 // }
 
 export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
-	let evts = store.getState().LinkTables.userEvents[username];
+	let evts = store.getState().LinkTables.SamplingEventLinkTable[username];
 	if (typeof evts === 'undefined') {
 		return [];
 	}
@@ -279,7 +279,7 @@ export function getStationFromID(stationID) {
 
 export function getStationIDsFromName(username, stationName) {	//find station number
 	// console.log("getStationIDsFromName(", username, ",", stationName, ")");
-	let stationIDList = store.getState().LinkTables.userStations[username];
+	let stationIDList = store.getState().LinkTables.StationLinkTable[username];
 	if (!stationIDList) {
 		//TODO: trigger network?
 		console.warn("User, " + username + ", has no stations in stations.");

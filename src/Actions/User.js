@@ -35,8 +35,7 @@ export function makeNewUser(username) {
 export function userDataIngest(userData) {
 	return (dispatch) => {
 		//TODO: ensure userdata is of appropriate format
-		console.log(userData);
-		dispatch({ type: SET_USER_DATA, user: userData }) //TODO: uncomment
+		dispatch({ type: SET_USER_DATA, user: userData })
 		return true;
 	}
 }

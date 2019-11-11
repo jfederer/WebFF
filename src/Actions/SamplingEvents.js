@@ -7,6 +7,8 @@ import {
 	SE_QUESTION_VALUE_CHANGE,
 	SE_QUESTION_VALUE_DELETE,
 	SAMPLING_EVENT_BANK_CHANGE,
+	SET_SAMPLING_EVENT,
+	SET_SAMPLING_EVENT_LINK_TABLE,
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
@@ -21,8 +23,10 @@ import {
 	ACTIONABLE_GLOBAL_QIDS,
 	EWI_METHOD_CATEGORY,
 	EDI_METHOD_CATEGORY,
-	
+
 } from '../Constants/Config';
+
+import { EVENT_LINK_TABLE_TYPE } from '../Constants/Dictionary';
 
 import { getQuestionValue, getMethodCategoryFromValue, getSamplesTableValueWithGivenBank, getDataEntryValueWithGivenBank } from '../Utils/QuestionUtilities';
 import { provideEWISamplingLocations, provideEDISamplingPercentages } from '../Utils/CalculationUtilities';
@@ -195,6 +199,33 @@ export function createNewSamplingEvent(eventName) {
 }
 
 
+export function ingestEvent(event) {
+	return (dispatch, getState) => {
+		return new Promise(function (resolve, reject) {
+			//FIXME: TODO: check for format & age
+			dispatch({
+				type: SET_SAMPLING_EVENT,
+				event
+			});
+			resolve(event.eventID);
+		});
+	}
+}
+
+export function ingestSamplingEventLinkTable(samplingEventLinkTable, username) {
+
+	return (dispatch, getState) => {
+		return new Promise(function (resolve, reject) {
+			//FIXME: TODO: check for format & age
+			dispatch({
+				type: SET_SAMPLING_EVENT_LINK_TABLE,
+				tableType: EVENT_LINK_TABLE_TYPE,
+				samplingEventLinkTable
+			});
+			resolve();
+		});
+	}
+}
 
 export function stationNameChanged(eventID, newStationName) {
 	// remember to make any changes here reflect in addButtonClickHandler for the AddRemoveStationDialog function
@@ -327,7 +358,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 				samplingPercentages.forEach((percent, i) => setInfoSampleTableValue[i + 1][0] = percent);
 				break;
 			default:
-				// do nothing, this is an 'other' category
+			// do nothing, this is an 'other' category
 		}
 
 
@@ -384,25 +415,20 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 	}
 }
 
-// function requestUserEvents(username) {
-// 	return {
-// 	  type: REQUEST_EVENTS,
-// 	  username
-// 	}
-//   }
+
 
 // export function loadUserEventsFromDB(username) {
 // 	return function(dispatch) {
 // 		// First dispatch: the app state is updated to inform
 // 		// that the API call is starting.
 // 			dispatch(requestUserEvents(username));
-	
+
 // 		// The function called by the thunk middleware can return a value,
 // 		// that is passed on as the return value of the dispatch method.
-	
+
 // 		// In this case, we return a promise to wait for.
 // 		// This is not required by thunk middleware, but it is convenient for us.
-	
+
 // 		return fetch(`https://www.reddit.com/r/${subreddit}.json`)
 // 		  .then(
 // 			response => response.json(),
@@ -415,7 +441,7 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 // 		  .then(json =>
 // 			// We can dispatch many times!
 // 			// Here, we update the app state with the results of the API call.
-	
+
 // 			dispatch(receivePosts(subreddit, json))
 // 		  )
 // 	  }

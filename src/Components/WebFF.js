@@ -58,12 +58,15 @@ import ErrorPage from './Errors/ErrorPage';
 
 //TEST
 import { setDBInfo, fetchDBInfo } from '../Utils/NetworkUtilities';
-
+import { linkTablePush, eventPush } from '../Actions/DB';
+import { EVENT_LINK_TABLE_TYPE, STATION_LINK_TABLE_TYPE } from '../Constants/Dictionary';
+import { getEventFromID } from '../Utils/StoreUtilities';
+import { loadAllUserEvents } from '../Actions/DB';
 const FUNCDEBUG = false;
 
 
 class WebFF extends React.Component {
-	
+
 
 	//Waiting on KEN:
 	//TODO: test save sedlogin compat xml
@@ -220,15 +223,15 @@ class WebFF extends React.Component {
 
 	render() {
 		const { classes,
-			appBarText, 
-			expandedSysMenu, 
-			expandedNavMenu, 
-			currentUser, 
-			isFetchingUserData, 
+			appBarText,
+			expandedSysMenu,
+			expandedNavMenu,
+			currentUser,
+			isFetchingUserData,
 			fetchingUserDataComplete } = this.props;
 
 		if (currentUser === undefined && this.props.location.pathname !== '/') {
-		// if (currentUser === undefined) {
+			// if (currentUser === undefined) {
 			console.log("There is no currentuser...going to login page");
 			return <Redirect to='/' />;
 		}
@@ -320,7 +323,20 @@ class WebFF extends React.Component {
 				<button onClick={this.usrMod}>INT to 300</button>
 				<button onClick={this.doTestPush}>TEST PUSH</button>
 				<button onClick={this.doTestPushUser}>TEST PUSH USER</button>
-				{JSON.stringify(this.state.usr)}
+				<button onClick={this.doTestEventTable}>TEST PUSH EVENT TABLE</button>
+				<button onClick={this.doTestStationTable}>TEST PUSH STATION TABLE</button>
+				<button onClick={this.doTestPushEvent}>TEST PUSH EVENT</button>
+				<button onClick={this.doTestPushStation}>TEST PUSH STATION</button>
+				<br></br>
+				Actions
+				<br></br>
+				<button onClick={this.doTestAllUserEvents}>TEST GET ALL USER EVENTS ACTION</button>
+				<br>
+				</br>	
+				<br>
+				</br>	
+				<br>
+				</br>	
 			</React.Fragment>
 
 		);
@@ -329,14 +345,18 @@ class WebFF extends React.Component {
 	usrMod = () => {
 		let newUsr = _.cloneDeep(this.state.usr);
 		newUsr.settings.backupInterval = 300;
-		this.setState({usr:newUsr});
+		this.setState({ usr: newUsr });
 	}
+	doTestAllUserEvents = () => {
+		this.props.loadAllUserEvents('jfederer@usgs.gov');
+	}
+
 	doTestPull = () => {
 		fetchDBInfo({ key: "username", value: "jfederer@usgs.gov" },
 			"Users",
 			(dbResponse) => {
-				if(Array.isArray(dbResponse) && dbResponse.length===1) {
-					this.setState({usr:dbResponse[0]})
+				if (Array.isArray(dbResponse) && dbResponse.length === 1) {
+					this.setState({ usr: dbResponse[0] })
 				} else {
 					console.log("dbResponse did not return user"); //TODO: do check for username/etc..
 				}
@@ -348,7 +368,7 @@ class WebFF extends React.Component {
 			"Users",
 			this.state.usr,
 			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
-			(res) => alert("TEST FAILURE"+ res));
+			(res) => alert("TEST FAILURE" + res));
 	}
 	doTestPushUser = () => {
 		let username = "jfederer@usgs.gov";
@@ -356,11 +376,40 @@ class WebFF extends React.Component {
 			"Users",
 			this.props.users[username],
 			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
-			(res) => alert("TEST FAILURE"+ res));
+			(res) => alert("TEST FAILURE" + res));
 	}
+	doTestEventTable = () => {
+		let username = "jfederer@usgs.gov";
+		linkTablePush(EVENT_LINK_TABLE_TYPE, 
+			username, 
+			{username: username,
+				events: this.props.eventLinkTables[username]},
+			(res) => alert("WEBFF SUCCESS CB! " + res),
+			(res) => alert("WEBFF FAILURE CB! " + res)
+		);
+	}
+	doTestStationTable = () => {
+		let username = "jfederer@usgs.gov";
+		linkTablePush(STATION_LINK_TABLE_TYPE, 
+			username, 
+			{username: username,
+				events: this.props.stationLinkTables[username]},
+			(res) => alert("WEBFF SUCCESS CB! " + res),
+			(res) => alert("WEBFF FAILURE CB! " + res)
+		);
+	}
+	doTestPushEvent = () => {
+		let username = "jfederer@usgs.gov";
+		eventPush(username, 
+			getEventFromID(this.props.currentSamplingEventID),
+			(res) => alert("WEBFF SUCCESS CB! " + res),
+			(res) => alert("WEBFF FAILURE CB! " + res)
+		);
+	}
+//doTestPushStation
 
 
-	
+
 
 
 	// if (navigator.onLine) { //TODO: host reachable: https://stackoverflow.com/questions/2384167/check-if-internet-connection-exists-with-javascript
@@ -472,7 +521,10 @@ const mapStateToProps = function (state) {
 		fetchingUserDataComplete: state.SedFF.fetchingUserDataComplete,
 		events: state.Events,
 		currentUser: state.Users[state.SedFF.currentUsername],
-		currentSamplingEventID: state.SedFF.currentSamplingEventID
+		currentSamplingEventID: state.SedFF.currentSamplingEventID,
+		eventLinkTables: state.LinkTables["userEvents"],
+		stationLinkTables: state.LinkTables["StationLinkTable"]
+
 	}
 }
 
@@ -481,7 +533,8 @@ const mapDispatchToProps = {
 	loadAndSetCurrentUser,
 	setNavMenuExpand,
 	setSysMenuExpand,
-	hideQuestion
+	hideQuestion,
+	loadAllUserEvents
 }
 
 
