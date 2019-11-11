@@ -6,12 +6,12 @@ import {
 	REGISTER_EVENT_WITH_USERNAME,
 	SE_QUESTION_VALUE_CHANGE,
 	SE_QUESTION_VALUE_DELETE,
-	SAMPLING_EVENT_BANK_CHANGE
+	SAMPLING_EVENT_BANK_CHANGE,
 } from '../Constants/ActionTypes';
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
 import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
-import { setDBInfo } from '../Utils/NetworkUtilities';
+// import { setDBInfo } from '../Utils/NetworkUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
 	IDENTIFIER_SPLITTER,
@@ -326,6 +326,8 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 				let samplingPercentages = provideEDISamplingPercentages(numPoints);
 				samplingPercentages.forEach((percent, i) => setInfoSampleTableValue[i + 1][0] = percent);
 				break;
+			default:
+				// do nothing, this is an 'other' category
 		}
 
 
@@ -382,42 +384,42 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 	}
 }
 
-function requestUserEvents(username) {
-	return {
-	  type: REQUEST_EVENTS,
-	  username
-	}
-  }
+// function requestUserEvents(username) {
+// 	return {
+// 	  type: REQUEST_EVENTS,
+// 	  username
+// 	}
+//   }
 
-export function loadUserEventsFromDB(username) {
-	return function(dispatch) {
-		// First dispatch: the app state is updated to inform
-		// that the API call is starting.
-			dispatch(requestUserEvents(username));
+// export function loadUserEventsFromDB(username) {
+// 	return function(dispatch) {
+// 		// First dispatch: the app state is updated to inform
+// 		// that the API call is starting.
+// 			dispatch(requestUserEvents(username));
 	
-		// The function called by the thunk middleware can return a value,
-		// that is passed on as the return value of the dispatch method.
+// 		// The function called by the thunk middleware can return a value,
+// 		// that is passed on as the return value of the dispatch method.
 	
-		// In this case, we return a promise to wait for.
-		// This is not required by thunk middleware, but it is convenient for us.
+// 		// In this case, we return a promise to wait for.
+// 		// This is not required by thunk middleware, but it is convenient for us.
 	
-		return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-		  .then(
-			response => response.json(),
-			// Do not use catch, because that will also catch
-			// any errors in the dispatch and resulting render,
-			// causing a loop of 'Unexpected batch number' errors.
-			// https://github.com/facebook/react/issues/6895
-			error => console.log('An error occurred.', error)
-		  )
-		  .then(json =>
-			// We can dispatch many times!
-			// Here, we update the app state with the results of the API call.
+// 		return fetch(`https://www.reddit.com/r/${subreddit}.json`)
+// 		  .then(
+// 			response => response.json(),
+// 			// Do not use catch, because that will also catch
+// 			// any errors in the dispatch and resulting render,
+// 			// causing a loop of 'Unexpected batch number' errors.
+// 			// https://github.com/facebook/react/issues/6895
+// 			error => console.log('An error occurred.', error)
+// 		  )
+// 		  .then(json =>
+// 			// We can dispatch many times!
+// 			// Here, we update the app state with the results of the API call.
 	
-			dispatch(receivePosts(subreddit, json))
-		  )
-	  }
-}
+// 			dispatch(receivePosts(subreddit, json))
+// 		  )
+// 	  }
+// }
 
 // export function saveEventToDB(event) {
 // 	let eventID = event.id;

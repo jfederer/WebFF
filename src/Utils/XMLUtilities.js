@@ -1,5 +1,5 @@
 import xmljs from 'xml-js';
-import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES } from '../Constants/Config';
+import { PROGRAM_VERSION, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../Constants/Config';
 import { getQuestionValue, getActiveSedimentTypes, getMethodCategoryFromValue, getColumnNumberFromTableHeader } from './QuestionUtilities';
 import { getSetListAsArray } from './StoreUtilities';
 import {
@@ -65,7 +65,7 @@ export function getSedLOGINcompatibleXML(eventID) {
 	// });
 
 	return cleanXML;
-	return SLCXML;
+
 
 }
 

@@ -1,6 +1,6 @@
 import store from '../Store';
 import _ from 'lodash';
-import { defaultSetInformationQuestionsData, defaultWaterwayInfoQuestionsData } from '../Constants/DefaultObjects';
+import { defaultSetInformationQuestionsData } from '../Constants/DefaultObjects';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
 
 import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, SEDIMENT_TYPES } from '../Constants/Config';
@@ -94,7 +94,6 @@ export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  
 
 	// get EVENT questions data
 	let currentEventQD = {};
-	let event;
 	if (eventID) { // this might be run whn there is no current sampling event (ie: upon event creation)
 		let event = getEventFromID(eventID);
 		if (event) {

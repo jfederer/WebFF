@@ -1,7 +1,10 @@
 import {
 	REGISTER_EVENT_WITH_USERNAME,
 	REGISTER_STATION_WITH_USERNAME,
-	REMOVE_STATION_FROM_USERNAME
+	REMOVE_STATION_FROM_USERNAME,
+	RECIEVE_LINK_TABLE,
+	REQUEST_LINK_TABLE,
+	INVALIDATE_LINK_TABLE
 } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
@@ -39,6 +42,18 @@ export function LinkTables(state = initialEventLinkTableState, action) {
 			newState.userStations[action.username] = newState.userStations[action.username].filter((linkedStationID) => linkedStationID !== action.stationIDToRemove);
 			//TODO: actually deleting the station, not just the link - optionally looking at the network and other users.
 			return newState;
+		case INVALIDATE_LINK_TABLE:
+			newState[action.tableName][action.username].didInvalidate = true;
+			return newState;
+		case REQUEST_LINK_TABLE: //needs to be called for each table name type
+				newState[action.tableName][action.username].didInvalidate = false;
+				newState[action.tableName][action.username].isFetching = true;
+				return newState;
+		case RECIEVE_LINK_TABLE:  //needs to be called for each table name type
+				newState[action.tableName][action.username] = action[action.tableName][action.username];
+				newState[action.tableName][action.username].didInvalidate = false
+				newState[action.tableName][action.username].isFetching = false;  //TODO: add in some sort of 'updated' date (and/or date modified)
+				return newState;
 		default:
 			return state
 	}

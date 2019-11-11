@@ -21,9 +21,10 @@ import {
 	Redirect
 } from 'react-router-dom';
 
-import { isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
+// import { isReasonableUsername, ensureProgramVersionUpToDate } from '../Utils/ValidationUtilities';
+import { isReasonableUsername } from '../Utils/ValidationUtilities';
 
-import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
+// import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../Constants/Config';
 
 import { setSysMenuExpand, setNavMenuExpand, setLoginDialogVisibility, hideQuestion } from '../Actions/UI';
 import { loadAndSetCurrentUser } from '../Actions/SedFF';

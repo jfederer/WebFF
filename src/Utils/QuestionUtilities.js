@@ -309,7 +309,7 @@ export const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) =>
 			ret = index;
 		}
 	});
-	if (ret = -1) { // if we didn't find an exact match, let's look for a startsWith match instead
+	if (ret === -1) { // if we didn't find an exact match, let's look for a startsWith match instead
 		tableValue[0].forEach((header, index) => {
 			if (header.startsWith(headerToSearchFor)) {
 				ret = index;
