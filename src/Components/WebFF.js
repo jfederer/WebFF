@@ -153,6 +153,7 @@ class WebFF extends React.Component {
 	// warning for estimating time on QW pag eshould change if there aren't times available on DE page
 	// option to copy custom questions from station / user / event to another station / user / event
 	// secure setDBInfo ... (could be used nefariously)
+	// add "didInvalidate" to User...
 
 	//Cleanup
 	//TODO: Set-Sample-Dist column gives "NAN"...

@@ -11,6 +11,7 @@ import {
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
 import { getQuestionsData, getStationFromID, getStationIDsFromName, getEventFromID } from '../Utils/StoreUtilities';
 import { getColumnNumberFromTableHeader } from '../Utils/QuestionUtilities';
+import { setDBInfo } from '../Utils/NetworkUtilities';
 import {
 	SET_INFORMATION_IDENTIFIER,
 	IDENTIFIER_SPLITTER,
@@ -19,7 +20,8 @@ import {
 	PARAMETERS_TABLE_IDENTIFIER,
 	ACTIONABLE_GLOBAL_QIDS,
 	EWI_METHOD_CATEGORY,
-	EDI_METHOD_CATEGORY
+	EDI_METHOD_CATEGORY,
+	
 } from '../Constants/Config';
 
 import { getQuestionValue, getMethodCategoryFromValue, getSamplesTableValueWithGivenBank, getDataEntryValueWithGivenBank } from '../Utils/QuestionUtilities';
@@ -379,6 +381,82 @@ export function numberOfSamplingPointsChanged(eventID, sedimentType, setName, sa
 		}
 	}
 }
+
+function requestUserEvents(username) {
+	return {
+	  type: REQUEST_EVENTS,
+	  username
+	}
+  }
+
+export function loadUserEventsFromDB(username) {
+	return function(dispatch) {
+		// First dispatch: the app state is updated to inform
+		// that the API call is starting.
+			dispatch(requestUserEvents(username));
+	
+		// The function called by the thunk middleware can return a value,
+		// that is passed on as the return value of the dispatch method.
+	
+		// In this case, we return a promise to wait for.
+		// This is not required by thunk middleware, but it is convenient for us.
+	
+		return fetch(`https://www.reddit.com/r/${subreddit}.json`)
+		  .then(
+			response => response.json(),
+			// Do not use catch, because that will also catch
+			// any errors in the dispatch and resulting render,
+			// causing a loop of 'Unexpected batch number' errors.
+			// https://github.com/facebook/react/issues/6895
+			error => console.log('An error occurred.', error)
+		  )
+		  .then(json =>
+			// We can dispatch many times!
+			// Here, we update the app state with the results of the API call.
+	
+			dispatch(receivePosts(subreddit, json))
+		  )
+	  }
+}
+
+// export function saveEventToDB(event) {
+// 	let eventID = event.id;
+// 	setDBInfo({ key: "eventID", value: eventID },
+// 		"Events",
+// 		event,
+// 		(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
+// 		(res) => alert("TEST FAILURE" + res));
+// }
+
+
+//does not work
+// export function getEventFromDB(eventID) {
+// 	console.log("getEventFromDB(", eventID, ")");
+// 	// check if username is in store
+// 	// if not, check from database
+// 	// if not, reject with false
+// 	return (dispatch, getState) => {
+// 		return new Promise(function (resolve, reject) {
+// 				fetchDBInfo({ key: "eventID", value: eventID },
+// 					"Events",
+// 					(dbResponse) => {  // success callback
+// 						if (Array.isArray(dbResponse) && dbResponse.length === 1) {
+// 							let dispatchResp = dispatch(userDataIngest(dbResponse[0]));
+// 							resolve(true);
+// 						} else {
+// 							console.log("dbResponse did not return exactly one user");
+// 							reject(false);
+// 						}
+// 					},
+// 					(res) => { // failure callback
+// 						console.warn("userDataAcquire fetchDBInfo failure callback: " + res);
+// 						reject(false);
+// 					});
+// 		})
+// 	}
+// }
+
+
 
 
 // function getActionsFromActionString(actionsString) {

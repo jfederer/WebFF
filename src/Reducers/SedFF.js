@@ -44,6 +44,7 @@ export function SedFF(state = initialSedFFState, action) {
 		case SAMPLING_EVENTS_REQUEST:
 			newState.isFetchingEventsData = true;
 			return newState;
+
 		case SAMPLING_EVENTS_LOAD_COMPLETE:
 			newState.isFetchingEventsData = false;
 			return newState;

@@ -6,7 +6,9 @@ import {
 	ADD_QUESTION_TO_EVENT,
 	DELETE_QUESTION_FROM_EVENT,
 	SE_QUESTION_VALUE_DELETE,
-	SAMPLING_EVENT_BANK_CHANGE
+  SAMPLING_EVENT_BANK_CHANGE,
+  RECEIVE_EVENTS,
+  REQUEST_EVENTS
 } from '../Constants/ActionTypes';
 
 
@@ -1804,7 +1806,19 @@ export function SamplingEvents(state = initialState, action) {
 			return newState;
 		case SAMPLING_EVENT_BANK_CHANGE:
 			newState[action.eventID].questionsValues.waterwayInfo.bank = action.bank;
-			return newState;
+      return newState;
+    case REQUEST_EVENTS:
+      newState.isFetching = true;
+      newState.didInvalidate = false;
+      return newState;
+    case RECEIVE_EVENTS:
+      newState.isFetching = false;
+      newState.didInvalidate = false;
+      if(Array.isArray(action.events)) {
+        action.events.forEach(event => { newState[event.eventID]=event });
+        //TODO: only update if event is newer  FIXME:  (do outside reducer)
+      }
+      return newState;
 		default:
 			return state;
 	}
