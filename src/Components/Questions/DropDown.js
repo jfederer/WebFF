@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import { Fragment } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,23 +12,29 @@ import FormControl from '@material-ui/core/FormControl';
 import { SEQuestionValueChange } from '../../Actions/SamplingEvents' 
 
 
-//TODO: generate minWidth based on content & label
+//TODO: generate minWidth for select based on content & label
+//TODO: have select/drop down question fill entire paper over it
 const styles = theme => ({
+
 	root: {
 		display: 'flex',
 		flexWrap: 'wrap',
 	  },
 	formControl: {
-		margin: 0,
-		display: 'flex',
+	// 	margin: 0,
+	// 	display: 'flex',
 		fullWidth: true,
-		wrap: 'nowrap'
+	// 	flexWrap: 'wrap',
 	},
 	inputLabel: {
 		margin: 0,
 		display: 'flex',
 		fullWidth: true,
 		wrap: 'nowrap'
+	},
+	select: {
+		minWidth:"200px",
+		backgroundColor: '#eee',
 	}
 });
 
@@ -62,8 +69,9 @@ class DropDown extends React.Component {
 							<InputLabel className={classes.inputLabel} htmlFor="age-native-simple">{this.props.label}</InputLabel> :
 							null }
 						<Select
+							style={{minWidth: 200}}
+							// style={{backgroundColor: '#00e'}}
 							native
-							// autoWidth={true}
 							fullWidth
 							value={this.props.value}
 							onChange={this.handleValueChange('value')}

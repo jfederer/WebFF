@@ -88,6 +88,9 @@ class WebFF extends React.Component {
 
 	//LOOKS
 	//scrollbars on export dialog
+	//parameters page - less buffer, larger value
+	// set multichoice
+	// add set form
 
 	//BUGS: 
 	//MAke event (event1) using staton1 ... at some point outside that event, remove station1 ... when going back to event1, the station will switch to next available in list

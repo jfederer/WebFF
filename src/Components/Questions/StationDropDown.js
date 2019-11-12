@@ -22,10 +22,10 @@ const styles = theme => ({
 		flexWrap: 'wrap',
 	},
 	formControl: {
-		margin: 0,
-		display: 'flex',
+		// margin: 0,
+		// display: 'flex',
 		fullWidth: true,
-		wrap: 'nowrap'
+		// wrap: 'nowrap'
 	},
 	inputLabel: {
 		margin: 0,

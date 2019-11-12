@@ -10,7 +10,7 @@ const styles = theme => ({
 		...theme.mixins.gutters(),
 		flexGrow: 1,
 		paddingTop: 0,
-		paddingBottom: "100px",
+		paddingBottom: 0,
 		backgroundColor: '#eee',
 		marginBottom: '10px',  //margin between QuestionPanels
 
@@ -22,7 +22,7 @@ const styles = theme => ({
 		},
 	},
 	lightGrey: {
-		backgroundColor: '#d1d'
+		backgroundColor: '#ddd'
 	}
 });
 

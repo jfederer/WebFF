@@ -11,9 +11,9 @@ const styles = theme => ({
 	timeInput: {
 		margin: 0,
 		fullWidth: true,
-		wrap: 'nowrap',
-		display: 'flex',
-		flexWrap: 'wrap',
+		// wrap: 'nowrap',
+		// display: 'flex',
+		// flexWrap: 'wrap',
 	},
 });
 
