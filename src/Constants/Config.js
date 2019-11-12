@@ -44,9 +44,16 @@ export const PROGRAM_VERSION = "0.6.0";
 
 export const IET_REQUIRING_SAMPLER_TYPE_VALUES = ['3055', '3056', '3057', '3058'];
 
+//DB collection names...
+export const SAMPLING_EVENTS_LINK_TABLE_COLLECTION_NAME = "SamplingEventsLinkTable";
+export const STATIONS_LINK_TABLE_COLLECTION_NAME = "StationsLinkTable";
+export const USERS_COLLECTION_NAME = "Users"
+export const SAMPLING_EVENTS_COLLECTION_NAME = "SamplingEvents"
+export const STATIONS_COLLECTION_NAME = "Stations"
+
 export const LINK_TABLES = {
-	[EVENTS_LINK_TABLE_TYPE] : "SamplingEventsLinkTable",  // value here is the table name in the database
-	[STATIONS_LINK_TABLE_TYPE]: "StationsLinkTable" // value here is the table name in the database
+	[EVENTS_LINK_TABLE_TYPE] : SAMPLING_EVENTS_COLLECTION_NAME, 
+	[STATIONS_LINK_TABLE_TYPE]: STATIONS_COLLECTION_NAME 
 }
 
 export const METHOD_QIDS = {

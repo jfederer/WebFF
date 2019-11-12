@@ -116,7 +116,7 @@ class EventsManager extends React.Component {
 			return [];
 		}
 
-		console.log('currentUserEventIDs :', currentUserEventIDs);
+		// console.log('currentUserEventIDs :', currentUserEventIDs);
 
 		let currentUserEvents = currentUserEventIDs.map((eventID) => {
 			return this.props.allSamplingEvents[eventID]

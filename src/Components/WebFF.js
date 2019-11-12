@@ -58,10 +58,9 @@ import ErrorPage from './Errors/ErrorPage';
 
 //TEST
 import { setDBInfo, fetchDBInfo } from '../Utils/NetworkUtilities';
-import { linkTablePush, eventPush } from '../Actions/DB';
 import { EVENTS_LINK_TABLE_TYPE, STATIONS_LINK_TABLE_TYPE } from '../Constants/Dictionary';
 import { getEventFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
-import { loadAllUserEvents, pushEventToDB } from '../Actions/DB';
+import { loadAllUserEventsFromDB, loadAllUserStationsFromDB, pushEventToDB, pushLinkTableToDB, pushStationToDB } from '../Actions/DB';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
 const FUNCDEBUG = false;
 
@@ -82,11 +81,10 @@ class WebFF extends React.Component {
 
 	//BREAKING:
 	//TODO: webserver, network loads
-	//TODO: Does not check for updated data outside localstorage
 	//TODO: push event to sedlogin
-	//TODO: Style sheet
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
-	//TODO: import/export
+	//TODO: date modified on all stations, linkTables, events, user modifications
+	//TODO: add checks for uploads/downloads on all stations/links/events/user
 
 	//BUGS: 
 	//MAke event (event1) using staton1 ... at some point outside that event, remove station1 ... when going back to event1, the station will switch to next available in list
@@ -95,6 +93,8 @@ class WebFF extends React.Component {
 	//BUG: average rep measures (from adding a second set) sticks around on a new event....  (Should get fixed if we reset UI before loading event)
 	//BUG: why is are we getting samples composited and "this is a group of samples" in an undefind panel on event summary (the problem is not event summary, the problem is that these are undefined)
 	//BUG: not correctly estimating time on first load of qwdata page...
+	//BUG: cleanup missing events from link table?
+	//BUG: USER_STATIONS_LIST_LOAD_COMPLETE fires (adn presumably the similar event function) before the inside of the promise -- learn about nested promises  (non-user-affecting at this point)
 
 	//TEST:
 	// hide/show panel button
@@ -106,6 +106,8 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	//TODO: import/export
+	//TODO: Style sheet
 	//TODO: auto-estimate time on first load of QWDATA
 	//TODO: new event from old... (pseudo-event)
 	//TODO: template manager/event copy
@@ -125,7 +127,7 @@ class WebFF extends React.Component {
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
 
 	//TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
-
+	//TODO: verify my dbResponse are returning wtih upsert info vs failure messages
 	//TODO: "remove set" button on sets
 
 	//Would be nice:
@@ -338,6 +340,7 @@ class WebFF extends React.Component {
 				<button onClick={this.doTestPushStation_Action}>TEST PUSH STATION</button>
 				<button onClick={this.doTestPushStationsTable_Action}>TEST PUSH STATIONS TABLE</button>
 				<button onClick={this.doTestAllUserStations_Action}>TEST GET ALL USER STATIONS</button>
+				<button onClick={this.doTestPushAllUserStations_Action}>TEST PUSH ALL USER STATIONS</button>
 				<br>
 				</br>	
 				<br>
@@ -350,109 +353,110 @@ class WebFF extends React.Component {
 	}
 
 
-	doTestPushEvent_Action = () => {
+	doTestPushEvent_Action = () => {  //DONE  (push all events)
 		console.log("doTestPushEvent_Action");
 		this.props.pushEventToDB(getEventFromID(this.props.currentSamplingEventID));
 	}
 
-	doTestPushEventsTable_Action = () => {
+	doTestPushEventsTable_Action = () => { //DONE
 		console.log("doTestPushEventsTable_Action");
-		this.props.pushLinkTable(EVENTS_LINK_TABLE_TYPE, 'jfederer@usgs.gov');
+		this.props.pushLinkTableToDB(EVENTS_LINK_TABLE_TYPE, 'jfederer@usgs.gov');
 	}
 
-	doTestAllUserEvents_Action = () => {
+	doTestAllUserEvents_Action = () => { //DONE
 		console.log("doTestAllUserEvents_Action");
-		this.props.loadAllUserEvents('jfederer@usgs.gov');
+		this.props.loadAllUserEventsFromDB('jfederer@usgs.gov');
 	}
 
-	doTestPushStation_Action = () => {
+	doTestPushStation_Action = () => { //DONE
 		console.log("doTestPushStation_Action");
-		let stationName = getQuestionValue('stationName');
+		let stationName = getQuestionValue(this.props.currentSamplingEventID, 'stationName');
 		this.props.pushStationToDB(getStationFromID(getStationIDsFromName('jfederer@usgs.gov', stationName)[0]));  // need to get the station object itself, first
 	}
 
-	doTestPushStationsTable_Action = () => {
+	doTestPushStationsTable_Action = () => { //DONE
 		console.log("doTestPushStationsTable_Action");
-		this.props.pushLinkTable(STATIONS_LINK_TABLE_TYPE, 'jfederer@usgs.gov');
+		this.props.pushLinkTableToDB(STATIONS_LINK_TABLE_TYPE, 'jfederer@usgs.gov');
 	}
 
 	doTestAllUserStations_Action = () => {
 		console.log("doTestAllUserStations_Action");
+		this.props.loadAllUserStationsFromDB("jfederer@usgs.gov");
 	}
 
 ////////////////////////////////
 
-	usrMod = () => {
-		let newUsr = _.cloneDeep(this.state.usr);
-		newUsr.settings.backupInterval = 300;
-		this.setState({ usr: newUsr });
-	}
+	// usrMod = () => {
+	// 	let newUsr = _.cloneDeep(this.state.usr);
+	// 	newUsr.settings.backupInterval = 300;
+	// 	this.setState({ usr: newUsr });
+	// }
 
-	doTestPull = () => {
-		fetchDBInfo({ key: "username", value: "jfederer@usgs.gov" },
-			"Users",
-			(dbResponse) => {
-				if (Array.isArray(dbResponse) && dbResponse.length === 1) {
-					this.setState({ usr: dbResponse[0] })
-				} else {
-					console.log("dbResponse did not return user"); //TODO: do check for username/etc..
-				}
-			},
-			(res) => alert("TEST FAILURE" + res));
-	}
-	doTestPush = () => {
-		setDBInfo({ key: "username", value: "jfederer@usgs.gov" },
-			"Users",
-			this.state.usr,
-			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
-			(res) => alert("TEST FAILURE" + res));
-	}
-	doTestPushUser = () => {
-		let username = "jfederer@usgs.gov";
-		setDBInfo({ key: "username", value: username },
-			"Users",
-			this.props.users[username],
-			(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
-			(res) => alert("TEST FAILURE" + res));
-	}
-	doTestEventTable = () => {
-		let username = "jfederer@usgs.gov";
-		linkTablePush(EVENTS_LINK_TABLE_TYPE, 
-			username, 
-			{username: username,
-				events: this.props.eventLinkTables[username]},
-			(res) => alert("WEBFF SUCCESS CB! " + res),
-			(res) => alert("WEBFF FAILURE CB! " + res)
-		);
-	}
-	doTestStationTable = () => {
-		let username = "jfederer@usgs.gov";
-		linkTablePush(STATIONS_LINK_TABLE_TYPE, 
-			username, 
-			{username: username,
-				events: this.props.stationLinkTables[username]},
-			(res) => alert("WEBFF SUCCESS CB! " + res),
-			(res) => alert("WEBFF FAILURE CB! " + res)
-		);
-	}
-	doTestStationTable = () => {
-		let username = "jfederer@usgs.gov";
-		linkTablePush(STATIONS_LINK_TABLE_TYPE, 
-			username, 
-			{username: username,
-				events: this.props.stationLinkTables[username]},
-			(res) => alert("WEBFF SUCCESS CB! " + res),
-			(res) => alert("WEBFF FAILURE CB! " + res)
-		);
-	}
-	doTestPushEvent = () => {
-		let username = "jfederer@usgs.gov";
-		eventPush(username, 
-			getEventFromID(this.props.currentSamplingEventID),
-			(res) => alert("WEBFF SUCCESS CB! " + res),
-			(res) => alert("WEBFF FAILURE CB! " + res)
-		);
-	}
+	// doTestPull = () => {
+	// 	fetchDBInfo({ key: "username", value: "jfederer@usgs.gov" },
+	// 		"Users",
+	// 		(dbResponse) => {
+	// 			if (Array.isArray(dbResponse) && dbResponse.length === 1) {
+	// 				this.setState({ usr: dbResponse[0] })
+	// 			} else {
+	// 				console.log("dbResponse did not return user"); //TODO: do check for username/etc..
+	// 			}
+	// 		},
+	// 		(res) => alert("TEST FAILURE" + res));
+	// }
+	// doTestPush = () => {
+	// 	setDBInfo({ key: "username", value: "jfederer@usgs.gov" },
+	// 		"Users",
+	// 		this.state.usr,
+	// 		(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
+	// 		(res) => alert("TEST FAILURE" + res));
+	// }
+	// doTestPushUser = () => {
+	// 	let username = "jfederer@usgs.gov";
+	// 	setDBInfo({ key: "username", value: username },
+	// 		"Users",
+	// 		this.props.users[username],
+	// 		(res) => alert("TEST SUCCESS! " + JSON.stringify(res)),
+	// 		(res) => alert("TEST FAILURE" + res));
+	// }
+	// doTestEventTable = () => {
+	// 	let username = "jfederer@usgs.gov";
+	// 	linkTablePush(EVENTS_LINK_TABLE_TYPE, 
+	// 		username, 
+	// 		{username: username,
+	// 			events: this.props.eventLinkTables[username]},
+	// 		(res) => alert("WEBFF SUCCESS CB! " + res),
+	// 		(res) => alert("WEBFF FAILURE CB! " + res)
+	// 	);
+	// }
+	// doTestStationTable = () => {
+	// 	let username = "jfederer@usgs.gov";
+	// 	linkTablePush(STATIONS_LINK_TABLE_TYPE, 
+	// 		username, 
+	// 		{username: username,
+	// 			events: this.props.stationLinkTables[username]},
+	// 		(res) => alert("WEBFF SUCCESS CB! " + res),
+	// 		(res) => alert("WEBFF FAILURE CB! " + res)
+	// 	);
+	// }
+	// doTestStationTable = () => {
+	// 	let username = "jfederer@usgs.gov";
+	// 	linkTablePush(STATIONS_LINK_TABLE_TYPE, 
+	// 		username, 
+	// 		{username: username,
+	// 			events: this.props.stationLinkTables[username]},
+	// 		(res) => alert("WEBFF SUCCESS CB! " + res),
+	// 		(res) => alert("WEBFF FAILURE CB! " + res)
+	// 	);
+	// }
+	// doTestPushEvent = () => {
+	// 	let username = "jfederer@usgs.gov";
+	// 	eventPush(username, 
+	// 		getEventFromID(this.props.currentSamplingEventID),
+	// 		(res) => alert("WEBFF SUCCESS CB! " + res),
+	// 		(res) => alert("WEBFF FAILURE CB! " + res)
+	// 	);
+	// }
 
 
 
@@ -581,8 +585,13 @@ const mapDispatchToProps = {
 	setNavMenuExpand,
 	setSysMenuExpand,
 	hideQuestion,
-	loadAllUserEvents,
-	pushEventToDB
+
+	loadAllUserEventsFromDB,
+	loadAllUserStationsFromDB,
+	pushEventToDB,
+	pushStationToDB,
+	pushLinkTableToDB
+	
 }
 
 

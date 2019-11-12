@@ -8,7 +8,7 @@ import {
 	SE_QUESTION_VALUE_DELETE,
 	SAMPLING_EVENT_BANK_CHANGE,
 	SAMPLING_EVENT_SET,
-	SAMPLING_EVENT_LINK_TABLE_SET
+	SAMPLING_EVENTS_LINK_TABLE_SET
 } from '../Constants/ActionTypes';
 
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
@@ -213,15 +213,14 @@ export function ingestEvent(event) {
 	}
 }
 
-export function ingestSamplingEventLinkTable(samplingEventLinkTable, username) {
+export function ingestSamplingEventsLinkTable(samplingEventsLinkTable) {
 
 	return (dispatch, getState) => {
 		return new Promise(function (resolve, reject) {
 			//FIXME: TODO: check for format & age
 			dispatch({
-				type: SAMPLING_EVENT_LINK_TABLE_SET,
-				tableType: EVENTS_LINK_TABLE_TYPE,
-				samplingEventLinkTable
+				type: SAMPLING_EVENTS_LINK_TABLE_SET,
+				samplingEventsLinkTable
 			});
 			resolve();
 		});

@@ -1,5 +1,5 @@
 import {
-	SET_STATION_VALUES,
+	SET_STATION,
 	ADD_QUESTION_TO_STATION,
 	DELETE_QUESTION_FROM_STATION
 } from '../Constants/ActionTypes';
@@ -55,14 +55,16 @@ const initialStations = {
 export function Stations(state = initialStations, action) {
 	let newState = _.cloneDeep(state);
 	switch (action.type) {
-		case SET_STATION_VALUES:
+		case SET_STATION:
 			newState[action.station.stationID] = action.station;
 			return newState;
 		case ADD_QUESTION_TO_STATION:
 			newState[action.stationID].questionsData[action.question.id] = action.question;
+			newState[action.stationID].dateModified = new Date();
 			return newState;
 		case DELETE_QUESTION_FROM_STATION:
 			delete newState[action.stationID].questionsData[action.QID];
+			newState[action.stationID].dateModified = new Date();
 			return newState;
 		default:
 			return state

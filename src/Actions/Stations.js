@@ -2,9 +2,10 @@ import _ from 'lodash';
 import uuidv4 from 'uuid';
 
 import {
-	SET_STATION_VALUES,
+	SET_STATION,
 	REGISTER_STATION_WITH_USERNAME,
-	REMOVE_STATION_FROM_USERNAME
+	REMOVE_STATION_FROM_USERNAME,
+	STATIONS_LINK_TABLE_SET
 } from '../Constants/ActionTypes';
 
 import { getStationIDsFromName } from '../Utils/StoreUtilities';
@@ -68,7 +69,7 @@ export function createNewStation(newStationObject) {
 			stationObject.displayName = stationObject.name;
 		}
 
-		dispatch({ type: SET_STATION_VALUES, station: stationObject });
+		dispatch({ type: SET_STATION, station: stationObject });
 		return (stationObject.stationID);
 	}
 }
@@ -84,5 +85,31 @@ export function removeStationFromUser(username, stationName) {
 	}
 }
 
+export function ingestStation(station) {
+	return (dispatch, getState) => {
+		return new Promise(function (resolve, reject) {
+			//FIXME: TODO: check for format & age
+			dispatch({
+				type: SET_STATION,
+				station
+			});
+			resolve(station.stationID);
+		});
+	}
+}
+
+export function ingestStationsLinkTable(stationsLinkTable) {
+
+	return (dispatch, getState) => {
+		return new Promise(function (resolve, reject) {
+			//FIXME: TODO: check for format & age
+			dispatch({
+				type: STATIONS_LINK_TABLE_SET, 
+				stationsLinkTable
+			});
+			resolve();
+		});
+	}
+}
 
 

@@ -250,11 +250,19 @@ export function getSetInformationQuestionsData() {
 // 	return retQD;
 // }
 
-export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease
-	if (typeof store.getState().SamplingEventsLinkTables[username] === 'undefined') {
+export function getSamplingEventsLinkTable(username) {
+	return store.getState().SamplingEventsLinkTables[username];
+}
+
+export function getStationsLinkTable(username) {
+	return store.getState().StationsLinkTables[username];
+}
+
+export function getAllUsersEventIDs(username) {  //TODO:  remove all for gramatical ease   
+	if (typeof getSamplingEventsLinkTable(username) === 'undefined') {
 		return [];
 	}
-	let evts = store.getState().SamplingEventsLinkTables[username].events;
+	let evts = getSamplingEventsLinkTable(username).events;
 	if (typeof evts === 'undefined') {
 		return [];
 	}
@@ -281,10 +289,10 @@ export function getStationFromID(stationID) {
 }
 
 export function getStationIDsFromName(username, stationName) {	//find station number
-	if (!store.getState().StationsLinkTables[username]) {
+	if (!getStationsLinkTable(username)) {
 		return null;
 	}
-	let stationIDList = store.getState().StationsLinkTables[username].stations;
+	let stationIDList = getStationsLinkTable(username).stations;
 	if (!stationIDList) {
 		//TODO: trigger network? (switch this and ande events to promises?)
 		console.warn("User, " + username + ", has no stations in stations.");
