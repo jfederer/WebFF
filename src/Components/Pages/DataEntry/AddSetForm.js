@@ -11,6 +11,7 @@ import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from 
 
 import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DISALLOWED_CHARACTERS_IN_SETNAME_REGEX } from '../../../Constants/Config';
 
+import  Question  from '../../Question';
 import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
@@ -204,8 +205,17 @@ class AddSetForm extends React.Component {
 		return (<React.Fragment>
 			<Paper>
 				<div className={classes.horzCenterText}>
-					<TextField
+					{/* <TextField
 						id="addSetNameField"
+						label="New Set Name (optional)"
+						placeholder="New Set Name"
+						margin="normal"
+						onChange={this.handleAddSetNameChange}
+						value={this.state.newSetName}
+					/> */}
+					<Question
+						id="addSetNameField"
+						type="Text"
 						label="New Set Name (optional)"
 						placeholder="New Set Name"
 						margin="normal"

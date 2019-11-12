@@ -153,6 +153,7 @@ class SetInformation extends React.Component {
 		let realAnalysedForName = getRealQID(this.props.setName, analysedForName);
 
 		return <React.Fragment>
+			<div style={{paddingBottom:"10px"}}>
 			Set {setName}
 			{/* TODO: 'options' button on set information that brings up dialog providing things like "overwrite stationing from X set", "overwrite all data from X set", "rename set", "delete set" } */}
 
@@ -188,6 +189,7 @@ class SetInformation extends React.Component {
 				}
 			</Grid>
 			</Grid>
+			</div>
 		</React.Fragment >
 
 	}
