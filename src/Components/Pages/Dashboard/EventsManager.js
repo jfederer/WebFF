@@ -134,7 +134,7 @@ class EventsManager extends React.Component {
 					new Date(event.dateModified).toDateString() + " @ " + new Date(event.dateModified).getHours() + ":" + (new Date(event.dateModified).getMinutes() + 1),
 					getQuestionValue(event.eventID, "stationName") ? getQuestionValue(event.eventID, "stationName") : "N/A",
 					event.shippedStatus,
-					<Button onClick={() => {
+					<Button onClick={() => {   //FIXME: passing objects is Depricated.  Will need to fix
 						this.setState({ toEventSummary: true, SummaryEventID: event.eventID })
 					}}>
 						View Event Summary
@@ -149,17 +149,9 @@ class EventsManager extends React.Component {
 		return data;
 	}
 
-	//rowsDeleted: object(lookup: {[dataIndex]: boolean}, data: arrayOfObjects: {index: number, dataIndex: number})
-
 	onRowsDelete = (rowsDeleted) => {
-		console.log('rowsDeleted :', rowsDeleted);
-		rowsDeleted.data.forEach(indexObj => {
-			console.log(" indexObj.dataIndex", indexObj.dataIndex)
-			let eventIDToRemove = this.getDataTable()[indexObj.dataIndex][EVENT_ID_COLUMN];
-			console.log('eventIDToRemove :', eventIDToRemove);
-			this.props.removeEventFromUsername(eventIDToRemove, this.props.currentUser.username);
-		})
-
+		let eventIDsToDelete = rowsDeleted.data.map(indexObj => this.getDataTable()[indexObj.dataIndex][EVENT_ID_COLUMN]);
+		eventIDsToDelete.forEach(eventIDToRemove => this.props.removeEventFromUsername(eventIDToRemove, this.props.currentUser.username));
 	}
 
 	componentWillUnmount() {

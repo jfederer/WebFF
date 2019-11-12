@@ -94,6 +94,7 @@ class WebFF extends React.Component {
 	//BUG: not correctly estimating time on first load of qwdata page...
 	//BUG: cleanup missing events from link table?
 	//BUG: USER_STATIONS_LIST_LOAD_COMPLETE fires (adn presumably the similar event function) before the inside of the promise -- learn about nested promises  (non-user-affecting at this point)
+	//BUG: when current event is deleted, should reset nav...
 	
 	//TEST:
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
