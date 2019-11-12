@@ -7,11 +7,11 @@ import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 
 import { setAppBarText, showQuestionPanel } from '../../../Actions/UI';
-import { TextField, Button, Paper, Checkbox, Select, Typography, Tooltip } from '@material-ui/core';
+import { Button, Paper, Checkbox, Select, Typography, Tooltip } from '@material-ui/core';
 
 import { SET_INFORMATION_IDENTIFIER, DATA_ENTRY_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER, DISALLOWED_CHARACTERS_IN_SETNAME_REGEX } from '../../../Constants/Config';
-
-import  Question  from '../../Question';
+import Grid from '@material-ui/core/Grid';
+import Question from '../../Question';
 import { addQuestionToEvent } from '../../../Actions/Questions';
 import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
@@ -35,8 +35,8 @@ class AddSetForm extends React.Component {
 
 	componentWillMount() {
 		let setList = getSetListAsArray(this.props.currentSamplingEventID, this.props.sedimentType);
-		
-		if(setList.length<1) {
+
+		if (setList.length < 1) {
 			this.addSet();
 		}
 	}
@@ -92,9 +92,9 @@ class AddSetForm extends React.Component {
 		}
 
 		let setList = getSetListAsArray(currentSamplingEventID, sedimentType);
-		
-		if(setList.length>=1) {
-			let QP = "DataEntry:Average Representational Measures"+IDENTIFIER_SPLITTER+DATA_ENTRY_INFORMATION_IDENTIFIER+sedimentType;
+
+		if (setList.length >= 1) {
+			let QP = "DataEntry:Average Representational Measures" + IDENTIFIER_SPLITTER + DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType;
 			// console.log('QP :', QP);
 			this.props.showQuestionPanel(QP);
 		}
@@ -115,7 +115,7 @@ class AddSetForm extends React.Component {
 
 		let newSetValue = {};
 
-		
+
 
 		if (this.state.copyStationing) {
 			// duplicating stationing from state.duplicateFromSet set
@@ -126,7 +126,7 @@ class AddSetForm extends React.Component {
 			// get value
 			let copyFromValue;
 			try {
-				copyFromValue = getQuestionValue(currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER+sedimentType, this.state.duplicateFromSet);
+				copyFromValue = getQuestionValue(currentSamplingEventID, DATA_ENTRY_INFORMATION_IDENTIFIER + sedimentType, this.state.duplicateFromSet);
 			}
 			catch (err) {
 				if (err.name === "TypeError") {
@@ -150,7 +150,7 @@ class AddSetForm extends React.Component {
 				let newKey = origKey.replace(this.state.duplicateFromSet, SET_INFORMATION_IDENTIFIER + newSetName);
 				Object.assign(newSetValue, copyFromValue, { [newKey]: copyFromValue[origKey] });
 			})
-		} 
+		}
 
 		let defaultSetInformationQD = getSetInformationQuestionsData();
 
@@ -183,7 +183,7 @@ class AddSetForm extends React.Component {
 		} else {
 			this.props.SEQuestionValueChange(currentSamplingEventID, newSetQuestion.id, newSetValue);
 		}
-		
+
 		this.setState({
 			newSetName: "",
 			duplicateFromSet: this.state.duplicateFromSet ? this.state.duplicateFromSet : this.fullSetName(newSetName)
@@ -203,9 +203,9 @@ class AddSetForm extends React.Component {
 		let setList = getSetListAsObject(currentSamplingEventID, sedimentType);
 
 		return (<React.Fragment>
-			<Paper>
-				<div className={classes.horzCenterText}>
-					{/* <TextField
+			{/* <Paper> */}
+			{/* <div className={classes.horzCenterText}> */}
+			{/* <TextField
 						id="addSetNameField"
 						label="New Set Name (optional)"
 						placeholder="New Set Name"
@@ -213,6 +213,12 @@ class AddSetForm extends React.Component {
 						onChange={this.handleAddSetNameChange}
 						value={this.state.newSetName}
 					/> */}
+			<Grid container
+				direction="row"
+				justify="center"
+				alignItems="center"
+				spacing={3}>
+				<Grid item xs={4}>
 					<Question
 						id="addSetNameField"
 						type="Text"
@@ -222,27 +228,30 @@ class AddSetForm extends React.Component {
 						onChange={this.handleAddSetNameChange}
 						value={this.state.newSetName}
 					/>
+				</Grid>
+				<Grid item xs={4}>
 					<Tooltip title={this.state.addNewSetButtonDisabled ? this.state.addNewSetDisabledReason : ""}>
-						<div><Button
+						<Button
 							variant="outlined"
 							margin="dense"
 							onClick={() => this.addSet()}
 							disabled={this.state.addNewSetButtonDisabled}
 						>
 							Add Set
-					</Button>
-						</div>
+								</Button>
 					</Tooltip>
+				</Grid>
 
-					{Object.keys(setList).length > 0
-						? <React.Fragment>
+				{Object.keys(setList).length > 0
+					? <React.Fragment>
+						<Grid item xs={1}>
 
 							<Checkbox
 								checked={this.state.copyStationing}
 								onChange={() => this.setState({ copyStationing: !this.state.copyStationing })}
 							/>
-							<Typography>Duplicate Set:"</Typography>
-
+						</Grid>
+						<Grid item xs={2}>		<Typography>Duplicate Set:</Typography>
 							<Select
 								native
 								// autoWidth={true}
@@ -258,12 +267,15 @@ class AddSetForm extends React.Component {
 								{/* TODO: filter list to only sets that HAVE stationing */}
 
 							</Select>
-						</React.Fragment>
-						: <React.Fragment>
-							{null}
-						</React.Fragment>}
-				</div>
-			</Paper>
+						</Grid>
+					</React.Fragment>
+					: <React.Fragment>
+						{null}
+					</React.Fragment>}
+
+			</Grid>
+			{/* </div> */}
+			{/* </Paper> */}
 		</React.Fragment>
 		)
 	}
