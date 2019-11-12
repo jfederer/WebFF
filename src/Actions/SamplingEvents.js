@@ -8,7 +8,7 @@ import {
 	SE_QUESTION_VALUE_DELETE,
 	SAMPLING_EVENT_BANK_CHANGE,
 	SAMPLING_EVENT_SET,
-	
+	SAMPLING_EVENT_LINK_TABLE_SET
 } from '../Constants/ActionTypes';
 
 import { emptySamplingEvent } from '../Constants/DefaultObjects';

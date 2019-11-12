@@ -6,6 +6,7 @@ import {
 	SAMPLING_EVENT_REQUEST,
 	SAMPLING_EVENT_LOAD_COMPLETE,
 	SAMPLING_EVENT_PUSH,
+	SAMPLING_EVENT_PUSH_COMPLETE,
 	SYNC_ALL_TO_DB
 } from '../Constants/ActionTypes';
 import { LINK_TABLES } from '../Constants/Config';
@@ -62,7 +63,7 @@ function fetchSamplingEventLinkTable(username) {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			fetchDBInfo({ key: "username", value: username },
-				"SamplingEventLinkTable",
+				"SamplingEventLinkTable", //TODO: FIXME: pull from config
 				(dbResponse) => {  // success callback
 					console.log("fetchSamplingEventLinkTable Success callback");
 					if (Array.isArray(dbResponse) && dbResponse.length === 1) {
@@ -99,8 +100,6 @@ function fetchSamplingEvent(eventID) {
 	}
 }
 
-
-
 export function loadAllUserEvents(username) {
 	return (dispatch, getState) => {
 		dispatch(requestUserEvents(username));
@@ -130,38 +129,41 @@ export function loadAllUserEvents(username) {
 	};
 }
 
+function samplingEventPushToDB(eventID) {
+	return {
+		type: SAMPLING_EVENT_PUSH,
+		eventID
+	}
+}
 
-// export function pushEventToDB(event) {
-// 	return (dispatch, getState) => {
-// 		dispatch(requestUserEvents(username));
-// 		dispatch(requestSamplingEventLinkTable(username));
-// 		dispatch(fetchSamplingEventLinkTable(username))
-// 			.then((samplingEventLinkTable) => {
-// 				dispatch(ingestSamplingEventLinkTable(samplingEventLinkTable, username))
-// 					.then(listIngestSuccess => {
-// 						dispatch(loadCompleteSamplingEventLinkTable(username))
-// 						samplingEventLinkTable.events.forEach((eventID) => {
-// 							dispatch(requestSamplingEvent(eventID));
-// 							dispatch(fetchSamplingEvent(eventID))
-// 								.then((event) => {
-// 									dispatch(ingestEvent(event))
-// 										.then(eventID => dispatch(loadCompleteSamplingEvent(eventID)))
-// 										.catch(eventIngestFailure => console.warn(eventID + " failed to ingest: " + eventIngestFailure));
-// 								})
-// 								.catch(eventFetchFailure => console.warn(eventID + " was in link table but not found cleanly in the database: " + eventFetchFailure)); //TODO: notify, upload? or cleanup table ... this event wasn't found in DB
-// 						});
-// 					})
-// 					.catch(listIngestFailure => console.warn('failed to ingest samplingEventLinkTable: ' + listIngestFailure));
-// 			})
-// 			.then(dispatch(loadCompleteUserEvents(username)))
-// 			.catch((samplingEventLinkTableFetchFailure) => {
-// 				console.log('CATCH samplingEventLinkTableResponse :', samplingEventLinkTableFetchFailure);
-// 			});
-// 	};
-// }
+function samplingEventPushComplete(eventID) {
+	return {
+		type: SAMPLING_EVENT_PUSH_COMPLETE,
+		eventID
+	}
+}
 
-
-
+export function pushEventToDB(event) {  //TODO: check with DB version for being newer
+	console.log('event', event)
+	return (dispatch, getState) => {
+		return new Promise((resolve, reject) => {
+			if(!event) reject("pushEventToDB requires an event");
+			dispatch(samplingEventPushToDB(event.eventID));
+			setDBInfo({ key: "eventID", value: event.eventID },
+				"SamplingEvents",
+				event,
+				(dbResponse) => {  // success callback
+					console.log("pushEventToDB setDBInfo Success callback");
+					dispatch(samplingEventPushComplete(event.eventID));
+					resolve(dbResponse);
+				},
+				(dbResponse) => { // failure callback
+					console.warn("pushEventToDB setDBInfo failure callback: " + dbResponse);
+					reject(dbResponse);
+				});
+		});		
+	};
+}
 
 
 ///////////////////////
@@ -243,30 +245,12 @@ export function linkTablePush(tableType, username, userTable, successCB, failure
 		});
 	// }
 }
+
 export function eventPush(username, event, successCB, failureCB) {
 	console.log("eventPush(", username, event, ")");
 	//TODO: validate that the event is formed correctly...
 
 	// return (dispatch, getState) => {
-	setDBInfo({ key: "eventID", value: event.eventID },
-		"SamplingEvents",
-		event,
-		(dbResponse) => {  // success callback
-			console.log("eventPush Success callback: ", dbResponse);
-			successCB(dbResponse)
-			// if (Array.isArray(dbResponse) && dbResponse.length === 1) {
-			// 	let dispatchResp = dispatch(userDataIngest(dbResponse[0]));
-			// 	console.log('dispatchResp', dispatchResp)
-			// resolve(true);
-			// } else {
-			// 	console.log("dbResponse did not return exactly one user");
-			// 	reject(false);
-			// }
-		},
-		(dbResponse) => { // failure callback
-			console.warn("eventPush Failure callback: " + dbResponse);
-			failureCB(dbResponse);
-			// reject(false);
-		});
+
 	// }
 }

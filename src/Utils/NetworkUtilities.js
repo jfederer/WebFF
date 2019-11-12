@@ -92,8 +92,8 @@ export const setDBInfo = (needle, collection, newData, successCB, failureCB) => 
 	const API = PHP_FILE_LOCATION + 'dbPatch2.php?';
 
 	const DEBUG = true;
-	if (!needle) {
-		console.warn("Needle reuired and not passed to setDBInfo");
+	if (!needle || !needle.key || !needle.value) {
+		console.warn("Needle reuired and not passed to setDBInfo: ", needle);
 		return;
 	}
 	if (!collection) {
@@ -119,7 +119,7 @@ export const setDBInfo = (needle, collection, newData, successCB, failureCB) => 
 		return response;
 	}
 
-	if (DEBUG) console.log("Function: fetchDBInfo PATCH @ " + API + query);
+	if (DEBUG) console.log("Function: setDBInfo PATCH @ " + API + query);
 
 	fetch(API, {
 		method: 'POST',

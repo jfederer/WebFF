@@ -335,7 +335,7 @@ class WebFF extends React.Component {
 				<button onClick={this.doTestPushEventsTable_Action}>TEST PUSH EVENT TABLE</button>
 				<button onClick={this.doTestAllUserEvents_Action}>TEST GET ALL USER EVENTS</button>
 				<br></br>
-				<button onClick={this.doTestPushStation_Action}>TEST PUSH USER EVENT</button>
+				<button onClick={this.doTestPushStation_Action}>TEST PUSH STATION</button>
 				<button onClick={this.doTestPushStationsTable_Action}>TEST PUSH STATIONS TABLE</button>
 				<button onClick={this.doTestAllUserStations_Action}>TEST GET ALL USER STATIONS</button>
 				<br>
@@ -352,7 +352,7 @@ class WebFF extends React.Component {
 
 	doTestPushEvent_Action = () => {
 		console.log("doTestPushEvent_Action");
-		this.props.pushEventToDB(this.props.currentSamplingEventID);
+		this.props.pushEventToDB(getEventFromID(this.props.currentSamplingEventID));
 	}
 
 	doTestPushEventsTable_Action = () => {

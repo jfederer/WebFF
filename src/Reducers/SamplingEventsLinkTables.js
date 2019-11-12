@@ -2,7 +2,6 @@ import {
 	REGISTER_EVENT_WITH_USERNAME,
 	SAMPLING_EVENT_LINK_TABLE_SET
 } from '../Constants/ActionTypes';
-import { LINK_TABLES } from '../Constants/Config';
 
 import _ from 'lodash';
 

@@ -7,9 +7,13 @@ import {
 	ADD_QUESTION_TO_EVENT,
 	DELETE_QUESTION_FROM_EVENT,
 	SE_QUESTION_VALUE_DELETE,
-  SAMPLING_EVENT_BANK_CHANGE,
-  USER_SAMPLING_EVENTS_REQUEST,
-  USER_SAMPLING_EVENTS_LOAD_COMPLETE
+	SAMPLING_EVENT_BANK_CHANGE,
+	USER_SAMPLING_EVENTS_REQUEST,
+	USER_SAMPLING_EVENTS_LOAD_COMPLETE,
+	SAMPLING_EVENT_PUSH,
+	SAMPLING_EVENT_PUSH_COMPLETE,
+	SAMPLING_EVENT_REQUEST,
+	SAMPLING_EVENT_LOAD_COMPLETE
 } from '../Constants/ActionTypes';
 
 
@@ -39,19 +43,23 @@ export function SamplingEvents(state = initialState, action) {
 			return newState;
 		case SAMPLING_EVENT_BANK_CHANGE:
 			newState[action.eventID].questionsValues.waterwayInfo.bank = action.bank;
-      return newState;
-    case USER_SAMPLING_EVENTS_REQUEST:
-      newState.isFetching = true;
-      newState.didInvalidate = false;
-      return newState;
-    case USER_SAMPLING_EVENTS_LOAD_COMPLETE:
-      newState.isFetching = false;
-      newState.didInvalidate = false;
-      if(Array.isArray(action.events)) {
-        action.events.forEach(event => { newState[event.eventID]=event });
-        //TODO: only update if event is newer  FIXME:  (do outside reducer)
-      }
-      return newState;
+			return newState;
+		case USER_SAMPLING_EVENTS_REQUEST:
+			newState.isFetching = true;
+			newState.didInvalidate = false;
+			return newState;
+		case USER_SAMPLING_EVENTS_LOAD_COMPLETE:
+			newState.isFetching = false;
+			newState.didInvalidate = false;
+			if (Array.isArray(action.events)) {
+				action.events.forEach(event => { newState[event.eventID] = event });
+				//TODO: only update if event is newer  FIXME:  (do outside reducer)
+			}
+			return newState;
+		case SAMPLING_EVENT_PUSH:
+		case SAMPLING_EVENT_PUSH_COMPLETE:
+		case SAMPLING_EVENT_REQUEST:
+		case SAMPLING_EVENT_LOAD_COMPLETE:
 		default:
 			return state;
 	}

@@ -3,10 +3,8 @@ import {
 	SET_CURRENT_SAMPLING_EVENT,
 	USER_DATA_REQUEST,
 	USER_DATA_LOAD_COMPLETE,
-	SAMPLING_EVENTS_REQUEST,
-	SAMPLING_EVENTS_LOAD_COMPLETE,
-	SAMPLING_EVENT_REQUEST,
-	SAMPLING_EVENT_LOAD_COMPLETE
+	USER_SAMPLING_EVENTS_REQUEST,
+	USER_SAMPLING_EVENTS_LOAD_COMPLETE
 } from '../Constants/ActionTypes';
 import _ from 'lodash';
 
@@ -41,20 +39,12 @@ export function SedFF(state = initialSedFFState, action) {
 			newState.fetchingUserDataComplete = true;
 			return newState
 
-		case SAMPLING_EVENTS_REQUEST:
+		case USER_SAMPLING_EVENTS_REQUEST:
 			newState.isFetchingEventsData = true;
 			return newState;
 
-		case SAMPLING_EVENTS_LOAD_COMPLETE:
+		case USER_SAMPLING_EVENTS_LOAD_COMPLETE:
 			newState.isFetchingEventsData = false;
-			return newState;
-
-		case SAMPLING_EVENT_REQUEST:
-			newState.isFetchingEventData = true;
-			return newState;
-
-		case SAMPLING_EVENT_LOAD_COMPLETE:
-			newState.isFetchingEventData = false;
 			return newState;
 
 		default:
