@@ -82,7 +82,6 @@ class WebFF extends React.Component {
 	//BREAKING:
 	//TODO: webserver, network loads
 	//TODO: push event to sedlogin
-	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
 	//TODO: date modified on all stations, linkTables, events, user modifications
 	//TODO: add checks for uploads/downloads on all stations/links/events/user
 
@@ -95,8 +94,9 @@ class WebFF extends React.Component {
 	//BUG: not correctly estimating time on first load of qwdata page...
 	//BUG: cleanup missing events from link table?
 	//BUG: USER_STATIONS_LIST_LOAD_COMPLETE fires (adn presumably the similar event function) before the inside of the promise -- learn about nested promises  (non-user-affecting at this point)
-
+	
 	//TEST:
+	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
 	// hide/show panel button
 	// Add/REmove station
 	// remove station that is set as the station for a different event
@@ -106,6 +106,7 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	//TODO: Questions data is really large for each event... shrink somehow?
 	//TODO: import/export
 	//TODO: Style sheet
 	//TODO: auto-estimate time on first load of QWDATA
