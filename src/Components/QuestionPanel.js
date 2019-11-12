@@ -10,9 +10,10 @@ const styles = theme => ({
 		...theme.mixins.gutters(),
 		flexGrow: 1,
 		paddingTop: 0,
-		paddingBottom: 0,
+		paddingBottom: "100px",
 		backgroundColor: '#eee',
-		margin: '10px',  //margin between QuestionPanels
+		marginBottom: '10px',  //margin between QuestionPanels
+
 		[theme.breakpoints.down('sm')]: {  // can be deleted, here for helping with layout testing
 			backgroundColor: '#eee',
 		},
@@ -21,7 +22,7 @@ const styles = theme => ({
 		},
 	},
 	lightGrey: {
-		backgroundColor: '#ddd'
+		backgroundColor: '#d1d'
 	}
 });
 

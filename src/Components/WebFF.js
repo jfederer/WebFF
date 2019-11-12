@@ -95,6 +95,7 @@ class WebFF extends React.Component {
 	//BUG: cleanup missing events from link table?
 	//BUG: USER_STATIONS_LIST_LOAD_COMPLETE fires (adn presumably the similar event function) before the inside of the promise -- learn about nested promises  (non-user-affecting at this point)
 	//BUG: when current event is deleted, should reset nav...
+	//BUG: SAMPLING_EVENT_BANK_CHANGE triggered on any input within WWI question...  shouldn't. ;)
 	
 	//TEST:
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
@@ -107,6 +108,7 @@ class WebFF extends React.Component {
 	//TODO: check implications of removing station that was used on previous event... (ie: new event A, set station to X, new event B, remove station X, load original event A.... ?)
 
 	//SHOULD:
+	//TODO: pass view summary button as ID rather than object to get around deprecation
 	//TODO: Questions data is really large for each event... shrink somehow?
 	//TODO: import/export
 	//TODO: Style sheet
