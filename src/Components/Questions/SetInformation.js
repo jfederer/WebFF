@@ -8,6 +8,7 @@ import _ from 'lodash';
 
 
 // import Table from '@material-ui/core/Table';
+import Grid from '@material-ui/core/Grid';
 // import TableBody from '@material-ui/core/TableBody';
 // import TableCell from '@material-ui/core/TableCell';
 // import TableHead from '@material-ui/core/TableHead';
@@ -26,7 +27,7 @@ import Question from '../Question';
 // import { safeCopy } from '../../Utils/Utilities';
 //this.state.value always contains the up-to-date question values/answers.
 //values with 'subQuestion' will need to be traced through LS to the sub question value
-import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER} from '../../Constants/Config';
+import { SET_INFORMATION_IDENTIFIER, IDENTIFIER_SPLITTER } from '../../Constants/Config';
 import { getGridedQuestions, getQuestionValue, getMethodCategoryFromValue } from '../../Utils/QuestionUtilities';
 import { getSetInformationQuestionsData } from '../../Utils/StoreUtilities';
 import { Typography, Paper } from '@material-ui/core';
@@ -54,23 +55,23 @@ class SetInformation extends React.Component {
 		//  console.log("SI CONSTRUCTOR PROPS: ", this.props);
 		if (_.isEmpty(this.props.value) || typeof this.props.value === "undefined") {
 			let initValue = {};
-			 //load value with default table?
+			//load value with default table?
 			if (this.props.alternateChangeHandler) {
 				this.props.alternateChangeHandler(this.props.currentSamplingEventID, this.props.id, initValue);
 			} else {
 				this.props.SEQuestionValueChange(this.props.currentSamplingEventID, this.props.id, initValue);
 			}
-		} 
+		}
 
 		this.state = {
-			showDataTable: Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType) 
+			showDataTable: Object.keys(this.props.value).includes("samplesTable_" + getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType)
 		}
 	}
 
 	componentDidMount() {
 		// This comes up if numberOfSamplingPoints is entered on a set, and then the user goes back and changes the sampling method... this will regenerate the table
-		if(this.props.value["numberOfSamplingPoints"]) {
-			if (!Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType)) {
+		if (this.props.value["numberOfSamplingPoints"]) {
+			if (!Object.keys(this.props.value).includes("samplesTable_" + getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType)) {
 				this.setInfoChangeHandler(this.props.currentSamplingEventID, "numberOfSamplingPoints", this.props.value["numberOfSamplingPoints"]);
 			}
 		}
@@ -79,13 +80,13 @@ class SetInformation extends React.Component {
 	setInfoChangeHandler = (eventID, sub_QID, value) => {
 		//   console.log("setInfoChangeHandler(", eventID, sub_QID, value, ")");
 		if (sub_QID === "numberOfSamplingPoints") {
-			if(parseInt(value)===0) {
+			if (parseInt(value) === 0) {
 				// can't have a value of zero samples...
 				return;
 			}
 			this.doChange(eventID, sub_QID, value)
 			this.setState({ showDataTable: true });
-			this.props.numberOfSamplingPointsChanged(eventID, this.props.sedimentType, this.props.setName,  this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
+			this.props.numberOfSamplingPointsChanged(eventID, this.props.sedimentType, this.props.setName, this.props.samplingMethod, _.cloneDeep(value), this.setInfoChangeHandler);
 			return;
 		}
 
@@ -99,10 +100,10 @@ class SetInformation extends React.Component {
 		// console.log("Set Info: doChange(", eventID, sub_QID, value, ")");
 
 		let splitID = this.props.id.split(IDENTIFIER_SPLITTER);
-	
+
 		let newValue = getQuestionValue(eventID, splitID.shift(), this.props.id); // have to look a the split ID in order to get the VALUE out of questionValues
 		newValue[sub_QID] = _.cloneDeep(value);
-			
+
 		if (this.props.alternateChangeHandler) {
 			this.props.alternateChangeHandler(eventID, this.props.id, newValue);
 		} else {
@@ -158,34 +159,36 @@ class SetInformation extends React.Component {
 			{getGridedQuestions(gridedQuestions)}
 
 
-
-			{/* Data table  */}
-			{samplingMethod && this.state.showDataTable
-			// {samplingMethod && Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType) 
-				? <Question {...setInfoQuestionsData[tableName]}
-					id={tableName}
-					key={realTableName}
-					value={typeof value[tableName] === "undefined"
-						? setInfoQuestionsData[tableName].value
-						: value[tableName]}
-					alternateChangeHandler={this.setInfoChangeHandler} />
-				: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected or the number of sampling points has not been filled out</Typography></Paper>
-			}
-
-
-			{/* analyzedFor multiple choice */}
-			{sedimentType  //redundant check
-				? <Question {...setInfoQuestionsData[analysedForName]}
-					id={analysedForName}
-					key={realAnalysedForName}
-					value={typeof value[analysedForName] === "undefined"
-						? setInfoQuestionsData[analysedForName].value
-						: value[analysedForName]}
-					alternateChangeHandler={this.setInfoChangeHandler} />
-				: <Paper><Typography align='center'>'Analysed For' options unavailable when sediment type not selected</Typography></Paper>
-			}
-
-		</React.Fragment>
+			<Grid container spacing={3}>
+				<Grid item xs={12} sm={8}>
+					{/* Data table  */}
+					{samplingMethod && this.state.showDataTable
+						// {samplingMethod && Object.keys(this.props.value).includes("samplesTable_"+getMethodCategoryFromValue(this.props.samplingMethod) + "_" + this.props.sedimentType) 
+						? <Question {...setInfoQuestionsData[tableName]}
+							id={tableName}
+							key={realTableName}
+							value={typeof value[tableName] === "undefined"
+								? setInfoQuestionsData[tableName].value
+								: value[tableName]}
+							alternateChangeHandler={this.setInfoChangeHandler} />
+						: <Paper><Typography align='center'>Data Table unavailable when sampling method not selected or the number of sampling points has not been filled out</Typography></Paper>
+					}
+				</Grid>
+				<Grid item xs={12} sm={4} style={{alignText:'center'}}>
+				{/* analyzedFor multiple choice */}
+				{sedimentType  //redundant check
+					? <Question {...setInfoQuestionsData[analysedForName]}
+						id={analysedForName}
+						key={realAnalysedForName}
+						value={typeof value[analysedForName] === "undefined"
+							? setInfoQuestionsData[analysedForName].value
+							: value[analysedForName]}
+						alternateChangeHandler={this.setInfoChangeHandler} />
+					: <Paper><Typography align='center'>'Analysed For' options unavailable when sediment type not selected</Typography></Paper>
+				}
+			</Grid>
+			</Grid>
+		</React.Fragment >
 
 	}
 }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Switch from '@material-ui/core/Switch';
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -12,7 +13,20 @@ import { SEQuestionValueChange } from '../../Actions/SamplingEvents'
 //all other items (options, selects, etc) are pulled from props. //TODO: ensure this is true for all types.
 
 const styles = theme => ({
-
+	root: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		marginLeft: 0
+	  },
+	  formControl: {
+		marginLeft: 0,
+		// display: 'inline',
+		// height: "1.1875em",
+		// wrap: 'nowrap',
+		// backgroundColor: '#8f8',
+		textAlign: 'center',
+		justifyContent: 'center'
+	}
 });
 
 class Toggle extends React.Component {
@@ -36,12 +50,13 @@ class Toggle extends React.Component {
 
 	render() {
 		// let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
-		// const { classes } = this.props;
+		const { classes } = this.props;
 		// var realPlaceholder = this.props.placeholder ? this.props.placeholder : this.props.XMLTag; 
 		let controlElement;
 
 		if (this.props.checkbox === true) {
 			controlElement = <Checkbox
+			
 				key={this.props.id}
 				id={this.props.id}
 				checked={this.props.value?true:false}
@@ -59,11 +74,13 @@ class Toggle extends React.Component {
 		}
 
 		if (this.props.label != null) {
-			return <FormControlLabel
+			return <FormControl className={classes.formControl}>
+				<FormControlLabel
+				style={{marginLeft: 0}}
 				key={this.props.id + "_FormControlLabel"}
 				control={controlElement}
 				label={this.props.label}
-			/>
+			/></FormControl>
 		} else {
 			return controlElement;
 		}
