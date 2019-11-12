@@ -17,11 +17,13 @@ export function StationsLinkTables(state = initialState, action) {
 			if (!newState[action.username]) {
 				newState[action.username] = {username: action.username, stations: []}
 			}
-			newState[action.username].stations.push(action.stationID); // push acceptable on clone //FIXME: fails if user doesn't exist in list
+			newState[action.username].stations.push(action.stationID); 
+			newState[action.username].dateModified = new Date().toString();
 			return newState;
 		case REMOVE_STATION_FROM_USERNAME:
 			newState[action.username].stations = newState[action.username].stations.filter((linkedStationID) => linkedStationID !== action.stationIDToRemove);
-			//TODO: actually deleting the station, not just the link - optionally looking at the network and other users.
+			newState[action.username].dateModified = new Date().toString();
+			//TODO: actually deleting the station, not just the link - optionally looking at the network and other users/events to see if station is still used...
 			return newState;
 		// case INVALIDATE_LINK_TABLE:
 		// 	newState[action.tableName][action.username].didInvalidate = true;

@@ -19,11 +19,11 @@ export function Stations(state = initialStations, action) {
 			return newState;
 		case ADD_QUESTION_TO_STATION:
 			newState[action.stationID].questionsData[action.question.id] = action.question;
-			newState[action.stationID].dateModified = new Date();
+			newState[action.stationID].dateModified = new Date().toString();
 			return newState;
 		case DELETE_QUESTION_FROM_STATION:
 			delete newState[action.stationID].questionsData[action.QID];
-			newState[action.stationID].dateModified = new Date();
+			newState[action.stationID].dateModified = new Date().toString();
 			return newState;
 		case STATION_PUSH:
 		case STATION_PUSH_COMPLETE:

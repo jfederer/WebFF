@@ -16,10 +16,12 @@ export function SamplingEventsLinkTables(state = initialState, action) {
 			if (!newState[action.username]) {
 				newState[action.username] = {username: action.username, events: []}
 			}
-			newState[action.username].events.push(action.eventID); // push acceptable on clone  //FIXME: fails if user doesn't exist in list
+			newState[action.username].events.push(action.eventID); // push acceptable on clone
+			newState[action.username].dateModified = new Date().toString();
 			return newState;
 
-		// case INVALIDATE_LINK_TABLE:
+			
+			// case INVALIDATE_LINK_TABLE:
 		// 	newState[action.tableName][action.username].didInvalidate = true;
 		// 	return newState;
 		// case REQUEST_LINK_TABLE: //needs to be called for each table name type
