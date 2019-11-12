@@ -8,7 +8,8 @@ import {
 	SE_QUESTION_VALUE_DELETE,
 	SAMPLING_EVENT_BANK_CHANGE,
 	SAMPLING_EVENT_SET,
-	SAMPLING_EVENTS_LINK_TABLE_SET
+	SAMPLING_EVENTS_LINK_TABLE_SET,
+	REMOVE_EVENT_FROM_USERNAME
 } from '../Constants/ActionTypes';
 
 import { emptySamplingEvent } from '../Constants/DefaultObjects';
@@ -224,6 +225,14 @@ export function ingestSamplingEventsLinkTable(samplingEventsLinkTable) {
 			});
 			resolve();
 		});
+	}
+}
+
+export function removeEventFromUsername(eventIDToRemove, username) {
+	return { 
+		type: REMOVE_EVENT_FROM_USERNAME,
+		eventIDToRemove,
+		username
 	}
 }
 

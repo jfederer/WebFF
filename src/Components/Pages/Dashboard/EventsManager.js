@@ -14,11 +14,13 @@ import { withRouter } from 'react-router-dom';
 import MUIDataTable from "mui-datatables";
 
 import { loadAndSetCurrentSamplingEvent } from "../../../Actions/SedFF";
+import { removeEventFromUsername } from "../../../Actions/SamplingEvents";
 import { showNavigationTab } from "../../../Actions/UI";
 import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import Button from '@material-ui/core/Button';
-import { AvVolumeDown } from 'material-ui/svg-icons';
+
+const EVENT_ID_COLUMN = 0;  // column in the data where eventID resides
 
 const columns = [
 	{
@@ -83,11 +85,12 @@ class EventsManager extends React.Component {
 			onRowsSelect: this.onRowsSelect,
 			onCellClick: (colData, cellMeta) => {
 				if (cellMeta.colIndex !== 6) {
-					this.props.loadAndSetCurrentSamplingEvent(this.getDataTable()[cellMeta.dataIndex][0], () => { // zero is the column number of the eventID
+					this.props.loadAndSetCurrentSamplingEvent(this.getDataTable()[cellMeta.dataIndex][EVENT_ID_COLUMN], () => { 
 						this.setState({ toFieldForm: true, selectedEventIndex: cellMeta.dataIndex });
 					})
 				}
-			}
+			},
+			onRowsDelete: this.onRowsDelete
 		};
 	}
 
@@ -146,6 +149,18 @@ class EventsManager extends React.Component {
 		return data;
 	}
 
+	//rowsDeleted: object(lookup: {[dataIndex]: boolean}, data: arrayOfObjects: {index: number, dataIndex: number})
+
+	onRowsDelete = (rowsDeleted) => {
+		console.log('rowsDeleted :', rowsDeleted);
+		rowsDeleted.data.forEach(indexObj => {
+			console.log(" indexObj.dataIndex", indexObj.dataIndex)
+			let eventIDToRemove = this.getDataTable()[indexObj.dataIndex][EVENT_ID_COLUMN];
+			console.log('eventIDToRemove :', eventIDToRemove);
+			this.props.removeEventFromUsername(eventIDToRemove, this.props.currentUser.username);
+		})
+
+	}
 
 	componentWillUnmount() {
 		this.setState(initialState);
@@ -182,7 +197,8 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	loadAndSetCurrentSamplingEvent,
-	showNavigationTab
+	showNavigationTab,
+	removeEventFromUsername
 }
 
 EventsManager.propTypes = {
