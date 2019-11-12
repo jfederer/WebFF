@@ -85,6 +85,10 @@ class WebFF extends React.Component {
 	//TODO: date modified on all stations, linkTables, events, user modifications
 	//TODO: add checks for uploads/downloads on all stations/links/events/user
 
+
+	//LOOKS
+	//scrollbars on export dialog
+
 	//BUGS: 
 	//MAke event (event1) using staton1 ... at some point outside that event, remove station1 ... when going back to event1, the station will switch to next available in list
 	//Remove currently-active station in event using dialog.
@@ -96,6 +100,7 @@ class WebFF extends React.Component {
 	//BUG: USER_STATIONS_LIST_LOAD_COMPLETE fires (adn presumably the similar event function) before the inside of the promise -- learn about nested promises  (non-user-affecting at this point)
 	//BUG: when current event is deleted, should reset nav...
 	//BUG: SAMPLING_EVENT_BANK_CHANGE triggered on any input within WWI question...  shouldn't. ;)
+	//BUG: reset export dialog on leaving...
 	
 	//TEST:
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)

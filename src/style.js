@@ -1,4 +1,7 @@
+import {baseSpacing} from './Constants/Config';
+
 const drawerWidth = 180;
+
 
 export const styles = theme => ({
 	root: {
@@ -63,9 +66,9 @@ export const styles = theme => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
 		}),
-		width: theme.spacing.unit * 7,
+		width: baseSpacing * 7,
 		[theme.breakpoints.up('sm')]: {
-			width: theme.spacing.unit * 9,
+			width: baseSpacing * 20,
 		},
 	},
 	toolbar: {
@@ -84,7 +87,7 @@ export const styles = theme => ({
 	content: {
 		flexGrow: 1,
 		backgroundColor: theme.palette.background.default,
-		padding: theme.spacing.unit * 3,
+		padding: baseSpacing * 3,
 	},
 	errorPage: {
 		margin: '0 auto',
@@ -92,11 +95,11 @@ export const styles = theme => ({
 		textAlign: 'center'
 	},
 	formControl: {
-		margin: theme.spacing.unit,
+		margin: baseSpacing,
 		minWidth: 120,
 	},
 	selectEmpty: {
-		marginTop: theme.spacing.unit * 2,
+		marginTop: baseSpacing * 2,
 	},
 	settingsTextField: {
 		marginLeft: "16px",

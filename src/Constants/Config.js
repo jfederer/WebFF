@@ -42,6 +42,8 @@ export const DEFAULT_BACKUP_INTERVAL = 300;
 
 export const PROGRAM_VERSION = "0.6.0";
 
+export const baseSpacing = 3;
+
 export const IET_REQUIRING_SAMPLER_TYPE_VALUES = ['3055', '3056', '3057', '3058'];
 
 //DB collection names...

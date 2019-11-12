@@ -375,7 +375,7 @@ export const getColumnNumberFromTableHeader = (tableValue, headerToSearchFor) =>
 export const getGridedQuestions = (questions) => {
 	return <Grid
 		container
-		spacing={10}
+		spacing={1}
 		alignItems='baseline'
 		alignContent='center'
 		// justify='space-around' 

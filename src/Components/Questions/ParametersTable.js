@@ -35,7 +35,7 @@ import _ from 'lodash';
 const styles = theme => ({
 	root: {
 		width: '100%',
-		marginTop: theme.spacing.unit * 3,
+		marginTop: 1,
 		overflowX: 'auto',
 	},
 	table: {
