@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import Hidden from '@material-ui/core/Hidden';
+import { connect } from 'react-redux';
 
 import Text from './Questions/Text';
 import DropDown from './Questions/DropDown';
@@ -147,9 +148,9 @@ class Question extends React.Component {
 
 		let withPaper = <Paper>{this.buildQuestion()}</Paper>;
 
-		if(this.props.globalState && this.props.globalState.usePaper!=null && !this.props.globalState.usePaper) { 
-			withPaper = rawQuestion;
-		} 
+		// if(!this.props.outlineQuestions) {   //TODO: remove paper... note that it messes up the size of the question components... likely a paper css
+		// 	withPaper = rawQuestion;
+		// } 
 
 		let withToolTip = withPaper;
 		if (tooltip != null) {
@@ -186,4 +187,14 @@ class Question extends React.Component {
 
 	};
 
-	export default withStyles(styles)(Question);
+	
+const mapStateToProps = function (state) {
+	return {
+		outlineQuestions: state.UI.outlineQuestions
+	}
+}
+
+const mapDispatchToProps = {
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Question));

@@ -82,15 +82,16 @@ class WebFF extends React.Component {
 	//BREAKING:
 	//TODO: webserver, network loads
 	//TODO: push event to sedlogin
-	//TODO: date modified on all stations, linkTables, events, user modifications
 	//TODO: add checks for uploads/downloads on all stations/links/events/user
-
+	
 
 	//LOOKS
 	//scrollbars on export dialog
 	//parameters page - less buffer, larger value
 	// set multichoice
 	// add set form
+	//TOOD: center within question
+	// piers
 
 	//BUGS: 
 	//MAke event (event1) using staton1 ... at some point outside that event, remove station1 ... when going back to event1, the station will switch to next available in list

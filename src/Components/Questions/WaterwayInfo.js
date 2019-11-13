@@ -122,7 +122,8 @@ class WaterwayInfo extends React.Component {
 		return <React.Fragment>
 			{getGridedQuestions(createQuestionComponents(this.state.basicQuestions,
 				this.props.value,
-				this.WWIChangeHandler))}
+				this.WWIChangeHandler,
+				{props: {outlineQuestions: this.props.outlineQuestions}}))}
 
 			{/* TODO: build pier question type and have better/combined look */}
 
@@ -141,7 +142,8 @@ class WaterwayInfo extends React.Component {
 const mapStateToProps = function (state) {
 	return {
 		currentSamplingEventID: state.SedFF.currentSamplingEventID,
-		currentEvent: state.SedFF[state.SedFF.currentSamplingEventID]
+		currentEvent: state.SedFF[state.SedFF.currentSamplingEventID],
+		outlineQuestions: state.UI.outlineQuestions
 	}
 }
 

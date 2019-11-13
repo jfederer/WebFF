@@ -10,6 +10,7 @@ import {
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
 	SET_APP_BAR_TEXT,
+	SET_OUTLINE_QUESTIONS,
 	SHOW_PANELS,
 	HIDE_PANELS,
 	SHOW_NAVIGATION_TABS,
@@ -88,6 +89,9 @@ export function UI(state = initialUIState, action) {
 			let panelsToHide = action.payload.map((panelsArr) => panelsArr[0].replace(/\s/g,''));
 			newState.visibility.hiddenPanels = newState.visibility.hiddenPanels.concat(panelsToHide);
 			break;
+			case SET_OUTLINE_QUESTIONS:
+				newState.outlineQuestions = action.useOutlineQuestions;
+				//TODO: run through settings in user to apply in UI
 		default:
 			return state
 	}

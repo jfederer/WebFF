@@ -33,7 +33,7 @@ const styles = theme => ({
 		wrap: 'nowrap'
 	},
 	select: {
-		minWidth:"200px",
+		minWidth:"100px",
 		backgroundColor: '#eee',
 	}
 });
