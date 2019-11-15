@@ -139,6 +139,7 @@ function fetchStation(stationID) {
 ////////////////////// PULL FUNCTIONS //////////////////////////
 ////////////////////////////////////////////////////////////////
 export function loadAllUserEventsFromDB(username) {
+	console.log('loadAllUserEventsFromDB(', username, ")");
 	return (dispatch, getState) => {
 		dispatch(requestUserEvents(username));
 		dispatch(requestSamplingEventsLinkTable(username));
@@ -449,13 +450,12 @@ export function userDataAcquire(username) {
 				fetchDBInfo({ key: "username", value: username },
 					USERS_COLLECTION_NAME,
 					(dbResponse) => {  // success callback
-						console.log("Success callback");
 						if (Array.isArray(dbResponse) && dbResponse.length === 1) {
 							let dispatchResp = dispatch(userDataIngest(dbResponse[0]));
-							console.log('dispatchResp', dispatchResp)
+							console.log('dispatchResp: ', dispatchResp);
 							resolve(true);
 						} else {
-							console.log("dbResponse did not return exactly one user");
+							console.warn("dbResponse did not return exactly one user");
 							reject(false);
 						}
 					},

@@ -58,6 +58,7 @@ class AddSetForm extends React.Component {
 	}
 
 	handleAddSetNameChange = (e) => {
+		console.log("handle ");
 		// various characters are not allowed due to being special delinators
 		if (e.target.value.match(DISALLOWED_CHARACTERS_IN_SETNAME_REGEX)) {
 			return;

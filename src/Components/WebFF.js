@@ -226,7 +226,15 @@ class WebFF extends React.Component {
 
 		if (isReasonableUsername(this.props.sedff.currentUsername)) {
 			console.log(this.props.sedff.currentUsername + "is logged in");
-			this.props.loadAndSetCurrentUser(this.props.sedff.currentUsername);
+			this.props.loadAndSetCurrentUser(this.props.sedff.currentUsername)
+			.then(res=>{
+				console.log("WebFF res: " + res)
+				return "HI";
+			});
+			// this.props.loadAllUserEventsFromDB(this.props.sedff.currentUsername);
+			// })
+			// .catch(res => console.log("Webff catch: " + res));
+				// loadAllUserStationsFromDB,);
 			// this.gatherUserConfig(USER_DB_NODES); // after setting loggedInUser, load user configuration);
 		} else {
 			console.log("No one is logged in... requesting user id");
@@ -335,7 +343,7 @@ class WebFF extends React.Component {
 					</div >
 				</React.Fragment>
 
-				<button onClick={this.doTestPull}>TEST PULL</button>
+				{/* <button onClick={this.doTestPull}>TEST PULL</button>
 				<button onClick={this.usrMod}>INT to 300</button>
 				<button onClick={this.doTestPush}>TEST PUSH</button>
 				<button onClick={this.doTestPushUser}>TEST PUSH USER</button>
@@ -359,7 +367,7 @@ class WebFF extends React.Component {
 				<br>
 				</br>	
 				<br>
-				</br>	
+				</br>	 */}
 			</React.Fragment>
 
 		);

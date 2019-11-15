@@ -27,23 +27,28 @@ import { userDataAcquire } from './DB';
 
 export function loadAndSetCurrentUser(username) {
 	return (dispatch, getState) => {
-		dispatch(userDataRequest(username));
+		return new Promise((resolve, reject) => {
+			dispatch(userDataRequest(username));
 
 
-		dispatch(userDataAcquire(username))
-			.then(
-				() => {
-					dispatch(setCurrentUsername(username));
-					dispatch(userDataLoadComplete());
-					//TODO: will need to fire off event loading, etc...
-				}, () => {
-					console.log("Unable to acquire user data... making new user.");
-					dispatch(makeNewUser(username));
-					dispatch(setCurrentUsername(username));
-					dispatch(userDataLoadComplete());
-					//TODO: modal dialog indicating could overwrite old user data
-				}
-			);
+			dispatch(userDataAcquire(username))
+				.then(
+					() => { // user data acquire resolve
+						console.log("then1")
+						dispatch(setCurrentUsername(username));
+						dispatch(userDataLoadComplete());
+						// resolve(username);
+					}, () => { // user data acquire reject
+						console.log("Unable to acquire user data... making new user.");
+						dispatch(makeNewUser(username));
+						dispatch(setCurrentUsername(username));
+						dispatch(userDataLoadComplete());
+						// resolve(username);
+						//TODO: modal dialog indicating could overwrite old user data
+					}
+				).catch(res => console.log("catch: ", res));
+		}
+		)
 	}
 }
 

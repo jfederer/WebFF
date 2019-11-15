@@ -322,11 +322,16 @@ export const defaultSetInformationQuestionsData = {
 			[ANALYSE_TEXT_FO]: "FO"
 		},
 		"value": {
-			[ANALYSE_TEXT_SF]: false,
-			[ANALYSE_TEXT_SA]: false,
-			[ANALYSE_TEXT_LOI]: false,
-			[ANALYSE_TEXT_Z]: false,
-			[ANALYSE_TEXT_FO]: false
+			"SF": false,
+			"SA": false,
+			"LOI": false,
+			"Z": false,
+			"FO": false
+			// [ANALYSE_TEXT_SF]: false,
+			// [ANALYSE_TEXT_SA]: false,
+			// [ANALYSE_TEXT_LOI]: false,
+			// [ANALYSE_TEXT_Z]: false,
+			// [ANALYSE_TEXT_FO]: false
 		},
 		"width_xs": 2,
 		"width_lg": 2
@@ -347,12 +352,18 @@ export const defaultSetInformationQuestionsData = {
 			[ANALYSE_TEXT_Z + "*"]: "Z"
 		},
 		"value": {
-			[ANALYSE_TEXT_SF]: false,
-			[ANALYSE_TEXT_FO]: false,
-			[ANALYSE_TEXT_SA]: false,
-			[ANALYSE_TEXT_LOI]: false,
-			[ANALYSE_TEXT_BD]: false,
-			[ANALYSE_TEXT_Z]: false
+			"SF": false,
+			"FO": false,
+			"SA": false,
+			"LOI": false,
+			"BD": false,
+			"Z": false
+			// [ANALYSE_TEXT_SF]: false,
+			// [ANALYSE_TEXT_FO]: false,
+			// [ANALYSE_TEXT_SA]: false,
+			// [ANALYSE_TEXT_LOI]: false,
+			// [ANALYSE_TEXT_BD]: false,
+			// [ANALYSE_TEXT_Z]: false
 		},
 		"width_xs": 2,
 		"width_lg": 2
