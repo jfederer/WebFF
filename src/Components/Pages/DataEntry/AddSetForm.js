@@ -17,6 +17,7 @@ import { SEQuestionValueChange } from '../../../Actions/SamplingEvents';
 import { getQuestionValue } from '../../../Utils/QuestionUtilities';
 import { getSetListAsArray, getSetListAsObject } from '../../../Utils/StoreUtilities';
 import { getSetInformationQuestionsData } from '../../../Utils/StoreUtilities';
+import { TextField } from 'material-ui';
 
 
 class AddSetForm extends React.Component {
@@ -57,24 +58,24 @@ class AddSetForm extends React.Component {
 		return filteredSetList.length === 0;
 	}
 
-	handleAddSetNameChange = (e) => {
-		console.log("handle ");
+	handleAddSetNameChange = (eventID, QID, value) => {
+		console.log("handle (", eventID, QID, value, ")");
 		// various characters are not allowed due to being special delinators
-		if (e.target.value.match(DISALLOWED_CHARACTERS_IN_SETNAME_REGEX)) {
+		if (value.match(DISALLOWED_CHARACTERS_IN_SETNAME_REGEX)) {
 			return;
 		}
 
 		// filter out duplicate setnames and disable add set button if it's a duplicate
-		if (this.isSetNameUnique(e.target.value)) {
+		if (this.isSetNameUnique(value)) {
 			this.setState({
 				addNewSetButtonDisabled: false,
-				newSetName: e.target.value
+				newSetName: value
 			})
 		} else {
 			this.setState({
 				addNewSetButtonDisabled: true,
 				addNewSetDisabledReason: "Set name must be unique",
-				newSetName: e.target.value
+				newSetName: value
 			})
 			return;
 		}
@@ -226,7 +227,11 @@ class AddSetForm extends React.Component {
 						label="New Set Name (optional)"
 						placeholder="New Set Name"
 						margin="normal"
-						onChange={this.handleAddSetNameChange}
+						// onChange={(e) => {
+						// 	console.log("onchange: ", e.target.value);
+						// 	this.handleAddSetNameChange(e);
+						// }}
+						alternateChangeHandler={this.handleAddSetNameChange}
 						value={this.state.newSetName}
 					/>
 				</Grid>
