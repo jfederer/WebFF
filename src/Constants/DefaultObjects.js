@@ -133,11 +133,6 @@ export const defaultSetInformationQuestionsData = {
 		"value": false,
 		"width_xs": 4,
 		"width_lg": 3,
-		"actions":
-		{
-			"true": "HideQuestion::showSetB&SetValue::setA_samplesComposited:false",  //TODO: likely doesn't do what needs to be done here (set value likels works, but science side?)
-			"false": "ShowQuestion::showSetB"
-		}
 	},
 
 	["samplesTable_EDI_" + BEDLOAD_TEXT]: {

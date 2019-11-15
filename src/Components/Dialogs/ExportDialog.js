@@ -62,8 +62,9 @@ class ExportDialog extends React.Component {
 	}
 
 	onEnter = () => {
-		console.log('this.props.sedLOGINUsername', this.props.sedLOGINUsername)
-		this.setState({ sedLOGINUsername: this.props.sedLOGINUsername });
+
+		this.setState(initialState, this.setState({ sedLOGINUsername: this.props.sedLOGINUsername }));
+
 	}
 
 	saveXML() {
@@ -134,14 +135,14 @@ class ExportDialog extends React.Component {
 
 	pushToSedLOGINClickHandler = () => {
 
-		this.setState({ showSedLOGINQs: true })
+		this.setState({ showSedLOGINQuestions: true })
 	}
 
 
 
 	sedLoginSubmitHandler = () => {
 		this.setState({ showStatus: true });
-		this.setState({ showSedLOGINQs: false })
+		this.setState({ showSedLOGINQuestions: false })
 		this.pushXMLToSedLOGIN(this.state.SedLOGINprojectID, this.state.sedLOGINUsername, this.state.pw);
 	}
 
@@ -164,23 +165,23 @@ class ExportDialog extends React.Component {
 
 
 	closeHandler = () => {
-		// 	this.props.handleXMLDialogClose(() => {
-		// 		setTimeout(() => {
-		// 			this.setState({
-		// 				showStatus: false,
-		// 				statusMessage: "",
-		// 				showSedLOGINQs: false
-		// 			});
-		// 		}, 250);
-
-		// 	});
-		// }
-		this.props.setExportDialogVisibility(false);
+		// this.props.handleXMLDialogClose(() => {
+			// setTimeout(() => {
+			// this.setState({
+			// 	showStatus: false,
+			// 	statusMessage: "",
+			// 	showSedLOGINQuestions: false
+			// }, () => this.props.setExportDialogVisibility(false));
+			// },
+			 this.props.setExportDialogVisibility(false);
+			// }, 250);
+		// });
 	}
+
 
 	render() {
 		const { classes, exportDialogVisibility, currentSamplingEventID } = this.props;
-
+		// console.log('this.state', this.state)
 		return (
 			<Dialog
 				open={exportDialogVisibility}
@@ -191,35 +192,23 @@ class ExportDialog extends React.Component {
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
 				<DialogTitle id="form-dialog-title">Save SedLOGIN-compatible XML</DialogTitle>
-				{!currentSamplingEventID 
+				{!currentSamplingEventID
 					? <DialogContent>
 						<DialogContentText>
-						You must have a sampling event loaded to export an event
+							You must have a sampling event loaded to export an event
             			</DialogContentText>
-						</DialogContent>
+					</DialogContent>
 					: <DialogContent>
 
-						<Grid justify="space-around" container spacing={10}>
+						<Grid justify="space-around" container spacing={2}>
 							<Grid item xs={12}>
-								<DialogContentText>
+							{!this.state.showSedLOGINQuestions 
+							? <DialogContentText>
 									Save the current event to your computer, or directly upload it to SedLOGIN
             				</DialogContentText>
+							: null }
 							</Grid>
-							<Grid item xs={4} >
-								<Paper style={{ height: '90%' }} className={classes.paper}>
-									<Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button>
-								</Paper>
-							</Grid>
-							<Grid item xs={4} >
-								<Paper style={{ height: '90%' }} className={classes.paper}>
-									<Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button>
-								</Paper>
-							</Grid>
-							<Grid item xs={4} >
-								<Paper style={{ height: '90%' }} className={classes.paper}>
-									<Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button>
-								</Paper>
-							</Grid>
+
 
 							{this.state.showStatus ? <Grid item xs={12}>
 								<Paper className={classes.paper}>
@@ -235,11 +224,28 @@ class ExportDialog extends React.Component {
 								</Paper>
 							</Grid> : null}
 
-							{this.state.showSedLOGINQs ?
+							{!this.state.showSedLOGINQuestions
+								? <React.Fragment><Grid item xs={4} >
+									<Paper style={{ height: '90%' }} className={classes.paper}>
+										<Button style={{ height: '100%' }} onClick={this.saveAllXML}>Save All Event Data to XML file</Button>
+									</Paper>
+								</Grid>
+									<Grid item xs={4} >
+										<Paper style={{ height: '90%' }} className={classes.paper}>
+											<Button style={{ height: '100%' }} onClick={this.saveXML}>Save SedLOGIN-compatible XML file</Button>
+										</Paper>
+									</Grid>
+									<Grid item xs={4} >
+										<Paper style={{ height: '90%' }} className={classes.paper}>
+											<Button style={{ height: '100%' }} onClick={this.pushToSedLOGINClickHandler}>Push event to SedLOGIN</Button>
+										</Paper>
+									</Grid>
+								</React.Fragment>
+								:
 								<React.Fragment>
 									<Divider></Divider>
 									<Grid item xs={12}><Typography>Enter the SedLOGIN Project ID, Username, and Password.<br />The Username/Password will typically be the same as your active directory login.</Typography></Grid>
-									<Grid item xs={3}>
+									<Grid item xs={4}>
 										<TextField
 											margin="dense"
 											id="sedLOGINProjectID"
@@ -249,7 +255,7 @@ class ExportDialog extends React.Component {
 											value={this.state.SedLOGINprojectID}
 										/>
 									</Grid>
-									<Grid item xs={5}>
+									<Grid item xs={4}>
 										<TextField
 											margin="dense"
 											id="sedLOGINUsername"
@@ -278,7 +284,7 @@ class ExportDialog extends React.Component {
 										>Submit to SedLOGIN</Button>
 									</Grid>
 								</React.Fragment>
-								: null}
+							}
 
 						</Grid>
 
@@ -286,30 +292,30 @@ class ExportDialog extends React.Component {
 
 					</DialogContent>
 				}
-					<DialogActions>
-						<Button onClick={this.closeHandler} color="primary">
-							Done
+				<DialogActions>
+					<Button onClick={this.closeHandler} color="primary">
+						Done
             </Button>
-					</DialogActions>
+				</DialogActions>
 			</Dialog>
-			);
-		}
+		);
 	}
-	
+}
+
 const mapStateToProps = function (state) {
 	return {
-					exportDialogVisibility: state.UI.visibility.exportDialogVisibility,
-				sedLOGINUsername: state.Users[state.SedFF.currentUsername] ? state.Users[state.SedFF.currentUsername].sedLoginUsername : "",
-				currentSamplingEventID: state.SedFF.currentSamplingEventID
-			}
-		}
-		
+		exportDialogVisibility: state.UI.visibility.exportDialogVisibility,
+		sedLOGINUsername: state.Users[state.SedFF.currentUsername] ? state.Users[state.SedFF.currentUsername].sedLoginUsername : "",
+		currentSamplingEventID: state.SedFF.currentSamplingEventID
+	}
+}
+
 const mapDispatchToProps = {
-					setExportDialogVisibility: setExportDialogVisibility,
-			}
-			
+	setExportDialogVisibility: setExportDialogVisibility,
+}
+
 ExportDialog.propTypes = {
-					classes: PropTypes.object.isRequired
-			};
-			
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, {withTheme: true })(ExportDialog));
+	classes: PropTypes.object.isRequired
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(ExportDialog));

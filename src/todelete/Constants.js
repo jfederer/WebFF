@@ -4,7 +4,7 @@ export const USER_DB_NODES = ['stations', 'customQuestions'];   //TODO: create a
 
 export const SAMPLING_EVENT_IDENTIFIER = "SamplingEvent::";
 
-export const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TODO: need to ensure no custom questions include these 
+// export const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TODO: need to ensure no custom questions include these 
 
 export const MAX_NUM_OF_SETS = 3;
 

@@ -22,8 +22,6 @@ export const DATA_ENTRY_SHEET_TYPE = "DATA_ENTRY_SHEET_TYPE";
 
 export const DATA_ENTRY_SAMPLES_TABLE_STATIONING_COLUMN_NUMBER = 0;
 
-// export const QUESTION_ID_STRINGS_THAT_FORCE_PROPAGATION = ["numberOfSamplingPoints", "samplesComposited", "pier", "edgeOfSamplingZone"];  //TODO: need to ensure no custom questions include these 
-
 export const QIDS_LINKED_TO_STATION_NAME = ["stationNumber", "projectName", "projectID", "agencyCode"];
 
 export const DEFAULT_HIDDEN_NAVIGATION_TABS = ["FieldForm", "DataEntry", "Parameters", "QWDATA"];

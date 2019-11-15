@@ -165,7 +165,8 @@ export function createNewSamplingEvent(eventName) {
 
 
 		// find all questions with actual default 'values' in questionsData and include those in the new event
-		let GQD = getQuestionsData(null);
+		let GQD = getQuestionsData(null);  //TODO: need to avoid adding sub-questions (from data-entry, for example) to the top level
+		console.log('GQD', GQD);
 		let filtered = _.filter(GQD, (QD) => {//TODO: could we use newEvent.eventID
 			if (typeof QD.value === 'undefined') { // undefined gets filtered out
 				return false;
@@ -188,7 +189,8 @@ export function createNewSamplingEvent(eventName) {
 		}
 		);
 
-		Object.keys(filtered).forEach((key) => {
+		Object.keys(filtered).forEach((key) => {  //this is already an array.... TODO: just move this to a normal forEach... not doing it before demo
+			
 			newEvent['questionsValues'][filtered[key].id] = filtered[key].value;
 		}
 		);

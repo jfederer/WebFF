@@ -98,6 +98,10 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		// if (typeof this.state.newStation_stationNumber === 'undefined' || this.state.newStation_stationNumber === "") {
 		// 	return "New station requires a station number before it can be added.";
 		// }
+		if(!this.state.newEventTemplateName) {
+			return "Must enter a template name";
+		}
+
 		if(!this.state.fromEventID) {
 			return "Must select an event to use as template";
 		}
@@ -114,10 +118,14 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		console.log("state: ", this.state);
 
 		let selectedItemsForTemplate = Object.keys(this.state).filter(key => key.startsWith(this.state.fromEventID) && this.state[key]===true);
-		console.log('selectedItemsForTemplate', selectedItemsForTemplate)
+		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
 		selectedItemsForTemplate.forEach((item, index) => selectedItemsForTemplate[index] = item.split(EVENT_KEY_SPLITTER)[1] );
-		console.log('selectedItemsForTemplate', selectedItemsForTemplate)
-		
+		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
+
+		let templateQuestionValuesObj  = {};
+		selectedItemsForTemplate.forEach(QID => templateQuestionValuesObj[QID] = getQuestionValue(this.state.fromEventID, QID));
+		console.log('templateQuestionValuesObj', templateQuestionValuesObj)
+
 		//create station object
 		// remember to make any changes here reflect in stationNameChanged function
 		let newEventTemplate = {
@@ -166,6 +174,13 @@ class AddRemoveEventTemplateDialog extends React.Component {
 	}
 
 
+	shortDate = (dateObj) => {
+		
+		let monthName = dateObj.toLocaleString('en-us', { month: 'long' });
+		let dd = String(dateObj.getDate()).padStart(2, '0');
+		let yyyy = dateObj.getFullYear();
+		return monthName + " " + dd + ", " + yyyy + " @ " + dateObj.getTime();
+	}
 
 
 	dialogCloseHandler = () => {
@@ -175,12 +190,12 @@ class AddRemoveEventTemplateDialog extends React.Component {
 	getEventsAsObject = (eventIDs) => {
 		let retObj = {};
 		eventIDs.forEach(eventID => {
-			let evtName = getEventFromID(eventID).eventName;  //TODO: do this better
-			let evtEntry = 1;
+			let evt = getEventFromID(eventID);
+			let evtName = evt.eventName;
 			if(retObj[evtName]) {
-				evtName = evtName + "(" + (evtEntry+1) + ")";
+				evtName = evtName + "( last modified " + new Date(evt.dateModified).toString() + ")";
+				// evtName = evtName + "( last modified " + this.shortDate(new Date(evt.dateModified)) + ")";
 			}
-		
 			retObj[evtName] = eventID;
 		})
 		return retObj;
@@ -188,9 +203,10 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 	render() {
 		const { classes, addRemoveEventTemplateDialogVisibility } = this.props;
-
+		console.log('this.props', this.props)
 
 		return (
+			
 			<Dialog
 				open={addRemoveEventTemplateDialogVisibility}
 				onClose={this.dialogCloseHandler}

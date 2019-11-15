@@ -141,11 +141,12 @@ class Question extends React.Component {
 
 	render() {
 		
+		// console.log('this.props.outlineQuestions', this.props.outlineQuestions)
 		let tooltip = this.props.helperText ? this.props.helperText : this.props.XMLTag;
 
 		//FUTURE: Let's build the question as needed rather than re-render every time?  (right now, the entire question gets rebuilt upon a single keypress)
 		let rawQuestion = this.buildQuestion();
-
+		
 		let withPaper = <Paper>{this.buildQuestion()}</Paper>;
 
 		// if(!this.props.outlineQuestions) {   //TODO: remove paper... note that it messes up the size of the question components... likely a paper css
@@ -154,7 +155,9 @@ class Question extends React.Component {
 
 		let withToolTip = withPaper;
 		if (tooltip != null) {
-			withToolTip = <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>{withPaper}</Tooltip>
+			withToolTip = <Tooltip title={tooltip} enterDelay={500} leaveDelay={200}>
+				{this.props.outlineQuestions ? withPaper : rawQuestion}
+				</Tooltip>
 		//	console.log("Adding tooltip: ", tooltip, "for question: ", this.props.label);
 			
 		}
@@ -190,7 +193,8 @@ class Question extends React.Component {
 	
 const mapStateToProps = function (state) {
 	return {
-		outlineQuestions: state.UI.outlineQuestions
+		// currentUser = state.SedFF.cure
+		outlineQuestions: state.Users[state.SedFF.currentUsername].settings.outlineQuestions
 	}
 }
 
