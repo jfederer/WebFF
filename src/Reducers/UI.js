@@ -9,6 +9,7 @@ import {
 	SET_SETTINGS_DIALOG_VISIBILITY,
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
+	SET_ADD_REMOVE_TEMPLATE_DIALOG_VISIBILITY,
 	SET_APP_BAR_TEXT,
 	SET_OUTLINE_QUESTIONS,
 	SHOW_PANELS,
@@ -33,7 +34,8 @@ const initialUIState = {
 		addRemoveQuestionDialogVisibility: false,
 		settingsDialogVisibility: false,
 		aboutDialogVisibility: false,
-		switchUserDialogVisibility: false
+		switchUserDialogVisibility: false,
+		addRemoveEventTemplateDialogVisibility: false
 	},
 	outlineQuestions: false,
 	appBarText: "Sediment Field Forms"
@@ -69,6 +71,9 @@ export function UI(state = initialUIState, action) {
 			break;
 		case SET_SWITCH_USER_DIALOG_VISIBILITY:
 			newState.visibility.switchUserDialogVisibility = action.switchUserDialogVisibility;
+			break;
+		case SET_ADD_REMOVE_TEMPLATE_DIALOG_VISIBILITY:
+			newState.visibility.addRemoveEventTemplateDialogVisibility = action.addRemoveEventTemplateDialogVisibility;
 			break;
 		case SET_APP_BAR_TEXT:
 			newState.appBarText = action.appBarText;

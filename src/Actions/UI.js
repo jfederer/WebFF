@@ -5,6 +5,7 @@ import {
 	SET_EXPORT_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_STATION_DIALOG_VISIBILITY,
 	SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY,
+	SET_ADD_REMOVE_TEMPLATE_DIALOG_VISIBILITY,
 	SET_SETTINGS_DIALOG_VISIBILITY,
 	SET_ABOUT_DIALOG_VISIBILITY,
 	SET_SWITCH_USER_DIALOG_VISIBILITY,
@@ -43,6 +44,9 @@ export function setAddRemoveStationDialogVisibility(addRemoveStationDialogVisibi
 
 export function setAddRemoveQuestionDialogVisibility(addRemoveQuestionDialogVisibility) {//TODO:  (if visitibility... show... if not, clear and hide)
 	return { type: SET_ADD_REMOVE_QUESTION_DIALOG_VISIBILITY, addRemoveQuestionDialogVisibility }
+}
+export function setAddRemoveEventTemplateDialogVisibility(addRemoveEventTemplateDialogVisibility) {//TODO:  (if visitibility... show... if not, clear and hide)
+	return { type: SET_ADD_REMOVE_TEMPLATE_DIALOG_VISIBILITY, addRemoveEventTemplateDialogVisibility }
 }
 
 export function setSettingsDialogVisibility(settingsDialogVisibility) { //TODO:  (if visitibility... show... if not, clear and hide)

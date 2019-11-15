@@ -29,6 +29,7 @@ export function makeNewUser(username) {
 	let newUser = _.cloneDeep(emptyUser);
 	newUser.username = username;
 	newUser.dateModified = new Date().toString();
+	newUser.sedLoginUsername = username;
 	return setUserData(newUser)
 }
 

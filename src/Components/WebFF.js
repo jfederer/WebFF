@@ -42,6 +42,7 @@ import LoginDialog from './Dialogs/LoginDialog';
 import AboutDialog from './Dialogs/AboutDialog';
 import AddRemoveQuestionDialog from './Dialogs/AddRemoveQuestionDialog';
 import AddRemoveStationDialog from './Dialogs/AddRemoveStationDialog';
+import AddRemoveEventTemplateDialog from './Dialogs/AddRemoveEventTemplateDialog';
 
 // menus 
 import SystemMenu from './Menus/SystemMenu.js';
@@ -62,6 +63,8 @@ import { EVENTS_LINK_TABLE_TYPE, STATIONS_LINK_TABLE_TYPE } from '../Constants/D
 import { getEventFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { loadAllUserEventsFromDB, loadAllUserStationsFromDB, pushEventToDB, pushLinkTableToDB, pushStationToDB } from '../Actions/DB';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
+
+import { setAddRemoveEventTemplateDialogVisibility } from '../Actions/UI';
 const FUNCDEBUG = false;
 
 
@@ -312,6 +315,7 @@ class WebFF extends React.Component {
 							/>
 							<AddRemoveQuestionDialog />
 							<AddRemoveStationDialog />
+							<AddRemoveEventTemplateDialog />
 							<SettingsDialog />
 							<AboutDialog />
 							<SwitchUserDialog />
@@ -344,6 +348,7 @@ class WebFF extends React.Component {
 					</div >
 				</React.Fragment>
 
+				<button onClick={()=>this.props.setAddRemoveEventTemplateDialogVisibility(true)}>SHOW TEMPLATE DIAG</button>
 				{/* <button onClick={this.doTestPull}>TEST PULL</button>
 				<button onClick={this.usrMod}>INT to 300</button>
 				<button onClick={this.doTestPush}>TEST PUSH</button>
@@ -607,6 +612,8 @@ const mapDispatchToProps = {
 	setNavMenuExpand,
 	setSysMenuExpand,
 	hideQuestion,
+
+	setAddRemoveEventTemplateDialogVisibility,
 
 	loadAllUserEventsFromDB,
 	loadAllUserStationsFromDB,

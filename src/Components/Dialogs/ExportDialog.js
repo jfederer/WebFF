@@ -62,6 +62,7 @@ class ExportDialog extends React.Component {
 	}
 
 	onEnter = () => {
+		console.log('this.props.sedLOGINUsername', this.props.sedLOGINUsername)
 		this.setState({ sedLOGINUsername: this.props.sedLOGINUsername });
 	}
 
