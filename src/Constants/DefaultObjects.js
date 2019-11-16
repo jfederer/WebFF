@@ -418,7 +418,7 @@ export const defaultWaterwayInfoQuestionsData = {
 		},
 		// "tabName": "FieldForm",
 		// "layoutGroup": "Waterway Info",
-		"width_xs": 6,
+		"width_xs": 12,
 		"width_lg": 2
 	},
 	edgeOfWater_Start: {
@@ -453,7 +453,7 @@ export const defaultWaterwayInfoQuestionsData = {
 		"value": "",
 		// "tabName": "FieldForm",
 		// "layoutGroup": "Waterway Info",
-		"width_xs": 5,
+		"width_xs": 6,
 		"width_lg": 3
 	},
 
@@ -465,7 +465,7 @@ export const defaultWaterwayInfoQuestionsData = {
 		"value": "",
 		// "tabName": "FieldForm",
 		// "layoutGroup": "Waterway Info",
-		"width_xs": 5,
+		"width_xs": 6,
 		"width_lg": 2
 	},
 

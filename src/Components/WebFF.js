@@ -266,9 +266,9 @@ class WebFF extends React.Component {
 
 		return (
 			<React.Fragment>
-				{isFetchingUserData === true
+				{/* {isFetchingUserData === true
 					? <img src={loading} alt="LOADING"></img>  //TODO:  better behavior
-					: null}
+					: null} */}
 
 				<React.Fragment>
 					<div className={classes.root} >
@@ -349,6 +349,8 @@ class WebFF extends React.Component {
 				</React.Fragment>
 
 				<button onClick={()=>this.props.setAddRemoveEventTemplateDialogVisibility(true)}>SHOW TEMPLATE DIAG</button>
+
+
 				{/* <button onClick={this.doTestPull}>TEST PULL</button>
 				<button onClick={this.usrMod}>INT to 300</button>
 				<button onClick={this.doTestPush}>TEST PUSH</button>

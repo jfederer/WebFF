@@ -21,7 +21,8 @@ import {
 	setAddRemoveQuestionDialogVisibility,
 	setSettingsDialogVisibility,
 	setAboutDialogVisibility,
-	setSwitchUserDialogVisibility
+	setSwitchUserDialogVisibility,
+	setAddRemoveEventTemplateDialogVisibility
 } from '../../Actions/UI';
 
 
@@ -155,6 +156,13 @@ class SystemMenu extends React.Component {
 							<ListItemText primary="Add/Remove Question" />
 						</ListItem>
 
+						{/* <ListItem button onClick={setAddRemoveEventTemplateDialogVisibility}>
+							<ListItemIcon>
+							{materialIconBuilder("NoteAddIcon")}
+							</ListItemIcon>
+							<ListItemText primary="Add/Remove Event Template" />
+						</ListItem> */}
+
 						<a className={classes.noUnderline} href="https://docs.google.com/document/d/15rctoHyXupM6MiDQSHd9Hfb4nxkssAXY3lI7DThjYNc/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
 							<ListItem button onClick={this.closeHandler}>
 								<ListItemIcon>
@@ -206,7 +214,8 @@ const mapDispatchToProps = {
 	setAddRemoveQuestionDialogVisibility: ()=>setAddRemoveQuestionDialogVisibility(true),
 	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),
 	setAboutDialogVisibility: ()=>setAboutDialogVisibility(true),
-	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) 
+	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) ,
+	// setAddRemoveEventTemplateDialogVisibility: ()=>setAddRemoveEventTemplateDialogVisibility(true) 
 }
 
 SystemMenu.propTypes = {
