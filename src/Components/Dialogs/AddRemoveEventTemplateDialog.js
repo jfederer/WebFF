@@ -34,6 +34,8 @@ import Paper from '@material-ui/core/Paper';
 
 import { registerEventTemplateWithUser, removeEventTemplateFromUser } from '../../Actions/User';
 import { setEventTemplate } from '../../Actions/SedFF';
+import DataEntry from '../Pages/DataEntry/DataEntry';
+import { DATA_ENTRY_INFORMATION_IDENTIFIER } from '../../Constants/Config';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -128,20 +130,32 @@ class AddRemoveEventTemplateDialog extends React.Component {
 			return;
 		}
 
-		console.log("state: ", this.state);
+		// console.log("state: ", this.state);
 
 		let selectedItemsForTemplate = Object.keys(this.state).filter(key => key.startsWith(this.state.fromEventID) && this.state[key] === true);
 		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
 		selectedItemsForTemplate.forEach((item, index) => selectedItemsForTemplate[index] = item.split(EVENT_KEY_SPLITTER)[1]);
-		console.log('selectedItemsForTemplate', selectedItemsForTemplate)
+		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
 
 		let templateQuestionsValuesObj = {};
 		selectedItemsForTemplate.forEach(QID => templateQuestionsValuesObj[QID] = getQuestionValue(this.state.fromEventID, QID));
-		console.log('templateQuestionsValuesObj', templateQuestionsValuesObj)
+		// console.log('templateQuestionsValuesObj', templateQuestionsValuesObj)
 
 		let templateQuestionsDataObj = {};
-		selectedItemsForTemplate.forEach(QID => templateQuestionsDataObj[QID] = getQuestionsData(this.state.fromEventID)[QID]);
-		console.log('templateQuestionsDataObj :', templateQuestionsDataObj);
+		let QD = getQuestionsData(this.state.fromEventID);
+		selectedItemsForTemplate.forEach(QID => {
+			if (QID.startsWith(DATA_ENTRY_INFORMATION_IDENTIFIER)) {
+				//import all sets ... //TODO: eventually allow just the sets to be imported
+				Object.keys(QD).forEach(key => {
+					if (key.startsWith(QID)) {  // if it's a set or a data entry sheet
+						templateQuestionsDataObj[key] = QD[key];
+					}
+				});
+			} else {
+				templateQuestionsDataObj[QID] = QD[QID];
+			}
+		});
+		// console.log('templateQuestionsDataObj :', templateQuestionsDataObj);
 
 		//create Event Template Object
 		let newEventTemplate = {
@@ -153,7 +167,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 			dateCreated: new Date().toString(),
 		}
 
-		console.log('newEventTemplate :', newEventTemplate);
+		// console.log('newEventTemplate :', newEventTemplate);
 
 		// save Event Template
 		this.props.setEventTemplate(newEventTemplate);
@@ -171,7 +185,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		let cancellationMessage = "Removal of event template '" + getEventTemplateFromID(this.state.eventTemplateIDToRemove).eventTemplateName + "' from your personal event template list cancelled";
 
 		if (removalConfirmed === true) {
-				this.props.removeEventTemplateFromUser(this.state.eventTemplateIDToRemove, this.props.currentUsername);
+			this.props.removeEventTemplateFromUser(this.state.eventTemplateIDToRemove, this.props.currentUsername);
 		} else {
 			alert(cancellationMessage);
 		}
@@ -282,6 +296,9 @@ class AddRemoveEventTemplateDialog extends React.Component {
 													let label = key;
 													let value = getQuestionValue(this.state.fromEventID, key);
 
+													console.log('key :', key);
+													console.log('value :', value);
+
 
 													if (Array.isArray(value) || typeof value === 'object') {
 														value = "All Values";
@@ -301,7 +318,6 @@ class AddRemoveEventTemplateDialog extends React.Component {
 														<Paper elevation={5}>
 															<Grid container spacing={1}>
 																<Grid item xs={1}>
-
 																	<Checkbox
 																		id={id}
 																		key={id}
@@ -356,7 +372,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 								: null}
 							{this.state.addOrRemove === REMOVE
-								? <Button onClick={this.removeButtonClickHandler} color="primary" disabled={this.state.eventTemplateIDToRemove===""}>
+								? <Button onClick={this.removeButtonClickHandler} color="primary" disabled={this.state.eventTemplateIDToRemove === ""}>
 									Remove Event Template
 								</Button>
 								: null}
