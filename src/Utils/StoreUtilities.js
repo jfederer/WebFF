@@ -77,7 +77,7 @@ export function getEventFromID(eventID) {
 }
 
 /** 
-@desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's... defaultSetInformation, defaultWaterwayInfoQuestionsData and the global default questionsData
+@desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's... defaultSetInformation and the global default questionsData
 @returns {object} combined questionsData object.
 */
 export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  THIS RUNS ALOT!
@@ -111,14 +111,15 @@ export function getQuestionsData(eventID, fromGetQuestionValue) {  //OPTIMIZE:  
 		}
 	}
 
-	let defaultSetInfoQD = getSetInformationQuestionsData();
+	// let defaultSetInfoQD = getSetInformationQuestionsData();
 	
 	// let defaultWWInfoQD = _.clone(defaultWaterwayInfoQuestionsData);
 
 	let defaultQD = store.getState().Questions.questionsData;
 
 	// return _.merge({}, defaultQD, defaultSetInfoQD, defaultWWInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
-	let bigQD = _.merge({}, defaultQD, defaultSetInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	// let bigQD = _.merge({}, defaultQD, defaultSetInfoQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
+	let bigQD = _.merge({}, defaultQD, currentUserQD, currentStationQD, currentEventQD);  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 	// console.log('bigQD :', bigQD);
 	return bigQD;  //OPTIMIZE:  This is likely an expensive way of combining these. May make sense to combine into a single 'master/current' questionsData set in the store when adding/removing questions
 }

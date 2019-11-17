@@ -262,7 +262,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 												let id = this.state.fromEventID + EVENT_KEY_SPLITTER + key;
 												return <Question id={id}
 												key={id}
-													label={key}
+													label={key + " (" + getQuestionValue(this.state.fromEventID, key) + ")"}
 													type="Toggle"
 													checkbox={true}
 													value={this.state[id] ? true : this.state.id}
