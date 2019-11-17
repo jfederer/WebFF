@@ -128,7 +128,7 @@ class SystemMenu extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Test" />
           </ListItem> */}
-						<ListItem button onClick={setExportDialogVisibility} >
+						<ListItem button onClick={()=>this.props.setExportDialogVisibility(true)} >
 							<ListItemIcon>
 							{materialIconBuilder("CodeIcon")}
 							</ListItemIcon>
@@ -142,26 +142,26 @@ class SystemMenu extends React.Component {
 							<ListItemText primary="Sync Data to Database" />
 						</ListItem>
 
-						<ListItem button onClick={setAddRemoveStationDialogVisibility}>
+						<ListItem button onClick={()=>this.props.setAddRemoveStationDialogVisibility(true)}>
 							<ListItemIcon>
 							{materialIconBuilder("NoteAddIcon")}
 							</ListItemIcon>
 							<ListItemText primary="Add/Remove Station" />
 						</ListItem>
 
-						<ListItem button onClick={setAddRemoveQuestionDialogVisibility}>
+						<ListItem button onClick={()=>this.props.setAddRemoveQuestionDialogVisibility(true)}>
 							<ListItemIcon>
 							{materialIconBuilder("HelpIcon")}
 							</ListItemIcon>
 							<ListItemText primary="Add/Remove Question" />
 						</ListItem>
 
-						{/* <ListItem button onClick={setAddRemoveEventTemplateDialogVisibility}>
+						<ListItem button onClick={()=>this.props.setAddRemoveEventTemplateDialogVisibility(true)}>
 							<ListItemIcon>
-							{materialIconBuilder("NoteAddIcon")}
+							{materialIconBuilder("PlaylistAddCheckIcon")}
 							</ListItemIcon>
 							<ListItemText primary="Add/Remove Event Template" />
-						</ListItem> */}
+						</ListItem>
 
 						<a className={classes.noUnderline} href="https://docs.google.com/document/d/15rctoHyXupM6MiDQSHd9Hfb4nxkssAXY3lI7DThjYNc/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
 							<ListItem button onClick={this.closeHandler}>
@@ -172,7 +172,7 @@ class SystemMenu extends React.Component {
 							</ListItem>
 						</a>
 
-						<ListItem button onClick={setSettingsDialogVisibility}>
+						<ListItem button onClick={()=>this.props.setSettingsDialogVisibility(true)}>
 							<ListItemIcon>
 							{materialIconBuilder("SettingsIcon")}
 							</ListItemIcon>
@@ -180,14 +180,14 @@ class SystemMenu extends React.Component {
 						</ListItem>
 
 						{/* <ListItem button onClick={() => this.menuItemClickHandler('About')}> */}
-						<ListItem button onClick={setAboutDialogVisibility}>
+						<ListItem button onClick={()=>this.props.setAboutDialogVisibility(true)}>
 							<ListItemIcon>
 							{materialIconBuilder("InfoIcon")}
 							</ListItemIcon>
 							<ListItemText primary="About" />
 						</ListItem>
 
-						<ListItem button onClick={setSwitchUserDialogVisibility}>
+						<ListItem button onClick={()=>this.props.setSwitchUserDialogVisibility(true)}>
 							<ListItemIcon>
 							{materialIconBuilder("PermIdentityIcon")}
 							</ListItemIcon>
@@ -209,13 +209,13 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setSysMenuExpand: setSysMenuExpand,
 	syncToDB: syncToDB,
-	setExportDialogVisibility: ()=>setExportDialogVisibility(true),
-	setAddRemoveStationDialogVisibility: ()=>setAddRemoveStationDialogVisibility(true),
-	setAddRemoveQuestionDialogVisibility: ()=>setAddRemoveQuestionDialogVisibility(true),
-	setSettingsDialogVisibility: ()=>setSettingsDialogVisibility(true),
-	setAboutDialogVisibility: ()=>setAboutDialogVisibility(true),
-	setSwitchUserDialogVisibility: ()=>setSwitchUserDialogVisibility(true) ,
-	// setAddRemoveEventTemplateDialogVisibility: ()=>setAddRemoveEventTemplateDialogVisibility(true) 
+	setExportDialogVisibility,
+	setAddRemoveStationDialogVisibility,
+	setAddRemoveQuestionDialogVisibility,
+	setSettingsDialogVisibility,
+	setAboutDialogVisibility,
+	setSwitchUserDialogVisibility,
+	setAddRemoveEventTemplateDialogVisibility
 }
 
 SystemMenu.propTypes = {

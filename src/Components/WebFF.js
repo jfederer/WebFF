@@ -63,6 +63,7 @@ import { EVENTS_LINK_TABLE_TYPE, STATIONS_LINK_TABLE_TYPE } from '../Constants/D
 import { getEventFromID, getStationFromID, getStationIDsFromName } from '../Utils/StoreUtilities';
 import { loadAllUserEventsFromDB, loadAllUserStationsFromDB, pushEventToDB, pushLinkTableToDB, pushStationToDB } from '../Actions/DB';
 import { getQuestionValue } from '../Utils/QuestionUtilities';
+import { ICONS } from '../Utils/MaterialIcons';
 
 import { setAddRemoveEventTemplateDialogVisibility } from '../Actions/UI';
 const FUNCDEBUG = false;
@@ -349,6 +350,8 @@ class WebFF extends React.Component {
 				</React.Fragment>
 
 				<button onClick={()=>this.props.setAddRemoveEventTemplateDialogVisibility(true)}>SHOW TEMPLATE DIAG</button>
+				
+				{/* {ICONS} */}
 
 
 				{/* <button onClick={this.doTestPull}>TEST PULL</button>

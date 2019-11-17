@@ -181,8 +181,7 @@ class ExportDialog extends React.Component {
 
 	render() {
 		const { classes, exportDialogVisibility, currentSamplingEventID } = this.props;
-		console.log('this.state: ', this.state);
-		console.log('this.props: ', this.props);
+
 		return (
 			<Dialog
 				open={exportDialogVisibility}

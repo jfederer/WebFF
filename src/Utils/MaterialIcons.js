@@ -63,3 +63,32 @@ export const materialIconBuilder = (iconName) => {
 		default: return <SettingsInputComponentIcon />
 	}
 }
+
+export const ICONS = <React.Fragment><DashboardIcon />
+	<SyncIcon />
+	<BuildIcon />
+	<HelpIcon />
+	<SettingsIcon />
+	<InfoIcon />
+	<PermIdentityIcon />
+	<ChevronRightIcon />
+	<ImportContactsIcon />
+	<OpacityIcon />
+	<ReorderIcon />
+	<ColorizeIcon />
+	<FilterDramaIcon />
+	<StraightenIcon />
+	<LibraryAddIcon />
+	<PlaylistAddIcon />
+	<PersonAddIcon />
+	<GroupAddIcon />
+	<PlaylistAddCheckIcon />
+	<NoteAddIcon />
+	<EditIcon />
+	<CompareIcon />
+	<SaveIcon />
+	<SubtitlesIcon />
+	<AssignmentIcon />
+	<CodeIcon />
+	<ChevronLeftIcon />
+</React.Fragment>
