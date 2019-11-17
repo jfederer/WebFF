@@ -4,7 +4,8 @@ import {
 	SET_OUTLINE_QUESTIONS,
 	SET_BACKUP_INTERVAL,
 	SET_SEDLOGIN_USERNAME,
-	SET_USER_DATA
+	SET_USER_DATA,
+	REGISTER_EVENT_TEMPLATE_WITH_USERNAME
 } from '../Constants/ActionTypes';
 
 import { emptyUser } from '../Constants/DefaultObjects';
@@ -41,5 +42,13 @@ export function userDataIngest(userData) {
 	}
 }
 
+export function registerEventTemplateWithUser(eventTemplateID, username) {
+	if (!username) {
+		throw new Error("No username passed to RegisterEventTemplateWithUser function");
+	}
+	if (!eventTemplateID) {
+		throw new Error("No eventTemplateID passed to RegisterEventTemplateWithUser function");
+	}
 
-
+	return { type: REGISTER_EVENT_TEMPLATE_WITH_USERNAME, eventTemplateID, username };
+}

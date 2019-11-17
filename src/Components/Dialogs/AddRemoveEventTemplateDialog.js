@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import classNames from 'classnames';
 import { styles } from '../../style';
+import uuidv4 from 'uuid';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -30,6 +31,9 @@ import { LEFT_BANK_VALUE, RIGHT_BANK_VALUE } from '../../Constants/Dictionary';
 import { Divider } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
+
+import { registerEventTemplateWithUser } from '../../Actions/User';
+import { setEventTemplate } from '../../Actions/SedFF';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -80,16 +84,17 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 
 	handleCheckValueChange = (id) => (event) => {
-		console.log('event', event)
-		console.log('id: ', id);
-
-
+		// console.log('event', event)
+		// console.log('id: ', id);
 		this.setState({ [id]: event.target.checked });
 
 	};
 
+	newTemplateNameValueChange  = (eventID, QID, value) => {
+		this.setState({ newEventTemplateName: value });
+	};
+
 	eventDropDownValueChange = (eventID, QID, value) => {
-		console.log('QIDDD', QID)
 		this.setState({ fromEventID: value });
 	};
 
@@ -112,6 +117,8 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		return true;
 	}
 
+	
+
 	addButtonClickHandler = () => {
 		//verify inputs
 		if (!this.requiredInputsExist() === true) {
@@ -123,30 +130,32 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		let selectedItemsForTemplate = Object.keys(this.state).filter(key => key.startsWith(this.state.fromEventID) && this.state[key] === true);
 		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
 		selectedItemsForTemplate.forEach((item, index) => selectedItemsForTemplate[index] = item.split(EVENT_KEY_SPLITTER)[1]);
-		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
+		console.log('selectedItemsForTemplate', selectedItemsForTemplate)
 
-		let templateQuestionValuesObj = {};
-		selectedItemsForTemplate.forEach(QID => templateQuestionValuesObj[QID] = getQuestionValue(this.state.fromEventID, QID));
-		console.log('templateQuestionValuesObj', templateQuestionValuesObj)
+		let templateQuestionsValuesObj = {};
+		selectedItemsForTemplate.forEach(QID => templateQuestionsValuesObj[QID] = getQuestionValue(this.state.fromEventID, QID));
+		console.log('templateQuestionsValuesObj', templateQuestionsValuesObj)
 
-		//create station object
-		// remember to make any changes here reflect in stationNameChanged function
+		let templateQuestionsDataObj = {};
+		selectedItemsForTemplate.forEach(QID => templateQuestionsDataObj[QID] = getQuestionsData(this.state.fromEventID)[QID]);
+		console.log('templateQuestionsDataObj :', templateQuestionsDataObj);
+
+		//create Event Template Object
 		let newEventTemplate = {
+			eventTemplateID: uuidv4(),
 			eventTemplateName: this.state.newEventTemplateName,
-			number: this.state.newStation_stationNumber,
-			questionValues: this.state.newStation_projectName,
-			//TODO: questionsData?
+			questionValues: templateQuestionsValuesObj,
+			questionsData: templateQuestionsDataObj,
 			dateModified: new Date().toString(),
 		}
 
-		//add Event template
-		let newEventTemplateID = this.props.createNewEventTemplateForUser(newEventTemplate, this.props.currentUsername);
+		console.log('newEventTemplate :', newEventTemplate);
 
-		// conditionally set current station to newly-created one
-		// if (this.state.newStation_changeCurrent && this.props.currentSamplingEventID) {
-		// this.props.SEQuestionValueChange(this.props.currentSamplingEventID, "stationName", getStationFromID(newStationID).name)
-		// this.props.stationNameChanged(this.props.currentSamplingEventID, getStationFromID(newStationID).name);
-		// }
+		// save Event Template
+		this.props.setEventTemplate(newEventTemplate);
+
+		// add Event template to this users link table  (link table due to it being handy to share between users)
+		this.props.registerEventTemplateWithUser(newEventTemplate.eventTemplateID, this.props.currentUsername);
 
 		this.dialogCloseHandler();
 	}
@@ -176,16 +185,6 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		this.dialogCloseHandler();
 	}
 
-
-	shortDate = (dateObj) => {
-
-		let monthName = dateObj.toLocaleString('en-us', { month: 'long' });
-		let dd = String(dateObj.getDate()).padStart(2, '0');
-		let yyyy = dateObj.getFullYear();
-		return monthName + " " + dd + ", " + yyyy + " @ " + dateObj.getTime();
-	}
-
-
 	dialogCloseHandler = () => {
 		this.props.setAddRemoveEventTemplateDialogVisibility(false);
 	}
@@ -202,7 +201,6 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		})
 		return retObj;
 	}
-	//TOOD: check all/none
 
 	render() {
 		const { classes, addRemoveEventTemplateDialogVisibility } = this.props;
@@ -246,7 +244,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 										helperText="Name of the event template"
 										value={this.state.newEventTemplateName}
 										required
-										alternateChangeHandler={this.handleValueChange}
+										alternateChangeHandler={this.newTemplateNameValueChange}
 									/>
 									Add questions from event:
 									<Question id="eventDropDown"
@@ -282,7 +280,11 @@ class AddRemoveEventTemplateDialog extends React.Component {
 													if(key.includes('::')) {  
 														label = key.replace('::', ' - ');
 													} else {
+														try {
 														label = getQuestionsData(this.state.fromEventID)[key].label;
+														} catch (e) {
+															console.warn("Failed to find label on fromEventID: " + this.state.fromEventID + " key: " + key + " :: " + e);
+														}
 													}
 													// console.log('label :', label);
 
@@ -449,11 +451,13 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = {
 	setAddRemoveEventTemplateDialogVisibility,
+	setEventTemplate,
+	registerEventTemplateWithUser
 
-	createNewStationForUser,
-	SEQuestionValueChange,
-	removeStationFromUser,
-	stationNameChanged
+	// createNewStationForUser,
+	// SEQuestionValueChange,
+	// removeStationFromUser,
+	// stationNameChanged
 }
 
 AddRemoveEventTemplateDialog.propTypes = {

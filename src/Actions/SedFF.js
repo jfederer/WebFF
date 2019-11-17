@@ -5,7 +5,7 @@ import {
 	USER_DATA_LOAD_COMPLETE,
 	SAMPLING_EVENT_REQUEST,
 	SAMPLING_EVENT_LOAD_COMPLETE,
-	// SET_USER_DATA
+	SET_EVENT_TEMPLATE
 } from '../Constants/ActionTypes';
 
 // import { runAllSamplingEventActionStrings } from './SamplingEvents';
@@ -56,7 +56,6 @@ function userDataRequest(username) {
 	return { type: USER_DATA_REQUEST, username };
 }
 
-
 function setCurrentUsername(username) {
 	return { type: SET_CURRENT_USERNAME, username }
 }
@@ -102,6 +101,9 @@ function samplingEventLoadComplete(eventID) {
 	return { type: SAMPLING_EVENT_LOAD_COMPLETE, eventID: eventID }
 }
 
+export function setEventTemplate(eventTemplate) {
+	return {type: SET_EVENT_TEMPLATE, eventTemplate}
+}
 
 
 

@@ -110,6 +110,7 @@ class WebFF extends React.Component {
 	//BUG: SAMPLING_EVENT_BANK_CHANGE triggered on any input within WWI question...  shouldn't. ;)
 	//BUG: reset export dialog on leaving...
 	//BUG: duplicate from set is empty on page refresh...
+	//BUG: Event Template doesnt' work if you save a value for a custom question that wouldn't apply to a given event...
 	
 	//TEST:
 	//TODO: does getQuestionsData not include [DATA_ENTRY_INFORMATION_IDENTIFIER + SUSPENDED_TEXT]: ... (the DE stuff)
@@ -148,6 +149,7 @@ class WebFF extends React.Component {
 	//TODO: "remove set" button on sets
 	//TODO: expand to include the sub-questions in template editor
 	//TODO: get the 'display value' of some of the values... some are just numbers (less than useful)
+	//TODO: check all/none for template manager
 
 	//Would be nice:
 	//TODO: "Station manager" - include extra waterway info, include "duplicate", include 'edit'
