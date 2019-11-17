@@ -5,7 +5,8 @@ import {
 	SET_BACKUP_INTERVAL,
 	SET_SEDLOGIN_USERNAME,
 	SET_USER_DATA,
-	REGISTER_EVENT_TEMPLATE_WITH_USERNAME
+	REGISTER_EVENT_TEMPLATE_WITH_USERNAME,
+	REMOVE_EVENT_TEMPLATE_FROM_USERNAME
 } from '../Constants/ActionTypes';
 
 import { emptyUser } from '../Constants/DefaultObjects';
@@ -51,4 +52,15 @@ export function registerEventTemplateWithUser(eventTemplateID, username) {
 	}
 
 	return { type: REGISTER_EVENT_TEMPLATE_WITH_USERNAME, eventTemplateID, username };
+}
+
+export function removeEventTemplateFromUser(eventTemplateIDToRemove, username) {
+	if (!username) {
+		throw new Error("No username passed to removeEventTemplateFromUser function");
+	}
+	if (!eventTemplateIDToRemove) {
+		throw new Error("No eventTemplateID passed to removeEventTemplateFromUser function");
+	}
+
+	return { type: REMOVE_EVENT_TEMPLATE_FROM_USERNAME, eventTemplateIDToRemove, username };
 }

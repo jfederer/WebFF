@@ -23,7 +23,7 @@ import { SEQuestionValueChange, stationNameChanged } from '../../Actions/Samplin
 import { setAddRemoveEventTemplateDialogVisibility } from '../../Actions/UI';
 import { createNewStationForUser, removeStationFromUser } from '../../Actions/Stations';
 import Question from '../Question';
-import { getQuestionsData, getEventFromID } from '../../Utils/StoreUtilities';
+import { getQuestionsData, getEventFromID, getEventTemplateFromID } from '../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
 import { Typography, FormControl } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -32,7 +32,7 @@ import { Divider } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 
-import { registerEventTemplateWithUser } from '../../Actions/User';
+import { registerEventTemplateWithUser, removeEventTemplateFromUser } from '../../Actions/User';
 import { setEventTemplate } from '../../Actions/SedFF';
 
 const ADD = "ADD";
@@ -52,13 +52,14 @@ class AddRemoveEventTemplateDialog extends React.Component {
 	}
 
 	getInitialState = () => {
-	
+
 		return _.cloneDeep({
 			addOrRemove: this.props.eventTemplateIDs && this.props.eventTemplateIDs.length > 0
 				? EITHER
 				: ADD,
 			fromEventID: "",
-			newEventTemplateName: ""
+			newEventTemplateName: "",
+			eventTemplateIDToRemove: ""
 			// templateIDToRemove:
 			// newStation_agencyCode: "USGS",   //TODO: set this default in settings
 			// newStation_changeCurrent: true,
@@ -84,18 +85,20 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 
 	handleCheckValueChange = (id) => (event) => {
-		// console.log('event', event)
-		// console.log('id: ', id);
 		this.setState({ [id]: event.target.checked });
 
 	};
 
-	newTemplateNameValueChange  = (eventID, QID, value) => {
+	newTemplateNameValueChange = (eventID, QID, value) => {
 		this.setState({ newEventTemplateName: value });
 	};
 
-	eventDropDownValueChange = (eventID, QID, value) => {
+	fromEventDropDownValueChange = (eventID, QID, value) => {
 		this.setState({ fromEventID: value });
+	};
+
+	removeEventDropDownValueChange = (eventID, QID, value) => {
+		this.setState({ eventTemplateIDToRemove: value });
 	};
 
 	//returns tool tip message for add button... or true if all prereqs exist.
@@ -117,7 +120,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		return true;
 	}
 
-	
+
 
 	addButtonClickHandler = () => {
 		//verify inputs
@@ -147,6 +150,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 			questionValues: templateQuestionsValuesObj,
 			questionsData: templateQuestionsDataObj,
 			dateModified: new Date().toString(),
+			dateCreated: new Date().toString(),
 		}
 
 		console.log('newEventTemplate :', newEventTemplate);
@@ -162,23 +166,12 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 
 	removeButtonClickHandler = () => {
-		let removalConfirmed = window.confirm("You are about to remove station '" + this.state.removeStation_stationName + "' from your personal station list.  Are you sure?");
+		let removalConfirmed = window.confirm("You are about to remove event template '" + getEventTemplateFromID(this.state.eventTemplateIDToRemove).eventTemplateName + "' from your personal event template list.  Are you sure?");
 
-		let cancellationMessage = "Removal of site '" + this.state.removeStation_stationName + "' from your personal station list cancelled";
+		let cancellationMessage = "Removal of event template '" + getEventTemplateFromID(this.state.eventTemplateIDToRemove).eventTemplateName + "' from your personal event template list cancelled";
 
 		if (removalConfirmed === true) {
-			// check if station name is current in use in the sampling event
-			let doubleCheckPassed = true;
-			if (this.props.currentSamplingEventID && getQuestionValue(this.props.currentSamplingEventID, "stationName") === this.state.removeStation_stationName) {
-				doubleCheckPassed = window.confirm("Station '" + this.state.removeStation_stationName + "' is set as your current event's station.\n\n  Removal will change this, and all station-linked data (station number, project name, project ID, agency code, and any custom questions saved to this station), to the next available station in your personal station list.  \n\nAre you sure you want to continue?");
-			}
-
-			if (doubleCheckPassed) {
-				this.props.removeStationFromUser(this.props.currentUsername, this.state.removeStation_stationName);
-				// the process of switching to the next available station name is handled with the validity checking of the stationDropDown question.
-			} else {
-				alert(cancellationMessage);
-			}
+				this.props.removeEventTemplateFromUser(this.state.eventTemplateIDToRemove, this.props.currentUsername);
 		} else {
 			alert(cancellationMessage);
 		}
@@ -191,10 +184,13 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 	getEventsAsObject = (eventIDs) => {
 		let retObj = {};
+		let eventNames = eventIDs.map(eventID => getEventFromID(eventID).eventName)
+		let namesThatHaveDuplicates = eventNames.filter((name, i, names) => names.indexOf(name) === i && names.lastIndexOf(name) !== i);
+
 		eventIDs.forEach(eventID => {
 			let evt = getEventFromID(eventID);
 			let evtName = evt.eventName;
-			if (retObj[evtName]) {
+			if (namesThatHaveDuplicates.includes(evtName)) {
 				evtName = evtName + "( last modified " + new Date(evt.dateModified).toLocaleString() + ")";
 			}
 			retObj[evtName] = eventID;
@@ -202,8 +198,24 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		return retObj;
 	}
 
+	getTemplatesAsObjects = (eventTemplateIDs) => {
+		let retObj = {};
+		let templateNames = eventTemplateIDs.map(eventTemplateID => getEventTemplateFromID(eventTemplateID).eventTemplateName)
+		let namesThatHaveDuplicates = templateNames.filter((name, i, names) => names.indexOf(name) === i && names.lastIndexOf(name) !== i);
+
+		eventTemplateIDs.forEach(eventTemplateID => {
+			let evtTemp = getEventTemplateFromID(eventTemplateID);
+			let evtTempName = evtTemp.eventTemplateName;
+			if (namesThatHaveDuplicates.includes(evtTempName)) {
+				evtTempName = evtTempName + "( last modified " + new Date(evtTemp.dateModified).toLocaleString() + ")";
+			}
+			retObj[evtTempName] = eventTemplateID;
+		})
+		return retObj;
+	}
+
 	render() {
-		const { classes, addRemoveEventTemplateDialogVisibility } = this.props;
+		const { classes, addRemoveEventTemplateDialogVisibility, eventTemplateIDs } = this.props;
 		// console.log('this.props', this.props)
 		// console.log('this.state :', this.state);
 
@@ -252,7 +264,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 										type="DropDown"
 										options={this.getEventsAsObject(this.props.eventIDs)}
 										value={this.state.fromEventID ? this.state.fromEventID : ""}
-										alternateChangeHandler={this.eventDropDownValueChange}
+										alternateChangeHandler={this.fromEventDropDownValueChange}
 										includeBlank={true}
 									/>
 									{!getEventFromID(this.state.fromEventID)
@@ -269,30 +281,21 @@ class AddRemoveEventTemplateDialog extends React.Component {
 													let id = this.state.fromEventID + EVENT_KEY_SPLITTER + key;
 													let label = key;
 													let value = getQuestionValue(this.state.fromEventID, key);
-													
-													
-													if(Array.isArray(value) || typeof value === 'object') {
-														value="All Values";
+
+
+													if (Array.isArray(value) || typeof value === 'object') {
+														value = "All Values";
 													}
 
-													// console.log('key :', key);
-													// console.log('getQuestionsData(this.state.fromEventID) :', getQuestionsData(this.state.fromEventID));
-													if(key.includes('::')) {  
+													if (key.includes('::')) {
 														label = key.replace('::', ' - ');
 													} else {
 														try {
-														label = getQuestionsData(this.state.fromEventID)[key].label;
+															label = getQuestionsData(this.state.fromEventID)[key].label;
 														} catch (e) {
 															console.warn("Failed to find label on fromEventID: " + this.state.fromEventID + " key: " + key + " :: " + e);
 														}
 													}
-													// console.log('label :', label);
-
-													// console.assert(id!==false, "ID was false label: " + label);
-													// console.log('id :', id);
-													// console.log('label :', label);
-													// console.log('value :', value);
-
 
 													return <Grid item xs={6} md={4} xl={3} key={"Grid" + id}>
 														<Paper elevation={5}>
@@ -322,86 +325,22 @@ class AddRemoveEventTemplateDialog extends React.Component {
 										</Fragment>
 									}
 
-
-									{/* <Question
-										id="newStation_stationName"
-										label="Station Full Name"
-										type="Text"
-										helperText="Full station name for use in SedLOGIN and other output formats"
-										value={this.state.newStation_stationName}
-										required
-										alternateChangeHandler={this.handleValueChange}
-									/>
-									<Question
-										id="newStation_displayName"
-										label="Station Display Name"
-										type="Text"
-										helperText="Station Name to be displayed in the drop down menu in SedFF"
-										value={this.state.newStation_displayName}
-										alternateChangeHandler={this.handleValueChange}
-									/>
-									<Question id="newStation_stationNumber"
-										label="Station Number"
-										type="Text"
-										required
-										value={this.state.newStation_stationNumber}
-										alternateChangeHandler={this.handleValueChange}
-									/>
-									<Question id="newStation_projectName"
-										label="Project Name"
-										type="Text"
-										value={this.state.newStation_projectName}
-										alternateChangeHandler={this.handleValueChange}
-									/>
-									<Question id="newStation_projectID"
-										label="Project ID"
-										type="Text"
-										value={this.state.newStation_projectID}
-										alternateChangeHandler={this.handleValueChange}
-									/>
-									<Question id="newStation_agencyCode"
-										label="Agency Code"
-										type="Text"
-										value={this.state.newStation_agencyCode}
-										alternateChangeHandler={this.handleValueChange}
-									/>
-
-									<Question id="newStation_fromLBank"
-										label="Default bank for measuring distance"
-										type="DropDown"
-										options={{
-											"Left Bank": LEFT_BANK_VALUE,
-											"Right Bank": RIGHT_BANK_VALUE
-										}}
-										value={this.state.newStation_fromLBank}
-										alternateChangeHandler={this.handleValueChange}
-									/>
-									<br />
-
-									<Question id="newStation_changeCurrent"
-										label="Set current event to this station"
-										type="Toggle"
-										checkbox={true}
-										value={this.state.newStation_changeCurrent}
-										alternateChangeHandler={this.handleValueChange}
-									/> */}
-
 								</React.Fragment>
 								: null}
 
 
 							{this.state.addOrRemove === REMOVE
 								? <React.Fragment>
-									<Typography>Select the station to remove from your personal station list:</Typography>
+									<Typography>Select the event template to remove from your personal event template list:</Typography>
+									{console.log('this.props.eventTemplateIDs :', this.props.eventTemplateIDs)}
 									<Question
-										id="removeStation_stationName"
-										label="Station To Remove"
-										type="StationDropDown"
-										includeAddStation={false}
+										id="eventTemplateToRemove"
+										label="Event Template To Remove"
+										type="DropDown"
 										includeBlank={true}
-										alternateChangeHandler={this.handleValueChange}
-										inDialog={true}
-										value={this.state.removeStation_stationName}
+										alternateChangeHandler={this.removeEventDropDownValueChange}
+										value={this.state.eventTemplateToRemove}
+										options={this.getTemplatesAsObjects(eventTemplateIDs)}
 									/>
 								</React.Fragment>
 								: null}
@@ -418,10 +357,8 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 								: null}
 							{this.state.addOrRemove === REMOVE
-								? <Button onClick={this.removeButtonClickHandler} color="primary">
+								? <Button onClick={this.removeButtonClickHandler} color="primary" disabled={this.state.eventTemplateIDToRemove===""}>
 									Remove Event Template
-									{//TODO: disable button util station selected...
-									}
 								</Button>
 								: null}
 							<Button onClick={this.dialogCloseHandler} color="primary">
@@ -452,7 +389,8 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
 	setAddRemoveEventTemplateDialogVisibility,
 	setEventTemplate,
-	registerEventTemplateWithUser
+	registerEventTemplateWithUser,
+	removeEventTemplateFromUser
 
 	// createNewStationForUser,
 	// SEQuestionValueChange,

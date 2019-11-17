@@ -75,6 +75,9 @@ export function checkForValidSedimentType(sedType, funcName) {
 export function getEventFromID(eventID) {
 	return store.getState().SamplingEvents[eventID]; //TODO: fail gracefully, attempt to fetch it??
 }
+export function getEventTemplateFromID(eventTemplateID) {
+	return store.getState().EventTemplates[eventTemplateID]; //TODO: fail gracefully, attempt to fetch it??
+}
 
 /** 
 @desc gets the combined current questionsData object - this is the combination of the currentSamplingEvent's, currentUser's, currentStation's... defaultSetInformation and the global default questionsData
