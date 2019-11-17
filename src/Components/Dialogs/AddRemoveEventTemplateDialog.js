@@ -198,7 +198,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		return retObj;
 	}
 
-	getTemplatesAsObjects = (eventTemplateIDs) => {
+	getTemplatesAsObjects = (eventTemplateIDs) => {  //TODO: copy to util class -- allso used in NewEventForm
 		let retObj = {};
 		let templateNames = eventTemplateIDs.map(eventTemplateID => getEventTemplateFromID(eventTemplateID).eventTemplateName)
 		let namesThatHaveDuplicates = templateNames.filter((name, i, names) => names.indexOf(name) === i && names.lastIndexOf(name) !== i);
@@ -353,7 +353,6 @@ class AddRemoveEventTemplateDialog extends React.Component {
 										Add Event Template
 									</Button></div>
 								</Tooltip>
-
 
 								: null}
 							{this.state.addOrRemove === REMOVE

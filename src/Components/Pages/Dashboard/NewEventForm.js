@@ -13,7 +13,9 @@ import { TextField, Button, Paper } from '@material-ui/core';
 import { createNewSampingEventForUser } from '../../../Actions/SamplingEvents';
 import { showNavigationTab } from '../../../Actions/UI';
 import { loadAndSetCurrentSamplingEvent } from '../../../Actions/SedFF';
-import { getAllUsersEventIDs } from '../../../Utils/StoreUtilities';
+import { getAllUsersEventIDs, getEventTemplateFromID } from '../../../Utils/StoreUtilities';
+import DropDown from '../../Questions/DropDown';
+
 
 
 class NewEventForm extends React.Component {
@@ -22,7 +24,8 @@ class NewEventForm extends React.Component {
 		super(props);
 		this.state = {
 			newSamplingEventName: "",
-			newEventButtonDisabled: false
+			newEventButtonDisabled: false,
+			eventTemplateToUse: ""
 		}
 	}
 
@@ -41,8 +44,28 @@ class NewEventForm extends React.Component {
 
 		this.setState({ newEventButtonDisabled: isDuplicate, newSamplingEventName: e.target.value });
 	}
+	
+	eventTemplateDropDownValueChange = (eventID, QID, value) => {
+		this.setState({ eventTemplateToUse: value });
+	};
 
 	handleBrandNewButtonClick = () => {
+		if (!this.props.currentUser) {
+			alert("There is no current user.  You cannot create an event without a current user set.  Please reload sedFF and try again.  If failures continue, contact jfederer@usgs.gov");
+			return;
+		}
+		let newEventID = this.props.createNewSampingEventForUser( // this is a syncronous process
+			this.state.newSamplingEventName ? this.state.newSamplingEventName : "",  //deal with blank in action
+			this.props.currentUser.username
+		);
+
+		this.props.loadAndSetCurrentSamplingEvent(newEventID, () => {
+			this.props.history.push("/FieldForm");
+			this.props.showNavigationTab("FieldForm");
+		});
+	}
+
+	handleNewFromTemplateButtonClick = () => {
 		if (!this.props.currentUser) {
 			alert("There is no current user.  You cannot create an event without a current user set.  Please reload sedFF and try again.  If failures continue, contact jfederer@usgs.gov");
 			return;
@@ -65,8 +88,24 @@ class NewEventForm extends React.Component {
 		}
 	}
 
+	getTemplatesAsObjects = (eventTemplateIDs) => {  //TODO: copy to util class -- allso used in NewEventForm
+		let retObj = {};
+		let templateNames = eventTemplateIDs.map(eventTemplateID => getEventTemplateFromID(eventTemplateID).eventTemplateName)
+		let namesThatHaveDuplicates = templateNames.filter((name, i, names) => names.indexOf(name) === i && names.lastIndexOf(name) !== i);
+
+		eventTemplateIDs.forEach(eventTemplateID => {
+			let evtTemp = getEventTemplateFromID(eventTemplateID);
+			let evtTempName = evtTemp.eventTemplateName;
+			if (namesThatHaveDuplicates.includes(evtTempName)) {
+				evtTempName = evtTempName + "( last modified " + new Date(evtTemp.dateModified).toLocaleString() + ")";
+			}
+			retObj[evtTempName] = eventTemplateID;
+		})
+		return retObj;
+	}
+
 	render() {
-		const { classes } = this.props;
+		const { classes, eventTemplateLinkTable } = this.props;
 
 		return (
 			<Paper className={classes.paper}>
@@ -92,7 +131,6 @@ class NewEventForm extends React.Component {
 					<br />
 					<Button
 						className={classes.dashboardWidgetButton}
-						// component={MyLink} 
 						disabled={this.state.newEventButtonDisabled}
 						onClick={this.handleBrandNewButtonClick}
 						variant="outlined">
@@ -100,6 +138,30 @@ class NewEventForm extends React.Component {
 							? "EVENT MUST HAVE UNIQUE NAME"
 							: "CREATE NEW EVENT"}
 					</Button>
+
+					
+
+					{eventTemplateLinkTable && eventTemplateLinkTable.eventTemplates && eventTemplateLinkTable.eventTemplates.length > 0
+						? <React.Fragment>
+							 - 
+							<Button
+								className={classes.dashboardWidgetButton}
+								disabled={this.state.newEventButtonDisabled || this.state.eventTemplateToUse===""}
+								onClick={this.handleNewFromTemplateButtonClick}
+								variant="outlined">
+								Create new event from template
+							</Button>
+							<DropDown
+								id="eventTemplateToUse"
+								label="Event Template To Use"
+								type="DropDown"
+								includeBlank={true}
+								alternateChangeHandler={this.eventTemplateDropDownValueChange}
+								value={this.state.eventTemplateToUse}
+								options={this.getTemplatesAsObjects(eventTemplateLinkTable.eventTemplates)}
+							/>
+						</React.Fragment>
+						: null}
 				</div>
 
 			</Paper>
@@ -109,9 +171,9 @@ class NewEventForm extends React.Component {
 
 const mapStateToProps = function (state) {
 	return {
-		users: state.Users, // to get user settings
 		samplingEvents: state.SamplingEvents, //to get list of sampling events to check for uniqueness for that user
-		currentUser: state.Users[state.SedFF.currentUsername]
+		currentUser: state.Users[state.SedFF.currentUsername],
+		eventTemplateLinkTable: state.EventTemplatesLinkTables[state.SedFF.currentUsername]
 	}
 }
 

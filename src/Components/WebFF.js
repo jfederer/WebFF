@@ -183,6 +183,7 @@ class WebFF extends React.Component {
 	// secure setDBInfo ... (could be used nefariously)
 	// add "didInvalidate" to User...
 	// consistent MM/DD/YYYY  (option in settings?)
+	// new event template should default to current event if exists
 
 	//Cleanup
 	//TODO: Set-Sample-Dist column gives "NAN"...
