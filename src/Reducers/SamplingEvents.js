@@ -31,12 +31,14 @@ export function SamplingEvents(state = initialState, action) {
 			return newState;
 		case SE_QUESTION_VALUE_CHANGE:
 			newState[action.eventID].questionsValues[action.questionID] = action.newValue;
+			newState[action.eventID].dateModified = new Date().toString();
 			return newState;
 		case SE_QUESTION_VALUE_DELETE:
 			delete newState[action.eventID].questionsValues[action.questionID];
 			return newState;
 		case ADD_QUESTION_TO_EVENT:
 			newState[action.eventID].questionsData[action.question.id] = action.question;
+			newState[action.eventID].dateModified = new Date().toString();
 			return newState;
 		case DELETE_QUESTION_FROM_EVENT:
 			delete newState[action.eventID].questionsData[action.QID];

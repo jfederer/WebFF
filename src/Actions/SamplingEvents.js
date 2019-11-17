@@ -129,13 +129,13 @@ export function SEQuestionValueDelete(eventID, questionID) {
 * @param {string} username  - the user name to link the event to.
 * @returns the eventID of the newly created event 
 */
-export function createNewSampingEventForUser(eventName, username) {
+export function createNewSampingEventForUser(eventName, username, eventTemplate) {
 	if (!username) {
 		throw new Error("No username passed to createNewSamplingEventForUser function");
 	}
 
 	return dispatch => {
-		let eventID = dispatch(createNewSamplingEvent(eventName));
+		let eventID = dispatch(createNewSamplingEvent(eventName, eventTemplate));
 		dispatch({ type: REGISTER_EVENT_WITH_USERNAME, eventID, username });
 		return eventID;
 	}
@@ -146,7 +146,7 @@ export function createNewSampingEventForUser(eventName, username) {
 * @param eventName {string} - the new event name.  If empty string, will be given date-based name
 * @returns the eventID of the newly created event  (note, up to the reciever to link user and event in eventLinkTable)
 */
-export function createNewSamplingEvent(eventName) {
+export function createNewSamplingEvent(eventName, eventTemplate) {
 	return dispatch => {
 		// get blank event and fill with initial data
 		let newEvent = _.cloneDeep(emptySamplingEvent);
@@ -165,8 +165,7 @@ export function createNewSamplingEvent(eventName) {
 
 
 		// find all questions with actual default 'values' in questionsData and include those in the new event
-		let GQD = getQuestionsData(null);  //TODO: need to avoid adding sub-questions (from data-entry, for example) to the top level
-		console.log('GQD', GQD);
+		let GQD = getQuestionsData(null); 
 		let filtered = _.filter(GQD, (QD) => {//TODO: could we use newEvent.eventID
 			if (typeof QD.value === 'undefined') { // undefined gets filtered out
 				return false;
@@ -190,10 +189,20 @@ export function createNewSamplingEvent(eventName) {
 		);
 
 		Object.keys(filtered).forEach((key) => {  //this is already an array.... TODO: just move this to a normal forEach... not doing it before demo
-			
 			newEvent['questionsValues'][filtered[key].id] = filtered[key].value;
 		}
 		);
+
+
+		// optionally add template questions data and values
+		if (eventTemplate) {
+			newEvent.questionsData = _.cloneDeep(eventTemplate.questionsData);
+
+			Object.keys(eventTemplate.questionValues).forEach(key => {
+				newEvent.questionsValues[key] = eventTemplate.questionValues[key];
+			})
+		}
+
 
 		//OPTIMIZE: call an optional callback 
 

@@ -13,7 +13,7 @@ import { TextField, Button, Paper } from '@material-ui/core';
 import { createNewSampingEventForUser } from '../../../Actions/SamplingEvents';
 import { showNavigationTab } from '../../../Actions/UI';
 import { loadAndSetCurrentSamplingEvent } from '../../../Actions/SedFF';
-import { getAllUsersEventIDs, getEventTemplateFromID } from '../../../Utils/StoreUtilities';
+import { getAllUsersEventIDs, getEventTemplateFromID, getEventFromID } from '../../../Utils/StoreUtilities';
 import DropDown from '../../Questions/DropDown';
 
 
@@ -70,9 +70,15 @@ class NewEventForm extends React.Component {
 			alert("There is no current user.  You cannot create an event without a current user set.  Please reload sedFF and try again.  If failures continue, contact jfederer@usgs.gov");
 			return;
 		}
+		if(!this.state.eventTemplateToUse) {
+			alert("There is no event template selected for use.  Please reload SedFF, select a template from the drop down options, and try again.  If failures continue, contact jfederer@usgs.gov");
+			return;
+		}
+
 		let newEventID = this.props.createNewSampingEventForUser( // this is a syncronous process
 			this.state.newSamplingEventName ? this.state.newSamplingEventName : "",  //deal with blank in action
-			this.props.currentUser.username
+			this.props.currentUser.username,
+			getEventTemplateFromID(this.state.eventTemplateToUse)
 		);
 
 		this.props.loadAndSetCurrentSamplingEvent(newEventID, () => {
