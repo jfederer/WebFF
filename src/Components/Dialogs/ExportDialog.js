@@ -63,7 +63,7 @@ class ExportDialog extends React.Component {
 
 	onEnter = () => {
 
-		this.setState(initialState, this.setState({ sedLOGINUsername: this.props.sedLOGINUsername }));
+		this.setState({..._.cloneDeep(initialState), sedLOGINUsername: this.props.sedLOGINUsername });
 
 	}
 
@@ -181,7 +181,8 @@ class ExportDialog extends React.Component {
 
 	render() {
 		const { classes, exportDialogVisibility, currentSamplingEventID } = this.props;
-		// console.log('this.state', this.state)
+		console.log('this.state: ', this.state);
+		console.log('this.props: ', this.props);
 		return (
 			<Dialog
 				open={exportDialogVisibility}
