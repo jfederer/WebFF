@@ -25,7 +25,7 @@ export const emptySamplingEvent = {
 	dateModified: "",
 	shippedStatus: "Not Shipped",
 	questionsValues: {
-		waterwayInfo:{}
+		// waterwayInfo:{}
 	},
 	questionsData: {
 	}
@@ -1051,6 +1051,7 @@ export const defaultQuestionsData = {
 	waterwayInfo: {
 		"id": "waterwayInfo",
 		"type": "WaterwayInfo",
+		"label": "Waterway Information",
 		"value": {
 			bank:LEFT_BANK_VALUE,
 			edgeOfWater_Start:"",

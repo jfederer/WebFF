@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-
+import classNames from 'classnames';
 import { styles } from '../../style';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -12,9 +12,8 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Grid from '@material-ui/core/Grid';
 
 // import Typography from '@material-ui/core/Typography';
 // import Divider from '@material-ui/core/Divider';
@@ -23,12 +22,14 @@ import { SEQuestionValueChange, stationNameChanged } from '../../Actions/Samplin
 import { setAddRemoveEventTemplateDialogVisibility } from '../../Actions/UI';
 import { createNewStationForUser, removeStationFromUser } from '../../Actions/Stations';
 import Question from '../Question';
-import { getStationFromID, getEventFromID } from '../../Utils/StoreUtilities';
+import { getQuestionsData, getEventFromID } from '../../Utils/StoreUtilities';
 import { getQuestionValue } from '../../Utils/QuestionUtilities';
-import { Typography } from '@material-ui/core';
+import { Typography, FormControl } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import { LEFT_BANK_VALUE, RIGHT_BANK_VALUE } from '../../Constants/Dictionary';
-import { Divider } from 'material-ui';
+import { Divider } from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
+import Paper from '@material-ui/core/Paper';
 
 const ADD = "ADD";
 const REMOVE = "REMOVE";
@@ -47,9 +48,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 	}
 
 	getInitialState = () => {
-		console.log('this.props.eventTemplateIDs', this.props.eventTemplateIDs);
-		console.log('this.props.eventIDs', this.props.eventIDs);
-
+	
 		return _.cloneDeep({
 			addOrRemove: this.props.eventTemplateIDs && this.props.eventTemplateIDs.length > 0
 				? EITHER
@@ -80,11 +79,15 @@ class AddRemoveEventTemplateDialog extends React.Component {
 	}
 
 
-	handleValueChange = (eventID, QID, value) => {
-		console.log('QID', QID)
-		this.setState({ [QID]: value });
+	handleCheckValueChange = (id) => (event) => {
+		console.log('event', event)
+		console.log('id: ', id);
+
+
+		this.setState({ [id]: event.target.checked });
 
 	};
+
 	eventDropDownValueChange = (eventID, QID, value) => {
 		console.log('QIDDD', QID)
 		this.setState({ fromEventID: value });
@@ -98,11 +101,11 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		// if (typeof this.state.newStation_stationNumber === 'undefined' || this.state.newStation_stationNumber === "") {
 		// 	return "New station requires a station number before it can be added.";
 		// }
-		if(!this.state.newEventTemplateName) {
+		if (!this.state.newEventTemplateName) {
 			return "Must enter a template name";
 		}
 
-		if(!this.state.fromEventID) {
+		if (!this.state.fromEventID) {
 			return "Must select an event to use as template";
 		}
 
@@ -117,12 +120,12 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 		console.log("state: ", this.state);
 
-		let selectedItemsForTemplate = Object.keys(this.state).filter(key => key.startsWith(this.state.fromEventID) && this.state[key]===true);
+		let selectedItemsForTemplate = Object.keys(this.state).filter(key => key.startsWith(this.state.fromEventID) && this.state[key] === true);
 		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
-		selectedItemsForTemplate.forEach((item, index) => selectedItemsForTemplate[index] = item.split(EVENT_KEY_SPLITTER)[1] );
+		selectedItemsForTemplate.forEach((item, index) => selectedItemsForTemplate[index] = item.split(EVENT_KEY_SPLITTER)[1]);
 		// console.log('selectedItemsForTemplate', selectedItemsForTemplate)
 
-		let templateQuestionValuesObj  = {};
+		let templateQuestionValuesObj = {};
 		selectedItemsForTemplate.forEach(QID => templateQuestionValuesObj[QID] = getQuestionValue(this.state.fromEventID, QID));
 		console.log('templateQuestionValuesObj', templateQuestionValuesObj)
 
@@ -175,7 +178,7 @@ class AddRemoveEventTemplateDialog extends React.Component {
 
 
 	shortDate = (dateObj) => {
-		
+
 		let monthName = dateObj.toLocaleString('en-us', { month: 'long' });
 		let dd = String(dateObj.getDate()).padStart(2, '0');
 		let yyyy = dateObj.getFullYear();
@@ -192,27 +195,29 @@ class AddRemoveEventTemplateDialog extends React.Component {
 		eventIDs.forEach(eventID => {
 			let evt = getEventFromID(eventID);
 			let evtName = evt.eventName;
-			if(retObj[evtName]) {
-				evtName = evtName + "( last modified " + new Date(evt.dateModified).toString() + ")";
-				// evtName = evtName + "( last modified " + this.shortDate(new Date(evt.dateModified)) + ")";
+			if (retObj[evtName]) {
+				evtName = evtName + "( last modified " + new Date(evt.dateModified).toLocaleString() + ")";
 			}
 			retObj[evtName] = eventID;
 		})
 		return retObj;
 	}
+	//TOOD: check all/none
 
 	render() {
 		const { classes, addRemoveEventTemplateDialogVisibility } = this.props;
-		console.log('this.props', this.props)
+		// console.log('this.props', this.props)
+		// console.log('this.state :', this.state);
 
 		return (
-			
+
 			<Dialog
 				open={addRemoveEventTemplateDialogVisibility}
 				onClose={this.dialogCloseHandler}
 				onEnter={this.onEnter}
 				aria-labelledby="form-dialog-title"
-				fullWidth
+				// fullWidth
+				maxWidth={'xl'}
 				classes={{ paperFullWidth: classes.dialogCustomizedWidth }}
 			>
 				{this.state.isInitialized && addRemoveEventTemplateDialogVisibility ?
@@ -252,25 +257,70 @@ class AddRemoveEventTemplateDialog extends React.Component {
 										alternateChangeHandler={this.eventDropDownValueChange}
 										includeBlank={true}
 									/>
-
-									{/* <Divider></Divider> */}
 									{!getEventFromID(this.state.fromEventID)
 										? "Select a valid event to build a template"
-										: <React.Fragment>
-											<Typography>Select which values you'd like to include in the template:</Typography>
-											{Object.keys(getEventFromID(this.state.fromEventID).questionsValues).map(key => {
-												let id = this.state.fromEventID + EVENT_KEY_SPLITTER + key;
-												return <Question id={id}
-												key={id}
-													label={key + " (" + getQuestionValue(this.state.fromEventID, key) + ")"}
-													type="Toggle"
-													checkbox={true}
-													value={this.state[id] ? true : this.state.id}
-													alternateChangeHandler={this.handleValueChange}
-												/>
-											})}
-										</React.Fragment>
+										: <Fragment>
+											<br></br>
+											<Divider></Divider>
+											<br></br>
+
+											<Typography variant='h6'>Select which values you'd like to include in the template:</Typography>
+											<br></br>
+											<Grid container spacing={3}>
+												{Object.keys(getEventFromID(this.state.fromEventID).questionsValues).map(key => {
+													let id = this.state.fromEventID + EVENT_KEY_SPLITTER + key;
+													let label = key;
+													let value = getQuestionValue(this.state.fromEventID, key);
+													
+													
+													if(Array.isArray(value) || typeof value === 'object') {
+														value="All Values";
+													}
+
+													// console.log('key :', key);
+													// console.log('getQuestionsData(this.state.fromEventID) :', getQuestionsData(this.state.fromEventID));
+													if(key.includes('::')) {  
+														label = key.replace('::', ' - ');
+													} else {
+														label = getQuestionsData(this.state.fromEventID)[key].label;
+													}
+													// console.log('label :', label);
+
+													// console.assert(id!==false, "ID was false label: " + label);
+													// console.log('id :', id);
+													// console.log('label :', label);
+													// console.log('value :', value);
+
+
+													return <Grid item xs={6} md={4} xl={3} key={"Grid" + id}>
+														<Paper elevation={5}>
+															<Grid container spacing={1}>
+																<Grid item xs={1}>
+
+																	<Checkbox
+																		id={id}
+																		key={id}
+																		checked={this.state[id] || false}
+																		// checked={false}
+																		onChange={this.handleCheckValueChange(id)}
+																	/>
+																</Grid>
+																<Grid item xs={11}>
+																	<div>
+																		<Typography display={'inline'} className={classes.templateKey}>{label}: </Typography>
+																		<Typography className={classes.templateValue}>({value.toString().substring(0, 50)})</Typography>
+																	</div>
+																</Grid>
+
+															</Grid>
+														</Paper>
+													</Grid>
+												})}
+											</Grid>
+										</Fragment>
 									}
+
+
 									{/* <Question
 										id="newStation_stationName"
 										label="Station Full Name"

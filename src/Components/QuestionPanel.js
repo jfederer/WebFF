@@ -20,9 +20,6 @@ const styles = theme => ({
 		[theme.breakpoints.up('lg')]: {
 			backgroundColor: '#eee',
 		},
-	},
-	lightGrey: {
-		backgroundColor: '#ddd'
 	}
 });
 

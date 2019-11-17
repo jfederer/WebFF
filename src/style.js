@@ -11,6 +11,22 @@ export const styles = theme => ({
 		position: 'relative',
 		display: 'flex',
 	},
+	lightGrey: {
+		backgroundColor: '#ddd'
+	},
+	templateValue: {
+		fontSize:'75%',
+		marginLeft: 10,
+		// backgroundColor: '#ef0'
+	},
+	templateKey: {
+		marginLeft: 10,
+		// backgroundColor: '#f00',
+		fontWeight: "500"
+	},
+	templateValueGrid: {
+		backgroundColor: '#ddd'
+	},
 	hundredWidth: {
 		// margin: 0,
 		// padding: 0,

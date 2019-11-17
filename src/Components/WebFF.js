@@ -143,10 +143,11 @@ class WebFF extends React.Component {
 	//TODO: Warn/notify when selecting composite on a set (will remove data from QWDATA and parameters table)
 	//TODO: duplicate just stationing (vs all - optionally) from set to set ... even existing?
 	// TODO: If they DON'T fill in Waterway Info, they should be able to enter Stream Width (P00004) by hand.  QWDATA can also accept this if left blank.
-
 	//TODO: create a 'settings' node with things like 'usePaper' and 'syncDelay'.  In the future, include other settings like "availableSamplers" } from '../Utils/Constants';
 	//TODO: verify my dbResponse are returning wtih upsert info vs failure messages
 	//TODO: "remove set" button on sets
+	//TODO: expand to include the sub-questions in template editor
+	//TODO: get the 'display value' of some of the values... some are just numbers (less than useful)
 
 	//Would be nice:
 	//TODO: "Station manager" - include extra waterway info, include "duplicate", include 'edit'
@@ -179,6 +180,7 @@ class WebFF extends React.Component {
 	// option to copy custom questions from station / user / event to another station / user / event
 	// secure setDBInfo ... (could be used nefariously)
 	// add "didInvalidate" to User...
+	// consistent MM/DD/YYYY  (option in settings?)
 
 	//Cleanup
 	//TODO: Set-Sample-Dist column gives "NAN"...
