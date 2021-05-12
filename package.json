@@ -13,7 +13,7 @@
     "lodash": "^4.17.11",
     "material-ui": "^0.20.2",
     "material-ui-time-picker": "^1.2.0",
-    "mathjs": "^5.10.3",
+    "mathjs": "^7.5.1",
     "moment": "^2.24.0",
     "mongodb": "^3.2.3",
     "mui-datatables": "^2.12.4",
